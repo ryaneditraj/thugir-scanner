@@ -6,7 +6,7 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 
 | Date (UTC) | Area | What shipped | Branch |
 |------------|------|--------------|--------|
-| 2026-07-07 19:00 | detection | Live Anthropic API key validation via Models API | `auto/detection/anthropic-live-key-validation` |
+| 2026-07-07 19:00 | detection | Live Anthropic API key validation via Models API | `cursor/thugir-scanner-evolution-932b` (PR #26) |
 
 **Follow-ups:** Stripe restricted-key (`rk_live_`) live validation; CSRF state-changing probe; MongoDB/Atlas connection string in client bundle.
 
