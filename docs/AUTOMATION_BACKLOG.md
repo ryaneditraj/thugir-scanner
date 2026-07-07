@@ -1,21 +1,44 @@
-# Automation backlog
+# Automation Backlog
 
-Hourly autonomous runs ship one PR each. Entries are append-only.
-
-## Shipped
-
-| Date (UTC) | Area | Branch | What shipped | Follow-ups |
-|------------|------|--------|--------------|------------|
-| 2026-07-07 | detection | `auto/detection/twilio-live-key-validation` | Live Twilio credential validation: pairs accountSid + 32-char auth token from the client bundle, then confirms with a harmless `GET /2010-04-01/Accounts/{Sid}.json` (fires only on HTTP 200 with matching sid). Replaces loose SID-only regex with rule `twilioLiveCredentialProbe`. | CSRF on state-changing routes; Stripe/OpenAI live-key validation; client-bundle internal URL extraction |
+Hourly autonomous runs ship one focused detection PR each. **This file is the single source of truth** — do not duplicate entries across PR branches. The `manage-pr-integrity` script audits open PRs before each run.
 
 ## Open PRs (do not duplicate)
 
-Tracked via `gh pr list` — includes reflected XSS, SSTI, open redirect, JWT alg=none, admin panel, cloud buckets, Convex probes, Algolia/Auth0 secrets, Twilio pairing (static), infra artifacts, Mapbox/Sentry/PostHog/Shopify patterns, PR integrity audits.
+| PR | Area | Detection | Branch |
+|----|------|-----------|--------|
+| #1 | detection | Mapbox, Sentry, PostHog, Shopify secret patterns | `cursor/thugir-scanner-evolution-d94f` |
+| #2 | detection | Exposed infra artifacts (Terraform, AWS, actuator) | `cursor/thugir-scanner-evolution-9233` |
+| #3 | detection | Open redirect via query parameter probe | `cursor/thugir-scanner-evolution-d346` |
+| #4 | detection | Auth0 OAuth client secret in client bundle | `cursor/thugir-scanner-evolution-9475` |
+| #5 | detection | Algolia admin API key in client bundle | `cursor/thugir-scanner-evolution-afe6` |
+| #6 | detection | Convex open-query probe for missing auth | `cursor/thugir-scanner-evolution-850a` |
+| #7 | detection | Public S3/GCS/R2 bucket probe from client bundle URLs | `cursor/thugir-scanner-evolution-8f31` |
+| #8 | detection | Exposed admin panel probe without authentication | `cursor/thugir-scanner-evolution-5f61` |
+| #9 | detection | JWT alg=none acceptance probe | `cursor/thugir-scanner-evolution-69b6` |
+| #10 | detection | Convex deploy key secret in client bundle | `cursor/thugir-scanner-evolution-68cd` |
+| #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
+| #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
+| #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
+| (new) | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
 
-## Queued (high impact)
+> **Must close manually (automation token lacks `closePullRequest`):**
+> - **#17** — duplicate `secret-twilio` modification; superseded by PR #12.
+> - **#18** (`cursor/pull-request-integrity-8f98`) — superseded by this integrity pass.
+> - **#16** (`cursor/pull-request-integrity-1ac1`) — superseded.
+> - **#14** — dead branch `cursor/pull-request-integrity-e6ce`; superseded.
+> - **#11** (`cursor/pull-request-integrity-447d`) — superseded.
 
-1. **detection** — CSRF probe on state-changing routes discovered from bundle
-2. **detection** — Live Stripe / OpenAI key validation (harmless provider read)
-3. **detection** — Client-bundle internal URL / feature-flag extraction
-4. **feature** — Scheduled re-scans with diff ("what changed since last scan")
-5. **frontend** — Evidence viewer copy-fix-prompt + severity filters on results
+## Queued (not yet taken)
+
+- **detection** — MongoDB / Atlas connection string in client bundle.
+- **feature** — Wire admin `patterns` DB table into `runFreeScan` runtime merge.
+- **feature** — Scheduled re-scans with finding diff.
+- **frontend** — Evidence viewer polish + copy-fix-prompt buttons.
+
+## Integrity rules
+
+1. One detection per PR — never bundle backlog items into a detection PR.
+2. Do not open a PR if an open PR or `main` already ships the same pattern slug (including modifications to an existing slug).
+3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
+4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
+5. Only one open integrity PR at a time — close superseded duplicates before opening a new one.
