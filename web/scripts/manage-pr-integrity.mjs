@@ -146,6 +146,25 @@ function auditPrs() {
     }
   }
 
+  const integrityPrs = prs.filter((p) =>
+    /pull-request-integrity/i.test(p.headRefName) || /PR integrity/i.test(p.title)
+  );
+  if (integrityPrs.length > 1) {
+    console.log("\n--- Multiple open integrity PRs (close superseded duplicates) ---");
+    const nums = integrityPrs.map((p) => `#${p.number}`).join(", ");
+    console.log(`  ERROR: ${integrityPrs.length} integrity PRs open: ${nums}`);
+    for (const p of integrityPrs) {
+      const alive = remoteBranchExists(p.headRefName);
+      console.log(`    #${p.number} ${p.headRefName}${alive ? "" : " (DEAD BRANCH)"}`);
+      issues.push({
+        kind: "duplicate-integrity-pr",
+        pr: p.number,
+        branch: p.headRefName,
+        dead: !alive,
+      });
+    }
+  }
+
   console.log("\n--- Cross-PR slug collisions (true duplicate detections) ---");
   for (const [slug, owners] of [...slugOwners.entries()].sort()) {
     if (owners.length > 1) {
@@ -261,7 +280,8 @@ if (audit) {
       i.kind === "duplicate-title" ||
       i.kind === "duplicate-slug" ||
       i.kind === "duplicate-pr" ||
-      i.kind === "missing-branch"
+      i.kind === "missing-branch" ||
+      i.kind === "duplicate-integrity-pr"
   );
   if (serious.length > 0 && !fixBacklog && !pruneBranches) {
     process.exit(1);
