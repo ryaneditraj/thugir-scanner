@@ -1,0 +1,30 @@
+{
+  "description": "Known-vulnerable apps with documented issues. Misses here are high-quality learning signal.",
+  "targets": [
+    {
+      "id": "juice-shop",
+      "url": "https://juice-shop.herokuapp.com",
+      "auth": "public_benchmark",
+      "expected_categories": [
+        "xss",
+        "sqli",
+        "idor",
+        "auth_bypass",
+        "sensitive_data",
+        "misconfig"
+      ],
+      "notes": "OWASP Juice Shop — use official challenge list as oracle"
+    },
+    {
+      "id": "crapi",
+      "url": "https://crapi.sandbox.local",
+      "auth": "public_benchmark",
+      "enabled": false,
+      "notes": "Enable when you host crAPI locally or have a reachable instance"
+    }
+  ],
+  "teacher_tools": [
+    "nuclei",
+    "thugir-node-max-power"
+  ]
+}
