@@ -23,14 +23,6 @@ const SECRET_DEFS: SecretDef[] = [
     impact: "Your OpenAI key can be used to run up usage charges on your account."
   },
   {
-    slug: "secret-anthropic",
-    name: "Anthropic API key",
-    regex: "sk-ant-[A-Za-z0-9_-]{20,}",
-    severity: "high",
-    serverOnly: true,
-    impact: "Your Anthropic key can be abused to bill your account."
-  },
-  {
     slug: "secret-stripe-live",
     name: "Stripe live secret key",
     regex: "sk_live_[A-Za-z0-9]{20,}",
@@ -153,7 +145,35 @@ const SECRET_DEFS: SecretDef[] = [
   }
 ];
 
-export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
+export const anthropicLiveKeyPattern: Pattern = {
+  slug: "secret-anthropic",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "high",
+  title: "Anthropic API key exposed in client bundle",
+  description:
+    "An Anthropic API key (sk-ant-*) was found in JavaScript or HTML served to the browser, and a harmless read against Anthropic's Models API confirmed the key is active. AI scaffolds routinely ship ANTHROPIC_API_KEY via NEXT_PUBLIC_* or VITE_* env vars.",
+  impactOneline: "Your Anthropic key can be abused to bill your account.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "anthropicLiveKeyProbe" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Anthropic API key now and move it server-side.",
+    steps: [
+      "Revoke and create a new API key in the Anthropic console immediately.",
+      "Remove ANTHROPIC_API_KEY from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Call Anthropic only from server-side code (route handlers / serverless functions)."
+    ]
+  },
+  fixPrompt:
+    "An Anthropic API key is exposed in my client bundle and validated as active. Remove it from all client-side code and client-exposed environment variables, move every Anthropic call into server-side code, and tell me exactly which files referenced it so I can rotate the key.",
+  version: 1,
+  enabled: true
+};
+
+export const secretPatterns: Pattern[] = [
+  ...SECRET_DEFS.map(
+    (s): Pattern => ({
   slug: s.slug,
   platform: "generic",
   category: "Exposed secret",
@@ -180,4 +200,7 @@ export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
   fixPrompt: `A ${s.name} is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.`,
   version: 1,
   enabled: true
-}));
+    })
+  ),
+  anthropicLiveKeyPattern
+];

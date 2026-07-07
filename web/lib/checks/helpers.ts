@@ -73,3 +73,50 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+export function redactSecretSample(sample: string): string {
+  return sample.length > 12 ? `${sample.slice(0, 6)}…${sample.slice(-4)}` : "***";
+}
+
+const ANTHROPIC_PLACEHOLDER_RE =
+  /example|placeholder|your_|changeme|sample|fake|dummy|not[_-]?real|insert|replace|xxxxxxxx/i;
+
+const ANTHROPIC_KEY_BODY_RE = /^[A-Za-z0-9_-]{20,}$/;
+
+/** Reject tutorial/placeholder Anthropic keys before hitting the API. */
+export function isLikelyAnthropicKey(key: string): boolean {
+  if (!/^sk-ant-[A-Za-z0-9_-]{20,}$/.test(key)) return false;
+  if (ANTHROPIC_PLACEHOLDER_RE.test(key)) return false;
+  const body = key.slice(7);
+  if (!ANTHROPIC_KEY_BODY_RE.test(body)) return false;
+  const entropy = new Set(body.replace(/-/g, "")).size;
+  if (entropy < 8) return false;
+  return true;
+}
+
+const ANTHROPIC_KEY_RE = /sk-ant-[A-Za-z0-9_-]{20,}/g;
+
+/** Pull the first plausible Anthropic API key from bundle text. */
+export function extractAnthropicKey(combined: string): string | null {
+  const envPatterns = [
+    /(?:NEXT_PUBLIC_|VITE_)?ANTHROPIC_(?:API_)?KEY\s*[=:]\s*["'](sk-ant-[A-Za-z0-9_-]{20,})["']/gi,
+    /(?:anthropicApiKey|ANTHROPIC_API_KEY)\s*[=:]\s*["'](sk-ant-[A-Za-z0-9_-]{20,})["']/gi
+  ];
+  for (const re of envPatterns) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(combined))) {
+      if (isLikelyAnthropicKey(m[1])) return m[1];
+    }
+  }
+
+  if (/anthropic/i.test(combined)) {
+    for (const m of combined.matchAll(ANTHROPIC_KEY_RE)) {
+      if (isLikelyAnthropicKey(m[0])) return m[0];
+    }
+  }
+
+  for (const m of combined.matchAll(ANTHROPIC_KEY_RE)) {
+    if (isLikelyAnthropicKey(m[0])) return m[0];
+  }
+  return null;
+}
