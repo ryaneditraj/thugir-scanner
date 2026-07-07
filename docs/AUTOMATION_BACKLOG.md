@@ -20,7 +20,7 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
-| #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-3d8b` |
+| #21 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-3d8b` |
 
 ## Retired PR shells
 
