@@ -120,14 +120,6 @@ const SECRET_DEFS: SecretDef[] = [
     impact: "Razorpay credentials can expose payment operations."
   },
   {
-    slug: "secret-twilio",
-    name: "Twilio account SID + auth",
-    regex: "AC[a-f0-9]{32}",
-    severity: "medium",
-    serverOnly: true,
-    impact: "Twilio credentials can be abused to send SMS/calls on your bill."
-  },
-  {
     slug: "secret-private-key",
     name: "Private key block",
     regex: "-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----",
@@ -153,7 +145,35 @@ const SECRET_DEFS: SecretDef[] = [
   }
 ];
 
-export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
+export const twilioLiveCredentialPattern: Pattern = {
+  slug: "secret-twilio",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "critical",
+  title: "Live Twilio credentials exposed in client bundle",
+  description:
+    "A Twilio account SID and auth token were found together in JavaScript or HTML served to the browser, and a harmless read against Twilio's Accounts API confirmed the credentials are live. AI SMS/OTP scaffolds often ship Twilio client SDK init with real keys.",
+  impactOneline: "Live Twilio credentials let anyone send SMS/calls on your bill.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "twilioLiveCredentialProbe" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Twilio auth token now and move credentials server-side.",
+    steps: [
+      "Rotate the Twilio auth token in the Twilio console immediately.",
+      "Remove accountSid and authToken from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Proxy SMS/OTP through a server route that holds the Twilio credentials."
+    ]
+  },
+  fixPrompt:
+    "Live Twilio credentials (accountSid + authToken) are exposed in my client bundle and validated as active. Remove them from all client-side code and client-exposed environment variables, move every Twilio call into server-side code, and tell me exactly which files referenced them so I can rotate the auth token.",
+  version: 1,
+  enabled: true
+};
+
+export const secretPatterns: Pattern[] = [
+  ...SECRET_DEFS.map(
+    (s): Pattern => ({
   slug: s.slug,
   platform: "generic",
   category: "Exposed secret",
@@ -180,4 +200,7 @@ export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
   fixPrompt: `A ${s.name} is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.`,
   version: 1,
   enabled: true
-}));
+    })
+  ),
+  twilioLiveCredentialPattern
+];

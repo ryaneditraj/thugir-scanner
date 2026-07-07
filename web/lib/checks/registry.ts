@@ -10,10 +10,12 @@ import type { ProbeCache } from "./probe-cache";
 import { extractApiPaths } from "./extract-api";
 import {
   extractSupabaseFromText,
+  extractTwilioCredentials,
   jwtPayload,
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
+  redactSecretSample,
   SENSITIVE_PATH_NEEDLES
 } from "./helpers";
 
@@ -559,6 +561,45 @@ const hardcodedCredentials: Rule = async (ctx) => {
   return { fired: true, confidence: 0.88, evidence: { hardcoded: hits.slice(0, 5) } };
 };
 
+// --- Live Twilio credentials in client bundle (pair + API validation) --------
+// Pairs accountSid with the 32-char auth token, then issues ONE harmless read to
+// Twilio's Accounts API. A 200 with a matching sid is positive proof the key is live.
+const twilioLiveCredentialProbe: Rule = async (ctx) => {
+  const creds = extractTwilioCredentials(ctx.combined);
+  if (!creds) return NEGATIVE;
+
+  const { accountSid, authToken } = creds;
+  const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}.json`;
+  const basic = Buffer.from(`${accountSid}:${authToken}`).toString("base64");
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 8000,
+    headers: { Authorization: `Basic ${basic}` }
+  });
+  if (doc.status !== 200) return NEGATIVE;
+
+  let friendlyName: string | undefined;
+  try {
+    const parsed = JSON.parse(doc.body) as { sid?: string; friendly_name?: string; status?: string };
+    if (parsed.sid !== accountSid) return NEGATIVE;
+    friendlyName = parsed.friendly_name;
+    return {
+      fired: true,
+      confidence: 0.97,
+      evidence: {
+        note: "Live Twilio credentials in client bundle — validated via Accounts API read",
+        accountSidRedacted: redactSecretSample(accountSid),
+        authTokenRedacted: redactSecretSample(authToken),
+        accountFriendlyName: friendlyName,
+        accountStatus: parsed.status,
+        validationEndpoint: url
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
 // --- Clerk secret key in client bundle --------------------------------------
 const clerkSecretInClient: Rule = async (ctx) => {
   if (!/clerk/i.test(ctx.combined)) return NEGATIVE;
@@ -732,6 +773,7 @@ export const RULES: Record<string, Rule> = {
   sitemapSensitivePaths,
   weakCsp,
   hardcodedCredentials,
+  twilioLiveCredentialProbe,
   clerkSecretInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
@@ -767,6 +809,7 @@ export const FREE_RULES = new Set([
   "sitemapSensitivePaths",
   "weakCsp",
   "hardcodedCredentials",
+  "twilioLiveCredentialProbe",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys"
