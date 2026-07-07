@@ -1,49 +1,34 @@
-# Automation backlog
+# Automation Backlog
 
-Hourly autonomous runs log shipped work and follow-ups here. Open PRs are checked before each run to avoid duplication.
+Hourly autonomous runs ship one focused detection PR each. **This file is the single source of truth** — do not duplicate entries across PR branches. The `manage-pr-integrity` script audits open PRs before each run.
 
 ## Open PRs (do not duplicate)
 
-| PR | Area | Title | Branch |
-|----|------|-------|--------|
+| PR | Area | Detection | Branch |
+|----|------|-----------|--------|
 | #1 | detection | Mapbox, Sentry, PostHog, Shopify secret patterns | `cursor/thugir-scanner-evolution-d94f` |
-| #2 | detection | Probe exposed infra artifacts (Terraform, AWS, actuator) | `cursor/thugir-scanner-evolution-9233` |
+| #2 | detection | Exposed infra artifacts (Terraform, AWS, actuator) | `cursor/thugir-scanner-evolution-9233` |
 | #3 | detection | Open redirect via query parameter probe | `cursor/thugir-scanner-evolution-d346` |
+| #4 | detection | Auth0 OAuth client secret in client bundle | `cursor/thugir-scanner-evolution-9475` |
+| #5 | detection | Algolia admin API key in client bundle | `cursor/thugir-scanner-evolution-afe6` |
+| #6 | detection | Convex open-query probe for missing auth | `cursor/thugir-scanner-evolution-850a` |
+| #7 | detection | Public S3/GCS/R2 bucket probe from client bundle URLs | `cursor/thugir-scanner-evolution-8f31` |
+| #8 | detection | Exposed admin panel probe without authentication | `cursor/thugir-scanner-evolution-5f61` |
+| #9 | detection | JWT alg=none acceptance probe | `cursor/thugir-scanner-evolution-69b6` |
+| #10 | detection | Convex deploy key secret in client bundle | `cursor/thugir-scanner-evolution-68cd` |
 
-## Shipped
+## Queued (not yet taken)
 
-### 2026-07-07 — Auth0 OAuth client secret in client bundle
+- **detection** — Twilio auth token pairing (require hex near Account SID).
+- **detection** — MongoDB / Atlas connection string in client bundle.
+- **detection** — Reflected XSS marker probe (safe canary param).
+- **feature** — Wire admin `patterns` DB table into `runFreeScan` runtime merge.
+- **feature** — Scheduled re-scans with finding diff.
+- **frontend** — Evidence viewer polish + copy-fix-prompt buttons.
 
-- **Area:** detection
-- **Branch:** `auto/detection/auth0-oauth-client-secret`
-- **What:** New `auth0SecretInClient` rule_ref + `vibe-auth0-secret-in-client` pattern. Flags `AUTH0_CLIENT_SECRET` / `AUTH0_M2M_*` env vars and `clientSecret` assignments near Auth0 config in shipped JS bundles.
-- **Patterns:** 64 enabled (was 63)
-- **Follow-ups:** Convex BaaS open-data probe; Upstash/Redis REST token regex; Algolia admin key; live Auth0 client-secret validation via token endpoint (careful rate limits); generic OAuth `client_secret` for non-Auth0 providers (GitHub, Google beyond GOCSPX prefix).
+## Integrity rules
 
-### 2026-07-07 — Open redirect (prior run, PR #3)
-
-- **Area:** detection
-- **What:** Query-parameter open redirect probe
-- **Follow-ups:** Header-based redirect chains, post-login redirect params
-
-### 2026-07-07 — Exposed infra artifacts (prior run, PR #2)
-
-- **Area:** detection
-- **What:** Terraform state, AWS creds, Spring actuator, kubeconfig http probes
-- **Follow-ups:** CI token paths (.travis.yml secrets), PEM/id_rsa dotfiles
-
-### 2026-07-07 — Mapbox/Sentry/PostHog/Shopify secrets (prior run, PR #1)
-
-- **Area:** detection
-- **What:** Additional secret_regex providers with format validation
-- **Follow-ups:** Live key validation for each provider
-
-## Backlog (not yet taken)
-
-1. **Convex open data plane** — fingerprint + REST probe analogous to Supabase RLS
-2. **Upstash Redis REST token** — `UPSTASH_*` in client bundles (common Lovable stack)
-3. **Algolia / Meilisearch admin keys** — server-only search credentials in JS
-4. **JWT signing secret in live bundle** — port codescan `jwt-alg-none` / hardcoded secret rules to URL scanner
-5. **Scheduled re-scans + diffing** — feature: what changed since last scan
-6. **Evidence viewer UX** — frontend: copy-fix-prompt, severity filters on scan results
-7. **Regenerate pattern seed drift** — keep `supabase/seed/patterns.sql` in sync (ongoing)
+1. One detection per PR — never bundle backlog items into a detection PR.
+2. Do not open a PR if an open PR or `main` already ships the same pattern slug.
+3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
+4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
