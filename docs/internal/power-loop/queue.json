@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-07T22:10:00.000Z",
+  "updated_at": "2026-07-07T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/",
+      "source": "Bright Security Broken Crystals public OSS deploy (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://demo.testfire.net/",
+      "source": "IBM Altoro Mutual intentionally vulnerable banking demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/",
+      "source": "Micro Focus WebInspect zero.webappsecurity training app",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/",
+      "source": "Acunetix vulnweb REST API public demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testasp.vulnweb.com/",
+      "source": "Acunetix vulnweb ASP.NET public demo",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwa.csalab.app/",
       "source": "OWASP VWAD public DVWA demo (csalab.app)",
