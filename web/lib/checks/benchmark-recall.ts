@@ -5,6 +5,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "unauthenticated-admin-endpoint": ["auth_bypass"],
   "dangerous-html-sinks": ["xss"],
   "idor-sequential-ids": ["idor"],
+  "spring-boot-actuator-exposed": ["misconfig"],
   "vibe-unauthenticated-api-routes": ["idor", "sensitive_data"]
 };
 
