@@ -22,8 +22,9 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #16 | infra | PR integrity audit script, backlog sync, duplicate detection | `cursor/pull-request-integrity-8f98` |
 
 > **Must close manually (automation token lacks `closePullRequest`):**
-> - **#14** — dead branch `cursor/pull-request-integrity-e6ce`; superseded by #16.
-> - **#11** — superseded by #16; same role as integrity pass.
+> - **#14** — dead branch `cursor/pull-request-integrity-e6ce`; superseded by this pass.
+> - **#11** — superseded; same role as integrity pass.
+> - **#16** (`cursor/pull-request-integrity-1ac1`) — superseded by this branch (`8f98`).
 
 ## Queued (not yet taken)
 
