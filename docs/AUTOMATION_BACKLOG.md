@@ -35,3 +35,4 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 2. Do not open a PR if an open PR or `main` already ships the same pattern slug.
 3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
 4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
+5. Only one open integrity PR at a time — close superseded duplicates before opening a new one.

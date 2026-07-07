@@ -191,6 +191,7 @@ function fixBacklogOnBranches() {
   const prs = getOpenPrs();
 
   const startBranch = shQuiet("git branch --show-current") || "main";
+  shQuiet("git stash push -m pr-integrity-fix-backlog -- docs/AUTOMATION_BACKLOG.md 2>/dev/null || true");
 
   for (const pr of prs) {
     const branch = pr.headRefName;
