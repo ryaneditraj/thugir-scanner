@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test:framework": "node scripts/test-framework.mjs",
     "test:smoke": "node scripts/smoke-scan.mjs",
-    "patterns": "node scripts/pattern-catalog.mjs && node scripts/export-patterns-seed.mjs"
+    "patterns": "node scripts/pattern-catalog.mjs && node scripts/export-patterns-seed.mjs",
+    "pr:integrity": "node scripts/manage-pr-integrity.mjs --audit"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
