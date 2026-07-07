@@ -73,3 +73,37 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+function b64urlJson(obj: Record<string, unknown>): string {
+  const json = JSON.stringify(obj);
+  const b64 =
+    typeof Buffer !== "undefined"
+      ? Buffer.from(json, "utf8").toString("base64")
+      : btoa(json);
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/** Build an unsigned JWT with alg:none for safe auth-bypass probes. */
+export function buildAlgNoneJwt(payload: Record<string, unknown>): string {
+  const header = b64urlJson({ alg: "none", typ: "JWT" });
+  const body = b64urlJson(payload);
+  return `${header}.${body}.`;
+}
+
+export function looksAuthChallenge(doc: { status: number; body: string }): boolean {
+  if (doc.status === 401 || doc.status === 403) return true;
+  return /unauthorized|invalid token|authentication required|not authenticated|access denied/i.test(
+    doc.body.slice(0, 400)
+  );
+}
+
+export function looksAuthGatedJson(doc: {
+  status: number;
+  headers: Record<string, string>;
+  body: string;
+}): boolean {
+  if (doc.status < 200 || doc.status >= 300) return false;
+  const ct = doc.headers["content-type"] || "";
+  if (!/json/i.test(ct) && !/^\s*[\[{]/.test(doc.body.trim())) return false;
+  return !/unauthorized|invalid token|forbidden|not authenticated/i.test(doc.body.slice(0, 400));
+}
