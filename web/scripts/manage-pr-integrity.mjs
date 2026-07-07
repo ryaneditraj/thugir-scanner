@@ -89,6 +89,41 @@ function detectionSlugForPr(pr, mainSlugs) {
   return [...branchSlugs].filter((s) => !mainSlugs.has(s));
 }
 
+function getPatternFiles(ref) {
+  const patternsDir = "web/lib/patterns";
+  return shQuiet(`git ls-tree -r --name-only ${ref} -- ${patternsDir}`)
+    .split("\n")
+    .filter((f) => f.endsWith(".ts") && !f.endsWith("types.ts") && !f.endsWith("index.ts"));
+}
+
+/** Fingerprints per slug so we can detect modifications to existing slugs, not just new ones. */
+function slugFingerprints(ref) {
+  const map = new Map();
+  for (const file of getPatternFiles(ref)) {
+    const text = shQuiet(`git show ${ref}:${file}`);
+    if (!text) continue;
+    const parts = text.split(/slug:\s*"/);
+    for (let i = 1; i < parts.length; i++) {
+      const slug = parts[i].match(/^([^"]+)"/)?.[1];
+      if (!slug) continue;
+      const blockEnd = parts[i].indexOf("slug:");
+      const block = blockEnd > 0 ? parts[i].slice(0, blockEnd) : parts[i].slice(0, 500);
+      const prev = map.get(slug) || "";
+      map.set(slug, prev + `\0${file}:${block}`);
+    }
+  }
+  return map;
+}
+
+function changedSlugsForPr(pr) {
+  if (!remoteBranchExists(pr.headRefName)) return [];
+  const mainFp = slugFingerprints("origin/main");
+  const branchFp = slugFingerprints(`origin/${pr.headRefName}`);
+  return [...branchFp.entries()]
+    .filter(([slug, fp]) => !mainFp.has(slug) || mainFp.get(slug) !== fp)
+    .map(([slug]) => slug);
+}
+
 function auditPrs() {
   const issues = [];
   const prs = getOpenPrs();
@@ -136,11 +171,16 @@ function auditPrs() {
     }
 
     const newSlugs = detectionSlugForPr(pr, mainSlugs);
+    const changedSlugs = remoteBranchExists(pr.headRefName) ? changedSlugsForPr(pr) : [];
+    const modifiedSlugs = changedSlugs.filter((s) => mainSlugs.has(s));
     console.log(`PR #${pr.number}: ${pr.title}`);
     console.log(`  branch: ${pr.headRefName}  draft: ${pr.isDraft}`);
     console.log(`  new slugs (${newSlugs.length}): ${newSlugs.join(", ") || "(none)"}`);
+    if (modifiedSlugs.length) {
+      console.log(`  modified slugs (${modifiedSlugs.length}): ${modifiedSlugs.join(", ")}`);
+    }
 
-    for (const slug of newSlugs) {
+    for (const slug of changedSlugs) {
       if (!slugOwners.has(slug)) slugOwners.set(slug, []);
       slugOwners.get(slug).push(pr.number);
     }
