@@ -433,5 +433,80 @@ export const genericPatterns: Pattern[] = [
       "My API may have IDOR: records are fetched by sequential ID without checking ownership. Add server-side ownership checks to every record access and switch user-facing IDs to UUIDs. Show the updated handlers.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "sql-error-disclosure",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SQL syntax error disclosed on search/query input",
+    description:
+      "A search or filter endpoint returns a raw database syntax error when given malformed input, proving the parameter is interpolated into SQL. This is positive proof of SQL injection risk.",
+    impactOneline: "Attackers can read or modify your database via the search parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlErrorDisclosure" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries; never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concatenated queries with prepared statements / ORM bindings.",
+        "Return generic errors to clients; log SQL details server-side only.",
+        "Add input validation and WAF rules on search endpoints."
+      ]
+    },
+    fixPrompt:
+      "My search endpoint returns SQL syntax errors (e.g. SQLITE_ERROR) when given malformed input. Switch to parameterized queries/ORM bindings, return generic errors to clients, and show me the fixed handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "unauthenticated-admin-endpoint",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Admin or application configuration reachable without authentication",
+    description:
+      "An administrative configuration endpoint responds with application settings to unauthenticated GET requests. Attackers gain internal config, feature flags, and sometimes secrets.",
+    impactOneline: "Anyone can read your admin/application configuration over HTTP.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "unauthenticatedAdminEndpoint" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Require admin authentication on every configuration endpoint.",
+      steps: [
+        "Gate /admin and /rest/admin routes behind session + role checks.",
+        "Return 401/403 for unauthenticated callers.",
+        "Never expose full application config in production APIs."
+      ]
+    },
+    fixPrompt:
+      "My /rest/admin/application-configuration (or similar admin config route) returns JSON without authentication. Add admin session + role checks and return 401 for unauthenticated requests. Show the middleware.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dangerous-html-sinks",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Dangerous HTML sinks in client bundle",
+    description:
+      "The shipped JavaScript uses bypassSecurityTrustHtml, dangerouslySetInnerHTML, or dynamic innerHTML bindings with API/user data — bypassing XSS sanitization. Stored or reflected XSS becomes trivial.",
+    impactOneline: "User-controlled data is rendered as HTML — XSS can steal sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dangerousHtmlSinks" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Never mark user/API content as trusted HTML; encode or sanitize.",
+      steps: [
+        "Remove bypassSecurityTrustHtml / dangerouslySetInnerHTML on dynamic data.",
+        "Render user content as text nodes or through a strict sanitizer.",
+        "Add CSP without unsafe-inline in production."
+      ]
+    },
+    fixPrompt:
+      "My Angular/React bundle uses bypassSecurityTrustHtml or dangerouslySetInnerHTML with dynamic data (orderId, searchValue, etc.). Remove trusted-HTML rendering on user/API content and show the safe template change.",
+    version: 1,
+    enabled: true
   }
 ];

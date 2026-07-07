@@ -13,6 +13,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runDeepScan } from "../lib/checks/runner";
 import { aiDeepProbe } from "../lib/ai/deep-probe";
+import { computeBenchmarkRecall } from "../lib/checks/benchmark-recall";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dir, "../..");
@@ -23,6 +24,14 @@ interface ScanEntry {
   auth?: string;
   id?: string;
   enabled?: boolean;
+}
+
+interface BenchmarkTarget extends ScanEntry {
+  expected_categories?: string[];
+}
+
+interface BenchmarksFile {
+  targets: BenchmarkTarget[];
 }
 
 interface ScanRunResult {
@@ -135,7 +144,7 @@ async function main() {
   const targets: Array<{ entry: ScanEntry; kind: "benchmark" | "discovery" }> = [];
 
   if (useBenchmarks) {
-    const bench = loadJson<{ targets: ScanEntry[] }>(resolve(LOOP, "benchmarks.json"), { targets: [] });
+    const bench = loadJson<BenchmarksFile>(resolve(LOOP, "benchmarks.json"), { targets: [] });
     for (const t of bench.targets) {
       if (t.enabled === false) continue;
       targets.push({ entry: t, kind: "benchmark" });
@@ -159,6 +168,8 @@ async function main() {
 
   let ok = 0;
   let findings = 0;
+  const benchmarkRecall: Record<string, ReturnType<typeof computeBenchmarkRecall>> = {};
+
   for (const { entry, kind } of slice) {
     const result = await scanOne(entry, kind);
     saveResults(result);
@@ -167,6 +178,14 @@ async function main() {
       findings += result.finding_count;
     }
     console.log(`${result.status} ${kind} ${entry.url} findings=${result.finding_count}`);
+
+    if (kind === "benchmark" && entry.id && result.status === "ok") {
+      const bench = loadJson<BenchmarksFile>(resolve(LOOP, "benchmarks.json"), { targets: [] });
+      const target = bench.targets.find((t) => t.id === entry.id);
+      if (target?.expected_categories?.length) {
+        benchmarkRecall[entry.id] = computeBenchmarkRecall(result.findings, target.expected_categories);
+      }
+    }
   }
 
   // Update scoreboard
@@ -176,6 +195,16 @@ async function main() {
   score.last_run = new Date().toISOString();
   score.total_sites_scanned = Number(score.total_sites_scanned || 0) + ok;
   score.total_findings = Number(score.total_findings || 0) + findings;
+  if (Object.keys(benchmarkRecall).length) {
+    score.benchmark_recall = {
+      ...(typeof score.benchmark_recall === "object" && score.benchmark_recall !== null
+        ? (score.benchmark_recall as Record<string, unknown>)
+        : {}),
+      ...benchmarkRecall
+    };
+  }
+  const shipped = loadJson<{ shipped: unknown[] }>(resolve(LOOP, "improvements.json"), { shipped: [] });
+  score.improvements_shipped = shipped.shipped?.length ?? Number(score.improvements_shipped || 0);
   writeFileSync(scorePath, JSON.stringify(score, null, 2));
 
   console.log(JSON.stringify({ ok: true, scanned: ok, findings, limit }));
