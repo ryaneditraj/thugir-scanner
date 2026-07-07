@@ -23,6 +23,57 @@ function extractSupabaseFromText(combined) {
   return jwts[0] ? { projectUrl, anonKey: jwts[0] } : null;
 }
 
+function extractConvexFromText(combined) {
+  const direct = combined.match(/https:\/\/([a-z][a-z0-9-]{2,50})\.convex\.cloud\b/);
+  if (direct) return { deploymentUrl: `https://${direct[1]}.convex.cloud` };
+  const env = combined.match(
+    /(?:CONVEX_URL|NEXT_PUBLIC_CONVEX_URL|VITE_CONVEX_URL)\s*[=:]\s*["']?(https:\/\/[^"'\s;]+\.convex\.cloud)\/?["']?/i
+  );
+  if (env) return { deploymentUrl: env[1].replace(/\/$/, "") };
+  return null;
+}
+
+function extractConvexFunctionPaths(combined, limit = 8) {
+  const paths = new Set();
+  const colonRe = /["']([a-z][a-zA-Z0-9_]*):([a-z][a-zA-Z0-9_]+)["']/g;
+  let m;
+  while ((m = colonRe.exec(combined)) && paths.size < limit) {
+    paths.add(`${m[1]}:${m[2]}`);
+  }
+  const apiRe = /api\.([a-z][a-zA-Z0-9_]*)\.([a-z][a-zA-Z0-9_]+)/g;
+  while ((m = apiRe.exec(combined)) && paths.size < limit) {
+    paths.add(`${m[1]}:${m[2]}`);
+  }
+  return [...paths];
+}
+
+function isConvexOpenQueryResponse(body) {
+  if (/unauthorized|not authenticated|unauthenticated|must be signed in|permission denied/i.test(body)) {
+    return { open: false };
+  }
+  try {
+    const parsed = JSON.parse(body);
+    if (parsed.status === "error" || parsed.errorMessage) return { open: false };
+    if (parsed.status !== "success") return { open: false };
+    const val = parsed.value;
+    if (Array.isArray(val) && val.length > 0) return { open: true, rowHint: `rows:${val.length}` };
+    if (val && typeof val === "object" && !Array.isArray(val) && Object.keys(val).length > 0) {
+      return { open: true, rowHint: "object" };
+    }
+    return { open: false };
+  } catch {
+    return { open: false };
+  }
+}
+
+function isLikelyConvexQueryPath(path) {
+  const fn = path.split(":")[1] || "";
+  if (/^(create|update|delete|insert|remove|set|add|mutate|send|patch|put|destroy)$/i.test(fn)) {
+    return false;
+  }
+  return /^(list|get|fetch|read|all|search|find|load|current|me|by|for)/i.test(fn);
+}
+
 const DEMO_FLAG_RES = [
   /["']?(?:SKIP_AUTH|BYPASS_AUTH|DISABLE_AUTH|MOCK_AUTH|DEMO_MODE|VITE_SKIP_AUTH|NEXT_PUBLIC_SKIP_AUTH|VITE_DEMO_MODE|NEXT_PUBLIC_DEMO_MODE)["']?\s*[:=]\s*(?:true|"true"|'true'|"1"|'1'|1)(?=["'\s;,}]|$)/i,
   /\bskipAuth\s*:\s*true\b/i,
@@ -122,5 +173,16 @@ assert("38 supabase url only no jwt", extractSupabaseFromText("https://abcdefghi
 assert("39 openapi swagger", looksOpenApiBody('{"swagger":"2.0","paths":{"/a":{"patch":{}}}}'));
 assert("40 extract fetch api", extractApiPaths("axios.get('/api/health')").includes("/api/health"));
 
-console.log(`\nRBT harness: ${passed}/${passed + failed} passed (40 cycles)`);
+assert("41 extractConvex finds deployment", extractConvexFromText("https://happy-fox-123.convex.cloud")?.deploymentUrl.includes("convex.cloud"));
+assert("42 convex env var", extractConvexFromText('NEXT_PUBLIC_CONVEX_URL="https://abc-fox.convex.cloud"')?.deploymentUrl.includes("abc-fox"));
+assert("43 convex paths api ref", extractConvexFunctionPaths("useQuery(api.users.list)").includes("users:list"));
+assert("44 convex colon path", extractConvexFunctionPaths('"messages:list"').includes("messages:list"));
+assert("45 convex open query rows", isConvexOpenQueryResponse('{"status":"success","value":[{"id":1}]}').open);
+assert("46 convex auth error", !isConvexOpenQueryResponse('{"status":"error","errorMessage":"Unauthorized"}').open);
+assert("47 convex empty array", !isConvexOpenQueryResponse('{"status":"success","value":[]}').open);
+assert("48 skip mutation path", !isLikelyConvexQueryPath("users:create"));
+assert("49 allow list path", isLikelyConvexQueryPath("users:list"));
+assert("50 no convex in random text", extractConvexFromText("hello world") === null);
+
+console.log(`\nRBT harness: ${passed}/${passed + failed} passed (50 cycles)`);
 process.exit(failed > 0 ? 1 : 0);
