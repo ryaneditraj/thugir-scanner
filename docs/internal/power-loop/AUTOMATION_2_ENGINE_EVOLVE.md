@@ -80,13 +80,14 @@ Log in `docs/internal/power-loop/improvements.json`:
 
 ## SHIP
 
-1. Commit to `cursor/power-loop-9ec4`
-2. Open or update **one draft PR** to `main`:
-   - Title: `engine: N improvements from benchmark oracle [date UTC]`
-   - Body: table — gap → fix → before/after finding count on benchmark
-3. Update `scoreboard.json` → `improvements_shipped`, `benchmark_recall`
+1. Commit to `cursor/power-loop-9ec4` only — **do NOT open a new PR every hour**
+2. Engine changes accumulate on the power-loop branch
+3. **Ship to Main** (12h automation) promotes to `main`
+4. **PR Triage** (hourly) manages the separate detection PR backlog
 
-**Do not auto-merge.**
+Update `docs/internal/power-loop/improvements.json` and `scoreboard.json`.
+
+**Do not auto-merge. Do not open per-run PRs.**
 
 ---
 
