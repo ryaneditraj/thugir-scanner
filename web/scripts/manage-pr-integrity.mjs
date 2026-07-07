@@ -276,6 +276,36 @@ function auditPrs() {
   return issues;
 }
 
+function supersededPrNumbers(prs) {
+  const retired = retiredPrNumbers();
+  const toSkip = new Set(retired);
+
+  const integrityPrs = prs.filter(
+    (p) => /pull-request-integrity/i.test(p.headRefName) || /PR integrity/i.test(p.title)
+  );
+  const liveIntegrity = integrityPrs.filter((p) => remoteBranchExists(p.headRefName));
+  if (liveIntegrity.length > 1) {
+    liveIntegrity.sort((a, b) => b.number - a.number);
+    for (const p of liveIntegrity.slice(1)) toSkip.add(p.number);
+  }
+
+  const slugOwners = new Map();
+  for (const pr of prs) {
+    if (!remoteBranchExists(pr.headRefName)) continue;
+    for (const slug of changedSlugsForPr(pr)) {
+      if (!slugOwners.has(slug)) slugOwners.set(slug, []);
+      slugOwners.get(slug).push(pr.number);
+    }
+  }
+  for (const owners of slugOwners.values()) {
+    if (owners.length <= 1) continue;
+    owners.sort((a, b) => a - b);
+    for (const prNum of owners.slice(1)) toSkip.add(prNum);
+  }
+
+  return toSkip;
+}
+
 function fixBacklogOnBranches() {
   if (!existsSync(backlogPath)) {
     console.error("Missing docs/AUTOMATION_BACKLOG.md — run from repo with canonical backlog.");
@@ -283,12 +313,17 @@ function fixBacklogOnBranches() {
   }
   const canonical = readFileSync(backlogPath, "utf8");
   const prs = getOpenPrs();
+  const skipPrs = supersededPrNumbers(prs);
 
   const startBranch = shQuiet("git branch --show-current") || "main";
   shQuiet("git stash push -u -m pr-integrity-fix-backlog 2>/dev/null || true");
 
   for (const pr of prs) {
     const branch = pr.headRefName;
+    if (skipPrs.has(pr.number)) {
+      console.log(`\nSkipping PR #${pr.number} (retired/superseded)`);
+      continue;
+    }
     console.log(`\nFixing backlog on ${branch} (PR #${pr.number})...`);
     shQuiet(`git fetch origin ${branch} --quiet`);
     if (!remoteBranchExists(branch)) {
@@ -326,8 +361,12 @@ function pruneOrphanBranches() {
   }
 
   for (const b of orphans) {
+    const orphanSlugs = getBranchSlugs(b);
     const cursorMatch = prs.find((p) => {
-      if (!remoteBranchExists(p.headRefName) || !remoteBranchExists(b)) return false;
+      if (!remoteBranchExists(p.headRefName) || !p.headRefName.startsWith("cursor/")) return false;
+      const prSlugs = detectionSlugForPr(p, getMainSlugs());
+      if (prSlugs.some((s) => orphanSlugs.has(s))) return true;
+      if (!remoteBranchExists(b)) return false;
       const diff = shQuiet(`git diff --stat origin/${b} origin/${p.headRefName}`);
       return diff === "" || diff.includes("1 file changed");
     });

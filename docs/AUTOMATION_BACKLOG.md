@@ -24,11 +24,10 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 
 ## Retired PR shells
 
-Branch deleted — close on GitHub when possible:
+Branch deleted — close on GitHub when possible (token lacks `closePullRequest`):
 
 - **#17** — duplicate `secret-twilio`; keeper is PR #12.
-- **#18, #16, #11** — superseded integrity passes; keeper is PR #19.
-- **#14** — dead branch (already gone).
+- **#18, #16, #11, #14** — superseded integrity passes; keeper is PR #19.
 
 ## Queued (not yet taken)
 
