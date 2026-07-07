@@ -86,6 +86,17 @@ function branchTip(branch) {
   return shQuiet(`git rev-parse origin/${branch} 2>/dev/null`);
 }
 
+function retiredPrNumbers() {
+  if (!existsSync(backlogPath)) return new Set();
+  const text = readFileSync(backlogPath, "utf8");
+  const retiredSection = text.split("## Retired")[1]?.split("##")[0] || "";
+  const sectionNums = new Set();
+  for (const m of retiredSection.matchAll(/^-\s+\*\*([^*]+)\*\*/gm)) {
+    for (const n of m[1].matchAll(/#(\d+)/g)) sectionNums.add(Number(n[1]));
+  }
+  return sectionNums;
+}
+
 function detectionSlugForPr(pr, mainSlugs) {
   const branchSlugs = getBranchSlugs(pr.headRefName);
   return [...branchSlugs].filter((s) => !mainSlugs.has(s));
@@ -142,6 +153,7 @@ function auditPrs() {
   const issues = [];
   const prs = getOpenPrs();
   const mainSlugs = getMainSlugs();
+  const retired = retiredPrNumbers();
 
   if (prs.length === 0) {
     console.log("No open PRs.");
@@ -157,9 +169,16 @@ function auditPrs() {
 
   for (const pr of prs) {
     if (!remoteBranchExists(pr.headRefName)) {
+      const isIntegrity =
+        /pull-request-integrity/i.test(pr.headRefName) || /PR integrity/i.test(pr.title);
+      const isRetired = isIntegrity || retired.has(pr.number);
       const msg = `PR #${pr.number} head branch missing on origin: ${pr.headRefName}`;
-      console.log(`  ERROR: ${msg}`);
-      issues.push({ kind: "missing-branch", pr: pr.number, branch: pr.headRefName });
+      console.log(`  ${isRetired ? "INFO" : "ERROR"}: ${msg}${isRetired ? " (retired shell)" : ""}`);
+      issues.push({
+        kind: isRetired ? "retired-pr-shell" : "missing-branch",
+        pr: pr.number,
+        branch: pr.headRefName,
+      });
     } else {
       const tip = branchTip(pr.headRefName);
       if (tipOwners.has(tip)) {
@@ -203,19 +222,21 @@ function auditPrs() {
   const integrityPrs = prs.filter((p) =>
     /pull-request-integrity/i.test(p.headRefName) || /PR integrity/i.test(p.title)
   );
-  if (integrityPrs.length > 1) {
+  const liveIntegrityPrs = integrityPrs.filter((p) => remoteBranchExists(p.headRefName));
+  if (liveIntegrityPrs.length > 1) {
     console.log("\n--- Multiple open integrity PRs (close superseded duplicates) ---");
-    const nums = integrityPrs.map((p) => `#${p.number}`).join(", ");
-    console.log(`  ERROR: ${integrityPrs.length} integrity PRs open: ${nums}`);
-    for (const p of integrityPrs) {
-      const alive = remoteBranchExists(p.headRefName);
-      console.log(`    #${p.number} ${p.headRefName}${alive ? "" : " (DEAD BRANCH)"}`);
-      issues.push({
-        kind: "duplicate-integrity-pr",
-        pr: p.number,
-        branch: p.headRefName,
-        dead: !alive,
-      });
+    const nums = liveIntegrityPrs.map((p) => `#${p.number}`).join(", ");
+    console.log(`  ERROR: ${liveIntegrityPrs.length} live integrity PRs: ${nums}`);
+    for (const p of liveIntegrityPrs) {
+      console.log(`    #${p.number} ${p.headRefName}`);
+      issues.push({ kind: "duplicate-integrity-pr", pr: p.number, branch: p.headRefName, dead: false });
+    }
+  }
+  const deadIntegrity = integrityPrs.filter((p) => !remoteBranchExists(p.headRefName));
+  if (deadIntegrity.length) {
+    console.log("\n--- Retired integrity PR shells (branch deleted, close on GitHub when possible) ---");
+    for (const p of deadIntegrity) {
+      console.log(`  INFO: #${p.number} ${p.headRefName} (DEAD BRANCH)`);
     }
   }
 
