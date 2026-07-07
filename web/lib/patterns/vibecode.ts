@@ -343,5 +343,30 @@ export const vibecodePatterns: Pattern[] = [
       "My Next.js __NEXT_DATA__ contains sensitive env key names with values. Remove them from page props so they never reach the client, and list what I must rotate.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "vibe-exposed-admin-panel",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Admin panel reachable without authentication",
+    description:
+      "A common admin path (/admin, /dashboard, /manage) returns an admin UI with management tables or copy — without redirecting to a login page. AI scaffolds often ship admin dashboards as client-only routes with no server-side gate.",
+    impactOneline: "Anyone can open your admin panel URL and use management features without signing in.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "exposedAdminPanel" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Protect every admin route with server-side authentication.",
+      steps: [
+        "Add middleware or server layout checks that return 401/redirect for unauthenticated requests.",
+        "Never rely on client-side route guards alone for /admin or /dashboard.",
+        "Audit admin mutations to require a verified session on the server."
+      ]
+    },
+    fixPrompt:
+      "My /admin or /dashboard route is reachable without authentication — visitors see the admin UI without logging in. Add server-side auth middleware on every admin route, redirect unauthenticated users to login, and show me the middleware/config changes.",
+    version: 1,
+    enabled: true
   }
 ];

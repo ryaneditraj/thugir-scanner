@@ -63,6 +63,7 @@ Patterns grounded in 2025 audits of Lovable/Bolt/v0/Replit deploys (vibe-eval, s
 | `hardcodedCredentials` | Literal admin/password or demo emails in client JS |
 | `clerkSecretInClient` | Clerk `sk_live_` / `sk_test_` assigned in browser code |
 | `firebaseFirestoreOpen` | Firestore REST returns documents without auth token |
+| `exposedAdminPanel` | `/admin`, `/dashboard` return admin UI without login redirect |
 | http_probe | `/.streamlit/secrets.toml` on Streamlit vibe deploys |
 
 Builder-specific aliases (Lovable storage, Bolt demo mode, v0 OpenAPI) share the same rules so
