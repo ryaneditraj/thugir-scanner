@@ -19,11 +19,11 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
-| (new) | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
+| #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
 
 > **Must close manually (automation token lacks `closePullRequest`):**
 > - **#17** — duplicate `secret-twilio` modification; superseded by PR #12.
-> - **#18** (`cursor/pull-request-integrity-8f98`) — superseded by this integrity pass.
+> - **#18** (`cursor/pull-request-integrity-8f98`) — superseded by PR #19.
 > - **#16** (`cursor/pull-request-integrity-1ac1`) — superseded.
 > - **#14** — dead branch `cursor/pull-request-integrity-e6ce`; superseded.
 > - **#11** (`cursor/pull-request-integrity-447d`) — superseded.
