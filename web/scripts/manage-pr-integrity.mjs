@@ -6,6 +6,7 @@
  *   node scripts/manage-pr-integrity.mjs --audit          # report only (exit 1 on issues)
  *   node scripts/manage-pr-integrity.mjs --fix-backlog    # reset AUTOMATION_BACKLOG.md on open PR branches
  *   node scripts/manage-pr-integrity.mjs --prune-branches  # delete orphan auto/detection/* branches
+ *   node scripts/manage-pr-integrity.mjs --retire-superseded  # delete branches for duplicate/superseded PRs
  */
 import { execSync } from "child_process";
 import { readFileSync, existsSync } from "fs";
@@ -21,6 +22,7 @@ const args = new Set(process.argv.slice(2));
 const audit = args.has("--audit") || args.size === 0;
 const fixBacklog = args.has("--fix-backlog");
 const pruneBranches = args.has("--prune-branches");
+const retireSuperseded = args.has("--retire-superseded");
 
 function sh(cmd, opts = {}) {
   return execSync(cmd, { cwd: repoRoot, encoding: "utf8", stdio: opts.silent ? "pipe" : "inherit", ...opts });
@@ -303,10 +305,8 @@ function pruneOrphanBranches() {
   }
 
   for (const b of orphans) {
-    // Only delete if an equivalent cursor branch exists with same tip or superset
-    const autoTip = shQuiet(`git rev-parse origin/${b}`);
-  const cursorMatch = prs.find((p) => {
-      const cursorTip = shQuiet(`git rev-parse origin/${p.headRefName}`);
+    const cursorMatch = prs.find((p) => {
+      if (!remoteBranchExists(p.headRefName) || !remoteBranchExists(b)) return false;
       const diff = shQuiet(`git diff --stat origin/${b} origin/${p.headRefName}`);
       return diff === "" || diff.includes("1 file changed");
     });
@@ -320,9 +320,63 @@ function pruneOrphanBranches() {
   }
 }
 
+/** Delete remote branches for duplicate detections and superseded integrity PRs (token cannot close PRs). */
+function retireSupersededBranches() {
+  const prs = getOpenPrs();
+  const toRetire = new Set();
+
+  const slugOwners = new Map();
+  for (const pr of prs) {
+    if (!remoteBranchExists(pr.headRefName)) continue;
+    for (const slug of changedSlugsForPr(pr)) {
+      if (!slugOwners.has(slug)) slugOwners.set(slug, []);
+      slugOwners.get(slug).push(pr.number);
+    }
+  }
+
+  for (const [slug, owners] of slugOwners) {
+    if (owners.length <= 1) continue;
+    owners.sort((a, b) => a - b);
+    const keeper = owners[0];
+    for (const prNum of owners.slice(1)) {
+      console.log(`Mark PR #${prNum} for retirement (duplicate slug "${slug}", keeper #${keeper})`);
+      toRetire.add(prNum);
+    }
+  }
+
+  const integrityPrs = prs.filter(
+    (p) => /pull-request-integrity/i.test(p.headRefName) || /PR integrity/i.test(p.title)
+  );
+  if (integrityPrs.length > 1) {
+    integrityPrs.sort((a, b) => b.number - a.number);
+    const keeper = integrityPrs[0];
+    for (const p of integrityPrs.slice(1)) {
+      console.log(`Mark PR #${p.number} for retirement (superseded integrity, keeper #${keeper.number})`);
+      toRetire.add(p.number);
+    }
+  }
+
+  if (!toRetire.size) {
+    console.log("No superseded PR branches to retire.");
+    return;
+  }
+
+  for (const prNum of toRetire) {
+    const pr = prs.find((p) => p.number === prNum);
+    if (!pr) continue;
+    if (!remoteBranchExists(pr.headRefName)) {
+      console.log(`PR #${prNum} branch already gone: ${pr.headRefName}`);
+      continue;
+    }
+    console.log(`Deleting branch ${pr.headRefName} (PR #${prNum})`);
+    shQuiet(`git push origin --delete ${pr.headRefName}`);
+  }
+}
+
 // --- main ---
 if (fixBacklog) fixBacklogOnBranches();
 if (pruneBranches) pruneOrphanBranches();
+if (retireSuperseded) retireSupersededBranches();
 
 if (audit) {
   const issues = auditPrs();
@@ -335,7 +389,7 @@ if (audit) {
       i.kind === "missing-branch" ||
       i.kind === "duplicate-integrity-pr"
   );
-  if (serious.length > 0 && !fixBacklog && !pruneBranches) {
+  if (serious.length > 0 && !fixBacklog && !pruneBranches && !retireSuperseded) {
     process.exit(1);
   }
 }
