@@ -1,10 +1,35 @@
 {
-  "updated_at": "2026-07-07T20:03:43.333Z",
-  "benchmark_recall": {},
-  "total_sites_scanned": 1,
-  "total_findings": 4,
+  "updated_at": "2026-07-07T20:06:00.000Z",
+  "benchmark_recall": {
+    "juice-shop": {
+      "categories_expected": 6,
+      "categories_hit": 2,
+      "hit": ["sensitive_data", "misconfig"],
+      "gap": ["xss", "sqli", "idor", "auth_bypass"],
+      "findings": 4,
+      "notes": "Hit misconfig (headers, CORS) and sensitive_data (secret-resend, likely FP). vibe-unauthenticated-api-routes fired but does not map to idor/auth_bypass oracle. No active XSS/SQLi/IDOR probes triggered despite 65 probes run. Pages crawled: 1 (shallow crawl)."
+    }
+  },
+  "total_sites_scanned": 6,
+  "total_findings": 19,
   "critical_findings": 0,
   "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 5,
+  "discovery_findings": 15,
   "improvements_shipped": 0,
-  "last_run": "2026-07-07T20:03:43.333Z"
+  "last_run": "2026-07-07T20:04:59.139Z",
+  "top_gaps": [
+    "xss — no reflected/stored XSS canary hits on juice-shop benchmark",
+    "sqli — no SQL injection probe hits on juice-shop",
+    "idor — idor-sequential-ids pattern did not fire",
+    "auth_bypass — no JWT/session bypass probes triggered"
+  ],
+  "discovery_highlights": {
+    "dvwa.csalab.app": 3,
+    "nodegoat-websec.herokuapp.com": 3,
+    "crapi.apisec.ai": 4,
+    "wrongsecrets.herokuapp.com": 2,
+    "juice-shop-staging.herokuapp.com": 3
+  }
 }
