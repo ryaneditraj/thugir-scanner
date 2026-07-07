@@ -6,7 +6,8 @@ function cacheKey(url: string, opts: FetchOpts = {}): string {
   const method = opts.method ?? "GET";
   const body = opts.body ?? "";
   const hdr = opts.headers ? JSON.stringify(opts.headers) : "";
-  return `${method}:${url}:${body}:${hdr}`;
+  const redirect = opts.redirect ?? "follow";
+  return `${method}:${url}:${body}:${hdr}:${redirect}`;
 }
 
 /** Dedupes identical HTTP probes within a single scan (Cycle 16–17). */

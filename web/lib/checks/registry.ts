@@ -230,6 +230,107 @@ const corsReflectOrigin: Rule = async (ctx) => {
   };
 };
 
+// --- open redirect via query parameter --------------------------------------
+// AI auth flows often accept ?next= / ?redirect= without validating the destination.
+// We inject a harmless external probe URL and only flag when the server issues a redirect
+// (or meta-refresh) to that exact host — positive proof, not a reflected-string guess.
+const OPEN_REDIRECT_PROBE = "https://evil-open-redirect-probe.example/thugir-redirect-test";
+const OPEN_REDIRECT_PROBE_HOST = "evil-open-redirect-probe.example";
+const OPEN_REDIRECT_PARAMS = [
+  "redirect",
+  "redirect_uri",
+  "redirect_url",
+  "return",
+  "returnTo",
+  "return_to",
+  "next",
+  "url",
+  "goto",
+  "dest",
+  "destination",
+  "redir",
+  "continue",
+  "callback",
+  "forward"
+];
+const OPEN_REDIRECT_PATHS = ["/", "/login", "/logout", "/signin", "/auth/login"];
+
+function resolvesToOpenRedirectProbe(location: string, baseOrigin: string): boolean {
+  if (!location.trim()) return false;
+  try {
+    const u = new URL(location, baseOrigin);
+    return u.hostname === OPEN_REDIRECT_PROBE_HOST;
+  } catch {
+    return false;
+  }
+}
+
+const openRedirect: Rule = async (ctx) => {
+  const probes: { path: string; param: string; status: number; location: string; kind: string }[] = [];
+  const seen = new Set<string>();
+  const urls: { url: string; param: string; path: string }[] = [];
+
+  for (const path of OPEN_REDIRECT_PATHS) {
+    for (const param of OPEN_REDIRECT_PARAMS) {
+      const key = `${path}?${param}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set(param, OPEN_REDIRECT_PROBE);
+      urls.push({ url: u.toString(), param, path });
+      if (urls.length >= 12) break;
+    }
+    if (urls.length >= 12) break;
+  }
+
+  const docs = await ctx.probe.getMany(
+    urls.map((x) => x.url),
+    { maxBytes: 2048, redirect: "manual", timeoutMs: 8000 },
+    4
+  );
+  for (const { url: probeUrl, param, path } of urls) {
+    const doc = docs.get(probeUrl);
+    if (!doc) continue;
+    const location = doc.headers["location"] || "";
+    if (
+      [301, 302, 303, 307, 308].includes(doc.status) &&
+      resolvesToOpenRedirectProbe(location, ctx.origin)
+    ) {
+      probes.push({
+        path,
+        param,
+        status: doc.status,
+        location,
+        kind: "http_redirect"
+      });
+      continue;
+    }
+    const meta = doc.body.match(
+      /<meta[^>]*http-equiv=["']refresh["'][^>]*content=["'][^"']*url=([^"';]+)/i
+    );
+    if (meta && resolvesToOpenRedirectProbe(meta[1].trim(), ctx.origin)) {
+      probes.push({
+        path,
+        param,
+        status: doc.status,
+        location: meta[1].trim(),
+        kind: "meta_refresh"
+      });
+    }
+  }
+
+  if (probes.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      probeHost: OPEN_REDIRECT_PROBE_HOST,
+      hits: probes.slice(0, 4),
+      note: "Server redirected to attacker-controlled URL from query parameter"
+    }
+  };
+};
+
 // --- robots.txt discloses sensitive paths -------------------------------------
 const robotsSensitivePaths: Rule = async (ctx) => {
   const doc = await ctx.probe.get(`${ctx.origin}/robots.txt`, { maxBytes: 4096 });
@@ -719,6 +820,7 @@ export const RULES: Record<string, Rule> = {
   insecureCookies,
   permissiveCors,
   corsReflectOrigin,
+  openRedirect,
   robotsSensitivePaths,
   techDisclosure,
   inlineStateSecrets,
@@ -754,6 +856,7 @@ export const FREE_RULES = new Set([
   "insecureCookies",
   "permissiveCors",
   "corsReflectOrigin",
+  "openRedirect",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass

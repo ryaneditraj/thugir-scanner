@@ -204,6 +204,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "open-redirect-query-param",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Open redirect via query parameter",
+    description:
+      "A URL query parameter (e.g. ?next=, ?redirect=, ?return=) accepts an arbitrary external destination and the server issues an HTTP redirect to it. AI-generated login and OAuth flows commonly ship this pattern for post-auth navigation without validating the target.",
+    impactOneline:
+      "Attackers can craft links that redirect victims to phishing sites after visiting your domain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openRedirect" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Allow-list redirect destinations; never redirect to arbitrary URLs from query params.",
+      steps: [
+        "Replace open redirects with an allow-list of same-origin paths (or known trusted hosts).",
+        "Reject absolute URLs unless the host is explicitly trusted.",
+        "Prefer relative paths only (e.g. /dashboard) for post-login navigation."
+      ]
+    },
+    fixPrompt:
+      "My app has an open redirect: a query parameter like ?next= or ?redirect= sends users to arbitrary external URLs. Add an allow-list so only same-origin (or explicitly trusted) destinations are permitted, and show me the updated redirect handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "cors-reflect-origin",
     platform: "generic",
     category: "Security misconfiguration",

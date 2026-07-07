@@ -103,6 +103,8 @@ export async function fetchDoc(
     method?: string;
     body?: string;
     headers?: Record<string, string>;
+    /** When "manual", redirect responses are returned without following Location. */
+    redirect?: RequestRedirect;
   } = {}
 ): Promise<FetchedDoc> {
   const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -112,7 +114,7 @@ export async function fetchDoc(
   try {
     const res = await fetch(url, {
       method: opts.method ?? "GET",
-      redirect: "follow",
+      redirect: opts.redirect ?? "follow",
       signal: controller.signal,
       body: opts.body,
       headers: { "User-Agent": UA, Accept: "*/*", ...(opts.headers ?? {}) }
