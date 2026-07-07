@@ -1,10 +1,10 @@
 {
-  "updated_at": null,
+  "updated_at": "2026-07-07T20:03:43.333Z",
   "benchmark_recall": {},
-  "total_sites_scanned": 0,
-  "total_findings": 0,
+  "total_sites_scanned": 1,
+  "total_findings": 4,
   "critical_findings": 0,
   "teacher_delta_count": 0,
   "improvements_shipped": 0,
-  "last_run": null
+  "last_run": "2026-07-07T20:03:43.333Z"
 }
