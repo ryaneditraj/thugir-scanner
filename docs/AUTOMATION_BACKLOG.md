@@ -20,14 +20,21 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
-| #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-3d8b` |
+| #22 | detection | Live OpenAI API key validation via Models API | `cursor/thugir-scanner-evolution-f74b` |
+
+## Other open PRs (non-detection)
+
+| PR | Area | Description | Branch |
+|----|------|-------------|--------|
+| #23 | dev | Development environment setup + AGENTS.md | `cursor/setup-dev-environment-0829` |
+| #24 | infra | Power-loop scaffold for hourly Cursor automations | `cursor/power-loop-9ec4` |
 
 ## Retired PR shells
 
 Branch deleted — close on GitHub when possible (token lacks `closePullRequest`):
 
 - **#17** — duplicate `secret-twilio`; keeper is PR #12.
-- **#18, #16, #11, #14, #19** — superseded integrity passes; keeper is the latest integrity PR on `cursor/pull-request-integrity-3d8b`.
+- **#11, #14, #16, #18, #19, #21** — superseded integrity passes; keeper is the latest `cursor/pull-request-integrity-*` PR.
 
 ## Queued (not yet taken)
 
