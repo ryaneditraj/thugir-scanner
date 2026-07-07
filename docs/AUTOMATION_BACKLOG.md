@@ -6,7 +6,7 @@ Hourly autonomous runs log shipped work here. Open PRs and `done` entries are de
 
 | Date (UTC) | Area | Shipped | Follow-ups |
 |------------|------|---------|------------|
-| 2026-07-07 | detection | **PR:** `auto/detection/saas-secret-providers` — Added 4 high-precision `secret_regex` providers: Mapbox secret token (`sk.eyJ…`), Sentry auth token (`sntrys_…`), PostHog personal API key (`phx_…`), Shopify Admin API token (`shpat_…`). Includes max-damage copy + regex regression tests. | Algolia admin-key detection (contextual rule_ref); Auth0/Datadog/npm tokens; S3/GCS public bucket HEAD probes; Convex deployment auth probe; wire DB `patterns` table into runtime merge; active Stripe webhook signature probe (deep tier). |
+| 2026-07-07 | detection | **PR #1:** Added 4 high-precision `secret_regex` providers: Mapbox secret token (`sk.eyJ…`), Sentry auth token (`sntrys_…`), PostHog personal API key (`phx_…`), Shopify Admin API token (`shpat_…`). Includes max-damage copy + regex regression tests. Branch: `cursor/thugir-scanner-evolution-d94f`. | Algolia admin-key detection (contextual rule_ref); Auth0/Datadog/npm tokens; S3/GCS public bucket HEAD probes; Convex deployment auth probe; wire DB `patterns` table into runtime merge; active Stripe webhook signature probe (deep tier). |
 
 ## Queued (not yet taken)
 
