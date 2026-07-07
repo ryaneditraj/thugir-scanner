@@ -118,8 +118,8 @@ export function looksLikeLoginOnlyPage(body: string): boolean {
 
 /** True when HTML contains admin-dashboard signals (tables, nav, management copy). */
 export function looksLikeAdminPanel(body: string): boolean {
-  if (body.length < 200) return false;
   if (ADMIN_PANEL_MARKERS.some((re) => re.test(body))) return true;
+  if (body.length < 200) return false;
   if (/(?:sidebar|side-nav|sidenav)/i.test(body) && /<table/i.test(body)) return true;
   return false;
 }
