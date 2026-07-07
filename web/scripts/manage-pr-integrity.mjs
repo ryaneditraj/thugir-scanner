@@ -42,20 +42,31 @@ function getOpenPrs() {
   return JSON.parse(raw);
 }
 
+function getSlugsFromRef(ref) {
+  const patternsDir = "web/lib/patterns";
+  const files = shQuiet(`git ls-tree -r --name-only ${ref} -- ${patternsDir}`)
+    .split("\n")
+    .filter((f) => f.endsWith(".ts") && !f.endsWith("types.ts") && !f.endsWith("index.ts"));
+
+  const slugs = new Set();
+  for (const file of files) {
+    const text = shQuiet(`git show ${ref}:${file}`);
+    if (!text) continue;
+    for (const block of text.split(/slug:\s*"/).slice(1)) {
+      const slug = block.match(/^([^"]+)"/)?.[1];
+      if (slug) slugs.add(slug);
+    }
+  }
+  return slugs;
+}
+
 function getMainSlugs() {
   shQuiet("git fetch origin main --quiet");
-  const content = shQuiet("git show origin/main:docs/internal/pattern-catalog.json");
-  if (!content) {
-    const local = existsSync(catalogPath) ? readFileSync(catalogPath, "utf8") : "{}";
-    return new Set(JSON.parse(local).slugs || []);
-  }
-  return new Set(JSON.parse(content).slugs || []);
+  return getSlugsFromRef("origin/main");
 }
 
 function getBranchSlugs(branch) {
-  const content = shQuiet(`git show origin/${branch}:docs/internal/pattern-catalog.json`);
-  if (!content) return new Set();
-  return new Set(JSON.parse(content).slugs || []);
+  return getSlugsFromRef(`origin/${branch}`);
 }
 
 function getRemoteBranches(prefix) {
@@ -67,9 +78,7 @@ function getRemoteBranches(prefix) {
 
 function detectionSlugForPr(pr, mainSlugs) {
   const branchSlugs = getBranchSlugs(pr.headRefName);
-  const newSlugs = [...branchSlugs].filter((s) => !mainSlugs.has(s));
-  // Filter out catalog noise: slugs that appear in every open PR are backlog bleed, not unique detections
-  return newSlugs;
+  return [...branchSlugs].filter((s) => !mainSlugs.has(s));
 }
 
 function auditPrs() {
@@ -112,7 +121,7 @@ function auditPrs() {
     }
   }
 
-  console.log("\n--- Cross-PR slug collisions ---");
+  console.log("\n--- Cross-PR slug collisions (true duplicate detections) ---");
   for (const [slug, owners] of [...slugOwners.entries()].sort()) {
     if (owners.length > 1) {
       const msg = `Slug "${slug}" in PRs: ${owners.join(", ")}`;
@@ -121,7 +130,7 @@ function auditPrs() {
     }
   }
 
-  console.log("\n--- Hot files (merge conflict risk) ---");
+  console.log("\n--- Hot files (merge conflict risk — expected until PRs land) ---");
   const hotFiles = ["docs/AUTOMATION_BACKLOG.md", "docs/internal/pattern-catalog.json", "supabase/seed/patterns.sql"];
   for (const f of hotFiles) {
     const owners = fileOwners.get(f) || [];
@@ -213,8 +222,7 @@ if (pruneBranches) pruneOrphanBranches();
 
 if (audit) {
   const issues = auditPrs();
-  const serious = issues.filter((i) => i.kind !== "hot-file" && i.kind !== "duplicate-slug");
-  // hot-file and duplicate-slug are expected until PRs merge; orphan-branch and duplicate-title are actionable
+  const serious = issues.filter((i) => i.kind === "orphan-branch" || i.kind === "duplicate-title" || i.kind === "duplicate-slug");
   if (serious.length > 0 && !fixBacklog && !pruneBranches) {
     process.exit(1);
   }
