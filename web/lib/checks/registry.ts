@@ -230,6 +230,197 @@ const corsReflectOrigin: Rule = async (ctx) => {
   };
 };
 
+// --- Open redirect via query parameter (read-only GET, redirect: manual) -------
+// Inject a harmless external probe URL and only flag when the server issues a redirect
+// (or meta-refresh) to that exact host — positive proof, not a reflected-string guess.
+const OPEN_REDIRECT_PROBE = "https://evil-open-redirect-probe.example/thugir-redirect-test";
+const OPEN_REDIRECT_PROBE_HOST = "evil-open-redirect-probe.example";
+const OPEN_REDIRECT_PARAMS = [
+  "redirect",
+  "redirect_uri",
+  "redirect_url",
+  "return",
+  "returnTo",
+  "return_to",
+  "next",
+  "url",
+  "goto",
+  "dest",
+  "destination",
+  "redir",
+  "continue",
+  "callback",
+  "forward"
+];
+const OPEN_REDIRECT_FALLBACK_PATHS = ["/", "/login", "/logout", "/signin", "/auth/login"];
+
+function resolvesToOpenRedirectProbe(location: string, baseOrigin: string): boolean {
+  if (!location.trim()) return false;
+  try {
+    const u = new URL(location, baseOrigin);
+    return u.hostname === OPEN_REDIRECT_PROBE_HOST;
+  } catch {
+    return false;
+  }
+}
+
+function extractOpenRedirectPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const hrefRe = /href\s*=\s*["'](\/[^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(text))) {
+    const p = m[1].split("?")[0];
+    if (/redirect|return|callback|logout|signin|continue|oauth/i.test(p)) paths.add(p);
+  }
+  return [...paths].slice(0, 6);
+}
+
+const openRedirect: Rule = async (ctx) => {
+  const probes: { path: string; param: string; status: number; location: string; kind: string }[] = [];
+  const seen = new Set<string>();
+  const urls: { url: string; param: string; path: string }[] = [];
+  const paths = [
+    ...new Set([...OPEN_REDIRECT_FALLBACK_PATHS, ...extractOpenRedirectPaths(ctx.combined)])
+  ].slice(0, 8);
+
+  for (const path of paths) {
+    for (const param of OPEN_REDIRECT_PARAMS) {
+      const key = `${path}?${param}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set(param, OPEN_REDIRECT_PROBE);
+      urls.push({ url: u.toString(), param, path });
+      if (urls.length >= 12) break;
+    }
+    if (urls.length >= 12) break;
+  }
+
+  const docs = await ctx.probe.getMany(
+    urls.map((x) => x.url),
+    { maxBytes: 2048, redirect: "manual", timeoutMs: 8000 },
+    4
+  );
+  for (const { url: probeUrl, param, path } of urls) {
+    const doc = docs.get(probeUrl);
+    if (!doc) continue;
+    const location = doc.headers["location"] || "";
+    if (
+      [301, 302, 303, 307, 308].includes(doc.status) &&
+      resolvesToOpenRedirectProbe(location, ctx.origin)
+    ) {
+      probes.push({ path, param, status: doc.status, location, kind: "http_redirect" });
+      continue;
+    }
+    const meta = doc.body.match(
+      /<meta[^>]*http-equiv=["']refresh["'][^>]*content=["'][^"']*url=([^"';]+)/i
+    );
+    if (meta && resolvesToOpenRedirectProbe(meta[1].trim(), ctx.origin)) {
+      probes.push({
+        path,
+        param,
+        status: doc.status,
+        location: meta[1].trim(),
+        kind: "meta_refresh"
+      });
+    }
+  }
+
+  if (probes.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      probeHost: OPEN_REDIRECT_PROBE_HOST,
+      hits: probes.slice(0, 4),
+      note: "Server redirected to attacker-controlled URL from query parameter"
+    }
+  };
+};
+
+// --- Reflected XSS via query parameter (canary probe) -------------------------
+// Inject a unique canary into common query params on discovered/candidate paths.
+// Only fires when the raw canary is echoed unescaped in the HTML body — positive proof.
+const REFLECTED_XSS_PARAMS = [
+  "q",
+  "search",
+  "query",
+  "s",
+  "term",
+  "name",
+  "id",
+  "message",
+  "text",
+  "keyword",
+  "input"
+];
+const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search"];
+
+function extractReflectedXssPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const hrefRe = /href\s*=\s*["'](\/[^"'#?]+)\?[^"']+["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(text))) {
+    const p = m[1];
+    if (/reflected|search|query|echo|error/i.test(p)) paths.add(p);
+  }
+  if (/reflected/i.test(text)) paths.add("/reflected/parameter/body");
+  return [...paths].slice(0, 6);
+}
+
+function isReflectedXssCanary(body: string, canary: string): boolean {
+  if (!body.includes(canary)) return false;
+  const encoded = canary.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  if (body.includes(encoded) && !body.includes(canary)) return false;
+  return true;
+}
+
+const reflectedXss: Rule = async (ctx) => {
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const homePath = new URL(ctx.home.finalUrl).pathname || "/";
+  const paths = [
+    ...new Set([homePath, ...extractReflectedXssPaths(ctx.combined), ...REFLECTED_XSS_FALLBACK_PATHS])
+  ].slice(0, 6);
+  const hits: { path: string; param: string; url: string; snippet: string }[] = [];
+  const seen = new Set<string>();
+  const urls: { url: string; param: string; path: string }[] = [];
+
+  for (const path of paths) {
+    for (const param of REFLECTED_XSS_PARAMS) {
+      const key = `${path}?${param}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set(param, canary);
+      urls.push({ url: u.toString(), param, path });
+      if (urls.length >= 12) break;
+    }
+    if (urls.length >= 12) break;
+  }
+
+  const docs = await ctx.probe.getMany(urls.map((x) => x.url), { maxBytes: 8192 }, 4);
+  for (const { url: probeUrl, param, path } of urls) {
+    const doc = docs.get(probeUrl);
+    if (!doc || doc.status < 200 || doc.status >= 400) continue;
+    const ct = doc.headers["content-type"] || "";
+    if (!/html|text\/plain/i.test(ct) && !/<html|<body/i.test(doc.body)) continue;
+    if (!isReflectedXssCanary(doc.body, canary)) continue;
+    hits.push({ path, param, url: probeUrl, snippet: doc.body.slice(0, 200).trim() });
+    if (hits.length >= 3) break;
+  }
+
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      canary,
+      hits,
+      note: "query parameter echoed unescaped in HTML response — reflected XSS likely"
+    }
+  };
+};
+
 // --- robots.txt discloses sensitive paths -------------------------------------
 const robotsSensitivePaths: Rule = async (ctx) => {
   const doc = await ctx.probe.get(`${ctx.origin}/robots.txt`, { maxBytes: 4096 });
@@ -998,6 +1189,8 @@ export const RULES: Record<string, Rule> = {
   insecureCookies,
   permissiveCors,
   corsReflectOrigin,
+  openRedirect,
+  reflectedXss,
   robotsSensitivePaths,
   techDisclosure,
   inlineStateSecrets,
@@ -1039,6 +1232,7 @@ export const FREE_RULES = new Set([
   "insecureCookies",
   "permissiveCors",
   "corsReflectOrigin",
+  "openRedirect",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass

@@ -7,7 +7,8 @@ function cacheKey(url: string, opts: FetchOpts = {}): string {
   const body = opts.body ?? "";
   const hdr = opts.headers ? JSON.stringify(opts.headers) : "";
   const maxBytes = opts.maxBytes ?? "";
-  return `${method}:${url}:${body}:${hdr}:${maxBytes}`;
+  const redirect = opts.redirect ?? "";
+  return `${method}:${url}:${body}:${hdr}:${maxBytes}:${redirect}`;
 }
 
 /** Dedupes identical HTTP probes within a single scan (Cycle 16–17). */
