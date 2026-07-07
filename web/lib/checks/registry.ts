@@ -684,6 +684,135 @@ const nextDataSensitiveKeys: Rule = async (ctx) => {
   };
 };
 
+// --- SQL error disclosure on search/query endpoints (deep) --------------------
+// Benign malformed input that triggers a database syntax error is positive proof the
+// parameter is interpolated into SQL — the classic injection precursor.
+const SQL_ERROR_MARKERS = [
+  /SQLITE_ERROR/i,
+  /You have an error in your SQL syntax/i,
+  /ER_PARSE_ERROR/i,
+  /ORA-\d{5}/i,
+  /PostgreSQL.*ERROR/i,
+  /SQLSTATE\[/i,
+  /unterminated quoted string/i,
+  /quoted string not properly terminated/i
+];
+const SQL_PROBE = "'))";
+
+function extractSearchEndpoints(text: string): string[] {
+  const paths = new Set<string>();
+  const patterns = [
+    /["'`](\/rest\/[a-z0-9_\-/]+\/search)["'`]/gi,
+    /["'`](\/api\/[a-z0-9_\-/]+\/search)["'`]/gi,
+    /fetch\(\s*["']([^"'`]*\/search[^"'`?]*)["']/gi
+  ];
+  for (const re of patterns) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text))) {
+      const p = m[1].split("?")[0].replace(/\/+$/, "");
+      if (p.length > 3 && p.length < 80) paths.add(p);
+    }
+  }
+  return [...paths].slice(0, 4);
+}
+
+const sqlErrorDisclosure: Rule = async (ctx) => {
+  const discovered = extractSearchEndpoints(ctx.combined);
+  const fallbacks = ["/rest/products/search", "/api/products/search", "/search"];
+  const bases = [...new Set([...discovered, ...fallbacks])].slice(0, 5);
+  const urls = bases.map((p) => {
+    const u = new URL(p, ctx.origin);
+    u.searchParams.set("q", SQL_PROBE);
+    return u.toString();
+  });
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status === 401 || r.status === 403) continue;
+    const marker = SQL_ERROR_MARKERS.find((re) => re.test(r.body));
+    if (!marker) continue;
+    const match = r.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+        snippet: r.body.slice(0, 240).trim(),
+        note: "search/query parameter reaches SQL — injection likely"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- Unauthenticated admin / application config (read-only GET) ---------------
+const ADMIN_PROBE_PATHS = [
+  "/rest/admin/application-configuration",
+  "/rest/admin/config",
+  "/api/admin/config",
+  "/api/admin/settings",
+  "/admin/application-configuration"
+];
+const ADMIN_JSON_MARKERS = /"(?:config|admin|application|settings|server)"\s*:/;
+
+const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
+  const urls = ADMIN_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (/unauthorized|credentials_required|login required/i.test(r.body.slice(0, 400))) continue;
+    if (!ADMIN_JSON_MARKERS.test(r.body)) continue;
+    if (!/^\s*[\[{]/.test(r.body.trim()) && !/"status"\s*:\s*"success"/.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        snippet: r.body.slice(0, 200).trim(),
+        note: "admin/application configuration returned without authentication"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- Dangerous HTML sinks in client bundle (XSS precursor) --------------------
+const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Angular bypassSecurityTrustHtml with template interpolation",
+    re: /bypassSecurityTrustHtml\s*\(\s*`[^`]*\$\{/
+  },
+  {
+    label: "Angular bypassSecurityTrustHtml with API/user data",
+    re: /bypassSecurityTrustHtml\s*\([^)]*\.(?:data|orderId|comment|description|searchValue)/
+  },
+  {
+    label: "React dangerouslySetInnerHTML",
+    re: /dangerouslySetInnerHTML\s*:\s*\{/
+  },
+  {
+    label: "innerHTML binding with dynamic search/user value",
+    re: /\["innerHTML"\][^;]{0,120}(?:searchValue|userInput|\.data)/
+  }
+];
+
+const dangerousHtmlSinks: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of DANGEROUS_SINK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 80) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      sinks: hits.slice(0, 4),
+      note: "client bundle renders unsanitized HTML — stored/reflected XSS likely"
+    }
+  };
+};
+
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const paths = extractApiPaths(ctx.combined, 10);
@@ -738,7 +867,10 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   nextDataSensitiveKeys,
-  unauthenticatedApiRoutes
+  unauthenticatedApiRoutes,
+  sqlErrorDisclosure,
+  unauthenticatedAdminEndpoint,
+  dangerousHtmlSinks
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -769,5 +901,7 @@ export const FREE_RULES = new Set([
   "hardcodedCredentials",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
-  "nextDataSensitiveKeys"
+  "nextDataSensitiveKeys",
+  "unauthenticatedAdminEndpoint",
+  "dangerousHtmlSinks"
 ]);

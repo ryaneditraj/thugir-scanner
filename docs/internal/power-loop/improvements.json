@@ -1,4 +1,39 @@
 {
-  "candidates": [],
-  "shipped": []
+  "candidates": [
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "Juice Shop /rest/products/search?q=')) returns SQLITE_ERROR; benchmark recall sqli 0→1, findings 4→7"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "unauthenticated-admin-endpoint",
+      "status": "shipped",
+      "validation": "Juice Shop /rest/admin/application-configuration returns config JSON without auth; auth_bypass 0→1"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "Juice Shop main.js uses bypassSecurityTrustHtml with orderId interpolation; xss 0→1"
+    }
+  ],
+  "shipped": [
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sql-error-disclosure",
+      "shipped_at": "2026-07-07T20:06:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "unauthenticated-admin-endpoint",
+      "shipped_at": "2026-07-07T20:06:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "dangerous-html-sinks",
+      "shipped_at": "2026-07-07T20:06:00.000Z"
+    }
+  ]
 }

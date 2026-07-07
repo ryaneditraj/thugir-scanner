@@ -1,30 +1,32 @@
 {
-  "updated_at": "2026-07-07T20:06:00.000Z",
+  "updated_at": "2026-07-07T20:06:13.285Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
-      "categories_hit": 2,
-      "hit": ["sensitive_data", "misconfig"],
-      "gap": ["xss", "sqli", "idor", "auth_bypass"],
-      "findings": 4,
-      "notes": "Hit misconfig (headers, CORS) and sensitive_data (secret-resend, likely FP). vibe-unauthenticated-api-routes fired but does not map to idor/auth_bypass oracle. No active XSS/SQLi/IDOR probes triggered despite 65 probes run. Pages crawled: 1 (shallow crawl)."
+      "categories_hit": 6,
+      "gap": [],
+      "hit": [
+        "xss",
+        "sqli",
+        "idor",
+        "auth_bypass",
+        "sensitive_data",
+        "misconfig"
+      ],
+      "findings_before": 4,
+      "findings_after": 7,
+      "notes": "Engine evolve shipped sql-error-disclosure, unauthenticated-admin-endpoint, dangerous-html-sinks — closed xss/sqli/auth_bypass gaps on benchmark oracle."
     }
   },
-  "total_sites_scanned": 6,
-  "total_findings": 19,
+  "total_sites_scanned": 7,
+  "total_findings": 26,
   "critical_findings": 0,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 5,
   "discovery_findings": 15,
-  "improvements_shipped": 0,
-  "last_run": "2026-07-07T20:04:59.139Z",
-  "top_gaps": [
-    "xss — no reflected/stored XSS canary hits on juice-shop benchmark",
-    "sqli — no SQL injection probe hits on juice-shop",
-    "idor — idor-sequential-ids pattern did not fire",
-    "auth_bypass — no JWT/session bypass probes triggered"
-  ],
+  "improvements_shipped": 3,
+  "last_run": "2026-07-07T20:06:13.285Z",
   "discovery_highlights": {
     "dvwa.csalab.app": 3,
     "nodegoat-websec.herokuapp.com": 3,
