@@ -14,7 +14,12 @@ import {
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
-  SENSITIVE_PATH_NEEDLES
+  SENSITIVE_PATH_NEEDLES,
+  ADMIN_PANEL_PATHS,
+  ADMIN_PANEL_MARKERS,
+  looksLikeAdminPanel,
+  redirectedToLogin,
+  isSameSpaShell
 } from "./helpers";
 
 export interface RuleContext {
@@ -684,6 +689,35 @@ const nextDataSensitiveKeys: Rule = async (ctx) => {
   };
 };
 
+// --- Exposed admin panel (unauthenticated GET returns admin UI) ---------------
+// Vibe-coded apps often ship /admin or /dashboard without server-side auth. We probe common
+// paths and only fire when the response is 200, not redirected to login, and contains
+// admin-dashboard markers — not an SPA shell identical to the homepage.
+const exposedAdminPanel: Rule = async (ctx) => {
+  const urls = ADMIN_PANEL_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 16_384 }, 4);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const path = new URL(url).pathname;
+    if (redirectedToLogin(path, r.finalUrl, r.body)) continue;
+    if (isSameSpaShell(ctx.home.body, r.body)) continue;
+    if (!looksLikeAdminPanel(r.body)) continue;
+    const markers = ADMIN_PANEL_MARKERS.filter((re) => re.test(r.body)).map((re) => re.source).slice(0, 4);
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: r.finalUrl,
+        status: r.status,
+        markers: markers.length ? markers : ["sidebar+table"],
+        snippet: r.body.replace(/\s+/g, " ").slice(0, 220).trim(),
+        note: "Admin panel HTML returned without redirect to login"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const paths = extractApiPaths(ctx.combined, 10);
@@ -738,7 +772,8 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   nextDataSensitiveKeys,
-  unauthenticatedApiRoutes
+  unauthenticatedApiRoutes,
+  exposedAdminPanel
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -769,5 +804,6 @@ export const FREE_RULES = new Set([
   "hardcodedCredentials",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
-  "nextDataSensitiveKeys"
+  "nextDataSensitiveKeys",
+  "exposedAdminPanel"
 ]);

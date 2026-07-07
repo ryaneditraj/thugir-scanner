@@ -73,3 +73,69 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+/** Common admin-panel paths on vibe-coded deploys (read-only GET probes). */
+export const ADMIN_PANEL_PATHS = [
+  "/admin",
+  "/dashboard",
+  "/admin/dashboard",
+  "/manage",
+  "/backend",
+  "/console",
+  "/superadmin",
+  "/administrator",
+  "/staff"
+];
+
+/** Positive markers in HTML that indicate an admin UI (not a marketing page). */
+export const ADMIN_PANEL_MARKERS = [
+  /admin\s+dashboard/i,
+  /admin\s+panel/i,
+  /user\s+management/i,
+  /manage\s+users/i,
+  /role\s+management/i,
+  /total\s+(?:users|orders|revenue|customers)/i,
+  /data-admin/i,
+  /react-admin/i,
+  /ra-resource/i,
+  /moderator\s+dashboard/i,
+  /staff\s+portal/i
+];
+
+function normalizeHtmlSnippet(s: string): string {
+  return s.replace(/\s+/g, " ").trim().slice(0, 800);
+}
+
+/** True when the response is a login gate, not an exposed admin surface. */
+export function looksLikeLoginOnlyPage(body: string): boolean {
+  const hasPassword = /<input[^>]*type=["']password["']/i.test(body);
+  const hasLoginCta = /\b(?:sign\s*in|log\s*in)\b/i.test(body);
+  const hasAdminMarker = ADMIN_PANEL_MARKERS.some((re) => re.test(body));
+  if (hasPassword && hasLoginCta && !hasAdminMarker) return true;
+  if (/<title[^>]*>[^<]*(?:login|sign\s*in)[^<]*<\/title>/i.test(body) && !hasAdminMarker) return true;
+  return false;
+}
+
+/** True when HTML contains admin-dashboard signals (tables, nav, management copy). */
+export function looksLikeAdminPanel(body: string): boolean {
+  if (body.length < 200) return false;
+  if (ADMIN_PANEL_MARKERS.some((re) => re.test(body))) return true;
+  if (/(?:sidebar|side-nav|sidenav)/i.test(body) && /<table/i.test(body)) return true;
+  return false;
+}
+
+/** SPA catch-all: same shell as homepage with no admin-specific content. */
+export function isSameSpaShell(homeBody: string, body: string): boolean {
+  return normalizeHtmlSnippet(homeBody) === normalizeHtmlSnippet(body);
+}
+
+export function redirectedToLogin(requestedPath: string, finalUrl: string, body: string): boolean {
+  try {
+    const finalPath = new URL(finalUrl).pathname.toLowerCase();
+    const req = requestedPath.toLowerCase();
+    if (finalPath !== req && /(?:^|\/)(?:login|signin|sign-in|auth)(?:\/|$)/.test(finalPath)) return true;
+  } catch {
+    /* ignore */
+  }
+  return looksLikeLoginOnlyPage(body);
+}

@@ -122,5 +122,66 @@ assert("38 supabase url only no jwt", extractSupabaseFromText("https://abcdefghi
 assert("39 openapi swagger", looksOpenApiBody('{"swagger":"2.0","paths":{"/a":{"patch":{}}}}'));
 assert("40 extract fetch api", extractApiPaths("axios.get('/api/health')").includes("/api/health"));
 
-console.log(`\nRBT harness: ${passed}/${passed + failed} passed (40 cycles)`);
+const ADMIN_PANEL_MARKERS = [
+  /admin\s+dashboard/i,
+  /admin\s+panel/i,
+  /user\s+management/i,
+  /manage\s+users/i,
+  /role\s+management/i,
+  /total\s+(?:users|orders|revenue|customers)/i,
+  /data-admin/i,
+  /react-admin/i,
+  /ra-resource/i,
+  /moderator\s+dashboard/i,
+  /staff\s+portal/i
+];
+
+function looksLikeLoginOnlyPage(body) {
+  const hasPassword = /<input[^>]*type=["']password["']/i.test(body);
+  const hasLoginCta = /\b(?:sign\s*in|log\s*in)\b/i.test(body);
+  const hasAdminMarker = ADMIN_PANEL_MARKERS.some((re) => re.test(body));
+  if (hasPassword && hasLoginCta && !hasAdminMarker) return true;
+  if (/<title[^>]*>[^<]*(?:login|sign\s*in)[^<]*<\/title>/i.test(body) && !hasAdminMarker) return true;
+  return false;
+}
+
+function looksLikeAdminPanel(body) {
+  if (body.length < 200) return false;
+  if (ADMIN_PANEL_MARKERS.some((re) => re.test(body))) return true;
+  if (/(?:sidebar|side-nav|sidenav)/i.test(body) && /<table/i.test(body)) return true;
+  return false;
+}
+
+function isSameSpaShell(homeBody, body) {
+  const norm = (s) => s.replace(/\s+/g, " ").trim().slice(0, 800);
+  return norm(homeBody) === norm(body);
+}
+
+function redirectedToLogin(requestedPath, finalUrl, body) {
+  try {
+    const finalPath = new URL(finalUrl).pathname.toLowerCase();
+    const req = requestedPath.toLowerCase();
+    if (finalPath !== req && /(?:^|\/)(?:login|signin|sign-in|auth)(?:\/|$)/.test(finalPath)) return true;
+  } catch {
+    /* ignore */
+  }
+  return looksLikeLoginOnlyPage(body);
+}
+
+const adminHtml =
+  '<html><body><nav class="sidebar"></nav><h1>Admin Dashboard</h1><table><tr><th>User</th><th>Actions</th></tr></table></body></html>';
+const loginHtml =
+  '<html><head><title>Sign in</title></head><body><form><input type="password"/><button>Log in</button></form></body></html>';
+const spaShell = '<html><body><div id="root"></div><script src="/app.js"></script></body></html>';
+
+assert("41 admin panel markers", looksLikeAdminPanel(adminHtml));
+assert("42 login page not admin", !looksLikeAdminPanel(loginHtml));
+assert("43 login-only detected", looksLikeLoginOnlyPage(loginHtml));
+assert("44 admin not login-only", !looksLikeLoginOnlyPage(adminHtml));
+assert("45 redirect to login path", redirectedToLogin("/admin", "https://x.com/login", loginHtml));
+assert("46 same spa shell", isSameSpaShell(spaShell, spaShell));
+assert("47 sidebar+table admin", looksLikeAdminPanel('<div class="sidebar"></div><table><tr><td>x</td></tr></table>'.padEnd(220, " ")));
+assert("48 short body not admin", !looksLikeAdminPanel("<html>hi</html>"));
+
+console.log(`\nRBT harness: ${passed}/${passed + failed} passed (48 cycles)`);
 process.exit(failed > 0 ? 1 : 0);
