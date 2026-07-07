@@ -31,14 +31,6 @@ const SECRET_DEFS: SecretDef[] = [
     impact: "Your Anthropic key can be abused to bill your account."
   },
   {
-    slug: "secret-stripe-live",
-    name: "Stripe live secret key",
-    regex: "sk_live_[A-Za-z0-9]{20,}",
-    severity: "critical",
-    serverOnly: true,
-    impact: "A Stripe live secret key allows charges, refunds and reading customer data."
-  },
-  {
     slug: "secret-stripe-restricted",
     name: "Stripe restricted key",
     regex: "rk_live_[A-Za-z0-9]{20,}",
@@ -153,7 +145,35 @@ const SECRET_DEFS: SecretDef[] = [
   }
 ];
 
-export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
+export const stripeLiveKeyPattern: Pattern = {
+  slug: "secret-stripe-live",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "critical",
+  title: "Live Stripe secret key exposed in client bundle",
+  description:
+    "A Stripe live secret key (sk_live_*) was found in JavaScript or HTML served to the browser, and a harmless read against Stripe's Balance API confirmed the key is active. AI payment scaffolds routinely ship Stripe server keys via NEXT_PUBLIC_* or VITE_* env vars.",
+  impactOneline: "A live Stripe secret key allows charges, refunds and reading customer data.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "stripeLiveKeyProbe" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Stripe secret key now and move it server-side.",
+    steps: [
+      "Roll the secret key in the Stripe dashboard immediately.",
+      "Remove sk_live_* from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Use Stripe publishable keys (pk_live_*) in the browser and keep secret keys in server routes only."
+    ]
+  },
+  fixPrompt:
+    "A live Stripe secret key (sk_live_*) is exposed in my client bundle and validated as active. Remove it from all client-side code and client-exposed environment variables, move every Stripe server call into server-side code, and tell me exactly which files referenced it so I can rotate the key.",
+  version: 1,
+  enabled: true
+};
+
+export const secretPatterns: Pattern[] = [
+  ...SECRET_DEFS.map(
+    (s): Pattern => ({
   slug: s.slug,
   platform: "generic",
   category: "Exposed secret",
@@ -180,4 +200,7 @@ export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
   fixPrompt: `A ${s.name} is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.`,
   version: 1,
   enabled: true
-}));
+    })
+  ),
+  stripeLiveKeyPattern
+];
