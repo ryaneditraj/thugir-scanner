@@ -1,36 +1,43 @@
-# THUGIR Scanner — Automation Backlog
+# Automation Backlog
 
-Hourly autonomous runs pick the highest-impact item **not** already in an open PR or marked done below.
+Hourly autonomous runs ship one focused detection PR each. **This file is the single source of truth** — do not duplicate entries across PR branches. The `manage-pr-integrity` script audits open PRs before each run.
 
-## Shipped
+## Open PRs (do not duplicate)
 
-| Date (UTC) | Area | Branch / PR | What shipped | Follow-ups |
-|------------|------|-------------|--------------|------------|
-| 2026-07-07 17:01 | detection | `auto/detection/stripe-live-key-validation` | Live Stripe `sk_live_*` validation via Balance API; pattern upgraded from regex-only to `rule_ref` with evidence-gated proof | OpenAI live-key validation; CSRF state-changing probe; Stripe restricted-key (`rk_live_*`) live validation |
-| 2026-07-07 16:00 | detection | `auto/detection/twilio-live-key-validation` | Live Twilio credential validation via Accounts API | — |
-| 2026-07-07 15:00 | detection | `auto/detection/ssti-canary-probe` | SSTI canary probe via query parameters | — |
-| 2026-07-07 14:01 | detection | `auto/detection/reflected-xss-probe` | Reflected XSS canary probe via query parameters | — |
-| 2026-07-07 13:01 | detection | `auto/detection/twilio-auth-token-pairing` | Twilio auth token pairing replaces loose SID regex | Superseded by live validation PR |
-| 2026-07-07 12:01 | detection | `auto/detection/convex-deploy-key-secret` | Convex deploy key secret in client bundle | — |
-| 2026-07-07 11:01 | detection | `auto/detection/jwt-alg-none-probe` | JWT alg=none acceptance probe | — |
-| 2026-07-07 10:02 | detection | `auto/detection/exposed-admin-dashboard` | Exposed admin panel probe | — |
-| 2026-07-07 09:01 | detection | `auto/detection/public-cloud-storage-bucket` | Public S3/GCS/R2 bucket probe | — |
-| 2026-07-07 08:00 | detection | `auto/detection/convex-open-query-probe` | Convex open-query probe | — |
-| 2026-07-07 07:01 | detection | `auto/detection/algolia-admin-key-in-client` | Algolia admin API key detection | — |
-| 2026-07-07 06:01 | detection | `auto/detection/auth0-oauth-client-secret` | Auth0 OAuth client secret detection | — |
-| 2026-07-07 05:02 | detection | `cursor/thugir-scanner-evolution-d346` | Open redirect via query parameter probe | — |
-| 2026-07-07 04:05 | detection | `cursor/thugir-scanner-evolution-9233` | Exposed infra artifacts probe | — |
-| 2026-07-07 03:05 | detection | `cursor/thugir-scanner-evolution-d94f` | Mapbox, Sentry, PostHog, Shopify secret patterns | — |
+| PR | Area | Detection | Branch |
+|----|------|-----------|--------|
+| #1 | detection | Mapbox, Sentry, PostHog, Shopify secret patterns | `cursor/thugir-scanner-evolution-d94f` |
+| #2 | detection | Exposed infra artifacts (Terraform, AWS, actuator) | `cursor/thugir-scanner-evolution-9233` |
+| #3 | detection | Open redirect via query parameter probe | `cursor/thugir-scanner-evolution-d346` |
+| #4 | detection | Auth0 OAuth client secret in client bundle | `cursor/thugir-scanner-evolution-9475` |
+| #5 | detection | Algolia admin API key in client bundle | `cursor/thugir-scanner-evolution-afe6` |
+| #6 | detection | Convex open-query probe for missing auth | `cursor/thugir-scanner-evolution-850a` |
+| #7 | detection | Public S3/GCS/R2 bucket probe from client bundle URLs | `cursor/thugir-scanner-evolution-8f31` |
+| #8 | detection | Exposed admin panel probe without authentication | `cursor/thugir-scanner-evolution-5f61` |
+| #9 | detection | JWT alg=none acceptance probe | `cursor/thugir-scanner-evolution-69b6` |
+| #10 | detection | Convex deploy key secret in client bundle | `cursor/thugir-scanner-evolution-68cd` |
+| #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
+| #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
+| #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
+| #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
+| #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
+
+> **Retired (branch deleted — close PR shell on GitHub when possible):**
+> - **#17** — duplicate `secret-twilio`; keeper is PR #12.
+> - **#18, #16, #11** — superseded integrity passes; keeper is PR #19.
+> - **#14** — dead branch (already gone).
 
 ## Queued (not yet taken)
 
-- **detection**: OpenAI live-key validation (`/v1/models` read)
-- **detection**: CSRF probe on state-changing routes (missing token / SameSite bypass)
-- **detection**: Stripe restricted key (`rk_live_*`) live validation
-- **detection**: Anthropic live-key validation
-- **feature**: Scheduled re-scans + diffing
-- **frontend**: Evidence viewer polish + copy-fix-prompt buttons
+- **detection** — MongoDB / Atlas connection string in client bundle.
+- **feature** — Wire admin `patterns` DB table into `runFreeScan` runtime merge.
+- **feature** — Scheduled re-scans with finding diff.
+- **frontend** — Evidence viewer polish + copy-fix-prompt buttons.
 
-## Open PR deconflict notes
+## Integrity rules
 
-Do **not** duplicate: Twilio live validation (#17), SSTI (#15), XSS (#13), open redirect (#3), admin panel (#8), JWT alg=none (#9), Convex (#6, #10), cloud storage (#7), Algolia (#5), Auth0 (#4), infra artifacts (#2), Mapbox/Sentry/PostHog (#1).
+1. One detection per PR — never bundle backlog items into a detection PR.
+2. Do not open a PR if an open PR or `main` already ships the same pattern slug (including modifications to an existing slug).
+3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
+4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
+5. Only one open integrity PR at a time — retire superseded branches with `--retire-superseded`.
