@@ -10,8 +10,10 @@ import type { ProbeCache } from "./probe-cache";
 import { extractApiPaths } from "./extract-api";
 import {
   extractSupabaseFromText,
+  extractCloudStorageBuckets,
   jwtPayload,
   looksOpenApiBody,
+  looksPublicBucketListing,
   matchDemoFlags,
   HARDCODED_CRED_RES,
   SENSITIVE_PATH_NEEDLES
@@ -684,6 +686,38 @@ const nextDataSensitiveKeys: Rule = async (ctx) => {
   };
 };
 
+// --- Public S3/GCS/R2 bucket (URLs in bundle, read-only list probe) ----------
+// AI upload scaffolds hardcode bucket URLs in the client. We only probe buckets named in
+// the bundle and require a successful object listing — AccessDenied is not flagged.
+const publicCloudStorageBucket: Rule = async (ctx) => {
+  const buckets = extractCloudStorageBuckets(ctx.combined);
+  if (buckets.length === 0) return NEGATIVE;
+  const urls = buckets.map((b) => b.listUrl);
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const bucket of buckets) {
+    const doc = docs.get(bucket.listUrl);
+    if (!doc || doc.status < 200 || doc.status >= 300) continue;
+    if (!looksPublicBucketListing(doc.body, bucket.provider)) continue;
+    const objectHint =
+      bucket.provider === "gcs"
+        ? doc.body.match(/"name"\s*:\s*"([^"]+)"/)?.[1]
+        : doc.body.match(/<Key>([^<]+)<\/Key>/)?.[1];
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        provider: bucket.provider,
+        bucket: bucket.bucket,
+        listUrl: bucket.listUrl,
+        sourceHint: bucket.sourceHint,
+        sampleObject: objectHint || undefined,
+        note: "read-only list returned object names without authentication"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const paths = extractApiPaths(ctx.combined, 10);
@@ -738,7 +772,8 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   nextDataSensitiveKeys,
-  unauthenticatedApiRoutes
+  unauthenticatedApiRoutes,
+  publicCloudStorageBucket
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -769,5 +804,6 @@ export const FREE_RULES = new Set([
   "hardcodedCredentials",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
-  "nextDataSensitiveKeys"
+  "nextDataSensitiveKeys",
+  "publicCloudStorageBucket"
 ]);

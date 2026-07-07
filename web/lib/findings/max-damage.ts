@@ -64,6 +64,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "XSS on any page becomes full session theft — attackers drain accounts while users browse normally.",
   "vibe-streamlit-secrets-exposed":
     "Secrets in Streamlit config are scraped from the client — cloud keys and DB passwords compromised instantly.",
+  "vibe-public-cloud-storage-bucket":
+    "Every upload (IDs, invoices, private media) is harvestable and sold — mandatory breach disclosure and cloud bill abuse.",
   "lovable-supabase-storage-public":
     "All user uploads in Supabase Storage harvested without authentication — PII leak and extortion risk.",
   "v0-server-action-no-authz":
