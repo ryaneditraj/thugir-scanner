@@ -261,6 +261,31 @@ export const vibecodePatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vibe-algolia-admin-in-client",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Algolia admin API key in client bundle",
+    description:
+      "Algolia's admin API key grants full index control (create, delete, settings, browse all records). AI search integrations often copy the admin key into NEXT_PUBLIC_ or VITE_ env vars instead of the restricted search-only key.",
+    impactOneline: "Your Algolia admin key in JS lets anyone rewrite indexes and exfiltrate all search data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "algoliaAdminKeyInClient" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Use the search-only API key client-side and rotate the admin key.",
+      steps: [
+        "Replace client-side admin keys with the Algolia search-only API key.",
+        "Keep admin operations (reindex, settings) in server routes or Edge Functions only.",
+        "Rotate the admin API key in the Algolia dashboard → API Keys."
+      ]
+    },
+    fixPrompt:
+      "My client bundle exposes an Algolia admin API key (ALGOLIA_ADMIN_API_KEY or adminApiKey). Switch the browser to the search-only key, move admin/index operations server-side, and tell me to rotate the admin key.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vibe-clerk-secret-in-client",
     platform: "generic",
     category: "Exposed secret",

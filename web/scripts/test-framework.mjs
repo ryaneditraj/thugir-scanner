@@ -122,5 +122,31 @@ assert("38 supabase url only no jwt", extractSupabaseFromText("https://abcdefghi
 assert("39 openapi swagger", looksOpenApiBody('{"swagger":"2.0","paths":{"/a":{"patch":{}}}}'));
 assert("40 extract fetch api", extractApiPaths("axios.get('/api/health')").includes("/api/health"));
 
-console.log(`\nRBT harness: ${passed}/${passed + failed} passed (40 cycles)`);
+const PLACEHOLDER_API_KEY =
+  /^(?:your[-_]?|my[-_]?)?(?:admin[-_]?)?(?:api[-_]?)?key(?:[-_]?here)?$|^(?:changeme|placeholder|example|xxx+|test|dummy|fake|null|undefined|insert[-_]?here)$/i;
+
+function isLikelyRealAlgoliaKey(value) {
+  if (value.length < 16) return false;
+  if (PLACEHOLDER_API_KEY.test(value)) return false;
+  if (/^[*x]+$/i.test(value)) return false;
+  return /^[a-f0-9]{16,}$/i.test(value);
+}
+
+const ALGOLIA_ADMIN_ENV =
+  /(?:NEXT_PUBLIC_|VITE_)?ALGOLIA_ADMIN(?:_API)?_KEY\s*[=:]\s*["']([^"']+)["']/gi;
+const ALGOLIA_ADMIN_PROP = /(?:adminApiKey|algoliaAdminKey)\s*[=:]\s*["']([^"']+)["']/gi;
+
+function matchAlgoliaAdminEnv(text) {
+  const m = ALGOLIA_ADMIN_ENV.exec(text);
+  ALGOLIA_ADMIN_ENV.lastIndex = 0;
+  return m?.[1] ?? null;
+}
+
+assert("41 algolia admin env detected", isLikelyRealAlgoliaKey(matchAlgoliaAdminEnv('ALGOLIA_ADMIN_API_KEY="a1b2c3d4e5f6789012345678abcdef01"') ?? ""));
+assert("42 algolia search env ignored", !/ALGOLIA_ADMIN/.test("NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY=abc"));
+assert("43 algolia adminApiKey prop", isLikelyRealAlgoliaKey(ALGOLIA_ADMIN_PROP.exec('adminApiKey:"deadbeef0123456789abcdef012345"')?.[1] ?? ""));
+assert("44 algolia placeholder rejected", !isLikelyRealAlgoliaKey("your-api-key-here"));
+assert("45 algolia searchApiKey not admin env", matchAlgoliaAdminEnv('searchApiKey:"deadbeef0123456789abcdef012345"') === null);
+
+console.log(`\nRBT harness: ${passed}/${passed + failed} passed (45 cycles)`);
 process.exit(failed > 0 ? 1 : 0);

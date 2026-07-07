@@ -559,6 +559,58 @@ const hardcodedCredentials: Rule = async (ctx) => {
   return { fired: true, confidence: 0.88, evidence: { hardcoded: hits.slice(0, 5) } };
 };
 
+function redactSecretSample(secret: string): string {
+  return secret.length > 12 ? `${secret.slice(0, 6)}…${secret.slice(-4)}` : "***";
+}
+
+const PLACEHOLDER_API_KEY =
+  /^(?:your[-_]?|my[-_]?)?(?:admin[-_]?)?(?:api[-_]?)?key(?:[-_]?here)?$|^(?:changeme|placeholder|example|xxx+|test|dummy|fake|null|undefined|insert[-_]?here)$/i;
+
+function isLikelyRealAlgoliaKey(value: string): boolean {
+  if (value.length < 16) return false;
+  if (PLACEHOLDER_API_KEY.test(value)) return false;
+  if (/^[*x]+$/i.test(value)) return false;
+  return /^[a-f0-9]{16,}$/i.test(value);
+}
+
+// --- Algolia admin API key in client bundle ---------------------------------
+// Search-only keys belong in the browser; admin keys grant index/settings/delete access.
+// We only flag unambiguous admin naming (env vars / adminApiKey) — not generic hex strings.
+const algoliaAdminKeyInClient: Rule = async (ctx) => {
+  const hits: { note: string; sampleRedacted: string }[] = [];
+
+  const adminEnvRe =
+    /(?:NEXT_PUBLIC_|VITE_)?ALGOLIA_ADMIN(?:_API)?_KEY\s*[=:]\s*["']([^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = adminEnvRe.exec(ctx.combined))) {
+    if (isLikelyRealAlgoliaKey(m[1])) {
+      hits.push({
+        note: "Algolia admin API key env var exposed in client bundle",
+        sampleRedacted: redactSecretSample(m[1])
+      });
+    }
+  }
+
+  if (/algolia|instantsearch/i.test(ctx.combined)) {
+    const propRe = /(?:adminApiKey|algoliaAdminKey)\s*[=:]\s*["']([^"']+)["']/gi;
+    while ((m = propRe.exec(ctx.combined))) {
+      if (isLikelyRealAlgoliaKey(m[1])) {
+        hits.push({
+          note: "Algolia adminApiKey assigned in client-side config",
+          sampleRedacted: redactSecretSample(m[1])
+        });
+      }
+    }
+  }
+
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: { hits: hits.slice(0, 4) }
+  };
+};
+
 // --- Clerk secret key in client bundle --------------------------------------
 const clerkSecretInClient: Rule = async (ctx) => {
   if (!/clerk/i.test(ctx.combined)) return NEGATIVE;
@@ -733,6 +785,7 @@ export const RULES: Record<string, Rule> = {
   weakCsp,
   hardcodedCredentials,
   clerkSecretInClient,
+  algoliaAdminKeyInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
   serverActionAuthz,
@@ -768,6 +821,7 @@ export const FREE_RULES = new Set([
   "weakCsp",
   "hardcodedCredentials",
   "clerkSecretInClient",
+  "algoliaAdminKeyInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys"
 ]);

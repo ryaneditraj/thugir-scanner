@@ -52,6 +52,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Cross-site data theft from authenticated users' browsers — cookie/session abuse and API abuse.",
   "vibe-clerk-secret-in-client":
     "Full auth system compromise: create admin users, reset passwords, impersonate any customer.",
+  "vibe-algolia-admin-in-client":
+    "Attackers delete or poison your entire search index, scrape every indexed record (PII, prices, internal docs), and burn your Algolia quota overnight.",
   "vibe-next-data-sensitive-keys":
     "Every page load ships secret config to the browser — full credential breach and mandatory rotation.",
   "vibe-unauthenticated-api-routes":
