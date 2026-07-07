@@ -185,7 +185,7 @@ function fixBacklogOnBranches() {
     sh(`git push origin HEAD:${branch}`);
     shQuiet(`git branch -D pr-fix-${pr.number}`);
   }
-  sh("git checkout cursor/pull-request-integrity-447d 2>/dev/null || git checkout main");
+  sh("git checkout cursor/pull-request-integrity-e6ce 2>/dev/null || git checkout main");
 }
 
 function pruneOrphanBranches() {
