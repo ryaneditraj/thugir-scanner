@@ -20,15 +20,14 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
-| #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
+| #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-3d8b` |
 
 ## Retired PR shells
 
-Branch deleted — close on GitHub when possible:
+Branch deleted — close on GitHub when possible (token lacks `closePullRequest`):
 
 - **#17** — duplicate `secret-twilio`; keeper is PR #12.
-- **#18, #16, #11** — superseded integrity passes; keeper is PR #19.
-- **#14** — dead branch (already gone).
+- **#18, #16, #11, #14, #19** — superseded integrity passes; keeper is the latest integrity PR on `cursor/pull-request-integrity-3d8b`.
 
 ## Queued (not yet taken)
 
