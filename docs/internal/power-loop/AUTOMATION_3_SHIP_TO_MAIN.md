@@ -105,7 +105,21 @@ git merge origin/main -m "ship: realign power-loop after main merge"
 git push origin cursor/power-loop-9ec4
 ```
 
-Append to `docs/internal/power-loop/ship-log.json`:
+## PHASE 4 — Merge detection PRs (after power-loop merge)
+
+After merging power-loop → main, batch-merge **unique detection PRs** marked ready in `docs/AUTOMATION_BACKLOG.md`:
+
+For each PR in backlog "Ready to merge" (max 5 per ship run):
+
+```bash
+gh pr checkout <number>
+node web/scripts/ship-gate.mjs
+gh pr merge <number> --merge
+```
+
+Skip any that fail ship-gate or touch sacred zone.
+
+Update backlog after merges.
 
 ```json
 {

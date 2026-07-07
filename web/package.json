@@ -13,6 +13,7 @@
     "test:smoke": "node scripts/smoke-scan.mjs",
     "power-scan": "tsx scripts/power-scan.ts",
     "ship-gate": "node scripts/ship-gate.mjs",
+    "pr-integrity": "node scripts/manage-pr-integrity.mjs --audit",
     "patterns": "node scripts/pattern-catalog.mjs && node scripts/export-patterns-seed.mjs"
   },
   "dependencies": {
