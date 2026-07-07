@@ -12,6 +12,7 @@
     "test:framework": "node scripts/test-framework.mjs",
     "test:smoke": "node scripts/smoke-scan.mjs",
     "power-scan": "tsx scripts/power-scan.ts",
+    "ship-gate": "node scripts/ship-gate.mjs",
     "patterns": "node scripts/pattern-catalog.mjs && node scripts/export-patterns-seed.mjs"
   },
   "dependencies": {
