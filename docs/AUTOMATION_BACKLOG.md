@@ -16,10 +16,11 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #8 | detection | Exposed admin panel probe without authentication | `cursor/thugir-scanner-evolution-5f61` |
 | #9 | detection | JWT alg=none acceptance probe | `cursor/thugir-scanner-evolution-69b6` |
 | #10 | detection | Convex deploy key secret in client bundle | `cursor/thugir-scanner-evolution-68cd` |
+| #11 | infra | PR integrity audit script, canonical backlog, catalog refresh | `cursor/pull-request-integrity-e6ce` |
+| #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
 
 ## Queued (not yet taken)
 
-- **detection** — Twilio auth token pairing (require hex near Account SID).
 - **detection** — MongoDB / Atlas connection string in client bundle.
 - **detection** — Reflected XSS marker probe (safe canary param).
 - **feature** — Wire admin `patterns` DB table into `runFreeScan` runtime merge.
