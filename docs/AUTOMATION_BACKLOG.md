@@ -19,11 +19,14 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
-| #16 | infra | PR integrity audit script, backlog sync, duplicate detection | `cursor/pull-request-integrity-8f98` |
+| (new) | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
 
 > **Must close manually (automation token lacks `closePullRequest`):**
-> - **#14** — dead branch `cursor/pull-request-integrity-e6ce`; superseded by #16.
-> - **#11** — superseded by #16; same role as integrity pass.
+> - **#17** — duplicate `secret-twilio` modification; superseded by PR #12.
+> - **#18** (`cursor/pull-request-integrity-8f98`) — superseded by this integrity pass.
+> - **#16** (`cursor/pull-request-integrity-1ac1`) — superseded.
+> - **#14** — dead branch `cursor/pull-request-integrity-e6ce`; superseded.
+> - **#11** (`cursor/pull-request-integrity-447d`) — superseded.
 
 ## Queued (not yet taken)
 
@@ -35,7 +38,7 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 ## Integrity rules
 
 1. One detection per PR — never bundle backlog items into a detection PR.
-2. Do not open a PR if an open PR or `main` already ships the same pattern slug.
+2. Do not open a PR if an open PR or `main` already ships the same pattern slug (including modifications to an existing slug).
 3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
 4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
 5. Only one open integrity PR at a time — close superseded duplicates before opening a new one.
