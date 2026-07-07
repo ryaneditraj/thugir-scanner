@@ -204,6 +204,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "reflected-xss-query-param",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Reflected XSS via query parameter",
+    description:
+      "A search or error query parameter is echoed back in the HTML response without encoding. AI-built search pages, login error handlers, and 404 templates commonly forget to escape user input — letting attackers inject script via a crafted link.",
+    impactOneline: "Attackers can run JavaScript in victims' browsers via a crafted URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reflectedXss" },
+    tierRequired: "free",
+    remediation: {
+      summary: "HTML-encode all user input before rendering it in pages.",
+      steps: [
+        "Use your framework's auto-escaping templates (React JSX, etc.) instead of raw innerHTML.",
+        "Escape <, >, \", and ' in any user-controlled string inserted into HTML.",
+        "Add a strict Content-Security-Policy without unsafe-inline as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "My site reflects query parameters (search/error) into HTML without encoding, which is reflected XSS. Escape all user input before rendering in HTML and show me the fixed template/handler code.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "cors-reflect-origin",
     platform: "generic",
     category: "Security misconfiguration",
