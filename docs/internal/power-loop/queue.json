@@ -1,4 +1,30 @@
 {
-  "updated_at": null,
-  "discovery_urls": []
+  "updated_at": "2026-07-07T20:05:00.000Z",
+  "discovery_urls": [
+    {
+      "url": "https://dvwa.csalab.app/",
+      "source": "OWASP VWAD public DVWA demo (csalab.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com",
+      "source": "OWASP NodeGoat official Heroku deploy",
+      "auth": "benchmark"
+    },
+    {
+      "url": "http://crapi.apisec.ai",
+      "source": "APIsec University hosted OWASP crAPI",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com",
+      "source": "OWASP WrongSecrets official Heroku deploy",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "source": "OWASP Juice Shop staging Heroku",
+      "auth": "benchmark"
+    }
+  ]
 }
