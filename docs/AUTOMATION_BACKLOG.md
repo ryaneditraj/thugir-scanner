@@ -1,25 +1,34 @@
-# Automation backlog
+# Automation Backlog
 
-Hourly autonomous runs log shipped work here. Open PRs are checked to avoid duplicates.
+Hourly autonomous runs ship one focused detection PR each. **This file is the single source of truth** — do not duplicate entries across PR branches. The `manage-pr-integrity` script audits open PRs before each run.
 
-## Shipped
+## Open PRs (do not duplicate)
 
-| Date | Area | PR / branch | What shipped | Follow-ups |
-|------|------|-------------|--------------|------------|
-| 2026-07-07 | detection | `auto/detection/open-redirect-probe` | Open redirect detection: probes common `?next=` / `?redirect=` params on `/` and auth paths; flags only when server issues HTTP redirect or meta-refresh to injected probe host | Discover redirect param names from homepage links; probe `/api/auth/callback`; MongoDB connection string in client bundle |
+| PR | Area | Detection | Branch |
+|----|------|-----------|--------|
+| #1 | detection | Mapbox, Sentry, PostHog, Shopify secret patterns | `cursor/thugir-scanner-evolution-d94f` |
+| #2 | detection | Exposed infra artifacts (Terraform, AWS, actuator) | `cursor/thugir-scanner-evolution-9233` |
+| #3 | detection | Open redirect via query parameter probe | `cursor/thugir-scanner-evolution-d346` |
+| #4 | detection | Auth0 OAuth client secret in client bundle | `cursor/thugir-scanner-evolution-9475` |
+| #5 | detection | Algolia admin API key in client bundle | `cursor/thugir-scanner-evolution-afe6` |
+| #6 | detection | Convex open-query probe for missing auth | `cursor/thugir-scanner-evolution-850a` |
+| #7 | detection | Public S3/GCS/R2 bucket probe from client bundle URLs | `cursor/thugir-scanner-evolution-8f31` |
+| #8 | detection | Exposed admin panel probe without authentication | `cursor/thugir-scanner-evolution-5f61` |
+| #9 | detection | JWT alg=none acceptance probe | `cursor/thugir-scanner-evolution-69b6` |
+| #10 | detection | Convex deploy key secret in client bundle | `cursor/thugir-scanner-evolution-68cd` |
 
-## Open / in-flight (do not duplicate)
+## Queued (not yet taken)
 
-| PR | Area | Topic |
-|----|------|-------|
-| #1 (draft) | detection | Mapbox, Sentry, PostHog, Shopify secret patterns |
-| #2 (draft) | detection | Exposed infra artifacts (Terraform, AWS, actuator) |
+- **detection** — Twilio auth token pairing (require hex near Account SID).
+- **detection** — MongoDB / Atlas connection string in client bundle.
+- **detection** — Reflected XSS marker probe (safe canary param).
+- **feature** — Wire admin `patterns` DB table into `runFreeScan` runtime merge.
+- **feature** — Scheduled re-scans with finding diff.
+- **frontend** — Evidence viewer polish + copy-fix-prompt buttons.
 
-## Backlog (not yet taken)
+## Integrity rules
 
-- MongoDB / Atlas connection string in client bundle (`secret_regex` + inline state parity)
-- Algolia API key pattern in JS bundles
-- Convex backend exposure checks (fingerprint exists, no patterns yet)
-- JWT alg=none runtime probe (codescan rule exists; not in free HTTP scan)
-- Scheduled re-scans + diffing
-- SARIF export for CI
+1. One detection per PR — never bundle backlog items into a detection PR.
+2. Do not open a PR if an open PR or `main` already ships the same pattern slug.
+3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
+4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
