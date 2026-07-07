@@ -270,7 +270,8 @@ const DEEP_RULES = new Set<string>([
   "clientOnlyAuth",
   "serverActionAuthz",
   "idorProbe",
-  "unauthenticatedApiRoutes"
+  "unauthenticatedApiRoutes",
+  "jwtAlgNoneProbe"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;

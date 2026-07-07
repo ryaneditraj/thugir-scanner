@@ -14,7 +14,10 @@ import {
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
-  SENSITIVE_PATH_NEEDLES
+  SENSITIVE_PATH_NEEDLES,
+  buildAlgNoneJwt,
+  looksAuthChallenge,
+  looksAuthGatedJson
 } from "./helpers";
 
 export interface RuleContext {
@@ -707,6 +710,62 @@ const unauthenticatedApiRoutes: Rule = async (ctx) => {
   };
 };
 
+// --- JWT alg=none acceptance probe (active, read-only GET) --------------------
+// Sends a forged unsigned JWT (alg:none) to auth-gated API routes discovered in the bundle.
+// Fires only when unauthenticated AND malformed tokens are rejected but alg:none is accepted.
+const jwtAlgNoneProbe: Rule = async (ctx) => {
+  const usesJwt =
+    /Bearer\s+|Authorization.*(?:jwt|token)|jsonwebtoken|jose\.|jwt\.(?:sign|verify|decode)/i.test(
+      ctx.combined
+    );
+  const paths = new Set(extractApiPaths(ctx.combined, 6));
+  for (const p of ["/api/me", "/api/user", "/api/profile", "/api/auth/session", "/api/users"]) {
+    paths.add(p);
+  }
+  if (paths.size === 0 && !usesJwt) return NEGATIVE;
+
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({
+    sub: "thugir-probe-user",
+    role: "admin",
+    iat: now,
+    exp: now + 3600
+  });
+  const badToken = "thugir.invalid.probe.token";
+
+  for (const path of [...paths].slice(0, 6)) {
+    const url = new URL(path, ctx.origin).toString();
+    const [noAuth, badAuth, noneAuth] = await Promise.all([
+      ctx.probe.get(url, { maxBytes: 4096 }),
+      ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
+      ctx.probe.get(url, {
+        maxBytes: 4096,
+        headers: { Authorization: `Bearer ${algNoneToken}` }
+      })
+    ]);
+
+    if (
+      looksAuthChallenge(noAuth) &&
+      looksAuthChallenge(badAuth) &&
+      looksAuthGatedJson(noneAuth)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.88,
+        evidence: {
+          path,
+          note: "Endpoint rejected unauthenticated and malformed tokens but accepted a forged alg:none JWT",
+          statusWithoutAuth: noAuth.status,
+          statusWithMalformedToken: badAuth.status,
+          statusWithAlgNone: noneAuth.status,
+          responseSample: noneAuth.body.slice(0, 150).trim()
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -738,7 +797,8 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   nextDataSensitiveKeys,
-  unauthenticatedApiRoutes
+  unauthenticatedApiRoutes,
+  jwtAlgNoneProbe
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

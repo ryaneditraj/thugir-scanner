@@ -433,5 +433,31 @@ export const genericPatterns: Pattern[] = [
       "My API may have IDOR: records are fetched by sequential ID without checking ownership. Add server-side ownership checks to every record access and switch user-facing IDs to UUIDs. Show the updated handlers.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "jwt-alg-none-accepted",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: 'JWT "none" algorithm accepted on API route',
+    description:
+      "An API route that requires authentication accepts a forged unsigned JWT with alg:none. This lets anyone mint valid-looking tokens without the signing secret — full account takeover.",
+    impactOneline:
+      "Attackers can forge JWTs with alg:none and impersonate any user, including admins.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "jwtAlgNoneProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to a specific algorithm and reject alg:none.",
+      steps: [
+        "Configure your JWT library to allow only HS256/RS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Add a test that rejects unsigned alg:none tokens."
+      ]
+    },
+    fixPrompt:
+      'My API accepts JWTs with alg:"none", letting attackers forge tokens. Pin verification to HS256/RS256, explicitly reject alg:none, and show me the middleware/library config change.',
+    version: 1,
+    enabled: true
   }
 ];
