@@ -331,6 +331,8 @@ function fixBacklogOnBranches() {
       console.log(`  skipping — origin/${branch} not found`);
       continue;
     }
+    shQuiet("git reset --hard HEAD 2>/dev/null || true");
+    shQuiet("git clean -fd 2>/dev/null || true");
     sh(`git checkout -B pr-fix-${pr.number} origin/${branch}`);
     sh(`git checkout origin/main -- docs/AUTOMATION_BACKLOG.md 2>/dev/null || true`, { silent: true });
     // Write canonical backlog (main may not have it yet on first run)
