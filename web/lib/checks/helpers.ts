@@ -73,3 +73,15 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+export function redactSecretSample(sample: string): string {
+  return sample.length > 12 ? `${sample.slice(0, 6)}…${sample.slice(-4)}` : "***";
+}
+
+/** Twilio auth tokens are 32 hex chars; reject obvious non-secrets and SID duplicates. */
+export function isLikelyTwilioAuthToken(token: string, accountSid?: string): boolean {
+  if (!/^[a-f0-9]{32}$/i.test(token)) return false;
+  if (accountSid && token.toLowerCase() === accountSid.slice(2).toLowerCase()) return false;
+  if (/^0{12,}/.test(token)) return false;
+  return true;
+}

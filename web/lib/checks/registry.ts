@@ -14,7 +14,9 @@ import {
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
-  SENSITIVE_PATH_NEEDLES
+  SENSITIVE_PATH_NEEDLES,
+  redactSecretSample,
+  isLikelyTwilioAuthToken
 } from "./helpers";
 
 export interface RuleContext {
@@ -559,6 +561,87 @@ const hardcodedCredentials: Rule = async (ctx) => {
   return { fired: true, confidence: 0.88, evidence: { hardcoded: hits.slice(0, 5) } };
 };
 
+// --- Twilio account SID + auth token paired in client bundle ----------------
+// Account SIDs alone are semi-public and appear in legitimate client configs; we only flag when
+// the 32-char auth token is present nearby (or exposed via TWILIO_AUTH_TOKEN env var).
+const TWILIO_SID_RE = /AC[a-f0-9]{32}/gi;
+const twilioCredentialsInClient: Rule = async (ctx) => {
+  const publicAuthEnv =
+    /(?:NEXT_PUBLIC_|VITE_)?TWILIO_AUTH_TOKEN\s*[=:]\s*["']([a-f0-9]{32})["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = publicAuthEnv.exec(ctx.combined))) {
+    if (isLikelyTwilioAuthToken(m[1])) {
+      return {
+        fired: true,
+        confidence: 0.95,
+        evidence: {
+          note: "TWILIO_AUTH_TOKEN exposed in client bundle",
+          sampleRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+
+  for (const sidMatch of ctx.combined.matchAll(TWILIO_SID_RE)) {
+    const sid = sidMatch[0];
+    const idx = sidMatch.index ?? 0;
+    const window = ctx.combined.slice(Math.max(0, idx - 220), idx + sid.length + 420);
+
+    const authNear = window.match(
+      /(?:authToken|auth_token|TWILIO_AUTH_TOKEN)\s*[=:]\s*["']([a-f0-9]{32})["']/i
+    );
+    if (authNear && isLikelyTwilioAuthToken(authNear[1], sid)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          note: "Twilio accountSid + authToken pair in client bundle",
+          accountSidRedacted: redactSecretSample(sid),
+          authTokenRedacted: redactSecretSample(authNear[1])
+        }
+      };
+    }
+
+    const callPat = new RegExp(
+      `twilio\\s*\\(\\s*["']${sid}["']\\s*,\\s*["']([a-f0-9]{32})["']`,
+      "i"
+    );
+    const callM = window.match(callPat);
+    if (callM && isLikelyTwilioAuthToken(callM[1], sid)) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          note: "twilio(accountSid, authToken) call in client bundle",
+          accountSidRedacted: redactSecretSample(sid),
+          authTokenRedacted: redactSecretSample(callM[1])
+        }
+      };
+    }
+  }
+
+  if (!/twilio/i.test(ctx.combined)) return NEGATIVE;
+  const genericAuth = /(?:authToken|auth_token)\s*[=:]\s*["']([a-f0-9]{32})["']/gi;
+  while ((m = genericAuth.exec(ctx.combined))) {
+    const start = Math.max(0, (m.index ?? 0) - 320);
+    const end = (m.index ?? 0) + m[0].length + 320;
+    const nearby = ctx.combined.slice(start, end);
+    const sid = nearby.match(/AC[a-f0-9]{32}/i)?.[0];
+    if (sid && isLikelyTwilioAuthToken(m[1], sid)) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          note: "Twilio auth token near accountSid in client bundle",
+          accountSidRedacted: redactSecretSample(sid),
+          authTokenRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- Clerk secret key in client bundle --------------------------------------
 const clerkSecretInClient: Rule = async (ctx) => {
   if (!/clerk/i.test(ctx.combined)) return NEGATIVE;
@@ -732,6 +815,7 @@ export const RULES: Record<string, Rule> = {
   sitemapSensitivePaths,
   weakCsp,
   hardcodedCredentials,
+  twilioCredentialsInClient,
   clerkSecretInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
@@ -767,6 +851,7 @@ export const FREE_RULES = new Set([
   "sitemapSensitivePaths",
   "weakCsp",
   "hardcodedCredentials",
+  "twilioCredentialsInClient",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys"
