@@ -20,6 +20,8 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 
+> **Duplicate integrity PR:** #14 duplicates #11 (same commit, dead branch `cursor/pull-request-integrity-e6ce`) — close #14 and keep #11 until merged.
+
 ## Queued (not yet taken)
 
 - **detection** — MongoDB / Atlas connection string in client bundle.
@@ -33,3 +35,4 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 2. Do not open a PR if an open PR or `main` already ships the same pattern slug.
 3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
 4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
+5. Only one open integrity PR at a time — close superseded duplicates before opening a new one.
