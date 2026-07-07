@@ -6,6 +6,7 @@
 // they exist so the worker / future deep flow can share the same registry keys.
 
 import type { FetchedDoc } from "./http";
+import { looksHtml } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import { extractApiPaths } from "./extract-api";
 import {
@@ -410,6 +411,93 @@ const errorDisclosure: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- Infra / DevOps artifact files exposed over HTTP ------------------------
+// Terraform state, AWS creds, Spring actuator, kubeconfig, etc. are routinely left in the
+// deployed web root by misconfigured CI or static hosts. Each probe uses a path-specific body
+// validator so we only flag when the response looks like the real artifact (not an HTML 404).
+const INFRA_ARTIFACT_PROBES: {
+  path: string;
+  label: string;
+  test: (body: string) => boolean;
+}[] = [
+  {
+    path: "/terraform.tfstate",
+    label: "Terraform state",
+    test: (b) => /"version"\s*:\s*\d/.test(b) && /"resources"|"terraform_version"/.test(b)
+  },
+  {
+    path: "/terraform.tfstate.backup",
+    label: "Terraform state backup",
+    test: (b) => /"version"\s*:\s*\d/.test(b) && /"resources"|"terraform_version"/.test(b)
+  },
+  {
+    path: "/.aws/credentials",
+    label: "AWS credentials file",
+    test: (b) => /aws_access_key_id|aws_secret_access_key/i.test(b) && /\[(default|profile[^\]]+)\]/i.test(b)
+  },
+  {
+    path: "/actuator/env",
+    label: "Spring Boot actuator /env",
+    test: (b) => /"propertySources"|"systemEnvironment"/.test(b) && /"activeProfiles"|"server\.port"/.test(b)
+  },
+  {
+    path: "/.docker/config.json",
+    label: "Docker client config",
+    test: (b) => /"auths"\s*:|"credsStore"/.test(b)
+  },
+  {
+    path: "/fly.toml",
+    label: "Fly.io deploy config",
+    test: (b) => /^\s*app\s*=/m.test(b) && (/\[env\]/m.test(b) || /primary_region/.test(b))
+  },
+  {
+    path: "/.kube/config",
+    label: "Kubernetes kubeconfig",
+    test: (b) => /apiVersion:\s*v1/.test(b) && /clusters:|users:|contexts:/.test(b)
+  },
+  {
+    path: "/wp-config.php",
+    label: "WordPress config",
+    test: (b) => /DB_PASSWORD|DB_USER|define\s*\(\s*['"]DB_/i.test(b)
+  },
+  {
+    path: "/wp-config.php.bak",
+    label: "WordPress config backup",
+    test: (b) => /DB_PASSWORD|DB_USER|define\s*\(\s*['"]DB_/i.test(b)
+  },
+  {
+    path: "/settings.py",
+    label: "Django/Python settings",
+    test: (b) => /SECRET_KEY\s*=|DATABASES\s*=|DEBUG\s*=\s*True/.test(b)
+  },
+  {
+    path: "/settings.py.bak",
+    label: "Django settings backup",
+    test: (b) => /SECRET_KEY\s*=|DATABASES\s*=/.test(b)
+  }
+];
+const exposedInfraArtifacts: Rule = async (ctx) => {
+  const urls = INFRA_ARTIFACT_PROBES.map((p) => new URL(p.path, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 400) continue;
+    if (looksHtml(r.headers, r.body)) continue;
+    const probe = INFRA_ARTIFACT_PROBES.find((p) => url.endsWith(p.path) || url.includes(p.path));
+    if (!probe || !probe.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        artifact: probe.label,
+        status: r.status,
+        snippet: r.body.slice(0, 200).trim()
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- OpenAPI / Swagger docs exposed in production ---------------------------
 // Common on v0/Next and FastAPI scaffolds. A 200 with an openapi/swagger schema is
 // positive proof — attackers get every route without brute force.
@@ -726,6 +814,7 @@ export const RULES: Record<string, Rule> = {
   directoryListing,
   errorDisclosure,
   openApiDocs,
+  exposedInfraArtifacts,
   demoModeFlags,
   supabaseStoragePublic,
   supabaseServiceRoleClient,
@@ -761,6 +850,7 @@ export const FREE_RULES = new Set([
   "graphqlIntrospection",
   "directoryListing",
   "openApiDocs",
+  "exposedInfraArtifacts",
   "demoModeFlags",
   "supabaseStoragePublic",
   "supabaseServiceRoleClient",
