@@ -10,6 +10,66 @@ export function jwtPayload(jwt: string): string | null {
   }
 }
 
+/** Convex deployment URLs embedded in client bundles (e.g. https://happy-fox-123.convex.cloud). */
+export function extractConvexFromText(combined: string): { deploymentUrl: string } | null {
+  const direct = combined.match(/https:\/\/([a-z][a-z0-9-]{2,50})\.convex\.cloud\b/);
+  if (direct) return { deploymentUrl: `https://${direct[1]}.convex.cloud` };
+  const env = combined.match(
+    /(?:CONVEX_URL|NEXT_PUBLIC_CONVEX_URL|VITE_CONVEX_URL)\s*[=:]\s*["']?(https:\/\/[^"'\s;]+\.convex\.cloud)\/?["']?/i
+  );
+  if (env) return { deploymentUrl: env[1].replace(/\/$/, "") };
+  return null;
+}
+
+/** Convex function paths as module:fn (from api.users.list or "users:list" strings in bundles). */
+export function extractConvexFunctionPaths(combined: string, limit = 8): string[] {
+  const paths = new Set<string>();
+  const colonRe = /["']([a-z][a-zA-Z0-9_]*):([a-z][a-zA-Z0-9_]+)["']/g;
+  let m: RegExpExecArray | null;
+  while ((m = colonRe.exec(combined)) && paths.size < limit) {
+    paths.add(`${m[1]}:${m[2]}`);
+  }
+  const apiRe = /api\.([a-z][a-zA-Z0-9_]*)\.([a-z][a-zA-Z0-9_]+)/g;
+  while ((m = apiRe.exec(combined)) && paths.size < limit) {
+    paths.add(`${m[1]}:${m[2]}`);
+  }
+  return [...paths];
+}
+
+/** True when a Convex /api/query response returned real data without an auth error. */
+export function isConvexOpenQueryResponse(body: string): { open: boolean; rowHint?: string } {
+  if (/unauthorized|not authenticated|unauthenticated|must be signed in|permission denied/i.test(body)) {
+    return { open: false };
+  }
+  try {
+    const parsed = JSON.parse(body) as {
+      status?: string;
+      errorMessage?: string;
+      value?: unknown;
+    };
+    if (parsed.status === "error" || parsed.errorMessage) return { open: false };
+    if (parsed.status !== "success") return { open: false };
+    const val = parsed.value;
+    if (Array.isArray(val) && val.length > 0) {
+      return { open: true, rowHint: `rows:${val.length}` };
+    }
+    if (val && typeof val === "object" && !Array.isArray(val) && Object.keys(val as object).length > 0) {
+      return { open: true, rowHint: "object" };
+    }
+    return { open: false };
+  } catch {
+    return { open: false };
+  }
+}
+
+export function isLikelyConvexQueryPath(path: string): boolean {
+  const fn = path.split(":")[1] || "";
+  if (/^(create|update|delete|insert|remove|set|add|mutate|send|patch|put|destroy)$/i.test(fn)) {
+    return false;
+  }
+  return /^(list|get|fetch|read|all|search|find|load|current|me|by|for)/i.test(fn);
+}
+
 export function extractSupabaseFromText(
   combined: string
 ): { projectUrl: string; anonKey: string } | null {

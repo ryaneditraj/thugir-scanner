@@ -13,6 +13,7 @@ import {
   stackPatterns
 } from "./builders";
 import { vibecodePatterns } from "./vibecode";
+import { convexPatterns } from "./convex";
 import { publicSlug } from "../findings/gate";
 
 export * from "./types";
@@ -25,6 +26,7 @@ export const STATIC_PATTERNS: Pattern[] = [
   ...genericPatterns,
   ...supabasePatterns,
   ...firebasePatterns,
+  ...convexPatterns,
   ...vibecodePatterns,
   ...lovablePatterns,
   ...boltPatterns,

@@ -9,7 +9,11 @@ import type { FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import { extractApiPaths } from "./extract-api";
 import {
+  extractConvexFromText,
+  extractConvexFunctionPaths,
   extractSupabaseFromText,
+  isConvexOpenQueryResponse,
+  isLikelyConvexQueryPath,
   jwtPayload,
   looksOpenApiBody,
   matchDemoFlags,
@@ -684,6 +688,59 @@ const nextDataSensitiveKeys: Rule = async (ctx) => {
   };
 };
 
+// --- Convex public query without auth (harmless read probe) -------------------
+// Convex exports every query at POST /api/query. Functions without ctx.auth checks return
+// real rows to anonymous callers — a top leak in AI/agent app scaffolds.
+const CONVEX_QUERY_FALLBACKS = [
+  "users:list",
+  "messages:list",
+  "todos:list",
+  "tasks:list",
+  "notes:list",
+  "posts:list",
+  "profiles:list",
+  "items:list"
+];
+const convexOpenQuery: Rule = async (ctx) => {
+  const cv = extractConvexFromText(ctx.combined);
+  if (!cv) return NEGATIVE;
+  const { deploymentUrl } = cv;
+
+  const extracted = extractConvexFunctionPaths(ctx.combined, 6).filter(isLikelyConvexQueryPath);
+  const paths = [...new Set([...extracted, ...CONVEX_QUERY_FALLBACKS])].slice(0, 8);
+  const queryUrl = `${deploymentUrl}/api/query`;
+
+  const openQueries: { path: string; rowHint: string }[] = [];
+  for (const path of paths) {
+    const body = JSON.stringify({ path, args: {}, format: "json" });
+    const r = await ctx.probe.get(queryUrl, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      maxBytes: 8192
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    const check = isConvexOpenQueryResponse(r.body);
+    if (check.open) {
+      openQueries.push({ path, rowHint: check.rowHint || "data" });
+      break;
+    }
+  }
+
+  if (openQueries.length === 0) {
+    return { fired: false, confidence: 0, evidence: { deploymentUrl, probedPaths: paths.slice(0, 4) } };
+  }
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      deploymentUrl,
+      openQueries,
+      note: "Convex query returned data to unauthenticated POST /api/query — missing ctx.auth check"
+    }
+  };
+};
+
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const paths = extractApiPaths(ctx.combined, 10);
@@ -738,7 +795,8 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   nextDataSensitiveKeys,
-  unauthenticatedApiRoutes
+  unauthenticatedApiRoutes,
+  convexOpenQuery
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -769,5 +827,6 @@ export const FREE_RULES = new Set([
   "hardcodedCredentials",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
-  "nextDataSensitiveKeys"
+  "nextDataSensitiveKeys",
+  "convexOpenQuery"
 ]);
