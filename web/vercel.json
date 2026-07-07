@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/cron/monitors",
+      "schedule": "0 * * * *"
+    }
+  ],
+  "functions": {
+    "app/api/scan/free/route.ts": { "maxDuration": 60 },
+    "app/api/cron/monitors/route.ts": { "maxDuration": 60 }
+  }
+}
