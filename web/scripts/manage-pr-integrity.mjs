@@ -76,6 +76,14 @@ function getRemoteBranches(prefix) {
     .filter((b) => b.startsWith(prefix));
 }
 
+function remoteBranchExists(branch) {
+  return Boolean(shQuiet(`git rev-parse --verify origin/${branch} 2>/dev/null`));
+}
+
+function branchTip(branch) {
+  return shQuiet(`git rev-parse origin/${branch} 2>/dev/null`);
+}
+
 function detectionSlugForPr(pr, mainSlugs) {
   const branchSlugs = getBranchSlugs(pr.headRefName);
   return [...branchSlugs].filter((s) => !mainSlugs.has(s));
@@ -96,8 +104,25 @@ function auditPrs() {
   const slugOwners = new Map();
   const fileOwners = new Map();
   const titles = new Map();
+  const tipOwners = new Map();
 
   for (const pr of prs) {
+    if (!remoteBranchExists(pr.headRefName)) {
+      const msg = `PR #${pr.number} head branch missing on origin: ${pr.headRefName}`;
+      console.log(`  ERROR: ${msg}`);
+      issues.push({ kind: "missing-branch", pr: pr.number, branch: pr.headRefName });
+    } else {
+      const tip = branchTip(pr.headRefName);
+      if (tipOwners.has(tip)) {
+        const other = tipOwners.get(tip);
+        const msg = `PR #${pr.number} duplicates PR #${other} (same commit ${tip.slice(0, 7)})`;
+        console.log(`  ERROR: ${msg}`);
+        issues.push({ kind: "duplicate-pr", pr: pr.number, other, sha: tip });
+      } else {
+        tipOwners.set(tip, pr.number);
+      }
+    }
+
     if (titles.has(pr.title)) {
       issues.push({ kind: "duplicate-title", pr: pr.number, detail: `Duplicate title with PR #${titles.get(pr.title)}` });
     } else {
@@ -165,10 +190,16 @@ function fixBacklogOnBranches() {
   const canonical = readFileSync(backlogPath, "utf8");
   const prs = getOpenPrs();
 
+  const startBranch = shQuiet("git branch --show-current") || "main";
+
   for (const pr of prs) {
     const branch = pr.headRefName;
     console.log(`\nFixing backlog on ${branch} (PR #${pr.number})...`);
     shQuiet(`git fetch origin ${branch} --quiet`);
+    if (!remoteBranchExists(branch)) {
+      console.log(`  skipping — origin/${branch} not found`);
+      continue;
+    }
     sh(`git checkout -B pr-fix-${pr.number} origin/${branch}`);
     sh(`git checkout origin/main -- docs/AUTOMATION_BACKLOG.md 2>/dev/null || true`, { silent: true });
     // Write canonical backlog (main may not have it yet on first run)
@@ -185,7 +216,7 @@ function fixBacklogOnBranches() {
     sh(`git push origin HEAD:${branch}`);
     shQuiet(`git branch -D pr-fix-${pr.number}`);
   }
-  sh("git checkout cursor/pull-request-integrity-e6ce 2>/dev/null || git checkout main");
+  shQuiet(`git checkout ${startBranch} 2>/dev/null || git checkout main`);
 }
 
 function pruneOrphanBranches() {
@@ -222,7 +253,14 @@ if (pruneBranches) pruneOrphanBranches();
 
 if (audit) {
   const issues = auditPrs();
-  const serious = issues.filter((i) => i.kind === "orphan-branch" || i.kind === "duplicate-title" || i.kind === "duplicate-slug");
+  const serious = issues.filter(
+    (i) =>
+      i.kind === "orphan-branch" ||
+      i.kind === "duplicate-title" ||
+      i.kind === "duplicate-slug" ||
+      i.kind === "duplicate-pr" ||
+      i.kind === "missing-branch"
+  );
   if (serious.length > 0 && !fixBacklog && !pruneBranches) {
     process.exit(1);
   }
