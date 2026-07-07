@@ -14,7 +14,9 @@ import {
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
-  SENSITIVE_PATH_NEEDLES
+  SENSITIVE_PATH_NEEDLES,
+  XSS_CANARY,
+  isReflectedXssInHtml
 } from "./helpers";
 
 export interface RuleContext {
@@ -227,6 +229,70 @@ const corsReflectOrigin: Rule = async (ctx) => {
     fired: true,
     confidence: creds ? 0.95 : 0.88,
     evidence: { allowOrigin: acao, allowCredentials: creds, note: "reflects arbitrary Origin header" }
+  };
+};
+
+// --- Reflected XSS via query parameter (canary probe) ------------------------
+// Inject a harmless HTML metacharacter marker into common search/error params.
+// Only fires when the server echoes it unescaped in an HTML page — positive proof.
+const REFLECTED_XSS_PARAMS = [
+  "q",
+  "search",
+  "query",
+  "s",
+  "term",
+  "name",
+  "message",
+  "error",
+  "msg",
+  "text",
+  "keyword",
+  "filter"
+];
+const REFLECTED_XSS_PATHS = ["/", "/search", "/login", "/error"];
+
+const reflectedXss: Rule = async (ctx) => {
+  const hits: { path: string; param: string; url: string; snippet: string }[] = [];
+  const seen = new Set<string>();
+  const urls: { url: string; param: string; path: string }[] = [];
+
+  for (const path of REFLECTED_XSS_PATHS) {
+    for (const param of REFLECTED_XSS_PARAMS) {
+      const key = `${path}?${param}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set(param, XSS_CANARY);
+      urls.push({ url: u.toString(), param, path });
+      if (urls.length >= 12) break;
+    }
+    if (urls.length >= 12) break;
+  }
+
+  const docs = await ctx.probe.getMany(
+    urls.map((x) => x.url),
+    { maxBytes: 16_000, timeoutMs: 8000 },
+    4
+  );
+  for (const { url: probeUrl, param, path } of urls) {
+    const doc = docs.get(probeUrl);
+    if (!doc || doc.status >= 400) continue;
+    const ct = doc.headers["content-type"] || "";
+    if (!isReflectedXssInHtml(doc.body, XSS_CANARY, ct)) continue;
+    const idx = doc.body.indexOf(XSS_CANARY);
+    const snippet = doc.body.slice(Math.max(0, idx - 40), idx + XSS_CANARY.length + 40).trim();
+    hits.push({ path, param, url: probeUrl, snippet });
+  }
+
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      canary: XSS_CANARY,
+      hits: hits.slice(0, 4),
+      note: "Query parameter echoed unescaped in HTML — reflected XSS"
+    }
   };
 };
 
@@ -719,6 +785,7 @@ export const RULES: Record<string, Rule> = {
   insecureCookies,
   permissiveCors,
   corsReflectOrigin,
+  reflectedXss,
   robotsSensitivePaths,
   techDisclosure,
   inlineStateSecrets,
@@ -754,6 +821,7 @@ export const FREE_RULES = new Set([
   "insecureCookies",
   "permissiveCors",
   "corsReflectOrigin",
+  "reflectedXss",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass

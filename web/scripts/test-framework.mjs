@@ -122,5 +122,25 @@ assert("38 supabase url only no jwt", extractSupabaseFromText("https://abcdefghi
 assert("39 openapi swagger", looksOpenApiBody('{"swagger":"2.0","paths":{"/a":{"patch":{}}}}'));
 assert("40 extract fetch api", extractApiPaths("axios.get('/api/health')").includes("/api/health"));
 
-console.log(`\nRBT harness: ${passed}/${passed + failed} passed (40 cycles)`);
+const XSS_CANARY = '"><thugir-xss-canary>';
+function isReflectedXssInHtml(body, canary, contentType = "") {
+  if (!body.includes(canary)) return false;
+  if (/application\/json/i.test(contentType)) return false;
+  const isHtml = /text\/html|application\/xhtml/i.test(contentType) || /^\s*<(?:!doctype|html)/i.test(body);
+  if (!isHtml) return false;
+  const urlEncoded = encodeURIComponent(canary);
+  if (body.includes(urlEncoded) && !body.includes(canary)) return false;
+  return true;
+}
+
+assert("41 xss canary reflected in html", isReflectedXssInHtml(`<p>You searched for ${XSS_CANARY}</p>`, XSS_CANARY, "text/html"));
+assert("42 xss rejects json echo", !isReflectedXssInHtml(`{"q":"${XSS_CANARY}"}`, XSS_CANARY, "application/json"));
+assert("43 xss rejects encoded only", !isReflectedXssInHtml(`<a href="?q=${encodeURIComponent(XSS_CANARY)}">link</a>`, XSS_CANARY, "text/html"));
+assert("44 xss html doctype", isReflectedXssInHtml(`<!doctype html><div>${XSS_CANARY}</div>`, XSS_CANARY, ""));
+assert("45 xss rejects plain text", !isReflectedXssInHtml(XSS_CANARY, XSS_CANARY, "text/plain"));
+assert("46 xss snippet context", isReflectedXssInHtml(`<input value="${XSS_CANARY}">`, XSS_CANARY, "text/html"));
+assert("47 xss no false empty", !isReflectedXssInHtml("<html>safe</html>", XSS_CANARY, "text/html"));
+assert("48 xss rejects missing canary", !isReflectedXssInHtml("<html>hello</html>", XSS_CANARY, "text/html"));
+
+console.log(`\nRBT harness: ${passed}/${passed + failed} passed (48 cycles)`);
 process.exit(failed > 0 ? 1 : 0);

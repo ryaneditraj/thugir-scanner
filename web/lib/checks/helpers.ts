@@ -73,3 +73,24 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+/** Harmless marker with HTML metacharacters — reflected unescaped in HTML is XSS proof. */
+export const XSS_CANARY = '"><thugir-xss-canary>';
+
+const HTML_CT_RE = /text\/html|application\/xhtml/i;
+
+/** True when the canary appears literally in an HTML response (not JSON/plain). */
+export function isReflectedXssInHtml(
+  body: string,
+  canary: string,
+  contentType = ""
+): boolean {
+  if (!body.includes(canary)) return false;
+  if (/application\/json/i.test(contentType)) return false;
+  const isHtml = HTML_CT_RE.test(contentType) || /^\s*<(?:!doctype|html)/i.test(body);
+  if (!isHtml) return false;
+  // URL-encoded echoes in links (e.g. ?q=%22%3E...) are not unescaped reflection.
+  const urlEncoded = encodeURIComponent(canary);
+  if (body.includes(urlEncoded) && !body.includes(canary)) return false;
+  return true;
+}
