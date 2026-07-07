@@ -150,6 +150,15 @@ const SECRET_DEFS: SecretDef[] = [
     severity: "high",
     serverOnly: true,
     impact: "Paddle credentials can expose billing and customer data."
+  },
+  {
+    slug: "secret-convex-deploy-key",
+    name: "Convex deploy key",
+    // dev:joyful-jaguar-123|eyJ… or prod:/preview:/project: variants — distinctive pipe-delimited CLI format.
+    regex: "(?:dev|prod):[a-z0-9-]+\\|[A-Za-z0-9+/=_-]{20,}|(?:preview|project):[a-z0-9-]+:[a-z0-9-]+\\|[A-Za-z0-9+/=_-]{20,}",
+    severity: "critical",
+    serverOnly: true,
+    impact: "A Convex deploy key grants full read/write/deploy control over your backend."
   }
 ];
 

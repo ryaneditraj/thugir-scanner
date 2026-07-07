@@ -276,7 +276,11 @@ const INLINE_SECRET_RES: { name: string; re: RegExp }[] = [
   { name: "OpenAI key", re: /sk-[A-Za-z0-9]{20,}/ },
   { name: "Private key block", re: /-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/ },
   { name: "Slack token", re: /xox[baprs]-[A-Za-z0-9-]{10,}/ },
-  { name: "GitHub token", re: /gh[pousr]_[A-Za-z0-9]{36,}/ }
+  { name: "GitHub token", re: /gh[pousr]_[A-Za-z0-9]{36,}/ },
+  {
+    name: "Convex deploy key",
+    re: /(?:dev|prod):[a-z0-9-]+\|[A-Za-z0-9+/=_-]{20,}|(?:preview|project):[a-z0-9-]+:[a-z0-9-]+\|[A-Za-z0-9+/=_-]{20,}/
+  }
 ];
 const inlineStateSecrets: Rule = async (ctx) => {
   const html = ctx.home.body || "";
