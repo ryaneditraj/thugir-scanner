@@ -71,7 +71,9 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
   "lovable-client-only-auth":
     "Attackers bypass the UI entirely and read/write data via Supabase/API — total account takeover at scale.",
   "exposed-source-maps":
-    "Unminified source reveals hidden admin routes, hardcoded secrets, and business logic flaws attackers chain into full breach."
+    "Unminified source reveals hidden admin routes, hardcoded secrets, and business logic flaws attackers chain into full breach.",
+  "secret-convex-deploy-key":
+    "Full Convex backend compromise: deploy malicious functions, read/write every document, and exfiltrate all user data."
 };
 
 const SEVERITY_FALLBACK: Record<Severity, string> = {
