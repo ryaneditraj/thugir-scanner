@@ -22,10 +22,13 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
 | #19 | infra | PR integrity audit, backlog sync, duplicate detection | `cursor/pull-request-integrity-a924` |
 
-> **Retired (branch deleted — close PR shell on GitHub when possible):**
-> - **#17** — duplicate `secret-twilio`; keeper is PR #12.
-> - **#18, #16, #11** — superseded integrity passes; keeper is PR #19.
-> - **#14** — dead branch (already gone).
+## Retired PR shells
+
+Branch deleted — close on GitHub when possible:
+
+- **#17** — duplicate `secret-twilio`; keeper is PR #12.
+- **#18, #16, #11** — superseded integrity passes; keeper is PR #19.
+- **#14** — dead branch (already gone).
 
 ## Queued (not yet taken)
 
