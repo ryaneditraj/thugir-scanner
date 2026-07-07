@@ -191,7 +191,7 @@ function fixBacklogOnBranches() {
   const prs = getOpenPrs();
 
   const startBranch = shQuiet("git branch --show-current") || "main";
-  shQuiet("git stash push -m pr-integrity-fix-backlog -- docs/AUTOMATION_BACKLOG.md 2>/dev/null || true");
+  shQuiet("git stash push -u -m pr-integrity-fix-backlog 2>/dev/null || true");
 
   for (const pr of prs) {
     const branch = pr.headRefName;
@@ -218,6 +218,7 @@ function fixBacklogOnBranches() {
     shQuiet(`git branch -D pr-fix-${pr.number}`);
   }
   shQuiet(`git checkout ${startBranch} 2>/dev/null || git checkout main`);
+  shQuiet("git stash pop 2>/dev/null || true");
 }
 
 function pruneOrphanBranches() {
