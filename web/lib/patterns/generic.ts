@@ -229,6 +229,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssti-query-parameter",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Server-side template injection via query parameter",
+    description:
+      "A search, error, or filter parameter is passed into a server-side template engine without sanitization. AI-built Flask/Django/Express apps often render user input in error pages or search results, enabling remote code execution on many engines.",
+    impactOneline: "User input in URLs is evaluated as template code — often leading to RCE.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiCanary" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Never pass request parameters into template render calls; use auto-escaping.",
+      steps: [
+        "Remove user-controlled strings from template render/compile paths.",
+        "Enable auto-escaping in your template engine (Jinja2, Twig, EJS, etc.).",
+        "Treat search/error pages as untrusted input — pass data via context dicts, not string concat."
+      ]
+    },
+    fixPrompt:
+      "My app evaluates query parameters as server-side template code (SSTI). Stop passing user input into template render calls, enable auto-escaping, and show me the fixed handler for the affected route.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "robots-sensitive-paths",
     platform: "generic",
     category: "Information disclosure",

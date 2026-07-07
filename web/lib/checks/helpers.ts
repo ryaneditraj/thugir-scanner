@@ -73,3 +73,19 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+/** Harmless math probes — evaluated server-side only when SSTI is present. */
+export const SSTI_PROBES = [
+  { syntax: "jinja2/twig/nunjucks", payload: "{{17359*28471}}", result: "494163289" },
+  { syntax: "freemarker/velocity/spring-el", payload: "${17359*28471}", result: "494163289" },
+  { syntax: "erb/ejs", payload: "<%= 17359*28471 %>", result: "494163289" }
+] as const;
+
+/** True when the unique product appears but the raw template payload does not (evaluation proof). */
+export function isSstiEvaluated(body: string, payload: string, result: string): boolean {
+  if (!body.includes(result)) return false;
+  if (body.includes(payload)) return false;
+  const enc = encodeURIComponent(payload);
+  if (body.includes(enc) && !body.includes(payload)) return false;
+  return true;
+}

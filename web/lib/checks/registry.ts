@@ -14,7 +14,9 @@ import {
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
-  SENSITIVE_PATH_NEEDLES
+  SENSITIVE_PATH_NEEDLES,
+  SSTI_PROBES,
+  isSstiEvaluated
 } from "./helpers";
 
 export interface RuleContext {
@@ -227,6 +229,83 @@ const corsReflectOrigin: Rule = async (ctx) => {
     fired: true,
     confidence: creds ? 0.95 : 0.88,
     evidence: { allowOrigin: acao, allowCredentials: creds, note: "reflects arbitrary Origin header" }
+  };
+};
+
+// --- SSTI via query parameter (canary probe) --------------------------------
+// Inject harmless template math into common search/error params. Only fires when the server
+// evaluates the expression (unique product in body, raw payload absent) — positive proof.
+const SSTI_PARAMS = [
+  "q",
+  "search",
+  "query",
+  "s",
+  "term",
+  "name",
+  "message",
+  "error",
+  "msg",
+  "text",
+  "keyword",
+  "filter"
+];
+const SSTI_PATHS = ["/", "/search", "/error", "/login"];
+
+const sstiCanary: Rule = async (ctx) => {
+  const hits: {
+    path: string;
+    param: string;
+    url: string;
+    syntax: string;
+    payload: string;
+    snippet: string;
+  }[] = [];
+  const seen = new Set<string>();
+  const urls: { url: string; param: string; path: string; syntax: string; payload: string; result: string }[] =
+    [];
+
+  for (let i = 0; urls.length < 12; i++) {
+    const probe = SSTI_PROBES[i % SSTI_PROBES.length];
+    const path = SSTI_PATHS[i % SSTI_PATHS.length];
+    const param = SSTI_PARAMS[i % SSTI_PARAMS.length];
+    const key = `${probe.syntax}:${path}?${param}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const u = new URL(path, ctx.origin);
+    u.searchParams.set(param, probe.payload);
+    urls.push({
+      url: u.toString(),
+      param,
+      path,
+      syntax: probe.syntax,
+      payload: probe.payload,
+      result: probe.result
+    });
+  }
+
+  const docs = await ctx.probe.getMany(
+    urls.map((x) => x.url),
+    { maxBytes: 16_000, timeoutMs: 8000 },
+    4
+  );
+  for (const { url: probeUrl, param, path, syntax, payload, result } of urls) {
+    const doc = docs.get(probeUrl);
+    if (!doc || doc.status >= 400) continue;
+    if (!isSstiEvaluated(doc.body, payload, result)) continue;
+    const idx = doc.body.indexOf(result);
+    const snippet = doc.body.slice(Math.max(0, idx - 40), idx + result.length + 40).trim();
+    hits.push({ path, param, url: probeUrl, syntax, payload, snippet });
+  }
+
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      evaluatedResult: SSTI_PROBES[0].result,
+      hits: hits.slice(0, 4),
+      note: "Query parameter evaluated as server-side template — SSTI"
+    }
   };
 };
 
@@ -719,6 +798,7 @@ export const RULES: Record<string, Rule> = {
   insecureCookies,
   permissiveCors,
   corsReflectOrigin,
+  sstiCanary,
   robotsSensitivePaths,
   techDisclosure,
   inlineStateSecrets,
@@ -754,6 +834,7 @@ export const FREE_RULES = new Set([
   "insecureCookies",
   "permissiveCors",
   "corsReflectOrigin",
+  "sstiCanary",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass
