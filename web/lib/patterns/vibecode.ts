@@ -282,6 +282,31 @@ export const vibecodePatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vibe-auth0-secret-in-client",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Auth0 client secret referenced in client bundle",
+    description:
+      "Auth0 quickstarts and NextAuth Auth0Provider configs often assign AUTH0_CLIENT_SECRET or clientSecret in modules that ship to the browser. Only the client ID belongs client-side; the secret enables token exchange and session forgery.",
+    impactOneline: "Your Auth0 client secret in JS enables OAuth token theft and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "auth0SecretInClient" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Move Auth0 secret usage server-side and rotate the client secret.",
+      steps: [
+        "Remove AUTH0_CLIENT_SECRET from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+        "Handle Auth0 token exchange only in server routes or Edge Functions.",
+        "Rotate the client secret in Auth0 Dashboard → Applications → Settings."
+      ]
+    },
+    fixPrompt:
+      "My frontend references an Auth0 client secret (AUTH0_CLIENT_SECRET or clientSecret). Move all Auth0 secret usage to server-side API routes, remove it from client-exposed env vars, and tell me to rotate the client secret in Auth0.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vibe-firebase-firestore-open",
     platform: "firebase",
     category: "Broken access control",

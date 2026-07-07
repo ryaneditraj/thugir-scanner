@@ -576,6 +576,58 @@ const clerkSecretInClient: Rule = async (ctx) => {
   };
 };
 
+const PLACEHOLDER_SECRET =
+  /^(?:your[-_]?|my[-_]?)?(?:client[-_]?)?secret(?:[-_]?here)?$|^(?:changeme|placeholder|example|xxx+|test|dummy|fake|null|undefined|insert[-_]?here)$/i;
+
+function redactSecretSample(secret: string): string {
+  return secret.length > 12 ? `${secret.slice(0, 8)}…` : "***";
+}
+
+function isLikelyRealOAuthSecret(value: string): boolean {
+  if (value.length < 16) return false;
+  if (PLACEHOLDER_SECRET.test(value)) return false;
+  if (/^[*x]+$/i.test(value)) return false;
+  return true;
+}
+
+// --- Auth0 / OAuth client secret in client bundle ---------------------------
+// Auth0 quickstarts and NextAuth Auth0Provider configs often ship client_secret in
+// shared modules that end up in the browser bundle. Unlike publishable client IDs,
+// the secret enables token exchange and account-takeover flows.
+const auth0SecretInClient: Rule = async (ctx) => {
+  const envRe =
+    /(?:NEXT_PUBLIC_|VITE_)?AUTH0_(?:M2M_)?(?:CLIENT_)?SECRET(?:_KEY)?\s*[=:]\s*["']([^"']{8,})["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = envRe.exec(ctx.combined))) {
+    if (isLikelyRealOAuthSecret(m[1])) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          note: "Auth0 secret env var exposed in client bundle",
+          sampleRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+
+  if (!/auth0/i.test(ctx.combined)) return NEGATIVE;
+  const cfgRe = /(?:clientSecret|client_secret)\s*[=:]\s*["']([A-Za-z0-9_\-/.+]{20,})["']/gi;
+  while ((m = cfgRe.exec(ctx.combined))) {
+    if (isLikelyRealOAuthSecret(m[1])) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          note: "OAuth client_secret near Auth0 config in client bundle",
+          sampleRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- Firebase Firestore open read (REST) ------------------------------------
 const firebaseFirestoreOpen: Rule = async (ctx) => {
   const proj =
@@ -733,6 +785,7 @@ export const RULES: Record<string, Rule> = {
   weakCsp,
   hardcodedCredentials,
   clerkSecretInClient,
+  auth0SecretInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
   serverActionAuthz,
@@ -768,6 +821,7 @@ export const FREE_RULES = new Set([
   "weakCsp",
   "hardcodedCredentials",
   "clerkSecretInClient",
+  "auth0SecretInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys"
 ]);
