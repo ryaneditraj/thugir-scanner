@@ -44,6 +44,14 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Six-figure API bill overnight and your keys used to host phishing or malware campaigns tied to your account.",
   "secret-anthropic":
     "Runaway API spend and abuse of your account for malicious content generation.",
+  "secret-mapbox-sk":
+    "Attackers run up Mapbox usage charges, exfiltrate private geospatial datasets, and modify production map styles.",
+  "secret-sentry-auth":
+    "Full Sentry org access: every stack trace, user email, and internal error payload scraped and sold.",
+  "secret-posthog-personal":
+    "Complete product analytics and user-behavior data exported — competitors clone your funnel and target your users.",
+  "secret-shopify-admin":
+    "Every customer order, address, and payment detail readable; store settings changed to redirect payouts.",
   "graphql-introspection-enabled":
     "Internal admin mutations discovered and invoked — privilege escalation and data exfil at scale.",
   "cors-reflect-origin":
