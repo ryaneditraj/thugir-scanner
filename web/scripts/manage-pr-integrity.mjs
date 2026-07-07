@@ -97,19 +97,31 @@ function getPatternFiles(ref) {
 }
 
 /** Fingerprints per slug so we can detect modifications to existing slugs, not just new ones. */
+function extractSlugBlock(text, slug) {
+  const marker = `slug: "${slug}"`;
+  const idx = text.indexOf(marker);
+  if (idx < 0) return "";
+  const rest = text.slice(idx);
+  const end = rest.match(/\n  \},?/);
+  const raw = end ? rest.slice(0, end.index + end[0].length) : rest.slice(0, 400);
+  return raw
+    .replace(/,\s*$/, "")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith("//"))
+    .join("\n");
+}
+
 function slugFingerprints(ref) {
   const map = new Map();
   for (const file of getPatternFiles(ref)) {
     const text = shQuiet(`git show ${ref}:${file}`);
     if (!text) continue;
-    const parts = text.split(/slug:\s*"/);
-    for (let i = 1; i < parts.length; i++) {
-      const slug = parts[i].match(/^([^"]+)"/)?.[1];
+    for (const block of text.split(/slug:\s*"/).slice(1)) {
+      const slug = block.match(/^([^"]+)"/)?.[1];
       if (!slug) continue;
-      const blockEnd = parts[i].indexOf("slug:");
-      const block = blockEnd > 0 ? parts[i].slice(0, blockEnd) : parts[i].slice(0, 500);
-      const prev = map.get(slug) || "";
-      map.set(slug, prev + `\0${file}:${block}`);
+      const fp = extractSlugBlock(text, slug);
+      if (fp) map.set(slug, (map.get(slug) || "") + `\0${file}:${fp}`);
     }
   }
   return map;
