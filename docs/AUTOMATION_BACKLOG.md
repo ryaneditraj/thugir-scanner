@@ -27,7 +27,7 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 Branch deleted — close on GitHub when possible (token lacks `closePullRequest`):
 
 - **#17** — duplicate `secret-twilio`; keeper is PR #12.
-- **#18, #16, #11, #14, #19** — superseded integrity passes; keeper is the latest integrity PR on `cursor/pull-request-integrity-3d8b`.
+- **#18, #16, #11, #14, #19** — superseded integrity passes; keeper is PR #21.
 
 ## Queued (not yet taken)
 
