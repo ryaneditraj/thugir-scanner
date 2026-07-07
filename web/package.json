@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test:framework": "node scripts/test-framework.mjs",
     "test:smoke": "node scripts/smoke-scan.mjs",
+    "power-scan": "tsx scripts/power-scan.ts",
+    "ship-gate": "node scripts/ship-gate.mjs",
     "patterns": "node scripts/pattern-catalog.mjs && node scripts/export-patterns-seed.mjs"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",
     "puppeteer-core": "^23.11.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
 }
