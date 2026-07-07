@@ -21,6 +21,7 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
 | #22 | detection | Live OpenAI API key validation via Models API | `cursor/thugir-scanner-evolution-f74b` |
+| #26 | detection | Live Anthropic API key validation via Models API | `cursor/thugir-scanner-evolution-932b` |
 
 ## Other open PRs (non-detection)
 
