@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07T21:03:00.000Z",
+  "updated_at": "2026-07-07T22:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://dvwa.csalab.app/",
@@ -34,6 +34,26 @@
     {
       "url": "http://vapi.apisec.ai",
       "source": "APIsec University hosted OWASP vAPI",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/",
+      "source": "PortSwigger Gin and Juice Shop public scanner benchmark (blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bwapp.hakhub.net/",
+      "source": "bWAPP third-party public demo (hakhub.net)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/",
+      "source": "Google XSS Firing Range public benchmark (OSS README deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://google-gruyere.appspot.com/",
+      "source": "Google Gruyere intentionally vulnerable app (public demo)",
       "auth": "public_demo"
     }
   ]
