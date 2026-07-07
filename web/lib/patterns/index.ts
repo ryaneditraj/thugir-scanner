@@ -1,7 +1,7 @@
 import type { Pattern, Platform, Tier } from "./types";
 import { supabasePatterns } from "./supabase";
 import { firebasePatterns } from "./firebase";
-import { secretPatterns } from "./secrets";
+import { secretPatterns, twilioCredentialPattern } from "./secrets";
 import { genericPatterns } from "./generic";
 import {
   lovablePatterns,
@@ -22,6 +22,7 @@ export * from "./types";
 // Moat: these encode what vibe-coding scaffolds ship wrong — not a generic CVE list.
 export const STATIC_PATTERNS: Pattern[] = [
   ...secretPatterns,
+  twilioCredentialPattern,
   ...genericPatterns,
   ...supabasePatterns,
   ...firebasePatterns,

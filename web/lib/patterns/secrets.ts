@@ -120,14 +120,6 @@ const SECRET_DEFS: SecretDef[] = [
     impact: "Razorpay credentials can expose payment operations."
   },
   {
-    slug: "secret-twilio",
-    name: "Twilio account SID + auth",
-    regex: "AC[a-f0-9]{32}",
-    severity: "medium",
-    serverOnly: true,
-    impact: "Twilio credentials can be abused to send SMS/calls on your bill."
-  },
-  {
     slug: "secret-private-key",
     name: "Private key block",
     regex: "-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----",
@@ -181,3 +173,30 @@ export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
   version: 1,
   enabled: true
 }));
+
+// Twilio uses rule_ref (not regex) — Account SIDs alone are too noisy; we require auth token pairing.
+export const twilioCredentialPattern: Pattern = {
+  slug: "secret-twilio",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "high",
+  title: "Twilio account SID + auth token exposed in client bundle",
+  description:
+    "A Twilio account SID paired with its auth token was found in JavaScript or HTML served to the browser. AI SMS/OTP scaffolds often import the full Twilio client with both credentials on the client side.",
+  impactOneline: "Twilio credentials can be abused to send SMS/calls on your bill.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "twilioCredentialsInClient" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Twilio auth token now and move credentials server-side.",
+    steps: [
+      "Rotate the Twilio auth token in the Twilio console immediately.",
+      "Remove accountSid and authToken from all client code and client-exposed env vars.",
+      "Proxy SMS/OTP sends through a server route that holds the credentials."
+    ]
+  },
+  fixPrompt:
+    "My Twilio account SID and auth token are exposed in the client bundle. Move all Twilio API calls to server-side code, remove TWILIO_AUTH_TOKEN from any NEXT_PUBLIC_/VITE_ env vars, and show me exactly which files referenced the credentials so I can rotate the auth token.",
+  version: 2,
+  enabled: true
+};
