@@ -1,0 +1,44 @@
+# ---- dependencies ----
+node_modules/
+web/node_modules/
+
+# ---- Next.js build output ----
+.next/
+web/.next/
+out/
+web/out/
+*.tsbuildinfo
+web/next-env.d.ts
+
+# ---- env / secrets (NEVER commit real keys) ----
+.env
+.env.local
+.env*.local
+web/.env
+web/.env.local
+web/.env*.local
+worker/.env
+worker/.env.local
+
+# ---- Vercel ----
+.vercel/
+web/.vercel/
+
+# ---- Python (worker) ----
+__pycache__/
+*.pyc
+worker/.venv/
+worker/venv/
+.venv/
+
+# ---- local runtime data ----
+.data/
+web/.data/
+
+# ---- engine submodule build artifacts (if vendored at engine/) ----
+engine/**/__pycache__/
+engine/**/*.pyc
+
+# ---- OS / editor ----
+.DS_Store
+*.log

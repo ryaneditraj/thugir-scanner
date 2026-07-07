@@ -1,0 +1,9 @@
+# Deep Scan worker dependencies.
+# The worker also imports the thugir-node engine modules directly (deep_vuln_scan, scan_api,
+# finalize_findings). Install the engine's own requirements too:
+#   pip install -r ../../thugir-node/requirements.txt -r ../../thugir-node/requirements-api.txt
+# then this file:
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+requests>=2.31.0
+qstash>=2.0.0
