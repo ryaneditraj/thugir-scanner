@@ -122,5 +122,53 @@ assert("38 supabase url only no jwt", extractSupabaseFromText("https://abcdefghi
 assert("39 openapi swagger", looksOpenApiBody('{"swagger":"2.0","paths":{"/a":{"patch":{}}}}'));
 assert("40 extract fetch api", extractApiPaths("axios.get('/api/health')").includes("/api/health"));
 
-console.log(`\nRBT harness: ${passed}/${passed + failed} passed (40 cycles)`);
+const CLOUD_BUCKET_SKIP = new Set(["example", "test", "demo", "assets", "static", "cdn"]);
+function addCloudBucket(out, provider, bucket, listUrl, sourceHint) {
+  const name = bucket.toLowerCase();
+  if (name.length < 3 || CLOUD_BUCKET_SKIP.has(name)) return;
+  const key = `${provider}:${name}`;
+  if (!out.has(key)) out.set(key, { provider, bucket: name, listUrl, sourceHint });
+}
+function extractCloudStorageBuckets(combined) {
+  const out = new Map();
+  let m;
+  const s3Virtual = /https?:\/\/([a-z0-9][a-z0-9.-]{1,61}[a-z0-9])\.s3(?:[.-][a-z0-9-]+)?\.amazonaws\.com/gi;
+  while ((m = s3Virtual.exec(combined))) {
+    addCloudBucket(out, "s3", m[1], `https://${m[1]}.s3.amazonaws.com/?max-keys=5`, m[0]);
+  }
+  const s3Path = /https?:\/\/s3(?:[.-][a-z0-9-]+)?\.amazonaws\.com\/([a-z0-9][a-z0-9.-]{1,61}[a-z0-9])/gi;
+  while ((m = s3Path.exec(combined))) {
+    addCloudBucket(out, "s3", m[1], `https://${m[1]}.s3.amazonaws.com/?max-keys=5`, m[0]);
+  }
+  const gcsPath = /https?:\/\/storage\.googleapis\.com\/([a-z0-9][a-z0-9._-]{1,61}[a-z0-9])/gi;
+  while ((m = gcsPath.exec(combined))) {
+    addCloudBucket(out, "gcs", m[1], `https://storage.googleapis.com/storage/v1/b/${m[1]}/o?maxResults=5`, m[0]);
+  }
+  const r2Public = /https?:\/\/(pub-[a-f0-9]{16,}\.r2\.dev)\/?/gi;
+  while ((m = r2Public.exec(combined))) {
+    addCloudBucket(out, "r2", m[1], `https://${m[1]}/`, m[0]);
+  }
+  return [...out.values()];
+}
+function looksPublicBucketListing(body, provider) {
+  const trimmed = body.trim();
+  if (!trimmed || /AccessDenied|AllAccessDisabled/i.test(trimmed)) return false;
+  if (provider === "s3" || provider === "r2") {
+    return /<ListBucketResult[\s>]/i.test(trimmed) && /<Contents\b/i.test(trimmed);
+  }
+  return /"kind"\s*:\s*"storage#objects"/.test(trimmed) && /"items"\s*:\s*\[/.test(trimmed);
+}
+
+assert("41 extract S3 bucket", extractCloudStorageBuckets("https://my-app-uploads.s3.amazonaws.com/photo.jpg")[0]?.bucket === "my-app-uploads");
+assert("42 skip generic assets bucket", extractCloudStorageBuckets("https://assets.s3.amazonaws.com/x").length === 0);
+assert("43 extract GCS bucket", extractCloudStorageBuckets("https://storage.googleapis.com/my-prod-bucket/path")[0]?.provider === "gcs");
+assert("44 S3 listing proof", looksPublicBucketListing('<?xml><ListBucketResult><Contents><Key>a.jpg</Key></Contents></ListBucketResult>', "s3"));
+assert("45 rejects AccessDenied", !looksPublicBucketListing("<Error><Code>AccessDenied</Code></Error>", "s3"));
+assert("46 GCS listing proof", looksPublicBucketListing('{"kind":"storage#objects","items":[{"name":"file.txt"}]}', "gcs"));
+assert("47 extract R2 pub host", extractCloudStorageBuckets("https://pub-abc123def4567890.r2.dev/img.png")[0]?.provider === "r2");
+assert("48 no buckets in plain text", extractCloudStorageBuckets("hello world").length === 0);
+assert("49 S3 path-style", extractCloudStorageBuckets("https://s3.amazonaws.com/customer-data-backup/file.zip")[0]?.bucket === "customer-data-backup");
+assert("50 empty listing not proof", !looksPublicBucketListing("<html>404</html>", "s3"));
+
+console.log(`\nRBT harness: ${passed}/${passed + failed} passed (50 cycles)`);
 process.exit(failed > 0 ? 1 : 0);

@@ -343,5 +343,30 @@ export const vibecodePatterns: Pattern[] = [
       "My Next.js __NEXT_DATA__ contains sensitive env key names with values. Remove them from page props so they never reach the client, and list what I must rotate.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "vibe-public-cloud-storage-bucket",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Public cloud storage bucket lists objects without auth",
+    description:
+      "Your JavaScript references an S3, Google Cloud Storage, or Cloudflare R2 bucket URL, and a read-only list request returns real object names without credentials. AI upload scaffolds often hardcode bucket URLs and leave buckets world-readable.",
+    impactOneline: "Anyone can list and download files from your cloud storage bucket.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "publicCloudStorageBucket" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Block public list/read on the bucket and use signed URLs for uploads.",
+      steps: [
+        "Set the bucket to private and remove public ListBucket/GetObject permissions.",
+        "Use pre-signed URLs or a server-side upload proxy instead of public bucket URLs in the client.",
+        "Audit existing objects for sensitive uploads and rotate any exposed access keys."
+      ]
+    },
+    fixPrompt:
+      "My app references a public S3/GCS/R2 bucket that lists objects without authentication. Make the bucket private, remove public list/read ACLs, switch uploads to signed URLs or a server proxy, and show the IAM/policy changes.",
+    version: 1,
+    enabled: true
   }
 ];
