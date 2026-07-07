@@ -73,3 +73,52 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+export function redactSecretSample(sample: string): string {
+  return sample.length > 12 ? `${sample.slice(0, 6)}…${sample.slice(-4)}` : "***";
+}
+
+const OPENAI_PLACEHOLDER_RE =
+  /example|placeholder|your_|changeme|sample|fake|dummy|not[_-]?real|insert|replace|sk-test|xxxxxxxx/i;
+
+const OPENAI_KEY_BODY_RE = /^(?:proj-)?[A-Za-z0-9_-]{20,}$/;
+
+/** Reject tutorial/placeholder OpenAI keys and non-OpenAI sk- prefixes before hitting the API. */
+export function isLikelyOpenAiKey(key: string): boolean {
+  if (!/^sk-(?:proj-)?[A-Za-z0-9_-]{20,}$/.test(key)) return false;
+  if (/^sk-ant-/i.test(key)) return false;
+  if (/^sk_(?:live|test)_/i.test(key)) return false;
+  if (OPENAI_PLACEHOLDER_RE.test(key)) return false;
+  const body = key.slice(3);
+  if (!OPENAI_KEY_BODY_RE.test(body)) return false;
+  const entropy = new Set(body.replace(/-/g, "")).size;
+  if (entropy < 8) return false;
+  return true;
+}
+
+const OPENAI_KEY_RE = /sk-(?:proj-)?[A-Za-z0-9_-]{20,}/g;
+
+/** Pull the first plausible OpenAI API key from bundle text. */
+export function extractOpenAiKey(combined: string): string | null {
+  const envPatterns = [
+    /(?:NEXT_PUBLIC_|VITE_)?OPENAI_(?:API_)?KEY\s*[=:]\s*["'](sk-(?:proj-)?[A-Za-z0-9_-]{20,})["']/gi,
+    /(?:openaiApiKey|OPENAI_API_KEY)\s*[=:]\s*["'](sk-(?:proj-)?[A-Za-z0-9_-]{20,})["']/gi
+  ];
+  for (const re of envPatterns) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(combined))) {
+      if (isLikelyOpenAiKey(m[1])) return m[1];
+    }
+  }
+
+  if (/openai/i.test(combined)) {
+    for (const m of combined.matchAll(OPENAI_KEY_RE)) {
+      if (isLikelyOpenAiKey(m[0])) return m[0];
+    }
+  }
+
+  for (const m of combined.matchAll(OPENAI_KEY_RE)) {
+    if (isLikelyOpenAiKey(m[0])) return m[0];
+  }
+  return null;
+}
