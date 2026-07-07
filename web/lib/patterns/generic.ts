@@ -383,6 +383,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "phpinfo-exposed",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PHP phpinfo() page reachable in production",
+    description:
+      "A phpinfo() diagnostic page is publicly reachable. It dumps PHP version, loaded extensions, server paths, and often environment variables — a goldmine for attackers planning further exploits.",
+    impactOneline: "Anyone can read your full PHP/server configuration via phpinfo().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "phpinfoExposed" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Delete phpinfo pages from production and block the paths at the server.",
+      steps: [
+        "Remove phpinfo.php / info.php from the deployed web root.",
+        "Return 404 for /phpinfo* paths in your server or WAF rules.",
+        "Rotate any secrets that may have appeared in phpinfo environment output."
+      ]
+    },
+    fixPrompt:
+      "My production server still serves phpinfo.php (or similar). Remove those diagnostic files from the web root, block the paths in production, and show me the server config change.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "verbose-error-disclosure",
     platform: "generic",
     category: "Information disclosure",

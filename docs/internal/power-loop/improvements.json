@@ -17,6 +17,18 @@
       "slug": "dangerous-html-sinks",
       "status": "shipped",
       "validation": "Juice Shop main.js uses bypassSecurityTrustHtml with orderId interpolation; xss 0→1"
+    },
+    {
+      "source": "discovery:dvwa.csalab.app",
+      "slug": "phpinfo-exposed",
+      "status": "shipped",
+      "validation": "DVWA /phpinfo.php returns PHP Version 7.4.33 + phpinfo() title; findings 3→4"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "Staging main.js sink usage at byte ~1.38M past 800KB truncation; refetch + probe-cache maxBytes key; findings 5→6"
     }
   ],
   "shipped": [
@@ -34,6 +46,16 @@
       "source": "benchmark:juice-shop",
       "slug": "dangerous-html-sinks",
       "shipped_at": "2026-07-07T20:06:00.000Z"
+    },
+    {
+      "source": "discovery:dvwa.csalab.app",
+      "slug": "phpinfo-exposed",
+      "shipped_at": "2026-07-07T21:08:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "dangerous-html-sinks-large-bundle",
+      "shipped_at": "2026-07-07T21:08:00.000Z"
     }
   ]
 }
