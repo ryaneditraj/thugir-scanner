@@ -29,6 +29,18 @@
       "slug": "dangerous-html-sinks",
       "status": "shipped",
       "validation": "Staging main.js sink usage at byte ~1.38M past 800KB truncation; refetch + probe-cache maxBytes key; findings 5→6"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "idor-sequential-ids",
+      "status": "shipped",
+      "validation": "GET /rest/track-order/1 returns {\"status\":\"success\",\"data\":[{\"orderId\":\"1\"}]} without auth; benchmark findings 7→8, idor now positive-proof via idorObjectAccess rule"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "spring-boot-actuator-exposed",
+      "status": "shipped",
+      "validation": "GET /actuator returns _links.health JSON; GET /actuator/health returns {\"status\":\"UP\"}; WrongSecrets findings 2→3"
     }
   ],
   "shipped": [
@@ -56,6 +68,16 @@
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "dangerous-html-sinks-large-bundle",
       "shipped_at": "2026-07-07T21:08:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "idor-object-access",
+      "shipped_at": "2026-07-07T22:08:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "spring-boot-actuator-exposed",
+      "shipped_at": "2026-07-07T22:08:00.000Z"
     }
   ]
 }

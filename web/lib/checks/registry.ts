@@ -682,6 +682,88 @@ const serverActionAuthz: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- Spring Boot actuator exposed (read-only GET) -----------------------------
+// Production Spring apps often leave /actuator reachable. The index JSON with
+// _links.health or a health UP response is positive proof of management exposure.
+const ACTUATOR_PROBE_PATHS = ["/actuator", "/actuator/health", "/actuator/info", "/manage/actuator"];
+
+const springActuatorExposed: Rule = async (ctx) => {
+  const urls = ACTUATOR_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const body = r.body.trim();
+    if (!/^\s*[\[{]/.test(body)) continue;
+    const isIndex = /"_links"\s*:/.test(body) && /"health"\s*:/.test(body);
+    const isHealth = /"status"\s*:\s*"UP"/i.test(body);
+    const isInfo = /"git"\s*:\s*\{/.test(body) && /"commit"\s*:/.test(body);
+    if (!isIndex && !isHealth && !isInfo) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        snippet: body.slice(0, 200).trim(),
+        note: "Spring Boot actuator management endpoint reachable without authentication"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- IDOR: unauthenticated read by sequential numeric ID (active GET probe) ---
+// Positive proof when /resource/1 returns record JSON without an auth challenge.
+const IDOR_FALLBACK_PATHS = ["/rest/track-order/1", "/api/orders/1", "/api/users/1"];
+const IDOR_AUTH_MARKERS = /unauthorized|login required|authentication|credentials_required|jwt token required|invalid token/i;
+
+function extractIdorProbePaths(text: string): string[] {
+  const paths = new Set<string>();
+  const templateRe = /["'`](\/(?:rest|api)\/[a-z0-9_-]+)\/\$\{/gi;
+  let m: RegExpExecArray | null;
+  while ((m = templateRe.exec(text))) paths.add(`${m[1]}/1`);
+  if (/track-order/i.test(text)) paths.add("/rest/track-order/1");
+  const baseRe = /["'`](\/rest\/[a-z][a-z0-9_-]{2,30})["'`]/gi;
+  while ((m = baseRe.exec(text))) {
+    const base = m[1];
+    if (base.includes("admin") || base.endsWith("search")) continue;
+    paths.add(`${base}/1`);
+  }
+  return [...paths].slice(0, 5);
+}
+
+const idorObjectAccess: Rule = async (ctx) => {
+  const discovered = extractIdorProbePaths(ctx.combined);
+  const paths = [...new Set([...discovered, ...IDOR_FALLBACK_PATHS])].slice(0, 6);
+  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  const hits: { path: string; status: number; sample: string }[] = [];
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (IDOR_AUTH_MARKERS.test(r.body.slice(0, 500))) continue;
+    const trimmed = r.body.trim();
+    if (!/^\s*[\[{]/.test(trimmed)) continue;
+    if (/"(?:config|application|settings|admin)"\s*:/.test(r.body.slice(0, 300))) continue;
+    const hasRecord =
+      /"status"\s*:\s*"success"/i.test(r.body) ||
+      /"orderId"|"userId"|"user_id"|"email"\s*:|"data"\s*:\s*\[\s*\{/.test(r.body);
+    if (!hasRecord) continue;
+    hits.push({
+      path: new URL(url).pathname,
+      status: r.status,
+      sample: r.body.slice(0, 120).trim()
+    });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      routes: hits.slice(0, 4),
+      note: "sequential numeric ID returns record data without authentication — IDOR likely"
+    }
+  };
+};
+
 // --- IDOR / client-side ID fetch pattern — deep heuristic ----------------------
 const idorProbe: Rule = async (ctx) => {
   const signals: string[] = [];
@@ -939,7 +1021,9 @@ export const RULES: Record<string, Rule> = {
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
   unauthenticatedAdminEndpoint,
-  dangerousHtmlSinks
+  dangerousHtmlSinks,
+  springActuatorExposed,
+  idorObjectAccess
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -973,5 +1057,6 @@ export const FREE_RULES = new Set([
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys",
   "unauthenticatedAdminEndpoint",
-  "dangerousHtmlSinks"
+  "dangerousHtmlSinks",
+  "springActuatorExposed"
 ]);

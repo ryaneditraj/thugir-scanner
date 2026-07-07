@@ -141,7 +141,7 @@ values
    'AI-generated CRUD scaffolding often exposes resources by sequential numeric IDs without an ownership check, so changing the ID in the URL returns another user''s data.',
    'Changing an ID in the URL may expose other users'' private records.',
    'rule_ref',
-   '{"rule":"idorProbe"}'::jsonb,
+   '{"rule":"idorObjectAccess"}'::jsonb,
    'deep',
    '{"summary":"Add server-side ownership checks to every record lookup.","steps":["On every fetch/update/delete, verify the record belongs to the authenticated user.","Prefer non-guessable IDs (UUIDs) for user-facing resources.","Add automated tests that attempt cross-account access."]}'::jsonb,
    'My API may have IDOR: records are fetched by sequential ID without checking ownership. Add server-side ownership checks to every record access and switch user-facing IDs to UUIDs. Show the updated handlers.',

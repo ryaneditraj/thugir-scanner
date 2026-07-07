@@ -443,8 +443,8 @@ export const genericPatterns: Pattern[] = [
     impactOneline:
       "Changing an ID in the URL may expose other users' private records.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "idorProbe" },
-    // This needs authenticated/multi-request probing to confirm safely -> Deep Scan.
+    detectorConfig: { rule: "idorObjectAccess" },
+    // Active read-only GET probe with sequential ID — positive proof, not bundle heuristic.
     tierRequired: "deep",
     remediation: {
       summary: "Add server-side ownership checks to every record lookup.",
@@ -531,6 +531,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "My Angular/React bundle uses bypassSecurityTrustHtml or dangerouslySetInnerHTML with dynamic data (orderId, searchValue, etc.). Remove trusted-HTML rendering on user/API content and show the safe template change.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "spring-boot-actuator-exposed",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Spring Boot actuator endpoints exposed",
+    description:
+      "Spring Boot management endpoints (/actuator) respond with JSON to unauthenticated requests. Attackers can read health, git commit info, and sometimes environment secrets depending on exposure settings.",
+    impactOneline: "Management/monitoring endpoints are publicly reachable — config and secrets may leak.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "springActuatorExposed" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Restrict actuator to internal networks and disable sensitive endpoints in production.",
+      steps: [
+        "Set management.endpoints.web.exposure.include to only what you need (often just health).",
+        "Require authentication on /actuator or move it off the public internet.",
+        "Disable env, heapdump, and configprops endpoints in production."
+      ]
+    },
+    fixPrompt:
+      "My Spring Boot app exposes /actuator publicly (health/info/_links JSON). Lock down management endpoints: restrict exposure, require auth, and show me the application.properties / application.yml changes.",
     version: 1,
     enabled: true
   }
