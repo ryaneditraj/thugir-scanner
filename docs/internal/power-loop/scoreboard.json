@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07T23:03:30.000Z",
+  "updated_at": "2026-07-07T23:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 16,
   "discovery_findings": 58,
-  "improvements_shipped": 7,
-  "last_run": "2026-07-07T23:03:30.000Z",
+  "improvements_shipped": 9,
+  "last_run": "2026-07-07T23:08:00.000Z",
   "last_run_summary": {
     "hour_utc": "23:00",
     "benchmark": {
@@ -37,7 +37,14 @@
     "discovery_findings_new": 22,
     "skipped_rescan_48h": 11,
     "teacher_delta": "skipped — no nuclei/engine",
-    "improvements_this_run": 0
+    "improvements_this_run": 2,
+    "discovery_validation": {
+      "public-firing-range.appspot.com": {
+        "findings_before": 1,
+        "findings_after": 3,
+        "new_slugs": ["open-redirect-query-param", "reflected-xss-query-param"]
+      }
+    }
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -54,7 +61,7 @@
     "vapi.apisec.ai": 3,
     "ginandjuice.shop": 2,
     "bwapp.hakhub.net": 6,
-    "public-firing-range.appspot.com": 1,
+    "public-firing-range.appspot.com": 3,
     "google-gruyere.appspot.com": 2
   }
 }

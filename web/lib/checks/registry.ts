@@ -236,14 +236,14 @@ const corsReflectOrigin: Rule = async (ctx) => {
 const OPEN_REDIRECT_PROBE = "https://evil-open-redirect-probe.example/thugir-redirect-test";
 const OPEN_REDIRECT_PROBE_HOST = "evil-open-redirect-probe.example";
 const OPEN_REDIRECT_PARAMS = [
+  "url",
   "redirect",
-  "redirect_uri",
-  "redirect_url",
+  "next",
   "return",
   "returnTo",
   "return_to",
-  "next",
-  "url",
+  "redirect_uri",
+  "redirect_url",
   "goto",
   "dest",
   "destination",
@@ -272,6 +272,7 @@ function extractOpenRedirectPaths(text: string): string[] {
     const p = m[1].split("?")[0];
     if (/redirect|return|callback|logout|signin|continue|oauth/i.test(p)) paths.add(p);
   }
+  if (/redirect/i.test(text)) paths.add("/redirect/parameter");
   return [...paths].slice(0, 6);
 }
 
@@ -279,21 +280,22 @@ const openRedirect: Rule = async (ctx) => {
   const probes: { path: string; param: string; status: number; location: string; kind: string }[] = [];
   const seen = new Set<string>();
   const urls: { url: string; param: string; path: string }[] = [];
-  const paths = [
-    ...new Set([...OPEN_REDIRECT_FALLBACK_PATHS, ...extractOpenRedirectPaths(ctx.combined)])
-  ].slice(0, 8);
+  const discovered = extractOpenRedirectPaths(ctx.combined);
+  const paths = discovered.length
+    ? [...new Set([...discovered, "/"])].slice(0, 6)
+    : [...OPEN_REDIRECT_FALLBACK_PATHS].slice(0, 6);
 
-  for (const path of paths) {
-    for (const param of OPEN_REDIRECT_PARAMS) {
+  // Spread probes across paths (discovered first) instead of exhausting one path.
+  outer: for (const param of OPEN_REDIRECT_PARAMS) {
+    for (const path of paths) {
       const key = `${path}?${param}`;
       if (seen.has(key)) continue;
       seen.add(key);
       const u = new URL(path, ctx.origin);
       u.searchParams.set(param, OPEN_REDIRECT_PROBE);
       urls.push({ url: u.toString(), param, path });
-      if (urls.length >= 12) break;
+      if (urls.length >= 16) break outer;
     }
-    if (urls.length >= 12) break;
   }
 
   const docs = await ctx.probe.getMany(
@@ -378,24 +380,24 @@ function isReflectedXssCanary(body: string, canary: string): boolean {
 const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
   const homePath = new URL(ctx.home.finalUrl).pathname || "/";
+  const discovered = extractReflectedXssPaths(ctx.combined);
   const paths = [
-    ...new Set([homePath, ...extractReflectedXssPaths(ctx.combined), ...REFLECTED_XSS_FALLBACK_PATHS])
+    ...new Set([...discovered, homePath, ...REFLECTED_XSS_FALLBACK_PATHS])
   ].slice(0, 6);
   const hits: { path: string; param: string; url: string; snippet: string }[] = [];
   const seen = new Set<string>();
   const urls: { url: string; param: string; path: string }[] = [];
 
-  for (const path of paths) {
-    for (const param of REFLECTED_XSS_PARAMS) {
+  outer: for (const param of REFLECTED_XSS_PARAMS) {
+    for (const path of paths) {
       const key = `${path}?${param}`;
       if (seen.has(key)) continue;
       seen.add(key);
       const u = new URL(path, ctx.origin);
       u.searchParams.set(param, canary);
       urls.push({ url: u.toString(), param, path });
-      if (urls.length >= 12) break;
+      if (urls.length >= 16) break outer;
     }
-    if (urls.length >= 12) break;
   }
 
   const docs = await ctx.probe.getMany(urls.map((x) => x.url), { maxBytes: 8192 }, 4);
