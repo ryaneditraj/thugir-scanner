@@ -73,3 +73,47 @@ export const HARDCODED_CRED_RES = [
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
   { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
 ];
+
+export function redactSecretSample(sample: string): string {
+  return sample.length > 12 ? `${sample.slice(0, 6)}…${sample.slice(-4)}` : "***";
+}
+
+const STRIPE_PLACEHOLDER_RE =
+  /example|placeholder|your_|changeme|sample|fake|testkey|dummy|not[_-]?real|insert|replace|sk_live_test/i;
+
+/** Reject tutorial/placeholder Stripe live secret keys before hitting the API. */
+export function isLikelyStripeLiveKey(key: string): boolean {
+  if (!/^sk_live_[A-Za-z0-9]{20,}$/.test(key)) return false;
+  if (STRIPE_PLACEHOLDER_RE.test(key)) return false;
+  if (/^sk_live_0{8,}/.test(key)) return false;
+  const body = key.slice(8);
+  if (new Set(body).size < 8) return false;
+  return true;
+}
+
+const STRIPE_LIVE_KEY_RE = /sk_live_[A-Za-z0-9]{20,}/g;
+
+/** Pull the first plausible Stripe live secret key from bundle text. */
+export function extractStripeLiveKey(combined: string): string | null {
+  const envPatterns = [
+    /(?:NEXT_PUBLIC_|VITE_)?STRIPE_(?:SECRET_)?KEY\s*[=:]\s*["'](sk_live_[A-Za-z0-9]{20,})["']/gi,
+    /(?:stripeSecretKey|STRIPE_SECRET)\s*[=:]\s*["'](sk_live_[A-Za-z0-9]{20,})["']/gi
+  ];
+  for (const re of envPatterns) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(combined))) {
+      if (isLikelyStripeLiveKey(m[1])) return m[1];
+    }
+  }
+
+  if (/stripe/i.test(combined)) {
+    for (const m of combined.matchAll(STRIPE_LIVE_KEY_RE)) {
+      if (isLikelyStripeLiveKey(m[0])) return m[0];
+    }
+  }
+
+  for (const m of combined.matchAll(STRIPE_LIVE_KEY_RE)) {
+    if (isLikelyStripeLiveKey(m[0])) return m[0];
+  }
+  return null;
+}

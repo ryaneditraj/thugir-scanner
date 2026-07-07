@@ -10,10 +10,12 @@ import type { ProbeCache } from "./probe-cache";
 import { extractApiPaths } from "./extract-api";
 import {
   extractSupabaseFromText,
+  extractStripeLiveKey,
   jwtPayload,
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
+  redactSecretSample,
   SENSITIVE_PATH_NEEDLES
 } from "./helpers";
 
@@ -559,6 +561,49 @@ const hardcodedCredentials: Rule = async (ctx) => {
   return { fired: true, confidence: 0.88, evidence: { hardcoded: hits.slice(0, 5) } };
 };
 
+// --- Live Stripe secret key in client bundle (API validation) -----------------
+// Finds sk_live_* in the bundle, then issues ONE harmless read to Stripe's Balance
+// API. A 200 with object=balance is positive proof the key is live.
+const stripeLiveKeyProbe: Rule = async (ctx) => {
+  const secretKey = extractStripeLiveKey(ctx.combined);
+  if (!secretKey) return NEGATIVE;
+
+  const url = "https://api.stripe.com/v1/balance";
+  const basic = Buffer.from(`${secretKey}:`).toString("base64");
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 8000,
+    headers: { Authorization: `Basic ${basic}` }
+  });
+  if (doc.status !== 200) return NEGATIVE;
+
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      object?: string;
+      available?: { amount?: number; currency?: string }[];
+      livemode?: boolean;
+    };
+    if (parsed.object !== "balance") return NEGATIVE;
+    const currencies = (parsed.available ?? [])
+      .map((b) => b.currency)
+      .filter(Boolean)
+      .slice(0, 4);
+    return {
+      fired: true,
+      confidence: 0.97,
+      evidence: {
+        note: "Live Stripe secret key in client bundle — validated via Balance API read",
+        secretKeyRedacted: redactSecretSample(secretKey),
+        livemode: parsed.livemode,
+        balanceCurrencies: currencies,
+        validationEndpoint: url
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
 // --- Clerk secret key in client bundle --------------------------------------
 const clerkSecretInClient: Rule = async (ctx) => {
   if (!/clerk/i.test(ctx.combined)) return NEGATIVE;
@@ -732,6 +777,7 @@ export const RULES: Record<string, Rule> = {
   sitemapSensitivePaths,
   weakCsp,
   hardcodedCredentials,
+  stripeLiveKeyProbe,
   clerkSecretInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
@@ -767,6 +813,7 @@ export const FREE_RULES = new Set([
   "sitemapSensitivePaths",
   "weakCsp",
   "hardcodedCredentials",
+  "stripeLiveKeyProbe",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys"
