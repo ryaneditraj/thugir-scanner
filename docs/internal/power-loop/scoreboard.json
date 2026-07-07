@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07T20:06:13.285Z",
+  "updated_at": "2026-07-07T21:03:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,26 +12,32 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "findings_before": 4,
-      "findings_after": 7,
-      "notes": "Engine evolve shipped sql-error-disclosure, unauthenticated-admin-endpoint, dangerous-html-sinks — closed xss/sqli/auth_bypass gaps on benchmark oracle."
+      ]
     }
   },
-  "total_sites_scanned": 7,
-  "total_findings": 26,
-  "critical_findings": 0,
+  "total_sites_scanned": 10,
+  "total_findings": 43,
+  "critical_findings": 1,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 5,
-  "discovery_findings": 15,
+  "discovery_urls_added": 7,
+  "discovery_findings": 25,
   "improvements_shipped": 3,
-  "last_run": "2026-07-07T20:06:13.285Z",
+  "last_run": "2026-07-07T21:03:00.000Z",
+  "last_run_summary": {
+    "hour_utc": "21:00",
+    "benchmark": { "url": "https://juice-shop.herokuapp.com", "findings": 7, "recall": "6/6" },
+    "discovery_new": 2,
+    "discovery_findings_new": 10,
+    "skipped_rescan_48h": 5
+  },
   "discovery_highlights": {
     "dvwa.csalab.app": 3,
     "nodegoat-websec.herokuapp.com": 3,
     "crapi.apisec.ai": 4,
     "wrongsecrets.herokuapp.com": 2,
-    "juice-shop-staging.herokuapp.com": 3
+    "juice-shop-staging.herokuapp.com": 3,
+    "demo.owasp-juice.shop": 7,
+    "vapi.apisec.ai": 3
   }
 }
