@@ -150,6 +150,7 @@ function changedSlugsForPr(pr) {
 }
 
 function auditPrs() {
+  shQuiet("git fetch origin --prune --quiet");
   const issues = [];
   const prs = getOpenPrs();
   const mainSlugs = getMainSlugs();
@@ -351,6 +352,7 @@ function fixBacklogOnBranches() {
 }
 
 function pruneOrphanBranches() {
+  shQuiet("git fetch origin --prune --quiet");
   const prs = getOpenPrs();
   const prHeads = new Set(prs.map((p) => p.headRefName));
   const orphans = getRemoteBranches("auto/detection/").filter((b) => !prHeads.has(b));
@@ -382,6 +384,7 @@ function pruneOrphanBranches() {
 
 /** Delete remote branches for duplicate detections and superseded integrity PRs (token cannot close PRs). */
 function retireSupersededBranches() {
+  shQuiet("git fetch origin --prune --quiet");
   const prs = getOpenPrs();
   const toRetire = new Set();
 
