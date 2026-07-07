@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-07T22:04:41.689Z",
-  "total": 67,
-  "uniqueSlugs": 67,
+  "generatedAt": "2026-07-07T23:04:57.314Z",
+  "total": 70,
+  "uniqueSlugs": 70,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,26 +9,26 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 49,
+    "generic": 52,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 58,
-    "deep": 9,
+    "free": 60,
+    "deep": 10,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 11,
+    "Broken access control": 12,
     "Exposed secret": 14,
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
-    "Security misconfiguration": 5,
+    "Security misconfiguration": 6,
     "Information disclosure": 9,
     "Broken authentication": 3,
     "Injection": 1,
-    "Cross-site scripting": 1,
+    "Cross-site scripting": 2,
     "general": 16
   },
   "slugs": [
@@ -51,8 +51,10 @@
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",
     "missing-security-headers",
+    "open-redirect-query-param",
     "permissive-cors",
     "phpinfo-exposed",
+    "reflected-xss-query-param",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",
     "robots-sensitive-paths",
@@ -73,6 +75,7 @@
     "secret-stripe-restricted",
     "secret-supabase-service-role",
     "secret-twilio",
+    "spring-boot-actuator-exposed",
     "sql-error-disclosure",
     "stack-cors-wildcard-api",
     "stack-database-url-in-bundle",

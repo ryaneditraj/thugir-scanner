@@ -41,6 +41,18 @@
       "slug": "spring-boot-actuator-exposed",
       "status": "shipped",
       "validation": "GET /actuator returns _links.health JSON; GET /actuator/health returns {\"status\":\"UP\"}; WrongSecrets findings 2→3"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "open-redirect-query-param",
+      "status": "shipped",
+      "validation": "GET /redirect/parameter?url=https://evil-open-redirect-probe.example/... returns 302 Location to probe host; Firing Range findings 1→3"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "GET /reflected/parameter/body?q=thugirXSScanary echoes raw canary in HTML body; Firing Range findings 1→3"
     }
   ],
   "shipped": [
@@ -78,6 +90,16 @@
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "spring-boot-actuator-exposed",
       "shipped_at": "2026-07-07T22:08:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "open-redirect-query-param",
+      "shipped_at": "2026-07-07T23:08:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "reflected-xss-query-param",
+      "shipped_at": "2026-07-07T23:08:00.000Z"
     }
   ]
 }
