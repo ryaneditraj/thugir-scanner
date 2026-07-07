@@ -10,10 +10,12 @@ import type { ProbeCache } from "./probe-cache";
 import { extractApiPaths } from "./extract-api";
 import {
   extractSupabaseFromText,
+  extractOpenAiKey,
   jwtPayload,
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
+  redactSecretSample,
   SENSITIVE_PATH_NEEDLES
 } from "./helpers";
 
@@ -559,6 +561,48 @@ const hardcodedCredentials: Rule = async (ctx) => {
   return { fired: true, confidence: 0.88, evidence: { hardcoded: hits.slice(0, 5) } };
 };
 
+// --- OpenAI API key in client bundle (live-validated) -----------------------
+// Regex alone can't prove a sk- token is an active OpenAI key (Stripe/Clerk also use sk_).
+// We extract a high-confidence candidate and confirm with a harmless GET /v1/models read.
+const openaiLiveKeyProbe: Rule = async (ctx) => {
+  const apiKey = extractOpenAiKey(ctx.combined);
+  if (!apiKey) return NEGATIVE;
+
+  const url = "https://api.openai.com/v1/models";
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 8000,
+    headers: { Authorization: `Bearer ${apiKey}` }
+  });
+  if (doc.status !== 200) return NEGATIVE;
+
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      object?: string;
+      data?: { id?: string }[];
+    };
+    if (parsed.object !== "list" || !Array.isArray(parsed.data) || parsed.data.length === 0) {
+      return NEGATIVE;
+    }
+    const modelIds = parsed.data
+      .map((m) => m.id)
+      .filter(Boolean)
+      .slice(0, 4) as string[];
+    return {
+      fired: true,
+      confidence: 0.97,
+      evidence: {
+        note: "OpenAI API key in client bundle — validated via Models API read",
+        secretKeyRedacted: redactSecretSample(apiKey),
+        modelSample: modelIds,
+        validationEndpoint: url
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
 // --- Clerk secret key in client bundle --------------------------------------
 const clerkSecretInClient: Rule = async (ctx) => {
   if (!/clerk/i.test(ctx.combined)) return NEGATIVE;
@@ -732,6 +776,7 @@ export const RULES: Record<string, Rule> = {
   sitemapSensitivePaths,
   weakCsp,
   hardcodedCredentials,
+  openaiLiveKeyProbe,
   clerkSecretInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
@@ -767,6 +812,7 @@ export const FREE_RULES = new Set([
   "sitemapSensitivePaths",
   "weakCsp",
   "hardcodedCredentials",
+  "openaiLiveKeyProbe",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys"

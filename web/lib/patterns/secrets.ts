@@ -15,14 +15,6 @@ interface SecretDef {
 
 const SECRET_DEFS: SecretDef[] = [
   {
-    slug: "secret-openai",
-    name: "OpenAI API key",
-    regex: "sk-(?:proj-)?[A-Za-z0-9_-]{20,}",
-    severity: "high",
-    serverOnly: true,
-    impact: "Your OpenAI key can be used to run up usage charges on your account."
-  },
-  {
     slug: "secret-anthropic",
     name: "Anthropic API key",
     regex: "sk-ant-[A-Za-z0-9_-]{20,}",
@@ -153,7 +145,35 @@ const SECRET_DEFS: SecretDef[] = [
   }
 ];
 
-export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
+export const openaiLiveKeyPattern: Pattern = {
+  slug: "secret-openai",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "high",
+  title: "OpenAI API key exposed in client bundle",
+  description:
+    "An OpenAI API key (sk-* / sk-proj-*) was found in JavaScript or HTML served to the browser, and a harmless read against OpenAI's Models API confirmed the key is active. AI scaffolds routinely ship OPENAI_API_KEY via NEXT_PUBLIC_* or VITE_* env vars.",
+  impactOneline: "Your OpenAI key can be used to run up usage charges on your account.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "openaiLiveKeyProbe" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the OpenAI API key now and move it server-side.",
+    steps: [
+      "Revoke and create a new API key in the OpenAI dashboard immediately.",
+      "Remove OPENAI_API_KEY from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Call OpenAI only from server-side code (route handlers / serverless functions)."
+    ]
+  },
+  fixPrompt:
+    "An OpenAI API key is exposed in my client bundle and validated as active. Remove it from all client-side code and client-exposed environment variables, move every OpenAI call into server-side code, and tell me exactly which files referenced it so I can rotate the key.",
+  version: 1,
+  enabled: true
+};
+
+export const secretPatterns: Pattern[] = [
+  ...SECRET_DEFS.map(
+    (s): Pattern => ({
   slug: s.slug,
   platform: "generic",
   category: "Exposed secret",
@@ -180,4 +200,7 @@ export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
   fixPrompt: `A ${s.name} is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.`,
   version: 1,
   enabled: true
-}));
+    })
+  ),
+  openaiLiveKeyPattern
+];
