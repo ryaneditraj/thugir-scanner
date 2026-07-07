@@ -16,11 +16,11 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #8 | detection | Exposed admin panel probe without authentication | `cursor/thugir-scanner-evolution-5f61` |
 | #9 | detection | JWT alg=none acceptance probe | `cursor/thugir-scanner-evolution-69b6` |
 | #10 | detection | Convex deploy key secret in client bundle | `cursor/thugir-scanner-evolution-68cd` |
-| #11 | infra | PR integrity audit script, canonical backlog, catalog refresh | `cursor/pull-request-integrity-447d` |
+| #11 | infra | PR integrity audit script, canonical backlog, catalog refresh | `cursor/pull-request-integrity-447d` *(superseded by 1ac1 pass)* |
 | #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 
-> **Duplicate integrity PR:** #14 duplicates #11 (same commit, dead branch `cursor/pull-request-integrity-e6ce`) — close #14 and keep #11 until merged.
+> **Duplicate integrity PRs:** Close #14 (dead branch `cursor/pull-request-integrity-e6ce`, duplicates #11). Hourly pass `cursor/pull-request-integrity-1ac1` supersedes #11 with improved duplicate detection.
 
 ## Queued (not yet taken)
 
