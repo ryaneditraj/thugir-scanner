@@ -30,6 +30,7 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #17 | detection | Live Twilio credential validation via Accounts API | `cursor/thugir-scanner-evolution-925d` |
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
 | #22 | detection | Live OpenAI API key validation via Models API | `cursor/thugir-scanner-evolution-f74b` |
+| #26 | detection | Live Anthropic API key validation via Models API | `cursor/thugir-scanner-evolution-932b` |
 
 ## Queued (not yet taken)
 
