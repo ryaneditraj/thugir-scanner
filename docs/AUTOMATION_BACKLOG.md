@@ -1,14 +1,6 @@
 # Automation Backlog
 
-Hourly autonomous runs ship one focused detection PR each. **This file is the single source of truth** — do not duplicate entries across PR branches.
-
-## Shipped this run
-
-| Date (UTC) | Area | What shipped | Branch |
-|------------|------|--------------|--------|
-| 2026-07-07 18:00 | detection | Live OpenAI API key validation via Models API | `cursor/thugir-scanner-evolution-f74b` |
-
-**Follow-ups:** Anthropic live-key validation; Stripe restricted-key (`rk_live_`) validation; CSRF state-changing probe.
+Hourly autonomous runs ship one focused detection PR each. **This file is the single source of truth** — do not duplicate entries across PR branches. The `manage-pr-integrity` script audits open PRs before each run.
 
 ## Open PRs (do not duplicate)
 
@@ -27,14 +19,25 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 | #12 | detection | Twilio auth token pairing (replaces loose SID regex) | `cursor/thugir-scanner-evolution-27fc` |
 | #13 | detection | Reflected XSS canary probe via query parameters | `cursor/thugir-scanner-evolution-e4e1` |
 | #15 | detection | SSTI canary probe via query parameters | `cursor/thugir-scanner-evolution-f0c2` |
-| #17 | detection | Live Twilio credential validation via Accounts API | `cursor/thugir-scanner-evolution-925d` |
 | #20 | detection | Live Stripe secret key validation via Balance API | `cursor/thugir-scanner-evolution-fdd0` |
+| #22 | detection | Live OpenAI API key validation via Models API | `cursor/thugir-scanner-evolution-f74b` |
+
+## Other open PRs (non-detection)
+
+| PR | Area | Description | Branch |
+|----|------|-------------|--------|
+| #23 | dev | Development environment setup + AGENTS.md | `cursor/setup-dev-environment-0829` |
+| #24 | infra | Power-loop scaffold for hourly Cursor automations | `cursor/power-loop-9ec4` |
+
+## Retired PR shells
+
+Branch deleted — close on GitHub when possible (token lacks `closePullRequest`):
+
+- **#17** — duplicate `secret-twilio`; keeper is PR #12.
+- **#11, #14, #16, #18, #19, #21** — superseded integrity passes; keeper is the latest `cursor/pull-request-integrity-*` PR.
 
 ## Queued (not yet taken)
 
-- **detection** — Anthropic live API key validation (`sk-ant-*` via harmless read).
-- **detection** — Stripe restricted key (`rk_live_*`) live validation.
-- **detection** — CSRF probe on state-changing routes.
 - **detection** — MongoDB / Atlas connection string in client bundle.
 - **feature** — Wire admin `patterns` DB table into `runFreeScan` runtime merge.
 - **feature** — Scheduled re-scans with finding diff.
@@ -44,6 +47,6 @@ Hourly autonomous runs ship one focused detection PR each. **This file is the si
 
 1. One detection per PR — never bundle backlog items into a detection PR.
 2. Do not open a PR if an open PR or `main` already ships the same pattern slug (including modifications to an existing slug).
-3. Use `cursor/thugir-scanner-evolution-*` branches for PRs.
-4. Run `node web/scripts/pattern-catalog.mjs` after pattern changes.
-5. Only flag secrets when live validation or positive proof succeeds — no regex-only findings for provider keys.
+3. Use `cursor/thugir-scanner-evolution-*` branches for PRs; do not create parallel `auto/detection/*` branches.
+4. Run `node web/scripts/manage-pr-integrity.mjs --audit` before opening a new detection PR.
+5. Only one open integrity PR at a time — retire superseded branches with `--retire-superseded`.
