@@ -6,6 +6,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Full account takeover across every service in the file — database wiped or sold, Stripe drained, email domain used for fraud, GDPR/CCPA breach notification to all users.",
   "exposed-config-backup":
     "Complete database dump downloadable: all customer PII, passwords, and payment records exfiltrated in one request — lawsuit, regulator fines, and forced shutdown.",
+  "exposed-infra-artifacts":
+    "Terraform state and cloud credential files grant instant AWS/GCP/Azure takeover — production wiped, crypto-mining bills, and total data exfiltration.",
   "exposed-git-dir":
     "Entire source history stolen including every secret ever committed; attacker replays old API keys and finds unpublished admin backdoors.",
   "secret-stripe-live":
