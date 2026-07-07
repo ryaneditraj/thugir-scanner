@@ -361,6 +361,42 @@ const graphqlIntrospection: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- phpinfo() page exposed in production -----------------------------------
+// PHP apps sometimes ship phpinfo.php for debugging. The page dumps extensions,
+// paths, env vars and sometimes secrets — positive proof when the title/body match.
+const PHPINFO_PATHS = [
+  "/phpinfo.php",
+  "/info.php",
+  "/phpinfo",
+  "/_profiler/phpinfo",
+  "/i.php"
+];
+
+const phpinfoExposed: Rule = async (ctx) => {
+  const urls = PHPINFO_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 16_384 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const hasVersion = /PHP Version\s+[0-9]/i.test(r.body);
+    const hasPhpinfo =
+      /phpinfo\s*\(\s*\)/i.test(r.body) ||
+      /<title>[^<]*phpinfo\s*\(\s*\)[^<]*<\/title>/i.test(r.body);
+    if (!hasVersion || !hasPhpinfo) continue;
+    const version = r.body.match(/PHP Version\s+([0-9][^\s<]+)/i)?.[1];
+    return {
+      fired: true,
+      confidence: 0.95,
+      evidence: {
+        url,
+        phpVersion: version,
+        snippet: r.body.slice(0, 220).trim(),
+        note: "phpinfo() page reachable — full server configuration disclosed"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- directory listing / autoindex ------------------------------------------
 const directoryListing: Rule = async (ctx) => {
   const dirs = ["/uploads/", "/files/", "/images/", "/static/", "/assets/", "/backup/", "/tmp/"];
@@ -795,13 +831,45 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /\["innerHTML"\][^;]{0,120}(?:searchValue|userInput|\.data)/
   }
 ];
+const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
+const LARGE_SCRIPT_REFETCH_BYTES = 2_000_000;
 
-const dangerousHtmlSinks: Rule = async (ctx) => {
+function scanDangerousHtmlSinks(text: string): { label: string; sample: string }[] {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of DANGEROUS_SINK_RES) {
-    const m = ctx.combined.match(re);
+    const m = text.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 80) });
   }
+  return hits;
+}
+
+const dangerousHtmlSinks: Rule = async (ctx) => {
+  let hits = scanDangerousHtmlSinks(ctx.combined);
+
+  // Minified SPA bundles (e.g. Juice Shop main.js ~1.7MB) truncate at 800KB — sink *usage*
+  // often lives past the cut. Re-fetch flagged script URLs with a higher byte cap.
+  if (hits.length === 0 && SINK_SYMBOL_RE.test(ctx.combined)) {
+    const urls = ctx.scripts
+      .filter((s) => SINK_SYMBOL_RE.test(s.body))
+      .map((s) => s.finalUrl)
+      .slice(0, 3);
+    for (const url of urls) {
+      const doc = await ctx.probe.get(url, { maxBytes: LARGE_SCRIPT_REFETCH_BYTES });
+      hits = scanDangerousHtmlSinks(doc.body);
+      if (hits.length > 0) {
+        return {
+          fired: true,
+          confidence: 0.88,
+          evidence: {
+            sinks: hits.slice(0, 4),
+            scriptUrl: url,
+            note: "client bundle renders unsanitized HTML — sink usage found past initial fetch truncation"
+          }
+        };
+      }
+    }
+  }
+
   if (hits.length === 0) return NEGATIVE;
   return {
     fired: true,
@@ -853,6 +921,7 @@ export const RULES: Record<string, Rule> = {
   inlineStateSecrets,
   graphqlIntrospection,
   directoryListing,
+  phpinfoExposed,
   errorDisclosure,
   openApiDocs,
   demoModeFlags,
@@ -892,6 +961,7 @@ export const FREE_RULES = new Set([
   "inlineStateSecrets",
   "graphqlIntrospection",
   "directoryListing",
+  "phpinfoExposed",
   "openApiDocs",
   "demoModeFlags",
   "supabaseStoragePublic",
