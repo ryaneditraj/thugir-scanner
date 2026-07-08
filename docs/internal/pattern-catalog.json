@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T15:06:37.779Z",
-  "total": 80,
-  "uniqueSlugs": 80,
+  "generatedAt": "2026-07-08T16:09:48.825Z",
+  "total": 81,
+  "uniqueSlugs": 81,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 62,
+    "generic": 63,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 62,
-    "deep": 18,
+    "deep": 19,
     "continuous": 0
   },
   "byCategory": {
@@ -31,7 +31,7 @@
     "Cross-site scripting": 3,
     "Server-side request forgery": 1,
     "Sensitive data exposure": 1,
-    "AI security": 1,
+    "AI security": 2,
     "general": 16
   },
   "slugs": [
@@ -39,6 +39,7 @@
     "bolt-public-env-prefix-leak",
     "client-side-file-upload-evidence",
     "client-side-idor-evidence",
+    "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sql-evidence",
