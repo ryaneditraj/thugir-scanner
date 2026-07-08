@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T03:05:00.000Z",
+  "updated_at": "2026-07-08T04:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -179,6 +179,31 @@
     {
       "url": "https://csrf-xss-demo.vercel.app/",
       "source": "CSRF and XSS interactive demo app (public Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/",
+      "source": "AI & Security Platform OSS Vercel deploy — 14 OWASP Top 10 challenges (Next.js + Supabase)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/",
+      "source": "SecLab Web Vulnerability Playground alternate Vercel deploy (DaniSam-STU/security-lab homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://sqli-lab.vercel.app/",
+      "source": "Error-based SQL injection educational lab (public Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-lab.vercel.app/",
+      "source": "Stored XSS advanced lab — intentionally vulnerable post board (public Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/",
+      "source": "UCU OWASP Top 10 CTF 2025 public challenge platform (Vercel deploy)",
       "auth": "public_demo"
     }
   ]

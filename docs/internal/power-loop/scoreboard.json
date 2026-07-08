@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T03:10:00.000Z",
+  "updated_at": "2026-07-08T04:04:06.692Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,66 +15,55 @@
       ]
     }
   },
-  "total_sites_scanned": 71,
-  "total_findings": 281,
+  "total_sites_scanned": 77,
+  "total_findings": 303,
   "critical_findings": 13,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 36,
-  "discovery_findings": 146,
+  "discovery_urls_added": 41,
+  "discovery_findings": 161,
   "improvements_shipped": 17,
-  "last_run": "2026-07-08T03:10:00.000Z",
+  "last_run": "2026-07-08T04:04:06.693Z",
   "last_run_summary": {
-    "hour_utc": "03:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
-      "gap": []
+      "gap": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": []
+        }
+      }
     },
     "discovery_new": 5,
     "discovery_findings_new": 15,
-    "skipped_rescan_48h": 31,
+    "skipped_rescan_48h": 36,
     "teacher_delta": "skipped — no nuclei/engine",
-    "improvements_this_run": 2,
-    "discovery_validation": {
-      "idor-website.vercel.app": {
-        "findings_before": 2,
-        "findings_after": 3,
-        "new_slugs": [
-          "client-side-idor-evidence"
-        ]
-      },
-      "urban-vampi-staging.up.railway.app": {
-        "findings_before": 2,
-        "findings_after": 4,
-        "new_slugs": [
-          "idor-sequential-ids",
-          "vibe-unauthenticated-api-routes"
-        ]
-      }
-    },
     "discovery_highlights_new": {
-      "secure-bank-bay.vercel.app": 3,
-      "owaspbased-lessons.vercel.app": 1,
-      "hack-this-site-eta.vercel.app": 6,
-      "zero-health.vercel.app": 3,
-      "csrf-xss-demo.vercel.app": 2
+      "ai-security-platform-iota.vercel.app": 3,
+      "securityweb-iota.vercel.app": 5,
+      "sqli-lab.vercel.app": 2,
+      "xss-lab.vercel.app": 2,
+      "ucu-owasp-ctf.vercel.app": 3
     },
     "notable_findings": [
-      "client-side-idor-evidence on idor-website.vercel.app via VULNERABLE ENDPOINT /api/users/{userId} bundle markers",
-      "idor-sequential-ids + vibe-unauthenticated-api-routes on urban-vampi via OpenAPI GET path probing (/users/v1/name1, /books/v1)",
-      "hack-this-site-eta.vercel.app: 6 findings — exposed-source-maps, graphql-introspection-enabled, vibe-unauthenticated-api-routes"
+      "securityweb-iota.vercel.app: 5 findings — secret-resend, dangerous-html-sinks, vibe-unauthenticated-api-routes (SecLab alternate deploy)",
+      "ai-security-platform-iota.vercel.app: dangerous-html-sinks on 14-challenge OWASP platform (6 pages crawled)",
+      "ucu-owasp-ctf.vercel.app: firebase-config-exposed on OWASP Top 10 CTF platform"
     ],
     "learning_gaps": [
-      "csrf-xss-demo.vercel.app: no reflected-xss/CSRF slugs despite intentional XSS+CSRF demo UI",
-      "vulnerable-web-site.vercel.app: auth-gated CSRF/SSRF/XSS labs (login required for active probes)",
-      "zero-health.vercel.app: no sqli/idor slugs despite README listing SQLi, IDOR, command injection"
+      "sqli-lab.vercel.app: no sql-error-disclosure despite error-based SQLi demo with live query viewer",
+      "xss-lab.vercel.app: no stored-xss/reflected-xss slugs despite intentional stored XSS post board",
+      "ai-security-platform-iota.vercel.app: IDOR/auth_bypass challenges in catalog not surfaced by passive probes"
     ],
     "unreachable_candidates": [
-      "pentest-forge.com lab subdomains (502)",
       "testphp.vulnweb.com / testhtml5.vulnweb.com (DNS fail from cloud)",
-      "dvai-red.vercel.app (404)"
+      "mutillidae/dvsa heroku demos (404)",
+      "insecure-app.vercel.app (insurance landing page, not a vuln lab)"
     ]
   },
   "discovery_highlights": {
@@ -113,6 +102,11 @@
     "owaspbased-lessons.vercel.app": 1,
     "hack-this-site-eta.vercel.app": 6,
     "zero-health.vercel.app": 3,
-    "csrf-xss-demo.vercel.app": 2
+    "csrf-xss-demo.vercel.app": 2,
+    "ai-security-platform-iota.vercel.app": 3,
+    "securityweb-iota.vercel.app": 5,
+    "sqli-lab.vercel.app": 2,
+    "xss-lab.vercel.app": 2,
+    "ucu-owasp-ctf.vercel.app": 3
   }
 }
