@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T16:08:28.192Z",
+  "updated_at": "2026-07-08T16:13:00.302Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,72 +16,62 @@
       ]
     }
   },
-  "total_sites_scanned": 138,
-  "total_findings": 518,
+  "total_sites_scanned": 143,
+  "total_findings": 532,
   "critical_findings": 15,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 76,
-  "discovery_findings": 283,
+  "discovery_urls_added": 81,
+  "discovery_findings": 297,
   "improvements_shipped": 48,
-  "last_run": "2026-07-08T16:08:28.192Z",
+  "last_run": "2026-07-08T16:13:00.302Z",
   "last_run_summary": {
-    "hour_utc": "15:00",
+    "hour_utc": "16:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
-      "oracle_recall": "6/6",
-      "gap": [],
+      "oracle_status": "503 Service Unavailable (Heroku)",
+      "oracle_findings": 1,
+      "oracle_recall": "1/6",
+      "pages_crawled": 1,
+      "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "categories_hit": 1,
+          "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+          "hit": ["misconfig"]
         }
-      }
+      },
+      "note": "Infrastructure outage — not scanner regression. juice-shop.herokuapp.com and demo.owasp-juice.shop also return 503."
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "scanned_ok": 2,
-      "findings": 4,
-      "errors": [
-        "web2-lab2-mck1.onrender.com: TLS cert error (Render deploy unreachable)",
-        "testphp.vulnweb.com: DNS not found",
-        "demo.securityknowledgeframework.org: DNS not found",
-        "bugbait.io: TLS cert error from cloud scan env (curl returns 200)"
-      ],
+      "scanned_ok": 5,
+      "findings": 14,
+      "skipped_48h": ["vulnbank.org (3 findings at 09:13 UTC)"],
       "new_targets": [
-        "agent-probe.vercel.app: 3 (dangerous-html-sinks + CORS on Cornell AI Hackathon prompt-injection scanner)",
-        "sqli-demo.vercel.app: 1 (missing headers only — 403 on curl, shallow crawl)"
-      ],
-      "validated_targets": [
-        "ref.jock.pl/modern-web: 2→3 (hidden-prompt-injection — 6 HTML vectors)",
-        "hackable-web.vercel.app: 2→3 (unauthenticated-admin-endpoint SPA shell)"
+        "duck-store.escape.tech: 5 (secret-openai + dangerous-html-sinks + OpenAPI docs — Escape benchmark app)",
+        "dvaib.com: 3 (dangerous-html-sinks + unauthenticated API routes on AI bank lab)",
+        "aesthetic-bubblegum-cbc86d.netlify.app: 2 (dangerous-html-sinks on React XSS AppSec demo)",
+        "pentest-ground.com:7001: 1 (headers only — shallow crawl of Pentest-Tools benchmark app)",
+        "web2-lab2-mck1.onrender.com: 3 (TLS now reachable — headers + insecure cookies)"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall maintained at 6/6 (7 findings)",
-      "ref.jock.pl/modern-web: closed scoreboard learning gap — hidden prompt-injection vectors now detected",
-      "hackable-web.vercel.app: /admin SPA shell with /admin/users nav reachable without auth redirect",
-      "agent-probe.vercel.app: dangerous-html-sinks + permissive-cors on LLM prompt-injection training UI"
+      "juice-shop-staging: 503 outage drops benchmark recall 6/6→1/6 — only missing-security-headers on error page",
+      "duck-store.escape.tech: OpenAI key in client bundle + Swagger at /docs — strong Escape.tech benchmark signal",
+      "aesthetic-bubblegum-cbc86d.netlify.app: correctly flags dangerouslySetInnerHTML XSS sink (intentional demo vuln)",
+      "web2-lab2-mck1.onrender.com: TLS intermittent — now scans OK with 5 pages crawled"
     ],
     "learning_gaps": [
-      "sqli-demo.vercel.app: returns 403 to some clients; scanner found headers only — need deeper /api route crawl",
-      "bugbait.io: TLS handshake failure from cloud egress despite public 200 — try http:// or alternate mirror",
-      "testphp.vulnweb.com + demo.securityknowledgeframework.org: DNS dead from cloud egress",
-      "web2-lab2-mck1.onrender.com: persistent TLS failure blocks XSS/access-control lab scan"
+      "juice-shop oracle down (503) — need fallback benchmark when staging/production unavailable; consider local docker oracle",
+      "duck-store: 20 documented vulns (SQLi/SSRF/BOLA) but scanner found bundle/OpenAPI only — need API route crawl + auth flows",
+      "dvaib.com: AI prompt-injection scenarios not probed — landing page only (1 page crawled)",
+      "pentest-ground.com:7001: shallow scan — need port-specific path discovery for Pentest-Tools vuln apps"
     ],
     "learning_gaps_closed": [
-      "ref.jock.pl/modern-web: 10 hidden prompt-injection vectors (HTML comments, zero-width Unicode, display:none) — now surfaced via hiddenPromptInjection rule"
+      "web2-lab2-mck1.onrender.com: TLS failure resolved this run — now reachable from cloud egress"
     ]
   },
   "discovery_highlights": {
@@ -167,6 +157,11 @@
     "wiz.jock.pl/experiments/agent-arena": 4,
     "ref.jock.pl/modern-web": 3,
     "agent-probe.vercel.app": 3,
-    "sqli-demo.vercel.app": 1
+    "sqli-demo.vercel.app": 1,
+    "duck-store.escape.tech": 5,
+    "dvaib.com": 3,
+    "aesthetic-bubblegum-cbc86d.netlify.app": 2,
+    "pentest-ground.com:7001": 1,
+    "web2-lab2-mck1.onrender.com": 3
   }
 }

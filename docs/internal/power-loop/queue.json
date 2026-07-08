@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-08T15:05:00.000Z",
+  "updated_at": "2026-07-08T16:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/",
+      "source": "Escape.tech Duck Store — intentionally vulnerable React/FastAPI benchmark (20 documented vulns)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/",
+      "source": "Commando-X/vuln-bank public deploy — AI-integrated banking vuln lab for DAST benchmarking",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvaib.com/",
+      "source": "Damn Vulnerable AI Bank — prompt injection / AI security training lab (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://aesthetic-bubblegum-cbc86d.netlify.app/",
+      "source": "NatFreelance/react-xss-appsec-demo OSS — React dangerouslySetInnerHTML XSS demo (Netlify)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://pentest-ground.com:7001/",
+      "source": "Pentest-Ground.com vulnerable web app (Pentest-Tools.com scanner benchmark playground)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwu.vercel.app/",
       "source": "web search — Damn Vulnerable Web University (OWASP Top 10 training)",
