@@ -79,5 +79,9 @@ export const HARDCODED_CRED_RES = [
   {
     label: "inline password literal comparison",
     re: /["']password["']\s*===\s*["'](?:admin|password|123456|12345678|test|secret)['"]/i
+  },
+  {
+    label: "inline email/password ternary login check",
+    re: /["'][\w.+-]+@[^"']+["']\s*===\s*\w+\s*&&\s*["'][^"']+["']\s*===\s*\w+/
   }
 ];
