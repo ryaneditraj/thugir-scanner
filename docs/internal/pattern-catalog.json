@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T13:08:28.419Z",
-  "total": 79,
-  "uniqueSlugs": 79,
+  "generatedAt": "2026-07-08T15:06:37.779Z",
+  "total": 80,
+  "uniqueSlugs": 80,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,12 +9,12 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 61,
+    "generic": 62,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 61,
+    "free": 62,
     "deep": 18,
     "continuous": 0
   },
@@ -31,6 +31,7 @@
     "Cross-site scripting": 3,
     "Server-side request forgery": 1,
     "Sensitive data exposure": 1,
+    "AI security": 1,
     "general": 16
   },
   "slugs": [
@@ -54,6 +55,7 @@
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
     "graphql-introspection-enabled",
+    "hidden-prompt-injection",
     "idor-sequential-ids",
     "inline-state-secrets",
     "insecure-cookies",

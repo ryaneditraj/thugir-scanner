@@ -281,6 +281,18 @@
       "slug": "client-side-sql-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle SQL Injection Detected + Authentication Bypass Successful markers on /api/portal lab; dvwu.vercel.app findings 3→5"
+    },
+    {
+      "source": "discovery:ref.jock.pl/modern-web",
+      "slug": "hidden-prompt-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <!-- PINEAPPLE-EXPRESS --> + data-system-prompt COBALT-SUNRISE + display:none VELVET-THUNDER + clip:rect NEON-PHANTOM; ref.jock.pl/modern-web findings 2→3"
+    },
+    {
+      "source": "discovery:hackable-web.vercel.app",
+      "slug": "unauthenticated-admin-endpoint",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns 200 with href=\"/admin/users\" + Administration nav without login redirect; hackable-web.vercel.app findings 2→3"
     }
   ],
   "shipped": [
@@ -513,6 +525,16 @@
       "source": "discovery:dvwu.vercel.app",
       "slug": "spa-sqli-lab-bundle-markers",
       "shipped_at": "2026-07-08T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:ref.jock.pl/modern-web",
+      "slug": "hidden-prompt-injection-html-vectors",
+      "shipped_at": "2026-07-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:hackable-web.vercel.app",
+      "slug": "spa-admin-shell-no-auth-redirect",
+      "shipped_at": "2026-07-08T15:10:00.000Z"
     }
   ]
 }

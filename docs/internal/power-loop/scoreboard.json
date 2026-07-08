@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T15:07:52.632Z",
+  "updated_at": "2026-07-08T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 136,
-  "total_findings": 516,
+  "total_sites_scanned": 137,
+  "total_findings": 517,
   "critical_findings": 15,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 76,
   "discovery_findings": 283,
-  "improvements_shipped": 46,
-  "last_run": "2026-07-08T15:07:52.632Z",
+  "improvements_shipped": 48,
+  "last_run": "2026-07-08T15:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
@@ -62,25 +62,26 @@
         "agent-probe.vercel.app: 3 (dangerous-html-sinks + CORS on Cornell AI Hackathon prompt-injection scanner)",
         "sqli-demo.vercel.app: 1 (missing headers only — 403 on curl, shallow crawl)"
       ],
-      "deferred_48h": [
-        "dev-lucasoliveira.github.io/frontend-xss-demo",
-        "juicesec.mrdinesh.workers.dev",
-        "mehdiaitsaid.github.io/owasp-top-10-labs"
+      "validated_targets": [
+        "ref.jock.pl/modern-web: 2→3 (hidden-prompt-injection — 6 HTML vectors)",
+        "hackable-web.vercel.app: 2→3 (unauthenticated-admin-endpoint SPA shell)"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall maintained at 6/6 (7 findings, 173 probes)",
-      "agent-probe.vercel.app: dangerous-html-sinks + permissive-cors on LLM prompt-injection training UI",
-      "sqli-demo.vercel.app: misconfig only — SQLi lab routes not surfaced from landing page"
+      "juice-shop-staging: benchmark recall maintained at 6/6 (7 findings)",
+      "ref.jock.pl/modern-web: closed scoreboard learning gap — hidden prompt-injection vectors now detected",
+      "hackable-web.vercel.app: /admin SPA shell with /admin/users nav reachable without auth redirect",
+      "agent-probe.vercel.app: dangerous-html-sinks + permissive-cors on LLM prompt-injection training UI"
     ],
     "learning_gaps": [
       "sqli-demo.vercel.app: returns 403 to some clients; scanner found headers only — need deeper /api route crawl",
       "bugbait.io: TLS handshake failure from cloud egress despite public 200 — try http:// or alternate mirror",
       "testphp.vulnweb.com + demo.securityknowledgeframework.org: DNS dead from cloud egress",
-      "web2-lab2-mck1.onrender.com: persistent TLS failure blocks XSS/access-control lab scan",
-      "agent-probe.vercel.app: prompt-injection payloads in UI not classified as findings (expected for scanner scope)"
+      "web2-lab2-mck1.onrender.com: persistent TLS failure blocks XSS/access-control lab scan"
     ],
-    "learning_gaps_closed": []
+    "learning_gaps_closed": [
+      "ref.jock.pl/modern-web: 10 hidden prompt-injection vectors (HTML comments, zero-width Unicode, display:none) — now surfaced via hiddenPromptInjection rule"
+    ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -156,14 +157,14 @@
     "cybersec-lab.vercel.app": 4,
     "owasp-juice.shop": 2,
     "vuln-academy.vercel.app": 4,
-    "hackable-web.vercel.app": 2,
+    "hackable-web.vercel.app": 3,
     "vulnerable-ecommerce.vercel.app": 5,
     "insecure-app.vercel.app": 2,
     "dvwu.vercel.app": 5,
     "capture-the-flag-official-website.vercel.app": 3,
     "cve-2025-55182-demo.vercel.app": 3,
     "wiz.jock.pl/experiments/agent-arena": 4,
-    "ref.jock.pl/modern-web": 2,
+    "ref.jock.pl/modern-web": 3,
     "agent-probe.vercel.app": 3,
     "sqli-demo.vercel.app": 1
   }
