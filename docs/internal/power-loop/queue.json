@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T08:05:00.000Z",
+  "updated_at": "2026-07-08T09:12:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -304,6 +304,31 @@
     {
       "url": "https://cyber-ctf-website.vercel.app/",
       "source": "CyberCTF hands-on hacking platform landing — 200+ labs marketing (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/",
+      "source": "Commando-X/vuln-bank OSS — intentionally insecure banking platform (README live URL)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/",
+      "source": "Riglabs Collective Cyber Lab — interactive SQLi/XSS/crypto training modules (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/",
+      "source": "Acunetix Acuart PHP/MySQL public scanner benchmark (vulnweb.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testhtml5.vulnweb.com/",
+      "source": "Acunetix SecurityTweets HTML5/Flask public scanner benchmark (vulnweb.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vulnweb.com/",
+      "source": "Acunetix vulnweb.com — official directory of intentionally vulnerable test sites",
       "auth": "public_demo"
     }
   ]
