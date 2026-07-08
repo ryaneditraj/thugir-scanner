@@ -125,6 +125,24 @@
       "slug": "client-side-sql-evidence",
       "status": "shipped",
       "validation": "bundle has DANGEROUS: Concatenating input directly + SELECT FROM users WHERE id = string concat; sqli-lab.vercel.app findings 2→3"
+    },
+    {
+      "source": "discovery:swarnadip-kar.github.io/xss-victim",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "Subpath crawl resolves victim.html; URLSearchParams→innerHTML=q in victim.html; swarnadip-kar.github.io/xss-victim findings 2→3"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vibe-unauthenticated-api-routes",
+      "status": "shipped",
+      "validation": "Bundle baseURL vulnshop-production.up.railway.app; GET /api/debug/config returns secret_key+passwords; vulnshop.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "GET vulnshop-production.up.railway.app/api/products?search=')) returns 500 {\"detail\":\"near \\\")\\\": syntax error\"}; vulnshop.vercel.app findings 2→4"
     }
   ],
   "shipped": [
@@ -232,6 +250,21 @@
       "source": "discovery:sqli-lab.vercel.app",
       "slug": "client-side-sql-evidence",
       "shipped_at": "2026-07-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:swarnadip-kar.github.io/xss-victim",
+      "slug": "subpath-crawl-dom-xss-innerhtml",
+      "shipped_at": "2026-07-08T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "cross-origin-api-probing",
+      "shipped_at": "2026-07-08T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "json-api-sql-error-disclosure",
+      "shipped_at": "2026-07-08T06:10:00.000Z"
     }
   ]
 }

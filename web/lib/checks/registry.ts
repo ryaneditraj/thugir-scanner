@@ -7,7 +7,7 @@
 
 import type { FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
-import { extractApiPaths } from "./extract-api";
+import { extractApiPaths, extractExternalApiBases, buildApiProbeUrls } from "./extract-api";
 import {
   extractSupabaseFromText,
   jwtPayload,
@@ -1142,7 +1142,8 @@ const SQL_ERROR_MARKERS = [
   /Microsoft OLE DB Provider/i,
   /ODBC SQL Server Driver/i,
   /ADODB\.Recordset/i,
-  /Syntax error.*in query expression/i
+  /Syntax error.*in query expression/i,
+  /"detail"\s*:\s*"[\s\S]{0,120}syntax error/i
 ];
 const SQL_PROBE = "'))";
 const SQL_ASP_PROBE_PARAMS = ["id", "cat", "tfSearch"];
@@ -1211,6 +1212,7 @@ function extractSearchEndpoints(text: string): string[] {
 }
 
 const SQL_PROBE_PARAMS = ["q", "query", "search", "id", "tfSearch", "cat"];
+const SQL_API_SEARCH_PATHS = ["/api/products", "/api/search", "/api/items", "/api/users"];
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
   const discovered = extractSearchEndpoints(ctx.combined);
@@ -1222,6 +1224,7 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
     ...SQL_ASP_FALLBACK_PATHS
   ];
   const bases = [...new Set([...discovered, ...fallbacks])].slice(0, 6);
+  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 3);
   const urls: string[] = [];
   const seen = new Set<string>();
   outer: for (const p of bases) {
@@ -1233,6 +1236,20 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
       seen.add(url);
       urls.push(url);
       if (urls.length >= 14) break outer;
+    }
+  }
+  // SPA backends: probe discovered external hosts with common JSON search routes.
+  ext: for (const base of externalBases) {
+    for (const path of SQL_API_SEARCH_PATHS) {
+      for (const param of ["search", "q", "query"]) {
+        const u = new URL(path, base);
+        u.searchParams.set(param, SQL_PROBE);
+        const url = u.toString();
+        if (seen.has(url)) continue;
+        seen.add(url);
+        urls.push(url);
+        if (urls.length >= 20) break ext;
+      }
     }
   }
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
@@ -1312,6 +1329,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "innerHTML renders unsanitized post content from template literal",
     re: /\$\{(?:post\.)?(?:content|title|author)\}[\s\S]{0,350}\.innerHTML\s*=\s*html/i
+  },
+  {
+    label: "innerHTML assignment from URL query param (URLSearchParams)",
+    re: /URLSearchParams[\s\S]{0,450}\.innerHTML\s*=/
+  },
+  {
+    label: "getElementById innerHTML = query param variable",
+    re: /getElementById\([^)]+\)\.innerHTML\s*=\s*[a-z]\b/
   },
   {
     label: "innerHTML html variable built from post.content",
@@ -1465,27 +1490,47 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
 };
 
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
+const DEBUG_API_PATHS = ["/api/debug/config", "/api/debug/users", "/api/debug/env"];
+
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const paths = [
-    ...new Set([...extractApiPaths(ctx.combined, 10), ...(await fetchOpenApiGetPaths(ctx, 8))])
+    ...new Set([
+      ...extractApiPaths(ctx.combined, 10),
+      ...(await fetchOpenApiGetPaths(ctx, 8)),
+      ...DEBUG_API_PATHS
+    ])
   ];
   if (paths.length === 0) return NEGATIVE;
-  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
+  const urls = buildApiProbeUrls(paths, ctx.origin, externalBases, 18);
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
-  const open: { path: string; status: number; sample: string }[] = [];
+  const open: { path: string; status: number; sample: string; host?: string }[] = [];
   for (const [url, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
     const ct = r.headers["content-type"] || "";
     if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
     if (/unauthorized|login required|sign in|authentication/i.test(r.body.slice(0, 500))) continue;
-    const path = new URL(url).pathname;
-    open.push({ path, status: r.status, sample: r.body.slice(0, 120).trim() });
+    const parsed = new URL(url);
+    const path = parsed.pathname;
+    const sensitive =
+      /secret_key|admin_default_password|password|is_admin|plaintext/i.test(r.body) ||
+      /\/api\/debug\//i.test(path);
+    if (!sensitive && !/"(?:id|name|email|username|data)"\s*:/.test(r.body.slice(0, 400))) continue;
+    open.push({
+      path,
+      status: r.status,
+      sample: r.body.slice(0, 120).trim(),
+      host: parsed.hostname
+    });
   }
   if (open.length === 0) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.82,
-    evidence: { routes: open.slice(0, 6), note: "JSON API routes returned data without auth challenge" }
+    confidence: 0.85,
+    evidence: {
+      routes: open.slice(0, 6),
+      note: "JSON API routes returned data without auth challenge"
+    }
   };
 };
 
