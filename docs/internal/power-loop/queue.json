@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T14:05:00.000Z",
+  "updated_at": "2026-07-08T15:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://dvwu.vercel.app/",
@@ -355,6 +355,31 @@
       "url": "https://bugbait.io/",
       "source": "BugBait intentionally vulnerable web app (OWASP VWAD online)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://agent-probe.vercel.app/",
+      "source": "pcatattacks/agent-probe OSS — Cornell AI Hackathon 2026 prompt-injection scanner demo (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dev-lucasoliveira.github.io/frontend-xss-demo/",
+      "source": "dev-LucasOliveira/frontend-xss-demo OSS — XSS insecure vs secure routes (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://sqli-demo.vercel.app/",
+      "source": "web search — public SQL injection practice demo (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/",
+      "source": "mr-dinesh/juicesec OSS — OWASP Top 10 browser lab with AI tutor (Cloudflare Workers)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/",
+      "source": "mehdiaitsaid/owasp-top-10-labs OSS — interactive OWASP Top 10 practice labs (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ]
 }
