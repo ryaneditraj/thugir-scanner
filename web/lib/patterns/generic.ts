@@ -638,6 +638,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ssrf-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Client bundle documents SSRF-prone URL fetch in admin panel",
+    description:
+      "The shipped JavaScript includes SSRF lab markers (e.g. VULNERABILITY: SSRF, localhost blocklist bypass) where user-supplied URLs are fetched server-side without validation.",
+    impactOneline:
+      "Admin panels that fetch arbitrary URLs enable SSRF — internal services and cloud metadata may be reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal IPs, metadata endpoints, and file:// schemes before server-side fetch.",
+      steps: [
+        "Allowlist outbound fetch destinations; deny RFC1918, link-local, and metadata IPs.",
+        "Never pass raw user URLs to server-side fetch without DNS rebinding protections.",
+        "Remove SSRF demo code and vulnerability markers from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My admin panel fetches user-supplied URLs server-side (SSRF risk). Add URL allowlisting, block private/metadata IPs, and show the safe fetch handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-file-upload-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Client bundle documents unsafe file upload without validation",
+    description:
+      "The shipped JavaScript advertises file upload with no type or size validation (e.g. VULNERABILITY: No file type validation), enabling arbitrary file upload to admin panels.",
+    impactOneline:
+      "Unrestricted file upload can lead to webshell deployment and full server compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFileUploadEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate MIME type, extension, and size server-side; store uploads outside webroot.",
+      steps: [
+        "Allowlist safe extensions and verify magic bytes server-side.",
+        "Enforce max file size and scan uploads with AV where possible.",
+        "Store uploads on object storage with no execute permission."
+      ]
+    },
+    fixPrompt:
+      "My app uploads files without type validation (VULNERABILITY: No file type validation). Add server-side MIME/extension allowlisting, size limits, and store uploads outside the webroot.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sensitive-api-token-leakage",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "JWT or session token returned in unauthenticated API response",
+    description:
+      "A JSON API endpoint returns a JWT or session token (e.g. token field with eyJ...) without requiring authentication — leaking secrets to any caller.",
+    impactOneline:
+      "Session tokens in public API responses let attackers hijack accounts or read privileged data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sensitiveApiTokenLeakage" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return session tokens in public API bodies; use HttpOnly cookies.",
+      steps: [
+        "Remove token fields from unauthenticated GET responses.",
+        "Store session tokens in HttpOnly Secure cookies, not JSON bodies.",
+        "Remove DEBUG token console.log statements from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My /api/posts (or similar) returns a JWT in the JSON body without auth. Remove token fields from public responses, use HttpOnly cookies for sessions, and delete debug token logging.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-session-hijack-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -660,6 +738,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "My app is vulnerable to session hijack (session tokens can be stolen and replayed). Configure session cookies with HttpOnly, Secure, and SameSite=Lax, rotate session IDs on login, and add server-side session revocation. Show the cookie/session config.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "server-side-eval-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Server handler passes request body to eval()",
+    description:
+      "Application source (bundled or tutorial-visible) shows eval(req.body.*) or eval(req.query.*) — a classic server-side JavaScript injection pattern in Node/Express apps.",
+    impactOneline:
+      "User input is passed to eval() on the server — remote code execution is likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "serverSideEvalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval(); parse input with JSON.parse or typed parsers.",
+      steps: [
+        "Delete eval() and new Function() calls that read req.body or req.query.",
+        "Use JSON.parse with schema validation for structured input.",
+        "Return generic errors; never execute user strings as code."
+      ]
+    },
+    fixPrompt:
+      "My Node/Express handler uses eval(req.body.field) to parse user input. Remove eval(), parse with JSON.parse + validation, and show the safe handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-prototype-pollution-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Client bundle documents prototype pollution via __proto__ merge",
+    description:
+      "The shipped HTML/JavaScript merges user-controlled objects without blocking __proto__ or constructor.prototype — enabling prototype pollution that can escalate to RCE in some stacks.",
+    impactOneline:
+      "Unsafe object merge allows __proto__ pollution — privilege escalation or RCE may follow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePrototypePollutionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block __proto__ and constructor keys during object merge.",
+      steps: [
+        "Use Object.create(null) for lookup maps or a safe merge library.",
+        "Reject keys __proto__, constructor, and prototype from user JSON.",
+        "Freeze Object.prototype in hardened environments where supported."
+      ]
+    },
+    fixPrompt:
+      "My app merges user JSON into config objects without blocking __proto__. Add key blocklisting for __proto__/constructor/prototype and show a safe merge helper.",
     version: 1,
     enabled: true
   },
