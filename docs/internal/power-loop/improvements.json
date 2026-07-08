@@ -197,6 +197,24 @@
       "slug": "unauthenticated-admin-endpoint",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns 200 HTML Admin Panel + password form without SSO redirect; web-pentest-playground.onrender.com findings 1→2"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vibe-openapi-docs-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Swagger UI at /api/docs references /static/openapi.json (title Vulnerable Bank API); openApiDocs probes /static/openapi.json + swagger config url; vulnbank.org findings 3→4"
+    },
+    {
+      "source": "discovery:riglabs-cyber-lab.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle has vulnerable login query + SELECT * FROM users WHERE username='INPUT'; riglabs-cyber-lab.vercel.app findings 3→4"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /login inline script document.getElementById('message').innerHTML = data.message; extends sink regex for API-response XSS"
     }
   ],
   "shipped": [
@@ -364,6 +382,21 @@
       "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "exposed-admin-html-login-panel",
       "shipped_at": "2026-07-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "static-openapi-swagger-config-discovery",
+      "shipped_at": "2026-07-08T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:riglabs-cyber-lab.vercel.app",
+      "slug": "sqli-training-lab-bundle-markers",
+      "shipped_at": "2026-07-08T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "innerhtml-api-response-field-sink",
+      "shipped_at": "2026-07-08T10:10:00.000Z"
     }
   ]
 }

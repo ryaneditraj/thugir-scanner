@@ -730,8 +730,32 @@ const OPENAPI_PATHS = [
   "/api/openapi.json",
   "/v3/api-docs",
   "/docs/openapi.json",
-  "/swagger/v1/swagger.json"
+  "/swagger/v1/swagger.json",
+  "/static/openapi.json",
+  "/api/docs/openapi.json"
 ];
+
+/** Swagger UI embeds the spec URL in inline config (e.g. FastAPI /api/docs → /static/openapi.json). */
+function extractSwaggerUiOpenApiPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const re = /["']url["']\s*:\s*["']([^"']*(?:openapi|swagger|api-docs)[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const raw = m[1].trim();
+    if (!raw) continue;
+    try {
+      const p = /^https?:\/\//i.test(raw) ? new URL(raw).pathname : raw.split("?")[0];
+      if (p.startsWith("/") && p.length < 120) paths.add(p);
+    } catch {
+      /* ignore malformed */
+    }
+  }
+  return [...paths];
+}
+
+function openApiProbePaths(ctx: RuleContext): string[] {
+  return [...new Set([...OPENAPI_PATHS, ...extractSwaggerUiOpenApiPaths(ctx.combined)])].slice(0, 14);
+}
 
 function substituteOpenApiPathParam(param: string): string {
   const p = param.toLowerCase();
@@ -743,7 +767,7 @@ function substituteOpenApiPathParam(param: string): string {
 /** Turn OpenAPI GET paths into concrete probe URLs (e.g. /users/v1/{username} → /users/v1/name1). */
 async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<string[]> {
   const paths = new Set<string>();
-  const urls = OPENAPI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const urls = openApiProbePaths(ctx).map((path) => new URL(path, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 24_000 }, 4);
   for (const [, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
@@ -765,7 +789,7 @@ async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<strin
 }
 
 const openApiDocs: Rule = async (ctx) => {
-  const urls = OPENAPI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const urls = openApiProbePaths(ctx).map((path) => new URL(path, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 12_000 }, 4);
   for (const [url, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
@@ -1400,6 +1424,10 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "element.innerHTML = userInput (XSS lab sample)",
     re: /element\.innerHTML\s*=\s*userInput\b/
+  },
+  {
+    label: "getElementById innerHTML = API response field (data.message XSS)",
+    re: /getElementById\([^)]+\)\.innerHTML\s*=\s*(?:data|response|result|json|res)\./
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1518,6 +1546,14 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQLi bypass OR/quote inspection before query build",
     re: /\.includes\s*\(\s*["']OR["']\s*\)[\s\S]{0,250}`SELECT \* FROM users/i
+  },
+  {
+    label: "SQLi training lab login query with INPUT placeholders",
+    re: /SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['"]INPUT['"]/i
+  },
+  {
+    label: "SQLi lab vulnerable login query marker",
+    re: /vulnerable login query[\s\S]{0,250}SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users/i
   }
 ];
 
