@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T17:15:00.000Z",
+  "updated_at": "2026-07-08T18:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/",
@@ -429,6 +429,31 @@
     {
       "url": "https://llm-security-lab.vercel.app/",
       "source": "web search — LLM Security Lab prompt-injection attacks & defenses demo (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prototype-pollution-interactive-demo.netlify.app/",
+      "source": "Joseph-Martre/prototype-pollution-interactive-demo OSS — client-side prototype pollution → XSS (Netlify)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ssrf-lab.vercel.app/",
+      "source": "web search — SSRF vulnerability lab public deploy (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://graphql-lab.vercel.app/",
+      "source": "web search — GraphQL security testing lab public deploy (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://api-goat.vercel.app/",
+      "source": "web search — API Goat OWASP API Top 10 vulnerable REST API (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf-maker-monorepo.vercel.app/",
+      "source": "web search — CTF DeFi Security 101 workshop vulnerable smart-contract playground (Vercel)",
       "auth": "public_demo"
     }
   ]
