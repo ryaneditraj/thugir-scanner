@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T02:05:00.000Z",
+  "updated_at": "2026-07-08T03:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -155,6 +155,31 @@
       "url": "https://urban-vampi-staging.up.railway.app/",
       "source": "OWASP VAmPI vulnerable REST API OSS Railway deploy (apisec-inc/urban-VAmPI README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/",
+      "source": "SecureBank attack/secure mode banking lab OSS Vercel deploy (Areeeshaa/SecureBank README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/",
+      "source": "OWASP GenAI Security Lab public interactive lessons (OSS Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/",
+      "source": "Hack-This-Site educational vulnerable platform OSS Vercel deploy (dkyazzentwatwa/hack-this-site README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://zero-health.vercel.app/",
+      "source": "Zero Health deliberately vulnerable health-tech platform OSS Vercel deploy (aligorithm/Zero-Health README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://csrf-xss-demo.vercel.app/",
+      "source": "CSRF and XSS interactive demo app (public Vercel deploy)",
+      "auth": "public_demo"
     }
   ]
 }
