@@ -811,7 +811,7 @@ values
    'A Hasura admin secret was found in JavaScript or HTML served to the browser.',
    'A Hasura admin secret bypasses all GraphQL/Postgres authorization rules.',
    'secret_regex',
-   '{"regex":"x-hasura-admin-secret\\\\s*[:=]\\\\s*[\\"'']([A-Za-z0-9]{20,})[\\"'']","secretName":"Hasura admin secret","serverOnly":true}'::jsonb,
+   '{"regex":"x-hasura-admin-secret[\\"''']?\\\\s*:\\\\s*[\\"'']([A-Za-z0-9]{20,})[\\"'']","secretName":"Hasura admin secret","serverOnly":true}'::jsonb,
    'free',
    '{"summary":"Rotate the Hasura admin secret now and move it server-side.","steps":["Treat the key as compromised and rotate it with the provider immediately.","Remove it from all client code and from any client-exposed env var (e.g. NEXT_PUBLIC_*, VITE_*).","Access the key only from server-side code (route handlers / serverless functions)."]}'::jsonb,
    'A Hasura admin secret is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.',

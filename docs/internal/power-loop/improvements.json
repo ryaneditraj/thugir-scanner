@@ -329,6 +329,30 @@
       "slug": "client-side-prompt-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle Damn Vulnerable AI Bank + Use prompt injection and social engineering to test defenses + Prompt Injection & Jailbreaks; dvaib.com findings 3→4"
+    },
+    {
+      "source": "discovery:prototype-pollution-interactive-demo.netlify.app",
+      "slug": "client-side-prototype-pollution-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: unsafeMerge() + Prototype pollution happens here! + __proto__ onerror payload in script.js; prototype-pollution-interactive-demo.netlify.app findings 1→2"
+    },
+    {
+      "source": "discovery:graphql-lab.vercel.app",
+      "slug": "secret-hasura-admin",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: x-hasura-admin-secret\":\"LxVz0hkGS6Q5MvJpWW94hQlFQbBS2vGFI4UQscilranmrw6WTKVVH97oPDAqpxcE in main.f9b7383f.js; graphql-lab.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:graphql-lab.vercel.app",
+      "slug": "graphql-introspection-enabled",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://graphql-lab.hasura.app/v1/graphql with leaked admin secret returns __schema.types; graphql-lab.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:ssrf-lab.vercel.app",
+      "slug": "ssrf-endpoint-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ssrfEndpointProbe rule probes GET/POST /api/fetch|/proxy with example.com canary; ssrf-lab.vercel.app now behind Vercel SSO — rule shipped, juice-shop benchmark recall 6/6 maintained"
     }
   ],
   "shipped": [
@@ -601,6 +625,26 @@
       "source": "discovery:dvaib.com",
       "slug": "dvaib-prompt-injection-lab-markers",
       "shipped_at": "2026-07-08T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:prototype-pollution-interactive-demo.netlify.app",
+      "slug": "unsafeMerge-prototype-pollution-markers",
+      "shipped_at": "2026-07-08T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:graphql-lab.vercel.app",
+      "slug": "secret-hasura-admin-bundle-leak",
+      "shipped_at": "2026-07-08T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:graphql-lab.vercel.app",
+      "slug": "external-hasura-graphql-introspection",
+      "shipped_at": "2026-07-08T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf-lab.vercel.app",
+      "slug": "ssrf-endpoint-fetch-probe",
+      "shipped_at": "2026-07-08T19:10:00.000Z"
     }
   ]
 }

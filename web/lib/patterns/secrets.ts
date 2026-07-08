@@ -154,7 +154,7 @@ const SECRET_DEFS: SecretDef[] = [
   {
     slug: "secret-hasura-admin",
     name: "Hasura admin secret",
-    regex: 'x-hasura-admin-secret\\s*[:=]\\s*["\']([A-Za-z0-9]{20,})["\']',
+    regex: 'x-hasura-admin-secret["\']?\\s*:\\s*["\']([A-Za-z0-9]{20,})["\']',
     severity: "critical",
     serverOnly: true,
     impact: "A Hasura admin secret bypasses all GraphQL/Postgres authorization rules."
