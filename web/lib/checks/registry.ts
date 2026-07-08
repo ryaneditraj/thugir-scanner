@@ -618,7 +618,7 @@ const inlineStateSecrets: Rule = async (ctx) => {
 // including internal mutations and fields. Introspection is a read-only query, so confirming it
 // is positive proof without touching data.
 function extractHasuraAdminSecret(text: string): string | null {
-  const m = text.match(/x-hasura-admin-secret\s*[:=]\s*["']([A-Za-z0-9]{20,})["']/i);
+  const m = text.match(/x-hasura-admin-secret["']?\s*:\s*["']([A-Za-z0-9]{20,})["']/i);
   return m?.[1] ?? null;
 }
 

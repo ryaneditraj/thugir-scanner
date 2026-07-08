@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T17:18:18.802Z",
-  "total": 81,
-  "uniqueSlugs": 81,
+  "generatedAt": "2026-07-08T18:58:55.862Z",
+  "total": 83,
+  "uniqueSlugs": 83,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,12 +9,12 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 63,
+    "generic": 65,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 62,
+    "free": 64,
     "deep": 19,
     "continuous": 0
   },
@@ -29,10 +29,10 @@
     "Broken authentication": 4,
     "Injection": 4,
     "Cross-site scripting": 3,
-    "Server-side request forgery": 1,
+    "Server-side request forgery": 2,
     "Sensitive data exposure": 1,
     "AI security": 2,
-    "general": 16
+    "general": 17
   },
   "slugs": [
     "bolt-demo-mode-shipped",
@@ -75,6 +75,7 @@
     "secret-github-fine",
     "secret-github-pat",
     "secret-google-oauth",
+    "secret-hasura-admin",
     "secret-linear",
     "secret-openai",
     "secret-paddle",
@@ -91,6 +92,7 @@
     "server-side-eval-evidence",
     "spring-boot-actuator-exposed",
     "sql-error-disclosure",
+    "ssrf-endpoint-fetch",
     "stack-cors-wildcard-api",
     "stack-database-url-in-bundle",
     "stack-neon-url-in-bundle",
