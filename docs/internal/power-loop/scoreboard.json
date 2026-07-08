@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T07:01:23.338Z",
+  "updated_at": "2026-07-08T07:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 92,
-  "total_findings": 360,
-  "critical_findings": 13,
+  "total_sites_scanned": 97,
+  "total_findings": 372,
+  "critical_findings": 14,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 51,
-  "discovery_findings": 183,
+  "discovery_urls_added": 56,
+  "discovery_findings": 195,
   "improvements_shipped": 24,
-  "last_run": "2026-07-08T07:01:23.338Z",
+  "last_run": "2026-07-08T07:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -41,30 +41,28 @@
     },
     "discovery_new": 5,
     "discovery_findings_new": 12,
-    "skipped_rescan_48h": 46,
+    "skipped_rescan_48h": 51,
     "teacher_delta": "skipped — no nuclei/engine",
-    "improvements_this_run": 3,
+    "improvements_this_run": 0,
     "discovery_highlights_new": {
-      "ashimkoirala.github.io/HackLab": 3,
-      "vulnweb.netlify.app": 3,
-      "web-pentest-playground.onrender.com": 1,
-      "cyberdesserts.github.io/cookiejar-lab/demo": 2,
-      "tempehs.github.io/The_Unsecure_PWA": 3
+      "yusufarbc.github.io/apigoat": 2,
+      "koadt.github.io/oss-oopssec-store": 2,
+      "dxx33.github.io/WebVulnsGuide": 3,
+      "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
+      "lab.pentest-forge.com": 1
     },
     "notable_findings": [
-      "tempehs.github.io/The_Unsecure_PWA: secret-resend in client bundle on education PWA",
-      "vulnweb.netlify.app: client-side-sql-evidence + dangerous-html-sinks on OWASP Top 10 demo",
-      "ashimkoirala.github.io/HackLab: client-side-idor-evidence in single-file browser sandbox"
+      "dxx33.github.io/WebVulnsGuide: secret-aws-akid (critical) in client bundle on pentesting guide",
+      "purushotham-muktha-dev-sec-ops-visu.vercel.app: secret-resend + dangerous-html-sinks on DevSecOps pipeline demo",
+      "juice-shop-staging: idor-sequential-ids + sql-error-disclosure + unauthenticated-admin-endpoint (7 findings, 6/6 recall)"
     ],
     "learning_gaps": [
-      "web-pentest-playground.onrender.com: only misconfig headers — SQLi/XSS/IDOR labs not reached (Render cold start / shallow crawl)",
-      "cyberdesserts.github.io/cookiejar-lab/demo: static walkthrough only; no session-hijack slugs on demo HTML",
-      "ashimkoirala.github.io/HackLab: no sql-error-disclosure or reflected-xss despite in-browser SQLi/XSS simulators"
+      "yusufarbc.github.io/apigoat: GitHub Pages landing only — API microservices run on localhost:8000 via Docker, no BOLA/JWT slugs reachable",
+      "koadt.github.io/oss-oopssec-store: walkthrough blog hub only; live OopsSec Store requires npx/docker local deploy",
+      "lab.pentest-forge.com: hub page scanned but subdomains (juice-shop/dvwa/crapi/dvga.lab.pentest-forge.com) return 502 — cannot benchmark live targets",
+      "dxx33.github.io/WebVulnsGuide: secret-aws-akid hit but no sql-error-disclosure or reflected-xss on static CSRF/SQLi guide pages"
     ],
-    "learning_gaps_closed": [
-      "swarnadip-kar.github.io/xss-victim: dangerous-html-sinks via subpath crawl + URLSearchParams innerHTML (2→3)",
-      "vulnshop.vercel.app: cross-origin Railway API debug routes + JSON SQL syntax error (2→4)"
-    ]
+    "learning_gaps_closed": []
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -117,6 +115,11 @@
     "vulnweb.netlify.app": 3,
     "web-pentest-playground.onrender.com": 1,
     "cyberdesserts.github.io/cookiejar-lab/demo": 2,
-    "tempehs.github.io/The_Unsecure_PWA": 3
+    "tempehs.github.io/The_Unsecure_PWA": 3,
+    "yusufarbc.github.io/apigoat": 2,
+    "koadt.github.io/oss-oopssec-store": 2,
+    "dxx33.github.io/WebVulnsGuide": 3,
+    "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
+    "lab.pentest-forge.com": 1
   }
 }
