@@ -617,30 +617,83 @@ const inlineStateSecrets: Rule = async (ctx) => {
 // An exposed GraphQL endpoint with introspection on hands attackers a full map of your schema,
 // including internal mutations and fields. Introspection is a read-only query, so confirming it
 // is positive proof without touching data.
+function extractHasuraAdminSecret(text: string): string | null {
+  const m = text.match(/x-hasura-admin-secret\s*[:=]\s*["']([A-Za-z0-9]{20,})["']/i);
+  return m?.[1] ?? null;
+}
+
+function extractBundleGraphqlUrls(text: string, pageOrigin: string): string[] {
+  const own = new URL(pageOrigin).origin;
+  const urls = new Set<string>();
+  const patterns = [
+    /["'](https?:\/\/[^"']+\/v1\/graphql)["']/gi,
+    /url:\s*["'](https?:\/\/[^"']+\/graphql)["']/gi,
+    /url:\s*["'](https?:\/\/[^"']+\/v1\/graphql)["']/gi
+  ];
+  for (const re of patterns) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text))) {
+      try {
+        const origin = new URL(m[1]).origin;
+        if (origin !== own) urls.add(m[1]);
+      } catch {
+        /* ignore */
+      }
+      if (urls.size >= 4) break;
+    }
+  }
+  return [...urls];
+}
+
 const graphqlIntrospection: Rule = async (ctx) => {
   const query = JSON.stringify({ query: "{__schema{queryType{name} types{name}}}" });
-  const candidates = ["/graphql", "/api/graphql", "/v1/graphql", "/query"];
-  const urls = candidates.map((path) => new URL(path, ctx.origin).toString());
-  const docs = await ctx.probe.getMany(
-    urls,
-    {
+  const hasuraSecret = extractHasuraAdminSecret(ctx.combined);
+  const candidates = [
+    "/graphql",
+    "/api/graphql",
+    "/v1/graphql",
+    "/query",
+    ...extractBundleGraphqlUrls(ctx.combined, ctx.origin)
+  ];
+  const seen = new Set<string>();
+  const probes: { url: string; headers: Record<string, string> }[] = [];
+  for (const path of candidates) {
+    const url = /^https?:\/\//i.test(path) ? path : new URL(path, ctx.origin).toString();
+    if (seen.has(url)) continue;
+    seen.add(url);
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (hasuraSecret && /hasura/i.test(url)) headers["x-hasura-admin-secret"] = hasuraSecret;
+    probes.push({ url, headers });
+    if (probes.length >= 8) break;
+  }
+  for (const { url, headers } of probes) {
+    const r = await ctx.probe.get(url, {
       method: "POST",
       body: query,
-      headers: { "Content-Type": "application/json" },
+      headers,
       maxBytes: 8192
-    },
-    4
-  );
-  for (const [url, r] of docs) {
-    if (r.status >= 200 && r.status < 300 && /"__schema"\s*:/.test(r.body) && /"queryType"/.test(r.body)) {
-      let typeCount = 0;
-      try {
-        typeCount = (JSON.parse(r.body)?.data?.__schema?.types ?? []).length;
-      } catch {
-        /* keep zero */
-      }
-      return { fired: true, confidence: 0.9, evidence: { endpoint: url, introspection: "enabled", typeCount } };
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!/"__schema"\s*:/.test(r.body) || !/"queryType"/.test(r.body)) continue;
+    let typeCount = 0;
+    try {
+      typeCount = (JSON.parse(r.body)?.data?.__schema?.types ?? []).length;
+    } catch {
+      /* keep zero */
     }
+    const external = /^https?:\/\//i.test(url) && !url.startsWith(ctx.origin);
+    return {
+      fired: true,
+      confidence: external && hasuraSecret ? 0.92 : 0.9,
+      evidence: {
+        endpoint: url,
+        introspection: "enabled",
+        typeCount,
+        ...(external && hasuraSecret
+          ? { note: "external GraphQL endpoint from bundle — introspection confirmed with leaked Hasura admin secret" }
+          : {})
+      }
+    };
   }
   return NEGATIVE;
 };
@@ -1841,7 +1894,13 @@ const serverSideEvalEvidence: Rule = async (ctx) => {
 const clientSidePrototypePollutionEvidence: Rule = async (ctx) => {
   const markers: string[] = [];
   if (/prototype pollution/i.test(ctx.combined)) markers.push("prototype pollution");
+  if (/unsafeMerge\s*\(/i.test(ctx.combined)) markers.push("unsafeMerge recursive merge");
+  if (/Prototype pollution happens here/i.test(ctx.combined)) markers.push("prototype pollution injection point");
   if (/__proto__[\s\S]{0,120}isAdmin/i.test(ctx.combined)) markers.push("__proto__ isAdmin payload");
+  if (/__proto__[\s\S]{0,160}(?:onerror|img|polluted)/i.test(ctx.combined))
+    markers.push("__proto__ XSS/allowlist gadget");
+  if (/TAG_ALLOWLIST[\s\S]{0,120}Prototype chain traversal/i.test(ctx.combined))
+    markers.push("allowlist bypass via prototype chain");
   if (/constructor\.prototype[\s\S]{0,120}(?:polluted|isAdmin)/i.test(ctx.combined))
     markers.push("constructor.prototype pollution");
   if (/Object\.assign\s*\([^)]*,\s*(?:JSON\.parse|userInput|req\.body)/i.test(ctx.combined))
@@ -1873,6 +1932,103 @@ const clientSideSessionHijackEvidence: Rule = async (ctx) => {
       note: "client bundle documents session hijack / token replay without HttpOnly protection"
     }
   };
+};
+
+// --- SSRF endpoint probe (server fetches attacker-supplied URL) ---------------
+const SSRF_CANARY_URL = "http://example.com";
+const SSRF_CANARY_MARKERS = [/Example Domain/i, /<title>\s*Example Domain/i];
+const SSRF_GET_PATHS = [
+  "/api/fetch",
+  "/api/proxy",
+  "/api/url",
+  "/api/ssrf",
+  "/fetch",
+  "/proxy",
+  "/api/render",
+  "/api/metadata"
+];
+const SSRF_GET_PARAMS = ["url", "target", "link", "uri", "dest"];
+const SSRF_POST_PATHS = ["/api/fetch", "/api/proxy", "/api/url", "/api/ssrf", "/api/render", "/api/metadata"];
+const SSRF_POST_FIELDS = ["url", "target", "link", "uri"];
+
+function extractSsrfPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const re = /["'`](\/(?:api\/)?(?:fetch|proxy|ssrf|render|metadata)[a-z0-9/_-]*)["'`]/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const p = m[1].split("?")[0].replace(/\/+$/, "") || m[1];
+    paths.add(p);
+    if (paths.size >= 6) break;
+  }
+  return [...paths];
+}
+
+function bodyReflectsSsrfCanary(body: string): boolean {
+  return SSRF_CANARY_MARKERS.some((re) => re.test(body));
+}
+
+const ssrfEndpointProbe: Rule = async (ctx) => {
+  const paths = [...new Set([...extractSsrfPaths(ctx.combined), ...SSRF_GET_PATHS])].slice(0, 8);
+  const getUrls: string[] = [];
+  const seen = new Set<string>();
+  outer: for (const path of paths) {
+    for (const param of SSRF_GET_PARAMS) {
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set(param, SSRF_CANARY_URL);
+      const url = u.toString();
+      if (seen.has(url)) continue;
+      seen.add(url);
+      getUrls.push(url);
+      if (getUrls.length >= 12) break outer;
+    }
+  }
+  const getDocs = await ctx.probe.getMany(getUrls, { maxBytes: 16_384, redirect: "manual" }, 4);
+  for (const [url, r] of getDocs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!bodyReflectsSsrfCanary(r.body)) continue;
+    const parsed = new URL(url);
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        param: parsed.searchParams.keys().next().value,
+        status: r.status,
+        snippet: r.body.slice(0, 180).trim(),
+        note: "server returned fetched canary page content — server-side request forgery likely"
+      }
+    };
+  }
+
+  const postPaths = [...new Set([...extractSsrfPaths(ctx.combined), ...SSRF_POST_PATHS])].slice(0, 6);
+  for (const path of postPaths) {
+    for (const field of SSRF_POST_FIELDS) {
+      const url = new URL(path, ctx.origin).toString();
+      const body = JSON.stringify({ [field]: SSRF_CANARY_URL });
+      const r = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 16_384,
+        redirect: "manual"
+      });
+      if (r.status < 200 || r.status >= 300) continue;
+      if (!bodyReflectsSsrfCanary(r.body)) continue;
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          url,
+          method: "POST",
+          field,
+          status: r.status,
+          snippet: r.body.slice(0, 180).trim(),
+          note: "POST body URL fetched server-side and echoed — server-side request forgery likely"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 };
 
 // --- Client-side SSRF evidence in bundle (educational labs / admin panels) ---
@@ -2188,7 +2344,8 @@ export const RULES: Record<string, Rule> = {
   springActuatorExposed,
   idorObjectAccess,
   hiddenPromptInjection,
-  clientSidePromptInjectionEvidence
+  clientSidePromptInjectionEvidence,
+  ssrfEndpointProbe
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -2226,5 +2383,6 @@ export const FREE_RULES = new Set([
   "dangerousHtmlSinks",
   "domEvalXss",
   "springActuatorExposed",
-  "hiddenPromptInjection"
+  "hiddenPromptInjection",
+  "ssrfEndpointProbe"
 ]);
