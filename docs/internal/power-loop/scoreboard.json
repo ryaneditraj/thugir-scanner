@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 116,
   "discovery_findings": 406,
-  "improvements_shipped": 66,
+  "improvements_shipped": 69,
   "last_run": "2026-07-08T22:28:12.070Z",
   "last_run_summary": {
     "hour_utc": "22:00",
@@ -62,7 +62,12 @@
         "https://ai-security-demo.vercel.app/",
         "https://mutillidae.lab.pentest-forge.com/"
       ],
-      "queue_backlog_cleared": "Also rescanned 4 stale-pending targets (ginandjuice, firing-range, gruyere, dvga.tools) + queue drain batch"
+      "queue_backlog_cleared": "Also rescanned 4 stale-pending targets (ginandjuice, firing-range, gruyere, dvga.tools) + queue drain batch",
+      "improvements": [
+        "gartnerpeerinsightsxssdemo: 2→3 (postmessage-dom-xss-evidence via widget1.js message→innerHTML)",
+        "prompt-injection-demo.vercel.app: 2→3 (client-side-prompt-injection-evidence Spanish RAG lab markers)",
+        "llmsec githack: 2→3 (client-side-prompt-injection-evidence LLMSec + context poisoning markers)"
+      ]
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings)",
@@ -79,7 +84,10 @@
       "mutillidae.lab.pentest-forge.com + other *.lab.pentest-forge.com: 502 backends — shallow scans only",
       "testphp.vulnweb.com + testhtml5.vulnweb.com + demo.securityknowledgeframework.org + bugbait.io: unreachable from cloud"
     ],
-    "learning_gaps_closed": []
+    "learning_gaps_closed": [
+      "justinsteven.github.io/gartnerpeerinsightsxssdemo: postMessage DOM XSS demos now detected",
+      "prompt-injection-demo.vercel.app + llmsec githack: RAG/prompt-injection lab markers in bundle/HTML"
+    ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
