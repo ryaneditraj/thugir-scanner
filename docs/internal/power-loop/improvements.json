@@ -311,6 +311,24 @@
       "slug": "client-side-prompt-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta description prompt injection vulnerabilities in any website + adversarial prompts to chatbots + 45-attack pool; agent-probe.vercel.app findings 3→4"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "vibe-unauthenticated-api-routes",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OpenAPI spec ~53KB truncated at 24KB; raised OPENAPI_SPEC_MAX_BYTES to 65KB + list→detail expansion; GET /api/v1/users/ returns admin usernames without auth; duck-store.escape.tech findings 5→7"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "idor-sequential-ids",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OpenAPI list→detail chains /api/v1/users/ id into /api/v1/users/{uuid} exposing admin@duck-store.escape email+role; duck-store.escape.tech findings 5→7"
+    },
+    {
+      "source": "discovery:dvaib.com",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Damn Vulnerable AI Bank + Use prompt injection and social engineering to test defenses + Prompt Injection & Jailbreaks; dvaib.com findings 3→4"
     }
   ],
   "shipped": [
@@ -568,6 +586,21 @@
       "source": "discovery:agent-probe.vercel.app",
       "slug": "prompt-injection-scanner-bundle-markers",
       "shipped_at": "2026-07-08T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "openapi-spec-64kb-list-detail-probing",
+      "shipped_at": "2026-07-08T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "openapi-uuid-idor-chain",
+      "shipped_at": "2026-07-08T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvaib.com",
+      "slug": "dvaib-prompt-injection-lab-markers",
+      "shipped_at": "2026-07-08T17:10:00.000Z"
     }
   ]
 }

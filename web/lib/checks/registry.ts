@@ -767,6 +767,9 @@ function openApiProbePaths(ctx: RuleContext): string[] {
   return [...new Set([...OPENAPI_PATHS, ...extractSwaggerUiOpenApiPaths(ctx.combined)])].slice(0, 14);
 }
 
+// Large FastAPI specs (e.g. duck-store.escape.tech ~53KB) truncate at 24KB and break JSON.parse.
+const OPENAPI_SPEC_MAX_BYTES = 65_536;
+
 function substituteOpenApiPathParam(param: string): string {
   const p = param.toLowerCase();
   if (/user(name)?|owner|account|email/.test(p)) return "name1";
@@ -774,27 +777,91 @@ function substituteOpenApiPathParam(param: string): string {
   return "test";
 }
 
-/** Turn OpenAPI GET paths into concrete probe URLs (e.g. /users/v1/{username} → /users/v1/name1). */
-async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<string[]> {
-  const paths = new Set<string>();
+function concreteOpenApiGetPath(path: string): string | null {
+  const concrete = /\{[^}]+\}/.test(path)
+    ? path.replace(/\{([^}]+)\}/g, (_, name) => substituteOpenApiPathParam(name))
+    : path;
+  return concrete.length > 1 && concrete.length < 120 ? concrete : null;
+}
+
+async function loadOpenApiSpec(ctx: RuleContext): Promise<Record<string, Record<string, unknown>> | null> {
   const urls = openApiProbePaths(ctx).map((path) => new URL(path, ctx.origin).toString());
-  const docs = await ctx.probe.getMany(urls, { maxBytes: 24_000 }, 4);
+  const docs = await ctx.probe.getMany(urls, { maxBytes: OPENAPI_SPEC_MAX_BYTES }, 4);
   for (const [, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
     if (!looksOpenApiBody(r.body)) continue;
     try {
       const spec = JSON.parse(r.body.trim()) as { paths?: Record<string, Record<string, unknown>> };
-      for (const [path, ops] of Object.entries(spec.paths ?? {})) {
-        if (!ops.get) continue;
-        const concrete = path.replace(/\{([^}]+)\}/g, (_, name) => substituteOpenApiPathParam(name));
-        if (concrete.length > 1 && concrete.length < 80) paths.add(concrete);
-        if (paths.size >= limit) break;
-      }
+      if (spec.paths) return spec.paths;
     } catch {
       /* yaml or truncated */
     }
+  }
+  return null;
+}
+
+/** Turn OpenAPI GET paths into concrete probe URLs (e.g. /users/v1/{username} → /users/v1/name1). */
+async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<string[]> {
+  const specPaths = await loadOpenApiSpec(ctx);
+  if (!specPaths) return [];
+  const paths = new Set<string>();
+  for (const [path, ops] of Object.entries(specPaths)) {
+    if (!ops.get) continue;
+    const concrete = concreteOpenApiGetPath(path);
+    if (concrete) paths.add(concrete);
     if (paths.size >= limit) break;
   }
+  return [...paths].slice(0, limit);
+}
+
+/**
+ * OpenAPI GET paths plus list→detail expansion: probe a list endpoint, take the first
+ * record id/uuid, and substitute into templated detail routes (e.g. Duck Store /users/).
+ */
+async function fetchOpenApiGetPathsWithDetails(ctx: RuleContext, limit = 12): Promise<string[]> {
+  const specPaths = await loadOpenApiSpec(ctx);
+  if (!specPaths) return [];
+  const paths = new Set<string>();
+  const templated: string[] = [];
+  const listPaths: string[] = [];
+
+  for (const [path, ops] of Object.entries(specPaths)) {
+    if (!ops.get) continue;
+    if (/\{[^}]+\}/.test(path)) {
+      templated.push(path);
+      const concrete = concreteOpenApiGetPath(path);
+      if (concrete) paths.add(concrete);
+    } else {
+      paths.add(path);
+      listPaths.push(path);
+    }
+  }
+
+  for (const listPath of listPaths.slice(0, 4)) {
+    const r = await ctx.probe.get(new URL(listPath, ctx.origin).toString(), { maxBytes: 4096 });
+    if (r.status < 200 || r.status >= 300) continue;
+    let items: unknown;
+    try {
+      items = JSON.parse(r.body);
+    } catch {
+      continue;
+    }
+    if (!Array.isArray(items) || items.length === 0) continue;
+    const first = items[0];
+    if (!first || typeof first !== "object") continue;
+    const rec = first as Record<string, unknown>;
+    const id = rec.id ?? rec.uuid ?? rec.user_id ?? rec.order_id;
+    if (id == null) continue;
+    const idStr = String(id);
+    const base = listPath.replace(/\/$/, "");
+
+    for (const tpl of templated) {
+      if (!tpl.startsWith(`${base}/`)) continue;
+      const detail = tpl.replace(/\{[^}]+\}/g, idStr);
+      if (detail.length > 1 && detail.length < 120) paths.add(detail);
+    }
+  }
+
   return [...paths].slice(0, limit);
 }
 
@@ -1089,7 +1156,7 @@ function extractIdorProbePaths(text: string): string[] {
 
 const idorObjectAccess: Rule = async (ctx) => {
   const discovered = extractIdorProbePaths(ctx.combined);
-  const openApiPaths = await fetchOpenApiGetPaths(ctx, 6);
+  const openApiPaths = await fetchOpenApiGetPathsWithDetails(ctx, 8);
   const paths = [...new Set([...discovered, ...openApiPaths, ...IDOR_FALLBACK_PATHS])].slice(0, 10);
   const urls = paths.map((p) => new URL(p, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
@@ -1926,7 +1993,7 @@ const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const paths = [
     ...new Set([
       ...extractApiPaths(ctx.combined, 10),
-      ...(await fetchOpenApiGetPaths(ctx, 8)),
+      ...(await fetchOpenApiGetPathsWithDetails(ctx, 10)),
       ...DEBUG_API_PATHS
     ])
   ];
@@ -1991,6 +2058,18 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Exposed system prompt in client UI",
     re: /(?:systemPrompt|Defender system prompt)/i
+  },
+  {
+    label: "Damn Vulnerable AI Bank training lab",
+    re: /Damn Vulnerable AI Bank/i
+  },
+  {
+    label: "DVAIB prompt injection challenge instructions",
+    re: /Use prompt injection and social engineering to test defenses/i
+  },
+  {
+    label: "Prompt injection jailbreak training module",
+    re: /Prompt Injection\s*&\s*Jailbreaks/i
   }
 ];
 
