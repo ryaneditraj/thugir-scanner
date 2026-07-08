@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T17:15:00.000Z",
+  "updated_at": "2026-07-08T18:07:08.266Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 156,
-  "total_findings": 575,
+  "total_sites_scanned": 162,
+  "total_findings": 592,
   "critical_findings": 16,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 86,
-  "discovery_findings": 329,
+  "discovery_urls_added": 91,
+  "discovery_findings": 339,
   "improvements_shipped": 54,
-  "last_run": "2026-07-08T17:15:00.000Z",
+  "last_run": "2026-07-08T18:07:08.266Z",
   "last_run_summary": {
-    "hour_utc": "17:00",
+    "hour_utc": "18:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall maintained at 6/6 (7 findings)",
+      "note": "Benchmark recall maintained at 6/6 (7 findings, 173 probes)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,23 +51,15 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "scanned_ok": 7,
+      "scanned_ok": 5,
       "scanned_error": 3,
-      "findings": 22,
-      "validated_targets": [
-        "duck-store.escape.tech: 5→7 (OpenAPI 64KB + list→detail IDOR chain on /api/v1/users/)",
-        "dvaib.com: 3→4 (client-side-prompt-injection-evidence DVAIB lab markers)"
-      ],
+      "findings": 10,
       "new_targets": [
-        "pentest-lab.vercel.app: 3 (dangerous-html-sinks + CORS — shallow, lab routes not crawled)",
-        "nextjs-cve-hackerone.vercel.app: 3 (tech-stack-disclosure Next.js 16.0.6 CVE demo)",
-        "xxe-lab.vercel.app: 4 (secret-aws-akid critical + 6 pages crawled)",
-        "nosql-injection-lab.vercel.app: 2 (headers/CORS only — NoSQL routes missed)",
-        "llm-security-lab.vercel.app: 5 (secret-openai + unauthenticated API routes)"
-      ],
-      "rescan_targets": [
-        "agent-probe.vercel.app: 4 (prompt-injection scanner UI stable)",
-        "sqli-demo.vercel.app: 1 (headers only — SQLi lab routes still shallow)"
+        "prototype-pollution-interactive-demo.netlify.app: 1 (headers only — prototype pollution XSS sink not detected)",
+        "ssrf-lab.vercel.app: 3 (secret-twilio + weak CSP — SSRF endpoints not probed)",
+        "graphql-lab.vercel.app: 2 (headers/CORS only — GraphQL introspection/injection missed)",
+        "api-goat.vercel.app: 2 (headers/CORS only — API Top 10 routes shallow)",
+        "ctf-maker-monorepo.vercel.app: 2 (verbose errors + headers — DeFi CTF wallet routes not crawled)"
       ],
       "unreachable": [
         "testphp.vulnweb.com: DNS failure from cloud egress",
@@ -76,24 +68,18 @@
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 maintained (7 findings, 173 probes)",
-      "duck-store.escape.tech: OpenAPI-driven /api/v1/users/ list + UUID IDOR after 64KB spec fix",
-      "dvaib.com: DVAIB prompt-injection training lab markers now detected",
-      "xxe-lab.vercel.app: AWS access key id in client bundle (critical)",
-      "llm-security-lab.vercel.app: OpenAI key + unauthenticated JSON API routes"
+      "juice-shop-staging: benchmark recall 6/6 maintained (7 findings)",
+      "ssrf-lab.vercel.app: Twilio SID + auth token in client bundle",
+      "ctf-maker-monorepo.vercel.app: verbose stack trace disclosure"
     ],
     "learning_gaps": [
-      "nosql-injection-lab.vercel.app: NoSQL injection scenarios not probed — landing page only",
-      "pentest-lab.vercel.app: multi-module lab (SQLi/XSS/SSRF) not deep-crawled",
-      "web2-lab2-mck1.onrender.com: XSS/admin labs require toggle params (xss=on, ac=on) not yet passed in probes",
-      "sqli-demo.vercel.app: SQL injection demo routes still shallow (1 finding)",
-      "testphp.vulnweb.com + demo.securityknowledgeframework.org: unreachable from cloud scan env"
+      "prototype-pollution-interactive-demo.netlify.app: client-side prototype pollution → XSS not detected (headers only)",
+      "ssrf-lab.vercel.app: SSRF fetch/proxy endpoints not exercised",
+      "graphql-lab.vercel.app: GraphQL injection/introspection scenarios missed",
+      "api-goat.vercel.app: OWASP API Top 10 lab routes shallow vs github pages apigoat",
+      "testphp.vulnweb.com + demo.securityknowledgeframework.org + bugbait.io: unreachable from cloud scan env"
     ],
-    "learning_gaps_closed": [
-      "juice-shop-staging: recovered from 16:00 UTC 503 outage — full 6/6 recall restored",
-      "duck-store.escape.tech: OpenAPI ~53KB spec truncated at 24KB — fixed via OPENAPI_SPEC_MAX_BYTES=65536 + list→detail path expansion",
-      "dvaib.com: AI prompt-injection lab UI missed — fixed via DVAIB bundle markers in clientSidePromptInjectionEvidence"
-    ]
+    "learning_gaps_closed": []
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -188,6 +174,11 @@
     "nextjs-cve-hackerone.vercel.app": 3,
     "xxe-lab.vercel.app": 4,
     "nosql-injection-lab.vercel.app": 2,
-    "llm-security-lab.vercel.app": 5
+    "llm-security-lab.vercel.app": 5,
+    "prototype-pollution-interactive-demo.netlify.app": 1,
+    "ssrf-lab.vercel.app": 3,
+    "graphql-lab.vercel.app": 2,
+    "api-goat.vercel.app": 2,
+    "ctf-maker-monorepo.vercel.app": 2
   }
 }
