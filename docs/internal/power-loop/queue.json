@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T13:07:40.592Z",
+  "updated_at": "2026-07-08T14:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://dvwu.vercel.app/",
@@ -330,6 +330,31 @@
       "url": "https://cybersec-lab.vercel.app/",
       "source": "cybersec-lab OSS — intentionally vulnerable Next.js OWASP practice lab (Vercel)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wiz.jock.pl/experiments/agent-arena/",
+      "source": "Show HN — Agent Arena prompt-injection honeypot for AI agents (wiz-experiments)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ref.jock.pl/modern-web",
+      "source": "Show HN Agent Arena — hidden prompt-injection test page (10 embedded attacks)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/",
+      "source": "Acunetix vulnweb PHP public demo (OWASP VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.securityknowledgeframework.org/",
+      "source": "OWASP Security Knowledge Framework public lab demo (VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugbait.io/",
+      "source": "BugBait intentionally vulnerable web app (OWASP VWAD online)",
+      "auth": "public_demo"
     }
   ]
 }

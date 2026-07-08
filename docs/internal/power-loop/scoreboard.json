@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T13:10:00.000Z",
+  "updated_at": "2026-07-08T14:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 130,
-  "total_findings": 492,
+  "total_sites_scanned": 133,
+  "total_findings": 505,
   "critical_findings": 15,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 66,
-  "discovery_findings": 273,
-  "improvements_shipped": 45,
-  "last_run": "2026-07-08T13:10:00.000Z",
+  "discovery_urls_added": 71,
+  "discovery_findings": 279,
+  "improvements_shipped": 46,
+  "last_run": "2026-07-08T14:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -50,35 +50,33 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "scanned_ok": 4,
-      "findings": 14,
-      "errors": [],
-      "improvements": [
-        "vulnerable-ecommerce.vercel.app: PHP source SQL concat + echo $_GET XSS evidence (3→5 findings)",
-        "dvwu.vercel.app: JSON POST /api/portal SQLi probe + SPA lab bundle markers (3→5 findings)"
+      "scanned_ok": 2,
+      "findings": 6,
+      "errors": [
+        "web2-lab2-mck1.onrender.com: TLS cert error (Render deploy unreachable)",
+        "testphp.vulnweb.com: DNS not found",
+        "demo.securityknowledgeframework.org: DNS not found"
       ],
       "new_targets": [
-        "capture-the-flag-official-website.vercel.app: 3 (dangerous-html-sinks)",
-        "cve-2025-55182-demo.vercel.app: 3 (misconfig only)",
-        "cybersec-lab.vercel.app: 4 (secret-private-key + dangerous-html-sinks)"
+        "wiz.jock.pl/experiments/agent-arena: 4 (dangerous-html-sinks + weak CSP on Show HN prompt-injection arena)",
+        "ref.jock.pl/modern-web: 2 (missing headers only — hidden prompt injections not surfaced as findings)"
+      ],
+      "deferred": [
+        "bugbait.io: queued but not reached within POWER_SCAN_LIMIT=5"
       ]
     },
     "notable_findings": [
-      "vulnerable-ecommerce.vercel.app: login.php source exposes string-concat SELECT; products.php echoes $_GET[msg]",
-      "dvwu.vercel.app: POST /api/portal with admin' OR '1'='1 returns SQL Injection success page",
-      "juice-shop-staging: benchmark recall maintained at 6/6 (7 findings)",
-      "cybersec-lab.vercel.app: secret-private-key critical + dangerous-html-sinks (4 findings)"
+      "juice-shop-staging: benchmark recall maintained at 6/6 (7 findings, 173 probes)",
+      "wiz.jock.pl Agent Arena: dangerous-html-sinks + vibe-weak-csp on Show HN AI agent honeypot",
+      "ref.jock.pl/modern-web: misconfig only — scanner missed hidden prompt-injection payloads (learning gap)"
     ],
     "learning_gaps": [
-      "hackable.so: advertises 12 hidden vulns but Vercel mirror API routes 404 — needs live hackable.so origin",
-      "owasp-juice.shop production demo: shallow 2 findings vs staging oracle 7",
-      "insecure-app.vercel.app: SPA vuln labs behind client routes not crawled",
-      "web2-lab2-mck1.onrender.com: Render deploy unreachable (TLS cert error)"
+      "ref.jock.pl/modern-web: 10 hidden prompt-injection vectors (HTML comments, zero-width Unicode) not detected — need DOM/hidden-content probe",
+      "testphp.vulnweb.com + demo.securityknowledgeframework.org: DNS dead from cloud egress — try alternate mirrors",
+      "web2-lab2-mck1.onrender.com: persistent TLS failure blocks XSS/access-control lab scan",
+      "bugbait.io: not yet scanned — defer to next run"
     ],
-    "learning_gaps_closed": [
-      "vulnerable-ecommerce FakeShop: PHP login/products SQLi/XSS missed despite exposed .php source in crawl",
-      "dvwu.vercel.app: advertised OWASP Top 10 labs missed sqli slug despite /api/portal in bundle"
-    ]
+    "learning_gaps_closed": []
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -159,6 +157,8 @@
     "insecure-app.vercel.app": 2,
     "dvwu.vercel.app": 5,
     "capture-the-flag-official-website.vercel.app": 3,
-    "cve-2025-55182-demo.vercel.app": 3
+    "cve-2025-55182-demo.vercel.app": 3,
+    "wiz.jock.pl/experiments/agent-arena": 4,
+    "ref.jock.pl/modern-web": 2
   }
 }
