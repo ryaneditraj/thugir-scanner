@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 115,
-  "total_findings": 448,
+  "total_sites_scanned": 120,
+  "total_findings": 461,
   "critical_findings": 15,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 71,
-  "discovery_findings": 236,
+  "discovery_urls_added": 76,
+  "discovery_findings": 249,
   "improvements_shipped": 39,
   "last_run": "2026-07-08T11:10:00.000Z",
   "last_run_summary": {
@@ -42,19 +42,32 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_scanned": 2,
-      "scanned_ok": 2,
-      "findings_delta": 3,
+      "urls_added": 5,
+      "urls_rescanned": 2,
+      "scanned_ok": 7,
+      "findings": 13,
+      "findings_delta_rescan": 3,
+      "errors": [
+        "testphp.vulnweb.com: DNS fail",
+        "testhtml5.vulnweb.com: DNS fail",
+        "vulnweb.com: connection reset"
+      ],
       "improvements": [
         "vulnlab.vercel.app: client-side-ssrf-evidence + client-side-file-upload-evidence from admin dashboard bundle markers (4→6 findings)",
         "vuln-demo.vercel.app: sensitive-api-token-leakage via GET /api/posts JWT in JSON body (3→4 findings)"
       ]
     },
     "notable_findings": [
+      "cybersec-lab.vercel.app: secret-private-key (critical) + dangerous-html-sinks on Spanish ethical-hacking lab SPA (4 findings)",
       "vulnlab.vercel.app: SSRF + unsafe file upload lab markers in main bundle (6 findings)",
-      "vuln-demo.vercel.app: JWT token leaked in /api/posts without auth (4 findings)"
+      "mehdiaitsaid.github.io/owasp-top-10-labs: dangerous-html-sinks on static OWASP Top 10 course pages (3 findings)",
+      "vuln-demo.vercel.app: JWT token leaked in /api/posts without auth (4 findings)",
+      "juicesec.mrdinesh.workers.dev: client-side-idor-evidence on browser-only OWASP challenge sim (2 findings)"
     ],
     "learning_gaps": [
+      "owasp-juice.shop: official demo returned only misconfig (2 findings) vs staging oracle 7 — SPA/API crawl depth or CDN gating on production domain",
+      "vuln-academy.vercel.app: advertises SVG XSS + SQLi + priv-esc CVE labs but scan only hit misconfig — client-side-only simulations need bundle sink probes",
+      "juicesec: browser-only challenge sims missed sqli/xss slugs despite OWASP Top 10 coverage — static regex on inlined worker HTML",
       "vulnlab.vercel.app: /admin SPA route returns 404 server-side — client-only admin panel not crawlable via HTTP",
       "vuln-demo.vercel.app: stored XSS in bulletin board content not confirmed via active probe (React text node rendering)",
       "Acunetix vulnweb.com family still unreachable from cloud scan env (DNS/connection reset)"
@@ -132,6 +145,11 @@
     "dev-lucasoliveira.github.io/frontend-xss-demo": 3,
     "web-security-lab.vercel.app": 3,
     "vuln-demo.vercel.app": 4,
-    "web-security-lab-docs.vercel.app": 2
+    "web-security-lab-docs.vercel.app": 2,
+    "juicesec.mrdinesh.workers.dev": 2,
+    "mehdiaitsaid.github.io/owasp-top-10-labs": 3,
+    "cybersec-lab.vercel.app": 4,
+    "owasp-juice.shop": 2,
+    "vuln-academy.vercel.app": 2
   }
 }
