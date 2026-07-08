@@ -353,6 +353,24 @@
       "slug": "ssrf-endpoint-fetch",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ssrfEndpointProbe rule probes GET/POST /api/fetch|/proxy with example.com canary; ssrf-lab.vercel.app now behind Vercel SSO — rule shipped, juice-shop benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:nosql-injection-lab.vercel.app",
+      "slug": "client-side-nosql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: findOne({ email, password }) + $gt operator injection + BACKEND VULNÉRABLE Node login in bundle; nosql-injection-lab.vercel.app 2→3 when reachable (Vercel Security Checkpoint may block cloud scans)"
+    },
+    {
+      "source": "discovery:xxe-lab.vercel.app",
+      "slug": "client-side-xxe-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ENTITY xxe SYSTEM file:///etc/passwd + libxmljs noent/nonet + parseFromString text/xml in bundle; xxe-lab.vercel.app gains client-side-xxe-evidence slug"
+    },
+    {
+      "source": "discovery:yusufarbc.github.io/apigoat",
+      "slug": "client-side-api-security-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP API Security Top 10 (2023) + Broken Object Level Authorization (BOLA) + deliberately vulnerable RESTful API; yusufarbc.github.io/apigoat 2→3, lab.pentest-forge.com 1→2"
     }
   ],
   "shipped": [
@@ -645,6 +663,21 @@
       "source": "discovery:ssrf-lab.vercel.app",
       "slug": "ssrf-endpoint-fetch-probe",
       "shipped_at": "2026-07-08T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:nosql-injection-lab.vercel.app",
+      "slug": "client-side-nosql-evidence",
+      "shipped_at": "2026-07-08T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:xxe-lab.vercel.app",
+      "slug": "client-side-xxe-evidence",
+      "shipped_at": "2026-07-08T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:yusufarbc.github.io/apigoat",
+      "slug": "client-side-api-security-lab-evidence",
+      "shipped_at": "2026-07-08T19:15:00.000Z"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T18:58:55.862Z",
-  "total": 83,
-  "uniqueSlugs": 83,
+  "generatedAt": "2026-07-08T19:07:14.088Z",
+  "total": 86,
+  "uniqueSlugs": 86,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 65,
+    "generic": 68,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 19,
+    "deep": 22,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 14,
+    "Broken access control": 15,
     "Exposed secret": 14,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 6,
     "Information disclosure": 9,
     "Broken authentication": 4,
-    "Injection": 4,
+    "Injection": 6,
     "Cross-site scripting": 3,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 1,
@@ -37,13 +37,16 @@
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "client-side-api-security-lab-evidence",
     "client-side-file-upload-evidence",
     "client-side-idor-evidence",
+    "client-side-nosql-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sql-evidence",
     "client-side-ssrf-evidence",
+    "client-side-xxe-evidence",
     "cors-reflect-origin",
     "cursor-next-public-secret",
     "dangerous-html-sinks",
