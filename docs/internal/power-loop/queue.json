@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T22:05:00.000Z",
+  "updated_at": "2026-07-08T23:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/",
@@ -584,6 +584,31 @@
     {
       "url": "https://mutillidae.lab.pentest-forge.com/",
       "source": "PentestForge Lab — Mutillidae II classic extended OWASP Top 10 playground",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://security-showcase.vercel.app/",
+      "source": "parvinder204/security-showcase OSS — FastAPI/Vue XSS+SQLi+CSRF side-by-side vulnerable vs secure panels (Vercel)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://weblogic.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — ShadowLogic WebLogic CVE-2023-21839 RCE benchmark target",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tomcat.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — GuardianLeaks Tomcat CVE-2017-12615 PUT RCE benchmark target",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/",
+      "source": "Riglabs Collective — 17-module interactive security training (SQLi/XSS/crypto/phishing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/",
+      "source": "Web Security Lab — OWASP XSS/SQLi/CSRF/JWT/IDOR/RBAC interactive attack platform (Vercel)",
       "auth": "public_demo"
     }
   ]
