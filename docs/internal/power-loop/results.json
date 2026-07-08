@@ -6117,6 +6117,310 @@
       "probes_run": 173,
       "status": "ok",
       "scanned_at": "2026-07-08T17:10:53.889Z"
+    },
+    {
+      "run_id": "2026-07-08T17:13:38.176Z",
+      "url": "http://testphp.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-08T17:13:38.176Z",
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-08T17:13:48.253Z",
+      "url": "https://demo.securityknowledgeframework.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-08T17:13:48.253Z",
+      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-08T17:13:48.709Z",
+      "url": "https://bugbait.io/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-08T17:13:48.709Z",
+      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-08T17:13:49.635Z",
+      "url": "https://agent-probe.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 191,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:13:49.635Z"
+    },
+    {
+      "run_id": "2026-07-08T17:13:51.349Z",
+      "url": "https://sqli-demo.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 181,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:13:51.349Z"
+    },
+    {
+      "run_id": "2026-07-08T17:13:52.295Z",
+      "url": "https://pentest-lab.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 180,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:13:52.295Z"
+    },
+    {
+      "run_id": "2026-07-08T17:13:53.519Z",
+      "url": "https://nextjs-cve-hackerone.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 196,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:13:53.519Z"
+    },
+    {
+      "run_id": "2026-07-08T17:13:57.654Z",
+      "url": "https://xxe-lab.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": "v0",
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "secret-aws-akid",
+          "title": "AWS access key id exposed in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 204,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:13:57.654Z"
+    },
+    {
+      "run_id": "2026-07-08T17:13:59.938Z",
+      "url": "https://nosql-injection-lab.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 183,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:13:59.938Z"
+    },
+    {
+      "run_id": "2026-07-08T17:14:01.220Z",
+      "url": "https://llm-security-lab.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "secret-openai",
+          "title": "OpenAI API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 197,
+      "status": "ok",
+      "scanned_at": "2026-07-08T17:14:01.220Z"
     }
   ],
   "teacher_delta_runs": [
@@ -6239,6 +6543,15 @@
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
       "benchmark_status": "503 Service Unavailable — oracle outage, 1/6 recall (misconfig only)",
       "scanned_at": "2026-07-08T16:13:00.000Z"
+    },
+    {
+      "run_id": "2026-07-08T17:15:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "scanned_at": "2026-07-08T17:15:00.000Z"
     }
   ]
 }
