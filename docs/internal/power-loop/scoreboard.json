@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T10:10:00.000Z",
+  "updated_at": "2026-07-08T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 114,
-  "total_findings": 441,
-  "critical_findings": 14,
+  "total_sites_scanned": 115,
+  "total_findings": 448,
+  "critical_findings": 15,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 71,
-  "discovery_findings": 229,
-  "improvements_shipped": 36,
-  "last_run": "2026-07-08T10:10:00.000Z",
+  "discovery_findings": 236,
+  "improvements_shipped": 39,
+  "last_run": "2026-07-08T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -42,33 +42,26 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "scanned_ok": 5,
-      "findings": 15,
-      "errors": [
-        "testphp.vulnweb.com: DNS fail",
-        "testhtml5.vulnweb.com: DNS fail",
-        "vulnweb.com: connection reset"
-      ],
+      "urls_scanned": 2,
+      "scanned_ok": 2,
+      "findings_delta": 3,
       "improvements": [
-        "vulnbank.org: vibe-openapi-docs-exposed via /static/openapi.json (3→4 findings)",
-        "riglabs-cyber-lab.vercel.app: client-side-sql-evidence from SQLi training module (3→4 findings)"
+        "vulnlab.vercel.app: client-side-ssrf-evidence + client-side-file-upload-evidence from admin dashboard bundle markers (4→6 findings)",
+        "vuln-demo.vercel.app: sensitive-api-token-leakage via GET /api/posts JWT in JSON body (3→4 findings)"
       ]
     },
     "notable_findings": [
-      "vulnlab.vercel.app: dangerous-html-sinks + client-side-sql-evidence on advertised SQLi/XSS lab (4 findings)",
-      "dev-lucasoliveira.github.io/frontend-xss-demo: dangerous-html-sinks on intentional /insecure route (3 findings)",
-      "web-security-lab.vercel.app: dangerous-html-sinks across XSS/SQLi chapter SPA (3 findings)"
+      "vulnlab.vercel.app: SSRF + unsafe file upload lab markers in main bundle (6 findings)",
+      "vuln-demo.vercel.app: JWT token leaked in /api/posts without auth (4 findings)"
     ],
     "learning_gaps": [
-      "vulnlab.vercel.app: advertises SSRF/admin/file-upload vulns but scan only hit xss/sqli slugs — deeper admin route crawl needed",
-      "vuln-demo.vercel.app: CTF bulletin board stored XSS not confirmed via sql-error-disclosure — static bundle signals only",
-      "Acunetix vulnweb.com family still unreachable from cloud scan env (DNS/connection reset)",
-      "riglabs-cyber-lab: locked module routes still client-side only — deeper SPA route extraction optional"
+      "vulnlab.vercel.app: /admin SPA route returns 404 server-side — client-only admin panel not crawlable via HTTP",
+      "vuln-demo.vercel.app: stored XSS in bulletin board content not confirmed via active probe (React text node rendering)",
+      "Acunetix vulnweb.com family still unreachable from cloud scan env (DNS/connection reset)"
     ],
     "learning_gaps_closed": [
-      "vulnbank OpenAPI at /static/openapi.json missed by fixed /openapi.json probe list",
-      "riglabs SQLi training module markers not matched by clientSideSqlEvidence regex set"
+      "vulnlab advertised SSRF/admin/file-upload vulns but scan only hit xss/sqli slugs",
+      "vuln-demo CTF JWT token leak in /api/posts not detected"
     ]
   },
   "discovery_highlights": {
@@ -135,10 +128,10 @@
     "cyber-ctf-website.vercel.app": 1,
     "vulnbank.org": 4,
     "riglabs-cyber-lab.vercel.app": 4,
-    "vulnlab.vercel.app": 4,
+    "vulnlab.vercel.app": 6,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 3,
     "web-security-lab.vercel.app": 3,
-    "vuln-demo.vercel.app": 3,
+    "vuln-demo.vercel.app": 4,
     "web-security-lab-docs.vercel.app": 2
   }
 }
