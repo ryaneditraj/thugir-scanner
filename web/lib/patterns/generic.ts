@@ -894,5 +894,31 @@ export const genericPatterns: Pattern[] = [
       "My app ships prompt-injection red-team UI (adversarial prompts, systemPrompt display, attack pool). Remove system-prompt leakage from the client, add server-side guardrails on chat inputs, and show how to detect automated prompt-injection probes.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "ssrf-endpoint-fetch",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "SSRF — server fetches attacker-controlled URL",
+    description:
+      "An API endpoint accepts a URL parameter and the server fetches it, returning the remote page content in the response. Attackers can use this to reach internal services, cloud metadata, or localhost-only admin panels.",
+    impactOneline:
+      "A fetch/proxy endpoint follows arbitrary URLs server-side — internal networks and metadata may be reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfEndpointProbe" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Block SSRF: allow-list destinations, validate resolved IPs, disable redirects.",
+      steps: [
+        "Replace open URL fetch with an allow-list of trusted hosts/schemes.",
+        "Resolve DNS and reject private, loopback, and link-local IP ranges before connecting.",
+        "Disable HTTP redirects on outbound requests and cap response size/timeouts."
+      ]
+    },
+    fixPrompt:
+      "My API has an SSRF-prone fetch/proxy endpoint that follows user-supplied URLs. Add allow-listing, block private/metadata IPs after DNS resolution, disable redirects, and show the safe server-side fetch handler.",
+    version: 1,
+    enabled: true
   }
 ];

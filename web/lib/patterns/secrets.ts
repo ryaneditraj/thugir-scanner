@@ -150,6 +150,14 @@ const SECRET_DEFS: SecretDef[] = [
     severity: "high",
     serverOnly: true,
     impact: "Paddle credentials can expose billing and customer data."
+  },
+  {
+    slug: "secret-hasura-admin",
+    name: "Hasura admin secret",
+    regex: 'x-hasura-admin-secret\\s*[:=]\\s*["\']([A-Za-z0-9]{20,})["\']',
+    severity: "critical",
+    serverOnly: true,
+    impact: "A Hasura admin secret bypasses all GraphQL/Postgres authorization rules."
   }
 ];
 
