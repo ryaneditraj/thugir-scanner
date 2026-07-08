@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T18:05:00.000Z",
+  "updated_at": "2026-07-08T19:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/",
@@ -454,6 +454,31 @@
     {
       "url": "https://ctf-maker-monorepo.vercel.app/",
       "source": "web search — CTF DeFi Security 101 workshop vulnerable smart-contract playground (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi2.apisec.ai",
+      "source": "OWASP crAPI v2 public demo — APIsec hosted OWASP API Top 10 lab (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com",
+      "source": "Show HN / DVAA — AI agent honeypot with 48 indirect prompt-injection payloads across 11 categories",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testhtml5.vulnweb.com",
+      "source": "Acunetix vulnweb HTML5 benchmark — SecurityTweets Flask/CouchDB public demo (VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io",
+      "source": "HackAdvisor Labs — browser-based real-world web vuln challenges with isolated instances",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sixhackacademy.com/en/ctf-labs/",
+      "source": "SixHack Academy CTF Labs — free OWASP Top 10 web hacking challenges (SQLi/XSS/IDOR/SSRF)",
       "auth": "public_demo"
     }
   ]
