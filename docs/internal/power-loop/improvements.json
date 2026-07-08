@@ -293,6 +293,24 @@
       "slug": "unauthenticated-admin-endpoint",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns 200 with href=\"/admin/users\" + Administration nav without login redirect; hackable-web.vercel.app findings 2→3"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "open-redirect-query-param",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns 302 Location to probe host; web-pentest-playground.onrender.com findings 1→3"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Use prompt injection, social engineering + agent guarded by a defender + systemPrompt UI; playground.fabraix.com findings 1→2"
+    },
+    {
+      "source": "discovery:agent-probe.vercel.app",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta description prompt injection vulnerabilities in any website + adversarial prompts to chatbots + 45-attack pool; agent-probe.vercel.app findings 3→4"
     }
   ],
   "shipped": [
@@ -535,6 +553,21 @@
       "source": "discovery:hackable-web.vercel.app",
       "slug": "spa-admin-shell-no-auth-redirect",
       "shipped_at": "2026-07-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "open-redirect-redirect-path-fallback",
+      "shipped_at": "2026-07-08T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "client-side-prompt-injection-lab-evidence",
+      "shipped_at": "2026-07-08T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:agent-probe.vercel.app",
+      "slug": "prompt-injection-scanner-bundle-markers",
+      "shipped_at": "2026-07-08T16:10:00.000Z"
     }
   ]
 }
