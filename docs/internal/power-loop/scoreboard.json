@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T02:05:00.000Z",
+  "updated_at": "2026-07-08T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,7 +12,8 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ]
+      ],
+      "note": "Oracle juice-shop-staging.herokuapp.com — 7 findings, 6/6 recall (2026-07-08 02 UTC)"
     }
   },
   "total_sites_scanned": 65,
@@ -22,28 +23,33 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 31,
   "discovery_findings": 131,
-  "improvements_shipped": 13,
-  "last_run": "2026-07-08T02:05:00.000Z",
+  "improvements_shipped": 15,
+  "last_run": "2026-07-08T02:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
-      "gap": [],
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
-        }
-      }
+      "gap": []
     },
     "discovery_new": 5,
     "discovery_findings_new": 15,
     "skipped_rescan_48h": 26,
     "teacher_delta": "skipped — no nuclei/engine",
+    "improvements_this_run": 2,
+    "discovery_validation": {
+      "xss-game.appspot.com": {
+        "findings_before": 1,
+        "findings_after": 2,
+        "new_slugs": ["reflected-xss-query-param"]
+      },
+      "hackxor.net": {
+        "findings_before": 2,
+        "findings_after": 3,
+        "new_slugs": ["reflected-xss-query-param"]
+      }
+    },
     "discovery_highlights_new": {
       "ist-edu-bd.vercel.app": 3,
       "pwnshop.ctfsecurity.com": 6,
@@ -52,6 +58,8 @@
       "urban-vampi-staging.up.railway.app": 2
     },
     "notable_findings": [
+      "reflected-xss-query-param on xss-game.appspot.com via /level1/frame?query= iframe src discovery",
+      "reflected-xss-query-param on hackxor.net via /mission?id= with 500 error-page canary echo",
       "sql-error-disclosure + reflected-xss-query-param + cors-reflect-origin on pwnshop.ctfsecurity.com",
       "dangerous-html-sinks on ist-edu-bd.vercel.app (DVWU)",
       "vibe-openapi-docs-exposed on urban-vampi-staging.up.railway.app"
@@ -84,10 +92,10 @@
     "google-gruyere.appspot.com": 2,
     "dvga.tools.escape.tech": 4,
     "testaspnet.vulnweb.com": 3,
-    "hackxor.net": 2,
+    "hackxor.net": 3,
     "seclab.vercel.app": 4,
     "dvga.xplat-demo.threatx.io": 2,
-    "xss-game.appspot.com": 1,
+    "xss-game.appspot.com": 2,
     "hackthissite.org": 3,
     "aigoat.app": 2,
     "vulnforge-academy.vercel.app": 4,

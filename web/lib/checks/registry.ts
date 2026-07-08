@@ -360,13 +360,15 @@ const REFLECTED_XSS_PARAMS = [
   "category",
   "filter"
 ];
-const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search", "/search.jsp", "/index.jsp", "/catalog"];
+const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search", "/search.html", "/search.jsp", "/index.jsp", "/catalog"];
 
-function prioritizeReflectedXssPaths(paths: string[]): string[] {
+function prioritizeReflectedXssPaths(paths: string[], discovered = new Set<string>()): string[] {
   const score = (p: string) => {
-    if (/\/catalog|search|product/i.test(p)) return 0;
-    if (p === "/") return 2;
-    return 1;
+    if (discovered.has(p)) return 0;
+    if (/\/frame|\/mission|reflected/i.test(p)) return 1;
+    if (/\/catalog|search|product/i.test(p)) return 2;
+    if (p === "/") return 4;
+    return 3;
   };
   return [...paths].sort((a, b) => score(a) - score(b));
 }
@@ -405,10 +407,46 @@ function extractSearchLikePaths(text: string): string[] {
   return [...paths].slice(0, 6);
 }
 
+/** iframe/frame src paths (e.g. XSS game /level1/frame). */
+function extractIframeSrcPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const re = /<(?:iframe|frame)[^>]*\ssrc\s*=\s*["']([^"'#?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const norm = normalizeProbePath(m[1]);
+    if (norm) paths.add(norm);
+  }
+  return [...paths];
+}
+
+/** href/action paths whose query string names a probe param (e.g. /mission?id=). */
+function extractQueryParamPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const linkRe = /(?:href|action)\s*=\s*["']([^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(text))) {
+    const full = m[1];
+    if (!full.includes("?")) continue;
+    const [pathPart, queryPart] = full.split("?");
+    const hasParam = REFLECTED_XSS_PARAMS.some((p) => new RegExp(`(?:^|&)${p}=`, "i").test(queryPart));
+    if (!hasParam) continue;
+    const norm = normalizeProbePath(pathPart);
+    if (norm) paths.add(norm);
+  }
+  return [...paths];
+}
+
 function extractReflectedXssPaths(text: string): string[] {
-  const paths = new Set(extractSearchLikePaths(text));
+  const paths = new Set([
+    ...extractSearchLikePaths(text),
+    ...extractIframeSrcPaths(text),
+    ...extractQueryParamPaths(text)
+  ]);
   if (/reflected/i.test(text)) paths.add("/reflected/parameter/body");
-  return [...paths].slice(0, 6);
+  const levelRe = /(?:href|action)\s*=\s*["'](\/level\d+)["']/gi;
+  let lm: RegExpExecArray | null;
+  while ((lm = levelRe.exec(text))) paths.add(`${lm[1]}/frame`);
+  return [...paths].slice(0, 8);
 }
 
 function isReflectedXssCanary(body: string, canary: string): boolean {
@@ -422,9 +460,11 @@ const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
   const homePath = new URL(ctx.home.finalUrl).pathname || "/";
   const discovered = extractReflectedXssPaths(ctx.combined);
-  const paths = prioritizeReflectedXssPaths([
-    ...new Set([...discovered, homePath, ...REFLECTED_XSS_FALLBACK_PATHS])
-  ]).slice(0, 8);
+  const discoveredSet = new Set(discovered);
+  const paths = prioritizeReflectedXssPaths(
+    [...new Set([...discovered, homePath, ...REFLECTED_XSS_FALLBACK_PATHS])],
+    discoveredSet
+  ).slice(0, 10);
   const hits: { path: string; param: string; url: string; snippet: string }[] = [];
   const seen = new Set<string>();
   const urls: { url: string; param: string; path: string }[] = [];
@@ -437,14 +477,14 @@ const reflectedXss: Rule = async (ctx) => {
       const u = new URL(path, ctx.origin);
       u.searchParams.set(param, canary);
       urls.push({ url: u.toString(), param, path });
-      if (urls.length >= 24) break outer;
+      if (urls.length >= 40) break outer;
     }
   }
 
   const docs = await ctx.probe.getMany(urls.map((x) => x.url), { maxBytes: 8192 }, 4);
   for (const { url: probeUrl, param, path } of urls) {
     const doc = docs.get(probeUrl);
-    if (!doc || doc.status < 200 || doc.status >= 400) continue;
+    if (!doc || doc.status < 200) continue;
     const ct = doc.headers["content-type"] || "";
     if (!/html|text\/plain/i.test(ct) && !/<html|<body/i.test(doc.body)) continue;
     if (!isReflectedXssCanary(doc.body, canary)) continue;

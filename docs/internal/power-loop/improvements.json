@@ -77,6 +77,18 @@
       "slug": "sql-error-disclosure",
       "status": "shipped",
       "validation": "GET /showforum.asp?id=1 returns 200 but id=1' returns 500 Internal server error; testasp.vulnweb.com findings 3→4"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "GET /level1/frame?query=thugirXSScanary echoes raw canary in <b> tag (iframe src discovery + discovered-path-first probe budget); xss-game.appspot.com findings 1→2"
+    },
+    {
+      "source": "discovery:hackxor.net",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "GET /mission?id=thugirXSScanary echoes raw canary in 500 HTML (query-param href discovery + accept 5xx when canary reflects); hackxor.net findings 2→3"
     }
   ],
   "shipped": [
@@ -144,6 +156,16 @@
       "source": "discovery:testasp.vulnweb.com",
       "slug": "sql-error-asp-differential",
       "shipped_at": "2026-07-08T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "reflected-xss-iframe-src-discovery",
+      "shipped_at": "2026-07-08T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:hackxor.net",
+      "slug": "reflected-xss-5xx-canary-echo",
+      "shipped_at": "2026-07-08T02:10:00.000Z"
     }
   ]
 }
