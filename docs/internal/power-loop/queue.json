@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T04:05:00.000Z",
+  "updated_at": "2026-07-08T05:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -204,6 +204,31 @@
     {
       "url": "https://ucu-owasp-ctf.vercel.app/",
       "source": "UCU OWASP Top 10 CTF 2025 public challenge platform (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-attacker.vercel.app/",
+      "source": "Swarnadip-Kar/xss-attacker OSS — cross-origin XSS C2 attacker dashboard (README live URL)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://swarnadip-kar.github.io/xss-victim/",
+      "source": "Swarnadip-Kar/xss-victim OSS — intentionally vulnerable bank site for XSS session hijack demo",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://playground.fabraix.com/",
+      "source": "Fabraix Playground — Show HN live AI agent red-team challenge platform (fabraix/playground)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.vercel.app/",
+      "source": "Damn Vulnerable Web Application public Vercel deploy (OWASP DVWA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/",
+      "source": "VulnShop intentionally vulnerable e-commerce pentest practice lab (public Vercel deploy)",
       "auth": "public_demo"
     }
   ]
