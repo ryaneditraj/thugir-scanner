@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T04:10:00.000Z",
+  "updated_at": "2026-07-08T05:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 77,
-  "total_findings": 303,
+  "total_sites_scanned": 78,
+  "total_findings": 310,
   "critical_findings": 13,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 41,
   "discovery_findings": 161,
-  "improvements_shipped": 19,
-  "last_run": "2026-07-08T04:10:00.000Z",
+  "improvements_shipped": 21,
+  "last_run": "2026-07-08T05:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -39,43 +39,27 @@
         }
       }
     },
-    "discovery_new": 5,
-    "discovery_findings_new": 15,
-    "skipped_rescan_48h": 36,
+    "discovery_new": 0,
     "teacher_delta": "skipped — no nuclei/engine",
     "improvements_this_run": 2,
     "discovery_validation": {
-      "csrf-xss-demo.vercel.app": {
+      "xss-lab.vercel.app": {
         "findings_before": 2,
-        "findings_after": 4,
-        "new_slugs": [
-          "dom-eval-xss",
-          "vibe-hardcoded-demo-credentials"
-        ]
+        "findings_after": 3,
+        "new_slugs": ["dangerous-html-sinks"]
+      },
+      "sqli-lab.vercel.app": {
+        "findings_before": 2,
+        "findings_after": 3,
+        "new_slugs": ["client-side-sql-evidence"]
       }
     },
-    "discovery_highlights_new": {
-      "ai-security-platform-iota.vercel.app": 3,
-      "securityweb-iota.vercel.app": 5,
-      "sqli-lab.vercel.app": 2,
-      "xss-lab.vercel.app": 2,
-      "ucu-owasp-ctf.vercel.app": 3
-    },
-    "notable_findings": [
-      "dom-eval-xss on csrf-xss-demo via eval(document.getElementById(\"xssInput\").value)",
-      "inline admin/password comparison detected in csrf-xss-demo CRA bundle",
-      "securityweb-iota.vercel.app: 5 findings — secret-resend, dangerous-html-sinks, vibe-unauthenticated-api-routes",
-      "ai-security-platform-iota.vercel.app: dangerous-html-sinks on 14-challenge OWASP platform"
-    ],
     "learning_gaps": [
-      "sqli-lab.vercel.app: no sql-error-disclosure despite error-based SQLi demo with live query viewer",
-      "xss-lab.vercel.app: no stored-xss/reflected-xss slugs despite intentional stored XSS post board",
       "zero-health.vercel.app: vulns behind Google OAuth login — no sqli/idor without session"
     ],
-    "unreachable_candidates": [
-      "testphp.vulnweb.com / testhtml5.vulnweb.com (DNS fail from cloud)",
-      "mutillidae/dvsa heroku demos (404)",
-      "insecure-app.vercel.app (insurance landing page, not a vuln lab)"
+    "notable_findings": [
+      "dangerous-html-sinks on xss-lab via inline innerHTML = html after ${post.content} template",
+      "client-side-sql-evidence on sqli-lab via DANGEROUS: Concatenating input directly + SELECT FROM users WHERE"
     ]
   },
   "discovery_highlights": {
@@ -117,8 +101,8 @@
     "csrf-xss-demo.vercel.app": 4,
     "ai-security-platform-iota.vercel.app": 3,
     "securityweb-iota.vercel.app": 5,
-    "sqli-lab.vercel.app": 2,
-    "xss-lab.vercel.app": 2,
+    "sqli-lab.vercel.app": 3,
+    "xss-lab.vercel.app": 3,
     "ucu-owasp-ctf.vercel.app": 3
   }
 }

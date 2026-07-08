@@ -1308,6 +1308,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "innerHTML binding with dynamic search/user value",
     re: /\["innerHTML"\][^;]{0,120}(?:searchValue|userInput|\.data)/
+  },
+  {
+    label: "innerHTML renders unsanitized post content from template literal",
+    re: /\$\{(?:post\.)?(?:content|title|author)\}[\s\S]{0,350}\.innerHTML\s*=\s*html/i
+  },
+  {
+    label: "innerHTML html variable built from post.content",
+    re: /post\.content[\s\S]{0,500}innerHTML\s*=\s*html/i
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1389,6 +1397,43 @@ const dangerousHtmlSinks: Rule = async (ctx) => {
     evidence: {
       sinks: hits.slice(0, 4),
       note: "client bundle renders unsanitized HTML — stored/reflected XSS likely"
+    }
+  };
+};
+
+// --- Client-side SQL injection evidence in bundle (educational labs / vibe prototypes) --
+const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DANGEROUS SQL string concatenation marker",
+    re: /DANGEROUS:\s*Concatenating input directly/i
+  },
+  {
+    label: "Unsafe Concat SQL query builder",
+    re: /Unsafe Concat[\s\S]{0,400}SELECT[\s\S]{0,200}FROM[\s\S]{0,120}WHERE/i
+  },
+  {
+    label: "SELECT FROM users WHERE id string concat",
+    re: /SELECT[\s\S]{0,60}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,60}id\s*=\s*['"]/i
+  },
+  {
+    label: "Client-side SQLi login bypass string check",
+    re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/
+  }
+];
+
+const clientSideSqlEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SQL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.92 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle builds SQL via string concatenation or simulates SQLi — injection likely if wired to a backend"
     }
   };
 };
@@ -1478,6 +1523,7 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   clientSideIdorEvidence,
+  clientSideSqlEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,

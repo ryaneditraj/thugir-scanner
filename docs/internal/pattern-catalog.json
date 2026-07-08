@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T04:05:44.480Z",
-  "total": 72,
-  "uniqueSlugs": 72,
+  "generatedAt": "2026-07-08T05:04:14.662Z",
+  "total": 73,
+  "uniqueSlugs": 73,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 54,
+    "generic": 55,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 61,
-    "deep": 11,
+    "deep": 12,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 6,
     "Information disclosure": 9,
     "Broken authentication": 3,
-    "Injection": 1,
+    "Injection": 2,
     "Cross-site scripting": 3,
     "general": 16
   },
@@ -35,6 +35,7 @@
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "client-side-idor-evidence",
+    "client-side-sql-evidence",
     "cors-reflect-origin",
     "cursor-next-public-secret",
     "dangerous-html-sinks",

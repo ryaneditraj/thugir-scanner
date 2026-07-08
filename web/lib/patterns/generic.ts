@@ -612,6 +612,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-sql-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Client bundle builds SQL via string concatenation",
+    description:
+      "The shipped JavaScript constructs SQL queries by concatenating user input into SELECT/WHERE clauses, or simulates classic SQLi bypass checks (e.g. ' or '1'='1). When wired to a real database this is trivially injectable.",
+    impactOneline:
+      "SQL is built from user strings in the browser — classic injection if the query reaches a database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSqlEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries; never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concat SQL with prepared statements / ORM parameter binding.",
+        "Remove client-side SQL simulation and auth bypass string checks from production.",
+        "Validate and escape all user input server-side before it touches a query."
+      ]
+    },
+    fixPrompt:
+      "My client bundle concatenates user input into SQL (SELECT ... WHERE id = '\" + input). Replace with parameterized queries server-side and remove unsafe string-concat query builders from the shipped JavaScript.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "reflected-xss-query-param",
     platform: "generic",
     category: "Cross-site scripting",
