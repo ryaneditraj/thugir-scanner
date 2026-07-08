@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T20:03:41.613Z",
-  "total": 86,
-  "uniqueSlugs": 86,
+  "generatedAt": "2026-07-08T21:18:51.465Z",
+  "total": 87,
+  "uniqueSlugs": 87,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 68,
+    "generic": 69,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 22,
+    "deep": 23,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 6,
-    "Information disclosure": 9,
+    "Information disclosure": 10,
     "Broken authentication": 4,
     "Injection": 6,
     "Cross-site scripting": 3,
@@ -67,6 +67,7 @@
     "lovable-supabase-storage-public",
     "missing-security-headers",
     "open-redirect-query-param",
+    "pentest-forge-linked-lab-probe",
     "permissive-cors",
     "phpinfo-exposed",
     "reflected-xss-query-param",
