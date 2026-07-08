@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T09:12:00.000Z",
+  "updated_at": "2026-07-08T10:08:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -329,6 +329,31 @@
     {
       "url": "http://vulnweb.com/",
       "source": "Acunetix vulnweb.com — official directory of intentionally vulnerable test sites",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnlab.vercel.app/",
+      "source": "Prakhar-Sethi/vulnlab OSS — XSS, SQLi, CSRF, SSRF intentionally vulnerable Vercel deploy",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dev-lucasoliveira.github.io/frontend-xss-demo/",
+      "source": "dev-LucasOliveira/frontend-xss-demo OSS — insecure vs secure XSS routes (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/",
+      "source": "Web Security Lab — Chinese interactive XSS/SQLi/CSRF/CSP chapters (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-demo.vercel.app/",
+      "source": "Japanese CTF bulletin board demo — stored XSS training app (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab-docs.vercel.app/",
+      "source": "Security Lab docs hub — OWASP-style attack case study platform landing (Vercel)",
       "auth": "public_demo"
     }
   ]
