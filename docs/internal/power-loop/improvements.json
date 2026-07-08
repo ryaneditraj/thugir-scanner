@@ -233,6 +233,30 @@
       "slug": "sensitive-api-token-leakage",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/posts returns {\"token\":\"eyJ...\"} + DEBUG token: console.log in bundle; vuln-demo.vercel.app findings 3→4"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: out.innerHTML = 'Showing results for: ' + val + div.innerHTML = val stored XSS; juicesec.mrdinesh.workers.dev findings 2→4"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: builds its SQL query using string concatenation + u.includes(\"' OR '1'='1\") in checkSQLi(); juicesec.mrdinesh.workers.dev findings 2→4"
+    },
+    {
+      "source": "discovery:vuln-academy.vercel.app",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: getElementById('svgPreview').innerHTML = content on SVG upload lab (CVE-2024-37427); vuln-academy.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:vuln-academy.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mysql_query(\"SELECT * FROM users WHERE coupon='${coupon}'\") in executeSQLi(); vuln-academy.vercel.app findings 2→4"
     }
   ],
   "shipped": [
@@ -430,6 +454,21 @@
       "source": "discovery:vuln-demo.vercel.app",
       "slug": "sensitive-api-token-leakage",
       "shipped_at": "2026-07-08T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "inline-lab-innerhtml-val-xss",
+      "shipped_at": "2026-07-08T12:12:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "inline-lab-sqli-or-bypass-markers",
+      "shipped_at": "2026-07-08T12:12:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-academy.vercel.app",
+      "slug": "svg-preview-innerhtml-coupon-sqli",
+      "shipped_at": "2026-07-08T12:12:00.000Z"
     }
   ]
 }

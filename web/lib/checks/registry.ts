@@ -1428,6 +1428,22 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "getElementById innerHTML = API response field (data.message XSS)",
     re: /getElementById\([^)]+\)\.innerHTML\s*=\s*(?:data|response|result|json|res)\./
+  },
+  {
+    label: "innerHTML string concat with user val (reflected XSS lab)",
+    re: /\.innerHTML\s*=\s*'[^']*'\s*\+\s*val\b/
+  },
+  {
+    label: "div.innerHTML = val (stored XSS direct assignment)",
+    re: /if\s*\(\s*div\s*\)\s*div\.innerHTML\s*=\s*val\b/
+  },
+  {
+    label: "commentStore.map rendered via innerHTML (stored XSS)",
+    re: /\.innerHTML\s*=\s*commentStore\.map\s*\(/
+  },
+  {
+    label: "SVG preview innerHTML = uploaded file content",
+    re: /getElementById\([^)]*svgPreview[^)]*\)\.innerHTML\s*=\s*content\b/i
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1529,7 +1545,7 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Client-side SQLi login bypass string check",
-    re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/
+    re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']' OR '1'='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/i
   },
   {
     label: "INTENTIONALLY INSECURE string-concat SQL login",
@@ -1554,6 +1570,26 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQLi lab vulnerable login query marker",
     re: /vulnerable login query[\s\S]{0,250}SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users/i
+  },
+  {
+    label: "Educational lab builds SQL via string concatenation",
+    re: /builds its SQL query using string concatenation/i
+  },
+  {
+    label: "sqli-query innerHTML displays interpolated username in SQL",
+    re: /getElementById\(['"]sqli-query['"]\)\.innerHTML[\s\S]{0,300}\$\{esc\(u\)\}/
+  },
+  {
+    label: "mysql_query SELECT FROM users WHERE coupon interpolation",
+    re: /mysql_query\([\s\S]{0,80}SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,60}coupon\s*=\s*'\$\{/i
+  },
+  {
+    label: "Query executed coupon SQL injection log",
+    re: /Query executed: SELECT \* FROM users WHERE coupon='\$\{coupon\}'/
+  },
+  {
+    label: "String concat SQL query on email field",
+    re: /query\s*=\s*"SELECT \* FROM users WHERE email='"\s*\+\s*email\s*\+\s*"'/
   }
 ];
 
