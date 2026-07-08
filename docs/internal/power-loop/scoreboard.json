@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T02:10:00.000Z",
+  "updated_at": "2026-07-08T03:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,21 +12,20 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "note": "Oracle juice-shop-staging.herokuapp.com — 7 findings, 6/6 recall (2026-07-08 02 UTC)"
+      ]
     }
   },
-  "total_sites_scanned": 65,
-  "total_findings": 259,
+  "total_sites_scanned": 71,
+  "total_findings": 281,
   "critical_findings": 13,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 31,
-  "discovery_findings": 131,
+  "discovery_urls_added": 36,
+  "discovery_findings": 146,
   "improvements_shipped": 15,
-  "last_run": "2026-07-08T02:10:00.000Z",
+  "last_run": "2026-07-08T03:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02:00",
+    "hour_utc": "03:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -35,41 +34,29 @@
     },
     "discovery_new": 5,
     "discovery_findings_new": 15,
-    "skipped_rescan_48h": 26,
+    "skipped_rescan_48h": 31,
     "teacher_delta": "skipped — no nuclei/engine",
-    "improvements_this_run": 2,
-    "discovery_validation": {
-      "xss-game.appspot.com": {
-        "findings_before": 1,
-        "findings_after": 2,
-        "new_slugs": ["reflected-xss-query-param"]
-      },
-      "hackxor.net": {
-        "findings_before": 2,
-        "findings_after": 3,
-        "new_slugs": ["reflected-xss-query-param"]
-      }
-    },
+    "improvements_this_run": 0,
     "discovery_highlights_new": {
-      "ist-edu-bd.vercel.app": 3,
-      "pwnshop.ctfsecurity.com": 6,
-      "idor-website.vercel.app": 2,
-      "vulnerable-web-site.vercel.app": 2,
-      "urban-vampi-staging.up.railway.app": 2
+      "secure-bank-bay.vercel.app": 3,
+      "owaspbased-lessons.vercel.app": 1,
+      "hack-this-site-eta.vercel.app": 6,
+      "zero-health.vercel.app": 3,
+      "csrf-xss-demo.vercel.app": 2
     },
     "notable_findings": [
-      "reflected-xss-query-param on xss-game.appspot.com via /level1/frame?query= iframe src discovery",
-      "reflected-xss-query-param on hackxor.net via /mission?id= with 500 error-page canary echo",
-      "sql-error-disclosure + reflected-xss-query-param + cors-reflect-origin on pwnshop.ctfsecurity.com",
-      "dangerous-html-sinks on ist-edu-bd.vercel.app (DVWU)",
-      "vibe-openapi-docs-exposed on urban-vampi-staging.up.railway.app"
+      "hack-this-site-eta.vercel.app: 6 findings — exposed-source-maps, graphql-introspection-enabled, vibe-unauthenticated-api-routes, robots-sensitive-paths",
+      "dangerous-html-sinks on secure-bank-bay.vercel.app and zero-health.vercel.app",
+      "csrf-xss-demo.vercel.app: misconfig only — no reflected-xss despite live XSS demo form"
     ],
     "learning_gaps": [
-      "idor-website.vercel.app: 0/1 IDOR category hit (misconfig only)",
-      "vulnerable-web-site.vercel.app: no CSRF/SSRF/XSS slugs despite known vulns in README"
+      "csrf-xss-demo.vercel.app: no reflected-xss/CSRF slugs despite intentional XSS+CSRF demo UI",
+      "zero-health.vercel.app: no sqli/idor slugs despite README listing SQLi, IDOR, command injection",
+      "secure-bank-bay.vercel.app: no sqli/csrf slugs despite attack-mode SQLi and CSRF in README"
     ],
     "unreachable_candidates": [
-      "pentest-forge.com lab targets (502)",
+      "pentest-forge.com lab subdomains (502)",
+      "testphp.vulnweb.com / testhtml5.vulnweb.com (DNS fail from cloud)",
       "dvai-red.vercel.app (404)"
     ]
   },
@@ -104,6 +91,11 @@
     "pwnshop.ctfsecurity.com": 6,
     "idor-website.vercel.app": 2,
     "vulnerable-web-site.vercel.app": 2,
-    "urban-vampi-staging.up.railway.app": 2
+    "urban-vampi-staging.up.railway.app": 2,
+    "secure-bank-bay.vercel.app": 3,
+    "owaspbased-lessons.vercel.app": 1,
+    "hack-this-site-eta.vercel.app": 6,
+    "zero-health.vercel.app": 3,
+    "csrf-xss-demo.vercel.app": 2
   }
 }
