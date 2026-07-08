@@ -4,6 +4,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "sql-error-disclosure": ["sqli"],
   "unauthenticated-admin-endpoint": ["auth_bypass"],
   "dangerous-html-sinks": ["xss"],
+  "dom-eval-xss": ["xss"],
   "idor-sequential-ids": ["idor"],
   "spring-boot-actuator-exposed": ["misconfig"],
   "vibe-unauthenticated-api-routes": ["idor", "sensitive_data"]
