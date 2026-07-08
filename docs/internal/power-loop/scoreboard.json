@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T06:06:00.000Z",
+  "updated_at": "2026-07-08T06:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 86,
-  "total_findings": 341,
+  "total_sites_scanned": 91,
+  "total_findings": 353,
   "critical_findings": 13,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 46,
-  "discovery_findings": 171,
+  "discovery_urls_added": 51,
+  "discovery_findings": 183,
   "improvements_shipped": 24,
-  "last_run": "2026-07-08T06:06:00.000Z",
+  "last_run": "2026-07-08T06:08:00.000Z",
   "last_run_summary": {
     "hour_utc": "06:00",
     "benchmark": {
@@ -39,8 +39,28 @@
         }
       }
     },
+    "discovery_new": 5,
+    "discovery_findings_new": 12,
+    "skipped_rescan_48h": 46,
     "teacher_delta": "skipped — no nuclei/engine",
     "improvements_this_run": 3,
+    "discovery_highlights_new": {
+      "ashimkoirala.github.io/HackLab": 3,
+      "vulnweb.netlify.app": 3,
+      "web-pentest-playground.onrender.com": 1,
+      "cyberdesserts.github.io/cookiejar-lab/demo": 2,
+      "tempehs.github.io/The_Unsecure_PWA": 3
+    },
+    "notable_findings": [
+      "tempehs.github.io/The_Unsecure_PWA: secret-resend in client bundle on education PWA",
+      "vulnweb.netlify.app: client-side-sql-evidence + dangerous-html-sinks on OWASP Top 10 demo",
+      "ashimkoirala.github.io/HackLab: client-side-idor-evidence in single-file browser sandbox"
+    ],
+    "learning_gaps": [
+      "web-pentest-playground.onrender.com: only misconfig headers — SQLi/XSS/IDOR labs not reached (Render cold start / shallow crawl)",
+      "cyberdesserts.github.io/cookiejar-lab/demo: static walkthrough only; no session-hijack slugs on demo HTML",
+      "ashimkoirala.github.io/HackLab: no sql-error-disclosure or reflected-xss despite in-browser SQLi/XSS simulators"
+    ],
     "learning_gaps_closed": [
       "swarnadip-kar.github.io/xss-victim: dangerous-html-sinks via subpath crawl + URLSearchParams innerHTML (2→3)",
       "vulnshop.vercel.app: cross-origin Railway API debug routes + JSON SQL syntax error (2→4)"
@@ -92,6 +112,11 @@
     "swarnadip-kar.github.io/xss-victim": 3,
     "playground.fabraix.com": 1,
     "dvwa.vercel.app": 2,
-    "vulnshop.vercel.app": 4
+    "vulnshop.vercel.app": 4,
+    "ashimkoirala.github.io/HackLab": 3,
+    "vulnweb.netlify.app": 3,
+    "web-pentest-playground.onrender.com": 1,
+    "cyberdesserts.github.io/cookiejar-lab/demo": 2,
+    "tempehs.github.io/The_Unsecure_PWA": 3
   }
 }

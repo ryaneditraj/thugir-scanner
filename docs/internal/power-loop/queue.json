@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T05:06:00.000Z",
+  "updated_at": "2026-07-08T06:08:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -230,6 +230,31 @@
       "url": "https://vulnshop.vercel.app/",
       "source": "VulnShop intentionally vulnerable e-commerce pentest practice lab (public Vercel deploy)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ashimkoirala.github.io/HackLab/",
+      "source": "AshimKoirala/HackLab OSS — zero-dependency browser sandbox for SQLi, XSS, broken auth, IDOR (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnweb.netlify.app/",
+      "source": "VulnWeb intentionally vulnerable OWASP Top 10 demo (Netlify deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/",
+      "source": "Adarsh-S-R/web-pentest-playground OSS — SQLi, IDOR, XSS, open redirect, file upload (Render deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cyberdesserts.github.io/cookiejar-lab/demo/",
+      "source": "CyberDesserts/cookiejar-lab OSS — session hijack / cookie security interactive demo (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://tempehs.github.io/The_Unsecure_PWA/",
+      "source": "tempehs/The_Unsecure_PWA OSS — unsecure-by-design PWA for web security education (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ]
 }
