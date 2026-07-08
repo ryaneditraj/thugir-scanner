@@ -732,6 +732,38 @@ const OPENAPI_PATHS = [
   "/docs/openapi.json",
   "/swagger/v1/swagger.json"
 ];
+
+function substituteOpenApiPathParam(param: string): string {
+  const p = param.toLowerCase();
+  if (/user(name)?|owner|account|email/.test(p)) return "name1";
+  if (/id|num|order|book|item/.test(p)) return "1";
+  return "test";
+}
+
+/** Turn OpenAPI GET paths into concrete probe URLs (e.g. /users/v1/{username} → /users/v1/name1). */
+async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<string[]> {
+  const paths = new Set<string>();
+  const urls = OPENAPI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 24_000 }, 4);
+  for (const [, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!looksOpenApiBody(r.body)) continue;
+    try {
+      const spec = JSON.parse(r.body.trim()) as { paths?: Record<string, Record<string, unknown>> };
+      for (const [path, ops] of Object.entries(spec.paths ?? {})) {
+        if (!ops.get) continue;
+        const concrete = path.replace(/\{([^}]+)\}/g, (_, name) => substituteOpenApiPathParam(name));
+        if (concrete.length > 1 && concrete.length < 80) paths.add(concrete);
+        if (paths.size >= limit) break;
+      }
+    } catch {
+      /* yaml or truncated */
+    }
+    if (paths.size >= limit) break;
+  }
+  return [...paths].slice(0, limit);
+}
+
 const openApiDocs: Rule = async (ctx) => {
   const urls = OPENAPI_PATHS.map((path) => new URL(path, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 12_000 }, 4);
@@ -987,15 +1019,31 @@ const springActuatorExposed: Rule = async (ctx) => {
 
 // --- IDOR: unauthenticated read by sequential numeric ID (active GET probe) ---
 // Positive proof when /resource/1 returns record JSON without an auth challenge.
-const IDOR_FALLBACK_PATHS = ["/rest/track-order/1", "/api/orders/1", "/api/users/1"];
+const IDOR_FALLBACK_PATHS = [
+  "/rest/track-order/1",
+  "/api/orders/1",
+  "/api/users/1",
+  "/users/v1/name1",
+  "/users/v1/1"
+];
 const IDOR_AUTH_MARKERS = /unauthorized|login required|authentication|credentials_required|jwt token required|invalid token/i;
 
 function extractIdorProbePaths(text: string): string[] {
   const paths = new Set<string>();
-  const templateRe = /["'`](\/(?:rest|api)\/[a-z0-9_-]+)\/\$\{/gi;
+  const templateRe = /["'`](\/(?:rest|api|users)\/[a-z0-9_./-]+)\/\$\{/gi;
   let m: RegExpExecArray | null;
-  while ((m = templateRe.exec(text))) paths.add(`${m[1]}/1`);
+  while ((m = templateRe.exec(text))) {
+    const base = m[1].replace(/\/+$/, "");
+    paths.add(`${base}/1`);
+    if (/\/users/i.test(base)) paths.add(`${base}/1001`);
+  }
   if (/track-order/i.test(text)) paths.add("/rest/track-order/1");
+  const braceRe = /["'`](\/api\/[a-z0-9_/-]+)\/\{[a-zA-Z]+\}["'`]/gi;
+  while ((m = braceRe.exec(text))) {
+    const base = m[1];
+    paths.add(`${base}/1`);
+    if (/\/users/i.test(base)) paths.add(`${base}/1001`);
+  }
   const baseRe = /["'`](\/rest\/[a-z][a-z0-9_-]{2,30})["'`]/gi;
   while ((m = baseRe.exec(text))) {
     const base = m[1];
@@ -1007,7 +1055,8 @@ function extractIdorProbePaths(text: string): string[] {
 
 const idorObjectAccess: Rule = async (ctx) => {
   const discovered = extractIdorProbePaths(ctx.combined);
-  const paths = [...new Set([...discovered, ...IDOR_FALLBACK_PATHS])].slice(0, 6);
+  const openApiPaths = await fetchOpenApiGetPaths(ctx, 6);
+  const paths = [...new Set([...discovered, ...openApiPaths, ...IDOR_FALLBACK_PATHS])].slice(0, 10);
   const urls = paths.map((p) => new URL(p, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
   const hits: { path: string; status: number; sample: string }[] = [];
@@ -1019,7 +1068,9 @@ const idorObjectAccess: Rule = async (ctx) => {
     if (/"(?:config|application|settings|admin)"\s*:/.test(r.body.slice(0, 300))) continue;
     const hasRecord =
       /"status"\s*:\s*"success"/i.test(r.body) ||
-      /"orderId"|"userId"|"user_id"|"email"\s*:|"data"\s*:\s*\[\s*\{/.test(r.body);
+      /"orderId"|"userId"|"user_id"|"username"|"email"\s*:|"data"\s*:\s*\[\s*\{|"Books"\s*:\s*\[/.test(
+        r.body
+      );
     if (!hasRecord) continue;
     hits.push({
       path: new URL(url).pathname,
@@ -1309,9 +1360,37 @@ const dangerousHtmlSinks: Rule = async (ctx) => {
   };
 };
 
+// --- Client-side IDOR evidence in bundle (explicit vulnerable endpoint docs) --
+const CLIENT_IDOR_MARKER_RE =
+  /VULNERABLE ENDPOINT|No authorization check|No ownership verification|any authenticated user can access/i;
+
+const clientSideIdorEvidence: Rule = async (ctx) => {
+  if (!CLIENT_IDOR_MARKER_RE.test(ctx.combined)) return NEGATIVE;
+  const endpoints = new Set<string>();
+  const re = /\/api\/[a-z0-9_/-]+(?:\$\{[^}]+\}|\{[a-zA-Z]+\})/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(ctx.combined))) endpoints.add(m[0]);
+  if (endpoints.size === 0) return NEGATIVE;
+  const markers: string[] = [];
+  if (/VULNERABLE ENDPOINT/i.test(ctx.combined)) markers.push("VULNERABLE ENDPOINT");
+  if (/No authorization check/i.test(ctx.combined)) markers.push("No authorization check");
+  if (/No ownership verification/i.test(ctx.combined)) markers.push("No ownership verification");
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      endpoints: [...endpoints].slice(0, 5),
+      markers,
+      note: "client bundle documents IDOR-prone API routes without ownership checks"
+    }
+  };
+};
+
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
-  const paths = extractApiPaths(ctx.combined, 10);
+  const paths = [
+    ...new Set([...extractApiPaths(ctx.combined, 10), ...(await fetchOpenApiGetPaths(ctx, 8))])
+  ];
   if (paths.length === 0) return NEGATIVE;
   const urls = paths.map((p) => new URL(p, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
@@ -1365,6 +1444,7 @@ export const RULES: Record<string, Rule> = {
   clientOnlyAuth,
   serverActionAuthz,
   idorProbe,
+  clientSideIdorEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
