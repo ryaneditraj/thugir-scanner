@@ -1948,8 +1948,44 @@ const SSRF_GET_PATHS = [
   "/api/metadata"
 ];
 const SSRF_GET_PARAMS = ["url", "target", "link", "uri", "dest"];
-const SSRF_POST_PATHS = ["/api/fetch", "/api/proxy", "/api/url", "/api/ssrf", "/api/render", "/api/metadata"];
-const SSRF_POST_FIELDS = ["url", "target", "link", "uri"];
+const SSRF_POST_PATHS = [
+  "/api/fetch",
+  "/api/proxy",
+  "/api/url",
+  "/api/ssrf",
+  "/api/render",
+  "/api/metadata",
+  "/workshop/api/merchant/contact_mechanic"
+];
+const SSRF_POST_FIELDS = ["url", "target", "link", "uri", "mechanic_api"];
+const API_LAB_DEMO_CREDS = [{ email: "test@test.com", password: "Test123!" }];
+const API_LAB_LOGIN_PATHS = ["/identity/api/auth/login", "/api/auth/login", "/api/login"];
+
+function looksLikeApiSecurityLab(combined: string): boolean {
+  return (
+    /completely ridiculous API\s*\(crAPI\)/i.test(combined) ||
+    (/BOLA/i.test(combined) && /BFLA/i.test(combined) && /OWASP.*API.*Top\s*10/i.test(combined)) ||
+    (/identity\/api/i.test(combined) && /workshop\/api/i.test(combined))
+  );
+}
+
+async function tryApiLabJwt(ctx: RuleContext): Promise<string | null> {
+  for (const path of API_LAB_LOGIN_PATHS) {
+    for (const creds of API_LAB_DEMO_CREDS) {
+      const url = new URL(path, ctx.origin).toString();
+      const r = await ctx.probe.get(url, {
+        method: "POST",
+        body: JSON.stringify(creds),
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 4096
+      });
+      if (r.status < 200 || r.status >= 300) continue;
+      const m = r.body.match(/"token"\s*:\s*"(eyJ[^"]+)"/);
+      if (m) return m[1];
+    }
+  }
+  return null;
+}
 
 function extractSsrfPaths(text: string): string[] {
   const paths = new Set<string>();
@@ -2004,7 +2040,12 @@ const ssrfEndpointProbe: Rule = async (ctx) => {
   for (const path of postPaths) {
     for (const field of SSRF_POST_FIELDS) {
       const url = new URL(path, ctx.origin).toString();
-      const body = JSON.stringify({ [field]: SSRF_CANARY_URL });
+      const payload: Record<string, unknown> = { [field]: SSRF_CANARY_URL };
+      if (field === "mechanic_api") {
+        payload.repeat_request_if_failed = true;
+        payload.number_of_repeats = 1;
+      }
+      const body = JSON.stringify(payload);
       const r = await ctx.probe.get(url, {
         method: "POST",
         body,
@@ -2026,6 +2067,53 @@ const ssrfEndpointProbe: Rule = async (ctx) => {
           note: "POST body URL fetched server-side and echoed — server-side request forgery likely"
         }
       };
+    }
+  }
+
+  // crAPI / OWASP API labs gate SSRF behind JWT — try benign demo login then re-probe.
+  if (looksLikeApiSecurityLab(ctx.combined)) {
+    const jwt = await tryApiLabJwt(ctx);
+    if (jwt) {
+      const authPaths = [
+        "/workshop/api/merchant/contact_mechanic",
+        ...postPaths.filter((p) => /workshop|merchant|contact/i.test(p))
+      ];
+      for (const path of [...new Set(authPaths)].slice(0, 4)) {
+        for (const field of SSRF_POST_FIELDS) {
+          const url = new URL(path, ctx.origin).toString();
+          const payload: Record<string, unknown> = { [field]: SSRF_CANARY_URL };
+          if (field === "mechanic_api") {
+            payload.repeat_request_if_failed = true;
+            payload.number_of_repeats = 1;
+          }
+          const body = JSON.stringify(payload);
+          const r = await ctx.probe.get(url, {
+            method: "POST",
+            body,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jwt}`
+            },
+            maxBytes: 16_384,
+            redirect: "manual"
+          });
+          if (r.status < 200 || r.status >= 300) continue;
+          if (!bodyReflectsSsrfCanary(r.body)) continue;
+          return {
+            fired: true,
+            confidence: 0.92,
+            evidence: {
+              url,
+              method: "POST",
+              field,
+              status: r.status,
+              authenticated: true,
+              snippet: r.body.slice(0, 180).trim(),
+              note: "authenticated API lab endpoint fetched attacker URL server-side — SSRF confirmed"
+            }
+          };
+        }
+      }
     }
   }
   return NEGATIVE;
@@ -2273,6 +2361,18 @@ const HIDDEN_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Zero-width Unicode smuggled in HTML text",
     re: /(?:&#x200[bcdBCD];|&#820[345];|&#65279;){2,}/
+  },
+  {
+    label: "ai-instructions meta tag for AI agents",
+    re: /<meta\s+name=["']ai-instructions["']\s+content=["'][^"']{20,}/i
+  },
+  {
+    label: "AI agent honeypot security resilience tests",
+    re: /AI agent security research[\s\S]{0,200}security resilience tests/i
+  },
+  {
+    label: "AgentPwn distributed honeypot network",
+    re: /distributed honeypot network[\s\S]{0,120}AI agents/i
   }
 ];
 
@@ -2397,6 +2497,18 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
     label: "Vulnerable API lab BOLA tag",
     re: />\s*BOLA\s*<|BOLA<\/span>/i
+  },
+  {
+    label: "crAPI intentionally vulnerable API lab",
+    re: /completely ridiculous API\s*\(crAPI\)/i
+  },
+  {
+    label: "crAPI meta keywords BOLA + BFLA + OWASP API Top 10",
+    re: /BOLA[\s,]+IDOR[\s,]+BFLA[\s\S]{0,120}OWASP[\s,]+API[\s,]+Top\s*10/i
+  },
+  {
+    label: "crAPI microservice API prefixes in bundle",
+    re: /["']identity\/["'][\s\S]{0,400}["']workshop\/["']/i
   }
 ];
 

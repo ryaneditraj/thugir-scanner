@@ -371,6 +371,24 @@
       "slug": "client-side-api-security-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: OWASP API Security Top 10 (2023) + Broken Object Level Authorization (BOLA) + deliberately vulnerable RESTful API; yusufarbc.github.io/apigoat 2→3, lab.pentest-forge.com 1→2"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "client-side-api-security-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta keywords BOLA+IDOR+BFLA+OWASP API Top 10 + identity/workshop microservice prefixes in bundle; crapi2.apisec.ai findings 4→6"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "ssrf-endpoint-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /workshop/api/merchant/contact_mechanic with mechanic_api=http://example.com after demo JWT login returns response_from_mechanic_api with Example Domain HTML; crapi2.apisec.ai findings 4→6"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "hidden-prompt-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta name=ai-instructions honeypot + distributed honeypot network studying AI agents in HTML; agentpwn.com findings 4→5"
     }
   ],
   "shipped": [
@@ -678,6 +696,21 @@
       "source": "discovery:yusufarbc.github.io/apigoat",
       "slug": "client-side-api-security-lab-evidence",
       "shipped_at": "2026-07-08T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "client-side-api-security-lab-evidence",
+      "shipped_at": "2026-07-08T20:05:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "ssrf-endpoint-fetch",
+      "shipped_at": "2026-07-08T20:05:00.000Z"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "hidden-prompt-injection",
+      "shipped_at": "2026-07-08T20:05:00.000Z"
     }
   ]
 }
