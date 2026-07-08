@@ -795,6 +795,16 @@ values
    'free',
    '{"summary":"Keep privileged credentials server-side only.","steps":["Audit VITE_/NEXT_PUBLIC_ usage.","Rotate any leaked credential."]}'::jsonb,
    'My Windsurf-built app may expose secrets via public env prefixes. Find them, move them server-side, and list rotations needed.',
+   true),
+  ('client-side-prompt-injection-evidence', 'generic', 'AI security', 'medium',
+   'Prompt-injection red-team or scanner functionality in client bundle',
+   'The shipped JavaScript or SSR HTML documents prompt-injection attack tooling — adversarial prompt scanners, AI defender challenges, or exposed system-prompt UI.',
+   'Client exposes prompt-injection attack UX or system prompts — LLM guardrails may be bypassable.',
+   'rule_ref',
+   '{"rule":"clientSidePromptInjectionEvidence"}'::jsonb,
+   'deep',
+   '{"summary":"Treat LLM inputs as untrusted; never expose system prompts; rate-limit adversarial probes.","steps":["Remove system-prompt disclosure from client-visible UI and bundles.","Add input/output guardrails and logging for jailbreak attempts.","Rate-limit chat endpoints in production."]}'::jsonb,
+   'My app ships prompt-injection red-team UI (adversarial prompts, systemPrompt display). Remove system-prompt leakage from the client and add server-side guardrails on chat inputs.',
    true)
 on conflict (slug) do update set
   platform = excluded.platform,

@@ -868,5 +868,31 @@ export const genericPatterns: Pattern[] = [
       "My site (or a page we ingest) has hidden prompt-injection vectors in the HTML source — comments, display:none instructions, data-system-prompt, or zero-width Unicode. Show how to strip these before any AI agent reads the page, and add detection in our content pipeline.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-prompt-injection-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Prompt-injection red-team or scanner functionality in client bundle",
+    description:
+      "The shipped JavaScript or SSR HTML documents prompt-injection attack tooling — adversarial prompt scanners, AI defender challenges, or exposed system-prompt UI. These apps are intentional red-team surfaces; production chatbots with similar patterns risk LLM abuse.",
+    impactOneline:
+      "Client exposes prompt-injection attack UX or system prompts — LLM guardrails may be bypassable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePromptInjectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat LLM inputs as untrusted; never expose system prompts; rate-limit and monitor adversarial probes.",
+      steps: [
+        "Remove system-prompt disclosure from client-visible UI and bundles.",
+        "Add input/output guardrails and logging for jailbreak / injection attempts.",
+        "Rate-limit chat endpoints and block automated adversarial prompt scanners in production."
+      ]
+    },
+    fixPrompt:
+      "My app ships prompt-injection red-team UI (adversarial prompts, systemPrompt display, attack pool). Remove system-prompt leakage from the client, add server-side guardrails on chat inputs, and show how to detect automated prompt-injection probes.",
+    version: 1,
+    enabled: true
   }
 ];

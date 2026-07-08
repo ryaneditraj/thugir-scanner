@@ -252,7 +252,14 @@ const OPEN_REDIRECT_PARAMS = [
   "callback",
   "forward"
 ];
-const OPEN_REDIRECT_FALLBACK_PATHS = ["/", "/login", "/logout", "/signin", "/auth/login"];
+const OPEN_REDIRECT_FALLBACK_PATHS = [
+  "/",
+  "/login",
+  "/logout",
+  "/signin",
+  "/auth/login",
+  "/redirect"
+];
 
 function resolvesToOpenRedirectProbe(location: string, baseOrigin: string): boolean {
   if (!location.trim()) return false;
@@ -272,7 +279,10 @@ function extractOpenRedirectPaths(text: string): string[] {
     const p = m[1].split("?")[0];
     if (/redirect|return|callback|logout|signin|continue|oauth/i.test(p)) paths.add(p);
   }
-  if (/redirect/i.test(text)) paths.add("/redirect/parameter");
+  if (/redirect/i.test(text)) {
+    paths.add("/redirect");
+    paths.add("/redirect/parameter");
+  }
   return [...paths].slice(0, 6);
 }
 
@@ -1954,6 +1964,53 @@ const unauthenticatedApiRoutes: Rule = async (ctx) => {
   };
 };
 
+// --- Client-side prompt-injection lab / scanner evidence in bundle ------------
+// Detects intentional AI red-team UIs (Fabraix Playground, agent/probe, etc.) from
+// shipped JS or SSR HTML — positive proof the app trains or automates prompt attacks.
+const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Prompt injection red-team lab instructions",
+    re: /Use prompt injection, social engineering/i
+  },
+  {
+    label: "AI agent defender challenge UI",
+    re: /agent guarded by a defender/i
+  },
+  {
+    label: "Adversarial chatbot prompt scanner",
+    re: /(?:Sends )?adversarial prompts to chatbots/i
+  },
+  {
+    label: "Prompt injection scanner product description",
+    re: /prompt injection vulnerabilities in any website/i
+  },
+  {
+    label: "Prompt attack research pool",
+    re: /\d+-attack (?:research )?pool/i
+  },
+  {
+    label: "Exposed system prompt in client UI",
+    re: /(?:systemPrompt|Defender system prompt)/i
+  }
+];
+
+const clientSidePromptInjectionEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PROMPT_INJECTION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.84,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle or page documents prompt-injection red-team / scanner functionality — LLM abuse surface likely"
+    }
+  };
+};
+
 // --- Hidden prompt-injection vectors in HTML (AI agent / scraper attacks) -----
 // Detects instructions smuggled into page source via comments, hidden elements, data
 // attributes, and zero-width Unicode — positive proof from raw HTML, not rendered view.
@@ -2051,7 +2108,8 @@ export const RULES: Record<string, Rule> = {
   domEvalXss,
   springActuatorExposed,
   idorObjectAccess,
-  hiddenPromptInjection
+  hiddenPromptInjection,
+  clientSidePromptInjectionEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
