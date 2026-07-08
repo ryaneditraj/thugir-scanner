@@ -3,6 +3,9 @@
 const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "sql-error-disclosure": ["sqli"],
   "client-side-sql-evidence": ["sqli"],
+  "client-side-nosql-evidence": ["sqli"],
+  "client-side-xxe-evidence": ["sqli"],
+  "client-side-api-security-lab-evidence": ["idor", "auth_bypass"],
   "unauthenticated-admin-endpoint": ["auth_bypass"],
   "dangerous-html-sinks": ["xss"],
   "dom-eval-xss": ["xss"],
