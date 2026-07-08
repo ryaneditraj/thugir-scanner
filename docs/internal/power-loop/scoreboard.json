@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T09:14:20.891Z",
+  "updated_at": "2026-07-08T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 108,
-  "total_findings": 419,
+  "total_sites_scanned": 109,
+  "total_findings": 426,
   "critical_findings": 14,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 66,
   "discovery_findings": 214,
-  "improvements_shipped": 33,
-  "last_run": "2026-07-08T09:14:20.891Z",
+  "improvements_shipped": 36,
+  "last_run": "2026-07-08T10:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -42,24 +42,20 @@
     },
     "teacher_delta": "skipped — no nuclei/engine",
     "discovery": {
-      "urls_added": 5,
-      "scanned_ok": 2,
-      "findings": 6,
-      "errors": [
-        "testphp.vulnweb.com: DNS fail",
-        "testhtml5.vulnweb.com: DNS fail",
-        "vulnweb.com: connection reset"
+      "improvements": [
+        "vulnbank.org: vibe-openapi-docs-exposed via /static/openapi.json (3→4 findings)",
+        "riglabs-cyber-lab.vercel.app: client-side-sql-evidence from SQLi training module (3→4 findings)",
+        "vulnbank.org: dangerous-html-sinks extended for getElementById().innerHTML = data.message"
       ]
     },
-    "notable_findings": [
-      "vulnbank.org: dangerous-html-sinks in intentionally insecure banking SPA (3 findings)",
-      "riglabs-cyber-lab.vercel.app: dangerous-html-sinks on SQLi/XSS training modules (3 findings)"
-    ],
     "learning_gaps": [
-      "Acunetix vulnweb.com family unreachable from scan env (DNS/connection reset) — retry with https or alternate egress",
-      "riglabs-cyber-lab: module labs locked behind client-side progress — sqli/xss slugs may need deeper route crawl"
+      "Acunetix vulnweb.com family unreachable from scan env (DNS/connection reset)",
+      "riglabs-cyber-lab: locked module routes still client-side only — deeper SPA route extraction optional"
     ],
-    "learning_gaps_closed": []
+    "learning_gaps_closed": [
+      "vulnbank OpenAPI at /static/openapi.json missed by fixed /openapi.json probe list",
+      "riglabs SQLi training module markers not matched by clientSideSqlEvidence regex set"
+    ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -123,7 +119,7 @@
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
     "cyber-ctf-website.vercel.app": 1,
-    "vulnbank.org": 3,
-    "riglabs-cyber-lab.vercel.app": 3
+    "vulnbank.org": 4,
+    "riglabs-cyber-lab.vercel.app": 4
   }
 }
