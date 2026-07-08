@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T19:12:00.000Z",
+  "updated_at": "2026-07-08T20:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,79 +15,34 @@
       ]
     }
   },
-  "total_sites_scanned": 176,
-  "total_findings": 667,
+  "total_sites_scanned": 178,
+  "total_findings": 681,
   "critical_findings": 18,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 96,
   "discovery_findings": 356,
-  "improvements_shipped": 60,
-  "last_run": "2026-07-08T19:12:00.000Z",
+  "improvements_shipped": 64,
+  "last_run": "2026-07-08T20:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 — sql-error-disclosure, idor-sequential-ids, unauthenticated-admin-endpoint, dangerous-html-sinks all hit",
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      }
+      "note": "Benchmark recall stable at 6/6 — no benchmark misses this run"
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 4,
-      "urls_error": 4,
-      "findings": 17,
-      "new_urls": [
-        "http://crapi2.apisec.ai",
-        "https://agentpwn.com",
-        "http://testhtml5.vulnweb.com",
-        "https://labs.hackadvisor.io",
-        "https://sixhackacademy.com/en/ctf-labs/"
-      ],
       "improvements": [
-        "nosql-injection-lab.vercel.app: 2→3 (client-side-nosql-evidence)",
-        "xxe-lab.vercel.app: adds client-side-xxe-evidence (ENTITY file:///etc/passwd)",
-        "yusufarbc.github.io/apigoat: 2→3 + lab.pentest-forge.com: 1→2 (client-side-api-security-lab-evidence)"
+        "crapi2.apisec.ai: 4→6 (client-side-api-security-lab-evidence + ssrf-endpoint-fetch via JWT-assisted contact_mechanic probe)",
+        "agentpwn.com: 4→5 (hidden-prompt-injection via ai-instructions meta honeypot)"
       ]
     },
-    "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings)",
-      "crapi2.apisec.ai: exposed-env-file critical + dangerous-html-sinks (4 findings)",
-      "labs.hackadvisor.io: reflected-xss-query-param + secret-resend (7 findings)",
-      "agentpwn.com: vibe-sitemap-sensitive-paths + dangerous-html-sinks (4 findings)",
-      "xxe-lab.vercel.app: XXE external entity file:// payload detected in bundle",
-      "yusufarbc.github.io/apigoat: OWASP API Top 10 BOLA lab markers confirmed"
-    ],
-    "learning_gaps": [
-      "crapi2.apisec.ai: OWASP API Top 10 BOLA/JWT/SSRF challenges not probed — only surface misconfig/secrets",
-      "sixhackacademy.com/ctf-labs: landing page shallow (2 findings, headers only) — per-challenge instances need auth/deeper crawl",
-      "agentpwn.com: 48 prompt-injection payloads not exercised without agent browse flow",
-      "nosql-injection-lab.vercel.app: intermittently behind Vercel Security Checkpoint",
-      "api-goat.vercel.app: placeholder JSON endpoint, not the APIGoat lab",
-      "testhtml5.vulnweb.com + testphp.vulnweb.com + demo.securityknowledgeframework.org + bugbait.io: unreachable from cloud scan env"
-    ],
     "learning_gaps_closed": [
-      "nosql-injection-lab.vercel.app: NoSQL findOne + $gt operator injection markers",
-      "xxe-lab.vercel.app: XXE external entity file:// payload documentation",
-      "yusufarbc.github.io/apigoat + lab.pentest-forge.com: OWASP API Top 10 BOLA/BFLA lab markers"
+      "crapi2.apisec.ai: crAPI meta BOLA/BFLA markers + authenticated SSRF on /workshop/api/merchant/contact_mechanic",
+      "agentpwn.com: ai-instructions meta tag honeypot for AI agent security research"
     ]
   },
   "discovery_highlights": {
