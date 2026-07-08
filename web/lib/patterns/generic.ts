@@ -535,6 +535,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dom-eval-xss",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DOM XSS via eval() on user input",
+    description:
+      "The shipped JavaScript passes DOM input (getElementById/querySelector .value) directly to eval() or new Function(). Any attacker-controlled string executes as code in the victim's browser.",
+    impactOneline: "User input is executed via eval() — full session compromise via crafted input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domEvalXss" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove eval() and new Function() on any user-influenced string.",
+      steps: [
+        "Delete eval()/new Function() calls that read from DOM inputs.",
+        "Parse structured data with JSON.parse and validate with a schema.",
+        "Render user content as text, never as executable code."
+      ]
+    },
+    fixPrompt:
+      "My client bundle calls eval() or new Function() on DOM input (.value from getElementById/querySelector). Remove dynamic code execution, parse input safely, and show the fixed handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "open-redirect-query-param",
     platform: "generic",
     category: "Broken access control",

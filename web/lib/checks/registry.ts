@@ -1322,6 +1322,39 @@ function scanDangerousHtmlSinks(text: string): { label: string; sample: string }
   return hits;
 }
 
+// --- DOM XSS via eval() on user-controlled input --------------------------------
+const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "eval() on getElementById/querySelector .value",
+    re: /eval\s*\(\s*(?:document\.)?(?:getElementById|querySelector|getElementsByName)\([^)]{0,80}\)\.value/
+  },
+  {
+    label: "eval() on input/textarea .value",
+    re: /eval\s*\(\s*(?:document\.)?(?:getElementById|querySelector)\([^)]{0,80}\)\.(?:value|innerHTML)/
+  },
+  {
+    label: "new Function() on DOM .value",
+    re: /new\s+Function\s*\(\s*(?:document\.)?(?:getElementById|querySelector)\([^)]{0,80}\)\.value/
+  }
+];
+
+const domEvalXss: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of DOM_EVAL_XSS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      sinks: hits.slice(0, 3),
+      note: "client bundle passes DOM user input to eval() — DOM XSS is trivial"
+    }
+  };
+};
+
 const dangerousHtmlSinks: Rule = async (ctx) => {
   let hits = scanDangerousHtmlSinks(ctx.combined);
 
@@ -1450,6 +1483,7 @@ export const RULES: Record<string, Rule> = {
   sqlErrorDisclosure,
   unauthenticatedAdminEndpoint,
   dangerousHtmlSinks,
+  domEvalXss,
   springActuatorExposed,
   idorObjectAccess
 };
@@ -1487,5 +1521,6 @@ export const FREE_RULES = new Set([
   "nextDataSensitiveKeys",
   "unauthenticatedAdminEndpoint",
   "dangerousHtmlSinks",
+  "domEvalXss",
   "springActuatorExposed"
 ]);

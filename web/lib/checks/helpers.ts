@@ -71,5 +71,13 @@ export function looksOpenApiBody(body: string): boolean {
 export const HARDCODED_CRED_RES = [
   { label: "default admin password", re: /["']password["']\s*:\s*["'](?:admin|password|123456|12345678|test|secret)['"]/i },
   { label: "hardcoded admin username", re: /["']username["']\s*:\s*["']admin['"]/i },
-  { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i }
+  { label: "demo account email", re: /["'][a-z]*(?:email|user(?:name)?)["']\s*:\s*["'](?:demo|test|admin)@[^"']+["']/i },
+  {
+    label: "inline admin/password login check",
+    re: /["']admin["']\s*===\s*\w+\s*&&\s*["']password["']\s*===\s*\w+/i
+  },
+  {
+    label: "inline password literal comparison",
+    re: /["']password["']\s*===\s*["'](?:admin|password|123456|12345678|test|secret)['"]/i
+  }
 ];
