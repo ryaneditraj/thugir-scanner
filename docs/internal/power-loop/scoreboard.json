@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T09:10:23.589Z",
+  "updated_at": "2026-07-08T09:14:20.891Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 106,
-  "total_findings": 413,
+  "total_sites_scanned": 108,
+  "total_findings": 419,
   "critical_findings": 14,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 61,
-  "discovery_findings": 208,
+  "discovery_urls_added": 66,
+  "discovery_findings": 214,
   "improvements_shipped": 33,
-  "last_run": "2026-07-08T09:10:23.589Z",
+  "last_run": "2026-07-08T09:14:20.891Z",
   "last_run_summary": {
     "hour_utc": "09:00",
     "benchmark": {
@@ -35,23 +35,31 @@
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
-          "gap": []
+          "gap": [],
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine",
-    "improvements_this_run": 3,
+    "discovery": {
+      "urls_added": 5,
+      "scanned_ok": 2,
+      "findings": 6,
+      "errors": [
+        "testphp.vulnweb.com: DNS fail",
+        "testhtml5.vulnweb.com: DNS fail",
+        "vulnweb.com: connection reset"
+      ]
+    },
     "notable_findings": [
-      "xss-payload-lab.vercel.app: dangerous-html-sinks from preview.innerHTML = comment + output.innerHTML = render(input) (2→3)",
-      "gauravkhurana.com/SQLInjection: client-side-sql-evidence from loginVulnerable WASM SQLite demo (5→6)",
-      "web-pentest-playground.onrender.com: unauthenticated-admin-endpoint on /admin HTML login panel (1→2)"
+      "vulnbank.org: dangerous-html-sinks in intentionally insecure banking SPA (3 findings)",
+      "riglabs-cyber-lab.vercel.app: dangerous-html-sinks on SQLi/XSS training modules (3 findings)"
     ],
-    "learning_gaps": [],
-    "learning_gaps_closed": [
-      "xss-payload-lab.vercel.app: dangerous-html-sinks for innerHTML render(input) educational XSS lab samples",
-      "gauravkhurana.com/SQLInjection: client-side-sql-evidence for inline loginVulnerable string-concat SQL",
-      "web-pentest-playground.onrender.com: exposed /admin HTML login panel via unauthenticatedAdminEndpoint probe"
-    ]
+    "learning_gaps": [
+      "Acunetix vulnweb.com family unreachable from scan env (DNS/connection reset) — retry with https or alternate egress",
+      "riglabs-cyber-lab: module labs locked behind client-side progress — sqli/xss slugs may need deeper route crawl"
+    ],
+    "learning_gaps_closed": []
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
@@ -114,6 +122,8 @@
     "gauravkhurana.com/SQLInjection": 6,
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
-    "cyber-ctf-website.vercel.app": 1
+    "cyber-ctf-website.vercel.app": 1,
+    "vulnbank.org": 3,
+    "riglabs-cyber-lab.vercel.app": 3
   }
 }
