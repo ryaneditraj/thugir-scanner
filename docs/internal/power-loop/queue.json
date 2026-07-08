@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-08T13:05:00.000Z",
+  "updated_at": "2026-07-08T13:07:40.592Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/",
+      "source": "web search — Damn Vulnerable Web University (OWASP Top 10 training)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web2-lab2-mck1.onrender.com/",
+      "source": "GitHub LovreMitrovic/web2-lab2 README live URL (XSS + poor access control)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://insecure-app.vercel.app/",
+      "source": "web search — Vite/React public demo app",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-ecommerce.vercel.app/",
+      "source": "web search — FakeShop PHP intentionally vulnerable e-commerce",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackable-web.vercel.app/",
+      "source": "web search — hackable.so social CTF (12 hidden vulns)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/",
       "source": "Bright Security Broken Crystals public OSS deploy (README)",

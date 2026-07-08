@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T07:06:38.924Z",
-  "total": 74,
-  "uniqueSlugs": 74,
+  "generatedAt": "2026-07-08T12:10:59.516Z",
+  "total": 79,
+  "uniqueSlugs": 79,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 56,
+    "generic": 61,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 61,
-    "deep": 13,
+    "deep": 18,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 13,
+    "Broken access control": 14,
     "Exposed secret": 14,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,16 +27,21 @@
     "Security misconfiguration": 6,
     "Information disclosure": 9,
     "Broken authentication": 4,
-    "Injection": 2,
+    "Injection": 4,
     "Cross-site scripting": 3,
+    "Server-side request forgery": 1,
+    "Sensitive data exposure": 1,
     "general": 16
   },
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "client-side-file-upload-evidence",
     "client-side-idor-evidence",
+    "client-side-prototype-pollution-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sql-evidence",
+    "client-side-ssrf-evidence",
     "cors-reflect-origin",
     "cursor-next-public-secret",
     "dangerous-html-sinks",
@@ -79,6 +84,8 @@
     "secret-stripe-restricted",
     "secret-supabase-service-role",
     "secret-twilio",
+    "sensitive-api-token-leakage",
+    "server-side-eval-evidence",
     "spring-boot-actuator-exposed",
     "sql-error-disclosure",
     "stack-cors-wildcard-api",

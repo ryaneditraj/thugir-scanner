@@ -730,8 +730,32 @@ const OPENAPI_PATHS = [
   "/api/openapi.json",
   "/v3/api-docs",
   "/docs/openapi.json",
-  "/swagger/v1/swagger.json"
+  "/swagger/v1/swagger.json",
+  "/static/openapi.json",
+  "/api/docs/openapi.json"
 ];
+
+/** Swagger UI embeds the spec URL in inline config (e.g. FastAPI /api/docs → /static/openapi.json). */
+function extractSwaggerUiOpenApiPaths(text: string): string[] {
+  const paths = new Set<string>();
+  const re = /["']url["']\s*:\s*["']([^"']*(?:openapi|swagger|api-docs)[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const raw = m[1].trim();
+    if (!raw) continue;
+    try {
+      const p = /^https?:\/\//i.test(raw) ? new URL(raw).pathname : raw.split("?")[0];
+      if (p.startsWith("/") && p.length < 120) paths.add(p);
+    } catch {
+      /* ignore malformed */
+    }
+  }
+  return [...paths];
+}
+
+function openApiProbePaths(ctx: RuleContext): string[] {
+  return [...new Set([...OPENAPI_PATHS, ...extractSwaggerUiOpenApiPaths(ctx.combined)])].slice(0, 14);
+}
 
 function substituteOpenApiPathParam(param: string): string {
   const p = param.toLowerCase();
@@ -743,7 +767,7 @@ function substituteOpenApiPathParam(param: string): string {
 /** Turn OpenAPI GET paths into concrete probe URLs (e.g. /users/v1/{username} → /users/v1/name1). */
 async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<string[]> {
   const paths = new Set<string>();
-  const urls = OPENAPI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const urls = openApiProbePaths(ctx).map((path) => new URL(path, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 24_000 }, 4);
   for (const [, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
@@ -765,7 +789,7 @@ async function fetchOpenApiGetPaths(ctx: RuleContext, limit = 10): Promise<strin
 }
 
 const openApiDocs: Rule = async (ctx) => {
-  const urls = OPENAPI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const urls = openApiProbePaths(ctx).map((path) => new URL(path, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 12_000 }, 4);
   for (const [url, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
@@ -1285,7 +1309,17 @@ const ADMIN_PROBE_PATHS = [
   "/api/admin/settings",
   "/admin/application-configuration"
 ];
+const ADMIN_HTML_LOGIN_PATHS = ["/admin", "/admin/"];
 const ADMIN_JSON_MARKERS = /"(?:config|admin|application|settings|server)"\s*:/;
+const ADMIN_HTML_LOGIN_MARKERS =
+  /(?:Admin Panel|Admin Login|administrator access|Secure administrator)/i;
+
+function isExposedAdminLoginHtml(body: string): boolean {
+  if (!ADMIN_HTML_LOGIN_MARKERS.test(body)) return false;
+  if (!/<input[^>]+type=["']password["']/i.test(body)) return false;
+  if (/oauth|sso|saml|sign in with/i.test(body.slice(0, 1200))) return false;
+  return true;
+}
 
 const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   const urls = ADMIN_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
@@ -1305,6 +1339,23 @@ const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
       }
     };
   }
+
+  const htmlUrls = ADMIN_HTML_LOGIN_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const htmlDocs = await ctx.probe.getMany(htmlUrls, { maxBytes: 8192 }, 2);
+  for (const [url, r] of htmlDocs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!isExposedAdminLoginHtml(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url,
+        snippet: r.body.slice(0, 200).trim(),
+        note: "admin login panel reachable without prior authentication redirect"
+      }
+    };
+  }
+
   return NEGATIVE;
 };
 
@@ -1353,6 +1404,46 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "innerHTML template literal with user input variable",
     re: /\.innerHTML\s*=\s*`[^`]{0,300}\$\{(?:escapeHtmlDisplay\()?input\b/
+  },
+  {
+    label: "innerHTML += user command/input variable",
+    re: /\.innerHTML\s*\+=\s*(?:command|input|userInput|payload|query|term)\b/
+  },
+  {
+    label: "getElementById innerHTML += user input",
+    re: /getElementById\([^)]+\)\.innerHTML\s*\+=/
+  },
+  {
+    label: "preview.innerHTML = user comment/content variable",
+    re: /preview\.innerHTML\s*=\s*(?:comment|content|input|userInput|payload)\b/
+  },
+  {
+    label: "output.innerHTML = render(user input)",
+    re: /output\.innerHTML\s*=\s*render\s*\(\s*(?:input|userInput|payload|comment)\s*\)/
+  },
+  {
+    label: "element.innerHTML = userInput (XSS lab sample)",
+    re: /element\.innerHTML\s*=\s*userInput\b/
+  },
+  {
+    label: "getElementById innerHTML = API response field (data.message XSS)",
+    re: /getElementById\([^)]+\)\.innerHTML\s*=\s*(?:data|response|result|json|res)\./
+  },
+  {
+    label: "innerHTML string concat with user val (reflected XSS lab)",
+    re: /\.innerHTML\s*=\s*'[^']*'\s*\+\s*val\b/
+  },
+  {
+    label: "div.innerHTML = val (stored XSS direct assignment)",
+    re: /if\s*\(\s*div\s*\)\s*div\.innerHTML\s*=\s*val\b/
+  },
+  {
+    label: "commentStore.map rendered via innerHTML (stored XSS)",
+    re: /\.innerHTML\s*=\s*commentStore\.map\s*\(/
+  },
+  {
+    label: "SVG preview innerHTML = uploaded file content",
+    re: /getElementById\([^)]*svgPreview[^)]*\)\.innerHTML\s*=\s*content\b/i
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1454,15 +1545,51 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Client-side SQLi login bypass string check",
-    re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/
+    re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']' OR '1'='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/i
+  },
+  {
+    label: "INTENTIONALLY INSECURE string-concat SQL login",
+    re: /INTENTIONALLY INSECURE[\s\S]{0,120}string concatenation/i
+  },
+  {
+    label: "loginVulnerable async SQL string interpolation",
+    re: /async function loginVulnerable[\s\S]{0,250}`SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,80}\$\{/
   },
   {
     label: "Template literal SELECT FROM users WHERE username interpolation",
-    re: /`SELECT \* FROM users[\s\S]{0,120}WHERE[\s\S]{0,60}username\s*=\s*'\$\{/
+    re: /`SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,60}username\s*=\s*'\$\{/
   },
   {
     label: "SQLi bypass OR/quote inspection before query build",
     re: /\.includes\s*\(\s*["']OR["']\s*\)[\s\S]{0,250}`SELECT \* FROM users/i
+  },
+  {
+    label: "SQLi training lab login query with INPUT placeholders",
+    re: /SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['"]INPUT['"]/i
+  },
+  {
+    label: "SQLi lab vulnerable login query marker",
+    re: /vulnerable login query[\s\S]{0,250}SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users/i
+  },
+  {
+    label: "Educational lab builds SQL via string concatenation",
+    re: /builds its SQL query using string concatenation/i
+  },
+  {
+    label: "sqli-query innerHTML displays interpolated username in SQL",
+    re: /getElementById\(['"]sqli-query['"]\)\.innerHTML[\s\S]{0,300}\$\{esc\(u\)\}/
+  },
+  {
+    label: "mysql_query SELECT FROM users WHERE coupon interpolation",
+    re: /mysql_query\([\s\S]{0,80}SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,60}coupon\s*=\s*'\$\{/i
+  },
+  {
+    label: "Query executed coupon SQL injection log",
+    re: /Query executed: SELECT \* FROM users WHERE coupon='\$\{coupon\}'/
+  },
+  {
+    label: "String concat SQL query on email field",
+    re: /query\s*=\s*"SELECT \* FROM users WHERE email='"\s*\+\s*email\s*\+\s*"'/
   }
 ];
 
@@ -1510,6 +1637,59 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
 };
 
 // --- Client-side session hijack evidence (educational labs / insecure cookie demos) --
+// --- Server-side eval() on request body (Node/Express anti-pattern) ----------------
+const SERVER_SIDE_EVAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "eval(req.body.*) server-side injection",
+    re: /eval\s*\(\s*req\.body\.[a-zA-Z_$][\w$]*/
+  },
+  {
+    label: "eval(req.query.*) server-side injection",
+    re: /eval\s*\(\s*req\.query\.[a-zA-Z_$][\w$]*/
+  },
+  {
+    label: "Function(req.body.*) dynamic code execution",
+    re: /(?:new\s+)?Function\s*\(\s*[^)]*req\.body\.[a-zA-Z_$][\w$]*/
+  }
+];
+
+const serverSideEvalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of SERVER_SIDE_EVAL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "server-side handler passes req.body/query to eval() — remote code execution likely"
+    }
+  };
+};
+
+// --- Client-side prototype pollution evidence (educational labs / unsafe merge) ---
+const clientSidePrototypePollutionEvidence: Rule = async (ctx) => {
+  const markers: string[] = [];
+  if (/prototype pollution/i.test(ctx.combined)) markers.push("prototype pollution");
+  if (/__proto__[\s\S]{0,120}isAdmin/i.test(ctx.combined)) markers.push("__proto__ isAdmin payload");
+  if (/constructor\.prototype[\s\S]{0,120}(?:polluted|isAdmin)/i.test(ctx.combined))
+    markers.push("constructor.prototype pollution");
+  if (/Object\.assign\s*\([^)]*,\s*(?:JSON\.parse|userInput|req\.body)/i.test(ctx.combined))
+    markers.push("Object.assign with user input");
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.9 : 0.85,
+    evidence: {
+      markers,
+      note: "client bundle documents prototype pollution via __proto__ merge without sanitization"
+    }
+  };
+};
+
 const clientSideSessionHijackEvidence: Rule = async (ctx) => {
   const markers: string[] = [];
   if (/Session Replay Attack/i.test(ctx.combined)) markers.push("Session Replay Attack");
@@ -1524,6 +1704,117 @@ const clientSideSessionHijackEvidence: Rule = async (ctx) => {
     evidence: {
       markers,
       note: "client bundle documents session hijack / token replay without HttpOnly protection"
+    }
+  };
+};
+
+// --- Client-side SSRF evidence in bundle (educational labs / admin panels) ---
+const CLIENT_SSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF vulnerability marker in admin panel",
+    re: /VULNERABILITY:\s*SSRF[\s\S]{0,80}No URL validation/i
+  },
+  {
+    label: "SSRF attack simulation with fetch",
+    re: /SSRF Attack detected[\s\S]{0,120}fetch/i
+  },
+  {
+    label: "SSRF lab localhost/127.0.0.1 blocklist check",
+    re: /includes\s*\(\s*["']localhost["']\s*\)[\s\S]{0,200}includes\s*\(\s*["']127\.0\.0\.1["']\s*\)/
+  },
+  {
+    label: "Server-Side Request Forgery in admin panel",
+    re: /Server-Side Request Forgery in admin panel/i
+  }
+];
+
+const clientSideSsrfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SSRF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents SSRF-prone URL fetch without validation — server-side request forgery likely"
+    }
+  };
+};
+
+// --- Client-side unsafe file upload evidence in bundle -----------------------
+const CLIENT_FILE_UPLOAD_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "No file type validation marker",
+    re: /VULNERABILITY:\s*No file type validation/i
+  },
+  {
+    label: "Unsafe file upload with no validation",
+    re: /Unsafe file upload with no validation/i
+  },
+  {
+    label: "File input without validation before upload handler",
+    re: /type:\s*["']file["'][\s\S]{0,500}Upload(?:ing)? file:/i
+  }
+];
+
+const clientSideFileUploadEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FILE_UPLOAD_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents file upload without type/size validation — arbitrary file upload likely"
+    }
+  };
+};
+
+// --- Sensitive token/JWT leaked in unauthenticated JSON API response ---------
+const TOKEN_API_PATHS = ["/api/posts", "/api/session", "/api/me", "/api/user", "/api/auth/session"];
+const JWT_IN_JSON_RE = /"(?:token|accessToken|refreshToken|jwt)"\s*:\s*"(eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)"/;
+
+const sensitiveApiTokenLeakage: Rule = async (ctx) => {
+  const paths = [
+    ...new Set([
+      ...TOKEN_API_PATHS,
+      ...extractApiPaths(ctx.combined, 10).filter((p) => /posts|session|token|auth/i.test(p))
+    ])
+  ];
+  if (paths.length === 0) return NEGATIVE;
+  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
+  const leaks: { path: string; field: string; sample: string }[] = [];
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const ct = r.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+    const m = r.body.match(JWT_IN_JSON_RE);
+    if (!m) continue;
+    const field = m[0].match(/"([^"]+)"\s*:/)?.[1] ?? "token";
+    leaks.push({
+      path: new URL(url).pathname,
+      field,
+      sample: m[1].slice(0, 48) + "..."
+    });
+  }
+  if (leaks.length === 0) return NEGATIVE;
+  const bundleDebug = /DEBUG token:/i.test(ctx.combined);
+  return {
+    fired: true,
+    confidence: bundleDebug ? 0.92 : 0.88,
+    evidence: {
+      routes: leaks.slice(0, 4),
+      bundleDebugLogging: bundleDebug,
+      note: "JSON API returned a JWT/session token without authentication — sensitive data exposure"
     }
   };
 };
@@ -1609,6 +1900,11 @@ export const RULES: Record<string, Rule> = {
   clientSideIdorEvidence,
   clientSideSqlEvidence,
   clientSideSessionHijackEvidence,
+  clientSideSsrfEvidence,
+  clientSideFileUploadEvidence,
+  sensitiveApiTokenLeakage,
+  clientSidePrototypePollutionEvidence,
+  serverSideEvalEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
