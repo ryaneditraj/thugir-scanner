@@ -347,6 +347,7 @@ const REFLECTED_XSS_PARAMS = [
   "q",
   "search",
   "query",
+  "content",
   "s",
   "term",
   "name",
@@ -356,16 +357,39 @@ const REFLECTED_XSS_PARAMS = [
   "keyword",
   "input"
 ];
-const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search"];
+const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search", "/search.jsp", "/index.jsp"];
+
+function normalizeProbePath(raw: string): string | null {
+  let p = raw.split("?")[0].split("#")[0].trim();
+  if (!p || /^https?:/i.test(p)) return null;
+  if (!p.startsWith("/")) p = `/${p}`;
+  if (p.length < 2 || p.length > 80) return null;
+  return p;
+}
+
+/** Discover search/echo/content paths from href, form action, and fetch() strings. */
+function extractSearchLikePaths(text: string): string[] {
+  const paths = new Set<string>();
+  const linkRe = /(?:href|action)\s*=\s*["']([^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(text))) {
+    const full = m[1];
+    const pathPart = full.split("?")[0];
+    const queryPart = full.includes("?") ? full.split("?")[1] : "";
+    if (!/search|query|content|reflected|echo|find/i.test(`${pathPart}${queryPart}`)) continue;
+    const norm = normalizeProbePath(pathPart);
+    if (norm) paths.add(norm);
+  }
+  const fetchRe = /fetch\(\s*["']([^"'`?]*(?:search|query)[^"'`]*)["']/gi;
+  while ((m = fetchRe.exec(text))) {
+    const norm = normalizeProbePath(m[1]);
+    if (norm) paths.add(norm);
+  }
+  return [...paths].slice(0, 6);
+}
 
 function extractReflectedXssPaths(text: string): string[] {
-  const paths = new Set<string>();
-  const hrefRe = /href\s*=\s*["'](\/[^"'#?]+)\?[^"']+["']/gi;
-  let m: RegExpExecArray | null;
-  while ((m = hrefRe.exec(text))) {
-    const p = m[1];
-    if (/reflected|search|query|echo|error/i.test(p)) paths.add(p);
-  }
+  const paths = new Set(extractSearchLikePaths(text));
   if (/reflected/i.test(text)) paths.add("/reflected/parameter/body");
   return [...paths].slice(0, 6);
 }
@@ -1011,11 +1035,10 @@ const SQL_ERROR_MARKERS = [
 const SQL_PROBE = "'))";
 
 function extractSearchEndpoints(text: string): string[] {
-  const paths = new Set<string>();
+  const paths = new Set<string>(extractSearchLikePaths(text));
   const patterns = [
     /["'`](\/rest\/[a-z0-9_\-/]+\/search)["'`]/gi,
-    /["'`](\/api\/[a-z0-9_\-/]+\/search)["'`]/gi,
-    /fetch\(\s*["']([^"'`]*\/search[^"'`?]*)["']/gi
+    /["'`](\/api\/[a-z0-9_\-/]+\/search)["'`]/gi
   ];
   for (const re of patterns) {
     let m: RegExpExecArray | null;
@@ -1024,18 +1047,28 @@ function extractSearchEndpoints(text: string): string[] {
       if (p.length > 3 && p.length < 80) paths.add(p);
     }
   }
-  return [...paths].slice(0, 4);
+  return [...paths].slice(0, 6);
 }
+
+const SQL_PROBE_PARAMS = ["q", "query", "search"];
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
   const discovered = extractSearchEndpoints(ctx.combined);
-  const fallbacks = ["/rest/products/search", "/api/products/search", "/search"];
+  const fallbacks = ["/rest/products/search", "/api/products/search", "/search", "/search.jsp"];
   const bases = [...new Set([...discovered, ...fallbacks])].slice(0, 5);
-  const urls = bases.map((p) => {
-    const u = new URL(p, ctx.origin);
-    u.searchParams.set("q", SQL_PROBE);
-    return u.toString();
-  });
+  const urls: string[] = [];
+  const seen = new Set<string>();
+  outer: for (const p of bases) {
+    for (const param of SQL_PROBE_PARAMS) {
+      const u = new URL(p, ctx.origin);
+      u.searchParams.set(param, SQL_PROBE);
+      const url = u.toString();
+      if (seen.has(url)) continue;
+      seen.add(url);
+      urls.push(url);
+      if (urls.length >= 12) break outer;
+    }
+  }
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
   for (const [url, r] of docs) {
     if (r.status === 401 || r.status === 403) continue;
