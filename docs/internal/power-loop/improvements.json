@@ -257,6 +257,30 @@
       "slug": "client-side-sql-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: mysql_query(\"SELECT * FROM users WHERE coupon='${coupon}'\") in executeSQLi(); vuln-academy.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login.php exposes $sql = \"SELECT * FROM users WHERE username='$username'\" string concat; vulnerable-ecommerce.vercel.app findings 3→5"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: products.php echo \"<p...\" . $_GET['msg'] without escaping (XSS test point comment); vulnerable-ecommerce.vercel.app findings 3→5"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal {\"username\":\"admin' OR '1'='1\"} returns Login Successful - SQL Injection! HTML; dvwu.vercel.app findings 3→5"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle SQL Injection Detected + Authentication Bypass Successful markers on /api/portal lab; dvwu.vercel.app findings 3→5"
     }
   ],
   "shipped": [
@@ -469,6 +493,26 @@
       "source": "discovery:vuln-academy.vercel.app",
       "slug": "svg-preview-innerhtml-coupon-sqli",
       "shipped_at": "2026-07-08T12:12:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "php-source-sql-concat-evidence",
+      "shipped_at": "2026-07-08T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "php-echo-get-xss-source",
+      "shipped_at": "2026-07-08T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "json-post-auth-sqli-probe",
+      "shipped_at": "2026-07-08T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "spa-sqli-lab-bundle-markers",
+      "shipped_at": "2026-07-08T13:10:00.000Z"
     }
   ]
 }
