@@ -896,6 +896,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-nosql-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Client bundle documents NoSQL injection via MongoDB operators",
+    description:
+      "The shipped JavaScript constructs MongoDB findOne queries with user-supplied JSON objects or documents NoSQL operator injection ($gt, $ne) that bypass authentication.",
+    impactOneline:
+      "NoSQL queries built from user JSON objects — auth bypass and data exfiltration if wired to MongoDB.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNosqlEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize MongoDB query inputs; reject operator keys starting with $.",
+      steps: [
+        "Use mongo-sanitize or schema validation to strip $ operator keys from user input.",
+        "Never pass raw req.body objects directly to findOne/find without type coercion.",
+        "Remove NoSQL injection demo code and educational lab markers from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My client bundle documents NoSQL injection via MongoDB $gt/$ne operator objects in findOne queries. Add mongo-sanitize, validate login input as strings only, and show the safe Mongoose/MongoDB query handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-xxe-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Client bundle documents XXE via external entity expansion",
+    description:
+      "The shipped HTML/JavaScript documents XML External Entity attacks — file:// entity payloads, libxmljs parsing without noent/nonet hardening, or DOMParser text/xml usage.",
+    impactOneline:
+      "XXE entity expansion can read local files or reach internal URLs — critical if XML parsing is server-side.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXxeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity processing in all XML parsers.",
+      steps: [
+        "Set libxmljs/DOMParser options: noent=false, nonet=true, dtdload=false.",
+        "Reject DOCTYPE declarations and external entities in user-supplied XML.",
+        "Remove XXE demo payloads and educational lab markers from production."
+      ]
+    },
+    fixPrompt:
+      "My app parses user-supplied XML with external entity support (XXE risk). Disable entity expansion, block DOCTYPE/external entities, and show the hardened libxmljs or DOMParser configuration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-api-security-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Client bundle documents OWASP API Security Top 10 lab",
+    description:
+      "The shipped HTML/JavaScript advertises deliberately vulnerable REST APIs covering OWASP API Security Top 10 categories — BOLA, BFLA, broken authentication, and related API authorization flaws.",
+    impactOneline:
+      "API routes documented without object/function-level authorization — BOLA and BFLA likely on production endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideApiSecurityLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level and function-level authorization on every API route.",
+      steps: [
+        "Verify the authenticated user owns every object on GET/PUT/DELETE.",
+        "Check role/permission before admin or privileged function endpoints.",
+        "Remove deliberately vulnerable API lab documentation from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My API lacks object-level authorization (BOLA) and function-level checks (BFLA). Add ownership validation on every /api/{resource}/{id} route and role checks on admin endpoints. Show the fixed middleware.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-endpoint-fetch",
     platform: "generic",
     category: "Server-side request forgery",

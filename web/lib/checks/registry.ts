@@ -2294,6 +2294,129 @@ const hiddenPromptInjection: Rule = async (ctx) => {
   };
 };
 
+// --- Client-side NoSQL injection evidence in bundle -----------------------------
+const CLIENT_NOSQL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "NoSQL Injection Educational Lab title",
+    re: /NoSQL Injection(?:\s+Educational)?\s+Lab/i
+  },
+  {
+    label: "MongoDB findOne with user-supplied credentials",
+    re: /findOne\s*\(\s*\{\s*email\s*:[\s\S]{0,120}password\s*:/i
+  },
+  {
+    label: "NoSQL $gt/$ne operator injection payload",
+    re: /\$\s*(?:gt|ne|regex)\s*["']?\s*:/
+  },
+  {
+    label: "Vulnerable Node login without mongo-sanitize",
+    re: /app\.post\s*\(\s*['"]\/login['"][\s\S]{0,500}findOne\s*\(\s*\{/i
+  },
+  {
+    label: "NoSQL auth bypass via JSON operator injection",
+    re: /contourner une authentification complète sur MongoDB|BACKEND VULNÉRABLE[\s\S]{0,200}findOne/i
+  }
+];
+
+const clientSideNosqlEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NOSQL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.92 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents NoSQL injection via MongoDB operator objects — auth bypass likely if wired to a backend"
+    }
+  };
+};
+
+// --- Client-side XXE evidence in bundle ---------------------------------------
+const CLIENT_XXE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XXE Vulnerability Lab title",
+    re: /(?:External Entity\s*\(\s*)?XXE(?:\s+Vulnerability)?\s+Lab/i
+  },
+  {
+    label: "XXE ENTITY SYSTEM file:// payload",
+    re: /ENTITY\s+\w+\s+SYSTEM\s+["']file:\/\//i
+  },
+  {
+    label: "XXE file:///etc/passwd entity expansion",
+    re: /file:\/\/\/etc\/passwd/i
+  },
+  {
+    label: "libxmljs entity processing options",
+    re: /libxmljs[\s\S]{0,250}(?:noent|nonet|dtdload)/i
+  },
+  {
+    label: "DOMParser parseFromString text/xml without hardening",
+    re: /parseFromString\s*\([^)]*text\/xml/i
+  }
+];
+
+const clientSideXxeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XXE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents XXE via external entity expansion — file disclosure or SSRF likely if XML parsing is server-side"
+    }
+  };
+};
+
+// --- Client-side OWASP API Security lab evidence in bundle --------------------
+const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP API Security Top 10 lab",
+    re: /OWASP API Security Top 10/i
+  },
+  {
+    label: "Broken Object Level Authorization (BOLA)",
+    re: /Broken Object Level Authorization\s*\(\s*BOLA\s*\)/i
+  },
+  {
+    label: "Broken Function Level Authorization (BFLA)",
+    re: /Broken Function Level Authorization/i
+  },
+  {
+    label: "Deliberately vulnerable RESTful API showcase",
+    re: /deliberately vulnerable RESTful API/i
+  },
+  {
+    label: "Vulnerable API lab BOLA tag",
+    re: />\s*BOLA\s*<|BOLA<\/span>/i
+  }
+];
+
+const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_API_SECURITY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents OWASP API Security Top 10 vulnerability categories (BOLA/BFLA) — broken authorization likely on API routes"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -2329,6 +2452,9 @@ export const RULES: Record<string, Rule> = {
   idorProbe,
   clientSideIdorEvidence,
   clientSideSqlEvidence,
+  clientSideNosqlEvidence,
+  clientSideXxeEvidence,
+  clientSideApiSecurityLabEvidence,
   clientSideSessionHijackEvidence,
   clientSideSsrfEvidence,
   clientSideFileUploadEvidence,
