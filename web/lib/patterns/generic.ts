@@ -638,6 +638,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ssrf-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Client bundle documents SSRF-prone URL fetch in admin panel",
+    description:
+      "The shipped JavaScript includes SSRF lab markers (e.g. VULNERABILITY: SSRF, localhost blocklist bypass) where user-supplied URLs are fetched server-side without validation.",
+    impactOneline:
+      "Admin panels that fetch arbitrary URLs enable SSRF — internal services and cloud metadata may be reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal IPs, metadata endpoints, and file:// schemes before server-side fetch.",
+      steps: [
+        "Allowlist outbound fetch destinations; deny RFC1918, link-local, and metadata IPs.",
+        "Never pass raw user URLs to server-side fetch without DNS rebinding protections.",
+        "Remove SSRF demo code and vulnerability markers from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My admin panel fetches user-supplied URLs server-side (SSRF risk). Add URL allowlisting, block private/metadata IPs, and show the safe fetch handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-file-upload-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Client bundle documents unsafe file upload without validation",
+    description:
+      "The shipped JavaScript advertises file upload with no type or size validation (e.g. VULNERABILITY: No file type validation), enabling arbitrary file upload to admin panels.",
+    impactOneline:
+      "Unrestricted file upload can lead to webshell deployment and full server compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFileUploadEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate MIME type, extension, and size server-side; store uploads outside webroot.",
+      steps: [
+        "Allowlist safe extensions and verify magic bytes server-side.",
+        "Enforce max file size and scan uploads with AV where possible.",
+        "Store uploads on object storage with no execute permission."
+      ]
+    },
+    fixPrompt:
+      "My app uploads files without type validation (VULNERABILITY: No file type validation). Add server-side MIME/extension allowlisting, size limits, and store uploads outside the webroot.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sensitive-api-token-leakage",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "JWT or session token returned in unauthenticated API response",
+    description:
+      "A JSON API endpoint returns a JWT or session token (e.g. token field with eyJ...) without requiring authentication — leaking secrets to any caller.",
+    impactOneline:
+      "Session tokens in public API responses let attackers hijack accounts or read privileged data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sensitiveApiTokenLeakage" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return session tokens in public API bodies; use HttpOnly cookies.",
+      steps: [
+        "Remove token fields from unauthenticated GET responses.",
+        "Store session tokens in HttpOnly Secure cookies, not JSON bodies.",
+        "Remove DEBUG token console.log statements from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My /api/posts (or similar) returns a JWT in the JSON body without auth. Remove token fields from public responses, use HttpOnly cookies for sessions, and delete debug token logging.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-session-hijack-evidence",
     platform: "generic",
     category: "Broken authentication",

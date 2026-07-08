@@ -1672,6 +1672,117 @@ const clientSideSessionHijackEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Client-side SSRF evidence in bundle (educational labs / admin panels) ---
+const CLIENT_SSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF vulnerability marker in admin panel",
+    re: /VULNERABILITY:\s*SSRF[\s\S]{0,80}No URL validation/i
+  },
+  {
+    label: "SSRF attack simulation with fetch",
+    re: /SSRF Attack detected[\s\S]{0,120}fetch/i
+  },
+  {
+    label: "SSRF lab localhost/127.0.0.1 blocklist check",
+    re: /includes\s*\(\s*["']localhost["']\s*\)[\s\S]{0,200}includes\s*\(\s*["']127\.0\.0\.1["']\s*\)/
+  },
+  {
+    label: "Server-Side Request Forgery in admin panel",
+    re: /Server-Side Request Forgery in admin panel/i
+  }
+];
+
+const clientSideSsrfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SSRF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents SSRF-prone URL fetch without validation — server-side request forgery likely"
+    }
+  };
+};
+
+// --- Client-side unsafe file upload evidence in bundle -----------------------
+const CLIENT_FILE_UPLOAD_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "No file type validation marker",
+    re: /VULNERABILITY:\s*No file type validation/i
+  },
+  {
+    label: "Unsafe file upload with no validation",
+    re: /Unsafe file upload with no validation/i
+  },
+  {
+    label: "File input without validation before upload handler",
+    re: /type:\s*["']file["'][\s\S]{0,500}Upload(?:ing)? file:/i
+  }
+];
+
+const clientSideFileUploadEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FILE_UPLOAD_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents file upload without type/size validation — arbitrary file upload likely"
+    }
+  };
+};
+
+// --- Sensitive token/JWT leaked in unauthenticated JSON API response ---------
+const TOKEN_API_PATHS = ["/api/posts", "/api/session", "/api/me", "/api/user", "/api/auth/session"];
+const JWT_IN_JSON_RE = /"(?:token|accessToken|refreshToken|jwt)"\s*:\s*"(eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)"/;
+
+const sensitiveApiTokenLeakage: Rule = async (ctx) => {
+  const paths = [
+    ...new Set([
+      ...TOKEN_API_PATHS,
+      ...extractApiPaths(ctx.combined, 10).filter((p) => /posts|session|token|auth/i.test(p))
+    ])
+  ];
+  if (paths.length === 0) return NEGATIVE;
+  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
+  const leaks: { path: string; field: string; sample: string }[] = [];
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const ct = r.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+    const m = r.body.match(JWT_IN_JSON_RE);
+    if (!m) continue;
+    const field = m[0].match(/"([^"]+)"\s*:/)?.[1] ?? "token";
+    leaks.push({
+      path: new URL(url).pathname,
+      field,
+      sample: m[1].slice(0, 48) + "..."
+    });
+  }
+  if (leaks.length === 0) return NEGATIVE;
+  const bundleDebug = /DEBUG token:/i.test(ctx.combined);
+  return {
+    fired: true,
+    confidence: bundleDebug ? 0.92 : 0.88,
+    evidence: {
+      routes: leaks.slice(0, 4),
+      bundleDebugLogging: bundleDebug,
+      note: "JSON API returned a JWT/session token without authentication — sensitive data exposure"
+    }
+  };
+};
+
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const DEBUG_API_PATHS = ["/api/debug/config", "/api/debug/users", "/api/debug/env"];
 
@@ -1753,6 +1864,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIdorEvidence,
   clientSideSqlEvidence,
   clientSideSessionHijackEvidence,
+  clientSideSsrfEvidence,
+  clientSideFileUploadEvidence,
+  sensitiveApiTokenLeakage,
   clientSidePrototypePollutionEvidence,
   serverSideEvalEvidence,
   nextDataSensitiveKeys,
