@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T21:05:00.000Z",
+  "updated_at": "2026-07-08T22:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/",
@@ -560,6 +560,31 @@
       "url": "https://raw.githack.com/sheshakandula/llmsec/main/frontend/index.html",
       "source": "sheshakandula/llmsec OSS — BSides LLMSec Demo vulnerable vs defended LLM endpoints (GitHack deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owasp-demo.vulcanlab.ai/",
+      "source": "Vulcan Lab — OWASP LLM Top 10 (2025) interactive demo playground",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/",
+      "source": "APISec OpenVault Bank — deliberately vulnerable banking API (12 OWASP API Top 10 flaws)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-playground.vercel.app/",
+      "source": "Prompt Injection Playground — 4-level AI security lab with vulnerable chatbots (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-demo.vercel.app/",
+      "source": "AI Red Team France — SecurBank IA live prompt-injection demo with layered defenses (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — Mutillidae II classic extended OWASP Top 10 playground",
+      "auth": "public_demo"
     }
   ]
 }
