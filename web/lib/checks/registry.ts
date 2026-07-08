@@ -347,6 +347,7 @@ const REFLECTED_XSS_PARAMS = [
   "q",
   "search",
   "query",
+  "searchTerm",
   "content",
   "s",
   "term",
@@ -355,9 +356,20 @@ const REFLECTED_XSS_PARAMS = [
   "message",
   "text",
   "keyword",
-  "input"
+  "input",
+  "category",
+  "filter"
 ];
-const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search", "/search.jsp", "/index.jsp"];
+const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search", "/search.jsp", "/index.jsp", "/catalog"];
+
+function prioritizeReflectedXssPaths(paths: string[]): string[] {
+  const score = (p: string) => {
+    if (/\/catalog|search|product/i.test(p)) return 0;
+    if (p === "/") return 2;
+    return 1;
+  };
+  return [...paths].sort((a, b) => score(a) - score(b));
+}
 
 function normalizeProbePath(raw: string): string | null {
   let p = raw.split("?")[0].split("#")[0].trim();
@@ -376,7 +388,12 @@ function extractSearchLikePaths(text: string): string[] {
     const full = m[1];
     const pathPart = full.split("?")[0];
     const queryPart = full.includes("?") ? full.split("?")[1] : "";
-    if (!/search|query|content|reflected|echo|find/i.test(`${pathPart}${queryPart}`)) continue;
+    if (
+      !/search|query|content|reflected|echo|find|catalog|product|searchTerm|category|filter/i.test(
+        `${pathPart}${queryPart}`
+      )
+    )
+      continue;
     const norm = normalizeProbePath(pathPart);
     if (norm) paths.add(norm);
   }
@@ -405,22 +422,22 @@ const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
   const homePath = new URL(ctx.home.finalUrl).pathname || "/";
   const discovered = extractReflectedXssPaths(ctx.combined);
-  const paths = [
+  const paths = prioritizeReflectedXssPaths([
     ...new Set([...discovered, homePath, ...REFLECTED_XSS_FALLBACK_PATHS])
-  ].slice(0, 6);
+  ]).slice(0, 8);
   const hits: { path: string; param: string; url: string; snippet: string }[] = [];
   const seen = new Set<string>();
   const urls: { url: string; param: string; path: string }[] = [];
 
-  outer: for (const param of REFLECTED_XSS_PARAMS) {
-    for (const path of paths) {
+  outer: for (const path of paths) {
+    for (const param of REFLECTED_XSS_PARAMS) {
       const key = `${path}?${param}`;
       if (seen.has(key)) continue;
       seen.add(key);
       const u = new URL(path, ctx.origin);
       u.searchParams.set(param, canary);
       urls.push({ url: u.toString(), param, path });
-      if (urls.length >= 16) break outer;
+      if (urls.length >= 24) break outer;
     }
   }
 
@@ -1030,12 +1047,64 @@ const SQL_ERROR_MARKERS = [
   /PostgreSQL.*ERROR/i,
   /SQLSTATE\[/i,
   /unterminated quoted string/i,
-  /quoted string not properly terminated/i
+  /quoted string not properly terminated/i,
+  /Microsoft OLE DB Provider/i,
+  /ODBC SQL Server Driver/i,
+  /ADODB\.Recordset/i,
+  /Syntax error.*in query expression/i
 ];
 const SQL_PROBE = "'))";
+const SQL_ASP_PROBE_PARAMS = ["id", "cat", "tfSearch"];
+const SQL_ASP_FALLBACK_PATHS = ["/showforum.asp", "/search.asp"];
+
+function extractAspSqlProbePaths(text: string): string[] {
+  const paths = new Set<string>();
+  const hrefRe = /(?:href|action)\s*=\s*["']([^"'#?]+\.asp)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(text))) {
+    const norm = normalizeProbePath(m[1]);
+    if (norm) paths.add(norm);
+  }
+  return [...paths].slice(0, 5);
+}
+
+async function probeAspDifferentialSql(
+  ctx: RuleContext,
+  paths: string[]
+): Promise<{ fired: true; confidence: number; evidence: Record<string, unknown> } | null> {
+  for (const path of paths.slice(0, 4)) {
+    for (const param of SQL_ASP_PROBE_PARAMS) {
+      const baseline = new URL(path, ctx.origin);
+      baseline.searchParams.set(param, "1");
+      const evil = new URL(path, ctx.origin);
+      evil.searchParams.set(param, "1'");
+      const docs = await ctx.probe.getMany([baseline.toString(), evil.toString()], { maxBytes: 8192 }, 2);
+      const baseDoc = docs.get(baseline.toString());
+      const evilDoc = docs.get(evil.toString());
+      if (!baseDoc || !evilDoc) continue;
+      if (baseDoc.status < 200 || baseDoc.status >= 400) continue;
+      if (evilDoc.status < 500) continue;
+      if (/500 - Internal server error/i.test(evilDoc.body) || evilDoc.status >= 500) {
+        return {
+          fired: true,
+          confidence: 0.88,
+          evidence: {
+            url: evil.toString(),
+            baselineStatus: baseDoc.status,
+            errorStatus: evilDoc.status,
+            snippet: evilDoc.body.slice(0, 240).trim(),
+            note: "numeric parameter tolerated but quote triggers server error — SQL injection likely (ASP/IIS)"
+          }
+        };
+      }
+    }
+  }
+  return null;
+}
 
 function extractSearchEndpoints(text: string): string[] {
   const paths = new Set<string>(extractSearchLikePaths(text));
+  for (const p of extractAspSqlProbePaths(text)) paths.add(p);
   const patterns = [
     /["'`](\/rest\/[a-z0-9_\-/]+\/search)["'`]/gi,
     /["'`](\/api\/[a-z0-9_\-/]+\/search)["'`]/gi
@@ -1047,15 +1116,21 @@ function extractSearchEndpoints(text: string): string[] {
       if (p.length > 3 && p.length < 80) paths.add(p);
     }
   }
-  return [...paths].slice(0, 6);
+  return [...paths].slice(0, 8);
 }
 
-const SQL_PROBE_PARAMS = ["q", "query", "search"];
+const SQL_PROBE_PARAMS = ["q", "query", "search", "id", "tfSearch", "cat"];
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
   const discovered = extractSearchEndpoints(ctx.combined);
-  const fallbacks = ["/rest/products/search", "/api/products/search", "/search", "/search.jsp"];
-  const bases = [...new Set([...discovered, ...fallbacks])].slice(0, 5);
+  const fallbacks = [
+    "/rest/products/search",
+    "/api/products/search",
+    "/search",
+    "/search.jsp",
+    ...SQL_ASP_FALLBACK_PATHS
+  ];
+  const bases = [...new Set([...discovered, ...fallbacks])].slice(0, 6);
   const urls: string[] = [];
   const seen = new Set<string>();
   outer: for (const p of bases) {
@@ -1066,7 +1141,7 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
       if (seen.has(url)) continue;
       seen.add(url);
       urls.push(url);
-      if (urls.length >= 12) break outer;
+      if (urls.length >= 14) break outer;
     }
   }
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
@@ -1086,6 +1161,11 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
       }
     };
   }
+
+  const aspPaths = [...new Set([...extractAspSqlProbePaths(ctx.combined), ...SQL_ASP_FALLBACK_PATHS])];
+  const aspHit = await probeAspDifferentialSql(ctx, aspPaths);
+  if (aspHit) return aspHit;
+
   return NEGATIVE;
 };
 

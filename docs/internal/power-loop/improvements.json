@@ -65,6 +65,18 @@
       "slug": "sql-error-disclosure",
       "status": "shipped",
       "validation": "sqlErrorDisclosure now probes query/search params and /search.jsp from form actions; staging benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "GET /catalog?searchTerm=thugirXSScanary echoes raw canary in script block (var searchText); ginandjuice.shop findings 2→3"
+    },
+    {
+      "source": "discovery:testasp.vulnweb.com",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "GET /showforum.asp?id=1 returns 200 but id=1' returns 500 Internal server error; testasp.vulnweb.com findings 3→4"
     }
   ],
   "shipped": [
@@ -122,6 +134,16 @@
       "source": "benchmark:juice-shop",
       "slug": "sql-error-multi-param-jsp",
       "shipped_at": "2026-07-08T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "reflected-xss-searchterm-catalog",
+      "shipped_at": "2026-07-08T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:testasp.vulnweb.com",
+      "slug": "sql-error-asp-differential",
+      "shipped_at": "2026-07-08T01:10:00.000Z"
     }
   ]
 }
