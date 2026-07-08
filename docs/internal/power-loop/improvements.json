@@ -143,6 +143,24 @@
       "slug": "sql-error-disclosure",
       "status": "shipped",
       "validation": "GET vulnshop-production.up.railway.app/api/products?search=')) returns 500 {\"detail\":\"near \\\")\\\": syntax error\"}; vulnshop.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:ashimkoirala.github.io/HackLab",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "HackLab inline JS: `SELECT * FROM users WHERE username = '${u}'` template literal; ashimkoirala.github.io/HackLab findings 3→5"
+    },
+    {
+      "source": "discovery:ashimkoirala.github.io/HackLab",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "HackLab xssDOM: output.innerHTML = `...${escapeHtmlDisplay(input)}` + element.innerHTML = location.hash docs; findings 3→5"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab/demo",
+      "slug": "client-side-session-hijack-evidence",
+      "status": "shipped",
+      "validation": "CookieJar demo: Session Replay Attack + doReplay() + vault-token/atk-token UI; cyberdesserts.github.io/cookiejar-lab/demo findings 2→3"
     }
   ],
   "shipped": [
@@ -265,6 +283,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "json-api-sql-error-disclosure",
       "shipped_at": "2026-07-08T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:ashimkoirala.github.io/HackLab",
+      "slug": "template-literal-sql-evidence",
+      "shipped_at": "2026-07-08T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:ashimkoirala.github.io/HackLab",
+      "slug": "dom-xss-innerhtml-input-hash",
+      "shipped_at": "2026-07-08T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab/demo",
+      "slug": "client-side-session-hijack-evidence",
+      "shipped_at": "2026-07-08T07:10:00.000Z"
     }
   ]
 }
