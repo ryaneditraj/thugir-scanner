@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T07:05:00.000Z",
+  "updated_at": "2026-07-08T08:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -279,6 +279,31 @@
     {
       "url": "https://lab.pentest-forge.com/",
       "source": "PentestForge Lab public vulnerable apps playground — Juice Shop, DVWA, crAPI, DVGA hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.weblock.ru/",
+      "source": "Vulnerable Bank intentionally insecure banking demo (demo.weblock.ru)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://gauravkhurana.com/SQLInjection/",
+      "source": "In-browser SQLite SQL injection live demo — vulnerable vs parameterized modes",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://aryan-rajoria.github.io/vuln-web-sec-proj/",
+      "source": "Vulnerable Web Security Projects Explorer — curated OSS vuln lab directory (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xss-payload-lab.vercel.app/",
+      "source": "XSS Payload Lab browser security playground — context explorer + sandbox preview (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cyber-ctf-website.vercel.app/",
+      "source": "CyberCTF hands-on hacking platform landing — 200+ labs marketing (Vercel deploy)",
       "auth": "public_demo"
     }
   ]
