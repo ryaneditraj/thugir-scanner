@@ -5793,7 +5793,7 @@
       "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
-      "run_id": "2026-07-08T15:02:08.639Z",
+      "run_id": "2026-07-08T15:07:02.608Z",
       "url": "https://juice-shop-staging.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -5855,125 +5855,7 @@
       "pages_crawled": 1,
       "probes_run": 173,
       "status": "ok",
-      "scanned_at": "2026-07-08T15:02:08.639Z"
-    },
-    {
-      "run_id": "2026-07-08T15:07:23.786Z",
-      "url": "https://web2-lab2-mck1.onrender.com/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-08T15:07:23.786Z",
-      "error": "We couldn't reach web2-lab2-mck1.onrender.com (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-08T15:07:38.811Z",
-      "url": "http://testphp.vulnweb.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-08T15:07:38.811Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-08T15:07:48.886Z",
-      "url": "https://demo.securityknowledgeframework.org/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-08T15:07:48.886Z",
-      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-08T15:07:49.287Z",
-      "url": "https://bugbait.io/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-08T15:07:49.287Z",
-      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-08T15:07:50.185Z",
-      "url": "https://agent-probe.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 191,
-      "status": "ok",
-      "scanned_at": "2026-07-08T15:07:50.185Z"
-    },
-    {
-      "run_id": "2026-07-08T15:07:51.689Z",
-      "url": "https://sqli-demo.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 181,
-      "status": "ok",
-      "scanned_at": "2026-07-08T15:07:51.689Z"
+      "scanned_at": "2026-07-08T15:07:02.608Z"
     }
   ],
   "teacher_delta_runs": [
@@ -6087,14 +5969,6 @@
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
       "scanned_at": "2026-07-08T14:05:00.000Z"
-    },
-    {
-      "run_id": "2026-07-08T15:05:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "scanned_at": "2026-07-08T15:05:00.000Z"
     }
   ]
 }
