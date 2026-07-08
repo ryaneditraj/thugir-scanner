@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T06:08:00.000Z",
+  "updated_at": "2026-07-08T07:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -255,6 +255,31 @@
       "url": "https://tempehs.github.io/The_Unsecure_PWA/",
       "source": "tempehs/The_Unsecure_PWA OSS — unsecure-by-design PWA for web security education (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yusufarbc.github.io/apigoat/",
+      "source": "yusufarbc/apigoat OSS — OWASP API Security Top 10 training platform landing (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/",
+      "source": "leogra/oss-oopssec-store OSS — intentionally vulnerable e-commerce CTF walkthrough hub (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/",
+      "source": "dxx33/WebVulnsGuide OSS — interactive SQLi/XSS/CSRF/CORS pentesting guide (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://purushotham-muktha-dev-sec-ops-visu.vercel.app/",
+      "source": "DevSecOps Visualizer OSS Vercel deploy — live SQLi/XSS/hardcoded-secret pipeline demos",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://lab.pentest-forge.com/",
+      "source": "PentestForge Lab public vulnerable apps playground — Juice Shop, DVWA, crAPI, DVGA hub",
+      "auth": "public_demo"
     }
   ]
 }
