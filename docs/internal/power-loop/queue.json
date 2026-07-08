@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T00:10:00.000Z",
+  "updated_at": "2026-07-08T01:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -105,6 +105,31 @@
       "url": "https://dvga.xplat-demo.threatx.io/",
       "source": "Damn Vulnerable GraphQL Application ThreatX public demo",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/",
+      "source": "Google XSS Game public training platform (OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackthissite.org/",
+      "source": "HackThisSite public web security training platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://aigoat.app/",
+      "source": "AIGoat OWASP LLM Top 10 intentionally vulnerable AI app",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/",
+      "source": "VulnForge Academy OSS deploy — 20-level OWASP Top 10 lab (README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/",
+      "source": "VaultApp IDOR training lab OSS Vercel deploy (README)",
+      "auth": "oss_deploy"
     }
   ]
 }
