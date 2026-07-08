@@ -215,6 +215,24 @@
       "slug": "dangerous-html-sinks",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /login inline script document.getElementById('message').innerHTML = data.message; extends sink regex for API-response XSS"
+    },
+    {
+      "source": "discovery:vulnlab.vercel.app",
+      "slug": "client-side-ssrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle VULNERABILITY: SSRF - No URL validation + SSRF Attack detected fetch; vulnlab.vercel.app findings 4→6"
+    },
+    {
+      "source": "discovery:vulnlab.vercel.app",
+      "slug": "client-side-file-upload-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNERABILITY: No file type validation + Unsafe file upload with no validation in admin dashboard; vulnlab.vercel.app findings 4→6"
+    },
+    {
+      "source": "discovery:vuln-demo.vercel.app",
+      "slug": "sensitive-api-token-leakage",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/posts returns {\"token\":\"eyJ...\"} + DEBUG token: console.log in bundle; vuln-demo.vercel.app findings 3→4"
     }
   ],
   "shipped": [
@@ -397,6 +415,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "innerhtml-api-response-field-sink",
       "shipped_at": "2026-07-08T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnlab.vercel.app",
+      "slug": "client-side-ssrf-evidence",
+      "shipped_at": "2026-07-08T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnlab.vercel.app",
+      "slug": "client-side-file-upload-evidence",
+      "shipped_at": "2026-07-08T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-demo.vercel.app",
+      "slug": "sensitive-api-token-leakage",
+      "shipped_at": "2026-07-08T11:10:00.000Z"
     }
   ]
 }
