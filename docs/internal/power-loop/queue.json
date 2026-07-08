@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T20:12:00.000Z",
+  "updated_at": "2026-07-08T21:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/",
@@ -535,6 +535,31 @@
       "url": "http://testhtml5.vulnweb.com",
       "source": "Acunetix vulnweb HTML5 public demo — DNS unreachable from cloud",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://hackable.so/",
+      "source": "hackable.so — social platform CTF with 12 hidden vulnerabilities (distinct from hackable-web.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cors-lab.vercel.app/",
+      "source": "web search — CORS misconfiguration educational lab with vulnerable/safe server toggle (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://justinsteven.github.io/gartnerpeerinsightsxssdemo/",
+      "source": "justinsteven/gartnerpeerinsightsxssdemo OSS — intentionally pwnable postMessage DOM XSS widget demos (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://prompt-injection-demo.vercel.app/",
+      "source": "web search — RAG prompt-injection demo with/without guardrails (Spanish LLM security lab, Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://raw.githack.com/sheshakandula/llmsec/main/frontend/index.html",
+      "source": "sheshakandula/llmsec OSS — BSides LLMSec Demo vulnerable vs defended LLM endpoints (GitHack deploy)",
+      "auth": "oss_deploy"
     }
   ]
 }
