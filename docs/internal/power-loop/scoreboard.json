@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T01:10:00.000Z",
+  "updated_at": "2026-07-08T01:23:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,22 +16,26 @@
       "note": "Oracle juice-shop-staging.herokuapp.com — 7 findings, 6/6 recall (2026-07-08 01 UTC)"
     }
   },
-  "total_sites_scanned": 54,
-  "total_findings": 223,
-  "critical_findings": 12,
+  "total_sites_scanned": 59,
+  "total_findings": 237,
+  "critical_findings": 13,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 21,
-  "discovery_findings": 102,
+  "discovery_urls_added": 26,
+  "discovery_findings": 116,
   "improvements_shipped": 13,
-  "last_run": "2026-07-08T01:10:00.000Z",
+  "last_run": "2026-07-08T01:23:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
-      "oracle_recall": "6/6"
+      "oracle_recall": "6/6",
+      "gap": []
     },
+    "discovery_new": 5,
+    "discovery_findings_new": 14,
+    "skipped_rescan_48h": 21,
     "teacher_delta": "skipped — no nuclei/engine",
     "improvements_this_run": 2,
     "discovery_validation": {
@@ -46,9 +50,22 @@
         "new_slugs": ["sql-error-disclosure"]
       }
     },
+    "discovery_highlights_new": {
+      "xss-game.appspot.com": 1,
+      "hackthissite.org": 3,
+      "aigoat.app": 2,
+      "vulnforge-academy.vercel.app": 4,
+      "vaultapp-omega.vercel.app": 4
+    },
     "notable_findings": [
-      "reflected-xss-query-param on ginandjuice.shop via /catalog?searchTerm=",
-      "sql-error-disclosure on testasp.vulnweb.com via ASP id-param differential (200 vs 500)"
+      "reflected-xss-query-param on ginandjuice.shop and aigoat.app",
+      "sql-error-disclosure on testasp.vulnweb.com via ASP id-param differential",
+      "secret-openai on vulnforge-academy.vercel.app",
+      "secret-resend + dangerous-html-sinks on vaultapp-omega.vercel.app"
+    ],
+    "unreachable_candidates": [
+      "pentest-forge.com lab targets (502)",
+      "testphp.vulnweb.com / testhtml5.vulnweb.com (timeout)"
     ]
   },
   "discovery_highlights": {
@@ -72,6 +89,11 @@
     "testaspnet.vulnweb.com": 3,
     "hackxor.net": 2,
     "seclab.vercel.app": 4,
-    "dvga.xplat-demo.threatx.io": 2
+    "dvga.xplat-demo.threatx.io": 2,
+    "xss-game.appspot.com": 1,
+    "hackthissite.org": 3,
+    "aigoat.app": 2,
+    "vulnforge-academy.vercel.app": 4,
+    "vaultapp-omega.vercel.app": 4
   }
 }
