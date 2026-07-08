@@ -2956,7 +2956,7 @@
       "scanned_at": "2026-07-08T03:05:55.372Z"
     },
     {
-      "run_id": "2026-07-08T04:02:07.471Z",
+      "run_id": "2026-07-08T04:05:10.758Z",
       "url": "https://juice-shop-staging.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -3018,7 +3018,7 @@
       "pages_crawled": 1,
       "probes_run": 161,
       "status": "ok",
-      "scanned_at": "2026-07-08T04:02:07.471Z"
+      "scanned_at": "2026-07-08T04:05:10.758Z"
     },
     {
       "run_id": "2026-07-08T04:03:52.830Z",

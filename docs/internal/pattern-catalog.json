@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T03:08:43.151Z",
-  "total": 71,
-  "uniqueSlugs": 71,
+  "generatedAt": "2026-07-08T04:05:44.480Z",
+  "total": 72,
+  "uniqueSlugs": 72,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,12 +9,12 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 53,
+    "generic": 54,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 60,
+    "free": 61,
     "deep": 11,
     "continuous": 0
   },
@@ -28,7 +28,7 @@
     "Information disclosure": 9,
     "Broken authentication": 3,
     "Injection": 1,
-    "Cross-site scripting": 2,
+    "Cross-site scripting": 3,
     "general": 16
   },
   "slugs": [
@@ -39,6 +39,7 @@
     "cursor-next-public-secret",
     "dangerous-html-sinks",
     "directory-listing-enabled",
+    "dom-eval-xss",
     "exposed-config-backup",
     "exposed-env-file",
     "exposed-git-dir",

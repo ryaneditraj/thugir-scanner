@@ -101,6 +101,18 @@
       "slug": "idor-sequential-ids",
       "status": "shipped",
       "validation": "OpenAPI /openapi.json drives GET probes; /users/v1/name1 returns {\"username\":\"name1\",\"email\":\"mail1@mail.com\"} without auth; urban-vampi findings 2→4"
+    },
+    {
+      "source": "discovery:csrf-xss-demo.vercel.app",
+      "slug": "dom-eval-xss",
+      "status": "shipped",
+      "validation": "eval(document.getElementById(\"xssInput\").value) in main.9ea457c1.js; csrf-xss-demo findings 2→4 (new dom-eval-xss slug)"
+    },
+    {
+      "source": "discovery:csrf-xss-demo.vercel.app",
+      "slug": "vibe-hardcoded-demo-credentials",
+      "status": "shipped",
+      "validation": "\"admin\"===username&&\"password\"===password inline login check in bundle; hardcodedCredentials rule extended with comparison patterns"
     }
   ],
   "shipped": [
@@ -188,6 +200,16 @@
       "source": "discovery:urban-vampi-staging.up.railway.app",
       "slug": "openapi-get-path-probing",
       "shipped_at": "2026-07-08T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:csrf-xss-demo.vercel.app",
+      "slug": "dom-eval-xss",
+      "shipped_at": "2026-07-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:csrf-xss-demo.vercel.app",
+      "slug": "inline-demo-credential-comparison",
+      "shipped_at": "2026-07-08T04:10:00.000Z"
     }
   ]
 }

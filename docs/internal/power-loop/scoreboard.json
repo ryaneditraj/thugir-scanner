@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T04:04:06.692Z",
+  "updated_at": "2026-07-08T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 41,
   "discovery_findings": 161,
-  "improvements_shipped": 17,
-  "last_run": "2026-07-08T04:04:06.693Z",
+  "improvements_shipped": 19,
+  "last_run": "2026-07-08T04:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "04:00",
     "benchmark": {
@@ -43,6 +43,17 @@
     "discovery_findings_new": 15,
     "skipped_rescan_48h": 36,
     "teacher_delta": "skipped — no nuclei/engine",
+    "improvements_this_run": 2,
+    "discovery_validation": {
+      "csrf-xss-demo.vercel.app": {
+        "findings_before": 2,
+        "findings_after": 4,
+        "new_slugs": [
+          "dom-eval-xss",
+          "vibe-hardcoded-demo-credentials"
+        ]
+      }
+    },
     "discovery_highlights_new": {
       "ai-security-platform-iota.vercel.app": 3,
       "securityweb-iota.vercel.app": 5,
@@ -51,14 +62,15 @@
       "ucu-owasp-ctf.vercel.app": 3
     },
     "notable_findings": [
-      "securityweb-iota.vercel.app: 5 findings — secret-resend, dangerous-html-sinks, vibe-unauthenticated-api-routes (SecLab alternate deploy)",
-      "ai-security-platform-iota.vercel.app: dangerous-html-sinks on 14-challenge OWASP platform (6 pages crawled)",
-      "ucu-owasp-ctf.vercel.app: firebase-config-exposed on OWASP Top 10 CTF platform"
+      "dom-eval-xss on csrf-xss-demo via eval(document.getElementById(\"xssInput\").value)",
+      "inline admin/password comparison detected in csrf-xss-demo CRA bundle",
+      "securityweb-iota.vercel.app: 5 findings — secret-resend, dangerous-html-sinks, vibe-unauthenticated-api-routes",
+      "ai-security-platform-iota.vercel.app: dangerous-html-sinks on 14-challenge OWASP platform"
     ],
     "learning_gaps": [
       "sqli-lab.vercel.app: no sql-error-disclosure despite error-based SQLi demo with live query viewer",
       "xss-lab.vercel.app: no stored-xss/reflected-xss slugs despite intentional stored XSS post board",
-      "ai-security-platform-iota.vercel.app: IDOR/auth_bypass challenges in catalog not surfaced by passive probes"
+      "zero-health.vercel.app: vulns behind Google OAuth login — no sqli/idor without session"
     ],
     "unreachable_candidates": [
       "testphp.vulnweb.com / testhtml5.vulnweb.com (DNS fail from cloud)",
@@ -102,7 +114,7 @@
     "owaspbased-lessons.vercel.app": 1,
     "hack-this-site-eta.vercel.app": 6,
     "zero-health.vercel.app": 3,
-    "csrf-xss-demo.vercel.app": 2,
+    "csrf-xss-demo.vercel.app": 4,
     "ai-security-platform-iota.vercel.app": 3,
     "securityweb-iota.vercel.app": 5,
     "sqli-lab.vercel.app": 2,
