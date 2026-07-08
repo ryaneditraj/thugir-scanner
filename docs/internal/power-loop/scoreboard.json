@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T08:10:00.000Z",
+  "updated_at": "2026-07-08T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 104,
-  "total_findings": 399,
+  "total_sites_scanned": 105,
+  "total_findings": 406,
   "critical_findings": 14,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 61,
   "discovery_findings": 208,
-  "improvements_shipped": 30,
-  "last_run": "2026-07-08T08:10:00.000Z",
+  "improvements_shipped": 33,
+  "last_run": "2026-07-08T09:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -42,18 +42,15 @@
     "teacher_delta": "skipped — no nuclei/engine",
     "improvements_this_run": 3,
     "notable_findings": [
-      "dxx33.github.io/WebVulnsGuide: innerHTML += command DOM XSS + prototype pollution lab (4→5)",
-      "nodegoat-websec.herokuapp.com: eval(req.body.preTax) server-side eval evidence (3→4)",
-      "juice-shop-staging: benchmark oracle 7 findings, 6/6 recall maintained"
+      "xss-payload-lab.vercel.app: dangerous-html-sinks from preview.innerHTML = comment + output.innerHTML = render(input) (2→3)",
+      "gauravkhurana.com/SQLInjection: client-side-sql-evidence from loginVulnerable WASM SQLite demo (5→6)",
+      "web-pentest-playground.onrender.com: unauthenticated-admin-endpoint on /admin HTML login panel (1→2)"
     ],
-    "learning_gaps": [
-      "web-pentest-playground.onrender.com: vuln labs behind /login — only misconfig reachable unauthenticated",
-      "gauravkhurana.com/SQLInjection: WASM SQLite demo — no sql-error-disclosure slug despite SQLi theme",
-      "xss-payload-lab.vercel.app: XSS sandbox — only header misconfig, no dom-eval-xss slug"
-    ],
+    "learning_gaps": [],
     "learning_gaps_closed": [
-      "dxx33.github.io/WebVulnsGuide: dangerous-html-sinks innerHTML+= + client-side-prototype-pollution-evidence via lab crawl prioritization",
-      "nodegoat-websec.herokuapp.com: server-side-eval-evidence from tutorial eval(req.body.*) samples"
+      "xss-payload-lab.vercel.app: dangerous-html-sinks for innerHTML render(input) educational XSS lab samples",
+      "gauravkhurana.com/SQLInjection: client-side-sql-evidence for inline loginVulnerable string-concat SQL",
+      "web-pentest-playground.onrender.com: exposed /admin HTML login panel via unauthenticatedAdminEndpoint probe"
     ]
   },
   "discovery_highlights": {
@@ -105,7 +102,7 @@
     "vulnshop.vercel.app": 4,
     "ashimkoirala.github.io/HackLab": 5,
     "vulnweb.netlify.app": 3,
-    "web-pentest-playground.onrender.com": 1,
+    "web-pentest-playground.onrender.com": 2,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "tempehs.github.io/The_Unsecure_PWA": 3,
     "yusufarbc.github.io/apigoat": 2,
@@ -114,9 +111,9 @@
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 1,
     "demo.weblock.ru": 3,
-    "gauravkhurana.com/SQLInjection": 5,
+    "gauravkhurana.com/SQLInjection": 6,
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
-    "xss-payload-lab.vercel.app": 2,
+    "xss-payload-lab.vercel.app": 3,
     "cyber-ctf-website.vercel.app": 1
   }
 }

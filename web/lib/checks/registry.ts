@@ -1285,7 +1285,17 @@ const ADMIN_PROBE_PATHS = [
   "/api/admin/settings",
   "/admin/application-configuration"
 ];
+const ADMIN_HTML_LOGIN_PATHS = ["/admin", "/admin/"];
 const ADMIN_JSON_MARKERS = /"(?:config|admin|application|settings|server)"\s*:/;
+const ADMIN_HTML_LOGIN_MARKERS =
+  /(?:Admin Panel|Admin Login|administrator access|Secure administrator)/i;
+
+function isExposedAdminLoginHtml(body: string): boolean {
+  if (!ADMIN_HTML_LOGIN_MARKERS.test(body)) return false;
+  if (!/<input[^>]+type=["']password["']/i.test(body)) return false;
+  if (/oauth|sso|saml|sign in with/i.test(body.slice(0, 1200))) return false;
+  return true;
+}
 
 const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   const urls = ADMIN_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
@@ -1305,6 +1315,23 @@ const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
       }
     };
   }
+
+  const htmlUrls = ADMIN_HTML_LOGIN_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const htmlDocs = await ctx.probe.getMany(htmlUrls, { maxBytes: 8192 }, 2);
+  for (const [url, r] of htmlDocs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!isExposedAdminLoginHtml(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url,
+        snippet: r.body.slice(0, 200).trim(),
+        note: "admin login panel reachable without prior authentication redirect"
+      }
+    };
+  }
+
   return NEGATIVE;
 };
 
@@ -1361,6 +1388,18 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "getElementById innerHTML += user input",
     re: /getElementById\([^)]+\)\.innerHTML\s*\+=/
+  },
+  {
+    label: "preview.innerHTML = user comment/content variable",
+    re: /preview\.innerHTML\s*=\s*(?:comment|content|input|userInput|payload)\b/
+  },
+  {
+    label: "output.innerHTML = render(user input)",
+    re: /output\.innerHTML\s*=\s*render\s*\(\s*(?:input|userInput|payload|comment)\s*\)/
+  },
+  {
+    label: "element.innerHTML = userInput (XSS lab sample)",
+    re: /element\.innerHTML\s*=\s*userInput\b/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1465,8 +1504,16 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
     re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/
   },
   {
+    label: "INTENTIONALLY INSECURE string-concat SQL login",
+    re: /INTENTIONALLY INSECURE[\s\S]{0,120}string concatenation/i
+  },
+  {
+    label: "loginVulnerable async SQL string interpolation",
+    re: /async function loginVulnerable[\s\S]{0,250}`SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,80}\$\{/
+  },
+  {
     label: "Template literal SELECT FROM users WHERE username interpolation",
-    re: /`SELECT \* FROM users[\s\S]{0,120}WHERE[\s\S]{0,60}username\s*=\s*'\$\{/
+    re: /`SELECT[\s\S]{0,120}FROM[\s\S]{0,60}users[\s\S]{0,120}WHERE[\s\S]{0,60}username\s*=\s*'\$\{/
   },
   {
     label: "SQLi bypass OR/quote inspection before query build",
