@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T07:05:00.000Z",
+  "updated_at": "2026-07-08T13:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -280,6 +280,31 @@
       "url": "https://lab.pentest-forge.com/",
       "source": "PentestForge Lab public vulnerable apps playground — Juice Shop, DVWA, crAPI, DVGA hub",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://capture-the-flag-official-website.vercel.app/",
+      "source": "Hackforge CTF platform — Product Hunt public cybersecurity training landing",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cve-2025-55182-demo.vercel.app/",
+      "source": "yuchant/critical-cve-demo OSS — CVE-2025-55182 React Server Components RCE simulation (Vercel)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-academy.vercel.app/",
+      "source": "Vuln Academy OSS — browser-only CVE walkthrough labs (SVG XSS, SQLi, priv esc)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-juice.shop/",
+      "source": "OWASP Juice Shop official public demo (production) — compare vs staging oracle",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://cybersec-lab.vercel.app/",
+      "source": "cybersec-lab OSS — intentionally vulnerable Next.js OWASP practice lab (Vercel)",
+      "auth": "oss_deploy"
     }
   ]
 }
