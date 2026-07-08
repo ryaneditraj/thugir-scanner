@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T08:05:00.474Z",
+  "updated_at": "2026-07-08T08:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 61,
   "discovery_findings": 208,
-  "improvements_shipped": 27,
-  "last_run": "2026-07-08T08:05:00.474Z",
+  "improvements_shipped": 30,
+  "last_run": "2026-07-08T08:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "08:00",
     "benchmark": {
@@ -39,28 +39,21 @@
         }
       }
     },
-    "discovery_new": 5,
-    "discovery_findings_new": 13,
-    "skipped_rescan_48h": 56,
     "teacher_delta": "skipped — no nuclei/engine",
-    "discovery_highlights_new": {
-      "demo.weblock.ru": 3,
-      "gauravkhurana.com/SQLInjection": 5,
-      "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
-      "xss-payload-lab.vercel.app": 2,
-      "cyber-ctf-website.vercel.app": 1
-    },
+    "improvements_this_run": 3,
     "notable_findings": [
-      "gauravkhurana.com/SQLInjection: dangerous-html-sinks + robots/sitemap sensitive paths on in-browser SQLi demo (5 findings)",
-      "demo.weblock.ru: Vulnerable Bank public demo — permissive-cors + tech-stack-disclosure (3 findings)",
+      "dxx33.github.io/WebVulnsGuide: innerHTML += command DOM XSS + prototype pollution lab (4→5)",
+      "nodegoat-websec.herokuapp.com: eval(req.body.preTax) server-side eval evidence (3→4)",
       "juice-shop-staging: benchmark oracle 7 findings, 6/6 recall maintained"
     ],
     "learning_gaps": [
-      "gauravkhurana.com/SQLInjection: intentional WASM SQLite SQLi demo — no sql-error-disclosure or client-side-sql-evidence slugs (only dangerous-html-sinks)",
-      "xss-payload-lab.vercel.app: XSS sandbox playground — only header misconfig, no dom-eval-xss despite script execution in iframe",
-      "demo.weblock.ru: banking + AI prompt-injection marketing — only misconfig/tech disclosure, no auth/sqli slugs",
-      "aryan-rajoria.github.io/vuln-web-sec-proj: curated project directory page, not a vuln app itself",
-      "cyber-ctf-website.vercel.app: marketing landing only — labs require signup/launcher"
+      "web-pentest-playground.onrender.com: vuln labs behind /login — only misconfig reachable unauthenticated",
+      "gauravkhurana.com/SQLInjection: WASM SQLite demo — no sql-error-disclosure slug despite SQLi theme",
+      "xss-payload-lab.vercel.app: XSS sandbox — only header misconfig, no dom-eval-xss slug"
+    ],
+    "learning_gaps_closed": [
+      "dxx33.github.io/WebVulnsGuide: dangerous-html-sinks innerHTML+= + client-side-prototype-pollution-evidence via lab crawl prioritization",
+      "nodegoat-websec.herokuapp.com: server-side-eval-evidence from tutorial eval(req.body.*) samples"
     ]
   },
   "discovery_highlights": {
@@ -70,7 +63,7 @@
     "rest.vulnweb.com": 3,
     "testasp.vulnweb.com": 4,
     "dvwa.csalab.app": 4,
-    "nodegoat-websec.herokuapp.com": 3,
+    "nodegoat-websec.herokuapp.com": 4,
     "crapi.apisec.ai": 4,
     "wrongsecrets.herokuapp.com": 3,
     "juice-shop-staging.herokuapp.com": 7,
@@ -117,7 +110,7 @@
     "tempehs.github.io/The_Unsecure_PWA": 3,
     "yusufarbc.github.io/apigoat": 2,
     "koadt.github.io/oss-oopssec-store": 2,
-    "dxx33.github.io/WebVulnsGuide": 3,
+    "dxx33.github.io/WebVulnsGuide": 5,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 1,
     "demo.weblock.ru": 3,

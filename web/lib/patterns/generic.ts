@@ -664,6 +664,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "server-side-eval-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Server handler passes request body to eval()",
+    description:
+      "Application source (bundled or tutorial-visible) shows eval(req.body.*) or eval(req.query.*) — a classic server-side JavaScript injection pattern in Node/Express apps.",
+    impactOneline:
+      "User input is passed to eval() on the server — remote code execution is likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "serverSideEvalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval(); parse input with JSON.parse or typed parsers.",
+      steps: [
+        "Delete eval() and new Function() calls that read req.body or req.query.",
+        "Use JSON.parse with schema validation for structured input.",
+        "Return generic errors; never execute user strings as code."
+      ]
+    },
+    fixPrompt:
+      "My Node/Express handler uses eval(req.body.field) to parse user input. Remove eval(), parse with JSON.parse + validation, and show the safe handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-prototype-pollution-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Client bundle documents prototype pollution via __proto__ merge",
+    description:
+      "The shipped HTML/JavaScript merges user-controlled objects without blocking __proto__ or constructor.prototype — enabling prototype pollution that can escalate to RCE in some stacks.",
+    impactOneline:
+      "Unsafe object merge allows __proto__ pollution — privilege escalation or RCE may follow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePrototypePollutionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block __proto__ and constructor keys during object merge.",
+      steps: [
+        "Use Object.create(null) for lookup maps or a safe merge library.",
+        "Reject keys __proto__, constructor, and prototype from user JSON.",
+        "Freeze Object.prototype in hardened environments where supported."
+      ]
+    },
+    fixPrompt:
+      "My app merges user JSON into config objects without blocking __proto__. Add key blocklisting for __proto__/constructor/prototype and show a safe merge helper.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "reflected-xss-query-param",
     platform: "generic",
     category: "Cross-site scripting",

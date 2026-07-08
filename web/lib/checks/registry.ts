@@ -1353,6 +1353,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "innerHTML template literal with user input variable",
     re: /\.innerHTML\s*=\s*`[^`]{0,300}\$\{(?:escapeHtmlDisplay\()?input\b/
+  },
+  {
+    label: "innerHTML += user command/input variable",
+    re: /\.innerHTML\s*\+=\s*(?:command|input|userInput|payload|query|term)\b/
+  },
+  {
+    label: "getElementById innerHTML += user input",
+    re: /getElementById\([^)]+\)\.innerHTML\s*\+=/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1510,6 +1518,59 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
 };
 
 // --- Client-side session hijack evidence (educational labs / insecure cookie demos) --
+// --- Server-side eval() on request body (Node/Express anti-pattern) ----------------
+const SERVER_SIDE_EVAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "eval(req.body.*) server-side injection",
+    re: /eval\s*\(\s*req\.body\.[a-zA-Z_$][\w$]*/
+  },
+  {
+    label: "eval(req.query.*) server-side injection",
+    re: /eval\s*\(\s*req\.query\.[a-zA-Z_$][\w$]*/
+  },
+  {
+    label: "Function(req.body.*) dynamic code execution",
+    re: /(?:new\s+)?Function\s*\(\s*[^)]*req\.body\.[a-zA-Z_$][\w$]*/
+  }
+];
+
+const serverSideEvalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of SERVER_SIDE_EVAL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "server-side handler passes req.body/query to eval() — remote code execution likely"
+    }
+  };
+};
+
+// --- Client-side prototype pollution evidence (educational labs / unsafe merge) ---
+const clientSidePrototypePollutionEvidence: Rule = async (ctx) => {
+  const markers: string[] = [];
+  if (/prototype pollution/i.test(ctx.combined)) markers.push("prototype pollution");
+  if (/__proto__[\s\S]{0,120}isAdmin/i.test(ctx.combined)) markers.push("__proto__ isAdmin payload");
+  if (/constructor\.prototype[\s\S]{0,120}(?:polluted|isAdmin)/i.test(ctx.combined))
+    markers.push("constructor.prototype pollution");
+  if (/Object\.assign\s*\([^)]*,\s*(?:JSON\.parse|userInput|req\.body)/i.test(ctx.combined))
+    markers.push("Object.assign with user input");
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.9 : 0.85,
+    evidence: {
+      markers,
+      note: "client bundle documents prototype pollution via __proto__ merge without sanitization"
+    }
+  };
+};
+
 const clientSideSessionHijackEvidence: Rule = async (ctx) => {
   const markers: string[] = [];
   if (/Session Replay Attack/i.test(ctx.combined)) markers.push("Session Replay Attack");
@@ -1609,6 +1670,8 @@ export const RULES: Record<string, Rule> = {
   clientSideIdorEvidence,
   clientSideSqlEvidence,
   clientSideSessionHijackEvidence,
+  clientSidePrototypePollutionEvidence,
+  serverSideEvalEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,

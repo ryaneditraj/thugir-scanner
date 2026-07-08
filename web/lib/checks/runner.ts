@@ -276,7 +276,9 @@ const DEEP_RULES = new Set<string>([
   "reflectedXss",
   "clientSideIdorEvidence",
   "clientSideSqlEvidence",
-  "clientSideSessionHijackEvidence"
+  "clientSideSessionHijackEvidence",
+  "clientSidePrototypePollutionEvidence",
+  "serverSideEvalEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -311,6 +313,39 @@ function internalLinks(html: string, pageUrl: string, limit: number): string[] {
     }
   }
   return [...out].slice(0, limit);
+}
+
+/** Prefer security lab HTML pages (xss/sqli/csrf/eval/prototype) over generic nav links. */
+function prioritizeSecurityLabLinks(links: string[]): string[] {
+  const LAB_KEYWORD_ORDER = [
+    "prototype",
+    "evalbypass",
+    "csrf",
+    "authbypass",
+    "xss",
+    "sqli",
+    "ssti",
+    "cors",
+    "ssrf",
+    "os-injection",
+    "injection",
+    "idor",
+    "bypass",
+    "pollution"
+  ];
+  const rank = (url: string) => {
+    try {
+      const p = new URL(url).pathname.toLowerCase();
+      for (let i = 0; i < LAB_KEYWORD_ORDER.length; i++) {
+        if (p.includes(LAB_KEYWORD_ORDER[i])) return i;
+      }
+      if (/\.html?$/i.test(p)) return LAB_KEYWORD_ORDER.length + 1;
+      return LAB_KEYWORD_ORDER.length + 2;
+    } catch {
+      return 99;
+    }
+  };
+  return [...links].sort((a, b) => rank(a) - rank(b));
 }
 
 /** Client-side navigation targets (e.g. window.location.href = 'victim.html'). */
@@ -349,11 +384,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const origin = target.origin;
 
-  // Shallow crawl: homepage + a handful of internal pages.
-  const crawlSeeds = [
-    ...internalLinks(home.body, home.finalUrl, DEEP_MAX_PAGES - 1),
-    ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1)
-  ];
+  // Shallow crawl: homepage + a handful of internal pages (prioritize vuln lab HTML).
+  const crawlSeeds = prioritizeSecurityLabLinks([
+    ...new Set([
+      ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 4),
+      ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1)
+    ])
+  ]).slice(0, DEEP_MAX_PAGES - 1);
   const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
   const probe = new ProbeCache();
   const extraPages = await fetchPagesBatched(pageUrls.slice(1), { probe, maxBytes: 600_000, concurrency: 3 });

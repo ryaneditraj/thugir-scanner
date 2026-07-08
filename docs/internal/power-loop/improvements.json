@@ -161,6 +161,24 @@
       "slug": "client-side-session-hijack-evidence",
       "status": "shipped",
       "validation": "CookieJar demo: Session Replay Attack + doReplay() + vault-token/atk-token UI; cyberdesserts.github.io/cookiejar-lab/demo findings 2→3"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: output.innerHTML += command + '<br>' in SSRF/EvalByPass lab pages; dxx33.github.io/WebVulnsGuide findings 4→5"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "server-side-eval-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: eval(req.body.preTax) in /tutorial HTML; nodegoat-websec.herokuapp.com findings 3→4"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-prototype-pollution-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prototype.html __proto__ isAdmin + prototype pollution lab markers; crawl prioritization picks prototype/EvalByPass/CSRF before duplicate SSRF pages; dxx33.github.io/WebVulnsGuide gains prototype-pollution slug"
     }
   ],
   "shipped": [
@@ -298,6 +316,21 @@
       "source": "discovery:cyberdesserts.github.io/cookiejar-lab/demo",
       "slug": "client-side-session-hijack-evidence",
       "shipped_at": "2026-07-08T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "innerhtml-plus-equals-dom-xss",
+      "shipped_at": "2026-07-08T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "server-side-eval-evidence",
+      "shipped_at": "2026-07-08T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "prototype-pollution-lab-crawl-priority",
+      "shipped_at": "2026-07-08T08:10:00.000Z"
     }
   ]
 }
