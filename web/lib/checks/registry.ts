@@ -1368,6 +1368,17 @@ function isExposedAdminLoginHtml(body: string): boolean {
   return true;
 }
 
+const ADMIN_SHELL_NAV_MARKERS = /Administration|Admin Panel|Manage users/i;
+const ADMIN_SHELL_LINK_MARKERS = /href\s*=\s*["']\/admin\/(?:users|config|settings)/i;
+
+function isExposedAdminShellHtml(body: string): boolean {
+  if (!ADMIN_SHELL_LINK_MARKERS.test(body) && !/\/admin\/users/i.test(body)) return false;
+  if (!ADMIN_SHELL_NAV_MARKERS.test(body)) return false;
+  if (/sign in|log in|login required|unauthorized/i.test(body.slice(0, 800))) return false;
+  if (isExposedAdminLoginHtml(body)) return false;
+  return true;
+}
+
 const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   const urls = ADMIN_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
@@ -1391,16 +1402,28 @@ const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   const htmlDocs = await ctx.probe.getMany(htmlUrls, { maxBytes: 8192 }, 2);
   for (const [url, r] of htmlDocs) {
     if (r.status < 200 || r.status >= 300) continue;
-    if (!isExposedAdminLoginHtml(r.body)) continue;
-    return {
-      fired: true,
-      confidence: 0.86,
-      evidence: {
-        url,
-        snippet: r.body.slice(0, 200).trim(),
-        note: "admin login panel reachable without prior authentication redirect"
-      }
-    };
+    if (isExposedAdminLoginHtml(r.body)) {
+      return {
+        fired: true,
+        confidence: 0.86,
+        evidence: {
+          url,
+          snippet: r.body.slice(0, 200).trim(),
+          note: "admin login panel reachable without prior authentication redirect"
+        }
+      };
+    }
+    if (isExposedAdminShellHtml(r.body)) {
+      return {
+        fired: true,
+        confidence: 0.84,
+        evidence: {
+          url,
+          snippet: r.body.slice(0, 200).trim(),
+          note: "admin SPA shell (users/config nav) reachable without authentication redirect"
+        }
+      };
+    }
   }
 
   return NEGATIVE;
@@ -1931,6 +1954,54 @@ const unauthenticatedApiRoutes: Rule = async (ctx) => {
   };
 };
 
+// --- Hidden prompt-injection vectors in HTML (AI agent / scraper attacks) -----
+// Detects instructions smuggled into page source via comments, hidden elements, data
+// attributes, and zero-width Unicode — positive proof from raw HTML, not rendered view.
+const HIDDEN_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTML comment with agent instruction",
+    re: /<!--[\s\S]{0,500}?(?:you must include|append code|content verification|SYSTEM NOTICE)[\s\S]{0,500}?-->/i
+  },
+  {
+    label: "data-system-prompt attribute",
+    re: /data-system-prompt\s*=\s*["'][^"']{10,}/i
+  },
+  {
+    label: "Visually hidden instruction (zero font-size or opacity)",
+    re: /style\s*=\s*["'][^"']*(?:font-size:\s*0(?:\.\d+)?px|opacity:\s*0(?:\.\d+)?)[^"']*["'][^>]*>[\s\S]{0,250}?(?:SYSTEM NOTICE|include the phrase|append code|verification code)/i
+  },
+  {
+    label: "display:none smuggled instruction",
+    re: /display\s*:\s*none[^>]*>[\s\S]{0,350}?(?:SYSTEM:|verification code|include the phrase|you must include)/i
+  },
+  {
+    label: "clip:rect screen-reader hidden instruction",
+    re: /clip:\s*rect\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\)[^>]*>[\s\S]{0,250}?(?:SYSTEM NOTICE|append code|verification)/i
+  },
+  {
+    label: "Zero-width Unicode smuggled in HTML text",
+    re: /(?:&#x200[bcdBCD];|&#820[345];|&#65279;){2,}/
+  }
+];
+
+const hiddenPromptInjection: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of HIDDEN_PROMPT_INJECTION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 120).replace(/\s+/g, " ").trim() });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: Math.min(0.92, 0.78 + hits.length * 0.03),
+    evidence: {
+      vectorCount: hits.length,
+      hits: hits.slice(0, 5),
+      note: "HTML source contains hidden instructions aimed at AI agents/scrapers (prompt injection)"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -1979,7 +2050,8 @@ export const RULES: Record<string, Rule> = {
   dangerousHtmlSinks,
   domEvalXss,
   springActuatorExposed,
-  idorObjectAccess
+  idorObjectAccess,
+  hiddenPromptInjection
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -2016,5 +2088,6 @@ export const FREE_RULES = new Set([
   "unauthenticatedAdminEndpoint",
   "dangerousHtmlSinks",
   "domEvalXss",
-  "springActuatorExposed"
+  "springActuatorExposed",
+  "hiddenPromptInjection"
 ]);

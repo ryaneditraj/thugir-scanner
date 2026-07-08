@@ -842,5 +842,31 @@ export const genericPatterns: Pattern[] = [
       "My Spring Boot app exposes /actuator publicly (health/info/_links JSON). Lock down management endpoints: restrict exposure, require auth, and show me the application.properties / application.yml changes.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "hidden-prompt-injection",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Hidden prompt-injection instructions in page HTML",
+    description:
+      "The page source embeds instructions for AI agents or scrapers using hidden HTML — comments, zero-opacity text, display:none blocks, data-system-prompt attributes, or zero-width Unicode. Untrusted page content can manipulate agents that summarize or act on the page.",
+    impactOneline:
+      "Hidden HTML tricks AI agents into leaking data or following attacker instructions — indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hiddenPromptInjection" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Strip untrusted HTML before feeding it to AI agents; never trust page source as benign.",
+      steps: [
+        "Sanitize or block-list HTML comments, hidden elements, and data-* prompt attributes before agent ingestion.",
+        "Detect zero-width Unicode and visually hidden text in content pipelines.",
+        "Treat all third-party page content as untrusted input to LLM prompts — use structured extraction, not raw HTML dumps."
+      ]
+    },
+    fixPrompt:
+      "My site (or a page we ingest) has hidden prompt-injection vectors in the HTML source — comments, display:none instructions, data-system-prompt, or zero-width Unicode. Show how to strip these before any AI agent reads the page, and add detection in our content pipeline.",
+    version: 1,
+    enabled: true
   }
 ];
