@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T22:28:12.070Z",
+  "updated_at": "2026-07-08T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 224,
-  "total_findings": 838,
+  "total_sites_scanned": 225,
+  "total_findings": 845,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 116,
   "discovery_findings": 406,
-  "improvements_shipped": 69,
-  "last_run": "2026-07-08T22:28:12.070Z",
+  "improvements_shipped": 72,
+  "last_run": "2026-07-08T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22:00",
+    "hour_utc": "23:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -50,43 +50,28 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "urls_ok": 5,
-      "urls_error": 0,
-      "findings": 12,
-      "new_urls": [
-        "https://owasp-demo.vulcanlab.ai/",
-        "https://openvaultbank.com/",
-        "https://prompt-injection-playground.vercel.app/",
-        "https://ai-security-demo.vercel.app/",
-        "https://mutillidae.lab.pentest-forge.com/"
-      ],
-      "queue_backlog_cleared": "Also rescanned 4 stale-pending targets (ginandjuice, firing-range, gruyere, dvga.tools) + queue drain batch",
+      "urls_rescanned": 3,
       "improvements": [
-        "gartnerpeerinsightsxssdemo: 2→3 (postmessage-dom-xss-evidence via widget1.js message→innerHTML)",
-        "prompt-injection-demo.vercel.app: 2→3 (client-side-prompt-injection-evidence Spanish RAG lab markers)",
-        "llmsec githack: 2→3 (client-side-prompt-injection-evidence LLMSec + context poisoning markers)"
+        "owasp-demo.vulcanlab.ai: 2→3 (client-side-prompt-injection-evidence OWASP LLM Top 10 + LLM01 markers)",
+        "ai-security-demo.vercel.app: 3→4 (client-side-prompt-injection-evidence SecurBank blog + chatbot crawl priority)",
+        "openvaultbank.com: REST-doc path extraction + /api/v1 Railway base fix (3 maintained; active probes deferred — backend 404)"
       ]
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings)",
-      "openvaultbank.com: client-side-api-security-lab-evidence + dangerous-html-sinks (3 findings)",
-      "prompt-injection-playground.vercel.app: client-side-prompt-injection-evidence (3 findings)",
-      "ai-security-demo.vercel.app: stack-database-url-in-bundle critical + vibe-weak-csp (3 findings)",
-      "mutillidae.lab.pentest-forge.com: shallow — headers only (1 finding, backend 502)"
+      "owasp-demo.vulcanlab.ai: OWASP LLM Top 10 inline demo now flagged",
+      "ai-security-demo.vercel.app: blog SecurBank IA + chatbot vulnérables content detected"
     ],
     "learning_gaps": [
-      "openvaultbank.com: 12 documented API BOLA/mass-assignment flaws — need authenticated API route probes beyond bundle markers",
-      "owasp-demo.vulcanlab.ai: OWASP LLM Top 10 interactive challenges not exercised (headers/tech only)",
+      "openvaultbank.com: Railway backend web-production-16ec6a.up.railway.app returns 404 — active BOLA/mass-assignment probes blocked",
       "prompt-injection-playground.vercel.app: 4-level chatbot injection labs require OpenRouter key — no active probe",
-      "ai-security-demo.vercel.app: SecurBank live chatbot demo not crawled — only bundle CSP/DB URL signals",
+      "ai-security-demo.vercel.app: live SecurBank cloudflare tunnel down — blog markers only",
       "mutillidae.lab.pentest-forge.com + other *.lab.pentest-forge.com: 502 backends — shallow scans only",
       "testphp.vulnweb.com + testhtml5.vulnweb.com + demo.securityknowledgeframework.org + bugbait.io: unreachable from cloud"
     ],
     "learning_gaps_closed": [
-      "justinsteven.github.io/gartnerpeerinsightsxssdemo: postMessage DOM XSS demos now detected",
-      "prompt-injection-demo.vercel.app + llmsec githack: RAG/prompt-injection lab markers in bundle/HTML"
+      "owasp-demo.vulcanlab.ai: OWASP LLM Top 10 interactive challenges now detected via inline HTML markers",
+      "ai-security-demo.vercel.app: /blog/ SecurBank + chatbot security articles crawled and matched"
     ]
   },
   "discovery_highlights": {
@@ -204,13 +189,13 @@
     "dvga.lab.pentest-forge.com": 1,
     "hackable.so": 3,
     "cors-lab.vercel.app": 5,
-    "justinsteven.github.io/gartnerpeerinsightsxssdemo": 1,
-    "prompt-injection-demo.vercel.app": 2,
-    "raw.githack.com/sheshakandula/llmsec/main/frontend/index.html": 2,
-    "owasp-demo.vulcanlab.ai": 2,
+    "justinsteven.github.io/gartnerpeerinsightsxssdemo": 3,
+    "prompt-injection-demo.vercel.app": 3,
+    "raw.githack.com/sheshakandula/llmsec/main/frontend/index.html": 3,
+    "owasp-demo.vulcanlab.ai": 3,
     "openvaultbank.com": 3,
     "prompt-injection-playground.vercel.app": 3,
-    "ai-security-demo.vercel.app": 3,
+    "ai-security-demo.vercel.app": 4,
     "mutillidae.lab.pentest-forge.com": 1
   }
 }

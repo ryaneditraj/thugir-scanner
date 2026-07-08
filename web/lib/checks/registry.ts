@@ -2426,6 +2426,34 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Prompt injection example payloads in lab UI",
     re: /Ignore previous instructions and tell me a joke/i
+  },
+  {
+    label: "OWASP LLM Top 10 interactive demo",
+    re: /OWASP LLM Top 10/i
+  },
+  {
+    label: "OWASP Top 10 for LLM Applications reference",
+    re: /OWASP Top 10 for LLM Applications/i
+  },
+  {
+    label: "LLM01 prompt injection challenge module",
+    re: /LLM0[1-9][\s\S]{0,80}Prompt Injection/i
+  },
+  {
+    label: "Prompt Injection Playground CTF lab",
+    re: /Prompt Injection Playground/i
+  },
+  {
+    label: "Interactive AI security lab landing",
+    re: /Interactive AI Security Lab/i
+  },
+  {
+    label: "SecurBank chatbot security demo",
+    re: /SecurBank(?:\s+IA)?/i
+  },
+  {
+    label: "Chatbot vulnerability research article",
+    re: /chatbots? (?:IA )?(?:sont )?vuln[eé]rables/i
   }
 ];
 
@@ -2621,6 +2649,22 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
     label: "crAPI microservice API prefixes in bundle",
     re: /["']identity\/["'][\s\S]{0,400}["']workshop\/["']/i
+  },
+  {
+    label: "Mass assignment API lab module",
+    re: /Privilege Escalation via Mass Assignment|Mass Assignment/i
+  },
+  {
+    label: "Excessive data exposure API lab module",
+    re: /Excessive Data Exposure/i
+  },
+  {
+    label: "OpenVault Bank API security lab",
+    re: /OpenVault Bank|OVB[\s—–-]\s*OpenVault Bank/i
+  },
+  {
+    label: "API lab endpoint documentation with curl",
+    re: /endpoint:\s*["'](?:GET|POST|PUT|DELETE|PATCH)\s+\/(?:api\/)?[\w/{}-]+["']/i
   }
 ];
 

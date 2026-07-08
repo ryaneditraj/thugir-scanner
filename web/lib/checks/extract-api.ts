@@ -5,13 +5,15 @@ export function extractApiPaths(text: string, limit = 10): string[] {
     /["'`](\/api\/[a-z0-9_\-/.]+)["'`]/gi,
     /fetch\(\s*["'](\/api\/[^"'`?]+)["']/gi,
     /axios\.(?:get|post|put|delete|patch)\(\s*["'](\/api\/[^"'`?]+)["']/gi,
-    /href=["'](\/api\/[^"'`?#]+)["']/gi
+    /href=["'](\/api\/[^"'`?#]+)["']/gi,
+    /(?:GET|POST|PUT|DELETE|PATCH)\s+(\/(?:api\/)?[a-z0-9_\-/.{}]+)/gi,
+    /endpoint:\s*["'](?:GET|POST|PUT|DELETE|PATCH)\s+(\/(?:api\/)?[a-z0-9_\-/.{}]+)["']/gi
   ];
   for (const re of patterns) {
     let m: RegExpExecArray | null;
     while ((m = re.exec(text))) {
       const p = m[1].split("?")[0].replace(/\/+$/, "") || m[1];
-      if (p.includes("${") || p.includes("{{") || p.length > 80) continue;
+      if (p.includes("${") || p.includes("{{") || p.includes("{") || p.length > 80) continue;
       if (/\.(js|css|png|jpg|svg|ico|map)$/i.test(p)) continue;
       paths.add(p.startsWith("/") ? p : `/${p}`);
       if (paths.size >= limit * 2) break;
@@ -50,7 +52,7 @@ export function extractExternalApiBases(text: string, pageOrigin: string, limit 
   const patterns = [
     /baseURL:\s*["'](https?:\/\/[^"']+)["']/gi,
     /create\(\{\s*baseURL:\s*["'](https?:\/\/[^"']+)["']/gi,
-    /["'](https?:\/\/[a-z0-9.-]+(?:\.railway\.app|\.herokuapp\.com|\.onrender\.com|\.fly\.dev|apisec\.ai))(?:\/api)?["']/gi
+    /["'](https?:\/\/[a-z0-9.-]+(?:\.railway\.app|\.herokuapp\.com|\.onrender\.com|\.fly\.dev|apisec\.ai))(?:\/api(?:\/v\d+)?)?["']/gi
   ];
   for (const re of patterns) {
     let m: RegExpExecArray | null;
