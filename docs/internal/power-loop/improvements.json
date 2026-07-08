@@ -89,6 +89,18 @@
       "slug": "reflected-xss-query-param",
       "status": "shipped",
       "validation": "GET /mission?id=thugirXSScanary echoes raw canary in 500 HTML (query-param href discovery + accept 5xx when canary reflects); hackxor.net findings 2→3"
+    },
+    {
+      "source": "discovery:idor-website.vercel.app",
+      "slug": "client-side-idor-evidence",
+      "status": "shipped",
+      "validation": "Bundle documents VULNERABLE ENDPOINT GET/PUT/DELETE /api/users/{userId} with No authorization check; idor-website.vercel.app findings 2→3"
+    },
+    {
+      "source": "discovery:urban-vampi-staging.up.railway.app",
+      "slug": "idor-sequential-ids",
+      "status": "shipped",
+      "validation": "OpenAPI /openapi.json drives GET probes; /users/v1/name1 returns {\"username\":\"name1\",\"email\":\"mail1@mail.com\"} without auth; urban-vampi findings 2→4"
     }
   ],
   "shipped": [
@@ -166,6 +178,16 @@
       "source": "discovery:hackxor.net",
       "slug": "reflected-xss-5xx-canary-echo",
       "shipped_at": "2026-07-08T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:idor-website.vercel.app",
+      "slug": "client-side-idor-evidence",
+      "shipped_at": "2026-07-08T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:urban-vampi-staging.up.railway.app",
+      "slug": "openapi-get-path-probing",
+      "shipped_at": "2026-07-08T03:10:00.000Z"
     }
   ]
 }

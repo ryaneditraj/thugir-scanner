@@ -561,6 +561,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-idor-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Client bundle documents IDOR-prone API routes",
+    description:
+      "The shipped JavaScript explicitly documents API endpoints that fetch or mutate resources by user-controlled ID without ownership verification — a client-side IDOR anti-pattern even before probing the server.",
+    impactOneline:
+      "API routes keyed by user ID lack ownership checks — changing the ID may expose other accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIdorEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add server-side ownership checks; never trust client-side authorization.",
+      steps: [
+        "Verify the authenticated user owns every record on GET/PUT/DELETE.",
+        "Remove demo vulnerability markers and mock APIs from production bundles.",
+        "Use non-guessable IDs and audit all /api/users/{id} style routes."
+      ]
+    },
+    fixPrompt:
+      "My client bundle documents IDOR-prone /api/users/{id} routes without ownership checks. Add server-side authorization on every record access and remove vulnerable demo endpoints from production. Show the fixed handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "reflected-xss-query-param",
     platform: "generic",
     category: "Cross-site scripting",

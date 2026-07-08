@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T02:08:35.007Z",
-  "total": 70,
-  "uniqueSlugs": 70,
+  "generatedAt": "2026-07-08T03:08:43.151Z",
+  "total": 71,
+  "uniqueSlugs": 71,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 52,
+    "generic": 53,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 60,
-    "deep": 10,
+    "deep": 11,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 12,
+    "Broken access control": 13,
     "Exposed secret": 14,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -34,6 +34,7 @@
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "client-side-idor-evidence",
     "cors-reflect-origin",
     "cursor-next-public-secret",
     "dangerous-html-sinks",
