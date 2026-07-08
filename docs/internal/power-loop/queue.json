@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T10:08:00.000Z",
+  "updated_at": "2026-07-08T11:08:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -354,6 +354,31 @@
     {
       "url": "https://web-security-lab-docs.vercel.app/",
       "source": "Security Lab docs hub — OWASP-style attack case study platform landing (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/",
+      "source": "mr-dinesh/juicesec OSS — OWASP Top 10 browser lab with AI tutor (Cloudflare Workers deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/",
+      "source": "mehdiaitsaid/owasp-top-10-labs OSS — structured OWASP Top 10 hands-on lab course (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cybersec-lab.vercel.app/",
+      "source": "CyberSec Lab — Spanish interactive ethical hacking rooms incl. OWASP web hacking (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-juice.shop/",
+      "source": "OWASP Juice Shop official production demo instance (juice-shop README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vuln-academy.vercel.app/",
+      "source": "Vuln Academy — OWASP vulnerability training platform (Vercel deploy)",
       "auth": "public_demo"
     }
   ]
