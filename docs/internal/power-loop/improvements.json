@@ -419,6 +419,24 @@
       "slug": "client-side-prompt-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: LLMSec Demo + Context poisoning and injection via poisoned documents + Ignore previous instructions; llmsec githack findings 2→3"
+    },
+    {
+      "source": "discovery:owasp-demo.vulcanlab.ai",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML OWASP LLM Top 10 + LLM01 Prompt Injection + OWASP Top 10 for LLM Applications; owasp-demo.vulcanlab.ai findings 2→3"
+    },
+    {
+      "source": "discovery:ai-security-demo.vercel.app",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /blog/ SecurBank IA + chatbots vulnérables article crawled via blog/chatbot priority; ai-security-demo.vercel.app findings 3→4"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "client-side-api-security-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Mass Assignment + Excessive Data Exposure + GET /admin/accounts REST doc paths; extractApiPaths REST-doc + /api/v1 Railway base fix; openvaultbank maintained 3 findings, benchmark 6/6"
     }
   ],
   "shipped": [
@@ -766,6 +784,21 @@
       "source": "discovery:llmsec-githack",
       "slug": "client-side-prompt-injection-llmsec-markers",
       "shipped_at": "2026-07-08T22:05:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-demo.vulcanlab.ai",
+      "slug": "client-side-prompt-injection-owasp-llm-top10",
+      "shipped_at": "2026-07-08T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:ai-security-demo.vercel.app",
+      "slug": "client-side-prompt-injection-securbank-blog-crawl",
+      "shipped_at": "2026-07-08T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "rest-doc-api-path-extraction",
+      "shipped_at": "2026-07-08T23:05:00.000Z"
     }
   ]
 }
