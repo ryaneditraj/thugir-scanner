@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T12:07:56.347Z",
+  "updated_at": "2026-07-08T12:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 81,
   "discovery_findings": 259,
-  "improvements_shipped": 39,
-  "last_run": "2026-07-08T12:07:56.347Z",
+  "improvements_shipped": 42,
+  "last_run": "2026-07-08T12:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "12:00",
     "benchmark": {
@@ -55,6 +55,10 @@
       "errors": [
         "web2-lab2-mck1.onrender.com: TLS/certificate error"
       ],
+      "improvements": [
+        "juicesec.mrdinesh.workers.dev: dangerous-html-sinks + client-side-sql-evidence from inline OWASP challenge HTML (2→4 findings)",
+        "vuln-academy.vercel.app: dangerous-html-sinks (svgPreview innerHTML) + client-side-sql-evidence (mysql_query coupon) (2→4 findings)"
+      ],
       "new_targets": [
         "hackable-web.vercel.app: 2 (misconfig only — advertises 12 hidden vulns)",
         "vulnerable-ecommerce.vercel.app: 3 (exposed-config-backup + misconfig)",
@@ -72,6 +76,10 @@
       "vulnerable-ecommerce FakeShop: PHP login/products endpoints not probed for SQLi — only backup file + headers detected",
       "dvwu.vercel.app: duplicate of ist-edu-bd.vercel.app (3 findings) — advertised OWASP Top 10 labs still miss sqli/idor slugs without deeper SPA route crawl",
       "web2-lab2-mck1.onrender.com: Render deploy unreachable (TLS cert error) from cloud scan env"
+    ],
+    "learning_gaps_closed": [
+      "juicesec browser-only challenge sims missed sqli/xss slugs despite OWASP Top 10 coverage",
+      "vuln-academy advertises SVG XSS + SQLi labs but scan only hit misconfig"
     ]
   },
   "discovery_highlights": {
@@ -143,11 +151,11 @@
     "web-security-lab.vercel.app": 3,
     "vuln-demo.vercel.app": 4,
     "web-security-lab-docs.vercel.app": 2,
-    "juicesec.mrdinesh.workers.dev": 2,
+    "juicesec.mrdinesh.workers.dev": 4,
     "mehdiaitsaid.github.io/owasp-top-10-labs": 3,
     "cybersec-lab.vercel.app": 4,
     "owasp-juice.shop": 2,
-    "vuln-academy.vercel.app": 2,
+    "vuln-academy.vercel.app": 4,
     "hackable-web.vercel.app": 2,
     "vulnerable-ecommerce.vercel.app": 3,
     "insecure-app.vercel.app": 2,
