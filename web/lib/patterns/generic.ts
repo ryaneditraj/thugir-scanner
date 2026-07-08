@@ -638,6 +638,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-session-hijack-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Client bundle documents session hijack / token replay",
+    description:
+      "The shipped HTML/JavaScript walks through session token theft and replay (e.g. doReplay, vault-token UI) — indicating cookies lack HttpOnly/Secure or session fixation is possible.",
+    impactOneline:
+      "Session tokens can be stolen and replayed — MFA does not protect against cookie theft.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSessionHijackEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set HttpOnly + Secure + SameSite on session cookies; enable server-side revocation.",
+      steps: [
+        "Add HttpOnly and Secure flags to all session/auth cookies.",
+        "Use SameSite=Lax or Strict to limit cross-site cookie sending.",
+        "Rotate session IDs on login and support server-side session revocation."
+      ]
+    },
+    fixPrompt:
+      "My app is vulnerable to session hijack (session tokens can be stolen and replayed). Configure session cookies with HttpOnly, Secure, and SameSite=Lax, rotate session IDs on login, and add server-side session revocation. Show the cookie/session config.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "reflected-xss-query-param",
     platform: "generic",
     category: "Cross-site scripting",

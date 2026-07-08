@@ -1341,6 +1341,18 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "innerHTML html variable built from post.content",
     re: /post\.content[\s\S]{0,500}innerHTML\s*=\s*html/i
+  },
+  {
+    label: "DOM XSS via location.hash innerHTML",
+    re: /(?:element\.)?innerHTML\s*=\s*location\.hash|innerHTML\s*=\s*hash\b[\s\S]{0,120}location\.hash/
+  },
+  {
+    label: "getElementById innerHTML = hash variable",
+    re: /getElementById\([^)]+\)\.innerHTML\s*=\s*hash\b/
+  },
+  {
+    label: "innerHTML template literal with user input variable",
+    re: /\.innerHTML\s*=\s*`[^`]{0,300}\$\{(?:escapeHtmlDisplay\()?input\b/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1443,6 +1455,14 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "Client-side SQLi login bypass string check",
     re: /includes\s*\(\s*["']' or ['"]1['"]='1["']\s*\)|includes\s*\(\s*["']admin' --["']\s*\)/
+  },
+  {
+    label: "Template literal SELECT FROM users WHERE username interpolation",
+    re: /`SELECT \* FROM users[\s\S]{0,120}WHERE[\s\S]{0,60}username\s*=\s*'\$\{/
+  },
+  {
+    label: "SQLi bypass OR/quote inspection before query build",
+    re: /\.includes\s*\(\s*["']OR["']\s*\)[\s\S]{0,250}`SELECT \* FROM users/i
   }
 ];
 
@@ -1485,6 +1505,25 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
       endpoints: [...endpoints].slice(0, 5),
       markers,
       note: "client bundle documents IDOR-prone API routes without ownership checks"
+    }
+  };
+};
+
+// --- Client-side session hijack evidence (educational labs / insecure cookie demos) --
+const clientSideSessionHijackEvidence: Rule = async (ctx) => {
+  const markers: string[] = [];
+  if (/Session Replay Attack/i.test(ctx.combined)) markers.push("Session Replay Attack");
+  if (/\bdoReplay\s*\(/i.test(ctx.combined)) markers.push("doReplay()");
+  if (/vault-token|atk-token|stolen token/i.test(ctx.combined)) markers.push("session token replay UI");
+  if (/cookies exfiltrated.*session tokens/i.test(ctx.combined))
+    markers.push("session token exfiltration");
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.9 : 0.84,
+    evidence: {
+      markers,
+      note: "client bundle documents session hijack / token replay without HttpOnly protection"
     }
   };
 };
@@ -1569,6 +1608,7 @@ export const RULES: Record<string, Rule> = {
   idorProbe,
   clientSideIdorEvidence,
   clientSideSqlEvidence,
+  clientSideSessionHijackEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
