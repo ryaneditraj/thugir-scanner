@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07T23:08:00.000Z",
+  "updated_at": "2026-07-08T00:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,40 +15,37 @@
       ]
     }
   },
-  "total_sites_scanned": 29,
-  "total_findings": 129,
+  "total_sites_scanned": 31,
+  "total_findings": 137,
   "critical_findings": 4,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 16,
   "discovery_findings": 58,
-  "improvements_shipped": 9,
-  "last_run": "2026-07-07T23:08:00.000Z",
+  "improvements_shipped": 11,
+  "last_run": "2026-07-08T00:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23:00",
+    "hour_utc": "00:00",
     "benchmark": {
-      "url": "https://juice-shop.herokuapp.com",
-      "findings": 8,
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "findings": 7,
       "recall": "6/6",
       "gap": [],
-      "dns_retry": "first attempt DNS fail, retry ok"
+      "note": "Primary juice-shop.herokuapp.com returned 503; oracle switched to staging"
     },
-    "discovery_new": 5,
-    "discovery_findings_new": 22,
-    "skipped_rescan_48h": 11,
     "teacher_delta": "skipped — no nuclei/engine",
     "improvements_this_run": 2,
     "discovery_validation": {
-      "public-firing-range.appspot.com": {
-        "findings_before": 1,
+      "demo.testfire.net": {
+        "findings_before": 2,
         "findings_after": 3,
-        "new_slugs": ["open-redirect-query-param", "reflected-xss-query-param"]
+        "new_slugs": ["reflected-xss-query-param"]
       }
     }
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
-    "demo.testfire.net": 2,
+    "demo.testfire.net": 3,
     "zero.webappsecurity.com": 3,
     "rest.vulnweb.com": 3,
     "testasp.vulnweb.com": 2,
@@ -56,7 +53,7 @@
     "nodegoat-websec.herokuapp.com": 3,
     "crapi.apisec.ai": 4,
     "wrongsecrets.herokuapp.com": 3,
-    "juice-shop-staging.herokuapp.com": 6,
+    "juice-shop-staging.herokuapp.com": 7,
     "demo.owasp-juice.shop": 7,
     "vapi.apisec.ai": 3,
     "ginandjuice.shop": 2,

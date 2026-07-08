@@ -53,6 +53,18 @@
       "slug": "reflected-xss-query-param",
       "status": "shipped",
       "validation": "GET /reflected/parameter/body?q=thugirXSScanary echoes raw canary in HTML body; Firing Range findings 1→3"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "GET /search.jsp?query=thugirXSScanary echoes raw canary in HTML (form action discovery); demo.testfire.net findings 2→3"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "sqlErrorDisclosure now probes query/search params and /search.jsp from form actions; staging benchmark recall 6/6 maintained"
     }
   ],
   "shipped": [
@@ -100,6 +112,16 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "reflected-xss-query-param",
       "shipped_at": "2026-07-07T23:08:00.000Z"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "reflected-xss-jsp-form-discovery",
+      "shipped_at": "2026-07-08T00:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sql-error-multi-param-jsp",
+      "shipped_at": "2026-07-08T00:10:00.000Z"
     }
   ]
 }
