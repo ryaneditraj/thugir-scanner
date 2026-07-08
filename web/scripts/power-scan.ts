@@ -62,6 +62,24 @@ function loadJson<T>(path: string, fallback: T): T {
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 
+function recentlyScanned(url: string, runs: ScanRunResult[], hours = 48): boolean {
+  const cutoff = Date.now() - hours * 60 * 60 * 1000;
+  let origin: string;
+  try {
+    origin = new URL(url).origin;
+  } catch {
+    return false;
+  }
+  return runs.some((r) => {
+    if (r.status !== "ok") return false;
+    try {
+      return new URL(r.url).origin === origin && new Date(r.scanned_at).getTime() > cutoff;
+    } catch {
+      return false;
+    }
+  });
+}
+
 function saveResults(run: ScanRunResult) {
   const resultsPath = resolve(LOOP, "results.json");
   const data = loadJson<{ runs: ScanRunResult[] }>(resultsPath, { runs: [] });
@@ -152,10 +170,13 @@ async function main() {
   }
 
   if (useQueue) {
+    const resultsPath = resolve(LOOP, "results.json");
+    const priorRuns = loadJson<{ runs: ScanRunResult[] }>(resultsPath, { runs: [] }).runs;
     const queue = loadJson<{ discovery_urls: ScanEntry[] }>(resolve(LOOP, "queue.json"), {
       discovery_urls: []
     });
     for (const u of queue.discovery_urls) {
+      if (recentlyScanned(u.url, priorRuns)) continue;
       targets.push({ entry: u, kind: "discovery" });
     }
   }
