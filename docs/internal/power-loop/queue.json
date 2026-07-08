@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07T23:05:00.000Z",
+  "updated_at": "2026-07-08T00:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -79,6 +79,31 @@
     {
       "url": "https://google-gruyere.appspot.com/",
       "source": "Google Gruyere intentionally vulnerable app (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/",
+      "source": "Damn Vulnerable GraphQL Application public demo (Escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testaspnet.vulnweb.com/",
+      "source": "Acunetix vulnweb Acublog ASP.NET public demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackxor.net/",
+      "source": "hackxor realistic webapp hacking game (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/",
+      "source": "SecLab Next.js OSS deploy — intentional XSS/SQLi/CSRF/IDOR labs (README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvga.xplat-demo.threatx.io/",
+      "source": "Damn Vulnerable GraphQL Application ThreatX public demo",
       "auth": "public_demo"
     }
   ]
