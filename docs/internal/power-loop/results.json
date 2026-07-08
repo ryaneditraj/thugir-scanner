@@ -3893,6 +3893,165 @@
       "probes_run": 164,
       "status": "ok",
       "scanned_at": "2026-07-08T07:01:16.368Z"
+    },
+    {
+      "run_id": "2026-07-08T07:03:53.624Z",
+      "url": "https://yusufarbc.github.io/apigoat/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 161,
+      "status": "ok",
+      "scanned_at": "2026-07-08T07:03:53.624Z"
+    },
+    {
+      "run_id": "2026-07-08T07:03:54.464Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 169,
+      "status": "ok",
+      "scanned_at": "2026-07-08T07:03:54.464Z"
+    },
+    {
+      "run_id": "2026-07-08T07:03:55.341Z",
+      "url": "https://dxx33.github.io/WebVulnsGuide/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "secret-aws-akid",
+          "title": "AWS access key id exposed in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 166,
+      "status": "ok",
+      "scanned_at": "2026-07-08T07:03:55.341Z"
+    },
+    {
+      "run_id": "2026-07-08T07:03:56.301Z",
+      "url": "https://purushotham-muktha-dev-sec-ops-visu.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "secret-resend",
+          "title": "Resend API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 164,
+      "status": "ok",
+      "scanned_at": "2026-07-08T07:03:56.301Z"
+    },
+    {
+      "run_id": "2026-07-08T07:03:57.385Z",
+      "url": "https://lab.pentest-forge.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 162,
+      "status": "ok",
+      "scanned_at": "2026-07-08T07:03:57.385Z"
     }
   ],
   "teacher_delta_runs": [
