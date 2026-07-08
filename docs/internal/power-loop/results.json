@@ -5856,6 +5856,29 @@
       "probes_run": 173,
       "status": "ok",
       "scanned_at": "2026-07-08T15:07:02.608Z"
+    },
+    {
+      "run_id": "2026-07-08T16:03:37.766Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 181,
+      "status": "ok",
+      "scanned_at": "2026-07-08T16:03:37.766Z"
     }
   ],
   "teacher_delta_runs": [
