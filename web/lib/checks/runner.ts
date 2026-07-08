@@ -286,7 +286,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePrototypePollutionEvidence",
   "serverSideEvalEvidence",
   "clientSidePromptInjectionEvidence",
-  "pentestForgeLinkedLabProbe"
+  "pentestForgeLinkedLabProbe",
+  "postMessageDomXssEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -326,6 +327,9 @@ function internalLinks(html: string, pageUrl: string, limit: number): string[] {
 /** Prefer security lab HTML pages (xss/sqli/csrf/eval/prototype) over generic nav links. */
 function prioritizeSecurityLabLinks(links: string[]): string[] {
   const LAB_KEYWORD_ORDER = [
+    "postmessage",
+    "rag-vuln",
+    "chat-vuln",
     "prototype",
     "evalbypass",
     "csrf",
@@ -339,7 +343,8 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "injection",
     "idor",
     "bypass",
-    "pollution"
+    "pollution",
+    "demo"
   ];
   const rank = (url: string) => {
     try {

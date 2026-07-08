@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-08T21:18:51.465Z",
-  "total": 87,
-  "uniqueSlugs": 87,
+  "generatedAt": "2026-07-08T22:03:27.835Z",
+  "total": 88,
+  "uniqueSlugs": 88,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 69,
+    "generic": 70,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 23,
+    "deep": 24,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Information disclosure": 10,
     "Broken authentication": 4,
     "Injection": 6,
-    "Cross-site scripting": 3,
+    "Cross-site scripting": 4,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 1,
     "AI security": 2,
@@ -70,6 +70,7 @@
     "pentest-forge-linked-lab-probe",
     "permissive-cors",
     "phpinfo-exposed",
+    "postmessage-dom-xss-evidence",
     "reflected-xss-query-param",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",

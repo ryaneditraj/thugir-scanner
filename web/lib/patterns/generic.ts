@@ -870,6 +870,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "postmessage-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DOM XSS via postMessage → innerHTML sink",
+    description:
+      "The shipped JavaScript registers a window message listener and assigns postMessage event data to innerHTML without sanitization. Third-party widgets (e.g. Gartner Peer Insights) have shipped this pattern — any page embedding the widget is vulnerable to DOM XSS from a malicious iframe.",
+    impactOneline:
+      "postMessage data is written to innerHTML — cross-origin iframe can execute script in the parent page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "postMessageDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign postMessage data to innerHTML; sanitize or use textContent.",
+      steps: [
+        "Replace innerHTML assignments from message handlers with textContent or a strict HTML sanitizer.",
+        "Validate event.origin against an explicit allow-list before processing message data.",
+        "Parse message payloads as JSON and reject HTML-bearing fields."
+      ]
+    },
+    fixPrompt:
+      "My widget listens for postMessage and assigns event.data to innerHTML. Replace innerHTML with safe rendering (textContent or DOMPurify), validate event.origin, and show the fixed message handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-prompt-injection-evidence",
     platform: "generic",
     category: "AI security",
