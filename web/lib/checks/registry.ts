@@ -1237,6 +1237,50 @@ function extractSearchEndpoints(text: string): string[] {
 
 const SQL_PROBE_PARAMS = ["q", "query", "search", "id", "tfSearch", "cat"];
 const SQL_API_SEARCH_PATHS = ["/api/products", "/api/search", "/api/items", "/api/users"];
+const JSON_AUTH_SQL_PATHS = ["/api/portal", "/api/auth/login", "/api/login", "/api/authenticate"];
+const JSON_SQLI_BODIES = [
+  JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+  JSON.stringify({ email: "admin' OR '1'='1", password: "x" })
+];
+const JSON_SQLI_SUCCESS_MARKERS = [
+  /SQL\s*Injection/i,
+  /Authentication Bypass Successful/i,
+  /Login Successful.*SQL Injection/i
+];
+
+async function probeJsonAuthSqlInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  const discovered = extractApiPaths(ctx.combined, 8).filter((p) =>
+    /login|auth|portal|authenticate/i.test(p)
+  );
+  const paths = [...new Set([...discovered, ...JSON_AUTH_SQL_PATHS])].slice(0, 6);
+  for (const path of paths) {
+    const url = new URL(path, ctx.origin).toString();
+    for (const body of JSON_SQLI_BODIES) {
+      const doc = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 8192
+      });
+      if (doc.status < 200 || doc.status >= 500) continue;
+      const marker = JSON_SQLI_SUCCESS_MARKERS.find((re) => re.test(doc.body));
+      if (!marker) continue;
+      const match = doc.body.match(marker);
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          url,
+          method: "POST",
+          marker: match?.[0]?.slice(0, 80) || "SQL injection success",
+          snippet: doc.body.slice(0, 240).trim(),
+          note: "JSON auth endpoint accepted SQLi payload — authentication bypass likely"
+        }
+      };
+    }
+  }
+  return null;
+}
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
   const discovered = extractSearchEndpoints(ctx.combined);
@@ -1297,6 +1341,9 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
   const aspPaths = [...new Set([...extractAspSqlProbePaths(ctx.combined), ...SQL_ASP_FALLBACK_PATHS])];
   const aspHit = await probeAspDifferentialSql(ctx, aspPaths);
   if (aspHit) return aspHit;
+
+  const jsonHit = await probeJsonAuthSqlInjection(ctx);
+  if (jsonHit?.fired) return jsonHit;
 
   return NEGATIVE;
 };
@@ -1444,6 +1491,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "SVG preview innerHTML = uploaded file content",
     re: /getElementById\([^)]*svgPreview[^)]*\)\.innerHTML\s*=\s*content\b/i
+  },
+  {
+    label: "PHP echo $_GET superglobal without escaping",
+    re: /echo[\s\S]{0,60}\$_GET\[/
+  },
+  {
+    label: "PHP echo $_REQUEST into HTML output",
+    re: /echo[\s\S]{0,60}\$_REQUEST\[/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -1590,6 +1645,18 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "String concat SQL query on email field",
     re: /query\s*=\s*"SELECT \* FROM users WHERE email='"\s*\+\s*email\s*\+\s*"'/
+  },
+  {
+    label: "PHP string-concat SQL with POST variables",
+    re: /\$sql\s*=\s*["']SELECT[\s\S]{0,200}WHERE[\s\S]{0,120}\$[a-zA-Z_]+/
+  },
+  {
+    label: "PHP query() with interpolated username variable",
+    re: /SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['"]\$username/
+  },
+  {
+    label: "SPA SQL injection lab success markers",
+    re: /SQL Injection Detected|Authentication Bypass Successful|Login Successful.*SQL Injection/i
   }
 ];
 
