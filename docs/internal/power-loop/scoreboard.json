@@ -1,50 +1,54 @@
 {
-  "updated_at": "2026-07-08T00:10:00.000Z",
+  "updated_at": "2026-07-08T00:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
-      "categories_hit": 1,
-      "gap": [
+      "categories_hit": 6,
+      "gap": [],
+      "hit": [
         "xss",
         "sqli",
         "idor",
         "auth_bypass",
-        "sensitive_data"
-      ],
-      "hit": [
+        "sensitive_data",
         "misconfig"
       ],
-      "note": "Heroku 503 outage — app serves error page only; 2 retries same result (1 finding: missing-security-headers)"
+      "note": "Primary juice-shop.herokuapp.com returned HTTP 503 (3 attempts, 1 finding each). Staging oracle juice-shop-staging.herokuapp.com achieved 6/6 recall (7 findings)."
     }
   },
-  "total_sites_scanned": 37,
-  "total_findings": 147,
-  "critical_findings": 4,
+  "total_sites_scanned": 39,
+  "total_findings": 153,
+  "critical_findings": 12,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 21,
-  "discovery_findings": 73,
-  "improvements_shipped": 9,
-  "last_run": "2026-07-08T00:10:00.000Z",
+  "discovery_findings": 102,
+  "improvements_shipped": 11,
+  "last_run": "2026-07-08T00:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "00:00",
     "benchmark": {
-      "url": "https://juice-shop.herokuapp.com",
-      "findings": 1,
-      "recall": "1/6",
-      "gap": [
-        "xss",
-        "sqli",
-        "idor",
-        "auth_bypass",
-        "sensitive_data"
-      ],
-      "outage": "HTTP 503 Service Unavailable (Heroku); retried twice, same 1-finding result"
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_findings": 1,
+      "primary_recall": "1/6",
+      "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+      "outage": "HTTP 503 Service Unavailable (Heroku); 3 attempts",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
+      "oracle_recall": "6/6"
     },
     "discovery_new": 5,
     "discovery_findings_new": 15,
     "skipped_rescan_48h": 16,
     "teacher_delta": "skipped — no nuclei/engine",
+    "improvements_this_run": 2,
+    "discovery_validation": {
+      "demo.testfire.net": {
+        "findings_before": 2,
+        "findings_after": 3,
+        "new_slugs": ["reflected-xss-query-param"]
+      }
+    },
     "discovery_highlights_new": {
       "dvga.tools.escape.tech": 4,
       "testaspnet.vulnweb.com": 3,
@@ -60,7 +64,7 @@
   },
   "discovery_highlights": {
     "brokencrystals.com": 12,
-    "demo.testfire.net": 2,
+    "demo.testfire.net": 3,
     "zero.webappsecurity.com": 3,
     "rest.vulnweb.com": 3,
     "testasp.vulnweb.com": 2,
@@ -68,7 +72,7 @@
     "nodegoat-websec.herokuapp.com": 3,
     "crapi.apisec.ai": 4,
     "wrongsecrets.herokuapp.com": 3,
-    "juice-shop-staging.herokuapp.com": 6,
+    "juice-shop-staging.herokuapp.com": 7,
     "demo.owasp-juice.shop": 7,
     "vapi.apisec.ai": 3,
     "ginandjuice.shop": 2,
