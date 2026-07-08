@@ -20,10 +20,33 @@ export function extractApiPaths(text: string, limit = 10): string[] {
   return [...paths].slice(0, limit);
 }
 
+/** PentestForge hub pages link sibling *.lab.pentest-forge.com vulnerable targets. */
+export function extractLinkedLabOrigins(text: string, pageOrigin: string, limit = 8): string[] {
+  const own = new URL(pageOrigin).origin;
+  const origins = new Set<string>();
+  const patterns = [
+    /href=["'](https?:\/\/[a-z0-9-]+\.lab\.pentest-forge\.com)\/?/gi,
+    /(https?:\/\/[a-z0-9-]+\.lab\.pentest-forge\.com)\/?/gi
+  ];
+  for (const re of patterns) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text))) {
+      try {
+        const origin = new URL(m[1]).origin;
+        if (origin !== own) origins.add(origin);
+      } catch {
+        /* ignore */
+      }
+      if (origins.size >= limit * 2) break;
+    }
+  }
+  return [...origins].slice(0, limit);
+}
+
 /** External API hosts referenced in SPA bundles (axios baseURL, Railway/Heroku backends). */
 export function extractExternalApiBases(text: string, pageOrigin: string, limit = 4): string[] {
   const own = new URL(pageOrigin).origin;
-  const bases = new Set<string>();
+  const bases = new Set<string>(extractLinkedLabOrigins(text, pageOrigin, limit));
   const patterns = [
     /baseURL:\s*["'](https?:\/\/[^"']+)["']/gi,
     /create\(\{\s*baseURL:\s*["'](https?:\/\/[^"']+)["']/gi,

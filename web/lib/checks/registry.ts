@@ -7,7 +7,12 @@
 
 import type { FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
-import { extractApiPaths, extractExternalApiBases, buildApiProbeUrls } from "./extract-api";
+import {
+  extractApiPaths,
+  extractExternalApiBases,
+  extractLinkedLabOrigins,
+  buildApiProbeUrls
+} from "./extract-api";
 import {
   extractSupabaseFromText,
   jwtPayload,
@@ -1211,7 +1216,20 @@ const idorObjectAccess: Rule = async (ctx) => {
   const discovered = extractIdorProbePaths(ctx.combined);
   const openApiPaths = await fetchOpenApiGetPathsWithDetails(ctx, 8);
   const paths = [...new Set([...discovered, ...openApiPaths, ...IDOR_FALLBACK_PATHS])].slice(0, 10);
-  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
+  const origins = [ctx.origin, ...externalBases];
+  const urls: string[] = [];
+  const seen = new Set<string>();
+  for (const base of origins) {
+    for (const p of paths) {
+      const url = new URL(p, base).toString();
+      if (seen.has(url)) continue;
+      seen.add(url);
+      urls.push(url);
+      if (urls.length >= 24) break;
+    }
+    if (urls.length >= 24) break;
+  }
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
   const hits: { path: string; status: number; sample: string }[] = [];
   for (const [url, r] of docs) {
@@ -1510,7 +1528,18 @@ function isExposedAdminShellHtml(body: string): boolean {
 }
 
 const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
-  const urls = ADMIN_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
+  const origins = [ctx.origin, ...externalBases];
+  const urls: string[] = [];
+  const seen = new Set<string>();
+  for (const base of origins) {
+    for (const p of ADMIN_PROBE_PATHS) {
+      const url = new URL(p, base).toString();
+      if (seen.has(url)) continue;
+      seen.add(url);
+      urls.push(url);
+    }
+  }
   const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
   for (const [url, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
@@ -2314,6 +2343,22 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Prompt injection jailbreak training module",
     re: /Prompt Injection\s*&\s*Jailbreaks/i
+  },
+  {
+    label: "Russian prompt injection training lab module",
+    re: /Что такое Prompt Injection/i
+  },
+  {
+    label: "Prompt injection definition in non-English lab UI",
+    re: /Prompt Injection\s*[—–-]\s*внедрение инструкций/i
+  },
+  {
+    label: "System prompt training concept in lab bundle",
+    re: /Системный промпт|System Prompt\s*[—–-]\s*скрытые инструкции/i
+  },
+  {
+    label: "Prompt injection attack types lab curriculum",
+    re: /типы атак[\s\S]{0,120}Prompt Injection|Типы атак/i
   }
 ];
 
@@ -2529,6 +2574,89 @@ const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentestForge hub: linked *.lab.pentest-forge.com vulnerable targets --------
+// Hub pages catalog OWASP Juice Shop, crAPI, VAmPI, etc. on sibling subdomains.
+// Probe linked origins with lab-specific routes; hub catalog alone is positive proof
+// of a public benchmark playground when 3+ live targets are listed.
+function labProbePathsForHost(hostname: string): string[] {
+  const h = hostname.toLowerCase();
+  if (h.includes("juice-shop")) {
+    return ["/rest/admin/application-configuration", "/rest/track-order/1", "/rest/products/search"];
+  }
+  if (h.includes("vampi")) return ["/api/v1/users/v1", "/api/v1/users"];
+  if (h.includes("crapi")) return ["/identity/api/v2/user/vehicles", "/workshop/api/shop/orders"];
+  if (h.includes("tomcat")) return ["/manager/html", "/host-manager/html"];
+  if (h.includes("weblogic")) return ["/console/", "/console/login/LoginForm.jsp"];
+  if (h.includes("dvga")) return ["/graphql", "/graphiql"];
+  if (h.includes("dvwa")) return ["/login.php", "/phpinfo.php"];
+  if (h.includes("mutillidae")) return ["/index.php?page=login.php"];
+  return ["/api/v1/users", "/rest/products/search"];
+}
+
+const PENTEST_FORGE_LAB_HIT_MARKERS = [
+  /"(?:config|application|settings|admin)"\s*:/,
+  /"status"\s*:\s*"success"/i,
+  /"orderId"|"username"|"email"\s*:/,
+  /SQLITE_ERROR|SQL syntax/i,
+  /Tomcat Manager Application/i,
+  /WebLogic Server/i
+];
+
+const pentestForgeLinkedLabProbe: Rule = async (ctx) => {
+  const isHub =
+    /PentestForge Lab/i.test(ctx.combined) &&
+    /vulnerable lab|Vulnerable systems/i.test(ctx.combined);
+  const linked = extractLinkedLabOrigins(ctx.combined, ctx.origin, 8);
+  const origins = new Set<string>(linked);
+  if (/\.lab\.pentest-forge\.com$/i.test(new URL(ctx.origin).hostname)) {
+    origins.add(ctx.origin);
+  }
+  if (!isHub && origins.size === 0) return NEGATIVE;
+
+  const probeHits: { host: string; path: string; status: number; sample: string }[] = [];
+  for (const origin of [...origins].slice(0, 6)) {
+    const host = new URL(origin).hostname;
+    const paths = labProbePathsForHost(host);
+    const urls = paths.map((p) => new URL(p, origin).toString());
+    const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+    for (const [url, r] of docs) {
+      if (r.status < 200 || r.status >= 400) continue;
+      if (!PENTEST_FORGE_LAB_HIT_MARKERS.some((re) => re.test(r.body.slice(0, 1200)))) continue;
+      probeHits.push({
+        host,
+        path: new URL(url).pathname,
+        status: r.status,
+        sample: r.body.slice(0, 120).trim()
+      });
+    }
+  }
+
+  if (probeHits.length > 0) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        hits: probeHits.slice(0, 4),
+        note: "linked PentestForge lab subdomain returned vulnerable-app data without auth"
+      }
+    };
+  }
+
+  const catalogLabs = linked.map((u) => new URL(u).hostname);
+  if (isHub && catalogLabs.length >= 3 && /OWASP Juice Shop/i.test(ctx.combined)) {
+    return {
+      fired: true,
+      confidence: 0.82,
+      evidence: {
+        labHosts: catalogLabs.slice(0, 8),
+        note: "public PentestForge vulnerable lab catalog lists live OWASP/API/CVE benchmark targets"
+      }
+    };
+  }
+
+  return NEGATIVE;
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -2583,7 +2711,8 @@ export const RULES: Record<string, Rule> = {
   idorObjectAccess,
   hiddenPromptInjection,
   clientSidePromptInjectionEvidence,
-  ssrfEndpointProbe
+  ssrfEndpointProbe,
+  pentestForgeLinkedLabProbe
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

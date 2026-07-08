@@ -998,5 +998,31 @@ export const genericPatterns: Pattern[] = [
       "My API has an SSRF-prone fetch/proxy endpoint that follows user-supplied URLs. Add allow-listing, block private/metadata IPs after DNS resolution, disable redirects, and show the safe server-side fetch handler.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "pentest-forge-linked-lab-probe",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Public vulnerable lab catalog with linked benchmark targets",
+    description:
+      "Page catalogs PentestForge *.lab.pentest-forge.com vulnerable apps (Juice Shop, crAPI, VAmPI, Tomcat, WebLogic) or a linked subdomain returned unauthenticated vulnerable-app data.",
+    impactOneline:
+      "Public benchmark playground exposes live vulnerable targets — scanners and attackers can enumerate OWASP/API/CVE labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeLinkedLabProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict lab hubs to authenticated testers; do not expose production-adjacent domains publicly.",
+      steps: [
+        "Gate benchmark playgrounds behind auth or VPN.",
+        "Use robots/noindex and avoid linking live vulnerable apps from public marketing pages.",
+        "Isolate lab subnets from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our site links to public PentestForge vulnerable lab subdomains. Show how to restrict the catalog to authenticated users and network-isolate benchmark targets.",
+    version: 1,
+    enabled: true
   }
 ];
