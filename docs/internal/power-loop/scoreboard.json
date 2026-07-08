@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T01:23:00.000Z",
+  "updated_at": "2026-07-08T02:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,60 +12,57 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "note": "Oracle juice-shop-staging.herokuapp.com — 7 findings, 6/6 recall (2026-07-08 01 UTC)"
+      ]
     }
   },
-  "total_sites_scanned": 59,
-  "total_findings": 237,
+  "total_sites_scanned": 65,
+  "total_findings": 259,
   "critical_findings": 13,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 26,
-  "discovery_findings": 116,
+  "discovery_urls_added": 31,
+  "discovery_findings": 131,
   "improvements_shipped": 13,
-  "last_run": "2026-07-08T01:23:00.000Z",
+  "last_run": "2026-07-08T02:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
-      "gap": []
-    },
-    "discovery_new": 5,
-    "discovery_findings_new": 14,
-    "skipped_rescan_48h": 21,
-    "teacher_delta": "skipped — no nuclei/engine",
-    "improvements_this_run": 2,
-    "discovery_validation": {
-      "ginandjuice.shop": {
-        "findings_before": 2,
-        "findings_after": 3,
-        "new_slugs": ["reflected-xss-query-param"]
-      },
-      "testasp.vulnweb.com": {
-        "findings_before": 3,
-        "findings_after": 4,
-        "new_slugs": ["sql-error-disclosure"]
+      "gap": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+        }
       }
     },
+    "discovery_new": 5,
+    "discovery_findings_new": 15,
+    "skipped_rescan_48h": 26,
+    "teacher_delta": "skipped — no nuclei/engine",
     "discovery_highlights_new": {
-      "xss-game.appspot.com": 1,
-      "hackthissite.org": 3,
-      "aigoat.app": 2,
-      "vulnforge-academy.vercel.app": 4,
-      "vaultapp-omega.vercel.app": 4
+      "ist-edu-bd.vercel.app": 3,
+      "pwnshop.ctfsecurity.com": 6,
+      "idor-website.vercel.app": 2,
+      "vulnerable-web-site.vercel.app": 2,
+      "urban-vampi-staging.up.railway.app": 2
     },
     "notable_findings": [
-      "reflected-xss-query-param on ginandjuice.shop and aigoat.app",
-      "sql-error-disclosure on testasp.vulnweb.com via ASP id-param differential",
-      "secret-openai on vulnforge-academy.vercel.app",
-      "secret-resend + dangerous-html-sinks on vaultapp-omega.vercel.app"
+      "sql-error-disclosure + reflected-xss-query-param + cors-reflect-origin on pwnshop.ctfsecurity.com",
+      "dangerous-html-sinks on ist-edu-bd.vercel.app (DVWU)",
+      "vibe-openapi-docs-exposed on urban-vampi-staging.up.railway.app"
+    ],
+    "learning_gaps": [
+      "idor-website.vercel.app: 0/1 IDOR category hit (misconfig only)",
+      "vulnerable-web-site.vercel.app: no CSRF/SSRF/XSS slugs despite known vulns in README"
     ],
     "unreachable_candidates": [
       "pentest-forge.com lab targets (502)",
-      "testphp.vulnweb.com / testhtml5.vulnweb.com (timeout)"
+      "dvai-red.vercel.app (404)"
     ]
   },
   "discovery_highlights": {
@@ -94,6 +91,11 @@
     "hackthissite.org": 3,
     "aigoat.app": 2,
     "vulnforge-academy.vercel.app": 4,
-    "vaultapp-omega.vercel.app": 4
+    "vaultapp-omega.vercel.app": 4,
+    "ist-edu-bd.vercel.app": 3,
+    "pwnshop.ctfsecurity.com": 6,
+    "idor-website.vercel.app": 2,
+    "vulnerable-web-site.vercel.app": 2,
+    "urban-vampi-staging.up.railway.app": 2
   }
 }
