@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T01:05:00.000Z",
+  "updated_at": "2026-07-08T02:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/",
@@ -129,6 +129,31 @@
     {
       "url": "https://vaultapp-omega.vercel.app/",
       "source": "VaultApp IDOR training lab OSS Vercel deploy (README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/",
+      "source": "Damn Vulnerable Web University OSS Vercel deploy (zahidoverflow/damn-vulnerable-web-university README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/",
+      "source": "Pwnshop intentionally vulnerable e-commerce public demo (ctfsec/pwnshop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-website.vercel.app/",
+      "source": "SecureBank IDOR training lab OSS Vercel deploy",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/",
+      "source": "CSRF/SSRF/XSS demo OSS Vercel deploy (megmogmog1965/vulnerable-web-site README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/",
+      "source": "OWASP VAmPI vulnerable REST API OSS Railway deploy (apisec-inc/urban-VAmPI README)",
       "auth": "oss_deploy"
     }
   ]
