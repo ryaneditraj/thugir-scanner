@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08T16:12:00.000Z",
+  "updated_at": "2026-07-08T17:15:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/",
@@ -405,6 +405,31 @@
       "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/",
       "source": "mehdiaitsaid/owasp-top-10-labs OSS — interactive OWASP Top 10 practice labs (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-lab.vercel.app/",
+      "source": "web search — PentestLab public demo (OWASP Top 10 hands-on labs, Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nextjs-cve-hackerone.vercel.app/",
+      "source": "Vercel changelog — intentional CVE-2025-66478 / React2Shell platform-protection bypass demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xxe-lab.vercel.app/",
+      "source": "web search — XXE Vulnerability Lab public deploy (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nosql-injection-lab.vercel.app/",
+      "source": "web search — NoSQL Injection Educational Lab public deploy (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://llm-security-lab.vercel.app/",
+      "source": "web search — LLM Security Lab prompt-injection attacks & defenses demo (Vercel)",
+      "auth": "public_demo"
     }
   ]
 }
