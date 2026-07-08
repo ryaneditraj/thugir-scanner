@@ -3,7 +3,7 @@
   "targets": [
     {
       "id": "juice-shop",
-      "url": "https://juice-shop.herokuapp.com",
+      "url": "https://juice-shop-staging.herokuapp.com",
       "auth": "public_benchmark",
       "expected_categories": [
         "xss",
@@ -13,7 +13,7 @@
         "sensitive_data",
         "misconfig"
       ],
-      "notes": "OWASP Juice Shop — use official challenge list as oracle"
+      "notes": "OWASP Juice Shop staging — primary juice-shop.herokuapp.com returned 503 (2026-07-08); same vuln oracle"
     },
     {
       "id": "crapi",
