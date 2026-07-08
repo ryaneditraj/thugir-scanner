@@ -212,7 +212,7 @@ export async function runFreeScan(targetInput: string, opts: FreeScanOptions = {
 
   // Pull a capped set of same-origin scripts for secret scanning.
   const probe = new ProbeCache();
-  const scriptUrls = extractScriptUrls(home.body, origin, opts.maxScripts ?? 12);
+  const scriptUrls = extractScriptUrls(home.body, home.finalUrl, opts.maxScripts ?? 12);
   const scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
   const combined = [home.body, ...scripts.map((s) => s.body)].join("\n");
   const detection = detectPlatform(home, combined);
@@ -292,16 +292,37 @@ export interface DeepScanResult {
 }
 
 // Pull same-origin internal links from an HTML body (deduped, capped).
-function internalLinks(html: string, origin: string, limit: number): string[] {
+// Resolve against pageUrl so GitHub Pages / subpath deploys crawl sibling .html correctly.
+function internalLinks(html: string, pageUrl: string, limit: number): string[] {
   const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
   const re = /href\s*=\s*["']([^"'#?]+)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(html)) && out.size < limit * 3) {
     try {
-      const u = new URL(m[1], origin);
-      if (u.origin !== origin) continue;
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
       if (/\.(png|jpe?g|svg|gif|webp|ico|css|js|map|woff2?|ttf|pdf|zip)$/i.test(u.pathname)) continue;
       u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out].slice(0, limit);
+}
+
+/** Client-side navigation targets (e.g. window.location.href = 'victim.html'). */
+function jsNavTargets(html: string, pageUrl: string, limit: number): string[] {
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const re =
+    /(?:location\.(?:href|assign|replace)|window\.location(?:\.href)?)\s*=\s*['"]([^'"]+\.html?)['"]/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) && out.size < limit * 2) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
       /* ignore */
@@ -328,14 +349,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const origin = target.origin;
 
   // Shallow crawl: homepage + a handful of internal pages.
-  const pageUrls = [home.finalUrl, ...internalLinks(home.body, origin, DEEP_MAX_PAGES - 1)];
+  const crawlSeeds = [
+    ...internalLinks(home.body, home.finalUrl, DEEP_MAX_PAGES - 1),
+    ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1)
+  ];
+  const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
   const probe = new ProbeCache();
   const extraPages = await fetchPagesBatched(pageUrls.slice(1), { probe, maxBytes: 600_000, concurrency: 3 });
   const pages: FetchedDoc[] = [home, ...extraPages];
 
   const scriptCap = opts.maxScripts ?? 24;
   const scriptUrls = new Set<string>();
-  for (const p of pages) for (const u of extractScriptUrls(p.body, origin, scriptCap)) scriptUrls.add(u);
+  for (const p of pages) for (const u of extractScriptUrls(p.body, p.finalUrl, scriptCap)) scriptUrls.add(u);
   const scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
     probe,
     maxBytes: 800_000,

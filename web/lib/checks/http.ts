@@ -172,14 +172,16 @@ export async function fetchDoc(
 }
 
 // Extract same-origin script URLs referenced by an HTML document.
-export function extractScriptUrls(html: string, origin: string, limit = 12): string[] {
+// Resolve relative src against the page URL (not bare origin) so subpath deploys work.
+export function extractScriptUrls(html: string, pageUrl: string, limit = 12): string[] {
   const urls = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
   const re = /<script[^>]+src=["']([^"']+)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(html))) {
     try {
-      const abs = new URL(m[1], origin);
-      if (abs.origin === new URL(origin).origin) urls.add(abs.toString());
+      const abs = new URL(m[1], pageUrl);
+      if (abs.origin === pageOrigin) urls.add(abs.toString());
     } catch {
       /* ignore malformed */
     }
