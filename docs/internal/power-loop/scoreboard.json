@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T17:07:55.715Z",
+  "updated_at": "2026-07-09T17:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 76,
   "discovery_findings": 764,
-  "improvements_shipped": 119,
-  "last_run": "2026-07-09T17:07:55.715Z",
+  "improvements_shipped": 122,
+  "last_run": "2026-07-09T17:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "17:00",
     "benchmark": {
@@ -57,18 +57,22 @@
         "https://demo.testfire.net (use http://)",
         "https://zero.webappsecurity.com (use http://)"
       ],
-      "focus": "516 Hackers modular playground; HackAdvisor real-world CTF labs; SixHack Academy CTF platform"
+      "focus": "WebSec.fr challenge source; SixHack CTF Labs markers; Root Me challenge hub; 516 Hackers + HackAdvisor discovery",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "websec.fr: /level01/source.php doQuery($injection) disclosed (2→3 findings)",
+      "sixhackacademy.com: CTF Labs SQLi/XSS/IDOR curriculum markers (2→3 findings)",
+      "www.root-me.org: Root Me challenge platform RSS/meta evidence (4→5 findings)",
       "labs.hackadvisor.io: secret-resend + reflected XSS + dangerous-html-sinks (7 findings)",
-      "516-hackers.github.io: weak CSP on modular SQLi/XSS lab landing (2 findings)",
-      "sixhackacademy.com: marketing site only — CTF lab instances behind signup (2 findings)"
+      "516-hackers.github.io: weak CSP on modular SQLi/XSS lab landing (2 findings)"
     ],
     "learning_gaps": [
       "516-hackers-vuln-playground: per-module SQLi/XSS/auth routes not crawled from GitHub Pages shell",
       "labs.hackadvisor.io: isolated challenge instances require lab start — homepage-only scan",
-      "sixhackacademy.com: platform.sixhackacademy.com CTF environments behind auth",
+      "hiddeninvestigations.net: react2shell lab not linked from marketing homepage",
+      "hacksec.in: password-protected landing — per-lab routes unreachable without auth",
       "demo.testfire.net / zero.webappsecurity.com: https DNS failure — queue corrected to http://"
     ]
   },
@@ -172,7 +176,7 @@
     "crapi2.apisec.ai": 6,
     "agentpwn.com": 5,
     "labs.hackadvisor.io": 7,
-    "sixhackacademy.com": 2,
+    "sixhackacademy.com": 3,
     "secresearchlab.web.app": 5,
     "skillaudit.vercel.app": 6,
     "prompt-injection-lab.vercel.app": 3,
@@ -209,7 +213,7 @@
     "archon-eight.vercel.app": 4,
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
-    "websec.fr": 2,
+    "websec.fr": 3,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 4,
@@ -243,6 +247,6 @@
     "angular.testsparker.com": 5,
     "516-hackers.github.io": 2,
     "labs.hackadvisor.io": 7,
-    "sixhackacademy.com": 2
+    "sixhackacademy.com": 3
   }
 }

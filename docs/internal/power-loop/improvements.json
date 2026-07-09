@@ -719,6 +719,24 @@
       "slug": "vibe-hardcoded-demo-credentials",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: smartDFS.php?username=admin&password=123456 in main.fbe5fbd112683a8c2d92.bundle.js; angular.testsparker.com findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level01/source.php doQuery($injection) + SELECT id,username FROM users + anti_csrf.php; websec.fr findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sixhackacademy.com",
+      "slug": "client-side-sixhack-ctf-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FAQ JSON-LD retos reales de hacking web (SQL injection, XSS, IDOR) + platform.sixhackacademy.com; sixhackacademy.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.root-me.org",
+      "slug": "client-side-rootme-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta page=backend-challenges RSS + Web-Client category + hack challenge CTF keywords; root-me.org findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1316,6 +1334,21 @@
       "source": "discovery:angular.testsparker.com",
       "slug": "hardcoded-api-query-credentials",
       "shipped_at": "2026-07-09T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-challenge-evidence",
+      "shipped_at": "2026-07-09T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:sixhackacademy.com",
+      "slug": "client-side-sixhack-ctf-lab-evidence",
+      "shipped_at": "2026-07-09T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.root-me.org",
+      "slug": "client-side-rootme-challenge-evidence",
+      "shipped_at": "2026-07-09T17:20:00.000Z"
     }
   ]
 }
