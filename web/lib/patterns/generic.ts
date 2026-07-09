@@ -1960,5 +1960,31 @@ export const genericPatterns: Pattern[] = [
       "We host SKF-style free Auth Bypass labs on secureby.design. Show how to gate lab-player instances behind auth and isolate them from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-google-gruyere-codelab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Google Gruyere web security codelab disclosed",
+    description:
+      "Google Gruyere codelab documents intentionally vulnerable cheese-themed web app exercises covering XSS, SQL injection, XSRF, path traversal, and code execution.",
+    impactOneline:
+      "Public Gruyere codelabs expose classic web vulnerability patterns attackers use to tune automated scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGoogleGruyereCodelabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gruyere instances are intentional — never deploy codelab code to production.",
+      steps: [
+        "Run Gruyere on isolated infrastructure with no production data.",
+        "Do not expose codelab instances to the public internet without access controls.",
+        "Use codelab findings to patch similar patterns in production code."
+      ]
+    },
+    fixPrompt:
+      "We host a Gruyere-style web security codelab. Show how to isolate it from production and fix XSS/SQLi patterns documented in the walkthrough.",
+    version: 1,
+    enabled: true
   }
 ];
