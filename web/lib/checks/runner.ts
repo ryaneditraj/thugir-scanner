@@ -315,6 +315,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSideHackThisSiteEvidence",
+  "clientSideAgenticAiCtfEvidence",
+  "clientSideWrongSecretsEvidence",
   "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -595,6 +597,29 @@ function extractSixHackCtfSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** OWASP WrongSecrets dropdown lists /challenge/challenge-N pages with secret-hunting walkthroughs. */
+function extractWrongSecretsChallengeSeeds(html: string, origin: string): string[] {
+  if (!/OWASP WrongSecrets|wrongsecrets/i.test(html)) return [];
+  const out = new Set<string>();
+  for (let i = 0; i <= 12; i++) {
+    try {
+      out.add(new URL(`/challenge/challenge-${i}`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const re = /href\s*=\s*["'](\/challenge\/challenge-\d+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** DVWA deploys (e.g. dvwa.vercel.app) may serve raw PHP source under vulnerabilities/…/source/. */
 const DVWA_VULN_MODULES = [
   "sqli",
@@ -836,6 +861,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
+  const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
@@ -851,6 +877,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...sixHackSeeds,
       ...pentesterLabSeeds,
       ...hackThisSiteSeeds,
+      ...wrongSecretsSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,
       ...spaRoutes,

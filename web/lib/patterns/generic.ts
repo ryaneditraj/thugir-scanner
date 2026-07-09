@@ -1752,5 +1752,57 @@ export const genericPatterns: Pattern[] = [
       "Our site mirrors HackThisSite-style mission challenges. Show how to isolate wargame VMs from production infrastructure.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-agentic-ai-ctf-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Agentic AI security CTF platform disclosed",
+    description:
+      "OWASP FinBot CTF advertises agentic AI exploit chains — prompt injection, tool abuse, and insecure agent namespaces.",
+    impactOneline:
+      "Public agentic AI CTFs document exploit patterns transferable to production LLM agents and tool routers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAgenticAiCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Agentic CTF platforms are intentional — isolate them from production agent infrastructure.",
+      steps: [
+        "Never reuse FinBot-style agent tool permissions in production.",
+        "Gate CTF namespaces behind authentication.",
+        "Monitor agent tool calls for prompt-injection exfiltration patterns."
+      ]
+    },
+    fixPrompt:
+      "We host an agentic AI CTF like OWASP FinBot. Show how to isolate agent namespaces from production LLM deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-wrongsecrets-evidence",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets secrets-management CTF disclosed",
+    description:
+      "WrongSecrets challenges hide secrets in application code, Docker layers, Git history, and cloud configuration.",
+    impactOneline:
+      "Secrets-management CTFs mirror real misconfigurations — hardcoded keys, leaked env vars, and container secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWrongSecretsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenges are intentional — ensure similar secrets never ship in production.",
+      steps: [
+        "Scan repos and containers for hardcoded secrets before deploy.",
+        "Use secret managers instead of application.properties or env files in images.",
+        "Rotate any secrets that appeared in Git history."
+      ]
+    },
+    fixPrompt:
+      "Our app mirrors OWASP WrongSecrets-style secret hiding. Show how to detect and remove secrets from code, Docker, and Git.",
+    version: 1,
+    enabled: true
   }
 ];

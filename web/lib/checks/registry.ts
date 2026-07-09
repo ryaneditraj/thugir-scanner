@@ -2977,6 +2977,14 @@ const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Invicti nslookup command injection form",
     re: /nslookup\.php[\s\S]{0,200}method\s*=\s*["']POST["']/i
+  },
+  {
+    label: "Acunetix ASP.NET practice site banner",
+    re: /Test Website for Acunetix Web Vulnerability Scanner/i
+  },
+  {
+    label: "Acunetix vulnerability scanner marketing link",
+    re: /acunetix\.com\/vulnerability-scanner/i
   }
 ];
 
@@ -3202,6 +3210,88 @@ const clientSideHackThisSiteEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "HackThisSite.org publishes Basic/Realistic/Application mission challenges for ethical hacking practice"
+    }
+  };
+};
+
+// --- OWASP FinBot / agentic AI CTF platform (GenAI Security Project) ------------
+const CLIENT_AGENTIC_AI_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Juice Shop for Agentic AI tagline",
+    re: /Juice Shop for Agentic AI|THE JUICE SHOP FOR AGENTIC AI/i
+  },
+  {
+    label: "Agentic AI security CTF platform",
+    re: /Agentic AI security CTF|agentic AI security CTF platform/i
+  },
+  {
+    label: "OWASP FinBot branding",
+    re: /OWASP FinBot|OWASP FINBOT/i
+  },
+  {
+    label: "GenAI Security Project FinBot repo",
+    re: /GenAI-Security-Project\/finbot-ctf/i
+  },
+  {
+    label: "Exploit prompt injection on agents",
+    re: /exploit.*prompt injection|prompt injection.*agentic|hack AI agents/i
+  }
+];
+
+const clientSideAgenticAiCtfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AGENTIC_AI_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP FinBot CTF documents agentic AI exploit chains — prompt injection and tool abuse against FinBot agents"
+    }
+  };
+};
+
+// --- OWASP WrongSecrets secrets-management CTF ----------------------------------
+const CLIENT_WRONGSECRETS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP WrongSecrets branding",
+    re: /OWASP WrongSecrets/i
+  },
+  {
+    label: "Find the secret hidden challenge",
+    re: /Find the secret hidden in/i
+  },
+  {
+    label: "Secrets in code, Docker, or cloud",
+    re: /secret.*(?:application code|Docker container|environment variables|cloud infrastructure)/i
+  },
+  {
+    label: "Secret scanning tooling references",
+    re: /trufflehog|git-secrets|Trufflehog/i
+  },
+  {
+    label: "Challenge answer submission UI",
+    re: /Enter the secret you found|data-cy="answer-textbox"/i
+  }
+];
+
+const clientSideWrongSecretsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WRONGSECRETS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP WrongSecrets CTF challenges hide secrets in source, config, Docker layers, and cloud metadata"
     }
   };
 };
@@ -4323,6 +4413,8 @@ export const RULES: Record<string, Rule> = {
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSideHackThisSiteEvidence,
+  clientSideAgenticAiCtfEvidence,
+  clientSideWrongSecretsEvidence,
   openApiDebugPasswordExposure
 };
 
