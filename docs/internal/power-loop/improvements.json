@@ -833,6 +833,24 @@
       "slug": "client-side-sixhack-ctf-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: platform.sixhackacademy.com host + SixHack Academy login shell; platform.sixhackacademy.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:server.vulnapp.id/mutillidae",
+      "slug": "client-side-mutillidae-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Mutillidae: Born to be Hacked + OWASP Top 10 SQLi/Command Injection menu + index.php?page=user-info.php; extractMutillidaeLabSeeds crawls challenge routes; server.vulnapp.id/mutillidae findings 4→6; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:server.vulnapp.id/mutillidae",
+      "slug": "html-comment-credential-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <!-- I think the database password is set to blank or perhaps samurai --> in Mutillidae HTML; server.vulnapp.id/mutillidae findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.itsecgames.com",
+      "slug": "client-side-bwapp-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bWAPP, a buggy web application + 100 web bugs + OWASP Top 10 injection taxonomy on bugs.htm; extractBwappLabSeeds; www.itsecgames.com findings 1→2; benchmark staging 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1525,6 +1543,21 @@
       "source": "discovery:platform.sixhackacademy.com",
       "slug": "sixhack-platform-host-markers",
       "shipped_at": "2026-07-09T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:server.vulnapp.id/mutillidae",
+      "slug": "client-side-mutillidae-evidence",
+      "shipped_at": "2026-07-09T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:server.vulnapp.id/mutillidae",
+      "slug": "html-comment-credential-disclosure",
+      "shipped_at": "2026-07-09T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.itsecgames.com",
+      "slug": "client-side-bwapp-evidence",
+      "shipped_at": "2026-07-09T23:10:00.000Z"
     }
   ]
 }

@@ -3563,6 +3563,7 @@ const clientSideGoogleGruyereCodelabEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
+  if (!/Gruyere|Web Application Exploits and Defenses/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.91 : 0.87,
@@ -3662,7 +3663,7 @@ const clientSideBwappEvidence: Rule = async (ctx) => {
 // --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
 const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
-    /<!--[\s\S]{0,600}?(?:database\s+password|db\s+password|password\s+is\s+set\s+to|admin\s+password\s+is)[\s\S]{0,300}?-->/i;
+    /<!--[\s\S]{0,1200}?(?:database\s+password|db\s+password|password\s+is\s+set\s+to|admin\s+password\s+is)[\s\S]{0,800}?-->/i;
   const m = ctx.combined.match(re);
   if (!m) return NEGATIVE;
   return {

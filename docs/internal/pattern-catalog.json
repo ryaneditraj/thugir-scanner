@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T22:08:48.627Z",
-  "total": 124,
-  "uniqueSlugs": 124,
+  "generatedAt": "2026-07-09T23:01:59.353Z",
+  "total": 127,
+  "uniqueSlugs": 127,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 106,
+    "generic": 109,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 60,
+    "deep": 63,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 9,
-    "Information disclosure": 12,
+    "Information disclosure": 13,
     "Broken authentication": 8,
-    "Injection": 14,
+    "Injection": 16,
     "Cross-site scripting": 8,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -39,6 +39,7 @@
     "bolt-public-env-prefix-leak",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-api-security-lab-evidence",
+    "client-side-bwapp-evidence",
     "client-side-chimera-vuln-lab-evidence",
     "client-side-csrf-evidence",
     "client-side-ctf-platform-evidence",
@@ -56,6 +57,7 @@
     "client-side-invicti-practice-site-evidence",
     "client-side-jwt-none-evidence",
     "client-side-maestro-agentic-ai-evidence",
+    "client-side-mutillidae-evidence",
     "client-side-nosql-evidence",
     "client-side-owasp-ctf-evidence",
     "client-side-owasp-educational-lab-evidence",
@@ -93,6 +95,7 @@
     "firebase-open-firestore-rules",
     "graphql-introspection-enabled",
     "hidden-prompt-injection",
+    "html-comment-credential-disclosure",
     "idor-sequential-ids",
     "inline-state-secrets",
     "insecure-cookies",

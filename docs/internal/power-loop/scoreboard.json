@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 106,
   "discovery_findings": 888,
-  "improvements_shipped": 138,
+  "improvements_shipped": 141,
   "last_run": "2026-07-09T23:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "23:00",
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 recall (7 findings incl secret-resend); third consecutive full recall after 20–21 UTC regressions",
+      "note": "Stable 6/6 recall (7 findings incl secret-resend); third consecutive full recall after 20\u201321 UTC regressions",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,7 +48,7 @@
         }
       }
     },
-    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 6,
@@ -60,22 +60,24 @@
       "scan_errors": [
         "http://websegura.radwarelatam.com/mutillidae/ (Invalid URL)"
       ],
-      "focus": "bWAPP backlog + crAPI v2/APIsec + secrets/AI training demos",
-      "improvements_shipped_this_run": 0
+      "focus": "Mutillidae + bWAPP classic PHP lab evidence; HTML comment credential disclosure",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — stable after cold-start regressions",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) \u2014 stable after cold-start regressions",
+      "server.vulnapp.id/mutillidae: Mutillidae OWASP Top 10 lab + DB password HTML comment (4\u21926 findings)",
+      "www.itsecgames.com: bWAPP 100-vulnerability catalog evidence (1\u21922 findings)",
       "secresearchlab.web.app: SQLi + XXE + SSRF + firebase-config-exposed (7 findings)",
       "crapi2.apisec.ai: exposed-env-file + SSRF endpoint fetch (6 findings)",
       "bwapp.hakhub.net: phpinfo-exposed + directory-listing (6 findings)",
       "skillaudit.vercel.app: OpenAPI docs + sitemap-sensitive-paths (6 findings)"
     ],
     "learning_gaps": [
-      "hackable.so: landing-only shallow crawl — unauthenticated-admin-endpoint only (3 findings)",
+      "hackable.so: landing-only shallow crawl \u2014 unauthenticated-admin-endpoint only (3 findings)",
       "vulnweb.netlify.app: client-side SQL/XSS evidence but no live reflected/stored XSS probe hits (4 findings)",
-      "testhtml5.vulnweb.com: DNS dead from cloud — disabled in queue",
+      "testhtml5.vulnweb.com: DNS dead from cloud \u2014 disabled in queue",
       "websegura.radwarelatam.com/mutillidae: Invalid URL on fetch",
-      "juice-shop recall still nondeterministic — monitor for 1/6 regressions on Heroku cold start"
+      "juice-shop recall still nondeterministic \u2014 monitor for 1/6 regressions on Heroku cold start"
     ]
   },
   "discovery_highlights": {
@@ -257,9 +259,9 @@
     "natas0.natas.labs.overthewire.org": 2,
     "hacking-lab.com": 2,
     "picoctf.org": 2,
-    "server.vulnapp.id/mutillidae": 4,
+    "server.vulnapp.id/mutillidae": 6,
     "computersciencesop2.vercel.app": 5,
-    "www.itsecgames.com": 1,
+    "www.itsecgames.com": 2,
     "solyd.com.br": 1
   }
 }
