@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T12:06:30.000Z",
+  "updated_at": "2026-07-09T12:11:36.176Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 322,
-  "total_findings": 1242,
+  "total_sites_scanned": 323,
+  "total_findings": 1249,
   "critical_findings": 21,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 55,
   "discovery_findings": 682,
   "improvements_shipped": 108,
-  "last_run": "2026-07-09T12:06:30.000Z",
+  "last_run": "2026-07-09T12:11:36.176Z",
   "last_run_summary": {
     "hour_utc": "12:00",
     "benchmark": {
@@ -142,8 +142,6 @@
     "owasp-juice.shop": 3,
     "xxe-lab.vercel.app": 5,
     "nextjs-cve-hackerone.vercel.app": 3,
-    "web-pentest-playground.onrender.com": 3,
-    "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "vuln-academy.vercel.app": 4,
     "hackable-web.vercel.app": 3,
     "vulnerable-ecommerce.vercel.app": 5,
@@ -161,8 +159,6 @@
     "pentest-ground.com:7001": 1,
     "web2-lab2-mck1.onrender.com": 3,
     "pentest-lab.vercel.app": 3,
-    "nextjs-cve-hackerone.vercel.app": 3,
-    "xxe-lab.vercel.app": 5,
     "nosql-injection-lab.vercel.app": 2,
     "llm-security-lab.vercel.app": 6,
     "prototype-pollution-interactive-demo.netlify.app": 2,
