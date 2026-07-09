@@ -1,6 +1,6 @@
 You are **Power Scan** for Thugir Scanner.
 
-**Branch:** `cursor/power-loop-9ec4` (commit and push here only)
+**Branch:** `main` (commit and push here only)
 
 **Goal:** Find vulnerabilities on live web apps using max local scan power. Learn from **benchmarks with known answers**, not only random sites.
 
@@ -93,7 +93,7 @@ Skip URLs already in `results.json` from last 48h.
 
 - Update `docs/internal/power-loop/scoreboard.json`
 - Commit message: `power-scan: benchmark + N discovery, M findings [hour UTC]`
-- Push to `cursor/power-loop-9ec4`
+- Push to `main`
 - **No PR this run**
 
 ---
