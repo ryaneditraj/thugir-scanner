@@ -611,6 +611,30 @@
       "slug": "client-side-vuln-auth-portal-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: HTML VULNPORTAL + SECURE ACCESS TERMINAL + bcrypt/zxcvbn + CVSS v3.1 OWASP Risk Rating; vuln-portal.vercel.app findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:idor-challenge.vercel.app",
+      "slug": "client-side-idor-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Simple IDOR SIMULATION + /dashboard/:userId + .users[e] client store lookup in index-BBHGr0hC.js; idor-challenge.vercel.app findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:webexp05.vercel.app",
+      "slug": "ctf-challenge-hub-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF Challenge Hub links /c1/–/c5/; extractCtfChallengeHubLinks seeds challenge pages; webexp05 pages_crawled 1→6"
+    },
+    {
+      "source": "discovery:webexp05.vercel.app",
+      "slug": "client-side-path-traversal-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /c4/ directory traversal + ../flag.txt lab; webexp05 findings 2→6 (sql+xss+jwt+path traversal slugs)"
+    },
+    {
+      "source": "discovery:luisillobret2.github.io/WebGoat",
+      "slug": "client-side-api-security-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WebGoat is a deliberately insecure application maintained by OWASP; luisillobret2.github.io/WebGoat findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1118,6 +1142,26 @@
       "source": "discovery:vuln-portal.vercel.app",
       "slug": "client-side-vuln-auth-portal-evidence",
       "shipped_at": "2026-07-09T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:idor-challenge.vercel.app",
+      "slug": "spa-idor-simulation-dashboard-userid",
+      "shipped_at": "2026-07-09T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:webexp05.vercel.app",
+      "slug": "ctf-challenge-hub-crawl",
+      "shipped_at": "2026-07-09T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:webexp05.vercel.app",
+      "slug": "client-side-path-traversal-evidence",
+      "shipped_at": "2026-07-09T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:luisillobret2.github.io/WebGoat",
+      "slug": "webgoat-deliberately-insecure-marker",
+      "shipped_at": "2026-07-09T10:10:00.000Z"
     }
   ]
 }

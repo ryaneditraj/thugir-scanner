@@ -2092,6 +2092,10 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "DVWA SQLi source low.php user_id concat",
     re: /SELECT[\s\S]{0,80}FROM[\s\S]{0,40}users[\s\S]{0,80}WHERE[\s\S]{0,40}user_id\s*=\s*'\$id'/
+  },
+  {
+    label: "CTF SQL Slammer challenge documented injectable query",
+    re: /SELECT \* FROM users WHERE username='\$input' AND password='\$input'/i
   }
 ];
 
@@ -2133,6 +2137,10 @@ const CLIENT_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "Reflected XSS training lab marker",
     re: /Reflected XSS[\s\S]{0,400}(?:echo|innerHTML|document\.write)[\s\S]{0,120}(?:input|param|query)/i
+  },
+  {
+    label: "CTF stored XSS comment section lab",
+    re: /doesn't sanitize user input[\s\S]{0,250}(?:inject malicious JavaScript|admin_flag cookie)/i
   }
 ];
 
@@ -2484,6 +2492,21 @@ const CLIENT_IDOR_MARKER_RE =
   /VULNERABLE ENDPOINT|No authorization check|No ownership verification|any authenticated user can access|belonging to another user/i;
 
 const clientSideIdorEvidence: Rule = async (ctx) => {
+  // SPA IDOR simulation labs (client-side user store + /dashboard/:userId route).
+  if (
+    /IDOR\s+SIMULATION|Simple IDOR/i.test(ctx.combined) &&
+    (/dashboard\/:userId|path:\s*["']\/dashboard\/:userId/i.test(ctx.combined) ||
+      /\.users\[[a-z]{1,8}\]/.test(ctx.combined))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        markers: ["IDOR SIMULATION", "dashboard userId route without server auth"],
+        note: "SPA exposes user records via predictable /dashboard/:userId without ownership verification"
+      }
+    };
+  }
   if (!CLIENT_IDOR_MARKER_RE.test(ctx.combined)) return NEGATIVE;
   const endpoints = new Set<string>();
   const re = /\/api\/[a-z0-9_./-]+(?:\$\{[^}]+\}|\{[a-zA-Z]+\})?/gi;
@@ -2553,6 +2576,10 @@ const CLIENT_JWT_NONE_RES: { label: string; re: RegExp }[] = [
   {
     label: "JWT None Algorithm challenge title",
     re: /JWT None Algorithm|accepts the ["']none["'] algorithm/i
+  },
+  {
+    label: "CTF JWT manipulation challenge with admin flag API",
+    re: /Manipulate your JWT token[\s\S]{0,600}(?:\/api\/admin\/flag|<code>\/api\/admin\/flag<\/code>)/i
   }
 ];
 
@@ -2569,6 +2596,39 @@ const clientSideJwtNoneEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 3),
       note: "client bundle documents JWT alg:none acceptance — signature verification can be bypassed"
+    }
+  };
+};
+
+// --- Client-side path traversal evidence (educational CTF / LFI labs) -----------
+const CLIENT_PATH_TRAVERSAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTF directory traversal challenge to read flag.txt",
+    re: /directory traversal[\s\S]{0,350}(?:\.\.\/)+flag\.txt/i
+  },
+  {
+    label: "Path traversal lab with ../ to escape intended directory",
+    re: /go up directories[\s\S]{0,250}\.\.\/[\s\S]{0,120}flag\.txt/i
+  },
+  {
+    label: "Unsanitized file path parameter LFI walkthrough",
+    re: /unsanitized file path parameter[\s\S]{0,250}read files outside the intended directory/i
+  }
+];
+
+const clientSidePathTraversalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PATH_TRAVERSAL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "crawled lab documents path traversal / LFI via ../ sequences to read sensitive files"
     }
   };
 };
@@ -3387,6 +3447,10 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
     label: "API lab endpoint documentation with curl",
     re: /endpoint:\s*["'](?:GET|POST|PUT|DELETE|PATCH)\s+\/(?:api\/)?[\w/{}-]+["']/i
+  },
+  {
+    label: "OWASP WebGoat deliberately insecure training app",
+    re: /WebGoat is a deliberately insecure application|deliberately insecure web application maintained by OWASP/i
   }
 ];
 
@@ -3557,7 +3621,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSecurityGameEvidence,
   clientSideXssC2CollectorEvidence,
   clientSideDevSecOpsLabEvidence,
-  clientSideVulnAuthPortalEvidence
+  clientSideVulnAuthPortalEvidence,
+  clientSidePathTraversalEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

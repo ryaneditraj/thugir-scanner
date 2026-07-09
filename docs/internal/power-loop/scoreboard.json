@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T09:10:00.000Z",
+  "updated_at": "2026-07-09T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 304,
-  "total_findings": 1166,
+  "total_sites_scanned": 306,
+  "total_findings": 1180,
   "critical_findings": 20,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 44,
   "discovery_findings": 627,
-  "improvements_shipped": 101,
-  "last_run": "2026-07-09T09:10:00.000Z",
+  "improvements_shipped": 105,
+  "last_run": "2026-07-09T10:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -51,20 +51,21 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_rescanned": 3,
-      "improvements_shipped": 3,
-      "focus": "Discovery-only — benchmark 6/6, teacher delta unavailable; shipped XSS C2 collector, DevSecOps lab, VulnPortal auth portal rules"
+      "improvements_shipped": 4,
+      "focus": "Discovery-only — benchmark 6/6, teacher delta unavailable; CTF hub crawl, SPA IDOR simulation, path traversal lab rule, WebGoat educational marker"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: client-side-devsecops-lab-evidence IDOR/gateway bypass/SIEM catalog (3→4 findings)",
-      "vuln-portal.vercel.app: client-side-vuln-auth-portal-evidence VULNPORTAL terminal (1→2 findings)",
-      "xss-attacker.vercel.app: client-side-xss-c2-collector-evidence rule shipped — Attacker C2 + /api/collect probe (direct validation; Vercel checkpoint may block live rescan)"
+      "idor-challenge.vercel.app: client-side-idor-evidence IDOR SIMULATION + /dashboard/:userId (2→3 findings)",
+      "webexp05.vercel.app: CTF hub crawl /c1–/c5 + sql/xss/jwt/path-traversal slugs (2→6 findings, pages 1→6)",
+      "luisillobret2.github.io/WebGoat: client-side-api-security-lab-evidence deliberately insecure OWASP marker (2→3 findings)"
     ],
     "learning_gaps": [
       "fvb.vchan.in: apidoc.fvb.vchan.in offline — REST/GraphQL live oracles still under-probed",
       "dvai.vercel.app: wrong deploy (DreamVator Aviation) — Damn Vulnerable AI range not at this URL",
       "riglabs-cyber-lab.vercel.app: no IDOR/CSRF modules in catalog — SQLi+XSS only",
-      "hiddeninvestigations.net: react2shell lab not linked from homepage — no live deploy URL in crawl"
+      "hiddeninvestigations.net: react2shell lab not linked from homepage — no live deploy URL in crawl",
+      "acuart.phpnet.us: DNS resolution error — classic Acunetix demo offline"
     ]
   },
   "discovery_highlights": {
@@ -215,9 +216,9 @@
     "fvb.vchan.in": 2,
     "weaponsforge.github.io/hacker-friendly-app": 4,
     "playground.fabraix.com": 2,
-    "webexp05.vercel.app": 2,
-    "idor-challenge.vercel.app": 2,
-    "luisillobret2.github.io/WebGoat": 2,
+    "webexp05.vercel.app": 6,
+    "idor-challenge.vercel.app": 3,
+    "luisillobret2.github.io/WebGoat": 3,
     "vuln-portal.vercel.app": 2
   }
 }

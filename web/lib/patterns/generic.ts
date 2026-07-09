@@ -768,6 +768,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-path-traversal-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Client-side path traversal / LFI lab documented in crawl",
+    description:
+      "Crawled lab pages document directory traversal via unsanitized file path parameters — attackers can use ../ sequences to read files outside the intended directory (e.g. flag.txt).",
+    impactOneline:
+      "Unsanitized path parameters let attackers read arbitrary files on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePathTraversalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Canonicalize paths and deny ../ traversal before reading files.",
+      steps: [
+        "Resolve paths against a fixed base directory and reject any result outside it.",
+        "Use an allow-list of filenames instead of user-supplied paths.",
+        "Remove LFI walkthrough pages from production-facing hosts."
+      ]
+    },
+    fixPrompt:
+      "Our file viewer accepts a path parameter and is vulnerable to directory traversal (../flag.txt). Show how to canonicalize paths against a base directory, block traversal, and use an allow-list of safe filenames.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-xss-c2-collector-evidence",
     platform: "generic",
     category: "Cross-site scripting",
