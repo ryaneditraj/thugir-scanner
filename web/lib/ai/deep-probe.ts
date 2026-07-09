@@ -6,6 +6,7 @@ import type { PatternFinding, Severity } from "../patterns/types";
 import { loadSettings } from "../settings/store";
 import type { TierName } from "../settings/schema";
 import { callAiProvider, envKeyFor, parseAiJson, tierAiConfig } from "./client";
+import { triageSeverity, WEB_SCANNER_SYSTEM_PREFIX } from "../methodology";
 
 export interface DeepProbeContext {
   target: string;
@@ -26,25 +27,19 @@ interface AiDeepHit {
   suggestedFix?: string;
 }
 
-const SYSTEM = `You are an elite offensive security researcher auditing AI-generated ("vibe-coded") web apps.
-You receive HTML and JavaScript excerpts from a shallow crawl of ONE target.
+const SYSTEM = `${WEB_SCANNER_SYSTEM_PREFIX}
 
-Find REAL security issues visible in the source. You must quote EXACT substrings from the provided source as evidenceQuote (max 200 chars each).
+You receive HTML and JavaScript excerpts from a crawl of ONE target.
 
-Focus on what vibe-coded apps ship wrong:
-- Client-only auth (UI guards without server/RLS enforcement)
-- Server Actions / fetch calls to /api/* without auth headers
-- Hardcoded credentials, demo bypass flags, admin routes in client routers
-- Dangerous sinks (dangerouslySetInnerHTML, eval, innerHTML with user data)
-- Exposed internal URLs, staging keys, debug flags
-- IDOR patterns (fetch by user id from URL without session check in same function)
-- Missing CSRF on state-changing client calls
+Find REAL security issues visible in the source. Quote EXACT substrings as evidenceQuote (max 200 chars).
 
-Do NOT report generic missing CSP/headers (other tools cover those).
-Do NOT invent issues — if evidenceQuote is not literally in the source, it will be rejected.
+Priority classes: injection, XSS, IDOR/BOLA, auth bypass, exposed secrets/API keys, SSRF sinks,
+dangerous sinks (eval, innerHTML, dangerouslySetInnerHTML), missing auth on state-changing fetches.
+
+AI-built app misconfigs are secondary — report if visible in source.
 
 Return ONLY a JSON array (max 8 items), no markdown:
-[{"title":"short title","severity":"critical|high|medium|low","category":"Broken access control|Exposed secret|Broken authentication|Information disclosure","impactOneline":"one line","maxDamageOneline":"worst realistic outcome for the COMPANY (fines, breach, fraud, shutdown — 1-2 sentences)","evidenceQuote":"exact substring from source","reasoning":"one sentence","suggestedFix":"imperative fix"}]`;
+[{"title":"short title","severity":"critical|high|medium|low","category":"...","impactOneline":"one line","maxDamageOneline":"...","evidenceQuote":"exact substring","reasoning":"one sentence","suggestedFix":"imperative fix"}]`;
 
 const SEV: Severity[] = ["critical", "high", "medium", "low"];
 
@@ -118,9 +113,16 @@ ${excerpt}`;
       if (seenTitles.has(title.toLowerCase())) continue;
       seenTitles.add(title.toLowerCase());
 
-      const severity = SEV.includes((hit.severity || "").toLowerCase() as Severity)
+      let severity = SEV.includes((hit.severity || "").toLowerCase() as Severity)
         ? ((hit.severity || "medium").toLowerCase() as Severity)
         : "medium";
+
+      severity = triageSeverity({
+        severity,
+        category: hit.category || "",
+        title,
+        hardeningOnly: /header|cors|csp|hsts/i.test((hit.category || "") + title)
+      });
 
       findings.push({
         patternSlug: slugify(title),

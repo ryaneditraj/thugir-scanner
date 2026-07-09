@@ -6,6 +6,7 @@ import type { PatternFinding } from "../patterns/types";
 import { loadSettings } from "../settings/store";
 import { PROVIDER_ENDPOINTS, type AiProvider, type TierName } from "../settings/schema";
 import { callAiProvider, envKeyFor, parseAiJson } from "./client";
+import { SEVERITY_TRIAGE_PROMPT } from "../methodology";
 
 export interface AiAnalysis {
   summary: string;
@@ -29,6 +30,8 @@ function findingsDigest(findings: PatternFinding[]): string {
 
 const SYSTEM = `You are a senior application security analyst for Thugir Scanner advising founders and CTOs.
 You are given CONFIRMED findings from a deterministic scan engine. The engine already proved these are real — do not question them or invent new ones.
+
+${SEVERITY_TRIAGE_PROMPT}
 
 Your job:
 1. summary — 2-3 sentences, attacker's-eye view of the worst realistic outcome if left unfixed.

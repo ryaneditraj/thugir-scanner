@@ -25,6 +25,13 @@
   ],
   "teacher_tools": [
     "nuclei",
-    "thugir-node-max-power"
-  ]
+    "thugir-node-max-power",
+    "cyberstrike-wstg-oracle"
+  ],
+  "wstg_oracle_skills": [
+    "docs/reference/cyberstrike/vendor/skills/wstg-inpv-05/SKILL.md",
+    "docs/reference/cyberstrike/vendor/skills/wstg-inpv-01/SKILL.md",
+    "docs/reference/cyberstrike/vendor/skills/wstg-authz-02/SKILL.md"
+  ],
+  "methodology_ref": "docs/reference/cyberstrike/README.md"
 }
