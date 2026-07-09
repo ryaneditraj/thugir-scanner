@@ -419,7 +419,9 @@
     {
       "url": "http://testhtml5.vulnweb.com/",
       "source": "Acunetix SecurityTweets — HTML5/Angular/Flask intentionally vulnerable benchmark (vulnweb.com)",
-      "auth": "public_demo"
+      "auth": "public_demo",
+      "enabled": false,
+      "notes": "DNS NXDOMAIN from cloud — removed from active queue"
     },
     {
       "url": "https://platform.sixhackacademy.com/",

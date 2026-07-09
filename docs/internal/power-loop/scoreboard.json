@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T21:06:09.302Z",
+  "updated_at": "2026-07-09T21:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,84 +16,77 @@
       ]
     }
   },
-  "total_sites_scanned": 368,
-  "total_findings": 1457,
+  "total_sites_scanned": 373,
+  "total_findings": 1467,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 91,
-  "discovery_findings": 824,
+  "discovery_urls_added": 96,
+  "discovery_findings": 834,
   "improvements_shipped": 132,
-  "last_run": "2026-07-09T21:06:09.302Z",
+  "last_run": "2026-07-09T21:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20:00",
+    "hour_utc": "21:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 4,
-      "oracle_recall": "4/6 (official oracle intermittent 503; staging validates 6/6)",
+      "oracle_findings": 1,
+      "oracle_recall": "1/6",
       "gap": [
         "xss",
+        "sqli",
+        "idor",
+        "auth_bypass",
         "sensitive_data"
       ],
-      "note": "Official Heroku oracle returned 503 during portions of this hour; juice-shop-staging.herokuapp.com confirms 6/6 recall maintained (7 findings)",
+      "note": "Third consecutive 1/6 regression on Heroku oracle (misconfig only); prior 19:05 run had 8 findings 6/6 — nondeterministic recall needs multi-pass/retry",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
+          "categories_hit": 1,
+          "gap": [
             "xss",
             "sqli",
             "idor",
             "auth_bypass",
-            "sensitive_data",
+            "sensitive_data"
+          ],
+          "hit": [
             "misconfig"
           ]
         }
-      },
-      "staging_validation": {
-        "url": "https://juice-shop-staging.herokuapp.com",
-        "findings": 7,
-        "recall": "6/6"
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 35,
-      "skipped_48h": [
-        "https://wrongsecrets.herokuapp.com/",
-        "https://bwapp.hakhub.net/",
-        "https://brokencrystals.com/",
-        "https://ginandjuice.shop/"
-      ],
+      "urls_scanned": 5,
+      "findings": 10,
+      "skipped_48h": "138 origins in 48h window",
       "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — removed from queue)"
+      ],
+      "scan_errors": [
+        "http://websegura.radwarelatam.com/mutillidae/ (Invalid URL — scanner fetch failed)"
       ],
       "queued_next_run": [
-        "https://ctflearn.com/",
-        "https://hacking-lab.com/events/"
+        "https://www.hackthissite.org/missions/basic/"
       ],
-      "focus": "MAESTRO/0day/CTF research evidence rules + OWASP VWAD demos (secureby.design, cyberscavengerhunt) + agentic AI labs",
-      "improvements_shipped_this_run": 3
+      "focus": "OverTheWire Natas + OWASP VWAD CTF platforms (ctflearn, hacking-lab, picoctf)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — code changes do not regress oracle",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: MAESTRO Framework + ElizaOS exploit demo (2→3 findings)",
-      "preview-zeroday-sec.vercel.app: elite cybersecurity training platform markers (2→3 findings)",
-      "hiddeninvestigations.net: CTF research + vulnerability disclosure team evidence (3→4 findings)",
-      "secureby.design: secret-resend + postmessage-dom-xss-evidence + source maps (6 findings)",
-      "reef-mcp-registry.vercel.app: secret-openai + secret-resend + secret-twilio + XSS sinks (6 findings)"
+      "juice-shop.herokuapp.com: benchmark REGRESSION 1/6 recall (1 finding — misconfig only)",
+      "ctflearn.com: insecure-cookies + missing-security-headers (2 findings)",
+      "natas0.natas.labs.overthewire.org: HTTP Basic auth challenge platform markers (2 findings)",
+      "hacking-lab.com: tech-stack-disclosure + missing headers on events and root (2+2 findings)",
+      "picoctf.org: CMU CTF platform landing evidence (2 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: intermittent 503 from Heroku — use staging oracle when official is down",
-      "testhtml5.vulnweb.com: DNS dead from cloud — replace with testasp/rest.vulnweb.com",
-      "acuart.phpnet.us: DNS parking page — classic Acunetix PHP art shop offline",
-      "www.root-me.org: Anubis bot-wall blocks scanner UA",
-      "platform.sixhackacademy.com: login-gated CTF labs — marketing markers on main site only",
-      "pentesteracademylab.appspot.com: shallow crawl — lab exercises behind /lab routes",
-      "cve-2025-55182-demo.vercel.app: React2Shell RCE oracle needs authenticated server action POST"
+      "juice-shop.herokuapp.com: recall NONDETERMINISTIC — 6/6 at 19:05 then 1/6 at 20:02 and 21:02; probes run (235) but only misconfig fires",
+      "natas0.natas.labs.overthewire.org: HTTP 401 Basic auth — challenge vulns behind per-level credentials",
+      "ctflearn.com/hacking-lab.com/picoctf.org: marketing/landing pages — CTF challenges behind signup",
+      "websegura.radwarelatam.com/mutillidae: scanner Invalid URL on fetch — needs http fallback or redirect handling",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
@@ -273,6 +266,10 @@
     "secureby.design": 6,
     "cyberscavengerhunt.com": 5,
     "pentesteracademylab.appspot.com": 1,
-    "hiddeninvestigations.net": 4
+    "hiddeninvestigations.net": 4,
+    "ctflearn.com": 2,
+    "hacking-lab.com": 2,
+    "natas0.natas.labs.overthewire.org": 2,
+    "picoctf.org": 2
   }
 }
