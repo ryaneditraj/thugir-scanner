@@ -2824,6 +2824,123 @@ const clientSideReactRscCveEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Chimera WAF honeypot documentation (chimera.atlascrew.dev) -----------------
+const CLIENT_CHIMERA_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Chimera intentionally vulnerable monorepo",
+    re: /intentionally vulnerable monorepo for WAF testing/i
+  },
+  {
+    label: "456+ vulnerable endpoints catalog",
+    re: /456\+ vulnerable endpoints|456\+ Vulnerable Endpoints/i
+  },
+  {
+    label: "CHM-ID vulnerability registry",
+    re: /CHM-(?:BANK|SAAS|HEALTH|ID)-\d{3}|CHM-ID vulnerabilities/i
+  },
+  {
+    label: "vuln-api Starlette honeypot",
+    re: /vuln-api|vuln_registry\.py|X-Chimera-Vuln-ID/i
+  },
+  {
+    label: "OWASP Top 10 injection and IDOR lab inventory",
+    re: /200\+ intentional vulnerabilities[\s\S]{0,120}(?:injection|IDOR|SSRF)/i
+  }
+];
+
+const clientSideChimeraVulnLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CHIMERA_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Jekyll docs catalog Chimera vuln-api honeypot with CHM-ID registry — 456+ intentional API flaws for WAF testing"
+    }
+  };
+};
+
+// --- Hack Health Nextra tutorial (hack-health-tutorial.vercel.app) --------------
+const CLIENT_HACK_HEALTH_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP A03 Injection module heading",
+    re: /A03:2021\s*-\s*Injection/i
+  },
+  {
+    label: "CWE-89 SQL injection tutorial",
+    re: /CWE-89[\s\S]{0,40}SQL Injection/i
+  },
+  {
+    label: "Query adjusted to be vulnerable to SQL injection",
+    re: /adjusted the query to be vulnerable to SQL injection/i
+  },
+  {
+    label: "UNION SELECT pg_user enumeration walkthrough",
+    re: /UNION SELECT usename[\s\S]{0,40}pg_user/i
+  },
+  {
+    label: "HackHealth login SQLi attack lab",
+    re: /HackHealth login screen|Expose vulnerabilities in the application/i
+  }
+];
+
+const clientSideHackHealthLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Nextra tutorial documents intentional SQL injection on HackHealth login — UNION-based PostgreSQL enumeration walkthrough"
+    }
+  };
+};
+
+// --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
+const openApiDebugPasswordExposure: Rule = async (ctx) => {
+  const specPaths = await loadOpenApiSpec(ctx);
+  if (!specPaths) return NEGATIVE;
+  const debugPaths: string[] = [];
+  for (const [path, ops] of Object.entries(specPaths)) {
+    if (!ops.get) continue;
+    if (!/(?:^|\/)(?:_debug|debug)(?:\/|$)/i.test(path)) continue;
+    const concrete = concreteOpenApiGetPath(path);
+    if (concrete) debugPaths.push(concrete);
+  }
+  if (debugPaths.length === 0) return NEGATIVE;
+  const urls = debugPaths.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  const exposed: { path: string; status: number; sample: string }[] = [];
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!/"password"\s*:\s*"/i.test(r.body)) continue;
+    exposed.push({
+      path: new URL(url).pathname,
+      status: r.status,
+      sample: r.body.slice(0, 120).trim()
+    });
+  }
+  if (exposed.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      routes: exposed.slice(0, 3),
+      note: "OpenAPI-documented debug endpoint returned user passwords without authentication"
+    }
+  };
+};
+
 // --- Docusaurus / static OWASP Top 10 educational lab content ------------------
 const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   {
@@ -3816,7 +3933,10 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnAuthPortalEvidence,
   clientSidePathTraversalEvidence,
   clientSideGraphqlLabEvidence,
-  clientSideReactRscCveEvidence
+  clientSideReactRscCveEvidence,
+  clientSideChimeraVulnLabEvidence,
+  clientSideHackHealthLabEvidence,
+  openApiDebugPasswordExposure
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
