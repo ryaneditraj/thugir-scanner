@@ -10,3 +10,10 @@ export {
   type CoverageVerdict
 } from "./coverage";
 export { WEB_SCANNER_SYSTEM_PREFIX, WSTG_ORACLE_HINT } from "./prompts";
+export {
+  loadSkill,
+  searchSkills,
+  loadCoreOracleSummaries,
+  CORE_ORACLE_SKILLS,
+  skillCount
+} from "./skills";

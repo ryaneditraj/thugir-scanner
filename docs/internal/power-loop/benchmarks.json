@@ -3,7 +3,7 @@
   "targets": [
     {
       "id": "juice-shop",
-      "url": "https://juice-shop-staging.herokuapp.com",
+      "url": "https://juice-shop.herokuapp.com",
       "auth": "public_benchmark",
       "expected_categories": [
         "xss",
@@ -13,7 +13,7 @@
         "sensitive_data",
         "misconfig"
       ],
-      "notes": "OWASP Juice Shop staging — primary juice-shop.herokuapp.com returned 503 (2026-07-08); same vuln oracle"
+      "notes": "OWASP Juice Shop — use official challenge list as oracle"
     },
     {
       "id": "crapi",
@@ -28,10 +28,23 @@
     "thugir-node-max-power",
     "cyberstrike-wstg-oracle"
   ],
-  "wstg_oracle_skills": [
-    "docs/reference/cyberstrike/vendor/skills/wstg-inpv-05/SKILL.md",
-    "docs/reference/cyberstrike/vendor/skills/wstg-inpv-01/SKILL.md",
-    "docs/reference/cyberstrike/vendor/skills/wstg-authz-02/SKILL.md"
-  ],
+  "wstg_oracle": {
+    "index": "docs/reference/cyberstrike/vendor/index.json",
+    "total_skills": 141,
+    "core_ids": [
+      "wstg-inpv-05",
+      "wstg-inpv-01",
+      "wstg-authz-02",
+      "wstg-apit-01",
+      "attack-ssrf",
+      "attack-jwt",
+      "attack-idor-automation",
+      "attack-ssti"
+    ],
+    "library_paths": {
+      "wstg": "docs/reference/cyberstrike/vendor/skills/WEB/OWASP_WSTG_4.2/",
+      "attack": "docs/reference/cyberstrike/vendor/skills/attack-*/"
+    }
+  },
   "methodology_ref": "docs/reference/cyberstrike/README.md"
 }
