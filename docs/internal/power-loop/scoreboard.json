@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T13:15:00.000Z",
+  "updated_at": "2026-07-09T14:07:43.986Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 328,
-  "total_findings": 1272,
+  "total_sites_scanned": 334,
+  "total_findings": 1296,
   "critical_findings": 22,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 56,
-  "discovery_findings": 684,
+  "discovery_urls_added": 61,
+  "discovery_findings": 701,
   "improvements_shipped": 111,
-  "last_run": "2026-07-09T13:15:00.000Z",
+  "last_run": "2026-07-09T14:07:43.986Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings, 223 probes)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,20 +50,24 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "DVGA BlackHat SpectaQL lab + Next.js RSC CVE HackerOne demo learning gaps",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 17,
+      "focus": "Netsparker testsparker suite + Troy Hunt Hack Yourself First + DOM clobbering CXSS lab"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "lab.blackhatgraphql.com:9001: DVGA SpectaQL docs → client-side-graphql-lab-evidence (1→2 findings)",
-      "nextjs-cve-hackerone.vercel.app: CVE-2025-66478 RSC lab markers (3→4 findings)",
-      "graphqlIntrospection: SpectaQL endpoint port extraction from DVGA docs"
+      "hack-yourself-first.azurewebsites.net: reflected-xss-query-param + insecure-cookies + robots-sensitive-paths (5)",
+      "angular.testsparker.com: secret-aws-akid critical + unauth API routes (4)",
+      "aspnet.testsparker.com: reflected-xss-query-param + sitemap-sensitive-paths (4)",
+      "php.testsparker.com: phpinfo-exposed (3)"
     ],
     "learning_gaps": [
-      "lab.blackhatgraphql.com:9001: GraphQL API on documented port 5013 unreachable from cloud — docs-only detection",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
-      "owasp-juice.shop: Jekyll docs site only — not the live Juice Shop API",
-      "vuln-portal.vercel.app: Vercel Security Checkpoint blocks SPA bundle"
+      "hack-yourself-first.azurewebsites.net: 50 known vulns — SQLi (CarsByCylinders), CSRF login, weak auth chains not exercised",
+      "php.testsparker.com: phpinfo found but SQLi/XSS injection routes under-probed",
+      "aspnet.testsparker.com: reflected XSS hit but SQLi oracle routes not exercised",
+      "angular.testsparker.com: AWS key in bundle but Angular SPA injection/BOLA live probes under-exercised",
+      "domgo.at/cxss/intro: DOM clobbering XSS training lab — only misconfig; CXSS gadget oracles needed"
     ]
   },
   "discovery_highlights": {
@@ -221,6 +225,11 @@
     "pentest-ground.com:9000": 4,
     "cyberdesserts.github.io": 3,
     "lab.blackhatgraphql.com:9001": 2,
-    "owasp-finbot-ctf-demo.onrender.com": 1
+    "owasp-finbot-ctf-demo.onrender.com": 1,
+    "hack-yourself-first.azurewebsites.net": 5,
+    "php.testsparker.com": 3,
+    "aspnet.testsparker.com": 4,
+    "angular.testsparker.com": 4,
+    "domgo.at": 1
   }
 }
