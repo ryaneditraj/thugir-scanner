@@ -1675,6 +1675,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /getElementById\([^)]*svgPreview[^)]*\)\.innerHTML\s*=\s*content\b/i
   },
   {
+    label: "commentDiv.innerHTML template with user content variable",
+    re: /\.innerHTML\s*=\s*`[^`]*\$\{content\}`/
+  },
+  {
+    label: "Inline HTML XSS lab documents innerHTML vulnerability",
+    re: /Cross-Site Scripting\s*\(\s*XSS\s*\)[\s\S]{0,800}<code>innerHTML<\/code>/i
+  },
+  {
     label: "PHP echo $_GET superglobal without escaping",
     re: /echo[\s\S]{0,60}\$_GET\[/
   },
@@ -1878,6 +1886,18 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "SPA SQL injection lab success markers",
     re: /SQL Injection Detected|Authentication Bypass Successful|Login Successful.*SQL Injection/i
+  },
+  {
+    label: "Inline HTML SQL injection lab with OR 1=1 example",
+    re: /SQL Injection[\s\S]{0,600}'\s+OR\s+1\s*=\s*1/i
+  },
+  {
+    label: "Vulnerable login API route login-vulneravel",
+    re: /\/auth\/login-vulneravel|login\s*\(\s*['"]vulneravel['"]\s*\)/
+  },
+  {
+    label: "Cyber lab SQL module INPUT placeholder login query",
+    re: /CYBERLAB[\s\S]{0,2500}SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['"]INPUT['"]/i
   }
 ];
 
