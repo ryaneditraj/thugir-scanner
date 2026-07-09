@@ -21,10 +21,10 @@ Razorpay is our billing stack only. Do not touch it.
 
 ## PHASE A — Benchmark scan (40% of run — DO THIS FIRST)
 
-**Oracle library (141 skills vendored from CyberStrike):**
-- Index: `docs/reference/cyberstrike/vendor/index.json`
-- WSTG (125): `docs/reference/cyberstrike/vendor/skills/WEB/OWASP_WSTG_4.2/`
-- Attack (16): `docs/reference/cyberstrike/vendor/skills/attack-*/`
+**Oracle library (141 Thugir security skills):**
+- Index: `docs/internal/security-skills/index.json`
+- WSTG (125): `docs/internal/security-skills/skills/WEB/OWASP_WSTG_4.2/`
+- Attack (16): `docs/internal/security-skills/skills/attack-*/`
 
 **Core oracles for every benchmark run (read these first):**
 - `wstg-inpv-05` SQLi, `wstg-inpv-01` XSS, `wstg-authz-02` IDOR

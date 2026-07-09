@@ -1,13 +1,12 @@
 /**
- * Load vendored CyberStrike WSTG / attack skills by id.
- * @see docs/reference/cyberstrike/vendor/index.json
+ * Load Thugir security skills (WSTG + attack playbooks) by id.
  */
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const REF = join(__dir, "../../../docs/reference/cyberstrike/vendor");
+const REF = join(__dir, "../../../docs/internal/security-skills");
 
 interface SkillIndexEntry {
   id: string;

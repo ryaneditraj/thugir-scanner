@@ -1,6 +1,5 @@
 /**
- * Three-gate confirmation adapted from CyberStrike common-prompt.txt
- * @see docs/reference/cyberstrike/vendor/prompts/common-prompt.txt
+ * Three-gate confirmation — baseline, exploit, measurable diff required.
  */
 
 export interface GateEvidence {

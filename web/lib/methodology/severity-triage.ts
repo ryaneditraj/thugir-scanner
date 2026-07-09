@@ -1,6 +1,5 @@
 /**
- * Severity triage adapted from CyberStrike report_vulnerability.txt
- * @see docs/reference/cyberstrike/vendor/prompts/report_vulnerability.txt
+ * Severity triage — bug-bounty style, prefer under-rating over scanner inflation.
  */
 import type { Severity } from "../patterns/types";
 

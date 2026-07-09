@@ -26,10 +26,10 @@
   "teacher_tools": [
     "nuclei",
     "thugir-node-max-power",
-    "cyberstrike-wstg-oracle"
+    "wstg-oracle"
   ],
   "wstg_oracle": {
-    "index": "docs/reference/cyberstrike/vendor/index.json",
+    "index": "docs/internal/security-skills/index.json",
     "total_skills": 141,
     "core_ids": [
       "wstg-inpv-05",
@@ -42,9 +42,9 @@
       "attack-ssti"
     ],
     "library_paths": {
-      "wstg": "docs/reference/cyberstrike/vendor/skills/WEB/OWASP_WSTG_4.2/",
-      "attack": "docs/reference/cyberstrike/vendor/skills/attack-*/"
+      "wstg": "docs/internal/security-skills/skills/WEB/OWASP_WSTG_4.2/",
+      "attack": "docs/internal/security-skills/skills/attack-*/"
     }
   },
-  "methodology_ref": "docs/reference/cyberstrike/README.md"
+  "methodology_ref": "docs/internal/security-skills/README.md"
 }
