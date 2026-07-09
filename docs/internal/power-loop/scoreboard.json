@@ -73,12 +73,14 @@
       "ctb-pi.vercel.app: robots-sensitive-paths + vibe-sitemap-sensitive-paths + weak-csp (5 findings, 6 pages, supabase)",
       "chimera.atlascrew.dev: secret-resend + 6-page crawl — 450+ API lab portal not fully exercised",
       "juice-shop.herokuapp.com: prod rescan 8 findings incl secret-resend (differs from staging oracle)",
-      "cybersec-demo.vercel.app: dangerous-html-sinks on Nivara landing (3 findings)"
+      "cybersec-demo.vercel.app: dangerous-html-sinks on Nivara landing (3 findings)",
+      "securebank-blog.vercel.app: client-side-sql-evidence + dangerous-html-sinks on attack-mode educational HTML; findings 2→4",
+      "secure-bank-bay.vercel.app: client-side-sql-evidence + client-side-csrf-evidence in SPA bundle; findings 4→6"
     ],
     "learning_gaps": [
       "chimera.atlascrew.dev: marketing portal only — 456+ vulnerable API endpoints behind demo-mode install, not reachable via crawl",
       "vuln-portal.vercel.app: queued but not scanned (POWER_SCAN_LIMIT=8) — auth terminal lab pending",
-      "securebank-blog + preview-zeroday-sec: landing-only rescans — headers/cors only",
+      "preview-zeroday-sec.vercel.app: marketing landing only — cloud labs behind demo request",
       "openvaultbank.com + prompt-injection-playground: prior-run gaps still open — auth/API probes needed"
     ]
   },
@@ -114,7 +116,7 @@
     "idor-website.vercel.app": 3,
     "vulnerable-web-site.vercel.app": 2,
     "urban-vampi-staging.up.railway.app": 4,
-    "secure-bank-bay.vercel.app": 4,
+    "secure-bank-bay.vercel.app": 6,
     "owaspbased-lessons.vercel.app": 1,
     "hack-this-site-eta.vercel.app": 7,
     "zero-health.vercel.app": 3,
