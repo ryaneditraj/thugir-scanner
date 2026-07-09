@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T19:05:55.277Z",
+  "updated_at": "2026-07-09T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 358,
-  "total_findings": 1414,
+  "total_findings": 1420,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 86,
-  "discovery_findings": 783,
-  "improvements_shipped": 125,
-  "last_run": "2026-07-09T19:05:55.277Z",
+  "discovery_findings": 789,
+  "improvements_shipped": 129,
+  "last_run": "2026-07-09T19:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "19:00",
     "benchmark": {
@@ -56,43 +56,49 @@
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — Acunetix HTML5 benchmark offline from cloud)"
       ],
-      "focus": "Agentic AI security demos (MAESTRO, Reef MCP) + CVE-2025-55182 RSC lab + SixHack platform",
-      "improvements_shipped_this_run": 0
+      "focus": "Agentic AI CTF + WrongSecrets challenge crawl + Acunetix ASP.NET practice markers",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "owasp-finbot-ctf.org: agentic AI CTF markers (3→4 findings)",
+      "wrongsecrets.herokuapp.com: challenge crawl + secrets-management CTF evidence (4→5 findings)",
+      "testaspnet.vulnweb.com: Acunetix practice site banner detection (2→3 findings)",
       "reef-mcp-registry.vercel.app: secret-openai + secret-resend + secret-twilio + XSS sinks (6 findings)",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url-in-bundle critical + missing headers (2)",
-      "cve-2025-55182-demo.vercel.app: dangerous-html-sinks + permissive-cors on RSC CVE demo (3)",
-      "platform.sixhackacademy.com: weak CSP on CTF platform landing (2)"
+      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url-in-bundle critical + missing headers (2)"
     ],
     "learning_gaps": [
       "testhtml5.vulnweb.com: DNS dead from cloud — entire Acunetix HTML5 benchmark unreachable",
+      "www.root-me.org: Anubis bot-wall blocks scanner UA — challenge markers unreachable from cloud",
+      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
+      "owasp-finbot-ctf-demo.onrender.com: service suspended (503)",
       "maestro-agentic-ai-security-demo-mon.netlify.app: RAG poisoning exploit chain requires live ElizaOS instance interaction",
       "reef-mcp-registry.vercel.app: MCP RCE block demo runs locally via docker compose — cloud scan sees marketing bundle only",
-      "platform.sixhackacademy.com: OWASP Top 10 CTF labs behind signup at platform.sixhackacademy.com",
-      "cve-2025-55182-demo.vercel.app: React2Shell RCE requires authenticated POST to /_next/server — shallow crawl misses exploit oracle"
+      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
+      "testphp.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "zero.webappsecurity.com: https URL fails DNS — http:// works (4–5 findings via protocol fallback)"
     ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 13,
-    "demo.testfire.net": 3,
-    "zero.webappsecurity.com": 3,
+    "demo.testfire.net": 6,
+    "zero.webappsecurity.com": 5,
     "rest.vulnweb.com": 3,
     "testasp.vulnweb.com": 4,
+    "testaspnet.vulnweb.com": 3,
     "dvwa.csalab.app": 4,
     "nodegoat-websec.herokuapp.com": 3,
     "crapi.apisec.ai": 4,
-    "wrongsecrets.herokuapp.com": 4,
+    "wrongsecrets.herokuapp.com": 5,
     "juice-shop-staging.herokuapp.com": 7,
     "demo.owasp-juice.shop": 7,
+    "juice-shop.herokuapp.com": 8,
     "vapi.apisec.ai": 3,
     "ginandjuice.shop": 3,
     "bwapp.hakhub.net": 6,
     "public-firing-range.appspot.com": 3,
     "google-gruyere.appspot.com": 2,
     "dvga.tools.escape.tech": 4,
-    "testaspnet.vulnweb.com": 3,
     "hackxor.net": 3,
     "seclab.vercel.app": 4,
     "dvga.xplat-demo.threatx.io": 2,
@@ -203,7 +209,6 @@
     "authlab.digi.ninja": 3,
     "defendtheweb.net": 2,
     "labs.hackxpert.com": 5,
-    "juice-shop.herokuapp.com": 8,
     "securebank-blog.vercel.app": 2,
     "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 2,
@@ -244,7 +249,7 @@
     "hack-yourself-first.azurewebsites.net": 7,
     "angular.testsparker.com": 5,
     "516-hackers.github.io": 2,
-    "owasp-finbot-ctf.org": 3,
+    "owasp-finbot-ctf.org": 4,
     "maestro-agentic-ai-security-demo-mon.netlify.app": 2,
     "reef-mcp-registry.vercel.app": 6,
     "platform.sixhackacademy.com": 2

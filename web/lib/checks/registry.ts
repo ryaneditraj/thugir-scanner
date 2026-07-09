@@ -2980,7 +2980,7 @@ const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Acunetix ASP.NET practice site banner",
-    re: /Test Website for Acunetix Web Vulnerability Scanner/i
+    re: /Test Website for[\s\S]{0,120}Acunetix Web Vulnerability Scanner/i
   },
   {
     label: "Acunetix vulnerability scanner marketing link",
