@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T18:09:06.171Z",
-  "total": 115,
-  "uniqueSlugs": 115,
+  "generatedAt": "2026-07-09T19:05:00.836Z",
+  "total": 117,
+  "uniqueSlugs": 117,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 97,
+    "generic": 99,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 51,
+    "deep": 53,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 23,
-    "Exposed secret": 14,
+    "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
@@ -31,12 +31,13 @@
     "Cross-site scripting": 7,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 2,
+    "AI security": 3,
     "general": 17
   },
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "client-side-agentic-ai-ctf-evidence",
     "client-side-api-security-lab-evidence",
     "client-side-chimera-vuln-lab-evidence",
     "client-side-csrf-evidence",
@@ -67,6 +68,7 @@
     "client-side-ssrf-evidence",
     "client-side-vuln-auth-portal-evidence",
     "client-side-websec-challenge-evidence",
+    "client-side-wrongsecrets-evidence",
     "client-side-xor-auth-evidence",
     "client-side-xss-c2-collector-evidence",
     "client-side-xss-evidence",

@@ -761,6 +761,24 @@
       "slug": "client-side-rootme-challenge-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: Anubis bot-wall returns challenge page to ThugirScanner UA — markers unreachable from cloud scans; rule retained for non-protected mirrors"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "client-side-agentic-ai-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Juice Shop for Agentic AI + GenAI-Security-Project/finbot-ctf + exploit prompt injection on agents; owasp-finbot-ctf.org findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "client-side-wrongsecrets-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge dropdown /challenge/challenge-N + Find the secret hidden in + trufflehog/git-secrets tooling refs; wrongsecrets findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:testaspnet.vulnweb.com",
+      "slug": "client-side-invicti-practice-site-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Test Website for Acunetix Web Vulnerability Scanner banner (HTML-tolerant regex) + acunetix.com/vulnerability-scanner link; testaspnet findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1388,6 +1406,26 @@
       "source": "discovery:demo.testfire.net",
       "slug": "http-protocol-fallback",
       "shipped_at": "2026-07-09T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "client-side-agentic-ai-ctf-evidence",
+      "shipped_at": "2026-07-09T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-crawl",
+      "shipped_at": "2026-07-09T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "client-side-wrongsecrets-evidence",
+      "shipped_at": "2026-07-09T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:testaspnet.vulnweb.com",
+      "slug": "acunetix-practice-site-markers",
+      "shipped_at": "2026-07-09T19:05:00.000Z"
     }
   ]
 }
