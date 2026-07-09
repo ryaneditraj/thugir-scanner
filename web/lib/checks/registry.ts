@@ -3124,6 +3124,88 @@ const clientSideRootMeChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab hands-on web hacking exercise platform --------------------------------
+const CLIENT_PENTESTERLAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "PentesterLab brand",
+    re: /PentesterLab(?:\s+Pro)?/i
+  },
+  {
+    label: "700+ hands-on labs",
+    re: /700\+.*hands-on labs/i
+  },
+  {
+    label: "Real-world CVE training",
+    re: /real-world CVEs?.*vulnerable code/i
+  },
+  {
+    label: "Web for Pentester course",
+    re: /Web for Pentester/i
+  },
+  {
+    label: "SQL/XSS curriculum ticker",
+    re: /SQL Injection[\s\S]{0,80}XSS|XSS[\s\S]{0,80}SQL Injection/i
+  }
+];
+
+const clientSidePentesterLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab hosts 700+ hands-on web hacking exercises including Web for Pentester CVE labs"
+    }
+  };
+};
+
+// --- HackThisSite ethical hacking mission platform --------------------------------------
+const CLIENT_HACKTHISITE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackThisSite training tagline",
+    re: /HackThisSite\.org is a free, safe and legal training ground/i
+  },
+  {
+    label: "Mission challenge nav",
+    re: /href\s*=\s*["']\/missions\/(?:basic|realistic|application)/i
+  },
+  {
+    label: "Hacking wargame keywords",
+    re: /hacking challenges[\s\S]{0,120}wargame/i
+  },
+  {
+    label: "Basic mission hub",
+    re: /\/missions\/basic\//i
+  },
+  {
+    label: "Ethical hacking skills CTF",
+    re: /ethical hacking skills with challenges/i
+  }
+];
+
+const clientSideHackThisSiteEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKTHISITE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackThisSite.org publishes Basic/Realistic/Application mission challenges for ethical hacking practice"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -4239,6 +4321,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
+  clientSidePentesterLabEvidence,
+  clientSideHackThisSiteEvidence,
   openApiDebugPasswordExposure
 };
 

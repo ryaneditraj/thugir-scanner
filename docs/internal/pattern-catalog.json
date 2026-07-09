@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T17:20:41.528Z",
-  "total": 113,
-  "uniqueSlugs": 113,
+  "generatedAt": "2026-07-09T18:09:06.171Z",
+  "total": 115,
+  "uniqueSlugs": 115,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 95,
+    "generic": 97,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 49,
+    "deep": 51,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 21,
+    "Broken access control": 23,
     "Exposed secret": 14,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -47,6 +47,7 @@
     "client-side-graphql-lab-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",
+    "client-side-hackthissite-evidence",
     "client-side-idor-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-jwt-none-evidence",
@@ -54,6 +55,7 @@
     "client-side-owasp-ctf-evidence",
     "client-side-owasp-educational-lab-evidence",
     "client-side-path-traversal-evidence",
+    "client-side-pentesterlab-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
     "client-side-react-rsc-cve-evidence",

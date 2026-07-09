@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T18:06:00.000Z",
+  "updated_at": "2026-07-09T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 353,
-  "total_findings": 1390,
+  "total_findings": 1393,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 81,
-  "discovery_findings": 767,
-  "improvements_shipped": 122,
-  "last_run": "2026-07-09T18:06:00.000Z",
+  "discovery_findings": 770,
+  "improvements_shipped": 125,
+  "last_run": "2026-07-09T18:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "18:00",
     "benchmark": {
@@ -51,8 +51,8 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 1,
-      "findings": 3,
+      "urls_scanned": 4,
+      "findings": 18,
       "skipped_48h": [
         "https://wrongsecrets.herokuapp.com/",
         "https://bwapp.hakhub.net/",
@@ -62,19 +62,24 @@
       "dns_failures": [
         "http://testphp.vulnweb.com/ (removed from queue — DNS NXDOMAIN)"
       ],
-      "focus": "OWASP WrongSecrets + FinBot CTF + bWAPP + Broken Crystals + Gin & Juice queue expansion",
-      "improvements_shipped_this_run": 0
+      "focus": "PentesterLab + HackThisSite lab evidence; http protocol fallback; OWASP FinBot CTF queue",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "owasp-finbot-ctf.org: prompt-injection evidence + OpenAPI docs exposed (3 findings)",
-      "wrongsecrets/bwapp/brokencrystals/ginandjuice: already scanned within 48h — queue entries added for future rescans"
+      "pentesterlab.com: 700+ hands-on labs + Web for Pentester markers (3→4 findings)",
+      "www.hackthissite.org: mission challenge platform evidence (4→5 findings)",
+      "demo.testfire.net: https URL now falls back to http (0→6 findings)",
+      "owasp-finbot-ctf.org: prompt-injection evidence + OpenAPI docs exposed (3 findings)"
     ],
     "learning_gaps": [
-      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace — homepage-only scan",
-      "wrongsecrets.herokuapp.com: secrets hidden in source/config/Docker layers — shallow crawl misses challenge-specific oracles",
-      "brokencrystals.com: GraphQL BOLA/injection chains need deeper API probing beyond landing",
-      "bwapp.hakhub.net: per-vulnerability module routes under-probed from index",
+      "www.root-me.org: Anubis bot-wall blocks scanner UA — challenge markers unreachable from cloud",
+      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
+      "wrongsecrets.herokuapp.com: secrets hidden in source/config/Docker layers — shallow crawl misses oracles",
+      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
+      "labs.hackadvisor.io: isolated challenge instances require lab start",
+      "hiddeninvestigations.net: react2shell lab is Docker-only (no public deploy)",
+      "hacksec.in: password-protected WordPress — per-lab routes unreachable",
       "testphp.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
@@ -236,9 +241,9 @@
     "owasp-finbot-ctf-demo.onrender.com": 1,
     "ssrf-defense-platform.onrender.com": 6,
     "api.graphqlbook.org": 5,
-    "pentesterlab.com": 3,
+    "pentesterlab.com": 4,
     "www.root-me.org": 4,
-    "www.hackthissite.org": 4,
+    "www.hackthissite.org": 5,
     "domgo.at": 3,
     "php.testsparker.com": 5,
     "hacksec.in": 5,

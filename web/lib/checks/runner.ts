@@ -48,13 +48,14 @@ function compile(re: string): RegExp {
 //   4. http:// + www.
 // On success, mutates `target` in place to the URL that actually responded so downstream
 // origin/link resolution uses the reachable variant.
-async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
-  const userForcedHttps = /^https:\/\//i.test(rawInput.trim());
+async function reachTarget(target: URL, _rawInput: string): Promise<FetchedDoc> {
   const apexHost = target.hostname.replace(/^www\./i, "");
   const hadWww = target.hostname.toLowerCase().startsWith("www.");
 
   const hosts = hadWww ? [target.hostname, apexHost] : [apexHost, `www.${apexHost}`];
-  const protocols = userForcedHttps ? ["https:"] : ["https:", "http:"];
+  // Legacy training benchmarks (demo.testfire.net, zero.webappsecurity.com) are http-only — always
+  // fall back to http when https DNS/TLS fails even if the user pasted an https:// URL.
+  const protocols = ["https:", "http:"];
 
   // Interleave so we prefer https on both hosts before dropping to http.
   const candidates: Array<{ protocol: string; hostname: string }> = [];
@@ -312,6 +313,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
+  "clientSidePentesterLabEvidence",
+  "clientSideHackThisSiteEvidence",
   "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -512,6 +515,59 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
       } catch {
         /* ignore */
       }
+    }
+  }
+  return [...out];
+}
+
+/** PentesterLab exercise catalog — /exercises/* course pages document CVE labs. */
+const PENTESTERLAB_EXERCISE_RE = /href\s*=\s*["'](\/exercises\/[a-z0-9_-]+)["']/gi;
+
+function extractPentesterLabExerciseSeeds(html: string, origin: string): string[] {
+  if (!/pentesterlab|700\+.*hands-on labs|Web for Pentester/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/exercises", "/exercises/web-for-pentester", "/exercises/web_for_pentester"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  let m: RegExpExecArray | null;
+  while ((m = PENTESTERLAB_EXERCISE_RE.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** HackThisSite mission hubs — /missions/basic|realistic|application carry challenge labs. */
+const HACKTHISITE_MISSION_RE = /href\s*=\s*["'](\/missions\/[a-z]+(?:\/\d+)?\/?)["']/gi;
+
+function extractHackThisSiteMissionSeeds(html: string, origin: string): string[] {
+  if (!/hackthissite|Hack This Site|ethical hacking skills/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "/missions/basic/",
+    "/missions/realistic/",
+    "/missions/application/",
+    "/missions/javascript/"
+  ]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  let m: RegExpExecArray | null;
+  while ((m = HACKTHISITE_MISSION_RE.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
     }
   }
   return [...out];
@@ -778,6 +834,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
+  const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
+  const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
@@ -791,6 +849,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ctfPlatformSeeds,
       ...websecSeeds,
       ...sixHackSeeds,
+      ...pentesterLabSeeds,
+      ...hackThisSiteSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,
       ...spaRoutes,

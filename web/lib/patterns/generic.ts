@@ -1700,5 +1700,57 @@ export const genericPatterns: Pattern[] = [
       "Our site mirrors Root Me-style public challenges. Show how to isolate lab VMs and prevent challenge code from leaking into production deploys.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "PentesterLab web hacking exercise platform disclosed",
+    description:
+      "PentesterLab advertises 700+ hands-on labs covering real-world CVEs, SQL injection, XSS, and Web for Pentester exercises.",
+    impactOneline:
+      "Public exercise platforms expose intentionally vulnerable endpoints attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab code in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Isolate exercise infrastructure from production networks.",
+        "Monitor outbound traffic from lab containers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab-style web hacking exercises. Show how to gate labs behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackthissite-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackThisSite mission challenges publicly indexed",
+    description:
+      "HackThisSite.org advertises Basic, Realistic, and Application mission challenges for ethical hacking practice.",
+    impactOneline:
+      "Public wargame missions document SQLi, XSS, and auth bypass patterns reusable against real apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackThisSiteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Wargame missions are intentional — ensure they never share code with production deployments.",
+      steps: [
+        "Keep mission challenge VMs isolated from corporate networks.",
+        "Do not copy mission vulnerability patterns into production code.",
+        "Rate-limit unauthenticated access to mission endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our site mirrors HackThisSite-style mission challenges. Show how to isolate wargame VMs from production infrastructure.",
+    version: 1,
+    enabled: true
   }
 ];

@@ -737,6 +737,30 @@
       "slug": "client-side-rootme-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta page=backend-challenges RSS + Web-Client category + hack challenge CTF keywords; root-me.org findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 700+ hands-on labs + real-world CVEs + Web for Pentester + SQL Injection/XSS ticker; pentesterlab.com findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hackthissite-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HackThisSite.org free training ground tagline + /missions/basic|realistic|application nav + ethical hacking challenges; hackthissite.org findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "http-protocol-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: https://demo.testfire.net DNS failure; reachTarget now retries http:// after https fails; findings 0→6 on https URL; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.root-me.org",
+      "slug": "client-side-rootme-challenge-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: Anubis bot-wall returns challenge page to ThugirScanner UA — markers unreachable from cloud scans; rule retained for non-protected mirrors"
     }
   ],
   "shipped": [
@@ -1349,6 +1373,21 @@
       "source": "discovery:www.root-me.org",
       "slug": "client-side-rootme-challenge-evidence",
       "shipped_at": "2026-07-09T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-evidence",
+      "shipped_at": "2026-07-09T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hackthissite-evidence",
+      "shipped_at": "2026-07-09T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "http-protocol-fallback",
+      "shipped_at": "2026-07-09T18:10:00.000Z"
     }
   ]
 }
