@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T18:10:00.000Z",
+  "updated_at": "2026-07-09T19:05:55.277Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 353,
-  "total_findings": 1393,
+  "total_sites_scanned": 358,
+  "total_findings": 1414,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 81,
-  "discovery_findings": 770,
+  "discovery_urls_added": 86,
+  "discovery_findings": 783,
   "improvements_shipped": 125,
-  "last_run": "2026-07-09T18:10:00.000Z",
+  "last_run": "2026-07-09T19:05:55.277Z",
   "last_run_summary": {
-    "hour_utc": "18:00",
+    "hour_utc": "19:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings on official Heroku oracle)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,35 +52,26 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 4,
-      "findings": 18,
-      "skipped_48h": [
-        "https://wrongsecrets.herokuapp.com/",
-        "https://bwapp.hakhub.net/",
-        "https://brokencrystals.com/",
-        "https://ginandjuice.shop/"
-      ],
+      "findings": 13,
       "dns_failures": [
-        "http://testphp.vulnweb.com/ (removed from queue — DNS NXDOMAIN)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — Acunetix HTML5 benchmark offline from cloud)"
       ],
-      "focus": "PentesterLab + HackThisSite lab evidence; http protocol fallback; OWASP FinBot CTF queue",
-      "improvements_shipped_this_run": 3
+      "focus": "Agentic AI security demos (MAESTRO, Reef MCP) + CVE-2025-55182 RSC lab + SixHack platform",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "pentesterlab.com: 700+ hands-on labs + Web for Pentester markers (3→4 findings)",
-      "www.hackthissite.org: mission challenge platform evidence (4→5 findings)",
-      "demo.testfire.net: https URL now falls back to http (0→6 findings)",
-      "owasp-finbot-ctf.org: prompt-injection evidence + OpenAPI docs exposed (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "reef-mcp-registry.vercel.app: secret-openai + secret-resend + secret-twilio + XSS sinks (6 findings)",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url-in-bundle critical + missing headers (2)",
+      "cve-2025-55182-demo.vercel.app: dangerous-html-sinks + permissive-cors on RSC CVE demo (3)",
+      "platform.sixhackacademy.com: weak CSP on CTF platform landing (2)"
     ],
     "learning_gaps": [
-      "www.root-me.org: Anubis bot-wall blocks scanner UA — challenge markers unreachable from cloud",
-      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
-      "wrongsecrets.herokuapp.com: secrets hidden in source/config/Docker layers — shallow crawl misses oracles",
-      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
-      "labs.hackadvisor.io: isolated challenge instances require lab start",
-      "hiddeninvestigations.net: react2shell lab is Docker-only (no public deploy)",
-      "hacksec.in: password-protected WordPress — per-lab routes unreachable",
-      "testphp.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
+      "testhtml5.vulnweb.com: DNS dead from cloud — entire Acunetix HTML5 benchmark unreachable",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: RAG poisoning exploit chain requires live ElizaOS instance interaction",
+      "reef-mcp-registry.vercel.app: MCP RCE block demo runs locally via docker compose — cloud scan sees marketing bundle only",
+      "platform.sixhackacademy.com: OWASP Top 10 CTF labs behind signup at platform.sixhackacademy.com",
+      "cve-2025-55182-demo.vercel.app: React2Shell RCE requires authenticated POST to /_next/server — shallow crawl misses exploit oracle"
     ]
   },
   "discovery_highlights": {
@@ -253,6 +244,9 @@
     "hack-yourself-first.azurewebsites.net": 7,
     "angular.testsparker.com": 5,
     "516-hackers.github.io": 2,
-    "owasp-finbot-ctf.org": 3
+    "owasp-finbot-ctf.org": 3,
+    "maestro-agentic-ai-security-demo-mon.netlify.app": 2,
+    "reef-mcp-registry.vercel.app": 6,
+    "platform.sixhackacademy.com": 2
   }
 }
