@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T02:05:00.000Z",
+  "updated_at": "2026-07-09T03:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -49,6 +49,26 @@
     {
       "url": "https://vuln-portal.vercel.app/",
       "source": "VulnPortal — intentionally vulnerable auth/access terminal",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/",
+      "source": "apisec-inc/urban-VAmPI — OWASP API Top 10 production Railway deploy (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hiddeninvestigations.net/",
+      "source": "hidden-investigations/react2shell-vulnlab — CVE-2025-55182 Next.js RSC lab (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://acuart.phpnet.us/",
+      "source": "Acunetix acuart — classic intentionally vulnerable PHP art shop demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/",
+      "source": "WebSec.fr — French public web security challenge platform",
       "auth": "public_demo"
     }
   ]
