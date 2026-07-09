@@ -664,6 +664,26 @@ function extractBundleGraphqlUrls(text: string, pageOrigin: string): string[] {
   return [...urls];
 }
 
+/** SpectaQL DVGA docs embed API endpoints like http://localhost:5013/graphql — remap to scan host. */
+function extractSpectaqlGraphqlEndpoints(text: string, pageOrigin: string): string[] {
+  if (!/Damn Vulnerable GraphQL Application|spectaql/i.test(text)) return [];
+  const out = new Set<string>();
+  const page = new URL(pageOrigin);
+  const re = /https?:\/\/(?:localhost|127\.0\.0\.1|[a-z0-9.-]+):(\d+)\/graphql/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    try {
+      const u = new URL(pageOrigin);
+      u.port = m[1];
+      u.pathname = "/graphql";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out].slice(0, 4);
+}
+
 const graphqlIntrospection: Rule = async (ctx) => {
   const query = JSON.stringify({ query: "{__schema{queryType{name} types{name}}}" });
   const hasuraSecret = extractHasuraAdminSecret(ctx.combined);
@@ -672,7 +692,8 @@ const graphqlIntrospection: Rule = async (ctx) => {
     "/api/graphql",
     "/v1/graphql",
     "/query",
-    ...extractBundleGraphqlUrls(ctx.combined, ctx.origin)
+    ...extractBundleGraphqlUrls(ctx.combined, ctx.origin),
+    ...extractSpectaqlGraphqlEndpoints(ctx.combined, ctx.origin)
   ];
   const seen = new Set<string>();
   const probes: { url: string; headers: Record<string, string> }[] = [];
@@ -2729,6 +2750,80 @@ const clientSidePathTraversalEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DVGA / SpectaQL GraphQL security lab documentation -----------------------
+const CLIENT_GRAPHQL_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Damn Vulnerable GraphQL Application title",
+    re: /Damn Vulnerable GraphQL Application/i
+  },
+  {
+    label: "DVGA SpectaQL API reference",
+    re: /spectaql|API Reference/i
+  },
+  {
+    label: "DVGA importPaste SSRF-style mutation",
+    re: /mutation\s+importPaste|importPaste\s*\(/i
+  },
+  {
+    label: "DVGA audits/pastes GraphQL operations",
+    re: /#query-audits|paste\s*\{|GraphQL\s+Operations/i
+  }
+];
+
+const clientSideGraphqlLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GRAPHQL_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 80) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SpectaQL/DVGA GraphQL security lab documentation exposed — importPaste/audits mutations document injection and SSRF-style flaws"
+    }
+  };
+};
+
+// --- Next.js React Server Components CVE lab pages (HackerOne / react2shell demos) -
+const CLIENT_RSC_CVE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Next.js RSC CVE-2025-66478 banner",
+    re: /CVE-2025-66478|CVE-2025-55182/i
+  },
+  {
+    label: "Vercel platform protection HackerOne flag",
+    re: /VERCEL_PLATFORM_PROTECTION/i
+  },
+  {
+    label: "Next.js server action lab button",
+    re: /Run Server Action|server action/i
+  },
+  {
+    label: "Vulnerable Next.js version disclosure",
+    re: /"next"\s*:\s*"1[56]\./
+  }
+];
+
+const clientSideReactRscCveEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_RSC_CVE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "page documents intentional Next.js RSC/server-action CVE lab — remote code execution chain may be reachable"
+    }
+  };
+};
+
 // --- Docusaurus / static OWASP Top 10 educational lab content ------------------
 const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   {
@@ -3719,7 +3814,9 @@ export const RULES: Record<string, Rule> = {
   clientSideXssC2CollectorEvidence,
   clientSideDevSecOpsLabEvidence,
   clientSideVulnAuthPortalEvidence,
-  clientSidePathTraversalEvidence
+  clientSidePathTraversalEvidence,
+  clientSideGraphqlLabEvidence,
+  clientSideReactRscCveEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

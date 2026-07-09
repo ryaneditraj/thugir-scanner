@@ -653,6 +653,24 @@
       "slug": "client-side-ctf-platform-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle Welcome to CTF Platform + publicChallenges() + CTF{ placeholder; extractCtfPlatformSpaSeeds crawls /practice /challenges; capture-the-flag-official-website.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:lab.blackhatgraphql.com:9001",
+      "slug": "client-side-graphql-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SpectaQL DVGA API Reference + importPaste mutation docs at lab.blackhatgraphql.com:9001; lab.blackhatgraphql.com:9001 findings 1→2; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:nextjs-cve-hackerone.vercel.app",
+      "slug": "client-side-react-rsc-cve-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML CVE-2025-66478 + VERCEL_PLATFORM_PROTECTION + Run Server Action; nextjs-cve-hackerone.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:lab.blackhatgraphql.com:9001",
+      "slug": "graphql-introspection-enabled",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractSpectaqlGraphqlEndpoints parses localhost:5013/graphql from SpectaQL docs and probes remapped host:port; graphqlIntrospection candidate expansion; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1195,6 +1213,21 @@
       "source": "discovery:capture-the-flag-official-website.vercel.app",
       "slug": "ctf-platform-spa-seeds-evidence",
       "shipped_at": "2026-07-09T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:lab.blackhatgraphql.com:9001",
+      "slug": "client-side-graphql-lab-evidence",
+      "shipped_at": "2026-07-09T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:nextjs-cve-hackerone.vercel.app",
+      "slug": "client-side-react-rsc-cve-evidence",
+      "shipped_at": "2026-07-09T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:lab.blackhatgraphql.com:9001",
+      "slug": "spectaql-graphql-endpoint-extraction",
+      "shipped_at": "2026-07-09T13:15:00.000Z"
     }
   ]
 }

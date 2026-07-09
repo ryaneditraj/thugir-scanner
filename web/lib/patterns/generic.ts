@@ -820,6 +820,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-graphql-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "DVGA GraphQL security lab documentation exposed",
+    description:
+      "SpectaQL or static API reference pages for Damn Vulnerable GraphQL Application (DVGA) are reachable — documents importPaste, audits, and other intentionally vulnerable GraphQL mutations.",
+    impactOneline:
+      "Public GraphQL lab docs reveal attack surface and vulnerable mutation shapes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGraphqlLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab documentation behind auth; isolate DVGA from production networks.",
+      steps: [
+        "Remove public SpectaQL/DVGA API reference from internet-facing hosts.",
+        "Run GraphQL security labs on private networks only.",
+        "Disable introspection and dangerous mutations in any non-lab deployment."
+      ]
+    },
+    fixPrompt:
+      "Our host serves public DVGA SpectaQL API reference with importPaste mutations. Show how to remove or auth-gate lab documentation and harden GraphQL introspection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-react-rsc-cve-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE lab page disclosed",
+    description:
+      "HTML or bundle documents an intentional Next.js React Server Components CVE lab (CVE-2025-66478 / CVE-2025-55182) with server actions — remote code execution may be reachable.",
+    impactOneline:
+      "Public RSC CVE demo advertises a known server-side code execution chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideReactRscCveEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React to patched versions; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to vendor-patched releases for RSC CVEs.",
+        "Remove public HackerOne/react2shell demo deployments from production domains.",
+        "Disable or auth-gate server actions that process attacker-controlled input."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js app hosts a CVE-2025-66478 RSC lab with a Run Server Action button. Show the patched Next.js/React versions and how to remove or isolate intentional RCE demos from public URLs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-xss-c2-collector-evidence",
     platform: "generic",
     category: "Cross-site scripting",
