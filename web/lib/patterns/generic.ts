@@ -1570,5 +1570,57 @@ export const genericPatterns: Pattern[] = [
       "Our Invicti practice site exposes artist.php SQLi, hello.php eval, and hidden phpinfo endpoints. Show how to retire the public demo and move exercises to a local-only Docker lab.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "sensitive-api-password-leakage",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Cleartext passwords returned by unauthenticated JSON API",
+    description:
+      "A robots.txt-disclosed or common admin API route (e.g. /api/admin/users) returns user records with cleartext password fields without authentication.",
+    impactOneline:
+      "User passwords exposed in public API responses enable credential theft and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sensitiveApiPasswordLeakage" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password fields in API responses; hash credentials server-side.",
+      steps: [
+        "Remove password columns from all JSON serializers and DTOs.",
+        "Hash passwords with bcrypt/argon2; never store or transmit cleartext.",
+        "Require authentication and authorization on every /api/admin/* route."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/users returns Email and Password fields without auth. Remove password from API responses, hash credentials server-side, and lock admin routes behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-yourself-first-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Hack Yourself First training app documents deliberate security flaws",
+    description:
+      "Troy Hunt's Supercar Showdown demo advertises 50+ intentional appsec mistakes for the Pluralsight Hack Yourself First course.",
+    impactOneline:
+      "Public intentionally-vulnerable training apps expose realistic attack surfaces if left reachable in production.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackYourselfFirstEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host training vulnerable apps on isolated lab infrastructure only.",
+      steps: [
+        "Move Hack Yourself First-style demos to VPN-only or local Docker environments.",
+        "Never deploy courseware with live cleartext credential APIs to public URLs.",
+        "Reset lab databases frequently and monitor for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host a Hack Yourself First-style training app with dozens of deliberate flaws. Show how to isolate it on a lab subdomain with auth gating and remove cleartext password APIs.",
+    version: 1,
+    enabled: true
   }
 ];

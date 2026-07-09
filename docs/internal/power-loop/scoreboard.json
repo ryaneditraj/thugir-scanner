@@ -50,24 +50,18 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Product Hunt labs + OWASP WebGoat + blue-team CTF platform",
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "discovery_findings": 30
+      "focus": "Hack Yourself First cleartext password API + Troy Hunt lab markers; Angular testsparker query-string credentials",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "cyberdefenders.org: secret-openai + secret-resend exposed in client bundle (8 findings)",
-      "agentpwn.com: dangerous-html-sinks + agentic lab evidence (5 findings)",
-      "hacksec.in: reflected-xss-query-param on Product Hunt lab platform (5 findings)",
-      "webgoat.org: postMessage DOM XSS + API security lab evidence (5 findings)",
-      "appsecmaster.net: client-side-react-rsc-cve-evidence + dangerous-html-sinks (7 findings)"
+      "hack-yourself-first.azurewebsites.net: GET /api/admin/users leaks Password fields (5→7 findings)",
+      "angular.testsparker.com: smartDFS.php?username=admin&password=123456 in bundle (4→5 findings)"
     ],
     "learning_gaps": [
-      "hacksec.in: per-lab challenge routes not crawled (landing page only)",
-      "webgoat.org: WebGoat lesson endpoints require separate hosted instance",
-      "cyberdefenders.org: per-challenge VM instances behind auth not probed",
-      "appsecmaster.net: Docker lab containers require user deployment"
+      "acuart.phpnet.us: DNS resolution failure — site offline",
+      "hiddeninvestigations.net: react2shell lab not linked from marketing homepage",
+      "hacksec.in: per-lab challenge routes not crawled (landing page only)"
     ]
   },
   "discovery_highlights": {
@@ -237,6 +231,8 @@
     "hacksec.in": 5,
     "webgoat.org": 5,
     "cyberdefenders.org": 8,
-    "appsecmaster.net": 7
+    "appsecmaster.net": 7,
+    "hack-yourself-first.azurewebsites.net": 7,
+    "angular.testsparker.com": 5
   }
 }

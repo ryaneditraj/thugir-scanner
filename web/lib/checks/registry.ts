@@ -19,6 +19,7 @@ import {
   looksOpenApiBody,
   matchDemoFlags,
   HARDCODED_CRED_RES,
+  parseRobotsDisallowApiPaths,
   SENSITIVE_PATH_NEEDLES
 } from "./helpers";
 
@@ -3437,6 +3438,84 @@ const clientSideFileUploadEvidence: Rule = async (ctx) => {
 const TOKEN_API_PATHS = ["/api/posts", "/api/session", "/api/me", "/api/user", "/api/auth/session"];
 const JWT_IN_JSON_RE = /"(?:token|accessToken|refreshToken|jwt)"\s*:\s*"(eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)"/;
 
+// --- Cleartext passwords in robots.txt-disclosed JSON API routes ----------------
+const ROBOTS_API_PASSWORD_FALLBACK = ["/api/admin/users", "/api/users", "/api/admin/users/"];
+
+const sensitiveApiPasswordLeakage: Rule = async (ctx) => {
+  const robots = await ctx.probe.get(`${ctx.origin}/robots.txt`, { maxBytes: 4096 });
+  const robotsPaths = robots.status === 200 ? parseRobotsDisallowApiPaths(robots.body) : [];
+  const paths = [...new Set([...robotsPaths, ...ROBOTS_API_PASSWORD_FALLBACK])].filter((p) =>
+    /\/api\//i.test(p)
+  );
+  if (paths.length === 0) return NEGATIVE;
+  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 16384 }, 4);
+  const leaks: { path: string; status: number; sample: string }[] = [];
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const ct = r.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+    if (!/"password"\s*:\s*"/i.test(r.body)) continue;
+    if (!/"(?:email|userid|user_id|username)"\s*:/i.test(r.body)) continue;
+    leaks.push({
+      path: new URL(url).pathname,
+      status: r.status,
+      sample: r.body.slice(0, 140).trim()
+    });
+  }
+  if (leaks.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      routes: leaks.slice(0, 4),
+      robotsDisclosed: robotsPaths.slice(0, 4),
+      note: "JSON API returned user records with cleartext password fields without authentication"
+    }
+  };
+};
+
+// --- Troy Hunt "Hack Yourself First" intentionally vulnerable training app -------
+const CLIENT_HACK_YOURSELF_FIRST_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hack Yourself First welcome modal",
+    re: /Welcome to [&"]Hack Yourself First/i
+  },
+  {
+    label: "50 sloppy security practices course hint",
+    re: /50 very sloppy security practices/i
+  },
+  {
+    label: "Pluralsight Hack Yourself First course link",
+    re: /pluralsight\.com\/training\/Courses\/TableOfContents\/hack-yourself-first/i
+  },
+  {
+    label: "Troy Hunt intentionally vulnerable app disclaimer",
+    re: /full of nasty app sec holes/i
+  },
+  {
+    label: "Supercar Showdown training app title",
+    re: /Supercar Showdown/i
+  }
+];
+
+const clientSideHackYourselfFirstEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_YOURSELF_FIRST_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Troy Hunt Hack Yourself First training app documents dozens of deliberate security flaws"
+    }
+  };
+};
+
 const sensitiveApiTokenLeakage: Rule = async (ctx) => {
   const paths = [
     ...new Set([
@@ -3996,6 +4075,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSsrfEvidence,
   clientSideFileUploadEvidence,
   sensitiveApiTokenLeakage,
+  sensitiveApiPasswordLeakage,
+  clientSideHackYourselfFirstEvidence,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
