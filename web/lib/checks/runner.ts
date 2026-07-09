@@ -348,6 +348,34 @@ function extractLabHubLinks(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** WebSec.fr challenge levels live under /levelNN/ but are only linked in <noscript> <select> options. */
+function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
+  const out = new Set<string>();
+  const optRe = /<option[^>]*>\s*(level\d+)\s*<\/option>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = optRe.exec(html))) {
+    try {
+      out.add(new URL(`/${m[1]}/`, origin).toString());
+      out.add(new URL(`/${m[1]}/source.php`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  // Banner hint on websec.fr: ".php?id=" — seed common challenge paths + disclosed source.
+  if (/\.php\?id=/i.test(html) || /websec challenges/i.test(html)) {
+    for (let n = 1; n <= 12; n++) {
+      const slug = `level${String(n).padStart(2, "0")}`;
+      try {
+        out.add(new URL(`/${slug}/`, origin).toString());
+        out.add(new URL(`/${slug}/source.php`, origin).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  return [...out];
+}
+
 /** Child lab pages linked from category index pages (e.g. /SQLI/00.php, /SSTI/lab1.php). */
 const LAB_CHILD_PATH_RE = /href\s*=\s*["']([^"']*(?:\/\d{2}\.php|lab\d+\.php))["']/gi;
 
@@ -393,6 +421,9 @@ async function extractSitemapCrawlSeeds(origin: string, probe: ProbeCache): Prom
 /** Prefer security lab HTML pages (xss/sqli/csrf/eval/prototype) over generic nav links. */
 function prioritizeSecurityLabLinks(links: string[]): string[] {
   const LAB_KEYWORD_ORDER = [
+    "source.php",
+    "level1",
+    "level0",
     "postmessage",
     "rag-vuln",
     "chat-vuln",
@@ -515,10 +546,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
+  const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
       ...labHubSeeds,
+      ...websecSeeds,
       ...sitemapSeeds,
       ...spaRoutes,
       ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 8),
