@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T05:01:14.035Z",
+  "updated_at": "2026-07-09T05:04:25.229Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 271,
-  "total_findings": 1022,
+  "total_sites_scanned": 276,
+  "total_findings": 1042,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 145,
-  "discovery_findings": 533,
+  "discovery_urls_added": 150,
+  "discovery_findings": 553,
   "improvements_shipped": 86,
-  "last_run": "2026-07-09T05:01:14.035Z",
+  "last_run": "2026-07-09T05:04:25.229Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -51,32 +51,30 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 4,
-      "urls_ok": 4,
+      "urls_scanned": 5,
+      "urls_ok": 5,
       "urls_error": 0,
-      "findings": 13,
+      "findings": 20,
       "new_urls": [
-        "http://vapi.apisec.ai/",
-        "https://vulnbank.org/",
-        "https://dvwa.vercel.app/",
-        "https://yusufarbc.github.io/apigoat/",
-        "https://ucu-owasp-ctf.vercel.app/"
-      ],
-      "engine_evolve_focus": "websec.fr learning gap",
-      "improvements_shipped_this_run": 3
+        "https://ogtamimi.github.io/OGT-Cyber-Game/",
+        "https://koadt.github.io/oss-oopssec-store/",
+        "https://ashimkoirala.github.io/HackLab/",
+        "https://vulnshop.vercel.app/",
+        "https://dxx33.github.io/WebVulnsGuide/"
+      ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "websec.fr: WebSec challenge crawl seeds /levelNN/source.php; client-side-sql-evidence from PHP concat; removed jQuery XXE false positive",
-      "websec.fr/level06: client-side-ssrf-evidence via URL grabber marker when challenge HTML crawled",
-      "vulnbank.org: idor-sequential-ids + dangerous-html-sinks + vibe-openapi-docs-exposed (5 findings)",
-      "yusufarbc.github.io/apigoat: client-side-api-security-lab-evidence (3 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — sql-error-disclosure, idor-sequential-ids, unauthenticated-admin-endpoint",
+      "dxx33.github.io/WebVulnsGuide: server-side-eval-evidence + client-side-prototype-pollution-evidence (6 findings)",
+      "ashimkoirala.github.io/HackLab: client-side-sql-evidence + client-side-idor-evidence + dangerous-html-sinks (5 findings)",
+      "ogtamimi.github.io/OGT-Cyber-Game: client-side-sql-evidence in React/Vite game bundle (3 findings)",
+      "koadt.github.io/oss-oopssec-store: client-side-api-security-lab-evidence across 6 crawled pages (3 findings)"
     ],
     "learning_gaps": [
-      "acuart.phpnet.us: site returns 404 on all vuln paths — oracle offline",
-      "dvwa.vercel.app: DVWA oracle — scanner found headers/CORS only, no SQLi/XSS on shallow crawl",
-      "vuln-portal.vercel.app: auth terminal lab under-probed — Vercel checkpoint blocks login POST",
-      "hiddeninvestigations.net: react2shell lab not deployed on main domain (marketing site only)"
+      "vulnshop.vercel.app: static Vercel shell only — client-side-api-security-lab-evidence but no live API backend probed",
+      "testphp.vulnweb.com / testhtml5.vulnweb.com: vulnweb oracle hosts unreachable (connection timeout)",
+      "dvwa.vercel.app: DVWA shallow crawl — headers/CORS only, no injection oracles",
+      "acuart.phpnet.us: oracle offline (404 on all vuln paths)"
     ]
   },
   "discovery_highlights": {
@@ -218,6 +216,9 @@
     "archon-eight.vercel.app": 4,
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
-    "websec.fr": 2
+    "websec.fr": 2,
+    "ogtamimi.github.io/OGT-Cyber-Game": 3,
+    "ashimkoirala.github.io/HackLab": 5,
+    "dxx33.github.io/WebVulnsGuide": 6
   }
 }
