@@ -502,7 +502,32 @@
       "url": "https://solyd.com.br/treinamentos/introducao-ao-hacking-e-pentest",
       "source": "Solyd Offensive Security — free Introdução ao Hacking e Pentest training lab",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnweb.netlify.app/",
+      "source": "VulnWeb — OWASP Top 10 interactive learning app with SQLi/XSS/IDOR/CSRF demos (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/",
+      "source": "APIsec crAPI v2 — OWASP API Top 10 microservices lab (roottusk/crapi)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackable.so/",
+      "source": "Hackable.so — intentionally vulnerable SaaS-style training platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/",
+      "source": "Secret Research Lab — secrets management vulnerability training demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://skillaudit.vercel.app/",
+      "source": "SkillAudit — AI/agent security skill assessment vulnerable demo (web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-09T22:05:00.000Z"
+  "updated_at": "2026-07-09T23:05:00.000Z"
 }
