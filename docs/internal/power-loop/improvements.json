@@ -503,6 +503,24 @@
       "slug": "client-side-csrf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: inline HTML Attack 3: CSRF — The Invisible Request + Fake page posts a transfer / secret CSRF token generated when the page loaded (932-char gap exceeded 600-char window); securebank-blog.vercel.app findings 4→5; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-challenge-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: noscript <option>level06</option> + banner .php?id= seeds /levelNN/source.php; websec.fr crawl now includes level01/06/16/26/27 source.php; client-side-sql-evidence from SELECT id,username FROM users WHERE id= . $injection; replaced jQuery XXE false positive"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "html-form-post-ssrf",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level06 POST form name=url URL grabber; ssrfEndpointProbe probes application/x-www-form-urlencoded POST; client-side-ssrf-evidence marker URL grabber which fetches remote URLs; level06 direct scan 1→2 findings"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-xxe-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: jquery.js parseFromString(text/xml) triggered false positive; removed loose DOMParser pattern; websec.fr findings quality improved (XXE FP removed, SQL evidence added); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -920,6 +938,21 @@
       "source": "discovery:securebank-blog.vercel.app",
       "slug": "client-side-csrf-evidence-blog-html",
       "shipped_at": "2026-07-09T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-challenge-noscript-crawl",
+      "shipped_at": "2026-07-09T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "html-form-post-ssrf-probe",
+      "shipped_at": "2026-07-09T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "xxe-jquery-false-positive-fix",
+      "shipped_at": "2026-07-09T04:10:00.000Z"
     }
   ]
 }
