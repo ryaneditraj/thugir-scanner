@@ -1,6 +1,116 @@
 {
   "runs": [
     {
+      "run_id": "2026-07-08T18:03:28.198Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 173,
+      "status": "ok",
+      "scanned_at": "2026-07-08T18:03:28.198Z"
+    },
+    {
+      "run_id": "2026-07-08T18:06:07.504Z",
+      "url": "http://testphp.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-08T18:06:07.504Z",
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-08T18:06:17.604Z",
+      "url": "https://demo.securityknowledgeframework.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-08T18:06:17.604Z",
+      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-08T18:06:17.833Z",
+      "url": "https://bugbait.io/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-08T18:06:17.833Z",
+      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
       "run_id": "2026-07-08T18:06:18.735Z",
       "url": "https://prototype-pollution-interactive-demo.netlify.app/",
       "auth": "oss_deploy",
@@ -7461,7 +7571,7 @@
       "scanned_at": "2026-07-09T10:08:28.949Z"
     },
     {
-      "run_id": "2026-07-09T11:01:02.724Z",
+      "run_id": "2026-07-09T11:06:58.953Z",
       "url": "https://juice-shop-staging.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -7523,15 +7633,16 @@
       "pages_crawled": 1,
       "probes_run": 223,
       "status": "ok",
-      "scanned_at": "2026-07-09T11:01:02.724Z"
+      "scanned_at": "2026-07-09T11:06:58.953Z"
     },
     {
-      "run_id": "2026-07-09T11:04:25.812Z",
-      "url": "https://owasp-juice.shop/",
-      "auth": "benchmark",
-      "scan_kind": "discovery",
+      "run_id": "2026-07-09T11:10:45.741Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 3,
+      "finding_count": 7,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -7548,176 +7659,46 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
           "severity": "high",
           "confidence": 0.9,
           "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 236,
-      "status": "ok",
-      "scanned_at": "2026-07-09T11:04:25.812Z"
-    },
-    {
-      "run_id": "2026-07-09T11:04:49.428Z",
-      "url": "https://xxe-lab.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": "v0",
-      "finding_count": 5,
-      "findings": [
+        },
         {
-          "slug": "secret-aws-akid",
-          "title": "AWS access key id exposed in client bundle",
-          "severity": "critical",
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
           "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-xxe-evidence",
-          "title": "Client bundle documents XXE via external entity expansion",
-          "severity": "high",
-          "confidence": 0.92,
           "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 263,
-      "status": "ok",
-      "scanned_at": "2026-07-09T11:04:49.428Z"
-    },
-    {
-      "run_id": "2026-07-09T11:04:51.667Z",
-      "url": "https://nextjs-cve-hackerone.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 255,
-      "status": "ok",
-      "scanned_at": "2026-07-09T11:04:51.667Z"
-    },
-    {
-      "run_id": "2026-07-09T11:04:57.335Z",
-      "url": "https://web-pentest-playground.onrender.com/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
         },
         {
           "slug": "unauthenticated-admin-endpoint",
           "title": "Admin or application configuration reachable without authentication",
           "severity": "critical",
-          "confidence": 0.86,
+          "confidence": 0.92,
           "category": "Broken authentication"
         },
         {
-          "slug": "open-redirect-query-param",
-          "title": "Open redirect via query parameter",
-          "severity": "medium",
-          "confidence": 0.93,
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
           "category": "Broken access control"
         }
       ],
       "ai_findings_added": 0,
-      "pages_crawled": 3,
-      "probes_run": 235,
+      "pages_crawled": 1,
+      "probes_run": 223,
       "status": "ok",
-      "scanned_at": "2026-07-09T11:04:57.335Z"
-    },
-    {
-      "run_id": "2026-07-09T11:05:09.128Z",
-      "url": "https://cyberdesserts.github.io/cookiejar-lab/demo",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-session-hijack-evidence",
-          "title": "Client bundle documents session hijack / token replay",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 232,
-      "status": "ok",
-      "scanned_at": "2026-07-09T11:05:09.128Z"
+      "scanned_at": "2026-07-09T11:10:45.741Z"
     }
   ],
   "teacher_delta_runs": [
@@ -8002,17 +7983,6 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T10:09:00.000Z"
-    },
-    {
-      "run_id": "2026-07-09T11:06:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
-      "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings",
-      "scanned_at": "2026-07-09T11:06:00.000Z"
     }
   ]
 }
