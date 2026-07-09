@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T03:01:44.931Z",
+  "updated_at": "2026-07-09T03:06:13.692Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 259,
-  "total_findings": 982,
+  "total_sites_scanned": 264,
+  "total_findings": 994,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 136,
-  "discovery_findings": 508,
+  "discovery_urls_added": 140,
+  "discovery_findings": 520,
   "improvements_shipped": 82,
-  "last_run": "2026-07-09T03:01:44.931Z",
+  "last_run": "2026-07-09T03:06:13.692Z",
   "last_run_summary": {
-    "hour_utc": "02:00",
+    "hour_utc": "03:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -50,37 +50,34 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 8,
+      "urls_added": 4,
+      "urls_scanned": 5,
+      "urls_ok": 5,
       "urls_error": 0,
-      "findings": 30,
+      "findings": 12,
       "new_urls": [
-        "https://chimera.atlascrew.dev/",
-        "https://archon-eight.vercel.app/",
-        "https://cybersec-demo.vercel.app/",
-        "https://ctb-pi.vercel.app/",
-        "https://vuln-portal.vercel.app/"
+        "https://urban-vampi-production.up.railway.app/",
+        "https://hiddeninvestigations.net/",
+        "http://acuart.phpnet.us/",
+        "https://websec.fr/"
       ],
-      "not_scanned_this_run": [
-        "https://hack-this-site-eta.vercel.app/ (48h skip)",
-        "https://vuln-portal.vercel.app/ (queue limit 8)"
+      "rescanned_from_prior_queue": [
+        "https://vuln-portal.vercel.app/"
       ]
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — sqli, xss, idor, auth_bypass, sensitive_data, misconfig all hit",
-      "archon-eight.vercel.app: postmessage-dom-xss-evidence + secret-resend (4 findings, 6 pages, bolt platform)",
-      "ctb-pi.vercel.app: robots-sensitive-paths + vibe-sitemap-sensitive-paths + weak-csp (5 findings, 6 pages, supabase)",
-      "chimera.atlascrew.dev: secret-resend + 6-page crawl — 450+ API lab portal not fully exercised",
-      "juice-shop.herokuapp.com: prod rescan 8 findings incl secret-resend (differs from staging oracle)",
-      "cybersec-demo.vercel.app: dangerous-html-sinks on Nivara landing (3 findings)",
-      "securebank-blog.vercel.app: client-side-sql-evidence + dangerous-html-sinks on attack-mode educational HTML; findings 2→4",
-      "secure-bank-bay.vercel.app: client-side-sql-evidence + client-side-csrf-evidence in SPA bundle; findings 4→6"
+      "urban-vampi-production.up.railway.app: idor-sequential-ids + vibe-unauthenticated-api-routes + vibe-openapi-docs-exposed (4 findings, VAmPI production fork)",
+      "websec.fr: client-side-xxe-evidence + 6-page crawl (2 findings, French challenge platform)",
+      "hiddeninvestigations.net: robots-sensitive-paths + permissive-cors (3 findings, React2Shell CVE lab)",
+      "acuart.phpnet.us: tech-stack-disclosure on classic Acunetix PHP demo (2 findings, shallow crawl)",
+      "vuln-portal.vercel.app: missing-security-headers only (1 finding) — auth terminal lab under-probed"
     ],
     "learning_gaps": [
-      "chimera.atlascrew.dev: marketing portal only — 456+ vulnerable API endpoints behind demo-mode install, not reachable via crawl",
-      "vuln-portal.vercel.app: queued but not scanned (POWER_SCAN_LIMIT=8) — auth terminal lab pending",
-      "preview-zeroday-sec.vercel.app: marketing landing only — cloud labs behind demo request",
+      "vuln-portal.vercel.app: auth/access terminal lab — only misconfig hit; need deeper auth_bypass/idor probes",
+      "acuart.phpnet.us: classic SQLi/XSS oracle — scanner missed injection on 1-page crawl",
+      "hiddeninvestigations.net: React2Shell RCE lab — no RSC/deserialization probes; headers/robots only",
+      "urban-vampi-production: API BOLA/auth bypass gaps vs staging sibling — compare production vs staging recall",
       "openvaultbank.com + prompt-injection-playground: prior-run gaps still open — auth/API probes needed"
     ]
   },
@@ -222,6 +219,11 @@
     "chimera.atlascrew.dev": 3,
     "archon-eight.vercel.app": 4,
     "cybersec-demo.vercel.app": 3,
-    "ctb-pi.vercel.app": 5
+    "ctb-pi.vercel.app": 5,
+    "vuln-portal.vercel.app": 1,
+    "urban-vampi-production.up.railway.app": 4,
+    "hiddeninvestigations.net": 3,
+    "acuart.phpnet.us": 2,
+    "websec.fr": 2
   }
 }
