@@ -2153,6 +2153,136 @@ const clientSideXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- XSS C2 collector dashboard (paired with xss-victim bank labs) ----------------
+const CLIENT_XSS_C2_COLLECTOR_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Attacker C2 XSS collector dashboard title",
+    re: /Attacker C2[\s\S]{0,40}XSS Collector/i
+  },
+  {
+    label: "XSS collector API endpoint documented in page",
+    re: /\/api\/collect/i
+  },
+  {
+    label: "Cookie stealer payload builder for cross-origin exfil",
+    re: /Cookie stealer|Cookies stolen/i
+  },
+  {
+    label: "img onerror cross-origin cookie exfil technique",
+    re: /img[\s\S]{0,80}onerror[\s\S]{0,120}cross-origin/i
+  }
+];
+
+const clientSideXssC2CollectorEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XSS_C2_COLLECTOR_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+
+  const probeUrl = new URL("/api/collect", ctx.origin).toString();
+  let probeNote: string | undefined;
+  if (/\/api\/collect/i.test(ctx.combined)) {
+    const r = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+    if (r.status >= 200 && r.status < 500 && /no data|cookie|collect/i.test(r.body)) {
+      probeNote = `GET ${new URL(probeUrl).pathname} returns ${r.status} — unauthenticated XSS exfil collector reachable`;
+    }
+  }
+
+  return {
+    fired: true,
+    confidence: probeNote ? 0.92 : hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      probe: probeNote,
+      note: "page documents an XSS C2 collector that receives stolen cookies cross-origin via /api/collect"
+    }
+  };
+};
+
+// --- DevSecOps microservices hacking lab (SIEM/WAF/IDOR attack catalog) ---------
+const CLIENT_DEVSECOPS_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DevSecOps Hacking Lab platform title",
+    re: /DevSecOps Hacking Lab/i
+  },
+  {
+    label: "Interactive security testing platform tagline",
+    re: /Interactive Security Testing Platform/i
+  },
+  {
+    label: "IDOR exploitation attack scenario catalog",
+    re: /IDOR Exploitation|id:\s*["']idor-exploit["']/i
+  },
+  {
+    label: "Gateway bypass or direct service access lab",
+    re: /Gateway Bypass|gateway bypass|Direct Access/i
+  },
+  {
+    label: "SIEM and WAF analytics modules",
+    re: /\/siem|SIEM[\s\S]{0,80}\/waf|WafAnalytics/i
+  },
+  {
+    label: "Brute force or MFA bypass attack module",
+    re: /executeBruteForce|MFA Bypass|brute force attack/i
+  }
+];
+
+const clientSideDevSecOpsLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DEVSECOPS_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 5),
+      note: "client bundle documents DevSecOps microservices lab with IDOR, auth bypass, gateway bypass, and SIEM/WAF attack scenarios"
+    }
+  };
+};
+
+// --- Intentionally vulnerable auth portal (VulnPortal-style terminals) -----------
+const CLIENT_VULN_AUTH_PORTAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnPortal branded access terminal",
+    re: /VULN\s*PORTAL|VulnPortal/i
+  },
+  {
+    label: "Secure access terminal login shell",
+    re: /SECURE ACCESS TERMINAL/i
+  },
+  {
+    label: "CVSS and OWASP risk rating on auth form",
+    re: /CVSS v3\.1[\s\S]{0,80}OWASP Risk Rating/i
+  },
+  {
+    label: "bcrypt password strength demo on login",
+    re: /bcrypt[\s\S]{0,60}zxcvbn/i
+  }
+];
+
+const clientSideVulnAuthPortalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULN_AUTH_PORTAL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HTML documents an intentionally vulnerable authentication portal lab — access-control flaws likely on /auth routes"
+    }
+  };
+};
+
 // --- Educational security game / level-select lab evidence (OGT Cyber Game, etc.) ---
 const CLIENT_SECURITY_GAME_RES: { label: string; re: RegExp }[] = [
   {
@@ -3424,7 +3554,10 @@ export const RULES: Record<string, Rule> = {
   ssrfEndpointProbe,
   pentestForgeLinkedLabProbe,
   owaspCtfLinkedLabProbe,
-  clientSideSecurityGameEvidence
+  clientSideSecurityGameEvidence,
+  clientSideXssC2CollectorEvidence,
+  clientSideDevSecOpsLabEvidence,
+  clientSideVulnAuthPortalEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

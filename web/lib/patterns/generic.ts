@@ -768,6 +768,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-xss-c2-collector-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "XSS C2 collector dashboard with unauthenticated /api/collect exfil endpoint",
+    description:
+      "The page documents an attacker C2 dashboard for XSS cookie theft, including /api/collect and cross-origin img onerror exfil techniques. GET /api/collect may respond without auth.",
+    impactOneline:
+      "Public XSS collector endpoints let any site exfiltrate victim session data to an attacker-controlled dashboard.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXssC2CollectorEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public C2 collectors; enforce HttpOnly cookies and strict CSP.",
+      steps: [
+        "Do not deploy XSS exfil collector APIs on production domains.",
+        "Set HttpOnly and Secure on session cookies so document.cookie cannot read them.",
+        "Use a strict Content-Security-Policy to block inline script injection."
+      ]
+    },
+    fixPrompt:
+      "Our app hosts an XSS C2 collector at /api/collect that receives stolen cookies cross-origin. Show how to remove the collector, set HttpOnly session cookies, and add CSP to block cookie theft via XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-devsecops-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "DevSecOps microservices lab documents IDOR and gateway bypass attacks",
+    description:
+      "The client bundle catalogs DevSecOps Hacking Lab attack scenarios — IDOR profile access, gateway bypass, brute force, MFA bypass, plus SIEM/WAF monitoring modules.",
+    impactOneline:
+      "Educational attack consoles on public URLs teach adversaries reusable IDOR and auth-bypass patterns against real APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDevSecOpsLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep offensive lab consoles off public production URLs.",
+      steps: [
+        "Host DevSecOps attack simulators on isolated lab networks only.",
+        "Require authentication before exposing attack scenario UIs.",
+        "Never point lab bundles at production API gateways without network segmentation."
+      ]
+    },
+    fixPrompt:
+      "Our DevSecOps Hacking Lab bundle documents IDOR exploitation and gateway bypass against /api/users/profile. Show how to isolate the lab from production and gate attack modules behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vuln-auth-portal-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Intentionally vulnerable auth portal terminal (VulnPortal-style)",
+    description:
+      "HTML documents a VulnPortal-style secure access terminal with bcrypt/zxcvbn demos and CVSS/OWASP risk rating — an educational broken-auth lab shell.",
+    impactOneline:
+      "Public vulnerable auth portals expose login bypass and session flaws for training but also give attackers a live target.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnAuthPortalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vuln auth portals to lab environments with clear labeling.",
+      steps: [
+        "Do not deploy VulnPortal-style terminals on production domains.",
+        "Require VPN or invite codes for auth bypass training apps.",
+        "Use separate subdomains isolated from customer data."
+      ]
+    },
+    fixPrompt:
+      "Our site serves a VulnPortal secure access terminal with intentional auth flaws for training. Show how to move it to an isolated lab subdomain and gate registration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-csrf-evidence",
     platform: "generic",
     category: "Broken access control",

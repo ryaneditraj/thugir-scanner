@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T09:07:17.437Z",
+  "updated_at": "2026-07-09T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 44,
   "discovery_findings": 627,
-  "improvements_shipped": 98,
-  "last_run": "2026-07-09T09:07:17.437Z",
+  "improvements_shipped": 101,
+  "last_run": "2026-07-09T09:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "09:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,21 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 12,
-      "focus": "Firebase XSS demo, Fabraix AI red-team playground, Hack-the-Basics CTF, IDOR lab, WebGoat mirror"
+      "urls_rescanned": 3,
+      "improvements_shipped": 3,
+      "focus": "Discovery-only — benchmark 6/6, teacher delta unavailable; shipped XSS C2 collector, DevSecOps lab, VulnPortal auth portal rules"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "weaponsforge.github.io/hacker-friendly-app: secret-resend Firebase API key + dangerous-html-sinks (4 findings)",
-      "playground.fabraix.com: client-side-prompt-injection-evidence on AI agent playground (2 findings)",
-      "webexp05.vercel.app: CORS+headers only (2) — CTF cookie/SQLi/XSS/API challenges under-probed",
-      "idor-challenge.vercel.app: headers/CORS only (2) — IDOR oracle not exercised server-side"
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: client-side-devsecops-lab-evidence IDOR/gateway bypass/SIEM catalog (3→4 findings)",
+      "vuln-portal.vercel.app: client-side-vuln-auth-portal-evidence VULNPORTAL terminal (1→2 findings)",
+      "xss-attacker.vercel.app: client-side-xss-c2-collector-evidence rule shipped — Attacker C2 + /api/collect probe (direct validation; Vercel checkpoint may block live rescan)"
     ],
     "learning_gaps": [
-      "webexp05.vercel.app: /c1-/c4 CTF paths (cookie b64, SQLi, XSS, API heist) not crawled — only landing shell",
-      "idor-challenge.vercel.app: Albus IDOR demo needs authenticated session + sequential ID probes",
-      "weaponsforge.github.io/hacker-friendly-app: Firebase /.json open-read/write rules not probed",
-      "playground.fabraix.com: multi-turn crescendo attack chains + tool-call guardrail bypass not exercised",
-      "luisillobret2.github.io/WebGoat: static mirror only — no /WebGoat lesson endpoints reachable"
+      "fvb.vchan.in: apidoc.fvb.vchan.in offline — REST/GraphQL live oracles still under-probed",
+      "dvai.vercel.app: wrong deploy (DreamVator Aviation) — Damn Vulnerable AI range not at this URL",
+      "riglabs-cyber-lab.vercel.app: no IDOR/CSRF modules in catalog — SQLi+XSS only",
+      "hiddeninvestigations.net: react2shell lab not linked from homepage — no live deploy URL in crawl"
     ]
   },
   "discovery_highlights": {
@@ -210,7 +207,7 @@
     "websec.fr": 2,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
-    "everdan0075.github.io/DevSecOps-Hacking-Lab": 3,
+    "everdan0075.github.io/DevSecOps-Hacking-Lab": 4,
     "riglabs-cyber-lab.vercel.app": 4,
     "vulnlab.vercel.app": 7,
     "avid-vuln-editor.vercel.app": 3,
@@ -220,6 +217,7 @@
     "playground.fabraix.com": 2,
     "webexp05.vercel.app": 2,
     "idor-challenge.vercel.app": 2,
-    "luisillobret2.github.io/WebGoat": 2
+    "luisillobret2.github.io/WebGoat": 2,
+    "vuln-portal.vercel.app": 2
   }
 }

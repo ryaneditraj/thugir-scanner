@@ -593,6 +593,24 @@
       "slug": "client-side-ssrf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: renderSSRF link-preview lab The server fetches it for you + Cloud metadata endpoint reached; juicesec findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-attacker.vercel.app",
+      "slug": "client-side-xss-c2-collector-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title Attacker C2 — XSS Collector + /api/collect + Cookies stolen; GET /api/collect returns 400 no data; rule direct test confidence 0.92; prior scan 3 findings (checkpoint may block live rescan); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:everdan0075.github.io/DevSecOps-Hacking-Lab",
+      "slug": "client-side-devsecops-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle DevSecOps Hacking Lab + IDOR Exploitation + executeBruteForce + /siem /waf modules; everdan0075.github.io/DevSecOps-Hacking-Lab findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "client-side-vuln-auth-portal-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HTML VULNPORTAL + SECURE ACCESS TERMINAL + bcrypt/zxcvbn + CVSS v3.1 OWASP Risk Rating; vuln-portal.vercel.app findings 1→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1085,6 +1103,21 @@
       "source": "discovery:juicesec.mrdinesh.workers.dev",
       "slug": "client-side-ssrf-link-preview-lab",
       "shipped_at": "2026-07-09T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss-attacker.vercel.app",
+      "slug": "client-side-xss-c2-collector-evidence",
+      "shipped_at": "2026-07-09T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:everdan0075.github.io/DevSecOps-Hacking-Lab",
+      "slug": "client-side-devsecops-lab-evidence",
+      "shipped_at": "2026-07-09T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "client-side-vuln-auth-portal-evidence",
+      "shipped_at": "2026-07-09T09:10:00.000Z"
     }
   ]
 }
