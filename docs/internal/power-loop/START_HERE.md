@@ -70,7 +70,13 @@ node docs/internal/security-skills/build-index.mjs
 
 Open PRs with **deleted branches** must be closed on GitHub UI (automations cannot close PRs):
 
-Close these: **#2–#26** except **#1** if you want to keep it, plus integrity shells **#11, #14, #16–#21, #25**
+Close orphaned PR shells on GitHub UI (automations cannot close PRs):
+
+```bash
+cd web && npm run close-orphan-prs -- --close
+```
+
+Or close manually: **#1–#26** plus integrity shells **#11, #14, #16–#21, #25**
 
 Then run: `cd web && node scripts/manage-pr-integrity.mjs --audit`
 
