@@ -405,7 +405,32 @@
       "url": "https://ginandjuice.shop/",
       "source": "PortSwigger Gin & Juice Shop — deliberately vulnerable e-commerce lab (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://maestro-agentic-ai-security-demo-mon.netlify.app/",
+      "source": "MAESTRO Framework — ElizaOS agentic AI security demo with RAG poisoning walkthrough (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://reef-mcp-registry.vercel.app/",
+      "source": "Reef MCP registry — signed supply chain demo blocking Anthropic MCP RCE (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testhtml5.vulnweb.com/",
+      "source": "Acunetix SecurityTweets — HTML5/Angular/Flask intentionally vulnerable benchmark (vulnweb.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://platform.sixhackacademy.com/",
+      "source": "SixHack Academy platform — OWASP Top 10 CTF labs (sixhackacademy.com platform subdomain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cve-2025-55182-demo.vercel.app/",
+      "source": "Next.js CVE-2025-55182 RSC vulnerability interactive demo (web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-09T18:06:00.000Z"
+  "updated_at": "2026-07-09T19:05:00.000Z"
 }
