@@ -2141,6 +2141,47 @@ const clientSideXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Educational security game / level-select lab evidence (OGT Cyber Game, etc.) ---
+const CLIENT_SECURITY_GAME_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Level catalog documents SQL Injection module",
+    re: /vulnerability:\s*["']SQL Injection["']/i
+  },
+  {
+    label: "Level catalog documents Reflected XSS module",
+    re: /vulnerability:\s*["']Reflected XSS["']/i
+  },
+  {
+    label: "Level catalog documents IDOR module",
+    re: /vulnerability:\s*["'](?:IDOR|Insecure Direct Object Reference)["']/i
+  },
+  {
+    label: "Cybersecurity learning game level select UI",
+    re: /currentView:\s*\w+\.LEVEL_SELECT|LEVEL_\d+.*Login Bypass/i
+  },
+  {
+    label: "Educational vulnerable code panel marker",
+    re: /Vulnerable Code[\s\S]{0,400}(?:SQL Injection|Cross-Site Scripting|IDOR)/i
+  }
+];
+
+const clientSideSecurityGameEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECURITY_GAME_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents multi-level security training game with injectable vulnerability modules"
+    }
+  };
+};
+
 // --- OWASP Top 10 CTF hub evidence (UCU CTF and similar challenge portals) ---
 const CLIENT_OWASP_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -3260,7 +3301,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePromptInjectionEvidence,
   ssrfEndpointProbe,
   pentestForgeLinkedLabProbe,
-  owaspCtfLinkedLabProbe
+  owaspCtfLinkedLabProbe,
+  clientSideSecurityGameEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
