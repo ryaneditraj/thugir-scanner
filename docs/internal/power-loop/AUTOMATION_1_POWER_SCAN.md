@@ -21,13 +21,16 @@ Razorpay is our billing stack only. Do not touch it.
 
 ## PHASE A — Benchmark scan (40% of run — DO THIS FIRST)
 
-**Oracle:** Read WSTG playbooks before scanning — these are ground truth teachers:
-- `docs/reference/cyberstrike/vendor/skills/wstg-inpv-05/SKILL.md` (SQLi)
-- `docs/reference/cyberstrike/vendor/skills/wstg-inpv-01/SKILL.md` (reflected XSS)
-- `docs/reference/cyberstrike/vendor/skills/wstg-authz-02/SKILL.md` (IDOR)
+**Oracle library (141 skills vendored from CyberStrike):**
+- Index: `docs/reference/cyberstrike/vendor/index.json`
+- WSTG (125): `docs/reference/cyberstrike/vendor/skills/WEB/OWASP_WSTG_4.2/`
+- Attack (16): `docs/reference/cyberstrike/vendor/skills/attack-*/`
 
-Methodology rules: `web/lib/methodology/` (3-gate confirmation, severity triage, coverage notes).
-Full CyberStrike reference: `docs/reference/cyberstrike/README.md`
+**Core oracles for every benchmark run (read these first):**
+- `wstg-inpv-05` SQLi, `wstg-inpv-01` XSS, `wstg-authz-02` IDOR
+- `attack-ssrf`, `attack-jwt`, `attack-ssti`, `attack-idor-automation`
+
+Methodology: `web/lib/methodology/` | Loader: `web/lib/methodology/skills.ts`
 
 1. Read `docs/internal/power-loop/benchmarks.json`
 2. Run local scanner:
