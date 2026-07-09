@@ -75,6 +75,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "exposed-infra-artifacts",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Infrastructure artifact reachable over HTTP",
+    description:
+      "DevOps and platform config files (Terraform state, AWS credentials, Spring Boot actuator env, kubeconfig, Fly.io config, WordPress/Django settings) are served from the web root. Misconfigured static hosts and CI deploys routinely publish these alongside the app, leaking cloud keys and database passwords.",
+    impactOneline:
+      "Terraform state, AWS creds, or actuator env is downloadable — full cloud takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "exposedInfraArtifacts" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove infra artifacts from the deployed web root and rotate every exposed credential.",
+      steps: [
+        "Delete terraform.tfstate, .aws/credentials, kubeconfig, and settings backups from the public artifact.",
+        "Disable Spring Boot actuator endpoints in production or restrict them to internal networks.",
+        "Rotate every cloud key, database password, and API token any exposed file contained."
+      ]
+    },
+    fixPrompt:
+      "My production deploy serves infrastructure files (terraform.tfstate, .aws/credentials, actuator/env, fly.toml, kubeconfig, or settings.py) over HTTP. Remove them from the web root, block those paths at the edge, disable actuator in production, and list every secret I must rotate.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-git-dir",
     platform: "generic",
     category: "Source exposure",
@@ -456,6 +482,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "My API may have IDOR: records are fetched by sequential ID without checking ownership. Add server-side ownership checks to every record access and switch user-facing IDs to UUIDs. Show the updated handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "jwt-alg-none-accepted",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: 'JWT "none" algorithm accepted on API route',
+    description:
+      "An API route that requires authentication accepts a forged unsigned JWT with alg:none. This lets anyone mint valid-looking tokens without the signing secret — full account takeover.",
+    impactOneline:
+      "Attackers can forge JWTs with alg:none and impersonate any user, including admins.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "jwtAlgNoneProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to a specific algorithm and reject alg:none.",
+      steps: [
+        "Configure your JWT library to allow only HS256/RS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Add a test that rejects unsigned alg:none tokens."
+      ]
+    },
+    fixPrompt:
+      'My API accepts JWTs with alg:"none", letting attackers forge tokens. Pin verification to HS256/RS256, explicitly reject alg:none, and show me the middleware/library config change.',
     version: 1,
     enabled: true
   },
