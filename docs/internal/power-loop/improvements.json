@@ -521,6 +521,24 @@
       "slug": "client-side-xxe-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: jquery.js parseFromString(text/xml) triggered false positive; removed loose DOMParser pattern; websec.fr findings quality improved (XXE FP removed, SQL evidence added); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.vercel.app",
+      "slug": "dvwa-vuln-source-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwa.vercel.app serves raw PHP; extractDvwaVulnSourceSeeds seeds /vulnerabilities/sqli/source/low.php ($query SELECT…user_id='$id'); crawl 1→6 pages; client-side-sql-evidence when source reachable; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.vercel.app",
+      "slug": "client-side-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/xss_r/source/low.php $html .= '<pre>Hello ' . $_GET['name']; clientSideXssEvidence PHP reflected-XSS patterns; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "client-side-owasp-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: main-Dgu1u6kg.js challenge array A01–A10 with Railway URLs + submitFlag; owaspCtfLinkedLabProbe probes linked targets; ucu-owasp-ctf findings 3→4+ when bundle loads; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -953,6 +971,21 @@
       "source": "discovery:websec.fr",
       "slug": "xxe-jquery-false-positive-fix",
       "shipped_at": "2026-07-09T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvwa.vercel.app",
+      "slug": "dvwa-vuln-source-crawl",
+      "shipped_at": "2026-07-09T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvwa.vercel.app",
+      "slug": "client-side-xss-evidence",
+      "shipped_at": "2026-07-09T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "client-side-owasp-ctf-evidence",
+      "shipped_at": "2026-07-09T05:10:00.000Z"
     }
   ]
 }

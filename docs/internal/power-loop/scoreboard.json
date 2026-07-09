@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T05:04:25.229Z",
+  "updated_at": "2026-07-09T05:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 276,
-  "total_findings": 1042,
+  "total_sites_scanned": 277,
+  "total_findings": 1049,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 150,
   "discovery_findings": 553,
-  "improvements_shipped": 86,
-  "last_run": "2026-07-09T05:04:25.229Z",
+  "improvements_shipped": 89,
+  "last_run": "2026-07-09T05:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "05:00",
     "benchmark": {
@@ -50,31 +50,19 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "urls_ok": 5,
-      "urls_error": 0,
-      "findings": 20,
-      "new_urls": [
-        "https://ogtamimi.github.io/OGT-Cyber-Game/",
-        "https://koadt.github.io/oss-oopssec-store/",
-        "https://ashimkoirala.github.io/HackLab/",
-        "https://vulnshop.vercel.app/",
-        "https://dxx33.github.io/WebVulnsGuide/"
-      ]
+      "focus": "dvwa.vercel.app + ucu-owasp-ctf.vercel.app learning gaps",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — sql-error-disclosure, idor-sequential-ids, unauthenticated-admin-endpoint",
-      "dxx33.github.io/WebVulnsGuide: server-side-eval-evidence + client-side-prototype-pollution-evidence (6 findings)",
-      "ashimkoirala.github.io/HackLab: client-side-sql-evidence + client-side-idor-evidence + dangerous-html-sinks (5 findings)",
-      "ogtamimi.github.io/OGT-Cyber-Game: client-side-sql-evidence in React/Vite game bundle (3 findings)",
-      "koadt.github.io/oss-oopssec-store: client-side-api-security-lab-evidence across 6 crawled pages (3 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "dvwa.vercel.app: vuln source crawl seeds sqli/xss_r low.php; client-side-sql-evidence when PHP source returned (2→3 findings)",
+      "ucu-owasp-ctf: OWASP Top 10 CTF A01–A10 challenge hub + linked Railway lab probe"
     ],
     "learning_gaps": [
-      "vulnshop.vercel.app: static Vercel shell only — client-side-api-security-lab-evidence but no live API backend probed",
-      "testphp.vulnweb.com / testhtml5.vulnweb.com: vulnweb oracle hosts unreachable (connection timeout)",
-      "dvwa.vercel.app: DVWA shallow crawl — headers/CORS only, no injection oracles",
-      "acuart.phpnet.us: oracle offline (404 on all vuln paths)"
+      "acuart.phpnet.us: site returns 404 on all vuln paths — oracle offline",
+      "dvwa.vercel.app: Vercel checkpoint intermittently blocks vuln source fetches",
+      "vuln-portal.vercel.app: auth terminal lab under-probed — Vercel checkpoint blocks login POST",
+      "hiddeninvestigations.net: react2shell lab not deployed on main domain (marketing site only)"
     ]
   },
   "discovery_highlights": {

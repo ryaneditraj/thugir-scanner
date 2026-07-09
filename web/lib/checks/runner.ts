@@ -376,6 +376,40 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** DVWA deploys (e.g. dvwa.vercel.app) may serve raw PHP source under vulnerabilities/…/source/. */
+const DVWA_VULN_MODULES = [
+  "sqli",
+  "xss_r",
+  "xss_s",
+  "xss_d",
+  "csrf",
+  "fi",
+  "fileupload",
+  "exec",
+  "brute",
+  "weak_id"
+];
+
+function extractDvwaVulnSourceSeeds(html: string, origin: string): string[] {
+  if (!/Damn Vulnerable Web Application|DVWA_WEB_PAGE_TO_ROOT/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const mod of DVWA_VULN_MODULES) {
+    try {
+      out.add(new URL(`/vulnerabilities/${mod}/source/low.php`, origin).toString());
+      out.add(new URL(`/vulnerabilities/${mod}/`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  try {
+    out.add(new URL("/login.php", origin).toString());
+    out.add(new URL("/phpinfo.php", origin).toString());
+  } catch {
+    /* ignore */
+  }
+  return [...out];
+}
+
 /** Child lab pages linked from category index pages (e.g. /SQLI/00.php, /SSTI/lab1.php). */
 const LAB_CHILD_PATH_RE = /href\s*=\s*["']([^"']*(?:\/\d{2}\.php|lab\d+\.php))["']/gi;
 
@@ -422,6 +456,7 @@ async function extractSitemapCrawlSeeds(origin: string, probe: ProbeCache): Prom
 function prioritizeSecurityLabLinks(links: string[]): string[] {
   const LAB_KEYWORD_ORDER = [
     "source.php",
+    "/vulnerabilities/",
     "level1",
     "level0",
     "postmessage",
@@ -499,6 +534,8 @@ function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): st
       const path = m[1];
       if (path === "/" || path.length < 2) continue;
       if (/\.(png|jpe?g|svg|gif|webp|ico|css|js|map|woff2?|ttf|pdf|zip)$/i.test(path)) continue;
+      // Vercel Security Checkpoint false positives (e.g. /assets/admin.html behind bot gate).
+      if (/\/assets\/admin\.html$/i.test(path)) continue;
       try {
         const u = new URL(path, pageOrigin);
         if (u.origin !== pageOrigin) continue;
@@ -547,11 +584,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
+  const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
       ...labHubSeeds,
       ...websecSeeds,
+      ...dvwaSeeds,
       ...sitemapSeeds,
       ...spaRoutes,
       ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 8),
