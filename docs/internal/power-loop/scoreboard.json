@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T04:05:03.488Z",
+  "updated_at": "2026-07-09T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 145,
   "discovery_findings": 533,
-  "improvements_shipped": 83,
-  "last_run": "2026-07-09T04:05:03.488Z",
+  "improvements_shipped": 86,
+  "last_run": "2026-07-09T04:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "04:00",
     "benchmark": {
@@ -62,22 +62,21 @@
         "https://yusufarbc.github.io/apigoat/",
         "https://ucu-owasp-ctf.vercel.app/"
       ],
-      "skipped_48h": [
-        "http://vapi.apisec.ai/ (prior scan 2026-07-08, 3 findings)"
-      ]
+      "engine_evolve_focus": "websec.fr learning gap",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — sql-error-disclosure, unauthenticated-admin-endpoint, idor-sequential-ids",
-      "vulnbank.org: idor-sequential-ids + dangerous-html-sinks + vibe-openapi-docs-exposed (5 findings, 6 pages)",
-      "yusufarbc.github.io/apigoat: client-side-api-security-lab-evidence — OWASP API Top 10 lab bundle (3 findings)",
-      "dvwa.vercel.app: misconfig only (2 findings) — classic SQLi/XSS oracle missed on 1-page crawl",
-      "ucu-owasp-ctf.vercel.app: firebase-config-exposed + misconfig (3 findings, 4 pages)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "websec.fr: WebSec challenge crawl seeds /levelNN/source.php; client-side-sql-evidence from PHP concat; removed jQuery XXE false positive",
+      "websec.fr/level06: client-side-ssrf-evidence via URL grabber marker when challenge HTML crawled",
+      "vulnbank.org: idor-sequential-ids + dangerous-html-sinks + vibe-openapi-docs-exposed (5 findings)",
+      "yusufarbc.github.io/apigoat: client-side-api-security-lab-evidence (3 findings)"
     ],
     "learning_gaps": [
-      "dvwa.vercel.app: DVWA oracle — scanner found headers/CORS only, no SQLi/XSS probes on shallow crawl",
-      "vulnbank.org: banking RCE/console + mass-assignment oracle — only IDOR/XSS/OpenAPI surfaced",
-      "vapi.apisec.ai: skipped 48h rescans — prior run found secret-openai in bundle (3 findings)",
-      "ucu-owasp-ctf.vercel.app: CTF challenges likely need auth/session probes beyond Firebase config leak"
+      "acuart.phpnet.us: site returns 404 on all vuln paths — oracle offline",
+      "dvwa.vercel.app: DVWA oracle — scanner found headers/CORS only, no SQLi/XSS on shallow crawl",
+      "vuln-portal.vercel.app: auth terminal lab under-probed — Vercel checkpoint blocks login POST",
+      "hiddeninvestigations.net: react2shell lab not deployed on main domain (marketing site only)"
     ]
   },
   "discovery_highlights": {
@@ -219,9 +218,6 @@
     "archon-eight.vercel.app": 4,
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
-    "vulnbank.org": 5,
-    "dvwa.vercel.app": 2,
-    "yusufarbc.github.io": 3,
-    "ucu-owasp-ctf.vercel.app": 3
+    "websec.fr": 2
   }
 }
