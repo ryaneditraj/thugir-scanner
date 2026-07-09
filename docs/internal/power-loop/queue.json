@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-08T23:05:00.000Z",
+  "updated_at": "2026-07-09T00:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnerable-graphql-lab.railway.app/",
+      "source": "web search — Damn Vulnerable GraphQL Application Railway deploy",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-graphql-demo.railway.app/",
+      "source": "web search — GraphQL injection/introspection vulnerable demo (Railway)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://authlab.digi.ninja/",
+      "source": "OWASP VWAD — digininja AuthLab public online auth vulnerability playground",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/",
+      "source": "OWASP VWAD — Defend the Web interactive web security challenge platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackxpert.com/",
+      "source": "OWASP VWAD — HackXpert public security labs and challenges",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/",
       "source": "Escape.tech Duck Store — intentionally vulnerable React/FastAPI benchmark (20 documented vulns)",
