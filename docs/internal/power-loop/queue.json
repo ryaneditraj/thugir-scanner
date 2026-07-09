@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T04:05:00.000Z",
+  "updated_at": "2026-07-09T05:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -95,6 +95,31 @@
       "url": "https://ucu-owasp-ctf.vercel.app/",
       "source": "UCU OWASP CTF — educational vulnerability challenges (Vercel)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ogtamimi.github.io/OGT-Cyber-Game/",
+      "source": "ogtamimi/OGT-Cyber-Game — SQLi/XSS/IDOR learning game (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/",
+      "source": "koadt/oss-oopssec-store — intentionally vulnerable e-commerce CTF (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ashimkoirala.github.io/HackLab/",
+      "source": "AshimKoirala/HackLab — zero-dependency browser OWASP Top 10 lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/",
+      "source": "yashasrnair/VulnShop — OWASP Top 10 e-commerce with demo panels (Vercel)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/",
+      "source": "dxx33/WebVulnsGuide — interactive web vulnerability guide (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ]
 }
