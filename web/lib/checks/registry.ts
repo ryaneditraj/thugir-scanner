@@ -1894,6 +1894,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "VULNERABLE CODE innerHTML XSS lab marker",
     re: /VULNERABLE CODE[\s\S]{0,200}innerHTML\s*=\s*`/
+  },
+  {
+    label: "DomGoat msgboard innerHTML assignment",
+    re: /getElementById\(["']msgboard["']\)\.innerHTML\s*=\s*\w+/
+  },
+  {
+    label: "getElementById innerHTML assignment with user message variable",
+    re: /getElementById\([^)]+\)\.innerHTML\s*=\s*(?:msg|html|content|val)\b/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -2902,6 +2910,88 @@ const clientSideHackHealthLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Nextra tutorial documents intentional SQL injection on HackHealth login — UNION-based PostgreSQL enumeration walkthrough"
+    }
+  };
+};
+
+// --- DomGoat DOM XSS learning platform (domgo.at/cxss) -------------------------
+const CLIENT_DOM_GOAT_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DomGoat DOM Security Learning Platform",
+    re: /DomGoat[\s\S]{0,40}DOM Security Learning Platform/i
+  },
+  {
+    label: "Client XSS exercise catalog",
+    re: /Client XSS Exercises|Client-site Code Execution\/XSS/i
+  },
+  {
+    label: "Client XSS sources and sinks modules",
+    re: /Client XSS (?:Sources|Sinks)/i
+  },
+  {
+    label: "DomGoat /cxss exercise route",
+    re: /\/cxss\/(?:example|sources|sinks)/i
+  },
+  {
+    label: "DOM XSS innerHTML sink table row",
+    re: /HTMLElement\.innerHTML[\s\S]{0,120}msgboard/i
+  }
+];
+
+const clientSideDomGoatLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DOM_GOAT_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DomGoat DOM XSS lab documents client-side sources, sinks, and innerHTML exercises — DOM XSS likely on /cxss routes"
+    }
+  };
+};
+
+// --- Invicti/Netsparker practice vulnerable sites (testsparker.com) ------------
+const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Invicti Test Web Site title",
+    re: /Invicti Test Web Site/i
+  },
+  {
+    label: "Invicti scanner practice site tags",
+    re: /invicti xss web-application-security false-positive-free automated-exploitation sql-injection/i
+  },
+  {
+    label: "Hidden phpinfo practice endpoint",
+    re: /display:\s*none[\s\S]{0,80}phpinfo\.php/i
+  },
+  {
+    label: "Invicti artist search SQLi route",
+    re: /artist\.php\?id=/i
+  },
+  {
+    label: "Invicti nslookup command injection form",
+    re: /nslookup\.php[\s\S]{0,200}method\s*=\s*["']POST["']/i
+  }
+];
+
+const clientSideInvictiPracticeSiteEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INVICTI_PRACTICE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Invicti/Netsparker practice site documents SQLi, XSS, LFI, and command-injection targets — classic scanner benchmark"
     }
   };
 };
@@ -3936,6 +4026,8 @@ export const RULES: Record<string, Rule> = {
   clientSideReactRscCveEvidence,
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,
+  clientSideDomGoatLabEvidence,
+  clientSideInvictiPracticeSiteEvidence,
   openApiDebugPasswordExposure
 };
 
