@@ -6,10 +6,14 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Full account takeover across every service in the file — database wiped or sold, Stripe drained, email domain used for fraud, GDPR/CCPA breach notification to all users.",
   "exposed-config-backup":
     "Complete database dump downloadable: all customer PII, passwords, and payment records exfiltrated in one request — lawsuit, regulator fines, and forced shutdown.",
+  "exposed-infra-artifacts":
+    "Terraform state and cloud credential files grant instant AWS/GCP/Azure takeover — production wiped, crypto-mining bills, and total data exfiltration.",
   "exposed-git-dir":
     "Entire source history stolen including every secret ever committed; attacker replays old API keys and finds unpublished admin backdoors.",
   "secret-stripe-live":
     "Unlimited charges and refunds on your merchant account, every customer's card data readable, business blacklisted by payment networks.",
+  "secret-convex-deploy-key":
+    "Full Convex backend compromise: deploy malicious functions, read/write every document, and exfiltrate all user data.",
   "secret-supabase-service-role":
     "Every row in your database readable, writable, and deletable without login — full customer data breach and ransomware-style wipe.",
   "supabase-service-role-in-bundle":
@@ -60,6 +64,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Cross-site data theft from authenticated users' browsers — cookie/session abuse and API abuse.",
   "vibe-clerk-secret-in-client":
     "Full auth system compromise: create admin users, reset passwords, impersonate any customer.",
+  "vibe-algolia-admin-in-client":
+    "Attackers delete or poison your entire search index, scrape every indexed record (PII, prices, internal docs), and burn your Algolia quota overnight.",
   "vibe-next-data-sensitive-keys":
     "Every page load ships secret config to the browser — full credential breach and mandatory rotation.",
   "vibe-unauthenticated-api-routes":
@@ -72,6 +78,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "XSS on any page becomes full session theft — attackers drain accounts while users browse normally.",
   "vibe-streamlit-secrets-exposed":
     "Secrets in Streamlit config are scraped from the client — cloud keys and DB passwords compromised instantly.",
+  "vibe-public-cloud-storage-bucket":
+    "Every upload (IDs, invoices, private media) is harvestable and sold — mandatory breach disclosure and cloud bill abuse.",
   "lovable-supabase-storage-public":
     "All user uploads in Supabase Storage harvested without authentication — PII leak and extortion risk.",
   "v0-server-action-no-authz":

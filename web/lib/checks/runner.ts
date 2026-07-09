@@ -272,6 +272,7 @@ const DEEP_RULES = new Set<string>([
   "serverActionAuthz",
   "idorProbe",
   "unauthenticatedApiRoutes",
+  "jwtAlgNoneProbe",
   "sqlErrorDisclosure",
   "sstiTemplateInjection",
   "clientSideXorAuthEvidence",
