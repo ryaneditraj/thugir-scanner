@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T22:10:00.000Z",
+  "updated_at": "2026-07-09T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 380,
-  "total_findings": 1497,
-  "critical_findings": 23,
+  "total_sites_scanned": 387,
+  "total_findings": 1536,
+  "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 101,
-  "discovery_findings": 856,
+  "discovery_urls_added": 106,
+  "discovery_findings": 888,
   "improvements_shipped": 138,
-  "last_run": "2026-07-09T22:10:00.000Z",
+  "last_run": "2026-07-09T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22:00",
+    "hour_utc": "23:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 8,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark retry+fallback shipped for Heroku cold-start regressions (1/6 at 20:02/21:05); current scan 8 findings 6/6",
+      "note": "Stable 6/6 recall (7 findings incl secret-resend); third consecutive full recall after 20–21 UTC regressions",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,41 +46,36 @@
             "misconfig"
           ]
         }
-      },
-      "staging_validation": {
-        "url": "https://juice-shop-staging.herokuapp.com",
-        "findings": 7,
-        "recall": "6/6"
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 6,
-      "findings": 19,
-      "skipped_48h": "136 origins in 48h window",
+      "findings": 32,
+      "skipped_48h": "139 origins in 48h window",
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
       "scan_errors": [
         "http://websegura.radwarelatam.com/mutillidae/ (Invalid URL)"
       ],
-      "focus": "Benchmark oracle retry/fallback; Gruyere codelab + SixHack platform evidence; OWASP VWAD discovery backlog",
-      "improvements_shipped_this_run": 3
+      "focus": "bWAPP backlog + crAPI v2/APIsec + secrets/AI training demos",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — retry+fallback hardening for cold-start regressions",
-      "google-gruyere.appspot.com: Gruyere XSS/SQLi/XSRF codelab markers (2→3 findings)",
-      "platform.sixhackacademy.com: SixHack CTF platform login evidence (2→3 findings)",
-      "wrongsecrets.herokuapp.com: spring-boot-actuator + postmessage-dom-xss (5 findings)",
-      "server.vulnapp.id/mutillidae: phpinfo-exposed + insecure-cookies (4)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — stable after cold-start regressions",
+      "secresearchlab.web.app: SQLi + XXE + SSRF + firebase-config-exposed (7 findings)",
+      "crapi2.apisec.ai: exposed-env-file + SSRF endpoint fetch (6 findings)",
+      "bwapp.hakhub.net: phpinfo-exposed + directory-listing (6 findings)",
+      "skillaudit.vercel.app: OpenAPI docs + sitemap-sensitive-paths (6 findings)"
     ],
     "learning_gaps": [
-      "natas0.natas.labs.overthewire.org: HTTP 401 Basic auth — challenge vulns behind per-level credentials",
-      "itsecgames.com/solyd.com.br: bWAPP/Solyd landing pages only — vulns require local Docker install",
-      "server.vulnapp.id/mutillidae: classic PHP lab but shallow crawl misses SQLi/XSS challenge routes",
-      "testhtml5.vulnweb.com: DNS dead from cloud",
-      "www.root-me.org: Anubis bot-wall blocks scanner UA"
+      "hackable.so: landing-only shallow crawl — unauthenticated-admin-endpoint only (3 findings)",
+      "vulnweb.netlify.app: client-side SQL/XSS evidence but no live reflected/stored XSS probe hits (4 findings)",
+      "testhtml5.vulnweb.com: DNS dead from cloud — disabled in queue",
+      "websegura.radwarelatam.com/mutillidae: Invalid URL on fetch",
+      "juice-shop recall still nondeterministic — monitor for 1/6 regressions on Heroku cold start"
     ]
   },
   "discovery_highlights": {
@@ -132,7 +127,7 @@
     "dvwa.vercel.app": 2,
     "vulnshop.vercel.app": 4,
     "ashimkoirala.github.io/HackLab": 5,
-    "vulnweb.netlify.app": 3,
+    "vulnweb.netlify.app": 4,
     "web-pentest-playground.onrender.com": 3,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "tempehs.github.io/The_Unsecure_PWA": 3,
@@ -186,7 +181,7 @@
     "labs.hackadvisor.io": 7,
     "sixhackacademy.com": 3,
     "platform.sixhackacademy.com": 3,
-    "secresearchlab.web.app": 5,
+    "secresearchlab.web.app": 7,
     "skillaudit.vercel.app": 6,
     "prompt-injection-lab.vercel.app": 3,
     "ai-prompt-lab.vercel.app": 4,
