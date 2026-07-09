@@ -6,7 +6,9 @@
  *   node scripts/manage-pr-integrity.mjs --audit          # report only (exit 1 on issues)
  *   node scripts/manage-pr-integrity.mjs --fix-backlog    # reset AUTOMATION_BACKLOG.md on open PR branches
  *   node scripts/manage-pr-integrity.mjs --prune-branches  # delete orphan auto/detection/* branches
- *   node scripts/manage-pr-integrity.mjs --retire-superseded  # delete branches for duplicate/superseded PRs
+ *   node scripts/manage-pr-integrity.mjs --retire-superseded  # integrity PRs + backlog Retired only
+ *   node scripts/manage-pr-integrity.mjs --retire-superseded --retire-detection-duplicates  # also slug dupes
+ *   node scripts/manage-pr-integrity.mjs --retire-superseded --dry-run  # preview without deleting
  */
 import { execSync } from "child_process";
 import { readFileSync, existsSync } from "fs";
@@ -23,6 +25,8 @@ const audit = args.has("--audit") || args.size === 0;
 const fixBacklog = args.has("--fix-backlog");
 const pruneBranches = args.has("--prune-branches");
 const retireSuperseded = args.has("--retire-superseded");
+const retireDetectionDuplicates = args.has("--retire-detection-duplicates");
+const dryRun = args.has("--dry-run");
 
 function sh(cmd, opts = {}) {
   return execSync(cmd, { cwd: repoRoot, encoding: "utf8", stdio: opts.silent ? "pipe" : "inherit", ...opts });
@@ -384,29 +388,41 @@ function pruneOrphanBranches() {
   }
 }
 
-/** Delete remote branches for duplicate detections and superseded integrity PRs (token cannot close PRs). */
+/** Delete remote branches for superseded integrity PRs and backlog Retired entries only (safe default). */
 function retireSupersededBranches() {
   shQuiet("git fetch origin --prune --quiet");
   const prs = getOpenPrs();
   const toRetire = new Set();
+  const retired = retiredPrNumbers();
 
-  const slugOwners = new Map();
   for (const pr of prs) {
-    if (!remoteBranchExists(pr.headRefName)) continue;
-    for (const slug of changedSlugsForPr(pr)) {
-      if (!slugOwners.has(slug)) slugOwners.set(slug, []);
-      slugOwners.get(slug).push(pr.number);
+    if (retired.has(pr.number)) {
+      console.log(`Mark PR #${pr.number} for retirement (listed in backlog Retired section)`);
+      toRetire.add(pr.number);
     }
   }
 
-  for (const [slug, owners] of slugOwners) {
-    if (owners.length <= 1) continue;
-    owners.sort((a, b) => a - b);
-    const keeper = owners[0];
-    for (const prNum of owners.slice(1)) {
-      console.log(`Mark PR #${prNum} for retirement (duplicate slug "${slug}", keeper #${keeper})`);
-      toRetire.add(prNum);
+  if (retireDetectionDuplicates) {
+    const slugOwners = new Map();
+    for (const pr of prs) {
+      if (!remoteBranchExists(pr.headRefName)) continue;
+      for (const slug of changedSlugsForPr(pr)) {
+        if (!slugOwners.has(slug)) slugOwners.set(slug, []);
+        slugOwners.get(slug).push(pr.number);
+      }
     }
+
+    for (const [slug, owners] of slugOwners) {
+      if (owners.length <= 1) continue;
+      owners.sort((a, b) => a - b);
+      const keeper = owners[0];
+      for (const prNum of owners.slice(1)) {
+        console.log(`Mark PR #${prNum} for retirement (duplicate slug "${slug}", keeper #${keeper})`);
+        toRetire.add(prNum);
+      }
+    }
+  } else {
+    console.log("Skipping detection slug duplicates (pass --retire-detection-duplicates to enable).");
   }
 
   const integrityPrs = prs.filter(
@@ -431,6 +447,10 @@ function retireSupersededBranches() {
     if (!pr) continue;
     if (!remoteBranchExists(pr.headRefName)) {
       console.log(`PR #${prNum} branch already gone: ${pr.headRefName}`);
+      continue;
+    }
+    if (dryRun) {
+      console.log(`[dry-run] Would delete branch ${pr.headRefName} (PR #${prNum})`);
       continue;
     }
     console.log(`Deleting branch ${pr.headRefName} (PR #${prNum})`);
