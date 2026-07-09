@@ -437,6 +437,24 @@
       "slug": "client-side-api-security-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle Mass Assignment + Excessive Data Exposure + GET /admin/accounts REST doc paths; extractApiPaths REST-doc + /api/v1 Railway base fix; openvaultbank maintained 3 findings, benchmark 6/6"
+    },
+    {
+      "source": "discovery:security-showcase.vercel.app",
+      "slug": "script-nav-lab-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login.js window.location.href='comments.html' only in JS; early script prefetch + jsNavTargets discovers /comments.html; security-showcase pages_crawled 1→2"
+    },
+    {
+      "source": "discovery:security-showcase.vercel.app",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: comments.js commentDiv.innerHTML=`...${content}` + inline HTML XSS lab <code>innerHTML</code>; security-showcase findings 2→4"
+    },
+    {
+      "source": "discovery:security-showcase.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML SQL Injection + ' OR 1=1 -- + /auth/login-vulneravel in login.js; security-showcase findings 2→4; riglabs-cyber-lab 3→4 via CYBERLAB INPUT query marker"
     }
   ],
   "shipped": [
@@ -799,6 +817,21 @@
       "source": "discovery:openvaultbank.com",
       "slug": "rest-doc-api-path-extraction",
       "shipped_at": "2026-07-08T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:security-showcase.vercel.app",
+      "slug": "script-nav-lab-crawl",
+      "shipped_at": "2026-07-09T00:05:00.000Z"
+    },
+    {
+      "source": "discovery:security-showcase.vercel.app",
+      "slug": "comment-innerhtml-content-xss-sink",
+      "shipped_at": "2026-07-09T00:05:00.000Z"
+    },
+    {
+      "source": "discovery:security-showcase.vercel.app",
+      "slug": "inline-sqli-lab-html-markers",
+      "shipped_at": "2026-07-09T00:05:00.000Z"
     }
   ]
 }
