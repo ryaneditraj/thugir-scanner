@@ -1,3 +1,12 @@
 {
-  "ships": []
+  "ships": [
+    {
+      "shipped_at": "2026-07-09T18:52:00Z",
+      "method": "manual_merge",
+      "from_branch": "cursor/power-loop-9ec4",
+      "commit": "d47420f",
+      "gate": "pass",
+      "notes": "CyberStrike 141 skills, methodology engine, PR triage, power-loop automations"
+    }
+  ]
 }
