@@ -270,6 +270,12 @@
       "url": "https://cyberdesserts.github.io/cookiejar-lab/demo",
       "source": "cyberdesserts/cookiejar-lab — CSRF/session cookie security demo (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "http://lab.blackhatgraphql.com:9001/",
+      "source": "Damn Vulnerable GraphQL Application — BlackHat public lab endpoint (dolevf/DVGA)",
+      "auth": "public_demo"
     }
-  ]
+  ],
+  "updated_at": "2026-07-09T12:05:00.000Z"
 }
