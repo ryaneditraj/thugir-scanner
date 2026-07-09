@@ -430,7 +430,32 @@
       "url": "https://cve-2025-55182-demo.vercel.app/",
       "source": "Next.js CVE-2025-55182 RSC vulnerability interactive demo (web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://secureby.design/",
+      "source": "OWASP VWAD — Secure by Design public demo instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cyberscavengerhunt.com/",
+      "source": "OWASP VWAD — Cyber Scavenger Hunt training platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://pentesteracademylab.appspot.com/",
+      "source": "Pentester Academy Lab — public App Engine vulnerable web exercises",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctflearn.com/",
+      "source": "CTFlearn — free web security CTF challenge platform (OWASP VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacking-lab.com/events/",
+      "source": "Hacking-Lab — public security training events and challenge platform",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T19:05:00.000Z"
+  "updated_at": "2026-07-09T20:10:00.000Z"
 }
