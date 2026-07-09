@@ -1155,6 +1155,16 @@ values
    'deep',
    '{"summary":"Gate SKF-style labs behind accounts; isolate lab-player instances from production networks.","steps":["Require login before launching injectable lab-player environments.","Run labs on dedicated subdomains with no production database access.","Publish ASVS write-ups without exposing live lab infrastructure routes."]}'::jsonb,
    'We host SKF-style free Auth Bypass labs on secureby.design. Show how to gate lab-player instances behind auth and isolate them from production.',
+   true),
+  ('client-side-google-gruyere-codelab-evidence', 'generic', 'Cross-site scripting', 'medium',
+   'Google Gruyere web security codelab disclosed',
+   'Google Gruyere codelab documents intentionally vulnerable cheese-themed web app exercises covering XSS, SQL injection, XSRF, path traversal, and code execution.',
+   'Public Gruyere codelabs expose classic web vulnerability patterns attackers use to tune automated scanners.',
+   'rule_ref',
+   '{"rule":"clientSideGoogleGruyereCodelabEvidence"}'::jsonb,
+   'deep',
+   '{"summary":"Gruyere instances are intentional — never deploy codelab code to production.","steps":["Run Gruyere on isolated infrastructure with no production data.","Do not expose codelab instances to the public internet without access controls.","Use codelab findings to patch similar patterns in production code."]}'::jsonb,
+   'We host a Gruyere-style web security codelab. Show how to isolate it from production and fix XSS/SQLi patterns documented in the walkthrough.',
    true)
 on conflict (slug) do update set
   platform = excluded.platform,

@@ -3076,6 +3076,12 @@ const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
 
 const clientSideSixHackCtfLabEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
+  if (/platform\.sixhackacademy\.com/i.test(ctx.origin)) {
+    hits.push({ label: "SixHack CTF platform host", sample: ctx.origin.slice(0, 100) });
+    if (/SixHack Academy/i.test(ctx.combined)) {
+      hits.push({ label: "SixHack Academy platform login", sample: "SixHack Academy" });
+    }
+  }
   for (const { label, re } of CLIENT_SIXHACK_CTF_RES) {
     const m = ctx.combined.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
@@ -3522,6 +3528,47 @@ const clientSideSkfLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "SKF (secureby.design) publishes free Auth Bypass, SQLi, and XSS labs via lab-player webcomponents with ASVS write-ups"
+    }
+  };
+};
+
+// --- Google Gruyere web application security codelab --------------------------------
+const CLIENT_GRUYERE_CODELAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Gruyere codelab title",
+    re: /Web Application Exploits and Defenses/i
+  },
+  {
+    label: "Gruyere intentionally vulnerable app",
+    re: /Gruyere[\s\S]{0,200}multiple security bugs ranging from cross-site scripting/i
+  },
+  {
+    label: "Gruyere XSS challenge catalog",
+    re: /Cross-Site Scripting \(XSS\)|Reflected XSS|Stored XSS via AJAX/i
+  },
+  {
+    label: "Gruyere SQL injection module",
+    re: /SQL Injection/i
+  },
+  {
+    label: "Gruyere XSRF challenge",
+    re: /Cross-Site Request Forgery \(XSRF\)|XSRF Challenge/i
+  }
+];
+
+const clientSideGoogleGruyereCodelabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GRUYERE_CODELAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Google Gruyere codelab documents XSS, SQLi, XSRF, path traversal, and remote code execution exercises"
     }
   };
 };
@@ -4651,6 +4698,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterAcademyLabEvidence,
   clientSideCyberScavengerHuntEvidence,
   clientSideSkfLabEvidence,
+  clientSideGoogleGruyereCodelabEvidence,
   openApiDebugPasswordExposure
 };
 

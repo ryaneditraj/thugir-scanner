@@ -323,6 +323,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterAcademyLabEvidence",
   "clientSideCyberScavengerHuntEvidence",
   "clientSideSkfLabEvidence",
+  "clientSideGoogleGruyereCodelabEvidence",
   "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -603,6 +604,29 @@ function extractSixHackCtfSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** Google Gruyere codelab (google-gruyere.appspot.com) — multi-part XSS/SQLi/XSRF walkthrough. */
+function extractGruyereCodelabSeeds(html: string, origin: string): string[] {
+  if (!/gruyere\.appspot\.com|Web Application Exploits and Defenses/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const part of ["part1", "part2", "part3", "part4", "part5"]) {
+    try {
+      out.add(new URL(`/${part}`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const re = /href\s*=\s*["'](\/part[1-5][^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** OWASP WrongSecrets dropdown lists /challenge/challenge-N pages with secret-hunting walkthroughs. */
 function extractWrongSecretsChallengeSeeds(html: string, origin: string): string[] {
   if (!/OWASP WrongSecrets|wrongsecrets/i.test(html)) return [];
@@ -865,6 +889,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
+  const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
@@ -881,6 +906,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ctfPlatformSeeds,
       ...websecSeeds,
       ...sixHackSeeds,
+      ...gruyereSeeds,
       ...pentesterLabSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
