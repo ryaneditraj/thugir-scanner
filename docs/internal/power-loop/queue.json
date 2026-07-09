@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T08:12:00.000Z",
+  "updated_at": "2026-07-09T09:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -195,6 +195,31 @@
       "url": "https://tempehs.github.io/The_Unsecure_PWA/",
       "source": "tempehs/The_Unsecure_PWA — unsecure-by-design PWA for HSC software engineering (web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://weaponsforge.github.io/hacker-friendly-app/",
+      "source": "weaponsforge/hacker-friendly-app — Firebase misconfig + XSS GitHub Pages demo (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://playground.fabraix.com/",
+      "source": "fabraix/playground — Show HN open-source AI agent red-team playground (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webexp05.vercel.app/",
+      "source": "Jaideep02/shiny-computing-machine — Hack the Basics CTF (cookie/SQLi/XSS/API) (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://idor-challenge.vercel.app/",
+      "source": "Albus Security internship — Simple IDOR demonstration lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://luisillobret2.github.io/WebGoat/",
+      "source": "WebGoat static mirror — deliberately insecure OWASP training app landing (web search)",
+      "auth": "public_demo"
     }
   ]
 }
