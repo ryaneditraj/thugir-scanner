@@ -337,6 +337,8 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "prototype",
     "evalbypass",
     "csrf",
+    "comment",
+    "showcase",
     "authbypass",
     "xss",
     "sqli",
@@ -401,15 +403,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const origin = target.origin;
 
-  // Shallow crawl: homepage + a handful of internal pages (prioritize vuln lab HTML).
+  // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
+  // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
+  const probe = new ProbeCache();
+  const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
+  const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
+    probe,
+    maxBytes: 120_000,
+    concurrency: 4
+  });
+  const scriptNavTargets = earlyScripts.flatMap((s) => jsNavTargets(s.body, s.finalUrl, DEEP_MAX_PAGES));
+
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
       ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 4),
-      ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1)
+      ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1),
+      ...scriptNavTargets
     ])
   ]).slice(0, DEEP_MAX_PAGES - 1);
   const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
-  const probe = new ProbeCache();
   const extraPages = await fetchPagesBatched(pageUrls.slice(1), { probe, maxBytes: 600_000, concurrency: 3 });
   const pages: FetchedDoc[] = [home, ...extraPages];
 
