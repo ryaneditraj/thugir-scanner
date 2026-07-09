@@ -380,7 +380,32 @@
       "url": "https://sixhackacademy.com/",
       "source": "SixHack Academy — free OWASP Top 10 CTF labs platform landing (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/",
+      "source": "OWASP WrongSecrets — secrets management CTF Heroku demo (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/",
+      "source": "OWASP FinBot CTF — agentic AI vulnerability training platform (owasp-finbot-ctf.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bwapp.hakhub.net/",
+      "source": "bWAPP — buggy web application public hosted instance (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/",
+      "source": "Broken Crystals — intentionally vulnerable API/web app for scanner benchmarking",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/",
+      "source": "PortSwigger Gin & Juice Shop — deliberately vulnerable e-commerce lab (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T17:05:00.000Z"
+  "updated_at": "2026-07-09T18:06:00.000Z"
 }
