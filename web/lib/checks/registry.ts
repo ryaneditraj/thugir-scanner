@@ -2108,7 +2108,15 @@ const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Attack mode CSRF educational banking lab",
-    re: /Attack 3: CSRF[\s\S]{0,600}secret CSRF token generated when the page loaded/i
+    re: /Attack 3: CSRF[\s\S]{0,1200}secret CSRF token generated when the page loaded/i
+  },
+  {
+    label: "SecureBank blog CSRF invisible transfer attack",
+    re: /Attack 3: CSRF — The Invisible Request/i
+  },
+  {
+    label: "Educational CSRF fake page transfer demo",
+    re: /Fake page posts a transfer[\s\S]{0,120}Server accepts it/i
   }
 ];
 
