@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T02:01:38.004Z",
+  "updated_at": "2026-07-09T02:06:14.953Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 250,
-  "total_findings": 945,
+  "total_sites_scanned": 258,
+  "total_findings": 975,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 131,
-  "discovery_findings": 478,
+  "discovery_urls_added": 136,
+  "discovery_findings": 508,
   "improvements_shipped": 79,
-  "last_run": "2026-07-09T02:01:38.004Z",
+  "last_run": "2026-07-09T02:06:14.953Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -51,32 +51,34 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "urls_ok": 5,
+      "urls_scanned": 8,
+      "urls_ok": 8,
       "urls_error": 0,
-      "findings": 22,
+      "findings": 30,
       "new_urls": [
-        "https://juice-shop.herokuapp.com/",
-        "https://securebank-blog.vercel.app/",
-        "https://hack-health-tutorial.vercel.app/",
-        "https://preview-zeroday-sec.vercel.app/",
-        "https://hack-this-site-eta.vercel.app/"
+        "https://chimera.atlascrew.dev/",
+        "https://archon-eight.vercel.app/",
+        "https://cybersec-demo.vercel.app/",
+        "https://ctb-pi.vercel.app/",
+        "https://vuln-portal.vercel.app/"
+      ],
+      "not_scanned_this_run": [
+        "https://hack-this-site-eta.vercel.app/ (48h skip)",
+        "https://vuln-portal.vercel.app/ (queue limit 8)"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings)",
-      "labs.hackxpert.com: lab-hub crawl + POST SQL + SSTI probes; findings 3→5",
-      "authlab.digi.ninja: client-side-xor-auth-evidence on clientside.js; findings 2→3",
-      "juice-shop.herokuapp.com: 8 findings incl secret-resend + unauthenticated-admin (official prod benchmark)",
-      "hack-this-site-eta.vercel.app: graphql-introspection + client-side-xxe-evidence + unauthenticated API (7 findings, 6 pages)",
-      "hack-health-tutorial.vercel.app: dangerous-html-sinks + cors (3 findings, 6 pages)",
-      "securebank-blog + preview-zeroday-sec: landing-only — headers/cors only (2 each)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — sqli, xss, idor, auth_bypass, sensitive_data, misconfig all hit",
+      "archon-eight.vercel.app: postmessage-dom-xss-evidence + secret-resend (4 findings, 6 pages, bolt platform)",
+      "ctb-pi.vercel.app: robots-sensitive-paths + vibe-sitemap-sensitive-paths + weak-csp (5 findings, 6 pages, supabase)",
+      "chimera.atlascrew.dev: secret-resend + 6-page crawl — 450+ API lab portal not fully exercised",
+      "juice-shop.herokuapp.com: prod rescan 8 findings incl secret-resend (differs from staging oracle)",
+      "cybersec-demo.vercel.app: dangerous-html-sinks on Nivara landing (3 findings)"
     ],
     "learning_gaps": [
-      "securebank-blog.vercel.app: attack/secure mode banking lab not reached — blog landing only, no SQLi/XSS/CSRF demos exercised",
-      "preview-zeroday-sec.vercel.app: marketing landing — cloud lab environments behind demo request",
-      "vulnerable-graphql-lab.railway.app + vulnerable-graphql-demo.railway.app: Railway hosts down — headers only when probed",
-      "defendtheweb.net: platform on hiatus — goodbye landing page only",
+      "chimera.atlascrew.dev: marketing portal only — 456+ vulnerable API endpoints behind demo-mode install, not reachable via crawl",
+      "vuln-portal.vercel.app: queued but not scanned (POWER_SCAN_LIMIT=8) — auth terminal lab pending",
+      "securebank-blog + preview-zeroday-sec: landing-only rescans — headers/cors only",
       "openvaultbank.com + prompt-injection-playground: prior-run gaps still open — auth/API probes needed"
     ]
   },
@@ -214,6 +216,10 @@
     "juice-shop.herokuapp.com": 8,
     "securebank-blog.vercel.app": 2,
     "hack-health-tutorial.vercel.app": 3,
-    "preview-zeroday-sec.vercel.app": 2
+    "preview-zeroday-sec.vercel.app": 2,
+    "chimera.atlascrew.dev": 3,
+    "archon-eight.vercel.app": 4,
+    "cybersec-demo.vercel.app": 3,
+    "ctb-pi.vercel.app": 5
   }
 }
