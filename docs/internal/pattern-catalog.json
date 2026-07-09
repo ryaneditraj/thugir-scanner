@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T14:12:45.025Z",
-  "total": 106,
-  "uniqueSlugs": 106,
+  "generatedAt": "2026-07-09T15:13:37.826Z",
+  "total": 108,
+  "uniqueSlugs": 108,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 88,
+    "generic": 90,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 42,
+    "deep": 44,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Security misconfiguration": 8,
     "Information disclosure": 10,
     "Broken authentication": 7,
-    "Injection": 12,
-    "Cross-site scripting": 6,
+    "Injection": 13,
+    "Cross-site scripting": 7,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 2,
     "AI security": 2,
@@ -42,10 +42,12 @@
     "client-side-csrf-evidence",
     "client-side-ctf-platform-evidence",
     "client-side-devsecops-lab-evidence",
+    "client-side-dom-goat-lab-evidence",
     "client-side-file-upload-evidence",
     "client-side-graphql-lab-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-idor-evidence",
+    "client-side-invicti-practice-site-evidence",
     "client-side-jwt-none-evidence",
     "client-side-nosql-evidence",
     "client-side-owasp-ctf-evidence",

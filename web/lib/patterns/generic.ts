@@ -1518,5 +1518,57 @@ export const genericPatterns: Pattern[] = [
       "Our API exposes GET /users/v1/_debug returning cleartext passwords without auth. Remove the debug route, strip password fields from responses, and show the hardened user serializer.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-dom-goat-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat DOM XSS lab documents client-side sources and sinks",
+    description:
+      "DomGoat (domgo.at) catalogs Client XSS sources, sinks, and innerHTML exercises across /cxss routes — a deliberate DOM-based XSS training platform.",
+    impactOneline:
+      "Public DomGoat labs teach DOM XSS gadget chains attackers can replay against any app with similar sink patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDomGoatLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign untrusted data to innerHTML; use textContent or a strict sanitizer.",
+      steps: [
+        "Replace innerHTML assignments with textContent or DOMPurify-sanitized HTML.",
+        "Host DomGoat-style labs on isolated subdomains, not production apps.",
+        "Audit all DOM sinks (innerHTML, document.write, eval) in client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our site hosts DomGoat-style DOM XSS exercises with innerHTML sinks on /cxss routes. Show safe textContent alternatives and how to isolate the lab from production traffic.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-invicti-practice-site-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Invicti/Netsparker practice site documents SQLi, XSS, and LFI targets",
+    description:
+      "Invicti Test Web Site pages advertise sql-injection, XSS, and file-inclusion practice endpoints including hidden phpinfo and nslookup forms.",
+    impactOneline:
+      "Public scanner benchmark sites expose known-vulnerable PHP endpoints attackers use to tune automated exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideInvictiPracticeSiteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove practice vulnerable apps from public internet; use local Docker labs only.",
+      steps: [
+        "Take Invicti/Netsparker practice sites offline or restrict to VPN-only access.",
+        "Remove hidden phpinfo.php and command-injection forms from any reachable host.",
+        "Replace live SQLi/XSS targets with static documentation on secure coding."
+      ]
+    },
+    fixPrompt:
+      "Our Invicti practice site exposes artist.php SQLi, hello.php eval, and hidden phpinfo endpoints. Show how to retire the public demo and move exercises to a local-only Docker lab.",
+    version: 1,
+    enabled: true
   }
 ];

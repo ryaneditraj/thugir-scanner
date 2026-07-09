@@ -305,6 +305,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideReactRscCveEvidence",
   "clientSideChimeraVulnLabEvidence",
   "clientSideHackHealthLabEvidence",
+  "clientSideDomGoatLabEvidence",
+  "clientSideInvictiPracticeSiteEvidence",
   "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -422,6 +424,34 @@ function extractJekyllSecurityDocLinks(html: string, pageUrl: string): string[] 
       if (u.origin !== pageOrigin) continue;
       u.hash = "";
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** DomGoat (domgo.at) — /cxss exercise pages carry inline innerHTML sink labs. */
+const DOM_GOAT_CXSS_RE = /href\s*=\s*["'](\/cxss\/(?:example(?:\/\d+)?|sinks|sources)[^"']*)["']/gi;
+
+function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
+  if (!/DomGoat|DOM Security Learning Platform/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = DOM_GOAT_CXSS_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const path of ["/cxss/sinks", "/cxss/example/1", "/cxss/example/2"]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -634,12 +664,13 @@ function jsNavTargets(html: string, pageUrl: string, limit: number): string[] {
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   const re =
-    /(?:location\.(?:href|assign|replace)|window\.location(?:\.href)?)\s*=\s*['"]([^'"]+\.html?)['"]/gi;
+    /(?:location\.(?:href|assign|replace)|window\.location(?:\.href)?)\s*=\s*['"]([^'"]+)['"]/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(html)) && out.size < limit * 2) {
     try {
       const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
+      if (/^javascript:/i.test(m[1])) continue;
       out.add(u.toString());
     } catch {
       /* ignore */
@@ -711,6 +742,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
   const nextraCyberSeeds = extractNextraCybersecurityLinks(home.body, home.finalUrl);
   const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
+  const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
@@ -722,6 +754,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...docusaurusLabSeeds,
       ...nextraCyberSeeds,
       ...jekyllSecurityDocSeeds,
+      ...domGoatCxssSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
       ...websecSeeds,

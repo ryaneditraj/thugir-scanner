@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T15:11:49.766Z",
+  "updated_at": "2026-07-09T15:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 340,
+  "total_sites_scanned": 341,
   "total_findings": 1325,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 66,
   "discovery_findings": 723,
-  "improvements_shipped": 114,
-  "last_run": "2026-07-09T15:11:49.766Z",
+  "improvements_shipped": 116,
+  "last_run": "2026-07-09T15:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
@@ -37,36 +37,24 @@
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 22,
-      "focus": "SSRF simulation platform + GraphQL Bookstore API + PentesterLab/Root-Me/HackThisSite CTF platforms"
+      "focus": "DomGoat DOM XSS lab + Invicti/Netsparker practice site",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "ssrf-defense-platform.onrender.com: client-side-ssrf-evidence + dangerous-html-sinks (6 findings)",
-      "api.graphqlbook.org: graphql-introspection-enabled + sitemap sensitive paths (5 findings)",
-      "www.root-me.org: secret-twilio in bundle + reflected-xss-query-param (4 findings)",
-      "pentesterlab.com / www.hackthissite.org: reflected-xss-query-param (3–4 findings each)"
+      "domgo.at/cxss/intro: DomGoat lab evidence + innerHTML sinks (1→3 findings)",
+      "php.testsparker.com: Invicti practice site markers + JS redirect crawl (3→5 findings)"
     ],
     "learning_gaps": [
-      "api.graphqlbook.org: OWASP API Top 10 injection/BOLA/mass-assignment live GraphQL probes under-exercised",
-      "ssrf-defense-platform.onrender.com: /api/attack-demo vulnerable mode SSRF oracles not live-probed",
-      "pentesterlab.com / root-me.org: hosted exercise VMs and per-challenge endpoints not crawled",
-      "www.hackthissite.org vs hackthissite.org: challenge-specific SQLi/XSS routes not differentiated"
+      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
+      "hiddeninvestigations.net: react2shell lab not linked from homepage (marketing site only)",
+      "sqli-demo.vercel.app: Vercel Security Checkpoint blocks SPA bundles"
     ]
   },
   "discovery_highlights": {
@@ -229,6 +217,8 @@
     "api.graphqlbook.org": 5,
     "pentesterlab.com": 3,
     "www.root-me.org": 4,
-    "www.hackthissite.org": 4
+    "www.hackthissite.org": 4,
+    "domgo.at": 3,
+    "php.testsparker.com": 5
   }
 }
