@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T01:05:00.000Z",
+  "updated_at": "2026-07-09T02:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -25,6 +25,31 @@
       "url": "https://hack-this-site-eta.vercel.app/",
       "source": "dkyazzentwatwa/hack-this-site Vercel deploy — educational vuln platform",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/",
+      "source": "inferno-lab/Chimera — 450+ vulnerable API endpoints (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://archon-eight.vercel.app/",
+      "source": "Archon cybersecurity training platform — mobile/web security labs",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cybersec-demo.vercel.app/",
+      "source": "Nivara security assessment platform demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctb-pi.vercel.app/",
+      "source": "Hurleveur/CTF — corporate cyber training CTF (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-portal.vercel.app/",
+      "source": "VulnPortal — intentionally vulnerable auth/access terminal",
+      "auth": "public_demo"
     }
   ]
 }
