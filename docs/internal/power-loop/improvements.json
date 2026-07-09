@@ -539,6 +539,24 @@
       "slug": "client-side-owasp-ctf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: main-Dgu1u6kg.js challenge array A01–A10 with Railway URLs + submitFlag; owaspCtfLinkedLabProbe probes linked targets; ucu-owasp-ctf findings 3→4+ when bundle loads; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.vercel.app",
+      "slug": "client-side-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: xss_r/source/low.php Hello . $_GET['name']; clientSideXssEvidence was missing from DEEP_RULES — wired; dvwa.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "client-side-owasp-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspCtfLinkedLabProbe was missing from DEEP_RULES — wired; ucu-owasp-ctf findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ogtamimi.github.io/OGT-Cyber-Game",
+      "slug": "client-side-security-game-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle level catalog vulnerability:\"SQL Injection\"/\"Reflected XSS\"/\"IDOR\" + Vulnerable Code panel; ogtamimi.github.io/OGT-Cyber-Game findings 3→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -985,7 +1003,17 @@
     {
       "source": "discovery:ucu-owasp-ctf.vercel.app",
       "slug": "client-side-owasp-ctf-evidence",
-      "shipped_at": "2026-07-09T05:10:00.000Z"
+      "shipped_at": "2026-07-09T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvwa.vercel.app",
+      "slug": "client-side-xss-evidence-deep-rules",
+      "shipped_at": "2026-07-09T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:ogtamimi.github.io/OGT-Cyber-Game",
+      "slug": "client-side-security-game-evidence",
+      "shipped_at": "2026-07-09T06:10:00.000Z"
     }
   ]
 }

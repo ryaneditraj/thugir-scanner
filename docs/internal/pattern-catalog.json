@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T05:10:43.214Z",
-  "total": 93,
-  "uniqueSlugs": 93,
+  "generatedAt": "2026-07-09T06:04:29.694Z",
+  "total": 94,
+  "uniqueSlugs": 94,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 75,
+    "generic": 76,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 29,
+    "deep": 30,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 6,
     "Information disclosure": 10,
     "Broken authentication": 5,
-    "Injection": 7,
+    "Injection": 8,
     "Cross-site scripting": 5,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 1,
@@ -45,6 +45,7 @@
     "client-side-owasp-ctf-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
+    "client-side-security-game-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sql-evidence",
     "client-side-ssrf-evidence",

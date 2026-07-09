@@ -664,6 +664,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-security-game-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Educational security game documents multiple vulnerability modules",
+    description:
+      "The shipped JavaScript documents a level-select security training game with explicit vulnerability modules (SQL Injection, XSS, IDOR, etc.) and vulnerable code walkthroughs — the bundled lab logic is intentionally exploitable.",
+    impactOneline:
+      "Public game bundle ships working vulnerability modules — attackers can study and exploit the documented patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecurityGameEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove vulnerable lab logic from production bundles; gate training games behind auth.",
+      steps: [
+        "Do not ship interactive SQLi/XSS/IDOR challenge code in public production JavaScript.",
+        "Host security training games on isolated lab domains, not production apps.",
+        "Replace string-concat SQL and unescaped echo patterns with safe demo stubs."
+      ]
+    },
+    fixPrompt:
+      "My security training game bundle documents SQL Injection, XSS, and IDOR levels with vulnerable code samples. Show how to isolate this to a private lab environment and remove exploitable patterns from the production bundle.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-owasp-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
