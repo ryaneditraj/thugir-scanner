@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T10:05:00.000Z",
+  "updated_at": "2026-07-09T11:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -244,6 +244,31 @@
     {
       "url": "https://capture-the-flag-official-website.vercel.app/",
       "source": "CTF educational platform — public vuln challenge hub (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owasp-juice.shop/",
+      "source": "OWASP Juice Shop official demo instance (owasp-juice.shop homepage)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://xxe-lab.vercel.app/",
+      "source": "XXE interactive security training lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nextjs-cve-hackerone.vercel.app/",
+      "source": "Next.js CVE HackerOne disclosure demo — RSC/server-component vuln lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/",
+      "source": "Web pentest playground — intentionally vulnerable training app on Render (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cyberdesserts.github.io/cookiejar-lab/demo",
+      "source": "cyberdesserts/cookiejar-lab — CSRF/session cookie security demo (GitHub Pages)",
       "auth": "oss_deploy"
     }
   ]

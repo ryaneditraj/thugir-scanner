@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T10:10:27.205Z",
+  "updated_at": "2026-07-09T11:05:10.574Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 310,
-  "total_findings": 1194,
+  "total_sites_scanned": 316,
+  "total_findings": 1218,
   "critical_findings": 20,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 49,
-  "discovery_findings": 648,
+  "discovery_urls_added": 54,
+  "discovery_findings": 665,
   "improvements_shipped": 105,
-  "last_run": "2026-07-09T10:10:27.205Z",
+  "last_run": "2026-07-09T11:05:10.574Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -52,22 +52,22 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 21,
-      "focus": "New Pentest-Ground DVWA/API instances, Duck Store, DVAIB, CTF hub"
+      "findings": 17,
+      "focus": "OWASP Juice Shop official demo, XXE lab, Next.js CVE demo, web pentest playground, CookieJar CSRF lab"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "duck-store.escape.tech: secret-openai + IDOR + unauthenticated API routes + OpenAPI (7 findings)",
-      "pentest-ground.com:4280: phpinfo-exposed on hosted DVWA (4 findings)",
-      "dvaib.com: prompt-injection evidence + unauthenticated API routes (4 findings)",
-      "pentest-ground.com:9000: OpenAPI docs exposed on REST API lab (3 findings)"
+      "xxe-lab.vercel.app: secret-aws-akid + client-side-xxe-evidence + XSS sinks (5 findings)",
+      "web-pentest-playground.onrender.com: unauthenticated-admin-endpoint + open-redirect (3 findings)",
+      "cyberdesserts.github.io/cookiejar-lab: client-side-session-hijack-evidence (3 findings)",
+      "owasp-juice.shop: API security lab evidence in bundle (3 findings)"
     ],
     "learning_gaps": [
-      "pentest-ground.com:4280: /vulnerabilities/sqli|xss|fi paths not exercised — phpinfo only, no SQLi/XSS oracle hits",
-      "pentest-ground.com:9000: OpenAPI listed but BOLA/SSRF/auth-bypass live probes under-exercised",
-      "dvaib.com: multi-turn prompt-injection jailbreak chains not exercised beyond bundle markers",
-      "capture-the-flag-official-website.vercel.app: challenge routes not crawled — headers/CORS/XSS sinks only (3)",
-      "duck-store.escape.tech: secret-openai in bundle — live key validity / GraphQL mutation oracles under-probed"
+      "xxe-lab.vercel.app: client-side XXE evidence found but live /api XML entity expansion not exercised",
+      "nextjs-cve-hackerone.vercel.app: CVE-2025 RSC/server-action exploit chain not probed — headers/XSS sinks only (3)",
+      "owasp-juice.shop: official demo weaker than staging oracle — only 3 findings vs staging 7; SQLi/IDOR live probes under-exercised",
+      "web-pentest-playground.onrender.com: open-redirect confirmed but SQLi/XSS lab routes not crawled",
+      "cookiejar-lab: session hijack bundle markers found — live CSRF/token-replay oracles under-probed"
     ]
   },
   "discovery_highlights": {
@@ -222,6 +222,11 @@
     "luisillobret2.github.io/WebGoat": 2,
     "vuln-portal.vercel.app": 2,
     "pentest-ground.com:4280": 4,
-    "pentest-ground.com:9000": 3
+    "pentest-ground.com:9000": 3,
+    "owasp-juice.shop": 3,
+    "xxe-lab.vercel.app": 5,
+    "nextjs-cve-hackerone.vercel.app": 3,
+    "web-pentest-playground.onrender.com": 3,
+    "cyberdesserts.github.io": 3
   }
 }
