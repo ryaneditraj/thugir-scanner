@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T07:08:00.000Z",
+  "updated_at": "2026-07-09T08:12:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -170,6 +170,31 @@
       "url": "https://juicesec.mrdinesh.workers.dev/",
       "source": "mrdinesh juicesec — Juice Shop variant on Cloudflare Workers (web search)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://xss-attacker.vercel.app/",
+      "source": "Swarnadip-Kar/xss-attacker — cross-origin XSS C2 dashboard paired with xss-victim bank (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://avid-vuln-editor.vercel.app/",
+      "source": "luciolle24/avid-vuln-editor — AVID backend with /vuln module lab (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvai.vercel.app/",
+      "source": "bb1nfosec/dvai — Damn Vulnerable AI Ecosystem red-team range (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://fvb.vchan.in/",
+      "source": "vchan-in/fvb — First Vulnerable Bank REST/GraphQL API training app (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tempehs.github.io/The_Unsecure_PWA/",
+      "source": "tempehs/The_Unsecure_PWA — unsecure-by-design PWA for HSC software engineering (web search)",
+      "auth": "oss_deploy"
     }
   ]
 }

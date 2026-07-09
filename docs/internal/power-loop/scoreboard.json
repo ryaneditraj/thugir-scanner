@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T08:10:00.000Z",
+  "updated_at": "2026-07-09T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 293,
-  "total_findings": 1133,
+  "total_sites_scanned": 298,
+  "total_findings": 1147,
   "critical_findings": 20,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 160,
-  "discovery_findings": 601,
+  "discovery_urls_added": 39,
+  "discovery_findings": 615,
   "improvements_shipped": 97,
-  "last_run": "2026-07-09T08:10:00.000Z",
+  "last_run": "2026-07-09T08:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "08:00",
     "benchmark": {
@@ -50,20 +50,24 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_scanned": 2,
-      "findings": 10,
-      "focus": "Docusaurus OWASP Top 10 lab crawl + JuiceSec inline JWT-none/SSRF lab markers",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 24,
+      "focus": "5 new demos (XSS C2, AVID vuln editor, DVAI, FVB, unsecure PWA) + owasp-top-10-labs/juicesec rescans"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "tempehs.github.io/The_Unsecure_PWA: secret-resend API key in client bundle (3 findings)",
       "mehdiaitsaid.github.io/owasp-top-10-labs: Docusaurus /labs/* crawl + patient_lookup.php UNION SELECT tutorial (3→4 findings)",
-      "juicesec.mrdinesh.workers.dev: JWT alg:none + link-preview SSRF lab markers (4→6 findings)"
+      "juicesec.mrdinesh.workers.dev: JWT alg:none + link-preview SSRF lab markers (4→6 findings)",
+      "fvb.vchan.in: client-side-api-security-lab-evidence + weak CSP (2 findings)"
     ],
     "learning_gaps": [
-      "riglabs-cyber-lab.vercel.app: no IDOR/CSRF modules in catalog — SQLi+XSS only (modules 1–17 are crypto/net labs)",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: GitHub Pages static shell — backend attack scenarios not reachable",
-      "juicesec.mrdinesh.workers.dev: still no server-side sql-error-disclosure or unauthenticated-admin-endpoint vs staging oracle (client-side lab only)"
+      "fvb.vchan.in: REST/GraphQL exploit oracles under-probed — only API-lab bundle marker + weak CSP",
+      "dvai.vercel.app: landing shell only (3) — AI red-team ops require player-supplied Groq keys",
+      "xss-attacker.vercel.app: CORS+XSS on C2 dashboard — api/collect exfil chain not exercised",
+      "riglabs-cyber-lab.vercel.app: no IDOR/CSRF modules in catalog — SQLi+XSS only",
+      "juicesec.mrdinesh.workers.dev: still no server-side sql-error-disclosure vs staging oracle"
     ]
   },
   "discovery_highlights": {
@@ -208,6 +212,9 @@
     "akbarbashakm.github.io/frontend-security-examples": 5,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 3,
     "riglabs-cyber-lab.vercel.app": 4,
-    "vulnlab.vercel.app": 7
+    "vulnlab.vercel.app": 7,
+    "avid-vuln-editor.vercel.app": 3,
+    "dvai.vercel.app": 3,
+    "fvb.vchan.in": 2
   }
 }
