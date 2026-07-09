@@ -2072,6 +2072,14 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "Attack mode pastes user input into SQL string (banking lab)",
     re: /attack mode, the app builds that query by directly pasting your input into the SQL string/i
+  },
+  {
+    label: "PHP mysqli query concatenates user variable into WHERE",
+    re: /\$query\s*=\s*"SELECT[\s\S]{0,200}WHERE[\s\S]{0,80}'\$[a-zA-Z_]+'/
+  },
+  {
+    label: "DVWA SQLi source low.php user_id concat",
+    re: /SELECT[\s\S]{0,80}FROM[\s\S]{0,40}users[\s\S]{0,80}WHERE[\s\S]{0,40}user_id\s*=\s*'\$id'/
   }
 ];
 
@@ -2088,6 +2096,141 @@ const clientSideSqlEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "client bundle builds SQL via string concatenation or simulates SQLi — injection likely if wired to a backend"
+    }
+  };
+};
+
+// --- Client-side reflected XSS evidence in PHP/JS source (educational labs) -----
+const CLIENT_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "PHP echoes $_GET into HTML without encoding",
+    re: /\$html\s*\.=\s*['"]<[^'"]*['"]\s*\.\s*\$_GET\s*\[\s*['"][^'"]+['"]\s*\]/
+  },
+  {
+    label: "PHP print/echo $_REQUEST directly into page",
+    re: /(?:echo|print)\s*\(?\s*['"][^'"]*['"]\s*\.\s*\$_(?:GET|REQUEST|POST)\s*\[/
+  },
+  {
+    label: "DVWA reflected XSS source low.php name param",
+    re: /Hello\s*['"]\s*\.\s*\$_GET\s*\[\s*['"]name['"]\s*\]/
+  },
+  {
+    label: "XSS lab documents unescaped user input in innerHTML",
+    re: /innerHTML\s*=\s*[^;]*(?:location\.search|getParameter|userInput)/i
+  },
+  {
+    label: "Reflected XSS training lab marker",
+    re: /Reflected XSS[\s\S]{0,400}(?:echo|innerHTML|document\.write)[\s\S]{0,120}(?:input|param|query)/i
+  }
+];
+
+const clientSideXssEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XSS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "source or bundle documents reflected XSS via unescaped user input in HTML output"
+    }
+  };
+};
+
+// --- OWASP Top 10 CTF hub evidence (UCU CTF and similar challenge portals) ---
+const CLIENT_OWASP_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "UCU OWASP CTF 2025 hub title",
+    re: /UCU OWASP (?:Top 10 )?CTF\s*2025/i
+  },
+  {
+    label: "OWASP Top 10 CTF challenge array A01 Broken Access Control",
+    re: /id:\s*["']A01["'][\s\S]{0,120}Broken Access Control/i
+  },
+  {
+    label: "OWASP CTF challenge Injection module A03",
+    re: /id:\s*["']A03["'][\s\S]{0,120}Injection/i
+  },
+  {
+    label: "OWASP CTF SSRF challenge A10 with metadata hint",
+    re: /id:\s*["']A10["'][\s\S]{0,200}169\.254\.169\.254/i
+  },
+  {
+    label: "CTF submitFlag challenge select",
+    re: /submitFlag[\s\S]{0,400}challengeSelect/i
+  }
+];
+
+function extractOwaspCtfChallengeOrigins(text: string, limit = 10): string[] {
+  const origins = new Set<string>();
+  const re = /url:\s*["'](https?:\/\/[^"']+\.railway\.app)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) && origins.size < limit) {
+    try {
+      origins.add(new URL(m[1]).origin);
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...origins];
+}
+
+const owaspCtfLinkedLabProbe: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 80) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+
+  const linked = extractOwaspCtfChallengeOrigins(ctx.combined, 8);
+  const probeHits: { host: string; path: string; status: number; sample: string }[] = [];
+  for (const origin of linked.slice(0, 6)) {
+    const host = new URL(origin).hostname;
+    const paths = ["/", "/api/users/1", "/api/user/1", "/admin", "/robots.txt", "/api/health"];
+    const urls = paths.map((p) => new URL(p, origin).toString());
+    const docs = await ctx.probe.getMany(urls, { maxBytes: 4096 }, 3);
+    for (const [url, r] of docs) {
+      if (r.status < 200 || r.status >= 400) continue;
+      if (/Vercel Security Checkpoint|Enable JavaScript/i.test(r.body.slice(0, 500))) continue;
+      if (
+        /"(?:id|user|email|flag|password|admin)"\s*:/i.test(r.body) ||
+        /User-agent:\s*\*/i.test(r.body) ||
+        /Disallow:\s*\/admin/i.test(r.body)
+      ) {
+        probeHits.push({
+          host,
+          path: new URL(url).pathname,
+          status: r.status,
+          sample: r.body.slice(0, 100).trim()
+        });
+      }
+    }
+  }
+
+  if (probeHits.length > 0) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        hubMarkers: hits.slice(0, 3),
+        hits: probeHits.slice(0, 4),
+        note: "OWASP Top 10 CTF hub links live challenge targets with exposed data or misconfig"
+      }
+    };
+  }
+
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      linkedChallenges: linked.slice(0, 6),
+      note: "client bundle documents OWASP Top 10 CTF challenge catalog with linked vulnerable targets"
     }
   };
 };
@@ -3091,6 +3234,7 @@ export const RULES: Record<string, Rule> = {
   idorProbe,
   clientSideIdorEvidence,
   clientSideSqlEvidence,
+  clientSideXssEvidence,
   clientSideCsrfEvidence,
   clientSideNosqlEvidence,
   clientSideXxeEvidence,
@@ -3115,7 +3259,8 @@ export const RULES: Record<string, Rule> = {
   hiddenPromptInjection,
   clientSidePromptInjectionEvidence,
   ssrfEndpointProbe,
-  pentestForgeLinkedLabProbe
+  pentestForgeLinkedLabProbe,
+  owaspCtfLinkedLabProbe
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

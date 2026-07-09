@@ -638,6 +638,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Source or bundle documents reflected XSS via unescaped input",
+    description:
+      "PHP source or client bundle echoes $_GET/$_REQUEST or user input into HTML without encoding (e.g. DVWA xss_r low.php). Reflected XSS is trivial when this code is reachable.",
+    impactOneline:
+      "User input is rendered as HTML without escaping — reflected XSS can steal sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input before HTML output; use Content-Security-Policy.",
+      steps: [
+        "Replace echo/concat patterns with htmlspecialchars() or framework auto-escaping.",
+        "Never assign user input to innerHTML or document.write.",
+        "Add CSP without unsafe-inline in production."
+      ]
+    },
+    fixPrompt:
+      "My PHP or client code echoes user input into HTML without encoding (e.g. $html .= '<pre>Hello ' . $_GET['name']). Show the fix using proper output encoding and CSP headers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-owasp-ctf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OWASP Top 10 CTF hub with linked vulnerable challenge targets",
+    description:
+      "The shipped JavaScript documents an OWASP Top 10 CTF challenge catalog (A01–A10) with URLs to live vulnerable Railway/deploy targets — broken access control and injection labs are one click away.",
+    impactOneline:
+      "Public CTF hub exposes linked intentionally vulnerable apps — attackers can enumerate and attack sibling targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspCtfLinkedLabProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate CTF hubs behind auth; network-isolate challenge targets.",
+      steps: [
+        "Remove production URLs to vulnerable challenge apps from public bundles.",
+        "Require team login before revealing challenge target URLs.",
+        "Deploy challenges on private networks, not public Railway URLs."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP CTF hub ships challenge URLs to live vulnerable Railway apps in the client bundle. Show how to gate challenge links behind authenticated APIs and isolate lab targets from the public internet.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-csrf-evidence",
     platform: "generic",
     category: "Broken access control",
