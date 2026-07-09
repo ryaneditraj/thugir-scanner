@@ -497,6 +497,12 @@
       "slug": "client-side-csrf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle CSRF token NOT verified + Simulate CSRF Attack + Vulnerable (No CSRF)/Secure (CSRF Token) mode toggle; secure-bank-bay.vercel.app findings 4→6"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "client-side-csrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML Attack 3: CSRF — The Invisible Request + Fake page posts a transfer / secret CSRF token generated when the page loaded (932-char gap exceeded 600-char window); securebank-blog.vercel.app findings 4→5; benchmark juice-shop 6/6 maintained"
     }
   ],
   "shipped": [
@@ -909,6 +915,11 @@
       "source": "discovery:secure-bank-bay.vercel.app",
       "slug": "client-side-csrf-evidence",
       "shipped_at": "2026-07-09T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "client-side-csrf-evidence-blog-html",
+      "shipped_at": "2026-07-09T03:10:00.000Z"
     }
   ]
 }
