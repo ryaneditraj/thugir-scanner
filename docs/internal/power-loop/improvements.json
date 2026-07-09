@@ -557,6 +557,24 @@
       "slug": "client-side-security-game-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle level catalog vulnerability:\"SQL Injection\"/\"Reflected XSS\"/\"IDOR\" + Vulnerable Code panel; ogtamimi.github.io/OGT-Cyber-Game findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:akbarbashakm.github.io/frontend-security-examples",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: resultsContent.innerHTML = `...${searchTerm}...` in 01-xss-examples/vulnerable-reflected.html; akbarbashakm findings 3→5"
+    },
+    {
+      "source": "discovery:akbarbashakm.github.io/frontend-security-examples",
+      "slug": "client-side-csrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <!-- VULNERABLE: No CSRF token! --> + intentionally vulnerable to CSRF attacks in 02-csrf-examples/vulnerable-bank.html; akbarbashakm findings 3→5"
+    },
+    {
+      "source": "discovery:demo.weblock.ru",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: landing chat widget Try asking me about our services or testing some prompt injection attacks; demo.weblock.ru findings 6→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1014,6 +1032,21 @@
       "source": "discovery:ogtamimi.github.io/OGT-Cyber-Game",
       "slug": "client-side-security-game-evidence",
       "shipped_at": "2026-07-09T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:akbarbashakm.github.io/frontend-security-examples",
+      "slug": "dom-xss-searchterm-innerhtml-lab",
+      "shipped_at": "2026-07-09T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:akbarbashakm.github.io/frontend-security-examples",
+      "slug": "educational-csrf-html-lab-markers",
+      "shipped_at": "2026-07-09T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:demo.weblock.ru",
+      "slug": "landing-chat-prompt-injection-demo",
+      "shipped_at": "2026-07-09T07:10:00.000Z"
     }
   ]
 }
