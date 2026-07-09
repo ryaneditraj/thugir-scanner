@@ -716,6 +716,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ctf-platform-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CTF challenge platform SPA with public challenge APIs",
+    description:
+      "The shipped JavaScript documents a Hackforge-style CTF platform with publicChallenges(), flag submission UI, and admin challenge routes — challenge metadata and APIs are exposed in the client bundle.",
+    impactOneline:
+      "Public CTF platform bundle reveals challenge APIs and flag workflows attackers can enumerate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfPlatformEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate challenge APIs behind auth; avoid shipping admin routes in public bundles.",
+      steps: [
+        "Require login before listing or fetching challenge details.",
+        "Move admin challenge management off the public SPA bundle.",
+        "Rate-limit flag submission endpoints server-side."
+      ]
+    },
+    fixPrompt:
+      "Our CTF platform SPA ships publicChallenges APIs and CTF{ flag submission UI in the client bundle. Show how to gate challenge routes behind authenticated APIs and remove admin paths from the production bundle.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-owasp-educational-lab-evidence",
     platform: "generic",
     category: "Injection",
