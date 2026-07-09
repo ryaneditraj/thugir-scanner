@@ -298,7 +298,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecurityGameEvidence",
   "clientSideXssC2CollectorEvidence",
   "clientSideDevSecOpsLabEvidence",
-  "clientSideVulnAuthPortalEvidence"
+  "clientSideVulnAuthPortalEvidence",
+  "clientSidePathTraversalEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -370,6 +371,27 @@ function extractDocusaurusLabLinks(html: string, pageUrl: string): string[] {
       const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
       if (DOCUSAURUS_LAB_SKIP.test(u.pathname)) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** CTF challenge hubs (webexp05-style) link /c1/, /c2/, … from a landing index only. */
+const CTF_CHALLENGE_HUB_RE = /href\s*=\s*["'](\/c\d+\/)["']/gi;
+
+function extractCtfChallengeHubLinks(html: string, pageUrl: string): string[] {
+  if (!/CTF Challenge Hub|Web Security Training Challenges|class="challenge-link"/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = CTF_CHALLENGE_HUB_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
       u.hash = "";
       out.add(u.toString());
     } catch {
@@ -615,6 +637,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
+  const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
@@ -622,6 +645,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ...new Set([
       ...labHubSeeds,
       ...docusaurusLabSeeds,
+      ...ctfHubSeeds,
       ...websecSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,

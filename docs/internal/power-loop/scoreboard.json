@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T10:09:12.969Z",
+  "updated_at": "2026-07-09T10:10:27.205Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 49,
   "discovery_findings": 648,
-  "improvements_shipped": 101,
-  "last_run": "2026-07-09T10:09:12.969Z",
+  "improvements_shipped": 105,
+  "last_run": "2026-07-09T10:10:27.205Z",
   "last_run_summary": {
     "hour_utc": "10:00",
     "benchmark": {
@@ -221,10 +221,7 @@
     "idor-challenge.vercel.app": 2,
     "luisillobret2.github.io/WebGoat": 2,
     "vuln-portal.vercel.app": 2,
-    "duck-store.escape.tech": 7,
-    "dvaib.com": 4,
     "pentest-ground.com:4280": 4,
-    "pentest-ground.com:9000": 3,
-    "capture-the-flag-official-website.vercel.app": 3
+    "pentest-ground.com:9000": 3
   }
 }
