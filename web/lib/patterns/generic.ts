@@ -716,6 +716,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-owasp-educational-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP Top 10 educational lab pages document injectable patterns",
+    description:
+      "Crawled Docusaurus or static OWASP lab content includes walkthroughs for SQL injection (patient_lookup.php, UNION SELECT), IDOR enumeration, or broken access-control flaws — the tutorial itself documents exploitable patterns.",
+    impactOneline:
+      "Public OWASP lab tutorials ship vulnerable code samples attackers can study and replay on real targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspEducationalLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host lab tutorials on isolated domains; use sanitized code samples in production docs.",
+      steps: [
+        "Keep intentionally vulnerable tutorial code on dedicated lab hosts, not production apps.",
+        "Replace live exploit strings in public docs with redacted or parameterized examples.",
+        "Gate hands-on labs behind authentication when they include runnable vulnerable snippets."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Top 10 lab site publishes SQL injection and IDOR walkthroughs with patient_lookup.php and UNION SELECT examples. Show how to host these on an isolated lab domain and redact exploitable snippets from public documentation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-jwt-none-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Client bundle documents JWT alg:none acceptance",
+    description:
+      "The shipped JavaScript includes a JWT lab where the none algorithm is accepted and role can be escalated to admin — signature verification is bypassable when the server mirrors this logic.",
+    impactOneline:
+      "JWT alg:none lets attackers forge admin tokens without a valid signature.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJwtNoneEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none; enforce HMAC/RSA signature verification server-side.",
+      steps: [
+        "Maintain an allowlist of permitted JWT algorithms (e.g. RS256, HS256).",
+        "Reject tokens with alg:none or missing signatures before parsing claims.",
+        "Remove JWT attack lab code from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My app accepts JWT alg:none and allows role escalation to admin. Show server-side middleware that rejects unsigned tokens, enforces RS256/HS256 only, and validates role claims after signature verification.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-csrf-evidence",
     platform: "generic",
     category: "Broken access control",

@@ -2351,12 +2351,12 @@ const clientSideCsrfEvidence: Rule = async (ctx) => {
 
 // --- Client-side IDOR evidence in bundle (explicit vulnerable endpoint docs) --
 const CLIENT_IDOR_MARKER_RE =
-  /VULNERABLE ENDPOINT|No authorization check|No ownership verification|any authenticated user can access/i;
+  /VULNERABLE ENDPOINT|No authorization check|No ownership verification|any authenticated user can access|belonging to another user/i;
 
 const clientSideIdorEvidence: Rule = async (ctx) => {
   if (!CLIENT_IDOR_MARKER_RE.test(ctx.combined)) return NEGATIVE;
   const endpoints = new Set<string>();
-  const re = /\/api\/[a-z0-9_/-]+(?:\$\{[^}]+\}|\{[a-zA-Z]+\})/gi;
+  const re = /\/api\/[a-z0-9_./-]+(?:\$\{[^}]+\}|\{[a-zA-Z]+\})?/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(ctx.combined))) endpoints.add(m[0]);
   if (endpoints.size === 0) return NEGATIVE;
@@ -2364,6 +2364,7 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
   if (/VULNERABLE ENDPOINT/i.test(ctx.combined)) markers.push("VULNERABLE ENDPOINT");
   if (/No authorization check/i.test(ctx.combined)) markers.push("No authorization check");
   if (/No ownership verification/i.test(ctx.combined)) markers.push("No ownership verification");
+  if (/belonging to another user/i.test(ctx.combined)) markers.push("cross-user object access");
   return {
     fired: true,
     confidence: 0.88,
@@ -2405,6 +2406,85 @@ const serverSideEvalEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 3),
       note: "server-side handler passes req.body/query to eval() — remote code execution likely"
+    }
+  };
+};
+
+// --- Client-side JWT "none" algorithm evidence (educational labs) ----------------
+const CLIENT_JWT_NONE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JWT none algorithm role escalation lab",
+    re: /alg\s*:\s*none[\s\S]{0,160}role\s+escalated\s+to\s+admin/i
+  },
+  {
+    label: "JWT header alg none acceptance check",
+    re: /\(header\.alg\|\|['"]\)\.toLowerCase\(\)\s*===\s*['"]none['"]/
+  },
+  {
+    label: "JWT None Algorithm challenge title",
+    re: /JWT None Algorithm|accepts the ["']none["'] algorithm/i
+  }
+];
+
+const clientSideJwtNoneEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JWT_NONE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "client bundle documents JWT alg:none acceptance — signature verification can be bypassed"
+    }
+  };
+};
+
+// --- Docusaurus / static OWASP Top 10 educational lab content ------------------
+const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "patient_lookup.php SQLi tutorial",
+    re: /patient_lookup\.php/i
+  },
+  {
+    label: "UNION SELECT injection walkthrough",
+    re: /' UNION SELECT/i
+  },
+  {
+    label: "IDOR direct object reference lab text",
+    re: /Direct object reference guessing \(IDOR\)/i
+  },
+  {
+    label: "Mass assignment admin escalation lab",
+    re: /is_admin\s*=\s*true/i
+  },
+  {
+    label: "Broken Access Control OWASP lab heading",
+    re: /Broken Access Control[\s\S]{0,400}authorization/i
+  },
+  {
+    label: "SQL injection prism tutorial with mysqli_prepare contrast",
+    re: /mysqli_prepare\(\)|PDO::prepare\(\)/
+  }
+];
+
+const clientSideOwaspEducationalLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_EDU_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const vulnHits = hits.filter((h) => !/mysqli_prepare|PDO::prepare/.test(h.label));
+  if (vulnHits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: vulnHits.length >= 3 ? 0.9 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 5),
+      note: "crawled OWASP Top 10 educational lab pages document injectable SQL, IDOR, or access-control flaws"
     }
   };
 };
@@ -2704,6 +2784,14 @@ const CLIENT_SSRF_RES: { label: string; re: RegExp }[] = [
   {
     label: "URL grabber fetches remote URLs (SSRF lab)",
     re: /URL grabber which fetches remote URLs/i
+  },
+  {
+    label: "Link preview server-side fetch SSRF lab",
+    re: /server fetches it for you/i
+  },
+  {
+    label: "Cloud metadata SSRF lab success marker",
+    re: /Cloud metadata endpoint reached|iam\/security-credentials/i
   }
 ];
 
@@ -3317,6 +3405,8 @@ export const RULES: Record<string, Rule> = {
   clientSideFileUploadEvidence,
   sensitiveApiTokenLeakage,
   clientSidePrototypePollutionEvidence,
+  clientSideJwtNoneEvidence,
+  clientSideOwaspEducationalLabEvidence,
   serverSideEvalEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,

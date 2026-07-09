@@ -351,6 +351,29 @@ function extractLabHubLinks(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Docusaurus OWASP Top 10 lab hubs (mehdiaitsaid.github.io/owasp-top-10-labs) — sidebar links /labs/*. */
+const DOCUSAURUS_LAB_PATH_RE = /href\s*=\s*["']([^"']*\/labs\/[a-z0-9_./-]+)["']/gi;
+const DOCUSAURUS_LAB_SKIP = /\/labs\/(?:intro|setup)\/?$/i;
+
+function extractDocusaurusLabLinks(html: string, pageUrl: string): string[] {
+  if (!/docusaurus|docs-doc-page|theme-doc-sidebar/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = DOCUSAURUS_LAB_PATH_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      if (DOCUSAURUS_LAB_SKIP.test(u.pathname)) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** WebSec.fr challenge levels live under /levelNN/ but are only linked in <noscript> <select> options. */
 function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
   const out = new Set<string>();
@@ -586,12 +609,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
+  const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
       ...labHubSeeds,
+      ...docusaurusLabSeeds,
       ...websecSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,
@@ -606,7 +631,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let pages: FetchedDoc[] = [home, ...extraPages];
 
   const childSeeds = prioritizeSecurityLabLinks(
-  extraPages.flatMap((p) => extractLabChildLinks(p.body, p.finalUrl))
+    extraPages.flatMap((p) => [
+      ...extractLabChildLinks(p.body, p.finalUrl),
+      ...extractDocusaurusLabLinks(p.body, p.finalUrl)
+    ])
   ).slice(0, 2);
   if (childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
     const childPages = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
