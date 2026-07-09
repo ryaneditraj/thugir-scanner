@@ -3296,6 +3296,117 @@ const clientSideWrongSecretsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- MAESTRO / ElizaOS agentic AI security keynote demo -------------------------
+const CLIENT_MAESTRO_AGENTIC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "MAESTRO security framework branding",
+    re: /MAESTRO (?:Framework|Security Architecture)/i
+  },
+  {
+    label: "ElizaOS agent security analysis",
+    re: /ElizaOS Security Analysis|exploitable vulnerabilities across all 7 MAESTRO layers/i
+  },
+  {
+    label: "Agentic prompt injection via memory poisoning",
+    re: /Stored prompt injection via memory poisoning|RAG poisoning/i
+  },
+  {
+    label: "ElizaOS zero-auth deployment exposure",
+    re: /zero authentication on \d+% of.*ElizaOS/i
+  }
+];
+
+const clientSideMaestroAgenticAiEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MAESTRO_AGENTIC_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "MAESTRO Framework demo documents ElizaOS agentic AI exploit chains — prompt injection, memory poisoning, and zero-auth deployments"
+    }
+  };
+};
+
+// --- 0day cybersecurity training platform landing --------------------------------
+const CLIENT_ZERODAY_TRAINING_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "0day elite training brand",
+    re: /0day\s*\|.*From Threat to Resilience|Master Cybersecurity Through/i
+  },
+  {
+    label: "Hands-on security labs curriculum",
+    re: /hands-on labs.*expert-led courses|Interactive Security Labs/i
+  },
+  {
+    label: "Penetration testing course catalog",
+    re: /Network Penetration Testing|Introduction to Web Penetration Testing/i
+  },
+  {
+    label: "0day training platform domain",
+    re: /zeroday-sec\.com/i
+  }
+];
+
+const clientSideZerodayTrainingEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ZERODAY_TRAINING_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "0day training platform advertises hands-on offensive security labs and penetration testing courses"
+    }
+  };
+};
+
+// --- Hidden Investigations CTF / vuln-disclosure research team ------------------
+const CLIENT_CTF_RESEARCH_TEAM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hidden Investigations CTF team",
+    re: /Hidden Investigations.*(?:CTF|Capture The Flag)/i
+  },
+  {
+    label: "Vulnerability disclosure research team",
+    re: /vulnerability disclosure team|Cybersecurity Research(?:\s+and\s+|\s*&\s*)Vulnerability Disclosure/i
+  },
+  {
+    label: "Offensive security research focus",
+    re: /offensive security research|responsible disclosure/i
+  },
+  {
+    label: "CTF community training programs",
+    re: /CTF (?:team|Event Organization)|no-cost cybersecurity bootcamps/i
+  }
+];
+
+const clientSideCtfResearchTeamEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTF_RESEARCH_TEAM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Public CTF research team site documents vulnerability disclosure, offensive security research, and community training"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -4415,6 +4526,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackThisSiteEvidence,
   clientSideAgenticAiCtfEvidence,
   clientSideWrongSecretsEvidence,
+  clientSideMaestroAgenticAiEvidence,
+  clientSideZerodayTrainingEvidence,
+  clientSideCtfResearchTeamEvidence,
   openApiDebugPasswordExposure
 };
 
