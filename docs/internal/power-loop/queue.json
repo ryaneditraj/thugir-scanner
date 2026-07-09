@@ -330,7 +330,32 @@
       "url": "https://www.hackthissite.org/",
       "source": "Hack This Site — educational vulnerability challenge platform (www origin)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/",
+      "source": "AgentPwn — agentic AI vulnerability training lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksec.in/",
+      "source": "hacksec — Product Hunt free live web application pentest labs",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webgoat.org/",
+      "source": "OWASP WebGoat — deliberately insecure Java training application",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cyberdefenders.org/",
+      "source": "CyberDefenders — public blue-team CTF and security challenge platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/",
+      "source": "AppSecMaster — Docker-based web application hacking lab platform",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T15:05:00.000Z"
+  "updated_at": "2026-07-09T16:05:00.000Z"
 }
