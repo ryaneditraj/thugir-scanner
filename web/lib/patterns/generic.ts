@@ -638,6 +638,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssti-template-injection",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Server-side template injection (SSTI) confirmed via arithmetic probe",
+    description:
+      "A GET parameter is injected into a server-side template engine. Probing with 7*7 returns 49 in the rendered output — positive proof the template evaluates attacker-controlled expressions.",
+    impactOneline:
+      "SSTI often escalates to remote code execution — template engines can invoke OS commands.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiTemplateInjection" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template expressions; use logic-less templates or strict sandboxing.",
+      steps: [
+        "Render templates with a logic-less engine or pass user data only as bound variables.",
+        "Disable dangerous template helpers (eval, exec, include) in production.",
+        "Add input validation and output encoding before any template render path."
+      ]
+    },
+    fixPrompt:
+      "My app evaluates user input inside server-side templates (7*7 renders as 49). Stop passing raw query parameters into template expressions, use bound variables only, and show the safe render handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-xor-auth-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Client-side XOR/obfuscated credential check in browser JS",
+    description:
+      "The shipped JavaScript validates login by XORing username:password against a hardcoded ciphertext blob with a static key — authentication is entirely client-side and bypassable in DevTools.",
+    impactOneline:
+      "Client-side auth checks are trivially bypassed — anyone can forge credentials without server validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXorAuthEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move all authentication to the server; never compare credentials in browser JavaScript.",
+      steps: [
+        "Remove client-side login validation and XOR/cipher comparison logic from production bundles.",
+        "Validate credentials server-side with bcrypt/argon2 and issue HttpOnly session cookies.",
+        "Never ship encryption keys or expected credential blobs to the browser."
+      ]
+    },
+    fixPrompt:
+      "My login uses client-side xorString() to compare credentials against an encrypted blob with a hardcoded key. Move authentication to the server, remove XOR checks from the bundle, and show the secure login API handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ssrf-evidence",
     platform: "generic",
     category: "Server-side request forgery",

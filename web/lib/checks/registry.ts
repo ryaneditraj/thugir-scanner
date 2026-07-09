@@ -1493,7 +1493,158 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
   const jsonHit = await probeJsonAuthSqlInjection(ctx);
   if (jsonHit?.fired) return jsonHit;
 
+  const postHit = await probePostFormSqlDisclosure(ctx);
+  if (postHit?.fired) return postHit;
+
   return NEGATIVE;
+};
+
+const POST_SQL_FORM_RE =
+  /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,1200}?name\s*=\s*["'](?:username|user|email)["'][\s\S]{0,800}?name\s*=\s*["'](?:password|pass)["']/gi;
+const POST_SQL_QUERY_ECHO_RE =
+  /SELECT\s+[\w*,\s]+\s+FROM\s+\w+\s+WHERE\s+[\w.]+\s*=\s*['"][^'"]*(?:OR\s+['"]1['"]\s*=\s*['"]1|'\s*OR)/i;
+const POST_SQLI_USERNAME = "admin' OR '1'='1";
+
+function extractPostSqlForms(html: string, origin: string): { action: string; fields: string[] }[] {
+  const forms: { action: string; fields: string[] }[] = [];
+  const re = /<form[^>]*method\s*=\s*["']post["'][^>]*(?:action\s*=\s*["']([^"']*)["'])?[^>]*>([\s\S]*?)<\/form>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) && forms.length < 6) {
+    const block = m[0];
+    if (!/name\s*=\s*["'](?:username|user|email)["']/i.test(block)) continue;
+    if (!/name\s*=\s*["'](?:password|pass)["']/i.test(block)) continue;
+    const action = m[1] || "";
+    const fields: string[] = [];
+    const fieldRe = /name\s*=\s*["']([^"']+)["']/gi;
+    let fm: RegExpExecArray | null;
+    while ((fm = fieldRe.exec(block))) fields.push(fm[1]);
+    try {
+      const url = new URL(action || ".", origin).toString();
+      forms.push({ action: url, fields });
+    } catch {
+      /* ignore */
+    }
+  }
+  return forms;
+}
+
+async function probePostFormSqlDisclosure(ctx: RuleContext): Promise<RuleResult | null> {
+  const forms = extractPostSqlForms(ctx.combined, ctx.origin);
+  const fallbacks = ["/SQLI/00.php", "/sqli/00.php", "/login.php", "/auth/login"];
+  const seen = new Set<string>();
+  for (const f of forms) seen.add(f.action);
+  for (const p of fallbacks) {
+    try {
+      seen.add(new URL(p, ctx.origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const action of [...seen].slice(0, 6)) {
+    const body = new URLSearchParams({
+      username: POST_SQLI_USERNAME,
+      password: "x",
+      user: POST_SQLI_USERNAME,
+      email: POST_SQLI_USERNAME,
+      pass: "x"
+    }).toString();
+    const r = await ctx.probe.get(action, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 12_288
+    });
+    if (r.status < 200 || r.status >= 500) continue;
+    const marker = SQL_ERROR_MARKERS.find((re) => re.test(r.body)) || POST_SQL_QUERY_ECHO_RE.test(r.body);
+    if (!marker) continue;
+    const sqlEcho = r.body.match(POST_SQL_QUERY_ECHO_RE);
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: action,
+        method: "POST",
+        sqlError: sqlEcho?.[0]?.slice(0, 120) || "SQL query echoed in POST response",
+        snippet: r.body.slice(0, 240).trim(),
+        note: "POST login form reflects constructed SQL — injection likely"
+      }
+    };
+  }
+  return null;
+}
+
+// --- Server-side template injection (SSTI) via arithmetic probe ----------------
+const SSTI_PROBE_EXPR = "7*7";
+const SSTI_PROBE_RESULT = "49";
+const SSTI_FALLBACK_PATHS = ["/SSTI/lab1.php", "/ssti/lab1.php", "/ssti", "/template"];
+
+function extractSstiGetEndpoints(html: string, origin: string): { url: string; param: string }[] {
+  const out: { url: string; param: string }[] = [];
+  const re = /<form[^>]*method\s*=\s*["']get["'][^>]*(?:action\s*=\s*["']([^"']*)["'])?[^>]*>([\s\S]*?)<\/form>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) && out.length < 6) {
+    const block = m[2];
+    const param =
+      block.match(/name\s*=\s*["'](name|input|query|q|template|msg)["']/i)?.[1] || "name";
+    try {
+      const url = new URL(m[1] || ".", origin).toString();
+      out.push({ url, param });
+    } catch {
+      /* ignore */
+    }
+  }
+  return out;
+}
+
+const sstiTemplateInjection: Rule = async (ctx) => {
+  const endpoints = [
+    ...extractSstiGetEndpoints(ctx.combined, ctx.origin),
+    ...SSTI_FALLBACK_PATHS.map((p) => ({ url: new URL(p, ctx.origin).toString(), param: "name" }))
+  ];
+  const seen = new Set<string>();
+  for (const { url, param } of endpoints) {
+    const key = `${url}|${param}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const probeUrl = new URL(url);
+    probeUrl.searchParams.set(param, SSTI_PROBE_EXPR);
+    const r = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+    if (r.status < 200 || r.status >= 500) continue;
+    if (!r.body.includes(SSTI_PROBE_RESULT)) continue;
+    if (r.body.includes(SSTI_PROBE_EXPR)) continue;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: probeUrl.toString(),
+        probe: SSTI_PROBE_EXPR,
+        result: SSTI_PROBE_RESULT,
+        note: "template engine evaluated arithmetic in user input — SSTI likely"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- Client-side XOR/obfuscated auth check in browser JS -----------------------
+const clientSideXorAuthEvidence: Rule = async (ctx) => {
+  const hasXor = /xorString|xorConvert/i.test(ctx.combined);
+  const hasLogin = /function\s+login\s*\(|addEventListener\s*\(\s*["']click["']/.test(ctx.combined);
+  const hasSecret = /(?:var|const|let)\s+secret\s*=\s*["'][^"']+["']|secretkey/i.test(ctx.combined);
+  const hasCipher = /(?:var|const|let)\s+encrypted\s*=\s*["'][^"']+["']|==\s*encrypted/.test(ctx.combined);
+  if (!hasXor || !hasLogin || (!hasSecret && !hasCipher)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      note: "client-side XOR/obfuscated credential comparison — auth bypassable in browser DevTools",
+      markers: [
+        ...(hasXor ? ["xorString obfuscation"] : []),
+        ...(hasCipher ? ["encrypted credential blob"] : []),
+        ...(hasSecret ? ["hardcoded xor key"] : [])
+      ]
+    }
+  };
 };
 
 // --- Unauthenticated admin / application config (read-only GET) ---------------
@@ -2835,6 +2986,8 @@ export const RULES: Record<string, Rule> = {
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
+  sstiTemplateInjection,
+  clientSideXorAuthEvidence,
   unauthenticatedAdminEndpoint,
   dangerousHtmlSinks,
   domEvalXss,
