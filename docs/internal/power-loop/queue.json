@@ -455,7 +455,32 @@
       "url": "https://hacking-lab.com/events/",
       "source": "Hacking-Lab — public security training events and challenge platform",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas0.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas — serverside web-security wargame level 0 (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://websegura.radwarelatam.com/mutillidae/",
+      "source": "OWASP Mutillidae II — public hosted training instance (VWAD community deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacking-lab.com/",
+      "source": "Hacking-Lab — Austrian public security training platform landing",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/",
+      "source": "Hack This Site — basic web security mission challenges (www origin)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://picoctf.org/",
+      "source": "picoCTF — Carnegie Mellon public CTF and cybersecurity education platform",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T20:10:00.000Z"
+  "updated_at": "2026-07-09T21:05:00.000Z"
 }

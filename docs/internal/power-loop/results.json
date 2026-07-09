@@ -1,21 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-08T21:06:52.888Z",
-      "url": "https://bugbait.io/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-08T21:06:52.888Z",
-      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
-    },
-    {
       "run_id": "2026-07-08T21:06:53.776Z",
       "url": "http://testhtml5.vulnweb.com",
       "auth": "public_demo",
@@ -28,7 +13,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T21:06:53.776Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T21:07:03.794Z",
@@ -376,7 +361,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T21:16:50.549Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T21:17:00.574Z",
@@ -391,7 +376,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T21:17:00.574Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T21:17:10.590Z",
@@ -406,7 +391,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T21:17:10.590Z",
-      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T21:17:10.980Z",
@@ -421,7 +406,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T21:17:10.980Z",
-      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T21:17:11.843Z",
@@ -436,7 +421,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T21:17:11.843Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T21:17:21.862Z",
@@ -718,7 +703,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:06:11.884Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:06:21.954Z",
@@ -733,7 +718,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:06:21.954Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:06:31.982Z",
@@ -748,7 +733,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:06:31.982Z",
-      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:06:32.432Z",
@@ -763,7 +748,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:06:32.432Z",
-      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:06:33.315Z",
@@ -778,7 +763,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:06:33.315Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:06:52.806Z",
@@ -1186,7 +1171,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:07:42.256Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:07:52.281Z",
@@ -1201,7 +1186,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:07:52.281Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:08:34.499Z",
@@ -1496,7 +1481,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:26:10.948Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:26:20.986Z",
@@ -1511,7 +1496,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:26:20.986Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:26:31.018Z",
@@ -1526,7 +1511,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:26:31.018Z",
-      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach demo.securityknowledgeframework.org (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:26:31.322Z",
@@ -1541,7 +1526,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:26:31.322Z",
-      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach bugbait.io (TLS/certificate error). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:26:32.193Z",
@@ -1556,7 +1541,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-08T22:26:32.193Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-08T22:26:42.218Z",
@@ -2128,7 +2113,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -3317,7 +3302,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -7146,7 +7131,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -7421,7 +7406,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-09T17:06:47.873Z",
-      "error": "We couldn't reach demo.testfire.net (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach demo.testfire.net (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-09T17:06:48.000Z",
@@ -7436,7 +7421,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-09T17:06:48.000Z",
-      "error": "We couldn't reach zero.webappsecurity.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach zero.webappsecurity.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-09T17:06:48.421Z",
@@ -7645,7 +7630,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-09T18:04:55.120Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-09T18:05:35.497Z",
@@ -7660,7 +7645,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-09T18:05:35.497Z",
-      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-09T19:05:23.569Z",
@@ -7972,7 +7957,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-09T20:10:49.334Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-09T20:10:59.365Z",
@@ -8084,7 +8069,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -8190,6 +8175,29 @@
       "probes_run": 235,
       "status": "ok",
       "scanned_at": "2026-07-09T20:13:44.337Z"
+    },
+    {
+      "run_id": "2026-07-09T21:02:12.242Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 235,
+      "status": "ok",
+      "scanned_at": "2026-07-09T21:02:12.242Z"
     }
   ],
   "teacher_delta_runs": [
@@ -8310,7 +8318,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "503 Service Unavailable \u2014 oracle outage, 1/6 recall (misconfig only)",
+      "benchmark_status": "503 Service Unavailable — oracle outage, 1/6 recall (misconfig only)",
       "scanned_at": "2026-07-08T16:13:00.000Z"
     },
     {
@@ -8319,7 +8327,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T17:15:00.000Z"
     },
     {
@@ -8328,7 +8336,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T18:05:00.000Z"
     },
     {
@@ -8337,7 +8345,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T19:12:00.000Z"
     },
     {
@@ -8346,7 +8354,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T20:12:00.000Z"
     },
     {
@@ -8355,7 +8363,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T21:17:00.000Z"
     },
     {
@@ -8364,7 +8372,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T22:05:00.000Z"
     },
     {
@@ -8373,7 +8381,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-08T23:05:00.000Z"
@@ -8384,7 +8392,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "scanned_at": "2026-07-09T00:12:00.000Z"
     },
     {
@@ -8393,7 +8401,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T02:06:00.000Z"
@@ -8404,7 +8412,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T03:06:00.000Z"
@@ -8415,7 +8423,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T04:06:00.000Z"
@@ -8426,7 +8434,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T05:06:00.000Z"
@@ -8437,7 +8445,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T06:06:00.000Z"
@@ -8448,7 +8456,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T07:06:00.000Z"
@@ -8459,7 +8467,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T08:12:00.000Z"
@@ -8470,7 +8478,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T10:09:00.000Z"
@@ -8481,7 +8489,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T13:03:00.000Z"
@@ -8492,7 +8500,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T14:05:00.000Z"
@@ -8503,7 +8511,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T15:05:00.000Z"
@@ -8514,7 +8522,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T16:05:00.000Z"
@@ -8525,7 +8533,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T17:05:00.000Z"
@@ -8536,7 +8544,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
+      "benchmark_status": "ok — 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T18:05:00.000Z"
@@ -8547,7 +8555,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "REGRESSION \u2014 1 finding, 1/6 recall (misconfig only); prior 19:05 run had 8 findings 6/6",
+      "benchmark_status": "REGRESSION — 1 finding, 1/6 recall (misconfig only); prior 19:05 run had 8 findings 6/6",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T20:05:00.000Z"
