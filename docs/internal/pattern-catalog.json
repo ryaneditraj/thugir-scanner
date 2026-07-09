@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T10:06:15.245Z",
-  "total": 100,
-  "uniqueSlugs": 100,
+  "generatedAt": "2026-07-09T11:06:58.340Z",
+  "total": 101,
+  "uniqueSlugs": 101,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 82,
+    "generic": 83,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 36,
+    "deep": 37,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 18,
+    "Broken access control": 19,
     "Exposed secret": 14,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -39,6 +39,7 @@
     "bolt-public-env-prefix-leak",
     "client-side-api-security-lab-evidence",
     "client-side-csrf-evidence",
+    "client-side-ctf-platform-evidence",
     "client-side-devsecops-lab-evidence",
     "client-side-file-upload-evidence",
     "client-side-idor-evidence",

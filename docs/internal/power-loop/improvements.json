@@ -635,6 +635,24 @@
       "slug": "client-side-api-security-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WebGoat is a deliberately insecure application maintained by OWASP; luisillobret2.github.io/WebGoat findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com:4280",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/xss_r/?name=thugirXSScanary echoes Hello canary in <pre>; extractDvwaXssProbePaths seeds DVWA xss_r/xss_d modules; pentest-ground.com:4280 findings 4→5; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com:9000",
+      "slug": "server-side-eval-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OpenAPI GET /eval?s=7*7 with X-Auth-Token returns {\"message\":\"Evaluation result: 49\"}; probeOpenApiEvalEndpoint live probe; pentest-ground.com:9000 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:capture-the-flag-official-website.vercel.app",
+      "slug": "client-side-ctf-platform-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Welcome to CTF Platform + publicChallenges() + CTF{ placeholder; extractCtfPlatformSpaSeeds crawls /practice /challenges; capture-the-flag-official-website.vercel.app findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1162,6 +1180,21 @@
       "source": "discovery:luisillobret2.github.io/WebGoat",
       "slug": "webgoat-deliberately-insecure-marker",
       "shipped_at": "2026-07-09T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com:4280",
+      "slug": "dvwa-xss-r-name-param-probe",
+      "shipped_at": "2026-07-09T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com:9000",
+      "slug": "openapi-eval-arithmetic-probe",
+      "shipped_at": "2026-07-09T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:capture-the-flag-official-website.vercel.app",
+      "slug": "ctf-platform-spa-seeds-evidence",
+      "shipped_at": "2026-07-09T11:10:00.000Z"
     }
   ]
 }

@@ -377,13 +377,20 @@ const REFLECTED_XSS_PARAMS = [
 ];
 const REFLECTED_XSS_FALLBACK_PATHS = ["/", "/search", "/search.html", "/search.jsp", "/index.jsp", "/catalog"];
 
+/** DVWA modules (xss_r, xss_d) reflect ?name= without search-like path names. */
+function extractDvwaXssProbePaths(text: string): string[] {
+  if (!/Damn Vulnerable Web Application|DVWA_WEB_PAGE_TO_ROOT/i.test(text)) return [];
+  return ["/vulnerabilities/xss_r/", "/vulnerabilities/xss_d/", "/vulnerabilities/xss_s/"];
+}
+
 function prioritizeReflectedXssPaths(paths: string[], discovered = new Set<string>()): string[] {
   const score = (p: string) => {
     if (discovered.has(p)) return 0;
-    if (/\/frame|\/mission|reflected/i.test(p)) return 1;
-    if (/\/catalog|search|product/i.test(p)) return 2;
-    if (p === "/") return 4;
-    return 3;
+    if (/\/vulnerabilities\/xss_/i.test(p)) return 1;
+    if (/\/frame|\/mission|reflected/i.test(p)) return 2;
+    if (/\/catalog|search|product/i.test(p)) return 3;
+    if (p === "/") return 5;
+    return 4;
   };
   return [...paths].sort((a, b) => score(a) - score(b));
 }
@@ -477,7 +484,14 @@ const reflectedXss: Rule = async (ctx) => {
   const discovered = extractReflectedXssPaths(ctx.combined);
   const discoveredSet = new Set(discovered);
   const paths = prioritizeReflectedXssPaths(
-    [...new Set([...discovered, homePath, ...REFLECTED_XSS_FALLBACK_PATHS])],
+    [
+      ...new Set([
+        ...discovered,
+        ...extractDvwaXssProbePaths(ctx.combined),
+        homePath,
+        ...REFLECTED_XSS_FALLBACK_PATHS
+      ])
+    ],
     discoveredSet
   ).slice(0, 10);
   const hits: { path: string; param: string; url: string; snippet: string }[] = [];
@@ -2332,6 +2346,47 @@ const clientSideSecurityGameEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CTF platform SPA evidence (Hackforge and similar challenge portals) ---------
+const CLIENT_CTF_PLATFORM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTF Platform welcome onboarding",
+    re: /Welcome to CTF Platform/i
+  },
+  {
+    label: "Hackforge CTF training platform title",
+    re: /Hackforge[\s\S]{0,80}(?:Train\. Hack\. Dominate|CTF)/i
+  },
+  {
+    label: "publicChallenges API client",
+    re: /publicChallenges\s*:\s*\(\)\s*=>/
+  },
+  {
+    label: "CTF flag submission input placeholder",
+    re: /placeholder\s*:\s*["']CTF\{/
+  },
+  {
+    label: "CTF Platform Admin console",
+    re: /CTF Platform Admin/i
+  }
+];
+
+const clientSideCtfPlatformEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTF_PLATFORM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents a CTF challenge platform with public challenge APIs and flag submission"
+    }
+  };
+};
+
 // --- OWASP Top 10 CTF hub evidence (UCU CTF and similar challenge portals) ---
 const CLIENT_OWASP_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -2546,7 +2601,48 @@ const SERVER_SIDE_EVAL_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+async function probeOpenApiEvalEndpoint(ctx: RuleContext): Promise<RuleResult | null> {
+  const specPaths = await loadOpenApiSpec(ctx);
+  if (!specPaths) return null;
+  for (const [path, ops] of Object.entries(specPaths)) {
+    if (!/\/eval/i.test(path)) continue;
+    const get = ops.get as
+      | { parameters?: Array<{ in?: string; name?: string; example?: string }> }
+      | undefined;
+    if (!get) continue;
+    const params = get.parameters ?? [];
+    const queryParam = params.find((p) => p.in === "query" && p.name)?.name || "s";
+    const headerParam = params.find((p) => p.in === "header" && p.name);
+    const concrete = concreteOpenApiGetPath(path) || path;
+    const probeUrl = new URL(concrete, ctx.origin);
+    probeUrl.searchParams.set(queryParam, "7*7");
+    const headers: Record<string, string> = {};
+    if (headerParam?.name) {
+      headers[headerParam.name] = String(headerParam.example ?? "THISISATOKEN");
+    }
+    const r = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, headers });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!/\b49\b/.test(r.body)) continue;
+    if (!/evaluat|result|message/i.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl.toString(),
+        probe: "7*7",
+        result: "49",
+        snippet: r.body.slice(0, 240).trim(),
+        note: "OpenAPI /eval endpoint evaluates user expressions server-side — code injection likely"
+      }
+    };
+  }
+  return null;
+}
+
 const serverSideEvalEvidence: Rule = async (ctx) => {
+  const live = await probeOpenApiEvalEndpoint(ctx);
+  if (live?.fired) return live;
+
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of SERVER_SIDE_EVAL_RES) {
     const m = ctx.combined.match(re);
@@ -3619,6 +3715,7 @@ export const RULES: Record<string, Rule> = {
   pentestForgeLinkedLabProbe,
   owaspCtfLinkedLabProbe,
   clientSideSecurityGameEvidence,
+  clientSideCtfPlatformEvidence,
   clientSideXssC2CollectorEvidence,
   clientSideDevSecOpsLabEvidence,
   clientSideVulnAuthPortalEvidence,

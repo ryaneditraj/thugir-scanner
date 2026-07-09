@@ -296,6 +296,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideXssEvidence",
   "owaspCtfLinkedLabProbe",
   "clientSideSecurityGameEvidence",
+  "clientSideCtfPlatformEvidence",
   "clientSideXssC2CollectorEvidence",
   "clientSideDevSecOpsLabEvidence",
   "clientSideVulnAuthPortalEvidence",
@@ -461,6 +462,26 @@ function extractDvwaVulnSourceSeeds(html: string, origin: string): string[] {
     /* ignore */
   }
   return [...out];
+}
+
+/** Hackforge-style CTF SPAs expose challenge routes only in JS — seed from HTML meta. */
+function extractCtfPlatformSpaSeeds(html: string, origin: string): string[] {
+  if (
+    !/Hackforge|CTF Platform|Premier Cybersecurity CTF|capture the flag.*training platform/i.test(
+      html
+    )
+  )
+    return [];
+  const paths = ["/practice", "/challenges", "/events", "/dashboard", "/courses"];
+  const out: string[] = [];
+  for (const p of paths) {
+    try {
+      out.push(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return out;
 }
 
 /** Child lab pages linked from category index pages (e.g. /SQLI/00.php, /SSTI/lab1.php). */
@@ -638,6 +659,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
+  const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
@@ -646,6 +668,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...labHubSeeds,
       ...docusaurusLabSeeds,
       ...ctfHubSeeds,
+      ...ctfPlatformSeeds,
       ...websecSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,
