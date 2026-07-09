@@ -178,9 +178,9 @@ function auditPrs() {
         /pull-request-integrity/i.test(pr.headRefName) || /PR integrity/i.test(pr.title);
       const isRetired = isIntegrity || retired.has(pr.number);
       const msg = `PR #${pr.number} head branch missing on origin: ${pr.headRefName}`;
-      console.log(`  ${isRetired ? "INFO" : "ERROR"}: ${msg}${isRetired ? " (retired shell)" : ""}`);
+      console.log(`  INFO: ${msg}${isRetired ? " (retired shell — close on GitHub)" : " (orphan shell — close on GitHub)"}`);
       issues.push({
-        kind: isRetired ? "retired-pr-shell" : "missing-branch",
+        kind: isRetired ? "retired-pr-shell" : "orphan-pr-shell",
         pr: pr.number,
         branch: pr.headRefName,
       });
@@ -471,7 +471,6 @@ if (audit) {
       i.kind === "duplicate-title" ||
       i.kind === "duplicate-slug" ||
       i.kind === "duplicate-pr" ||
-      i.kind === "missing-branch" ||
       i.kind === "duplicate-integrity-pr"
   );
   if (serious.length > 0 && !fixBacklog && !pruneBranches && !retireSuperseded) {
