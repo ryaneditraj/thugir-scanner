@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T03:14:15.928Z",
+  "updated_at": "2026-07-09T04:05:03.488Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 265,
-  "total_findings": 995,
+  "total_sites_scanned": 270,
+  "total_findings": 1015,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 140,
-  "discovery_findings": 520,
+  "discovery_urls_added": 145,
+  "discovery_findings": 533,
   "improvements_shipped": 83,
-  "last_run": "2026-07-09T03:14:15.928Z",
+  "last_run": "2026-07-09T04:05:03.488Z",
   "last_run_summary": {
-    "hour_utc": "03:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -50,33 +50,34 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 5,
-      "urls_ok": 5,
+      "urls_added": 5,
+      "urls_scanned": 4,
+      "urls_ok": 4,
       "urls_error": 0,
-      "findings": 12,
+      "findings": 13,
       "new_urls": [
-        "https://urban-vampi-production.up.railway.app/",
-        "https://hiddeninvestigations.net/",
-        "http://acuart.phpnet.us/",
-        "https://websec.fr/"
+        "http://vapi.apisec.ai/",
+        "https://vulnbank.org/",
+        "https://dvwa.vercel.app/",
+        "https://yusufarbc.github.io/apigoat/",
+        "https://ucu-owasp-ctf.vercel.app/"
       ],
-      "rescanned_from_prior_queue": [
-        "https://vuln-portal.vercel.app/"
+      "skipped_48h": [
+        "http://vapi.apisec.ai/ (prior scan 2026-07-08, 3 findings)"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "securebank-blog.vercel.app: client-side-csrf-evidence via Attack 3 CSRF blog HTML; findings 4→5 when reachable",
-      "urban-vampi-production.up.railway.app: idor-sequential-ids + vibe-unauthenticated-api-routes + vibe-openapi-docs-exposed (4 findings)",
-      "websec.fr: client-side-xxe-evidence + 6-page crawl (2 findings)",
-      "vuln-portal.vercel.app: missing-security-headers only — Vercel checkpoint blocks POST/auth probes"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — sql-error-disclosure, unauthenticated-admin-endpoint, idor-sequential-ids",
+      "vulnbank.org: idor-sequential-ids + dangerous-html-sinks + vibe-openapi-docs-exposed (5 findings, 6 pages)",
+      "yusufarbc.github.io/apigoat: client-side-api-security-lab-evidence — OWASP API Top 10 lab bundle (3 findings)",
+      "dvwa.vercel.app: misconfig only (2 findings) — classic SQLi/XSS oracle missed on 1-page crawl",
+      "ucu-owasp-ctf.vercel.app: firebase-config-exposed + misconfig (3 findings, 4 pages)"
     ],
     "learning_gaps": [
-      "securebank-blog.vercel.app + hack-health-tutorial: Vercel Security Checkpoint intermittently blocks cloud scanner (403)",
-      "vuln-portal.vercel.app: auth terminal lab under-probed — checkpoint blocks login POST",
-      "acuart.phpnet.us: classic SQLi/XSS oracle — scanner missed injection on 1-page crawl",
-      "openvaultbank.com: Railway backend web-production-16ec6a.up.railway.app returns 404"
+      "dvwa.vercel.app: DVWA oracle — scanner found headers/CORS only, no SQLi/XSS probes on shallow crawl",
+      "vulnbank.org: banking RCE/console + mass-assignment oracle — only IDOR/XSS/OpenAPI surfaced",
+      "vapi.apisec.ai: skipped 48h rescans — prior run found secret-openai in bundle (3 findings)",
+      "ucu-owasp-ctf.vercel.app: CTF challenges likely need auth/session probes beyond Firebase config leak"
     ]
   },
   "discovery_highlights": {
@@ -217,6 +218,10 @@
     "chimera.atlascrew.dev": 3,
     "archon-eight.vercel.app": 4,
     "cybersec-demo.vercel.app": 3,
-    "ctb-pi.vercel.app": 5
+    "ctb-pi.vercel.app": 5,
+    "vulnbank.org": 5,
+    "dvwa.vercel.app": 2,
+    "yusufarbc.github.io": 3,
+    "ucu-owasp-ctf.vercel.app": 3
   }
 }
