@@ -355,7 +355,32 @@
       "url": "https://appsecmaster.net/",
       "source": "AppSecMaster — Docker-based web application hacking lab platform",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://516-hackers.github.io/516-hackers-vuln-playground/",
+      "source": "516hackers/516-hackers-vuln-playground — modular DVWA-style SQLi/XSS/auth lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.testfire.net/",
+      "source": "Altoro Mutual TestFire — IBM/Watchfire classic banking vuln benchmark",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero.webappsecurity.com/",
+      "source": "Watchfire zero.webappsecurity — public Acunetix-style training demo site",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io/",
+      "source": "HackAdvisor Labs — browser-based real-world bug report CTF challenges (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sixhackacademy.com/",
+      "source": "SixHack Academy — free OWASP Top 10 CTF labs platform landing (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T16:05:00.000Z"
+  "updated_at": "2026-07-09T17:05:00.000Z"
 }
