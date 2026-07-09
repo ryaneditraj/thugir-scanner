@@ -3573,6 +3573,108 @@ const clientSideGoogleGruyereCodelabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP Mutillidae deliberately vulnerable PHP lab --------------------------------
+const CLIENT_MUTILLIDAE_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Mutillidae Born to be Hacked banner",
+    re: /Mutillidae:\s*Born to be Hacked/i
+  },
+  {
+    label: "Mutillidae OWASP Top 10 injection menu",
+    re: /OWASP Top 10[\s\S]{0,400}SQLi\s*-\s*Extract Data/i
+  },
+  {
+    label: "Mutillidae command injection DNS lookup",
+    re: /Command Injection[\s\S]{0,200}dns-lookup\.php/i
+  },
+  {
+    label: "Mutillidae user-info SQLi route",
+    re: /index\.php\?page=user-info\.php/i
+  },
+  {
+    label: "Mutillidae HTML injection blog route",
+    re: /index\.php\?page=add-to-your-blog\.php|HTML Injection \(HTMLi\)/i
+  },
+  {
+    label: "Mutillidae HTML comment database password hint",
+    re: /<!--[\s\S]{0,300}database password is set to[\s\S]{0,120}-->/i
+  }
+];
+
+const clientSideMutillidaeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MUTILLIDAE_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP Mutillidae documents SQLi, HTMLi, command injection, and XSS challenge routes under index.php?page="
+    }
+  };
+};
+
+// --- bWAPP deliberately insecure PHP training app (itsecgames.com) -------------------
+const CLIENT_BWAPP_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "bWAPP buggy web application title",
+    re: /bWAPP,\s*a buggy web application|an extremely buggy web app/i
+  },
+  {
+    label: "bWAPP 100 vulnerabilities catalog",
+    re: /over\s+<a[^>]*>\s*100 web (?:vulnerabilities|bugs)\s*<\/a>/i
+  },
+  {
+    label: "bWAPP OWASP Top 10 coverage",
+    re: /covers all (?:major known web bugs, including all )?risks from the OWASP Top 10|covers all vulnerabilities from the OWASP Top 10/i
+  },
+  {
+    label: "bWAPP injection taxonomy list",
+    re: /SQL, HTML, iFrame, SSI, OS Command, PHP, XML, XPath, LDAP/i
+  },
+  {
+    label: "bWAPP deliberately insecure disclaimer",
+    re: /deliberately insecure web application|security-testing and educational purposes only/i
+  }
+];
+
+const clientSideBwappEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BWAPP_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "bWAPP documents 100+ deliberately insecure PHP/MySQL exercises spanning OWASP Top 10 injection, XSS, CSRF, and LFI"
+    }
+  };
+};
+
+// --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
+const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
+  const re =
+    /<!--[\s\S]{0,600}?(?:database\s+password|db\s+password|password\s+is\s+set\s+to|admin\s+password\s+is)[\s\S]{0,300}?-->/i;
+  const m = ctx.combined.match(re);
+  if (!m) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      sample: m[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+      note: "HTML comment discloses database or admin credentials viewable in page source"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -4699,6 +4801,9 @@ export const RULES: Record<string, Rule> = {
   clientSideCyberScavengerHuntEvidence,
   clientSideSkfLabEvidence,
   clientSideGoogleGruyereCodelabEvidence,
+  clientSideMutillidaeEvidence,
+  clientSideBwappEvidence,
+  htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
 

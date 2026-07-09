@@ -1986,5 +1986,83 @@ export const genericPatterns: Pattern[] = [
       "We host a Gruyere-style web security codelab. Show how to isolate it from production and fix XSS/SQLi patterns documented in the walkthrough.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-mutillidae-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP Mutillidae vulnerable lab disclosed",
+    description:
+      "Mutillidae documents deliberately vulnerable PHP routes for SQLi, HTML injection, command injection, and XSS under index.php?page= handlers.",
+    impactOneline:
+      "Public Mutillidae instances expose classic OWASP Top 10 injection and XSS challenge routes scannable without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMutillidaeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional training software — never deploy it on production networks.",
+      steps: [
+        "Run Mutillidae only in isolated lab VMs with no production data.",
+        "Remove HTML comments that disclose database credentials from any forked code.",
+        "Block public internet access to Mutillidae instances."
+      ]
+    },
+    fixPrompt:
+      "We host an OWASP Mutillidae lab. Show how to isolate it from production and remove credential hints from HTML comments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-bwapp-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "bWAPP deliberately insecure training app disclosed",
+    description:
+      "bWAPP (buggy web application) advertises 100+ web vulnerabilities spanning OWASP Top 10 injection, XSS, CSRF, and file inclusion flaws.",
+    impactOneline:
+      "Public bWAPP marketing pages document vulnerability taxonomy attackers use to tune scanners against PHP/MySQL labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBwappEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bWAPP is an intentional training application — keep installs offline from production.",
+      steps: [
+        "Install bWAPP only in local VMs (bee-box) or isolated containers.",
+        "Do not expose bWAPP instances to the public internet.",
+        "Use bWAPP findings to patch similar patterns in production PHP code."
+      ]
+    },
+    fixPrompt:
+      "Our site documents bWAPP-style deliberately insecure PHP exercises. Show how to keep lab installs isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "html-comment-credential-disclosure",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Database or admin credentials in HTML comment",
+    description:
+      "Page source contains an HTML comment disclosing database passwords or admin credentials readable by anyone viewing source.",
+    impactOneline:
+      "Credential hints in HTML comments leak secrets to unauthenticated visitors and search engine caches.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "htmlCommentCredentialDisclosure" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove credential hints from HTML comments and rotate any disclosed secrets.",
+      steps: [
+        "Delete HTML comments containing passwords or connection strings.",
+        "Rotate database credentials if they were ever committed to HTML.",
+        "Use server-side config files outside the web root for secrets."
+      ]
+    },
+    fixPrompt:
+      "Our HTML includes a comment with database password hints. Show how to remove it and rotate credentials safely.",
+    version: 1,
+    enabled: true
   }
 ];
