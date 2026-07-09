@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T21:15:00.000Z",
+  "updated_at": "2026-07-09T22:08:30.986Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,29 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 373,
-  "total_findings": 1470,
+  "total_sites_scanned": 380,
+  "total_findings": 1497,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 96,
-  "discovery_findings": 837,
+  "discovery_urls_added": 101,
+  "discovery_findings": 856,
   "improvements_shipped": 135,
-  "last_run": "2026-07-09T21:15:00.000Z",
+  "last_run": "2026-07-09T22:08:30.986Z",
   "last_run_summary": {
-    "hour_utc": "21:00",
+    "hour_utc": "22:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 2,
-      "oracle_recall": "2/6 (official Heroku oracle intermittent 503/outage)",
-      "gap": [
-        "xss",
-        "sqli",
-        "idor",
-        "auth_bypass",
-        "sensitive_data"
-      ],
-      "note": "Official juice-shop.herokuapp.com returned degraded responses (1–2 findings); juice-shop-staging.herokuapp.com validates 6/6 recall (7 findings) — no code regression",
+      "oracle_findings": 8,
+      "oracle_recall": "6/6",
+      "gap": [],
+      "note": "RECOVERED from 1/6 regression (20:00–21:00) — 8 findings incl secret-resend; all expected categories hit",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,48 +46,36 @@
             "misconfig"
           ]
         }
-      },
-      "staging_validation": {
-        "url": "https://juice-shop-staging.herokuapp.com",
-        "findings": 7,
-        "recall": "6/6"
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 10,
-      "skipped_48h": "138 origins in 48h window",
+      "urls_scanned": 6,
+      "findings": 19,
+      "skipped_48h": "136 origins in 48h window",
       "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — removed from queue)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
       "scan_errors": [
-        "http://websegura.radwarelatam.com/mutillidae/ (Invalid URL — scanner fetch failed)"
+        "http://websegura.radwarelatam.com/mutillidae/ (Invalid URL)"
       ],
-      "queued_next_run": [
-        "https://www.hackthissite.org/missions/basic/"
-      ],
-      "focus": "Pentester Academy Lab + Cyber Scavenger Hunt + SKF lab evidence; OverTheWire Natas + CTFlearn + Hacking-Lab discovery",
-      "improvements_shipped_this_run": 3
+      "focus": "OWASP VWAD online targets — vulnapp Mutillidae, bWAPP landing, CS training hub; backlog vAPI + WrongSecrets rescanned",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — code changes do not regress oracle",
-      "pentesteracademylab.appspot.com: Pentester Academy Lab challenge hub markers (1→2 findings)",
-      "cyberscavengerhunt.com: 8-step recon scavenger hunt evidence (5→6 findings)",
-      "secureby.design: SKF lab-player Auth Bypass catalog on /labs (6→7 findings)",
-      "ctflearn.com: CTFlearn platform landing (2 findings)",
-      "natas0.natas.labs.overthewire.org: HTTP Basic auth challenge platform (2 findings)",
-      "hacking-lab.com: Cyber Security Training events page (2 findings)",
-      "picoctf.org: CMU CTF platform landing (2 findings)"
+      "juice-shop.herokuapp.com: benchmark recall RECOVERED 6/6 (8 findings incl secret-resend)",
+      "wrongsecrets.herokuapp.com: spring-boot-actuator + postmessage-dom-xss (5 findings)",
+      "computersciencesop2.vercel.app: secret-openai + dangerous-html-sinks + prompt-injection evidence (5)",
+      "server.vulnapp.id/mutillidae: phpinfo-exposed + insecure-cookies (4)",
+      "vapi.apisec.ai: secret-openai in client bundle (3)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: intermittent Heroku 503 — use staging oracle when official is down",
-      "natas0.natas.labs.overthewire.org: HTTP 401 Basic auth — challenge vulns behind per-level credentials",
-      "ctflearn.com/hacking-lab.com/picoctf.org: marketing/landing pages — CTF challenges behind signup",
-      "pentesteracademylab.appspot.com: challenge VMs on pentesteracademy.com video platform — hub HTML only",
-      "websegura.radwarelatam.com/mutillidae: scanner Invalid URL on fetch",
-      "www.root-me.org: Anubis bot-wall blocks scanner UA"
+      "juice-shop.herokuapp.com: recall NONDETERMINISTIC — 1/6 at 20–21 UTC then 6/6 at 22 UTC; needs multi-pass retry",
+      "itsecgames.com/solyd.com.br: bWAPP/Solyd landing pages only — vulns require local Docker install",
+      "server.vulnapp.id/mutillidae: classic PHP lab but shallow crawl misses SQLi/XSS challenge routes",
+      "testhtml5.vulnweb.com: DNS dead from cloud",
+      "websegura.radwarelatam.com/mutillidae: scanner Invalid URL on fetch"
     ]
   },
   "discovery_highlights": {
@@ -277,6 +259,10 @@
     "ctflearn.com": 2,
     "hacking-lab.com": 2,
     "natas0.natas.labs.overthewire.org": 2,
-    "picoctf.org": 2
+    "picoctf.org": 2,
+    "server.vulnapp.id/mutillidae": 4,
+    "computersciencesop2.vercel.app": 5,
+    "www.itsecgames.com": 1,
+    "solyd.com.br": 1
   }
 }
