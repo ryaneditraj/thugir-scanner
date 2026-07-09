@@ -302,7 +302,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnAuthPortalEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
-  "clientSideReactRscCveEvidence"
+  "clientSideReactRscCveEvidence",
+  "clientSideChimeraVulnLabEvidence",
+  "clientSideHackHealthLabEvidence",
+  "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -374,6 +377,49 @@ function extractDocusaurusLabLinks(html: string, pageUrl: string): string[] {
       const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
       if (DOCUSAURUS_LAB_SKIP.test(u.pathname)) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Nextra Hack Health-style cybersecurity tutorial paths (/cybersecurity/a03/sqlInjection). */
+const NEXTRA_CYBER_PATH_RE = /href\s*=\s*["'](\/cybersecurity\/[a-z0-9_./-]+)["']/gi;
+
+function extractNextraCybersecurityLinks(html: string, pageUrl: string): string[] {
+  if (!/nextra|__NEXT_DATA__|nx-flex/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = NEXTRA_CYBER_PATH_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Jekyll security doc hubs (Chimera) — vulnerability inventory and endpoint catalogs. */
+const JEKYLL_SECURITY_DOC_RE =
+  /href\s*=\s*["'](\/(?:vulnerability-inventory|endpoints-catalog|vulnerability-as-a-service)(?:\.html)?)["']/gi;
+
+function extractJekyllSecurityDocLinks(html: string, pageUrl: string): string[] {
+  if (!/Jekyll|site-header|jekyll/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = JEKYLL_SECURITY_DOC_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
       u.hash = "";
       out.add(u.toString());
     } catch {
@@ -531,6 +577,9 @@ async function extractSitemapCrawlSeeds(origin: string, probe: ProbeCache): Prom
 /** Prefer security lab HTML pages (xss/sqli/csrf/eval/prototype) over generic nav links. */
 function prioritizeSecurityLabLinks(links: string[]): string[] {
   const LAB_KEYWORD_ORDER = [
+    "vulnerability-inventory",
+    "endpoints-catalog",
+    "sqlInjection",
     "source.php",
     "/vulnerabilities/",
     "level1",
@@ -660,6 +709,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
+  const nextraCyberSeeds = extractNextraCybersecurityLinks(home.body, home.finalUrl);
+  const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
@@ -669,6 +720,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ...new Set([
       ...labHubSeeds,
       ...docusaurusLabSeeds,
+      ...nextraCyberSeeds,
+      ...jekyllSecurityDocSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
       ...websecSeeds,

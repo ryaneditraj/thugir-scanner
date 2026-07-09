@@ -1440,5 +1440,83 @@ export const genericPatterns: Pattern[] = [
       "Our site links to public PentestForge vulnerable lab subdomains. Show how to restrict the catalog to authenticated users and network-isolate benchmark targets.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-chimera-vuln-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera WAF honeypot documents 456+ intentional API vulnerabilities",
+    description:
+      "Jekyll documentation catalogs the Chimera vuln-api honeypot with CHM-ID registry entries spanning injection, IDOR, SSRF, and broken auth across 25+ industry domains.",
+    impactOneline:
+      "Public Chimera docs advertise a deployable honeypot with hundreds of exploitable API flaws — attackers can mirror the catalog against live instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideChimeraVulnLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Chimera honeypot docs and deployments on isolated lab networks.",
+      steps: [
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection.",
+        "Gate vulnerability inventory pages behind authentication for internal red-team use only.",
+        "Segment honeypot subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our site documents the Chimera vuln-api honeypot with CHM-ID vulnerability inventory. Show how to restrict docs to internal red-team networks and isolate honeypot deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Hack Health tutorial documents intentional SQL injection lab",
+    description:
+      "Nextra tutorial pages walk through CWE-89 SQL injection on the HackHealth login — string-concatenated queries and UNION SELECT pg_user enumeration.",
+    impactOneline:
+      "Educational SQLi walkthrough on a public deploy teaches reusable PostgreSQL injection patterns against the live login API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and restrict tutorial labs to local dev.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries or an ORM.",
+        "Host HackHealth attack tutorials on localhost only, not public Vercel deploys.",
+        "Remove UNION-based enumeration examples from production-facing docs."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth tutorial documents intentional SQL injection with UNION SELECT against pg_user. Show parameterized query fixes and how to gate the attack lab behind local-only access.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openapi-debug-password-exposure",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OpenAPI debug endpoint exposes cleartext passwords",
+    description:
+      "An OpenAPI-documented GET debug route (e.g. /users/v1/_debug) returns user records with cleartext password fields without authentication.",
+    impactOneline:
+      "Debug API routes leak password hashes or cleartext credentials to unauthenticated callers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openApiDebugPasswordExposure" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug endpoints from production; never return password fields in API responses.",
+      steps: [
+        "Delete or disable /_debug and /debug/* routes outside development.",
+        "Strip password fields from all API serializers and OpenAPI schemas.",
+        "Require admin authentication for any diagnostic user-listing endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our API exposes GET /users/v1/_debug returning cleartext passwords without auth. Remove the debug route, strip password fields from responses, and show the hardened user serializer.",
+    version: 1,
+    enabled: true
   }
 ];

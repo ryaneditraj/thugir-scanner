@@ -671,6 +671,24 @@
       "slug": "graphql-introspection-enabled",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractSpectaqlGraphqlEndpoints parses localhost:5013/graphql from SpectaQL docs and probes remapped host:port; graphqlIntrospection candidate expansion; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "client-side-chimera-vuln-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Jekyll docs 456+ vulnerable endpoints + CHM-ID registry + vuln-api honeypot; extractJekyllSecurityDocLinks seeds /vulnerability-inventory; chimera.atlascrew.dev findings 4→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Nextra /cybersecurity/a03/sqlInjection CWE-89 UNION SELECT pg_user walkthrough; extractNextraCybersecurityLinks crawl; hack-health-tutorial findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "openapi-debug-password-exposure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /users/v1/_debug returns {\"password\":\"pass1\"...} per OpenAPI spec; urban-vampi-production findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1228,6 +1246,21 @@
       "source": "discovery:lab.blackhatgraphql.com:9001",
       "slug": "spectaql-graphql-endpoint-extraction",
       "shipped_at": "2026-07-09T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "client-side-chimera-vuln-lab-evidence",
+      "shipped_at": "2026-07-09T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-lab-evidence",
+      "shipped_at": "2026-07-09T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "openapi-debug-password-exposure",
+      "shipped_at": "2026-07-09T14:15:00.000Z"
     }
   ]
 }
