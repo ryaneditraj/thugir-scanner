@@ -15,30 +15,6 @@ interface SecretDef {
 
 const SECRET_DEFS: SecretDef[] = [
   {
-    slug: "secret-openai",
-    name: "OpenAI API key",
-    regex: "sk-(?:proj-)?[A-Za-z0-9_-]{20,}",
-    severity: "high",
-    serverOnly: true,
-    impact: "Your OpenAI key can be used to run up usage charges on your account."
-  },
-  {
-    slug: "secret-anthropic",
-    name: "Anthropic API key",
-    regex: "sk-ant-[A-Za-z0-9_-]{20,}",
-    severity: "high",
-    serverOnly: true,
-    impact: "Your Anthropic key can be abused to bill your account."
-  },
-  {
-    slug: "secret-stripe-live",
-    name: "Stripe live secret key",
-    regex: "sk_live_[A-Za-z0-9]{20,}",
-    severity: "critical",
-    serverOnly: true,
-    impact: "A Stripe live secret key allows charges, refunds and reading customer data."
-  },
-  {
     slug: "secret-stripe-restricted",
     name: "Stripe restricted key",
     regex: "rk_live_[A-Za-z0-9]{20,}",
@@ -120,14 +96,6 @@ const SECRET_DEFS: SecretDef[] = [
     impact: "Razorpay credentials can expose payment operations."
   },
   {
-    slug: "secret-twilio",
-    name: "Twilio account SID + auth",
-    regex: "AC[a-f0-9]{32}",
-    severity: "medium",
-    serverOnly: true,
-    impact: "Twilio credentials can be abused to send SMS/calls on your bill."
-  },
-  {
     slug: "secret-private-key",
     name: "Private key block",
     regex: "-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----",
@@ -190,34 +158,154 @@ const SECRET_DEFS: SecretDef[] = [
     severity: "critical",
     serverOnly: true,
     impact: "A Hasura admin secret bypasses all GraphQL/Postgres authorization rules."
+  },
+  {
+    slug: "secret-convex-deploy-key",
+    name: "Convex deploy key",
+    regex: "(?:dev|prod):[a-z0-9-]+\\|[A-Za-z0-9+/=_-]{20,}|(?:preview|project):[a-z0-9-]+:[a-z0-9-]+\\|[A-Za-z0-9+/=_-]{20,}",
+    severity: "critical",
+    serverOnly: true,
+    impact: "A Convex deploy key grants full read/write/deploy control over your backend."
   }
 ];
 
-export const secretPatterns: Pattern[] = SECRET_DEFS.map((s) => ({
-  slug: s.slug,
+export const openaiLiveKeyPattern: Pattern = {
+  slug: "secret-openai",
   platform: "generic",
   category: "Exposed secret",
-  severityDefault: s.severity,
-  title: `${s.name} exposed in client bundle`,
-  description: `A ${s.name} was found in JavaScript or HTML served to the browser. AI builders often place .env access on the client side by default, shipping server secrets to every visitor.`,
-  impactOneline: s.impact,
-  detectorKind: "secret_regex",
-  detectorConfig: {
-    regex: s.regex,
-    validate: s.validate,
-    secretName: s.name,
-    serverOnly: s.serverOnly
-  },
+  severityDefault: "high",
+  title: "OpenAI API key exposed in client bundle",
+  description:
+    "An OpenAI API key (sk-* / sk-proj-*) was found in JavaScript or HTML served to the browser, and a harmless read against OpenAI's Models API confirmed the key is active. AI scaffolds routinely ship OPENAI_API_KEY via NEXT_PUBLIC_* or VITE_* env vars.",
+  impactOneline: "Your OpenAI key can be used to run up usage charges on your account.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "openaiLiveKeyProbe" },
   tierRequired: "free",
   remediation: {
-    summary: `Rotate the ${s.name} now and move it server-side.`,
+    summary: "Rotate the OpenAI API key now and move it server-side.",
     steps: [
-      "Treat the key as compromised and rotate it with the provider immediately.",
-      "Remove it from all client code and from any client-exposed env var (e.g. NEXT_PUBLIC_*, VITE_*).",
-      "Access the key only from server-side code (route handlers / serverless functions)."
+      "Revoke and create a new API key in the OpenAI dashboard immediately.",
+      "Remove OPENAI_API_KEY from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Call OpenAI only from server-side code (route handlers / serverless functions)."
     ]
   },
-  fixPrompt: `A ${s.name} is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.`,
+  fixPrompt:
+    "An OpenAI API key is exposed in my client bundle and validated as active. Remove it from all client-side code and client-exposed environment variables, move every OpenAI call into server-side code, and tell me exactly which files referenced it so I can rotate the key.",
   version: 1,
   enabled: true
-}));
+};
+
+export const anthropicLiveKeyPattern: Pattern = {
+  slug: "secret-anthropic",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "high",
+  title: "Anthropic API key exposed in client bundle",
+  description:
+    "An Anthropic API key (sk-ant-*) was found in JavaScript or HTML served to the browser, and a harmless read against Anthropic's Models API confirmed the key is active. AI scaffolds routinely ship ANTHROPIC_API_KEY via NEXT_PUBLIC_* or VITE_* env vars.",
+  impactOneline: "Your Anthropic key can be abused to bill your account.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "anthropicLiveKeyProbe" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Anthropic API key now and move it server-side.",
+    steps: [
+      "Revoke and create a new API key in the Anthropic console immediately.",
+      "Remove ANTHROPIC_API_KEY from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Call Anthropic only from server-side code (route handlers / serverless functions)."
+    ]
+  },
+  fixPrompt:
+    "An Anthropic API key is exposed in my client bundle and validated as active. Remove it from all client-side code and client-exposed environment variables, move every Anthropic call into server-side code, and tell me exactly which files referenced it so I can rotate the key.",
+  version: 1,
+  enabled: true
+};
+
+export const stripeLiveKeyPattern: Pattern = {
+  slug: "secret-stripe-live",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "critical",
+  title: "Live Stripe secret key exposed in client bundle",
+  description:
+    "A Stripe live secret key (sk_live_*) was found in JavaScript or HTML served to the browser, and a harmless read against Stripe's Balance API confirmed the key is active. AI payment scaffolds routinely ship Stripe server keys via NEXT_PUBLIC_* or VITE_* env vars.",
+  impactOneline: "A live Stripe secret key allows charges, refunds and reading customer data.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "stripeLiveKeyProbe" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Stripe secret key now and move it server-side.",
+    steps: [
+      "Roll the secret key in the Stripe dashboard immediately.",
+      "Remove sk_live_* from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+      "Use Stripe publishable keys (pk_live_*) in the browser and keep secret keys in server routes only."
+    ]
+  },
+  fixPrompt:
+    "A live Stripe secret key (sk_live_*) is exposed in my client bundle and validated as active. Remove it from all client-side code and client-exposed environment variables, move every Stripe server call into server-side code, and tell me exactly which files referenced it so I can rotate the key.",
+  version: 1,
+  enabled: true
+};
+
+// Twilio uses rule_ref (not regex) — Account SIDs alone are too noisy; we require auth token pairing.
+export const twilioCredentialPattern: Pattern = {
+  slug: "secret-twilio",
+  platform: "generic",
+  category: "Exposed secret",
+  severityDefault: "high",
+  title: "Twilio account SID + auth token exposed in client bundle",
+  description:
+    "A Twilio account SID paired with its auth token was found in JavaScript or HTML served to the browser. AI SMS/OTP scaffolds often import the full Twilio client with both credentials on the client side.",
+  impactOneline: "Twilio credentials can be abused to send SMS/calls on your bill.",
+  detectorKind: "rule_ref",
+  detectorConfig: { rule: "twilioCredentialsInClient" },
+  tierRequired: "free",
+  remediation: {
+    summary: "Rotate the Twilio auth token now and move credentials server-side.",
+    steps: [
+      "Rotate the Twilio auth token in the Twilio console immediately.",
+      "Remove accountSid and authToken from all client code and client-exposed env vars.",
+      "Proxy SMS/OTP sends through a server route that holds the credentials."
+    ]
+  },
+  fixPrompt:
+    "My Twilio account SID and auth token are exposed in the client bundle. Move all Twilio API calls to server-side code, remove TWILIO_AUTH_TOKEN from any NEXT_PUBLIC_/VITE_ env vars, and show me exactly which files referenced the credentials so I can rotate the auth token.",
+  version: 2,
+  enabled: true
+};
+
+export const secretPatterns: Pattern[] = [
+  ...SECRET_DEFS.map(
+    (s): Pattern => ({
+      slug: s.slug,
+      platform: "generic",
+      category: "Exposed secret",
+      severityDefault: s.severity,
+      title: `${s.name} exposed in client bundle`,
+      description: `A ${s.name} was found in JavaScript or HTML served to the browser. AI builders often place .env access on the client side by default, shipping server secrets to every visitor.`,
+      impactOneline: s.impact,
+      detectorKind: "secret_regex",
+      detectorConfig: {
+        regex: s.regex,
+        validate: s.validate,
+        secretName: s.name,
+        serverOnly: s.serverOnly
+      },
+      tierRequired: "free",
+      remediation: {
+        summary: `Rotate the ${s.name} now and move it server-side.`,
+        steps: [
+          "Treat the key as compromised and rotate it with the provider immediately.",
+          "Remove it from all client code and from any client-exposed env var (e.g. NEXT_PUBLIC_*, VITE_*).",
+          "Access the key only from server-side code (route handlers / serverless functions)."
+        ]
+      },
+      fixPrompt: `A ${s.name} is exposed in my client bundle. Remove it from all client-side code and client-exposed environment variables, move every use of it into server-side code, and tell me exactly which files referenced it so I can rotate and confirm.`,
+      version: 1,
+      enabled: true
+    })
+  ),
+  openaiLiveKeyPattern,
+  anthropicLiveKeyPattern,
+  stripeLiveKeyPattern
+];
