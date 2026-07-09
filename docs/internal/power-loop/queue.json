@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T05:05:00.000Z",
+  "updated_at": "2026-07-09T06:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -119,6 +119,31 @@
     {
       "url": "https://dxx33.github.io/WebVulnsGuide/",
       "source": "dxx33/WebVulnsGuide — interactive web vulnerability guide (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://akbarbashakm.github.io/frontend-security-examples/",
+      "source": "akbarbashakm/frontend-security-examples — 8-module XSS/CSRF/CSP/auth lab (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://gauravkhurana.com/SQLInjection/",
+      "source": "gauravkhurana SQLInjection — live WASM SQLite login-bypass demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.weblock.ru/",
+      "source": "Vulnerable Bank — intentionally insecure banking + AI prompt-injection demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dev-lucasoliveira.github.io/frontend-xss-demo/",
+      "source": "dev-LucasOliveira/frontend-xss-demo — insecure vs secure XSS routes (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://swarnadip-kar.github.io/xss-victim/",
+      "source": "Swarnadip-Kar/xss-victim — XSS victim bank for cross-origin cookie theft lab (GitHub)",
       "auth": "oss_deploy"
     }
   ]
