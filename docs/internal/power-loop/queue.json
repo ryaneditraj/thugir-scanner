@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T09:05:00.000Z",
+  "updated_at": "2026-07-09T10:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -220,6 +220,31 @@
       "url": "https://luisillobret2.github.io/WebGoat/",
       "source": "WebGoat static mirror — deliberately insecure OWASP training app landing (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/",
+      "source": "Escape Duck Store — intentionally vulnerable API/web app for scanner benchmarking (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvaib.com/",
+      "source": "Damn Vulnerable AI Bank — prompt injection / LLM security training demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/",
+      "source": "Pentest-Ground hosted DVWA — SQLi/XSS/LFI public lab (pentest-tools.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/",
+      "source": "Pentest-Ground REST API lab — API security training instance (pentest-tools.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://capture-the-flag-official-website.vercel.app/",
+      "source": "CTF educational platform — public vuln challenge hub (web search)",
+      "auth": "oss_deploy"
     }
   ]
 }
