@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T11:06:58.340Z",
-  "total": 101,
-  "uniqueSlugs": 101,
+  "generatedAt": "2026-07-09T13:20:35.092Z",
+  "total": 103,
+  "uniqueSlugs": 103,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 83,
+    "generic": 85,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 37,
+    "deep": 39,
     "continuous": 0
   },
   "byCategory": {
@@ -24,10 +24,10 @@
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
-    "Security misconfiguration": 6,
+    "Security misconfiguration": 7,
     "Information disclosure": 10,
     "Broken authentication": 7,
-    "Injection": 10,
+    "Injection": 11,
     "Cross-site scripting": 6,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 1,
@@ -42,6 +42,7 @@
     "client-side-ctf-platform-evidence",
     "client-side-devsecops-lab-evidence",
     "client-side-file-upload-evidence",
+    "client-side-graphql-lab-evidence",
     "client-side-idor-evidence",
     "client-side-jwt-none-evidence",
     "client-side-nosql-evidence",
@@ -50,6 +51,7 @@
     "client-side-path-traversal-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
+    "client-side-react-rsc-cve-evidence",
     "client-side-security-game-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sql-evidence",
