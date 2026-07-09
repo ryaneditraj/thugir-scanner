@@ -275,7 +275,12 @@
       "url": "http://lab.blackhatgraphql.com:9001/",
       "source": "Damn Vulnerable GraphQL Application — BlackHat public lab endpoint (dolevf/DVGA)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf-demo.onrender.com/",
+      "source": "OWASP Agentic AI CTF FinBot — public AI/agentic security vulnerability demo (Render)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T12:05:00.000Z"
+  "updated_at": "2026-07-09T13:05:00.000Z"
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T12:11:36.176Z",
+  "updated_at": "2026-07-09T13:04:30.557Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 323,
-  "total_findings": 1249,
+  "total_sites_scanned": 326,
+  "total_findings": 1258,
   "critical_findings": 21,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 55,
-  "discovery_findings": 682,
+  "discovery_urls_added": 56,
+  "discovery_findings": 684,
   "improvements_shipped": 108,
-  "last_run": "2026-07-09T12:11:36.176Z",
+  "last_run": "2026-07-09T13:04:30.557Z",
   "last_run_summary": {
-    "hour_utc": "12:00",
+    "hour_utc": "13:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -51,22 +51,20 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 1,
-      "urls_scanned": 5,
-      "findings": 17,
-      "focus": "owasp-juice.shop official demo + XXE/CVE labs + cookiejar CSRF demo"
+      "urls_scanned": 2,
+      "findings": 2,
+      "focus": "DVGA BlackHat GraphQL lab + OWASP Agentic AI FinBot CTF demo"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "xxe-lab.vercel.app: secret-aws-akid + client-side-xxe-evidence (5 findings) — sensitive_data + sqli oracle signals",
-      "web-pentest-playground.onrender.com: unauthenticated-admin-endpoint + open-redirect-query-param (3 findings)",
-      "cyberdesserts.github.io/cookiejar-lab/demo: client-side-session-hijack-evidence (3 findings)",
-      "owasp-juice.shop: client-side-api-security-lab-evidence (3 findings, fewer than staging oracle)"
+      "lab.blackhatgraphql.com:9001: first scan — missing-security-headers only (1 finding); GraphQL introspection/injection not exercised",
+      "owasp-finbot-ctf-demo.onrender.com: missing-security-headers only (1 finding); AI prompt-injection/agentic vulns not probed"
     ],
     "learning_gaps": [
-      "owasp-juice.shop official demo: only 3 findings vs staging 7 — sqli/idor/auth_bypass probes weaker on production demo instance",
-      "xxe-lab.vercel.app: AWS key in bundle needs server-side XXE oracle confirmation beyond client-side evidence",
-      "lab.blackhatgraphql.com:9001: queued (DVGA BlackHat lab) — not scanned this run, priority next hour",
-      "nextjs-cve-hackerone.vercel.app: RSC CVE demo detected tech-stack only — server-component exploit chain not exercised"
+      "lab.blackhatgraphql.com:9001: DVGA BlackHat lab scanned but only misconfig — need GraphQL introspection, batching, injection, IDOR probes",
+      "owasp-finbot-ctf-demo.onrender.com: agentic AI CTF demo needs prompt-injection and tool-abuse oracles beyond header checks",
+      "nextjs-cve-hackerone.vercel.app: RSC CVE demo detected tech-stack only — server-component exploit chain not exercised",
+      "owasp-juice.shop official demo: only 3 findings vs staging 7 — sqli/idor/auth_bypass probes weaker on production demo instance"
     ]
   },
   "discovery_highlights": {
@@ -222,6 +220,8 @@
     "vuln-portal.vercel.app": 2,
     "pentest-ground.com:4280": 5,
     "pentest-ground.com:9000": 4,
-    "cyberdesserts.github.io": 3
+    "cyberdesserts.github.io": 3,
+    "lab.blackhatgraphql.com:9001": 1,
+    "owasp-finbot-ctf-demo.onrender.com": 1
   }
 }
