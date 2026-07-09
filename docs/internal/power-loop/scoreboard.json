@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T16:09:10.099Z",
+  "updated_at": "2026-07-09T17:07:55.715Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 347,
-  "total_findings": 1362,
+  "total_sites_scanned": 351,
+  "total_findings": 1380,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 71,
-  "discovery_findings": 753,
-  "improvements_shipped": 116,
-  "last_run": "2026-07-09T16:09:10.099Z",
+  "discovery_urls_added": 76,
+  "discovery_findings": 764,
+  "improvements_shipped": 119,
+  "last_run": "2026-07-09T17:07:55.715Z",
   "last_run_summary": {
-    "hour_utc": "16:00",
+    "hour_utc": "17:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, 223 probes)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,18 +50,26 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Hack Yourself First cleartext password API + Troy Hunt lab markers; Angular testsparker query-string credentials",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 3,
+      "findings": 11,
+      "dns_failures": [
+        "https://demo.testfire.net (use http://)",
+        "https://zero.webappsecurity.com (use http://)"
+      ],
+      "focus": "516 Hackers modular playground; HackAdvisor real-world CTF labs; SixHack Academy CTF platform"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "hack-yourself-first.azurewebsites.net: GET /api/admin/users leaks Password fields (5→7 findings)",
-      "angular.testsparker.com: smartDFS.php?username=admin&password=123456 in bundle (4→5 findings)"
+      "labs.hackadvisor.io: secret-resend + reflected XSS + dangerous-html-sinks (7 findings)",
+      "516-hackers.github.io: weak CSP on modular SQLi/XSS lab landing (2 findings)",
+      "sixhackacademy.com: marketing site only — CTF lab instances behind signup (2 findings)"
     ],
     "learning_gaps": [
-      "acuart.phpnet.us: DNS resolution failure — site offline",
-      "hiddeninvestigations.net: react2shell lab not linked from marketing homepage",
-      "hacksec.in: per-lab challenge routes not crawled (landing page only)"
+      "516-hackers-vuln-playground: per-module SQLi/XSS/auth routes not crawled from GitHub Pages shell",
+      "labs.hackadvisor.io: isolated challenge instances require lab start — homepage-only scan",
+      "sixhackacademy.com: platform.sixhackacademy.com CTF environments behind auth",
+      "demo.testfire.net / zero.webappsecurity.com: https DNS failure — queue corrected to http://"
     ]
   },
   "discovery_highlights": {
@@ -227,12 +235,14 @@
     "www.hackthissite.org": 4,
     "domgo.at": 3,
     "php.testsparker.com": 5,
-    "agentpwn.com": 5,
     "hacksec.in": 5,
     "webgoat.org": 5,
     "cyberdefenders.org": 8,
     "appsecmaster.net": 7,
     "hack-yourself-first.azurewebsites.net": 7,
-    "angular.testsparker.com": 5
+    "angular.testsparker.com": 5,
+    "516-hackers.github.io": 2,
+    "labs.hackadvisor.io": 7,
+    "sixhackacademy.com": 2
   }
 }

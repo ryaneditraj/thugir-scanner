@@ -362,13 +362,13 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://demo.testfire.net/",
-      "source": "Altoro Mutual TestFire — IBM/Watchfire classic banking vuln benchmark",
+      "url": "http://demo.testfire.net/",
+      "source": "Altoro Mutual TestFire — IBM/Watchfire classic banking vuln benchmark (http only)",
       "auth": "public_demo"
     },
     {
-      "url": "https://zero.webappsecurity.com/",
-      "source": "Watchfire zero.webappsecurity — public Acunetix-style training demo site",
+      "url": "http://zero.webappsecurity.com/",
+      "source": "Watchfire zero.webappsecurity — public Acunetix-style training demo site (http only)",
       "auth": "public_demo"
     },
     {
