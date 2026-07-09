@@ -278,6 +278,7 @@ const DEEP_RULES = new Set<string>([
   "reflectedXss",
   "clientSideIdorEvidence",
   "clientSideSqlEvidence",
+  "clientSideCsrfEvidence",
   "clientSideNosqlEvidence",
   "clientSideXxeEvidence",
   "clientSideApiSecurityLabEvidence",
@@ -399,6 +400,9 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "chatbot",
     "llm",
     "blog",
+    "transfer",
+    "comments",
+    "messages",
     "sqli",
     "ssti",
     "nosqli",
@@ -453,6 +457,29 @@ function jsNavTargets(html: string, pageUrl: string, limit: number): string[] {
   return [...out].slice(0, limit);
 }
 
+/** React/Vite SPA routes declared in JS bundles (path:`/transfer`, to:`/comments`). */
+function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): string[] {
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const re = /(?:path|to)\s*:\s*[`'"](\/[a-z0-9/_-]+)[`'"]/gi;
+  for (const body of jsBodies) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(body)) && out.size < limit * 3) {
+      const path = m[1];
+      if (path === "/" || path.length < 2) continue;
+      if (/\.(png|jpe?g|svg|gif|webp|ico|css|js|map|woff2?|ttf|pdf|zip)$/i.test(path)) continue;
+      try {
+        const u = new URL(path, pageOrigin);
+        if (u.origin !== pageOrigin) continue;
+        out.add(u.toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  return [...out].slice(0, limit);
+}
+
 // Synchronous, in-request Deep Scan. Runs the full code-defined library (free + deep rules) over
 // the homepage AND a shallow same-origin crawl. No verified-domain requirement. Heavier active
 // probing (forged webhooks, multi-step IDOR) still belongs to the Python worker in production.
@@ -480,6 +507,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     concurrency: 4
   });
   const scriptNavTargets = earlyScripts.flatMap((s) => jsNavTargets(s.body, s.finalUrl, DEEP_MAX_PAGES));
+  const spaRoutes = spaRouteTargets(
+    [home.body, ...earlyScripts.map((s) => s.body)],
+    home.finalUrl,
+    DEEP_MAX_PAGES
+  );
 
   const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
@@ -488,6 +520,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ...new Set([
       ...labHubSeeds,
       ...sitemapSeeds,
+      ...spaRoutes,
       ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 8),
       ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1),
       ...scriptNavTargets
