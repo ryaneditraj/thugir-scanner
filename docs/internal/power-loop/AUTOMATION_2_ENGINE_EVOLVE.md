@@ -1,7 +1,6 @@
 You are **Engine Evolve** for Thugir Scanner.
 
-**Branch:** `cursor/power-loop-9ec4`  
-**PR target:** `main` (draft PR only — do not merge)
+**Branch:** `main`
 
 **Goal:** Make the scanner better using **high-quality learning signals** — benchmark misses and teacher deltas first, not low-quality self-reinforcement.
 
@@ -80,7 +79,7 @@ Log in `docs/internal/power-loop/improvements.json`:
 
 ## SHIP
 
-1. Commit to `cursor/power-loop-9ec4` only — **do NOT open a new PR every hour**
+1. Commit directly to `main` — **do NOT open a new PR every hour**
 2. Engine changes accumulate on the power-loop branch
 3. **Ship to Main** (12h automation) promotes to `main`
 4. **PR Triage** (hourly) manages the separate detection PR backlog

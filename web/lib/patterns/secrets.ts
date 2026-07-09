@@ -152,6 +152,38 @@ const SECRET_DEFS: SecretDef[] = [
     impact: "Paddle credentials can expose billing and customer data."
   },
   {
+    slug: "secret-mapbox-sk",
+    name: "Mapbox secret access token",
+    regex: "sk\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}",
+    severity: "high",
+    serverOnly: true,
+    impact: "A Mapbox secret token can create charges, read private datasets, and modify your maps account."
+  },
+  {
+    slug: "secret-sentry-auth",
+    name: "Sentry user auth token",
+    regex: "sntrys_[A-Za-z0-9_=-]{20,}",
+    severity: "high",
+    serverOnly: true,
+    impact: "A Sentry auth token can read error data, change project settings, and access org secrets."
+  },
+  {
+    slug: "secret-posthog-personal",
+    name: "PostHog personal API key",
+    regex: "phx_[A-Za-z0-9]{32,}",
+    severity: "high",
+    serverOnly: true,
+    impact: "A PostHog personal API key can export analytics data and change project configuration."
+  },
+  {
+    slug: "secret-shopify-admin",
+    name: "Shopify Admin API access token",
+    regex: "shpat_[a-fA-F0-9]{32}",
+    severity: "critical",
+    serverOnly: true,
+    impact: "A Shopify Admin API token can read orders, customers, and modify your store."
+  },
+  {
     slug: "secret-hasura-admin",
     name: "Hasura admin secret",
     regex: 'x-hasura-admin-secret["\']?\\s*:\\s*["\']([A-Za-z0-9]{20,})["\']',
