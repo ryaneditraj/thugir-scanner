@@ -272,6 +272,8 @@ const DEEP_RULES = new Set<string>([
   "idorProbe",
   "unauthenticatedApiRoutes",
   "sqlErrorDisclosure",
+  "sstiTemplateInjection",
+  "clientSideXorAuthEvidence",
   "idorObjectAccess",
   "reflectedXss",
   "clientSideIdorEvidence",
@@ -322,6 +324,66 @@ function internalLinks(html: string, pageUrl: string, limit: number): string[] {
     }
   }
   return [...out].slice(0, limit);
+}
+
+/** Security lab hub paths (HackXpert, VWAD-style nav) — scan full HTML, not capped internalLinks. */
+const LAB_HUB_PATH_RE =
+  /href\s*=\s*["'](\/(?:SQLI|SSTI|XXE|CSRF|SSRF|IDOR|JWT|LFI|NoSQLi|CSTI|RXSS|SXSS|XSS_Playground|OPENREDIRECT|CommandInjection|loginBypass|PortScanning|HOST_HEADER|CORS|CSP|HPP|RateLimitBypass|FILE_UPLOAD|LFIRFICOMBINED|RFI|BUSINESS_LOGIC|PrivEsc|ObjectPropertyAssignment|AdminBypass|XPATH_INJECTION)[^"'#?]*)["']/gi;
+
+function extractLabHubLinks(html: string, pageUrl: string): string[] {
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = LAB_HUB_PATH_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Child lab pages linked from category index pages (e.g. /SQLI/00.php, /SSTI/lab1.php). */
+const LAB_CHILD_PATH_RE = /href\s*=\s*["']([^"']*(?:\/\d{2}\.php|lab\d+\.php))["']/gi;
+
+function extractLabChildLinks(html: string, pageUrl: string): string[] {
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = LAB_CHILD_PATH_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+async function extractSitemapCrawlSeeds(origin: string, probe: ProbeCache): Promise<string[]> {
+  const doc = await probe.get(`${origin}/sitemap.xml`, { maxBytes: 16_384 });
+  if (doc.status !== 200 || !doc.body.trim()) return [];
+  const urls: string[] = [];
+  const re = /<loc>([^<]+)<\/loc>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(doc.body)) && urls.length < 24) {
+    try {
+      const loc = m[1].trim();
+      const u = loc.startsWith("http") ? new URL(loc) : new URL(loc, origin);
+      if (u.origin !== origin) continue;
+      urls.push(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return urls;
 }
 
 /** Prefer security lab HTML pages (xss/sqli/csrf/eval/prototype) over generic nav links. */
@@ -414,16 +476,32 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   });
   const scriptNavTargets = earlyScripts.flatMap((s) => jsNavTargets(s.body, s.finalUrl, DEEP_MAX_PAGES));
 
+  const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
+  const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
+
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
-      ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 4),
+      ...labHubSeeds,
+      ...sitemapSeeds,
+      ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 8),
       ...jsNavTargets(home.body, home.finalUrl, DEEP_MAX_PAGES - 1),
       ...scriptNavTargets
     ])
   ]).slice(0, DEEP_MAX_PAGES - 1);
   const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
   const extraPages = await fetchPagesBatched(pageUrls.slice(1), { probe, maxBytes: 600_000, concurrency: 3 });
-  const pages: FetchedDoc[] = [home, ...extraPages];
+  let pages: FetchedDoc[] = [home, ...extraPages];
+
+  const childSeeds = prioritizeSecurityLabLinks(
+  extraPages.flatMap((p) => extractLabChildLinks(p.body, p.finalUrl))
+  ).slice(0, 2);
+  if (childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
+    const childPages = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
+    pages = [...pages.slice(0, DEEP_MAX_PAGES - childPages.length), ...childPages];
+  } else if (childSeeds.length > 0) {
+    const childPages = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
+    pages = [...pages, ...childPages].slice(0, DEEP_MAX_PAGES);
+  }
 
   const scriptCap = opts.maxScripts ?? 24;
   const scriptUrls = new Set<string>();
