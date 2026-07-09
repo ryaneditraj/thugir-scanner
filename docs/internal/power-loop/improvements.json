@@ -575,6 +575,24 @@
       "slug": "client-side-prompt-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: landing chat widget Try asking me about our services or testing some prompt injection attacks; demo.weblock.ru findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-educational-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractDocusaurusLabLinks seeds /labs/injection/sql-injection; patient_lookup.php + UNION SELECT in prism tutorial; mehdiaitsaid.github.io/owasp-top-10-labs findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-jwt-none-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: checkJWT() accepts header.alg none + Role escalated to admin using alg:none; juicesec.mrdinesh.workers.dev findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-ssrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: renderSSRF link-preview lab The server fetches it for you + Cloud metadata endpoint reached; juicesec findings 4→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1047,6 +1065,26 @@
       "source": "discovery:demo.weblock.ru",
       "slug": "landing-chat-prompt-injection-demo",
       "shipped_at": "2026-07-09T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "docusaurus-owasp-lab-crawl",
+      "shipped_at": "2026-07-09T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-educational-lab-evidence",
+      "shipped_at": "2026-07-09T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-jwt-none-evidence",
+      "shipped_at": "2026-07-09T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-ssrf-link-preview-lab",
+      "shipped_at": "2026-07-09T08:10:00.000Z"
     }
   ]
 }
