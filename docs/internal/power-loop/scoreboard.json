@@ -1,82 +1,83 @@
 {
-  "updated_at": "2026-07-09T19:10:00.000Z",
+  "updated_at": "2026-07-09T20:12:07.704Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
-      "categories_hit": 6,
-      "gap": [],
-      "hit": [
+      "categories_hit": 1,
+      "gap": [
         "xss",
         "sqli",
         "idor",
         "auth_bypass",
-        "sensitive_data",
+        "sensitive_data"
+      ],
+      "hit": [
         "misconfig"
       ]
     }
   },
-  "total_sites_scanned": 358,
-  "total_findings": 1420,
+  "total_sites_scanned": 366,
+  "total_findings": 1446,
   "critical_findings": 23,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 86,
-  "discovery_findings": 789,
+  "discovery_urls_added": 91,
+  "discovery_findings": 814,
   "improvements_shipped": 129,
-  "last_run": "2026-07-09T19:10:00.000Z",
+  "last_run": "2026-07-09T20:12:07.704Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 8,
-      "oracle_recall": "6/6",
-      "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings on official Heroku oracle)",
+      "oracle_findings": 1,
+      "oracle_recall": "1/6",
+      "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+      "note": "REGRESSION — recall dropped from 6/6 (8 findings at 19:05) to 1/6 (misconfig only). Site returns 200 and /rest/products/search works; probes ran (235) but SQLi/XSS/IDOR/auth checks did not fire — scan flakiness, not oracle outage",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "categories_hit": 1,
+          "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+          "hit": ["misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 4,
-      "findings": 13,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — Acunetix HTML5 benchmark offline from cloud)"
+      "urls_scanned": 7,
+      "findings": 25,
+      "skipped_48h": [
+        "https://wrongsecrets.herokuapp.com/",
+        "https://bwapp.hakhub.net/",
+        "https://brokencrystals.com/",
+        "https://ginandjuice.shop/"
       ],
-      "focus": "Agentic AI CTF + WrongSecrets challenge crawl + Acunetix ASP.NET practice markers",
-      "improvements_shipped_this_run": 3
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "queued_next_run": [
+        "https://ctflearn.com/",
+        "https://hacking-lab.com/events/"
+      ],
+      "focus": "OWASP VWAD live demos (secureby.design, cyberscavengerhunt) + agentic AI labs (maestro, reef-mcp)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "owasp-finbot-ctf.org: agentic AI CTF markers (3→4 findings)",
-      "wrongsecrets.herokuapp.com: challenge crawl + secrets-management CTF evidence (4→5 findings)",
-      "testaspnet.vulnweb.com: Acunetix practice site banner detection (2→3 findings)",
-      "reef-mcp-registry.vercel.app: secret-openai + secret-resend + secret-twilio + XSS sinks (6 findings)",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url-in-bundle critical + missing headers (2)"
+      "juice-shop.herokuapp.com: benchmark recall REGRESSION 6/6→1/6 — only missing-security-headers (1 finding); prior run 19:05 had 8 findings",
+      "secureby.design: secret-resend + postmessage-dom-xss-evidence + source maps (6 findings)",
+      "cyberscavengerhunt.com: source maps + robots-sensitive-paths + sitemap (5 findings)",
+      "reef-mcp-registry.vercel.app: secret-openai + secret-resend + secret-twilio + XSS (6 findings)",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url critical (2 findings)",
+      "cve-2025-55182-demo.vercel.app: dangerous-html-sinks + permissive-cors (3 findings)"
     ],
     "learning_gaps": [
-      "testhtml5.vulnweb.com: DNS dead from cloud — entire Acunetix HTML5 benchmark unreachable",
-      "www.root-me.org: Anubis bot-wall blocks scanner UA — challenge markers unreachable from cloud",
-      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended (503)",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: RAG poisoning exploit chain requires live ElizaOS instance interaction",
-      "reef-mcp-registry.vercel.app: MCP RCE block demo runs locally via docker compose — cloud scan sees marketing bundle only",
-      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
-      "testphp.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "zero.webappsecurity.com: https URL fails DNS — http:// works (4–5 findings via protocol fallback)"
+      "juice-shop.herokuapp.com: nondeterministic recall — same URL 6/6 at 19:05 then 1/6 at 20:02 with probes still running; needs retry logic or multi-pass oracle validation",
+      "testhtml5.vulnweb.com: DNS dead from cloud — remove from queue or replace with testasp/rest.vulnweb.com",
+      "pentesteracademylab.appspot.com: shallow crawl (1 page) — lab exercises behind /lab routes need deeper path discovery",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: RAG poisoning requires live ElizaOS interaction",
+      "reef-mcp-registry.vercel.app: MCP RCE demo runs locally via docker compose",
+      "cve-2025-55182-demo.vercel.app: React2Shell RCE oracle needs authenticated server action POST"
     ]
   },
   "discovery_highlights": {
@@ -252,6 +253,9 @@
     "owasp-finbot-ctf.org": 4,
     "maestro-agentic-ai-security-demo-mon.netlify.app": 2,
     "reef-mcp-registry.vercel.app": 6,
-    "platform.sixhackacademy.com": 2
+    "platform.sixhackacademy.com": 2,
+    "secureby.design": 6,
+    "cyberscavengerhunt.com": 5,
+    "pentesteracademylab.appspot.com": 1
   }
 }
