@@ -1502,7 +1502,7 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
 const POST_SQL_FORM_RE =
   /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,1200}?name\s*=\s*["'](?:username|user|email)["'][\s\S]{0,800}?name\s*=\s*["'](?:password|pass)["']/gi;
 const POST_SQL_QUERY_ECHO_RE =
-  /SELECT\s+[\w*,\s]+\s+FROM\s+\w+\s+WHERE\s+[\w.]+\s*=\s*['"][^'"]*(?:OR\s+['"]1['"]\s*=\s*['"]1|'\s*OR)/i;
+  /SELECT\s+[\w*,\s]+\s+FROM\s+\w+\s+WHERE[\s\S]{0,160}(?:OR\s+(?:['"]1['"]|&#0?39;1&#0?39;)\s*=\s*(?:['"]1['"]|&#0?39;1&#0?39;)|OR\s+&#0?39;1&#0?39;)/i;
 const POST_SQLI_USERNAME = "admin' OR '1'='1";
 
 function extractPostSqlForms(html: string, origin: string): { action: string; fields: string[] }[] {
@@ -1611,7 +1611,10 @@ const sstiTemplateInjection: Rule = async (ctx) => {
     const r = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
     if (r.status < 200 || r.status >= 500) continue;
     if (!r.body.includes(SSTI_PROBE_RESULT)) continue;
-    if (r.body.includes(SSTI_PROBE_EXPR)) continue;
+    const evaluatedInOutput =
+      /Rendered output:[\s\S]{0,240}Hello,\s*49[!\s<]/i.test(r.body) ||
+      /Hello,\s*49[!\s<]/i.test(r.body.replace(/value\s*=\s*["'][^"']*["']/gi, ""));
+    if (!evaluatedInOutput) continue;
     return {
       fired: true,
       confidence: 0.9,

@@ -455,6 +455,30 @@
       "slug": "client-side-sql-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: inline HTML SQL Injection + ' OR 1=1 -- + /auth/login-vulneravel in login.js; security-showcase findings 2→4; riglabs-cyber-lab 3→4 via CYBERLAB INPUT query marker"
+    },
+    {
+      "source": "discovery:labs.hackxpert.com",
+      "slug": "lab-hub-sitemap-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage dropdown /SQLI/ buried past internalLinks cap; sitemap+lab-hub seeds + child 00.php crawl; labs.hackxpert.com pages now include /SQLI/00.php"
+    },
+    {
+      "source": "discovery:labs.hackxpert.com",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /SQLI/00.php username=admin' OR '1'='1 echoes SELECT username, role FROM users WHERE ... OR '1'='1'; labs.hackxpert.com findings 3→4"
+    },
+    {
+      "source": "discovery:labs.hackxpert.com",
+      "slug": "ssti-template-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /SSTI/lab1.php?name=7*7 returns Hello, 49! in rendered output; labs.hackxpert.com findings 4→5"
+    },
+    {
+      "source": "discovery:authlab.digi.ninja",
+      "slug": "client-side-xor-auth-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /public/js/clientside.js xorString(concat, secretkey)==encrypted blob; authlab.digi.ninja findings 2→3"
     }
   ],
   "shipped": [
@@ -832,6 +856,26 @@
       "source": "discovery:security-showcase.vercel.app",
       "slug": "inline-sqli-lab-html-markers",
       "shipped_at": "2026-07-09T00:05:00.000Z"
+    },
+    {
+      "source": "discovery:labs.hackxpert.com",
+      "slug": "lab-hub-sitemap-crawl",
+      "shipped_at": "2026-07-09T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:labs.hackxpert.com",
+      "slug": "post-form-sql-disclosure",
+      "shipped_at": "2026-07-09T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:labs.hackxpert.com",
+      "slug": "ssti-template-injection",
+      "shipped_at": "2026-07-09T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:authlab.digi.ninja",
+      "slug": "client-side-xor-auth-evidence",
+      "shipped_at": "2026-07-09T01:10:00.000Z"
     }
   ]
 }

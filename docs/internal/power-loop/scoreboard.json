@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T01:06:32.854Z",
+  "updated_at": "2026-07-09T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 249,
-  "total_findings": 935,
+  "total_findings": 938,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 131,
-  "discovery_findings": 475,
-  "improvements_shipped": 75,
-  "last_run": "2026-07-09T01:06:32.854Z",
+  "discovery_findings": 478,
+  "improvements_shipped": 79,
+  "last_run": "2026-07-09T01:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
@@ -65,6 +65,8 @@
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings)",
+      "labs.hackxpert.com: lab-hub crawl + POST SQL + SSTI probes; findings 3→5",
+      "authlab.digi.ninja: client-side-xor-auth-evidence on clientside.js; findings 2→3",
       "juice-shop.herokuapp.com: 8 findings incl secret-resend + unauthenticated-admin (official prod benchmark)",
       "hack-this-site-eta.vercel.app: graphql-introspection + client-side-xxe-evidence + unauthenticated API (7 findings, 6 pages)",
       "hack-health-tutorial.vercel.app: dangerous-html-sinks + cors (3 findings, 6 pages)",
@@ -73,8 +75,8 @@
     "learning_gaps": [
       "securebank-blog.vercel.app: attack/secure mode banking lab not reached — blog landing only, no SQLi/XSS/CSRF demos exercised",
       "preview-zeroday-sec.vercel.app: marketing landing — cloud lab environments behind demo request",
-      "juice-shop.herokuapp.com vs staging: prod adds secret-resend (exposed Resend key) — staging oracle misses sensitive_data category nuance",
-      "hack-health-tutorial.vercel.app: A07 hardcoded-cred tutorial pages shallow — bundle XSS evidence only",
+      "vulnerable-graphql-lab.railway.app + vulnerable-graphql-demo.railway.app: Railway hosts down — headers only when probed",
+      "defendtheweb.net: platform on hiatus — goodbye landing page only",
       "openvaultbank.com + prompt-injection-playground: prior-run gaps still open — auth/API probes needed"
     ]
   },
@@ -206,9 +208,9 @@
     "tomcat.lab.pentest-forge.com": 1,
     "vulnerable-graphql-lab.railway.app": 1,
     "vulnerable-graphql-demo.railway.app": 1,
-    "authlab.digi.ninja": 2,
+    "authlab.digi.ninja": 3,
     "defendtheweb.net": 2,
-    "labs.hackxpert.com": 3,
+    "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
     "securebank-blog.vercel.app": 2,
     "hack-health-tutorial.vercel.app": 3,

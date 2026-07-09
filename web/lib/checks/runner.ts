@@ -372,12 +372,15 @@ async function extractSitemapCrawlSeeds(origin: string, probe: ProbeCache): Prom
   if (doc.status !== 200 || !doc.body.trim()) return [];
   const urls: string[] = [];
   const re = /<loc>([^<]+)<\/loc>/gi;
+  const labPath =
+    /\/(?:sqli|ssti|nosqli|xxe|csrf|ssrf|idor|jwt|lfi|rfi|csti|xss|rxss|sxss|csp|cors|openredirect|commandinjection|loginbypass|file_upload|xpath)/i;
   let m: RegExpExecArray | null;
   while ((m = re.exec(doc.body)) && urls.length < 24) {
     try {
       const loc = m[1].trim();
       const u = loc.startsWith("http") ? new URL(loc) : new URL(loc, origin);
       if (u.origin !== origin) continue;
+      if (!labPath.test(u.pathname)) continue;
       urls.push(u.toString());
     } catch {
       /* ignore */
@@ -396,6 +399,10 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "chatbot",
     "llm",
     "blog",
+    "sqli",
+    "ssti",
+    "nosqli",
+    "xxe",
     "prototype",
     "evalbypass",
     "csrf",
@@ -403,8 +410,6 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "showcase",
     "authbypass",
     "xss",
-    "sqli",
-    "ssti",
     "cors",
     "ssrf",
     "os-injection",

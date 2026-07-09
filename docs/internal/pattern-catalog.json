@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T00:05:07.935Z",
-  "total": 88,
-  "uniqueSlugs": 88,
+  "generatedAt": "2026-07-09T01:12:43.281Z",
+  "total": 90,
+  "uniqueSlugs": 90,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 70,
+    "generic": 72,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 24,
+    "deep": 26,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Security misconfiguration": 6,
     "Information disclosure": 10,
-    "Broken authentication": 4,
-    "Injection": 6,
+    "Broken authentication": 5,
+    "Injection": 7,
     "Cross-site scripting": 4,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 1,
@@ -46,6 +46,7 @@
     "client-side-session-hijack-evidence",
     "client-side-sql-evidence",
     "client-side-ssrf-evidence",
+    "client-side-xor-auth-evidence",
     "client-side-xxe-evidence",
     "cors-reflect-origin",
     "cursor-next-public-secret",
@@ -98,6 +99,7 @@
     "spring-boot-actuator-exposed",
     "sql-error-disclosure",
     "ssrf-endpoint-fetch",
+    "ssti-template-injection",
     "stack-cors-wildcard-api",
     "stack-database-url-in-bundle",
     "stack-neon-url-in-bundle",
