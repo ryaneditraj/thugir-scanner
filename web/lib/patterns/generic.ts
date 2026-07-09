@@ -1882,5 +1882,83 @@ export const genericPatterns: Pattern[] = [
       "Our site is a public CTF research team like Hidden Investigations. Show how to isolate challenge infrastructure from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-pentester-academy-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pentester Academy Lab challenge hub disclosed",
+    description:
+      "Pentester Academy Lab on Appspot links video-guided web hacking challenges covering SQL injection, XSS, and authentication bypass.",
+    impactOneline:
+      "Public Pentester Academy lab hubs expose intentionally vulnerable exercise endpoints for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterAcademyLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab VMs behind paid Pentester Academy accounts; isolate exercise infrastructure.",
+      steps: [
+        "Require authentication before serving injectable challenge instances.",
+        "Run lab containers on dedicated infrastructure with no production data.",
+        "Monitor lab egress for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host Pentester Academy-style video lab challenges on Appspot. Show how to gate labs behind auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cyber-scavenger-hunt-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Cyber Scavenger Hunt recon lab disclosed",
+    description:
+      "Cyber Scavenger Hunt is an 8-step interactive lab teaching robots.txt enumeration, DevTools recon, and query-param privilege escalation.",
+    impactOneline:
+      "Public scavenger-hunt labs document recon and auth-bypass patterns attackers apply to real applications.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCyberScavengerHuntEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scavenger hunt labs are intentional — ensure /admin and /robots.txt lessons never mirror production misconfigs.",
+      steps: [
+        "Do not leave debug console messages in production bundles.",
+        "Block unauthenticated access to real admin routes regardless of query params.",
+        "Review robots.txt for sensitive path disclosure."
+      ]
+    },
+    fixPrompt:
+      "Our site is a Cyber Scavenger Hunt-style recon lab. Show how to remove debug console leaks and harden admin routes against query-param bypass.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-skf-lab-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Security Knowledge Framework (SKF) free labs disclosed",
+    description:
+      "SKF (secureby.design) publishes free Auth Bypass, SQLi, and XSS labs via lab-player webcomponents with OWASP ASVS write-ups.",
+    impactOneline:
+      "Public SKF lab catalogs expose injectable auth-bypass and injection exercises reachable without registration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSkfLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate SKF-style labs behind accounts; isolate lab-player instances from production networks.",
+      steps: [
+        "Require login before launching injectable lab-player environments.",
+        "Run labs on dedicated subdomains with no production database access.",
+        "Publish ASVS write-ups without exposing live lab infrastructure routes."
+      ]
+    },
+    fixPrompt:
+      "We host SKF-style free Auth Bypass labs on secureby.design. Show how to gate lab-player instances behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
   }
 ];
