@@ -305,7 +305,32 @@
       "url": "https://domgo.at/cxss/intro",
       "source": "DOM Clobbering XSS (CXSS) training lab — Mario Heiderich domgo.at (Awesome-Vulnerable-Labs)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf-defense-platform.onrender.com/",
+      "source": "Shashwath800/ssrf — SSRF Defense & Simulation Platform with vulnerable attack-demo mode (Render OSS)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://api.graphqlbook.org/",
+      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL API (OWASP API Top 10)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/",
+      "source": "PentesterLab — Web for Pentester hosted exercises and training platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.root-me.org/",
+      "source": "Root-Me — public web/server security CTF challenge platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/",
+      "source": "Hack This Site — educational vulnerability challenge platform (www origin)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T14:05:00.000Z"
+  "updated_at": "2026-07-09T15:05:00.000Z"
 }
