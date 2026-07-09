@@ -83,5 +83,21 @@ export const HARDCODED_CRED_RES = [
   {
     label: "inline email/password ternary login check",
     re: /["'][\w.+-]+@[^"']+["']\s*===\s*\w+\s*&&\s*["'][^"']+["']\s*===\s*\w+/
+  },
+  {
+    label: "admin password in API query string",
+    re: /(?:\?|&)username=admin&password=(?:123456|password|admin|passw0rd)/i
   }
 ];
+
+/** Disallow paths under /api/ advertised in robots.txt (often probed for data leaks). */
+export function parseRobotsDisallowApiPaths(robotsBody: string): string[] {
+  const paths = new Set<string>();
+  for (const line of robotsBody.split(/\r?\n/)) {
+    const m = line.match(/^\s*Disallow:\s*(\/\S+)/i);
+    if (!m) continue;
+    const p = m[1].trim();
+    if (/\/api\//i.test(p)) paths.add(p);
+  }
+  return [...paths];
+}

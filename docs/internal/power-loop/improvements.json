@@ -701,6 +701,24 @@
       "slug": "client-side-invicti-practice-site-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Invicti Test Web Site tags + hidden phpinfo + artist.php SQLi route; jsNavTargets follows process.php redirect; php.testsparker.com findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-yourself-first.azurewebsites.net",
+      "slug": "sensitive-api-password-leakage",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/users returns {\"Email\":\"troyhunt@hotmail.com\",\"Password\":\"passw0rd\"} per robots.txt Disallow; hack-yourself-first findings 5→7; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-yourself-first.azurewebsites.net",
+      "slug": "client-side-hack-yourself-first-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: modal 50 very sloppy security practices + Pluralsight hack-yourself-first course + Supercar Showdown; hack-yourself-first findings 5→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:angular.testsparker.com",
+      "slug": "vibe-hardcoded-demo-credentials",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: smartDFS.php?username=admin&password=123456 in main.fbe5fbd112683a8c2d92.bundle.js; angular.testsparker.com findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1283,6 +1301,21 @@
       "source": "discovery:php.testsparker.com",
       "slug": "client-side-invicti-practice-site-evidence",
       "shipped_at": "2026-07-09T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-yourself-first.azurewebsites.net",
+      "slug": "sensitive-api-password-leakage",
+      "shipped_at": "2026-07-09T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-yourself-first.azurewebsites.net",
+      "slug": "client-side-hack-yourself-first-evidence",
+      "shipped_at": "2026-07-09T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:angular.testsparker.com",
+      "slug": "hardcoded-api-query-credentials",
+      "shipped_at": "2026-07-09T16:10:00.000Z"
     }
   ]
 }

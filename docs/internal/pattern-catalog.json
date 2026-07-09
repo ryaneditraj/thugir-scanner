@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T15:13:37.826Z",
-  "total": 108,
-  "uniqueSlugs": 108,
+  "generatedAt": "2026-07-09T16:10:44.952Z",
+  "total": 110,
+  "uniqueSlugs": 110,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 90,
+    "generic": 92,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 44,
+    "deep": 46,
     "continuous": 0
   },
   "byCategory": {
@@ -24,13 +24,13 @@
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
-    "Security misconfiguration": 8,
+    "Security misconfiguration": 9,
     "Information disclosure": 10,
     "Broken authentication": 7,
     "Injection": 13,
     "Cross-site scripting": 7,
     "Server-side request forgery": 2,
-    "Sensitive data exposure": 2,
+    "Sensitive data exposure": 3,
     "AI security": 2,
     "general": 17
   },
@@ -46,6 +46,7 @@
     "client-side-file-upload-evidence",
     "client-side-graphql-lab-evidence",
     "client-side-hack-health-lab-evidence",
+    "client-side-hack-yourself-first-evidence",
     "client-side-idor-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-jwt-none-evidence",
@@ -112,6 +113,7 @@
     "secret-stripe-restricted",
     "secret-supabase-service-role",
     "secret-twilio",
+    "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
     "server-side-eval-evidence",
     "spring-boot-actuator-exposed",
