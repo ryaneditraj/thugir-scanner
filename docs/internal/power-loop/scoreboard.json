@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T06:10:00.000Z",
+  "updated_at": "2026-07-09T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 279,
-  "total_findings": 1063,
+  "total_sites_scanned": 284,
+  "total_findings": 1084,
   "critical_findings": 19,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 150,
-  "discovery_findings": 553,
+  "discovery_urls_added": 155,
+  "discovery_findings": 574,
   "improvements_shipped": 92,
-  "last_run": "2026-07-09T06:10:00.000Z",
+  "last_run": "2026-07-09T06:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "06:00",
     "benchmark": {
@@ -50,19 +50,28 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "DEEP_RULES wiring gap + OGT Cyber Game multi-vuln catalog",
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 21,
+      "focus": "DEEP_RULES wiring + SQLi/XSS static labs + Vulnerable Bank (weblock.ru)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
       "dvwa.vercel.app: clientSideXssEvidence wired into DEEP_RULES — xss_r low.php detected (3→4 findings)",
       "ucu-owasp-ctf: owaspCtfLinkedLabProbe wired into DEEP_RULES — A01–A10 hub detected (3→4 findings)",
-      "ogtamimi.github.io/OGT-Cyber-Game: new client-side-security-game-evidence for level catalog (3→5 findings)"
+      "ogtamimi.github.io/OGT-Cyber-Game: client-side-security-game-evidence for level catalog (3→5 findings)",
+      "gauravkhurana.com/SQLInjection: client-side-sql-evidence + dangerous-html-sinks (6 findings)",
+      "demo.weblock.ru: idor-sequential-ids + vibe-openapi-docs-exposed + XSS sinks (6 findings)",
+      "akbarbashakm/frontend-security-examples: client-side-sql-evidence on input-validation module (3 findings)"
     ],
     "learning_gaps": [
       "acuart.phpnet.us: site returns 404 on all vuln paths — oracle offline",
       "vuln-portal.vercel.app: auth terminal lab under-probed — Vercel checkpoint blocks register POST",
-      "hiddeninvestigations.net: react2shell lab not deployed on main domain (marketing site only)"
+      "hiddeninvestigations.net: react2shell lab not deployed on main domain (marketing site only)",
+      "akbarbashakm.github.io/frontend-security-examples: XSS/CSRF live demo modules under-probed — only misconfig+sql concat (3 findings)",
+      "demo.weblock.ru: AI banking assistant prompt-injection oracle not exercised",
+      "dev-lucasoliveira/frontend-xss-demo + swarnadip-kar/xss-victim: /insecure reflected XSS canary not echoed on shallow crawl (3 each)"
     ]
   },
   "discovery_highlights": {
@@ -122,7 +131,7 @@
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 3,
-    "demo.weblock.ru": 3,
+    "demo.weblock.ru": 6,
     "gauravkhurana.com/SQLInjection": 6,
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
@@ -205,6 +214,7 @@
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
     "websec.fr": 2,
-    "ogtamimi.github.io/OGT-Cyber-Game": 3
+    "ogtamimi.github.io/OGT-Cyber-Game": 5,
+    "akbarbashakm.github.io/frontend-security-examples": 3
   }
 }
