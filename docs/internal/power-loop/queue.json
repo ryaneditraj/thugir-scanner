@@ -482,7 +482,32 @@
       "url": "https://picoctf.org/",
       "source": "picoCTF — Carnegie Mellon public CTF and cybersecurity education platform",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://server.vulnapp.id/mutillidae/",
+      "source": "OWASP Mutillidae II — public Indonesia-hosted training instance (OWASP VWAD online)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.itsecgames.com/",
+      "source": "bWAPP / ITSEC Games — 100+ OWASP Top 10 bugs landing (Malik Mesellem)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://computersciencesop2.vercel.app/cybersecurity",
+      "source": "Sports Media CS Training Academy — curated vuln-app playbook with live deploy links",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://luisillobret2.github.io/WebGoat/",
+      "source": "luisillobret2/WebGoat — OWASP WebGoat 8 deliberately insecure app docs + deploy",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://solyd.com.br/treinamentos/introducao-ao-hacking-e-pentest",
+      "source": "Solyd Offensive Security — free Introdução ao Hacking e Pentest training lab",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T21:05:00.000Z"
+  "updated_at": "2026-07-09T22:05:00.000Z"
 }
