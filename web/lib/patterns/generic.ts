@@ -1622,5 +1622,83 @@ export const genericPatterns: Pattern[] = [
       "We host a Hack Yourself First-style training app with dozens of deliberate flaws. Show how to isolate it on a lab subdomain with auth gating and remove cleartext password APIs.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-websec-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "WebSec.fr challenge levels disclose injectable PHP source",
+    description:
+      "WebSec.fr publishes syntax-highlighted PHP for /levelNN/ challenges including doQuery($injection) SQL concatenation behind anti_csrf.php.",
+    impactOneline:
+      "Public challenge source code documents live SQLi/XSS flaws attackers can practice against without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host challenge source on isolated lab infrastructure; never deploy training SQLi to production domains.",
+      steps: [
+        "Move WebSec-style challenge apps to VPN-only or local Docker environments.",
+        "Remove public /source.php disclosure on any internet-facing host.",
+        "Replace live SQL concatenation exercises with parameterized query tutorials."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr-style challenge site exposes doQuery($injection) source at /level01/source.php. Show how to retire public source disclosure and move labs offline.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-sixhack-ctf-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SixHack Academy CTF Labs document OWASP web flaws",
+    description:
+      "SixHack Academy advertises free CTF Labs on platform.sixhackacademy.com covering SQL injection, XSS, IDOR, and SSRF.",
+    impactOneline:
+      "Public CTF lab platforms expose realistic OWASP Top 10 attack surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSixHackCtfLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate CTF lab platforms behind registration and rate limits; isolate from production data.",
+      steps: [
+        "Require authentication before exposing injectable lab endpoints.",
+        "Run labs on dedicated subdomains with no production database access.",
+        "Reset lab state frequently and monitor for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host free CTF Labs on platform.sixhackacademy.com with SQLi and XSS challenges. Show how to gate labs behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-rootme-challenge-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Root Me hacking challenge platform publicly indexed",
+    description:
+      "Root Me (root-me.org) publishes hundreds of Web-Client, App, and Crypto challenges with RSS feeds and documented solutions.",
+    impactOneline:
+      "Public challenge platforms list exploitable Web-Client and App targets attackers use to tune scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRootMeChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Challenge platforms are intentional labs — ensure they never share infrastructure with production apps.",
+      steps: [
+        "Keep challenge VMs isolated from corporate or customer networks.",
+        "Do not reuse challenge code patterns in production applications.",
+        "Monitor challenge infrastructure for outbound abuse."
+      ]
+    },
+    fixPrompt:
+      "Our site mirrors Root Me-style public challenges. Show how to isolate lab VMs and prevent challenge code from leaking into production deploys.",
+    version: 1,
+    enabled: true
   }
 ];

@@ -2997,6 +2997,133 @@ const clientSideInvictiPracticeSiteEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr public SQLi/XSS challenge levels (syntax-highlighted source.php) -
+const CLIENT_WEBSEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec.fr challenge platform tagline",
+    re: /web security challenges from the people of websec/i
+  },
+  {
+    label: "WebSec level picker options",
+    re: /<option[^>]*>\s*level\d+\s*<\/option>/i
+  },
+  {
+    label: "WebSec anti_csrf.php gate",
+    re: /anti_csrf\.php/i
+  },
+  {
+    label: "WebSec doQuery injection sink",
+    re: /doQuery\s*\(\s*\$injection\s*\)/i
+  },
+  {
+    label: "WebSec LevelOne challenge class",
+    re: /class\s+Level(?:One|Two|Three)/i
+  },
+  {
+    label: "WebSec highlighted SQL concat in source.php",
+    re: /SELECT(?:&nbsp;|\s)+id,username(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users/i
+  }
+];
+
+const clientSideWebsecChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr publishes syntax-highlighted PHP source for SQLi/XSS challenge levels — injection flaws documented in /levelNN/source.php"
+    }
+  };
+};
+
+// --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
+const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SixHack CTF Labs product name",
+    re: /CTF Labs de SixHack Academy/i
+  },
+  {
+    label: "SixHack free web hacking labs FAQ",
+    re: /retos reales de hacking web \(SQL injection, XSS, IDOR/i
+  },
+  {
+    label: "SixHack platform subdomain",
+    re: /platform\.sixhackacademy\.com/i
+  },
+  {
+    label: "SixHack OWASP Top 10 lab curriculum",
+    re: /SQL injection, XSS, IDOR, SSRF[\s\S]{0,120}OWASP Top 10/i
+  },
+  {
+    label: "SixHack CTF Labs nav link",
+    re: /href\s*=\s*["']\/ctf-labs\/?["']/i
+  }
+];
+
+const clientSideSixHackCtfLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SIXHACK_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SixHack Academy advertises free CTF Labs covering SQLi, XSS, IDOR, and SSRF on platform.sixhackacademy.com"
+    }
+  };
+};
+
+// --- Root Me public hacking challenge platform ----------------------------------
+const CLIENT_ROOTME_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Root Me platform description",
+    re: /plateforme.*(?:hacking|sécurité).*challenges/i
+  },
+  {
+    label: "Root Me challenge RSS backend",
+    re: /page=backend-challenges/i
+  },
+  {
+    label: "Root Me Web-Client challenge category",
+    re: /Web\s*-\s*Client/i
+  },
+  {
+    label: "Root Me CTF challenge keywords",
+    re: /hack(?:ing)? challenge.*capture the flag.*CTF/i
+  },
+  {
+    label: "Root Me challenge solutions feed",
+    re: /page=backend-solutions/i
+  }
+];
+
+const clientSideRootMeChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ROOTME_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Root Me publishes hundreds of public hacking challenges (Web-Client, App, Crypto) with documented solutions"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -4109,6 +4236,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackHealthLabEvidence,
   clientSideDomGoatLabEvidence,
   clientSideInvictiPracticeSiteEvidence,
+  clientSideWebsecChallengeEvidence,
+  clientSideSixHackCtfLabEvidence,
+  clientSideRootMeChallengeEvidence,
   openApiDebugPasswordExposure
 };
 

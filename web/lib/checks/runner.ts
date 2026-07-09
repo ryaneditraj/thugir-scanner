@@ -309,6 +309,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackHealthLabEvidence",
   "clientSideDomGoatLabEvidence",
   "clientSideInvictiPracticeSiteEvidence",
+  "clientSideWebsecChallengeEvidence",
+  "clientSideSixHackCtfLabEvidence",
+  "clientSideRootMeChallengeEvidence",
   "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -496,7 +499,11 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     }
   }
   // Banner hint on websec.fr: ".php?id=" — seed common challenge paths + disclosed source.
-  if (/\.php\?id=/i.test(html) || /websec challenges/i.test(html)) {
+  if (
+    /\.php\?id=/i.test(html) ||
+    /websec challenges/i.test(html) ||
+    /web security challenges from the people of websec/i.test(html)
+  ) {
     for (let n = 1; n <= 12; n++) {
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
@@ -505,6 +512,28 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
       } catch {
         /* ignore */
       }
+    }
+  }
+  return [...out];
+}
+
+/** SixHack Academy links CTF Labs on /ctf-labs/ and platform.sixhackacademy.com from marketing pages. */
+function extractSixHackCtfSeeds(html: string, origin: string): string[] {
+  if (!/sixhackacademy|CTF Labs de SixHack|platform\.sixhackacademy\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/ctf-labs/", "/ctf-labs"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const plat = html.match(/https?:\/\/platform\.sixhackacademy\.com\/?/i);
+  if (plat) {
+    try {
+      out.add(new URL("/", plat[0]).toString());
+    } catch {
+      /* ignore */
     }
   }
   return [...out];
@@ -748,6 +777,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
+  const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
@@ -760,6 +790,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
       ...websecSeeds,
+      ...sixHackSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,
       ...spaRoutes,
