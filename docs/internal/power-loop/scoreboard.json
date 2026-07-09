@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T02:06:14.953Z",
+  "updated_at": "2026-07-09T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 136,
   "discovery_findings": 508,
-  "improvements_shipped": 79,
-  "last_run": "2026-07-09T02:06:14.953Z",
+  "improvements_shipped": 82,
+  "last_run": "2026-07-09T02:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "02:00",
     "benchmark": {

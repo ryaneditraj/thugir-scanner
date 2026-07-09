@@ -638,6 +638,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-csrf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Client bundle documents CSRF-vulnerable transfer flows",
+    description:
+      "The shipped JavaScript exposes attack/secure mode CSRF labs, unverified token warnings, or simulated forged transfer requests — cross-site request forgery is likely on state-changing endpoints.",
+    impactOneline:
+      "CSRF protections are disabled or documented as bypassable — attackers can forge bank transfers and account actions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce CSRF tokens on every state-changing request; validate Origin/Referer.",
+      steps: [
+        "Issue per-session CSRF tokens and require them on POST/PUT/DELETE.",
+        "Set SameSite=Lax or Strict on session cookies.",
+        "Remove CSRF attack simulation and vulnerable-mode toggles from production bundles."
+      ]
+    },
+    fixPrompt:
+      "My banking app bundle documents CSRF-vulnerable transfer flows with attack/secure mode toggles. Add server-side CSRF token validation on every state-changing endpoint, set SameSite cookies, and remove CSRF lab demo code from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssti-template-injection",
     platform: "generic",
     category: "Injection",

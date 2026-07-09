@@ -1837,6 +1837,10 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /Cross-Site Scripting\s*\(\s*XSS\s*\)[\s\S]{0,800}<code>innerHTML<\/code>/i
   },
   {
+    label: "Attack mode stored XSS — raw HTML rendered (banking lab)",
+    re: /attack mode, whatever you type gets stored as raw HTML and rendered directly/i
+  },
+  {
     label: "PHP echo $_GET superglobal without escaping",
     re: /echo[\s\S]{0,60}\$_GET\[/
   },
@@ -2052,6 +2056,18 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "Cyber lab SQL module INPUT placeholder login query",
     re: /CYBERLAB[\s\S]{0,2500}SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['"]INPUT['"]/i
+  },
+  {
+    label: "Attack mode banking lab f-string SQL (educational HTML)",
+    re: /# Attack mode — dangerous[\s\S]{0,400}SELECT \* FROM users WHERE username\s*=/i
+  },
+  {
+    label: "SecureBank demo SQLi OR 1=1 example in bundle",
+    re: /SELECT \* FROM users WHERE username\s*=\s*admin' OR '1'='1'/i
+  },
+  {
+    label: "Attack mode pastes user input into SQL string (banking lab)",
+    re: /attack mode, the app builds that query by directly pasting your input into the SQL string/i
   }
 ];
 
@@ -2068,6 +2084,47 @@ const clientSideSqlEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "client bundle builds SQL via string concatenation or simulates SQLi — injection likely if wired to a backend"
+    }
+  };
+};
+
+// --- Client-side CSRF lab evidence in bundle (educational banking / transfer demos) --
+const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CSRF token NOT verified warning",
+    re: /CSRF token NOT verified/i
+  },
+  {
+    label: "Simulate CSRF Attack lab button",
+    re: /Simulate CSRF Attack/i
+  },
+  {
+    label: "Vulnerable vs Secure CSRF mode toggle",
+    re: /Vulnerable \(No CSRF\)[\s\S]{0,200}Secure \(CSRF Token\)/i
+  },
+  {
+    label: "Educational CSRF forged request demo",
+    re: /CSRF Forged Request|CSRF Attack Succeeded/i
+  },
+  {
+    label: "Attack mode CSRF educational banking lab",
+    re: /Attack 3: CSRF[\s\S]{0,600}secret CSRF token generated when the page loaded/i
+  }
+];
+
+const clientSideCsrfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CSRF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "client bundle documents CSRF-vulnerable transfer flows or attack/secure mode CSRF lab — forged cross-site requests likely"
     }
   };
 };
@@ -2977,6 +3034,7 @@ export const RULES: Record<string, Rule> = {
   idorProbe,
   clientSideIdorEvidence,
   clientSideSqlEvidence,
+  clientSideCsrfEvidence,
   clientSideNosqlEvidence,
   clientSideXxeEvidence,
   clientSideApiSecurityLabEvidence,

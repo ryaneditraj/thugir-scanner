@@ -479,6 +479,24 @@
       "slug": "client-side-xor-auth-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /public/js/clientside.js xorString(concat, secretkey)==encrypted blob; authlab.digi.ninja findings 2→3"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML # Attack mode — dangerous + f\"SELECT * FROM users WHERE username = '{input}'\" + attack mode pastes input into SQL string; securebank-blog.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: attack mode, whatever you type gets stored as raw HTML and rendered directly (XSS Attack 2 section); securebank-blog.vercel.app findings 2→4"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "client-side-csrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle CSRF token NOT verified + Simulate CSRF Attack + Vulnerable (No CSRF)/Secure (CSRF Token) mode toggle; secure-bank-bay.vercel.app findings 4→6"
     }
   ],
   "shipped": [
@@ -876,6 +894,21 @@
       "source": "discovery:authlab.digi.ninja",
       "slug": "client-side-xor-auth-evidence",
       "shipped_at": "2026-07-09T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "client-side-sql-evidence",
+      "shipped_at": "2026-07-09T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "dangerous-html-sinks",
+      "shipped_at": "2026-07-09T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "client-side-csrf-evidence",
+      "shipped_at": "2026-07-09T02:10:00.000Z"
     }
   ]
 }
