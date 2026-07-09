@@ -797,6 +797,24 @@
       "slug": "client-side-ctf-research-team-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Hidden Investigations vulnerability disclosure team + Capture The Flag (CTF) + offensive security research in meta/schema.org; hiddeninvestigations findings 3→4; staging benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesteracademylab.appspot.com",
+      "slug": "client-side-pentester-academy-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>Pentester Academy Lab + Challenge 1–4 buttons linking pentesteracademy.com/video; pentesteracademylab.appspot.com findings 1→2; staging benchmark recall maintained"
+    },
+    {
+      "source": "discovery:cyberscavengerhunt.com",
+      "slug": "client-side-cyber-scavenger-hunt-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 8-step scavenger hunt + web application penetration tester + authenticated=false privilege escalation in main.js; cyberscavengerhunt.com findings 5→6; staging benchmark recall maintained"
+    },
+    {
+      "source": "discovery:secureby.design",
+      "slug": "client-side-skf-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Security Knowledge Framework + lab-player auth-bypass-* webcomponents + skf.gitbook.io/asvs-write-ups on /labs; secureby.design findings 6→7; staging benchmark recall maintained"
     }
   ],
   "shipped": [
@@ -1459,6 +1477,21 @@
       "source": "discovery:hiddeninvestigations.net",
       "slug": "client-side-ctf-research-team-evidence",
       "shipped_at": "2026-07-09T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesteracademylab.appspot.com",
+      "slug": "client-side-pentester-academy-lab-evidence",
+      "shipped_at": "2026-07-09T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:cyberscavengerhunt.com",
+      "slug": "client-side-cyber-scavenger-hunt-evidence",
+      "shipped_at": "2026-07-09T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:secureby.design",
+      "slug": "client-side-skf-lab-evidence",
+      "shipped_at": "2026-07-09T21:10:00.000Z"
     }
   ]
 }
