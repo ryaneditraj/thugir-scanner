@@ -3407,6 +3407,125 @@ const clientSideCtfResearchTeamEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Pentester Academy Lab (Appspot challenge hub) --------------------------------
+const CLIENT_PENTESTER_ACADEMY_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Pentester Academy Lab title",
+    re: /<title>\s*Pentester Academy Lab/i
+  },
+  {
+    label: "Challenge hub buttons",
+    re: /Challenge\s+[1-4][\s\S]{0,80}pentesteracademy\.com\/video/i
+  },
+  {
+    label: "Pentester Academy video lab links",
+    re: /videos\.pentesteracademy\.com|pentesteracademy\.com\/video\?id=/i
+  },
+  {
+    label: "Appspot lab hosting domain",
+    re: /pentesteracademy(?:lab)?\.appspot\.com/i
+  }
+];
+
+const clientSidePentesterAcademyLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTER_ACADEMY_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pentester Academy Lab Appspot hub links video-guided web hacking challenges (SQLi, XSS, auth bypass)"
+    }
+  };
+};
+
+// --- Cyber Scavenger Hunt interactive recon lab -----------------------------------
+const CLIENT_CYBER_SCAVENGER_HUNT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cyber Scavenger Hunt branding",
+    re: /Cyber Scavenger Hunt/i
+  },
+  {
+    label: "8-step scavenger hunt intro",
+    re: /8-step scavenger hunt|step one of this 8-step/i
+  },
+  {
+    label: "Web app pentester recon narrative",
+    re: /think like a web application penetration tester|Reconnassaince against a web application/i
+  },
+  {
+    label: "Privilege escalation easter egg",
+    re: /authenticated=false|privilege escalation[\s\S]{0,80}query string params/i
+  },
+  {
+    label: "GitHub open-source lab repo",
+    re: /github\.com\/arthurakay\/cyberscavengerhunt/i
+  }
+];
+
+const clientSideCyberScavengerHuntEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBER_SCAVENGER_HUNT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Cyber Scavenger Hunt documents recon, robots.txt enumeration, and query-param privilege escalation across 8 easter eggs"
+    }
+  };
+};
+
+// --- Security Knowledge Framework (SKF) free labs ---------------------------------
+const CLIENT_SKF_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Security Knowledge Framework branding",
+    re: /Security Knowledge Framework/i
+  },
+  {
+    label: "SKF OWASP Top 10 course",
+    re: /OWASP(?:®)?\s*Top\s*10 Security Threats.*SKF100|SKF100/i
+  },
+  {
+    label: "SKF lab-player webcomponent",
+    re: /<lab-player[\s\S]{0,80}lab-name\s*=\s*["'][^"']+["']/i
+  },
+  {
+    label: "SKF GitBook ASVS write-ups",
+    re: /skf\.gitbook\.io\/asvs-write-ups/i
+  },
+  {
+    label: "Auth bypass lab catalog",
+    re: /Auth Bypass(?:\s+\d+| Simple)[\s\S]{0,120}lab-player/i
+  }
+];
+
+const clientSideSkfLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SKF_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SKF (secureby.design) publishes free Auth Bypass, SQLi, and XSS labs via lab-player webcomponents with ASVS write-ups"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -4529,6 +4648,9 @@ export const RULES: Record<string, Rule> = {
   clientSideMaestroAgenticAiEvidence,
   clientSideZerodayTrainingEvidence,
   clientSideCtfResearchTeamEvidence,
+  clientSidePentesterAcademyLabEvidence,
+  clientSideCyberScavengerHuntEvidence,
+  clientSideSkfLabEvidence,
   openApiDebugPasswordExposure
 };
 
