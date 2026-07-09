@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T10:02:59.703Z",
+  "updated_at": "2026-07-09T10:09:12.969Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 305,
-  "total_findings": 1173,
+  "total_sites_scanned": 310,
+  "total_findings": 1194,
   "critical_findings": 20,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 44,
-  "discovery_findings": 627,
+  "discovery_urls_added": 49,
+  "discovery_findings": 648,
   "improvements_shipped": 101,
-  "last_run": "2026-07-09T10:02:59.703Z",
+  "last_run": "2026-07-09T10:09:12.969Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
@@ -50,21 +50,24 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_rescanned": 3,
-      "improvements_shipped": 3,
-      "focus": "Discovery-only — benchmark 6/6, teacher delta unavailable; shipped XSS C2 collector, DevSecOps lab, VulnPortal auth portal rules"
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 21,
+      "focus": "New Pentest-Ground DVWA/API instances, Duck Store, DVAIB, CTF hub"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: client-side-devsecops-lab-evidence IDOR/gateway bypass/SIEM catalog (3→4 findings)",
-      "vuln-portal.vercel.app: client-side-vuln-auth-portal-evidence VULNPORTAL terminal (1→2 findings)",
-      "xss-attacker.vercel.app: client-side-xss-c2-collector-evidence rule shipped — Attacker C2 + /api/collect probe (direct validation; Vercel checkpoint may block live rescan)"
+      "duck-store.escape.tech: secret-openai + IDOR + unauthenticated API routes + OpenAPI (7 findings)",
+      "pentest-ground.com:4280: phpinfo-exposed on hosted DVWA (4 findings)",
+      "dvaib.com: prompt-injection evidence + unauthenticated API routes (4 findings)",
+      "pentest-ground.com:9000: OpenAPI docs exposed on REST API lab (3 findings)"
     ],
     "learning_gaps": [
-      "fvb.vchan.in: apidoc.fvb.vchan.in offline — REST/GraphQL live oracles still under-probed",
-      "dvai.vercel.app: wrong deploy (DreamVator Aviation) — Damn Vulnerable AI range not at this URL",
-      "riglabs-cyber-lab.vercel.app: no IDOR/CSRF modules in catalog — SQLi+XSS only",
-      "hiddeninvestigations.net: react2shell lab not linked from homepage — no live deploy URL in crawl"
+      "pentest-ground.com:4280: /vulnerabilities/sqli|xss|fi paths not exercised — phpinfo only, no SQLi/XSS oracle hits",
+      "pentest-ground.com:9000: OpenAPI listed but BOLA/SSRF/auth-bypass live probes under-exercised",
+      "dvaib.com: multi-turn prompt-injection jailbreak chains not exercised beyond bundle markers",
+      "capture-the-flag-official-website.vercel.app: challenge routes not crawled — headers/CORS/XSS sinks only (3)",
+      "duck-store.escape.tech: secret-openai in bundle — live key validity / GraphQL mutation oracles under-probed"
     ]
   },
   "discovery_highlights": {
@@ -217,6 +220,11 @@
     "webexp05.vercel.app": 2,
     "idor-challenge.vercel.app": 2,
     "luisillobret2.github.io/WebGoat": 2,
-    "vuln-portal.vercel.app": 2
+    "vuln-portal.vercel.app": 2,
+    "duck-store.escape.tech": 7,
+    "dvaib.com": 4,
+    "pentest-ground.com:4280": 4,
+    "pentest-ground.com:9000": 3,
+    "capture-the-flag-official-website.vercel.app": 3
   }
 }
