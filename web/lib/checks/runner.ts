@@ -324,6 +324,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideCyberScavengerHuntEvidence",
   "clientSideSkfLabEvidence",
   "clientSideGoogleGruyereCodelabEvidence",
+  "clientSideMutillidaeEvidence",
+  "clientSideBwappEvidence",
+  "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -597,6 +600,56 @@ function extractSixHackCtfSeeds(html: string, origin: string): string[] {
   if (plat) {
     try {
       out.add(new URL("/", plat[0]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** OWASP Mutillidae — index.php?page= routes for SQLi, HTMLi, command injection labs. */
+function extractMutillidaeLabSeeds(html: string, origin: string): string[] {
+  if (!/Mutillidae:\s*Born to be Hacked|mutillidae/i.test(html)) return [];
+  const out = new Set<string>();
+  const pages = [
+    "user-info.php",
+    "login.php",
+    "register.php",
+    "dns-lookup.php",
+    "add-to-your-blog.php",
+    "html5-storage.php",
+    "capture-data.php",
+    "view-someones-blog.php",
+    "password-generator.php",
+    "show-log.php",
+    "site-footer-xss-discussion.php"
+  ];
+  for (const page of pages) {
+    try {
+      out.add(new URL(`/index.php?page=${page}`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const re = /index\.php\?page=([a-z0-9_.-]+\.php)/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(`/index.php?page=${m[1]}`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** bWAPP marketing site (itsecgames.com) — bugs catalog documents 100+ vulnerability types. */
+function extractBwappLabSeeds(html: string, origin: string): string[] {
+  if (!/bWAPP|buggy web application|itsecgames/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["bugs.htm", "download.htm", "training.htm", "downloads/vulnerabilities.txt"]) {
+    try {
+      out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
@@ -890,6 +943,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
+  const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
+  const bwappSeeds = extractBwappLabSeeds(home.body, origin);
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
@@ -907,6 +962,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...websecSeeds,
       ...sixHackSeeds,
       ...gruyereSeeds,
+      ...mutillidaeSeeds,
+      ...bwappSeeds,
       ...pentesterLabSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
