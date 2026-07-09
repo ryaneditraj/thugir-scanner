@@ -779,6 +779,24 @@
       "slug": "client-side-invicti-practice-site-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Test Website for Acunetix Web Vulnerability Scanner banner (HTML-tolerant regex) + acunetix.com/vulnerability-scanner link; testaspnet findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:maestro-agentic-ai-security-demo-mon.netlify.app",
+      "slug": "client-side-maestro-agentic-ai-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MAESTRO Framework + ElizaOS Security Analysis + Stored prompt injection via memory poisoning in keynote HTML; maestro findings 2→3; staging benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview-zeroday-sec.vercel.app",
+      "slug": "client-side-zeroday-training-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Master Cybersecurity Through Elite Training + Interactive Security Labs + Network/Web Penetration Testing courses; preview-zeroday findings 2→3; staging benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:hiddeninvestigations.net",
+      "slug": "client-side-ctf-research-team-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Hidden Investigations vulnerability disclosure team + Capture The Flag (CTF) + offensive security research in meta/schema.org; hiddeninvestigations findings 3→4; staging benchmark recall 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1426,6 +1444,21 @@
       "source": "discovery:testaspnet.vulnweb.com",
       "slug": "acunetix-practice-site-markers",
       "shipped_at": "2026-07-09T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:maestro-agentic-ai-security-demo-mon.netlify.app",
+      "slug": "client-side-maestro-agentic-ai-evidence",
+      "shipped_at": "2026-07-09T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:preview-zeroday-sec.vercel.app",
+      "slug": "client-side-zeroday-training-evidence",
+      "shipped_at": "2026-07-09T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:hiddeninvestigations.net",
+      "slug": "client-side-ctf-research-team-evidence",
+      "shipped_at": "2026-07-09T20:10:00.000Z"
     }
   ]
 }

@@ -1804,5 +1804,83 @@ export const genericPatterns: Pattern[] = [
       "Our app mirrors OWASP WrongSecrets-style secret hiding. Show how to detect and remove secrets from code, Docker, and Git.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-maestro-agentic-ai-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "MAESTRO agentic AI security analysis demo disclosed",
+    description:
+      "MAESTRO Framework keynote demos document ElizaOS agent exploit chains — memory poisoning, zero-auth deployments, and RAG prompt injection.",
+    impactOneline:
+      "Public agentic AI security demos expose attack patterns transferable to production LLM agent deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMaestroAgenticAiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Agent security demos are intentional — isolate demo agents from production infrastructure.",
+      steps: [
+        "Require authentication on all agent API endpoints.",
+        "Sanitize and validate agent memory before RAG retrieval.",
+        "Never log API keys or database URLs during agent startup."
+      ]
+    },
+    fixPrompt:
+      "We host a MAESTRO-style ElizaOS security demo. Show how to gate agent endpoints and prevent memory-poisoning prompt injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-zeroday-training-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "0day cybersecurity training platform disclosed",
+    description:
+      "0day advertises elite hands-on offensive security labs, network pentest courses, and web application security training.",
+    impactOneline:
+      "Public training platforms expose intentionally vulnerable lab environments for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideZerodayTrainingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate training labs behind paid accounts; isolate lab VMs from production networks.",
+      steps: [
+        "Require authentication before serving injectable lab instances.",
+        "Run labs on dedicated infrastructure with no production data.",
+        "Monitor lab egress for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host a 0day-style cybersecurity training platform with hands-on pentest labs. Show how to gate labs behind auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctf-research-team-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "CTF research team and vulnerability disclosure program disclosed",
+    description:
+      "Hidden Investigations-style sites publish CTF team branding, offensive security research, and community vulnerability disclosure programs.",
+    impactOneline:
+      "Public CTF research teams document exploit training surfaces and responsible disclosure workflows attackers study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfResearchTeamEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Research team sites are intentional — ensure CTF infrastructure never shares networks with production.",
+      steps: [
+        "Isolate CTF challenge VMs from corporate infrastructure.",
+        "Do not reuse challenge vulnerability patterns in production code.",
+        "Publish disclosure policies without exposing internal lab routes."
+      ]
+    },
+    fixPrompt:
+      "Our site is a public CTF research team like Hidden Investigations. Show how to isolate challenge infrastructure from production.",
+    version: 1,
+    enabled: true
   }
 ];
