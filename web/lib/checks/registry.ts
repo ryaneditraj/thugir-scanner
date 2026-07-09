@@ -2451,7 +2451,7 @@ const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "UNION SELECT injection walkthrough",
-    re: /' UNION SELECT/i
+    re: /UNION SELECT/i
   },
   {
     label: "IDOR direct object reference lab text",
