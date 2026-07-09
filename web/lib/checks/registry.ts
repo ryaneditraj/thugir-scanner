@@ -1847,6 +1847,18 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "PHP echo $_REQUEST into HTML output",
     re: /echo[\s\S]{0,60}\$_REQUEST\[/
+  },
+  {
+    label: "searchTerm interpolated into innerHTML template (DOM XSS lab)",
+    re: /resultsContent\.innerHTML\s*=\s*`[\s\S]{0,200}\$\{searchTerm\}/
+  },
+  {
+    label: "getElementById value flows into innerHTML template literal",
+    re: /getElementById\([^)]+\)\.value[\s\S]{0,500}\.innerHTML\s*=\s*`/
+  },
+  {
+    label: "VULNERABLE CODE innerHTML XSS lab marker",
+    re: /VULNERABLE CODE[\s\S]{0,200}innerHTML\s*=\s*`/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -2305,6 +2317,18 @@ const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
   {
     label: "Educational CSRF fake page transfer demo",
     re: /Fake page posts a transfer[\s\S]{0,120}Server accepts it/i
+  },
+  {
+    label: "Educational banking app vulnerable to CSRF title",
+    re: /Vulnerable to CSRF/i
+  },
+  {
+    label: "HTML comment No CSRF token marker",
+    re: /VULNERABLE:\s*No CSRF token/i
+  },
+  {
+    label: "Intentionally vulnerable CSRF educational warning",
+    re: /intentionally vulnerable to CSRF attacks for educational purposes/i
   }
 ];
 
@@ -2930,6 +2954,14 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Chatbot vulnerability research article",
     re: /chatbots? (?:IA )?(?:sont )?vuln[eé]rables/i
+  },
+  {
+    label: "Landing chat widget invites prompt injection testing",
+    re: /testing some prompt injection attacks/i
+  },
+  {
+    label: "AI banking assistant prompt injection demo",
+    re: /AI banking assistant[\s\S]{0,120}prompt injection/i
   }
 ];
 

@@ -50,26 +50,23 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 21,
-      "focus": "DevSecOps SIEM lab + OWASP Top 10 labs + VulnLab multi-vuln platform + Juice Shop Workers variant",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "inline HTML lab markers for Frontend Security Hub + Vulnerable Bank prompt-injection chat",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "vulnlab.vercel.app: client-side SSRF + XXE + file-upload evidence + SQLi sinks (7 findings) — strongest discovery hit",
-      "riglabs-cyber-lab.vercel.app: client-side-sql-evidence + XSS sinks (4 findings)",
-      "juicesec.mrdinesh.workers.dev: Juice Shop Workers variant — IDOR+SQLi+XSS bundle evidence (4 findings)",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: client-side-api-security-lab-evidence (3 findings)",
-      "mehdiaitsaid.github.io/owasp-top-10-labs: dangerous-html-sinks on hub pages (3 findings)"
+      "akbarbashakm.github.io/frontend-security-examples: dangerous-html-sinks + client-side-csrf-evidence on crawled XSS/CSRF modules (3→5 findings)",
+      "demo.weblock.ru: client-side-prompt-injection-evidence on landing AI banking chat widget (6→7 findings)"
     ],
     "learning_gaps": [
       "everdan0075.github.io/DevSecOps-Hacking-Lab: GitHub Pages static shell — SIEM/WAF/IDS backend IDOR+SQLi attack scenarios not reachable",
       "mehdiaitsaid.github.io/owasp-top-10-labs: individual A01–A10 module labs under-probed — only hub misconfig+XSS sinks (3 findings)",
       "riglabs-cyber-lab.vercel.app: IDOR/CSRF lab modules likely missed — SQLi+XSS only (4 findings)",
       "juicesec.mrdinesh.workers.dev: no sql-error-disclosure or unauthenticated-admin-endpoint vs staging oracle (4 vs 7 findings)",
-      "akbarbashakm.github.io/frontend-security-examples: XSS/CSRF live demo modules still under-probed from prior runs"
+      "dev-lucasoliveira/frontend-xss-demo + swarnadip-kar/xss-victim: /insecure path 404 — dangerous-html-sinks already fires on bundle/victim.html"
     ]
   },
   "discovery_highlights": {
@@ -129,7 +126,7 @@
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 3,
-    "demo.weblock.ru": 6,
+    "demo.weblock.ru": 7,
     "gauravkhurana.com/SQLInjection": 6,
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
@@ -211,7 +208,7 @@
     "ctb-pi.vercel.app": 5,
     "websec.fr": 2,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
-    "akbarbashakm.github.io/frontend-security-examples": 3,
+    "akbarbashakm.github.io/frontend-security-examples": 5,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 3,
     "mehdiaitsaid.github.io/owasp-top-10-labs": 3,
     "riglabs-cyber-lab.vercel.app": 4,
