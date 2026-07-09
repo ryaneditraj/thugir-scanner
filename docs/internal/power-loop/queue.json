@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T06:05:00.000Z",
+  "updated_at": "2026-07-09T07:08:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -145,6 +145,31 @@
       "url": "https://swarnadip-kar.github.io/xss-victim/",
       "source": "Swarnadip-Kar/xss-victim — XSS victim bank for cross-origin cookie theft lab (GitHub)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://everdan0075.github.io/DevSecOps-Hacking-Lab/",
+      "source": "everdan0075/DevSecOps-Hacking-Lab — SIEM/WAF/IDS lab with SQLi, IDOR, XSS attack scenarios (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/",
+      "source": "mehdiaitsaid/owasp-top-10-labs — interactive OWASP Top 10 learning labs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/",
+      "source": "RigLabs cyber security training lab — hands-on vuln demos (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnlab.vercel.app/",
+      "source": "VulnLab — intentionally vulnerable web security training platform (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/",
+      "source": "mrdinesh juicesec — Juice Shop variant on Cloudflare Workers (web search)",
+      "auth": "benchmark"
     }
   ]
 }
