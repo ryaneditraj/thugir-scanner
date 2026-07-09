@@ -1,6 +1,5 @@
 /**
- * Prompt fragments derived from CyberStrike reference material.
- * Full upstream text: docs/reference/cyberstrike/vendor/
+ * Prompt fragments for Thugir web security methodology.
  */
 import { THREE_GATE_PROMPT } from "./three-gate";
 import { SEVERITY_TRIAGE_PROMPT } from "./severity-triage";
@@ -24,4 +23,4 @@ export const WSTG_ORACLE_HINT = `Use OWASP WSTG procedures as oracles when bench
 - wstg-inpv-05 SQL injection
 - wstg-inpv-01 reflected XSS
 - wstg-authz-02 IDOR / broken access control
-Reference playbooks: docs/reference/cyberstrike/vendor/skills/`;
+Reference playbooks: docs/internal/security-skills/skills/`;

@@ -1,5 +1,5 @@
 /**
- * Per-target coverage memory — what was tested (CyberStrike coverage-note pattern).
+ * Per-target coverage memory — what was tested per endpoint/class.
  * Persisted in scan metadata / power-loop results for learning loops.
  */
 export type VulnClass =
