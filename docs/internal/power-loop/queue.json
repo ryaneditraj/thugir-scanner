@@ -280,7 +280,32 @@
       "url": "https://owasp-finbot-ctf-demo.onrender.com/",
       "source": "OWASP Agentic AI CTF FinBot — public AI/agentic security vulnerability demo (Render)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-yourself-first.azurewebsites.net/",
+      "source": "Troy Hunt Supercar Showdown — Hack Yourself First intentionally vulnerable ASP.NET app (Azure)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://php.testsparker.com/",
+      "source": "Netsparker/Mavituna PHP vulnerability demo — Acunetix practice site (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://aspnet.testsparker.com/",
+      "source": "Netsparker/Mavituna ASP.NET vulnerability demo — Acunetix practice site (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://angular.testsparker.com/",
+      "source": "Netsparker/Mavituna Angular SPA vulnerability demo — Acunetix practice site (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/intro",
+      "source": "DOM Clobbering XSS (CXSS) training lab — Mario Heiderich domgo.at (Awesome-Vulnerable-Labs)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T13:05:00.000Z"
+  "updated_at": "2026-07-09T14:05:00.000Z"
 }
