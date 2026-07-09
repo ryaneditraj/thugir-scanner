@@ -2042,6 +2042,10 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
     re: /SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['"]\$username/
   },
   {
+    label: "PHP SQLite query concatenates user input into WHERE id",
+    re: /SELECT[\s\S]{0,40}id,\s*username[\s\S]{0,40}FROM[\s\S]{0,30}users[\s\S]{0,60}WHERE[\s\S]{0,20}id\s*=\s*['"][\s\S]{0,8}\.\s*\$/i
+  },
+  {
     label: "SPA SQL injection lab success markers",
     re: /SQL Injection Detected|Authentication Bypass Successful|Login Successful.*SQL Injection/i
   },
@@ -2310,6 +2314,23 @@ function bodyReflectsSsrfCanary(body: string): boolean {
   return SSRF_CANARY_MARKERS.some((re) => re.test(body));
 }
 
+function extractPostUrlForms(html: string, origin: string): { action: string; field: string }[] {
+  const forms: { action: string; field: string }[] = [];
+  const formRe = /<form[^>]*method\s*=\s*["']post["'][^>]*(?:action\s*=\s*["']([^"']*)["'])?[^>]*>([\s\S]*?)<\/form>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = formRe.exec(html)) && forms.length < 6) {
+    const block = m[2];
+    const fm = /name\s*=\s*["'](url|link|target|uri)["']/i.exec(block);
+    if (!fm) continue;
+    try {
+      forms.push({ action: new URL(m[1] || ".", origin).toString(), field: fm[1] });
+    } catch {
+      /* ignore */
+    }
+  }
+  return forms;
+}
+
 const ssrfEndpointProbe: Rule = async (ctx) => {
   const paths = [...new Set([...extractSsrfPaths(ctx.combined), ...SSRF_GET_PATHS])].slice(0, 8);
   const getUrls: string[] = [];
@@ -2423,6 +2444,34 @@ const ssrfEndpointProbe: Rule = async (ctx) => {
       }
     }
   }
+
+  const htmlForms = extractPostUrlForms(ctx.combined, ctx.origin);
+  for (const { action, field } of htmlForms.slice(0, 4)) {
+    const body = new URLSearchParams({ [field]: SSRF_CANARY_URL, submit: "Submit" }).toString();
+    const r = await ctx.probe.get(action, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 16_384,
+      redirect: "manual"
+    });
+    if (r.status < 200 || r.status >= 500) continue;
+    if (!bodyReflectsSsrfCanary(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: action,
+        method: "POST",
+        field,
+        contentType: "application/x-www-form-urlencoded",
+        status: r.status,
+        snippet: r.body.slice(0, 180).trim(),
+        note: "HTML form POST fetched attacker URL server-side — server-side request forgery likely"
+      }
+    };
+  }
+
   return NEGATIVE;
 };
 
@@ -2443,6 +2492,10 @@ const CLIENT_SSRF_RES: { label: string; re: RegExp }[] = [
   {
     label: "Server-Side Request Forgery in admin panel",
     re: /Server-Side Request Forgery in admin panel/i
+  },
+  {
+    label: "URL grabber fetches remote URLs (SSRF lab)",
+    re: /URL grabber which fetches remote URLs/i
   }
 ];
 
@@ -2831,10 +2884,6 @@ const CLIENT_XXE_RES: { label: string; re: RegExp }[] = [
   {
     label: "libxmljs entity processing options",
     re: /libxmljs[\s\S]{0,250}(?:noent|nonet|dtdload)/i
-  },
-  {
-    label: "DOMParser parseFromString text/xml without hardening",
-    re: /parseFromString\s*\([^)]*text\/xml/i
   }
 ];
 
