@@ -54,7 +54,32 @@ added **as data, not code**. Inventory the catalog with `node web/scripts/patter
 - **Razorpay** keys (test is fine) — optional in dev
 - (Deep Scan only) access to the **`thugir-node`** engine
 
-## Quick start (web, free tier)
+## Quick start (hackathon — works out of the box)
+
+```bash
+cd web
+npm install
+npm run hackathon          # copies config/hackathon.env → .env.local and starts dev server
+```
+
+Open **http://localhost:3000**. No Supabase, Razorpay, or manual env editing required.
+
+| Page | What to show |
+|------|----------------|
+| `/` | Live scan `petstore.swagger.io` |
+| `/verify/demo` | Trust badge |
+| `/admin/settings` | Change AI model (`qwen/qwen3-32b` default) |
+
+Or step by step:
+
+```bash
+cd web
+npm install
+npm run setup              # one-time: writes .env.local from config/hackathon.env
+npm run dev
+```
+
+## Quick start (web, free tier — custom env)
 
 ```bash
 cd web

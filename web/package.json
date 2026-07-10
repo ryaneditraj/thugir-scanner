@@ -5,6 +5,8 @@
   "description": "Thugir Scanner for AI-built apps - Next.js web app (Vercel). Free-tier checks run here; Deep Scan is delegated to the Python worker.",
   "scripts": {
     "dev": "next dev",
+    "setup": "node scripts/setup-hackathon.mjs",
+    "hackathon": "node scripts/setup-hackathon.mjs && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
