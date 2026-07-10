@@ -877,7 +877,32 @@
       "url": "https://raw.githack.com/sheshakandula/llmsec/main/frontend/index.html",
       "source": "sheshakandula/llmsec — OWASP LLM Top 10 prompt-injection training demo (GitHack deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://labs.hackxpert.com/",
+      "source": "hackXpert — public hands-on web security lab platform with shareable challenge instances (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mlastg.vercel.app/",
+      "source": "MLASTG — MLSec Application Security Testing Guide with LLM/ML vulnerability harnesses (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cryptohack.org/",
+      "source": "CryptoHack — public cryptography security CTF and challenge platform (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwn.college/",
+      "source": "ASU pwn.college — open cybersecurity education platform with web/binary exploit labs",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.overthewire.org/wargames/",
+      "source": "OverTheWire wargames — public security wargame hub including Natas web challenges (awesome-vulnerable-apps)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T13:05:00.000Z"
+  "updated_at": "2026-07-10T14:08:00.000Z"
 }
