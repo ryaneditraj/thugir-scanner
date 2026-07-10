@@ -2378,6 +2378,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-alf-xss-wargame-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "alf.nu alert(1)-to-win XSS wargame disclosed",
+    description:
+      "Erling Ellingsen's alf.nu publishes alert(1)-to-win XSS challenges — exploit unsafe client-side code with the shortest payload to win.",
+    impactOneline:
+      "Public XSS wargame instances document reflected/DOM XSS exploitation patterns attackers practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAlfXssWargameEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "alf.nu XSS wargames are intentional training — do not expose production apps with similar unsafe sinks.",
+      steps: [
+        "Run XSS wargame challenges only on isolated lab infrastructure.",
+        "Never deploy alert(1)-style unsafe eval/innerHTML patterns to production.",
+        "Sanitize and encode all user-controlled output in HTML contexts."
+      ]
+    },
+    fixPrompt:
+      "We host alf.nu-style XSS wargame challenges. Show how to isolate unsafe code labs from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-llm-sec-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "LLM Security Labs OWASP Top 10 training platform disclosed",
+    description:
+      "TomAbai LLM Security Labs offers hands-on interactive modules covering OWASP Top 10 LLM vulnerabilities including prompt injection and data poisoning.",
+    impactOneline:
+      "Public LLM security lab instances document adversarial prompt and AI abuse training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideLlmSecEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "LLM Security Labs are intentional training — gate AI red-team playgrounds behind authentication.",
+      steps: [
+        "Require authentication before serving live LLM attack labs.",
+        "Do not expose production chatbots to unauthenticated prompt-injection probes.",
+        "Monitor LLM endpoints for adversarial prompt patterns."
+      ]
+    },
+    fixPrompt:
+      "We host LLM Security Labs-style OWASP Top 10 LLM training. Show how to gate AI red-team labs behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-defendtheweb-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Defend the Web browser security challenge platform disclosed",
+    description:
+      "Defend the Web (DtW) was a long-running browser-based web security challenge platform for XSS, SQLi, and access-control drills.",
+    impactOneline:
+      "Historic Defend the Web deployments documented public security challenge surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDefendthewebEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Defend the Web was intentional training software — isolate challenge instances from production networks.",
+      steps: [
+        "Run security challenge platforms only on dedicated lab infrastructure.",
+        "Do not copy challenge vulnerability patterns into production applications.",
+        "Gate archived challenge content behind authentication if re-hosted."
+      ]
+    },
+    fixPrompt:
+      "We host Defend the Web-style browser security challenges. Show how to isolate challenge apps from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",

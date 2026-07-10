@@ -5191,6 +5191,132 @@ const clientSideZeroHealthEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Erling Ellingsen alf.nu XSS wargame (alert1 to win / escape.alf.nu) ------------
+const CLIENT_ALF_XSS_WARGAME_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "alert(1) to win challenge title",
+    re: /alert\(1\)\s+to\s+win/i
+  },
+  {
+    label: "XSS challenge series description",
+    re: /series of XSS challenges[\s\S]{0,120}exploit it/i
+  },
+  {
+    label: "Alert 1 to win hub link",
+    re: /Alert\s+1\s+to\s+win[\s\S]{0,80}XSS challenges/i
+  },
+  {
+    label: "alf.nu alert.min.js wargame loader",
+    re: /localStorage\.serverUrl[\s\S]{0,60}alf\.nu\/db\/true|\/s\/js\/alert\.min\.js/i
+  },
+  {
+    label: "escape.alf.nu XSS wargame host",
+    re: /escape\.alf\.nu/i
+  }
+];
+
+const clientSideAlfXssWargameEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ALF_XSS_WARGAME_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/alf\.nu|escape\.alf\.nu|alert\(1\)\s+to\s+win/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "alf.nu publishes alert(1)-to-win XSS wargame challenges with client-side unsafe code exploitation drills"
+    }
+  };
+};
+
+// --- TomAbai LLM Security Labs (llm-sec.vercel.app / llm-sec.dev) -----------------
+const CLIENT_LLM_SEC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Interactive LLM Security Labs title",
+    re: /Interactive LLM Security Labs/i
+  },
+  {
+    label: "OWASP Top 10 LLM vulnerabilities",
+    re: /OWASP Top 10 LLM(?:\s+Vulnerabilities)?/i
+  },
+  {
+    label: "Prompt injection tutorial keywords",
+    re: /prompt injection tutorial|Prompt Injection/i
+  },
+  {
+    label: "LLM threat model interactive diagram",
+    re: /LLM Security Threat Model|threat-model-preview/i
+  },
+  {
+    label: "TomAbai llm-sec GitHub attribution",
+    re: /TomAbai\/llm-sec|LLM Security Labs/i
+  },
+  {
+    label: "Hands-on LLM security education",
+    re: /hands-on interactive labs[\s\S]{0,80}LLM security/i
+  }
+];
+
+const clientSideLlmSecEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_LLM_SEC_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/llm-sec|LLM Security Labs|TomAbai/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "LLM Security Labs documents OWASP Top 10 LLM vulnerability modules with interactive prompt-injection training"
+    }
+  };
+};
+
+// --- Defend the Web browser security challenge platform (defendtheweb.net) ----------
+const CLIENT_DEFENDTHEWEB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Defend the Web platform title",
+    re: /<title>\s*Defend the Web\s*<\/title>|Defend the Web is now on hiatus/i
+  },
+  {
+    label: "DtW community farewell",
+    re: /made DtW such an amazing|supporters who made DtW/i
+  },
+  {
+    label: "17-year challenge platform longevity",
+    re: /After 17 incredible years,\s*Defend the Web/i
+  },
+  {
+    label: "defendtheweb.net support contact",
+    re: /support@defendtheweb\.net/i
+  }
+];
+
+const clientSideDefendthewebEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DEFENDTHEWEB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Defend the Web|defendtheweb\.net|DtW/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.86 : 0.83,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Defend the Web was a browser-based web security challenge platform (currently on hiatus)"
+    }
+  };
+};
+
 // --- PentestForge hub: linked *.lab.pentest-forge.com vulnerable targets --------
 // Hub pages catalog OWASP Juice Shop, crAPI, VAmPI, etc. on sibling subdomains.
 // Probe linked origins with lab-specific routes; hub catalog alone is positive proof
@@ -5381,6 +5507,9 @@ export const RULES: Record<string, Rule> = {
   clientSideTegalsecLabEvidence,
   clientSideBugBountyHunterEvidence,
   clientSideZeroHealthEvidence,
+  clientSideAlfXssWargameEvidence,
+  clientSideLlmSecEvidence,
+  clientSideDefendthewebEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
