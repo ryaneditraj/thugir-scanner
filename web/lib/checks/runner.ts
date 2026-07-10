@@ -326,6 +326,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideGoogleGruyereCodelabEvidence",
   "clientSideMutillidaeEvidence",
   "clientSideBwappEvidence",
+  "clientSideHackableSoLabEvidence",
+  "clientSideVulnwebLabEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -643,6 +645,43 @@ function extractMutillidaeLabSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** hackable.so — Next.js social platform with 12 hidden vulnerabilities. */
+function extractHackableSoSeeds(html: string, jsBodies: string[], origin: string): string[] {
+  const corpus = html + jsBodies.join("");
+  if (!/hackable\.so|12 hidden vulnerabilities/i.test(corpus)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "/login",
+    "/register",
+    "/admin",
+    "/dashboard",
+    "/admin/users",
+    "/admin/config"
+  ]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VulnWeb SPA lab — React routes for SQLi/XSS/IDOR modules (bundle + meta). */
+function extractVulnwebLabSeeds(html: string, jsBodies: string[], origin: string): string[] {
+  const corpus = html + jsBodies.join("");
+  if (!/VulnWeb|vulnerable web app lab|vulnweb\.netlify/i.test(corpus)) return [];
+  const out = new Set<string>();
+  for (const p of ["/login", "/search", "/comments", "/profile/1", "/profile/2"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** bWAPP marketing site (itsecgames.com) — bugs catalog documents 100+ vulnerability types. */
 function extractBwappLabSeeds(html: string, origin: string): string[] {
   if (!/bWAPP|buggy web application|itsecgames/i.test(html)) return [];
@@ -874,25 +913,37 @@ function jsNavTargets(html: string, pageUrl: string, limit: number): string[] {
   return [...out].slice(0, limit);
 }
 
+/** Expand React Router params like /profile/:id into concrete probe paths. */
+function expandSpaParamPaths(path: string): string[] {
+  if (!path.includes(":")) return [path];
+  const out = new Set<string>();
+  for (const id of ["1", "2"]) {
+    out.add(path.replace(/:[a-zA-Z_][a-zA-Z0-9_]*/g, id));
+  }
+  return [...out];
+}
+
 /** React/Vite SPA routes declared in JS bundles (path:`/transfer`, to:`/comments`). */
 function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): string[] {
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  const re = /(?:path|to)\s*:\s*[`'"](\/[a-z0-9/_-]+)[`'"]/gi;
+  const re = /(?:path|to)\s*:\s*[`'"](\/[a-z0-9/_:-]+)[`'"]/gi;
   for (const body of jsBodies) {
     let m: RegExpExecArray | null;
-    while ((m = re.exec(body)) && out.size < limit * 3) {
-      const path = m[1];
-      if (path === "/" || path.length < 2) continue;
-      if (/\.(png|jpe?g|svg|gif|webp|ico|css|js|map|woff2?|ttf|pdf|zip)$/i.test(path)) continue;
-      // Vercel Security Checkpoint false positives (e.g. /assets/admin.html behind bot gate).
-      if (/\/assets\/admin\.html$/i.test(path)) continue;
-      try {
-        const u = new URL(path, pageOrigin);
-        if (u.origin !== pageOrigin) continue;
-        out.add(u.toString());
-      } catch {
-        /* ignore */
+    while ((m = re.exec(body)) && out.size < limit * 4) {
+      const rawPath = m[1];
+      if (rawPath === "/" || rawPath.length < 2) continue;
+      for (const path of expandSpaParamPaths(rawPath)) {
+        if (/\.(png|jpe?g|svg|gif|webp|ico|css|js|map|woff2?|ttf|pdf|zip)$/i.test(path)) continue;
+        // Vercel Security Checkpoint false positives (e.g. /assets/admin.html behind bot gate).
+        if (/\/assets\/admin\.html$/i.test(path)) continue;
+        try {
+          const u = new URL(path, pageOrigin);
+          if (u.origin !== pageOrigin) continue;
+          out.add(u.toString());
+        } catch {
+          /* ignore */
+        }
       }
     }
   }
@@ -915,6 +966,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let home = await reachTarget(target, targetInput);
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const origin = target.origin;
+  const crawlOrigin = new URL(home.finalUrl).origin;
 
   // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
   // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
@@ -945,6 +997,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
+  const hackableSoSeeds = extractHackableSoSeeds(
+    home.body,
+    earlyScripts.map((s) => s.body),
+    crawlOrigin
+  );
+  const vulnwebSeeds = extractVulnwebLabSeeds(
+    home.body,
+    earlyScripts.map((s) => s.body),
+    crawlOrigin
+  );
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
@@ -964,6 +1026,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...gruyereSeeds,
       ...mutillidaeSeeds,
       ...bwappSeeds,
+      ...hackableSoSeeds,
+      ...vulnwebSeeds,
       ...pentesterLabSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
