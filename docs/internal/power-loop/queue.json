@@ -552,7 +552,32 @@
       "url": "https://vampi.lab.pentest-forge.com/",
       "source": "Pentest-Forge hosted VAmPI — OWASP API Top 10 training lab",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/",
+      "source": "Google XSS Application Security Firing Range — public XSS benchmark (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://google-gruyere.appspot.com/",
+      "source": "Google Gruyere codelab — intentionally vulnerable web app security training (Google Code Labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/",
+      "source": "Acunetix vulnweb REST API demo — classic injection/auth training site (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testaspnet.vulnweb.com/",
+      "source": "Acunetix vulnweb ASP.NET demo — XSS/SQLi practice site (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackxor.net/",
+      "source": "Hackxor — browser-based XSS/CSRF/auth challenge platform (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T00:15:00.000Z"
+  "updated_at": "2026-07-10T01:05:00.000Z"
 }
