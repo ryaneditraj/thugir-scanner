@@ -1025,7 +1025,7 @@ function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
   if (!/yogsec\.github\.io\/xss-labs|XSS Labs|yogsec\/xss-labs/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const id of ["reflected", "stored", "dom", "1", "2", "3"]) {
+  for (const id of ["1", "2", "3", "4", "5", "6"]) {
     try {
       const u = new URL(`labs/lab${id}.html`, pageUrl);
       if (u.origin !== pageOrigin) continue;
