@@ -702,7 +702,32 @@
       "url": "https://vulnerable-graphql-lab.railway.app/",
       "source": "Damn Vulnerable GraphQL Application — public Railway deploy for API security training",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ctfchallenge.co.uk/",
+      "source": "CTFchallenge / HackingHub — realistic multi-domain web app hacking challenge platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ws.digi.ninja/",
+      "source": "DigiNinja SocketToMe — WebSocket security testing lab (digininja/sockettome)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://intercode-benchmark.github.io/",
+      "source": "InterCode-CTF benchmark — picoCTF-style web/PWN/reverse challenge set (awesome-vulnerable-labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://exploit.education/",
+      "source": "Exploit Education — public VM labs for buffer overflow and web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cybench.github.io/",
+      "source": "CyBench — HackTheBox/Sekai/Glacier CTF benchmark challenge index (awesome-vulnerable-labs)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T06:05:00.000Z"
+  "updated_at": "2026-07-10T07:05:00.000Z"
 }
