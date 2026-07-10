@@ -200,6 +200,22 @@ async function main() {
     let result = await scanOne(entry, kind);
     saveResults(result);
 
+    if (kind === "benchmark" && entry.id) {
+      const bench = loadJson<BenchmarksFile>(resolve(LOOP, "benchmarks.json"), { targets: [] });
+      const target = bench.targets.find((t) => t.id === entry.id);
+
+      if (
+        result.status === "error" &&
+        target?.fallback_url &&
+        target.fallback_url !== entry.url
+      ) {
+        console.log(`benchmark error ${entry.url} — fallback ${target.fallback_url}`);
+        const fallback = await scanOne({ ...entry, url: target.fallback_url }, kind);
+        saveResults(fallback);
+        result = fallback;
+      }
+    }
+
     if (kind === "benchmark" && entry.id && result.status === "ok") {
       const bench = loadJson<BenchmarksFile>(resolve(LOOP, "benchmarks.json"), { targets: [] });
       const target = bench.targets.find((t) => t.id === entry.id);
