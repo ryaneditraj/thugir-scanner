@@ -953,6 +953,24 @@
       "slug": "client-side-zero-health-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Intentionally Vulnerable + bypass the JWT token + XSS as a Service + HIPAA Non-Compliant; zerohealth.aliyu.dev findings 0→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:alf.nu",
+      "slug": "client-side-alf-xss-wargame-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>alert(1) to win</title> + localStorage.serverUrl = '//alf.nu/db/true/' + /s/js/alert.min.js; extractAlfNuXssSeeds seeds escape.alf.nu; alf.nu/alert1 findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:llm-sec.vercel.app",
+      "slug": "client-side-llm-sec-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Interactive LLM Security Labs + OWASP Top 10 LLM Vulnerabilities + prompt injection tutorial meta; llm-sec.vercel.app findings 5→6; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:defendtheweb.net",
+      "slug": "client-side-defendtheweb-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>Defend the Web</title> + After 17 incredible years, Defend the Web is now on hiatus + support@defendtheweb.net; defendtheweb.net findings 2→3; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -1745,6 +1763,21 @@
       "source": "discovery:zerohealth.aliyu.dev",
       "slug": "client-side-zero-health-evidence",
       "shipped_at": "2026-07-10T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:alf.nu",
+      "slug": "client-side-alf-xss-wargame-evidence",
+      "shipped_at": "2026-07-10T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:llm-sec.vercel.app",
+      "slug": "client-side-llm-sec-evidence",
+      "shipped_at": "2026-07-10T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:defendtheweb.net",
+      "slug": "client-side-defendtheweb-evidence",
+      "shipped_at": "2026-07-10T06:10:00.000Z"
     }
   ]
 }
