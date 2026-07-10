@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T08:30:00.000Z",
+  "updated_at": "2026-07-10T09:58:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 447,
-  "total_findings": 1792,
+  "total_sites_scanned": 455,
+  "total_findings": 1829,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 150,
-  "discovery_findings": 1073,
-  "improvements_shipped": 167,
-  "last_run": "2026-07-10T08:30:00.000Z",
+  "discovery_urls_added": 153,
+  "discovery_findings": 1083,
+  "improvements_shipped": 170,
+  "last_run": "2026-07-10T09:58:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary juice-shop.herokuapp.com cold-start degraded 1/6 twice; staging fallback 6/6 — no new benchmark category misses",
+      "note": "No benchmark category misses — primary Heroku cold-start 1/6; staging fallback 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -47,48 +47,38 @@
           ],
           "primary_degraded": {
             "url": "https://juice-shop.herokuapp.com",
-            "first_pass": { "findings": 1, "categories_hit": 1, "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"] },
-            "retry": { "findings": 1, "categories_hit": 1, "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"] }
+            "findings": 1,
+            "categories_hit": 1,
+            "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
           }
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 25,
-      "errors": [
-        "https://ginandjuice.shop/ (Invalid URL)",
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
-        "https://seclab.vercel.app/ (Invalid URL)"
-      ],
-      "queued_next": [
-        "https://yogsec.github.io/xss-labs/",
-        "https://bwapp.net/",
-        "https://escape.alf.nu/",
-        "https://ws.digi.ninja/"
-      ],
-      "focus": "VulnerableApp regression fix + CTFChallenge UK + Exploit Education VM labs",
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 10,
+      "focus": "yogsec XSS Labs + Hacker101 CTF + DigiNinja SocketToMe WebSocket lab evidence",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary Heroku cold-start 1/6 twice before fallback",
-      "sasanlabs.github.io/VulnerableApp: client-side-vulnerableapp-evidence regression fixed (2→3 findings)",
-      "ctfchallenge.co.uk: client-side-ctfchallenge-evidence — 11 challenges / 74 flags (0→3 findings)",
-      "exploit.education: client-side-exploit-education-evidence — Phoenix/Nebula buffer overflow VM catalog (0→3 findings)",
-      "hack-this-site-eta.vercel.app: 10 findings incl. exposed source maps + CORS",
-      "llm-sec.vercel.app: 6 findings incl. client-side-llm-sec-evidence"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category misses",
+      "yogsec.github.io/xss-labs: client-side-yogsec-xss-labs-evidence + lab crawl sinks (2→5 findings)",
+      "ctf.hacker101.com: client-side-hacker101-ctf-evidence (2→3 findings)",
+      "ws.digi.ninja: client-side-sockettome-evidence WebSocket lab markers (1→2 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: intermittent Heroku cold-start yields 1-page shallow crawl (1/6 recall) — staging fallback required",
-      "ginandjuice.shop: Invalid URL from cloud scanner despite public availability",
-      "ws.digi.ninja: SocketToMe temporarily down (PHP upgrade) — queued for WebSocket lab evidence",
-      "xss-quiz.int21h.jp: host serves printenv stub — yamagata21 stage pages unreachable from cloud",
-      "mutillidae.lab.pentest-forge.com: 502 Bad Gateway — offline"
+      "bwapp.net: domain parked (HR-Assistant) — use bwapp.hakhub.net mirror instead",
+      "escape.alf.nu: already covered by client-side-alf-xss-wargame-evidence via alf.nu/alert1",
+      "ginandjuice.shop: Invalid URL from cloud scanner despite public availability"
     ]
   },
   "discovery_highlights": {
+    "yogsec.github.io/xss-labs": 5,
+    "ctf.hacker101.com": 3,
+    "ws.digi.ninja": 2,
     "hack-this-site-eta.vercel.app": 10,
     "llm-sec.vercel.app": 6,
     "defendtheweb.net": 3,
@@ -227,11 +217,11 @@
     "returntrue.win": 4,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
-    "securebank-blog.vercel.app": 2,
+    "securebank-blog.vercel.app": 5,
     "hack-health-tutorial.vercel.app": 4,
-    "preview-zeroday-sec.vercel.app": 2,
+    "preview-zeroday-sec.vercel.app": 3,
     "chimera.atlascrew.dev": 10,
-    "archon-eight.vercel.app": 4,
+    "archon-eight.vercel.app": 5,
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
     "websec.fr": 3,
