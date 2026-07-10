@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T15:05:27.147Z",
-  "total": 166,
-  "uniqueSlugs": 166,
+  "generatedAt": "2026-07-10T16:05:10.498Z",
+  "total": 168,
+  "uniqueSlugs": 168,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 148,
+    "generic": 150,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 102,
+    "deep": 104,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 44,
+    "Broken access control": 46,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -59,6 +59,7 @@
     "client-side-dom-goat-lab-evidence",
     "client-side-eks-goat-evidence",
     "client-side-exploit-education-evidence",
+    "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
     "client-side-google-gruyere-codelab-evidence",
     "client-side-graphql-lab-evidence",
@@ -119,6 +120,7 @@
     "client-side-xss-quiz-evidence",
     "client-side-xxe-evidence",
     "client-side-yogsec-xss-labs-evidence",
+    "client-side-yrprey-evidence",
     "client-side-zero-health-evidence",
     "client-side-zeroday-training-evidence",
     "cors-reflect-origin",

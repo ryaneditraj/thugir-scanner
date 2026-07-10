@@ -1115,6 +1115,24 @@
       "slug": "client-side-overthewire-natas-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Natas teaches the basics of serverside web-security + natas0.natas.labs.overthewire.org + Username: natas0 Password: natas0; extractOverTheWireNatasSeeds; www.overthewire.org/wargames/natas findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:natas0.natas.labs.overthewire.org",
+      "slug": "wargame-basic-auth-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: applyWargameBasicAuth retries natas0 with natas0:natas0 when 401 or natas.labs host; wechallinfo level natas0 + password for the next level in HTML; natas0.natas.labs.overthewire.org findings 2→3; benchmark juice-shop 8 findings 6/6"
+    },
+    {
+      "source": "discovery:ffuf.me",
+      "slug": "client-side-ffufme-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FFUF.Me is a live playground to practice ffuf + /cd/basic fuzzing routes + adamtlangley/ffufme; extractFfufMeSeeds; ffuf.me findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yrprey.com",
+      "slug": "client-side-yrprey-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta deliberately contains various vulnerabilities + Groundbreaking Framework For Practicing Security Vulnerabilities + github.com/yrprey/yrprey-application; yrprey.com findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2042,6 +2060,21 @@
       "source": "discovery:www.overthewire.org",
       "slug": "client-side-overthewire-natas-evidence",
       "shipped_at": "2026-07-10T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:natas0.natas.labs.overthewire.org",
+      "slug": "wargame-basic-auth-probe",
+      "shipped_at": "2026-07-10T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:ffuf.me",
+      "slug": "client-side-ffufme-evidence",
+      "shipped_at": "2026-07-10T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:yrprey.com",
+      "slug": "client-side-yrprey-evidence",
+      "shipped_at": "2026-07-10T16:10:00.000Z"
     }
   ]
 }
