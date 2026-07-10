@@ -652,6 +652,32 @@
       "url": "https://xss-game.appspot.com/",
       "source": "Google XSS Game — interactive cross-site scripting challenge platform (public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://xss-quiz.int21h.jp/",
+      "source": "yamagata21 XSS Challenges — 19-stage public XSS wargame (Acunetix XSS skills list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/",
+      "source": "Defend the Web — public web security CTF challenge platform (formerly HackThis!!)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://alf.nu/alert1",
+      "source": "ALF Security XSS lab — classic reflected XSS challenge series entry point",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://promptmap.vercel.app/",
+      "source": "PromptMap — interactive prompt-injection vulnerability training demo (Vercel)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://llm-sec.vercel.app/",
+      "source": "TomAbai/llm-sec — OWASP LLM Top 10 hands-on lab platform (Vercel deploy)",
+      "auth": "oss_deploy"
     }
-  ]
+  ],
+  "updated_at": "2026-07-10T05:05:00.000Z"
 }
