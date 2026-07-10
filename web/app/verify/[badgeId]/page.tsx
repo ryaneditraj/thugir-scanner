@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getServiceSupabase } from "@/lib/supabase/server";
+import { VerifyBadgeCard } from "@/components/VerifyBadgeCard";
 
 export const metadata: Metadata = {
   title: "Scan verification",
@@ -38,31 +40,29 @@ export default async function VerifyPage({ params }: { params: { badgeId: string
   }
 
   return (
-    <article className="page-pad">
-      <h1 style={{ fontFamily: "var(--display)" }}>Scan verification</h1>
-      {!summary && <p className="notice">No verified scan found for this badge.</p>}
-      {summary && (
-        <div className="card" style={{ maxWidth: 560 }}>
-          <p className="kv">
-            <b>{summary.domain}</b> was scanned by Thugir
-            {summary.date ? ` on ${new Date(summary.date).toLocaleDateString()}` : ""}.
-          </p>
-          {summary.clean ? (
-            <p style={{ marginTop: 12 }}>
-              <span className="tag low">passed</span>{" "}
-              <span className="muted">No open critical issues at scan time.</span>
-            </p>
-          ) : (
-            <p style={{ marginTop: 12 }}>
-              <span className="tag high">attention</span>{" "}
-              <span className="muted">{summary.criticals} open critical issue(s) at scan time.</span>
-            </p>
-          )}
-          <p className="muted" style={{ marginTop: 14 }}>
-            Verification reflects the state at scan time only.
-          </p>
-        </div>
+    <div className="page-pad" style={{ maxWidth: 720, margin: "0 auto" }}>
+      <Link href="/" className="back-link">
+        ← Back to scanner
+      </Link>
+      <h1 className="verify-page-title">Scan verification</h1>
+      {!summary && (
+        <p className="notice">
+          No verified scan found for this badge.{" "}
+          <Link href="/verify/demo" style={{ color: "inherit", textDecoration: "underline" }}>
+            View the demo badge
+          </Link>
+          .
+        </p>
       )}
-    </article>
+      {summary && (
+        <VerifyBadgeCard
+          domain={summary.domain}
+          scannedAt={summary.date}
+          status={summary.clean ? "passed" : "attention"}
+          criticalCount={summary.criticals}
+          badgeId={params.badgeId}
+        />
+      )}
+    </div>
   );
 }
