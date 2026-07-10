@@ -3338,5 +3338,57 @@ export const genericPatterns: Pattern[] = [
       "Our app is listed in OWASP VWAD. Show how to keep intentionally vulnerable training instances isolated and monitor for abuse.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-atlas-crew-hub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Atlas Crew security platform portfolio hub disclosed",
+    description:
+      "atlascrew.dev catalogs Synapse, Chimera, Crucible, and Apparatus open-source security platforms with links to live lab subdomains.",
+    impactOneline:
+      "Public security portfolio hub maps reachable offensive-security lab instances attackers can enumerate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAtlasCrewHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab subdomains behind auth; portfolio pages are marketing but lab instances must stay isolated.",
+      steps: [
+        "Require authentication on chimera/synapse/crucible/apparatus lab deployments.",
+        "IP-allowlist horizon-demo.atlascrew.dev and similar live demos.",
+        "Monitor linked subdomains for unauthenticated scanner traffic."
+      ]
+    },
+    fixPrompt:
+      "Our atlascrew.dev hub links to Synapse/Chimera/Crucible lab subdomains. Show how to restrict public access to demo instances.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-mcp-supply-chain-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "MCP supply-chain security demo with attack pack catalog disclosed",
+    description:
+      "Reef MCP registry documents signed MCP server supply chains, Anthropic MCP RCE blocking, OWASP Agentic ASI mappings, and DAST-A attack packs.",
+    impactOneline:
+      "Public MCP security demo reveals attack pack IDs and supply-chain bypass techniques useful for red-team enumeration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMcpSupplyChainEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep MCP registry demos on isolated networks; attack pack catalogs are intentional but instances need auth.",
+      steps: [
+        "Require authentication before MCP bind demos and /api/summarize attack playground.",
+        "Do not expose policy-bus admin tokens in client bundles.",
+        "Segment MCP registry control-plane from production agent fleets."
+      ]
+    },
+    fixPrompt:
+      "We host a public Reef MCP registry demo with MCP-RCE-26.04 attack packs. Show how to auth-gate the demo API and isolate control-plane endpoints.",
+    version: 1,
+    enabled: true
   }
 ];
