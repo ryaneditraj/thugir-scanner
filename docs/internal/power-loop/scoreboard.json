@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T04:10:00.000Z",
+  "updated_at": "2026-07-10T04:17:07.646Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 414,
-  "total_findings": 1660,
+  "total_sites_scanned": 420,
+  "total_findings": 1681,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 126,
-  "discovery_findings": 973,
+  "discovery_urls_added": 130,
+  "discovery_findings": 994,
   "improvements_shipped": 155,
-  "last_run": "2026-07-10T04:10:00.000Z",
+  "last_run": "2026-07-10T04:17:07.646Z",
   "last_run_summary": {
     "hour_utc": "04:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
+      "note": "Remote run 8 findings 6/6; local first pass degraded 1/6 before retry (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,18 +50,36 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Firing Range reflected XSS regression fix; WebGoat meta-refresh stub follow",
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 21,
+      "errors": [
+        "https://ginandjuice.shop/ (Invalid URL)",
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "queued_next": [
+        "https://www.bugbountyhunter.com/",
+        "https://zerohealth.aliyu.dev/",
+        "https://seclab.vercel.app/",
+        "https://nodegoat-websec.herokuapp.com/",
+        "https://dvwa.csalab.app/",
+        "https://xss-game.appspot.com/"
+      ],
+      "focus": "TegalSec XSS/br0w + BugBountyHunter; pwnshop OWASP+LLM; engine shipped Firing Range + WebGoat fixes",
       "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "public-firing-range.appspot.com: reflected XSS restored via path priority + lab crawl (2→4 findings)",
-      "webgoat.github.io/WebGoat: meta-refresh stub now follows webgoat.org (2→4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings on remote; local retry 7 after 1/6 cold-start)",
+      "pwnshop.ctfsecurity.com: 9 findings — SQLi+XSS+prototype pollution+prompt injection+API lab evidence",
+      "vulnforge-academy.vercel.app: 6 findings — OpenAI secret + OWASP training platform markers",
+      "labs.tegalsec.org/xss-labs + br0w: 2 findings each — shallow header-only on XSS/CTF labs",
+      "bugbountyhunter.com/challenge + playground: 1 finding each — shallow on zseano platform"
     ],
     "learning_gaps": [
-      "ginandjuice.shop: Invalid URL from cloud scanner despite public demo",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — keep disabled in queue",
-      "vampi.lab.pentest-forge.com: 502 Bad Gateway — hosted VAmPI lab offline"
+      "juice-shop.herokuapp.com: intermittent Heroku cold-start causes 1-page shallow crawl before retry",
+      "ginandjuice.shop: Invalid URL from cloud scanner",
+      "tegalsec + bugbountyhunter: need reflected-XSS / JS-bundle evidence rules",
+      "zerohealth.aliyu.dev + nodegoat + dvwa.csalab + xss-game: queued pending limit-8"
     ]
   },
   "discovery_highlights": {
@@ -71,9 +89,9 @@
     "rest.vulnweb.com": 4,
     "testasp.vulnweb.com": 4,
     "testaspnet.vulnweb.com": 3,
-    "labs.tegalsec.org/xss-labs": 0,
-    "labs.tegalsec.org/br0w": 0,
-    "bugbountyhunter.com": 0,
+    "labs.tegalsec.org/xss-labs": 2,
+    "labs.tegalsec.org/br0w": 2,
+    "bugbountyhunter.com": 1,
     "dvwa.csalab.app": 4,
     "nodegoat-websec.herokuapp.com": 3,
     "crapi.apisec.ai": 4,
@@ -96,7 +114,7 @@
     "vulnforge-academy.vercel.app": 6,
     "vaultapp-omega.vercel.app": 4,
     "ist-edu-bd.vercel.app": 5,
-    "pwnshop.ctfsecurity.com": 7,
+    "pwnshop.ctfsecurity.com": 9,
     "idor-website.vercel.app": 3,
     "vulnerable-web-site.vercel.app": 2,
     "urban-vampi-staging.up.railway.app": 4,
@@ -256,9 +274,10 @@
     "sasanlabs.github.io/VulnerableApp": 3
   },
   "notable_findings": [
-    "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-    "sasanlabs.github.io/VulnerableApp: OWASP scanner evaluation platform (2→3 findings)",
-    "rest.vulnweb.com: Invicti REST API lab (3→4 findings)",
-    "vulnforge-academy.vercel.app: 20-level OWASP training platform (5→6 findings)"
+    "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings on remote; local retry 7 after 1/6 cold-start)",
+    "pwnshop.ctfsecurity.com: 9 findings — SQLi+XSS+prototype pollution+prompt injection+API lab evidence",
+    "vulnforge-academy.vercel.app: 6 findings — OpenAI secret + OWASP training platform markers",
+    "labs.tegalsec.org/xss-labs + br0w: 2 findings each — shallow header-only on XSS/CTF labs",
+    "bugbountyhunter.com/challenge + playground: 1 finding each — shallow on zseano platform"
   ]
 }
