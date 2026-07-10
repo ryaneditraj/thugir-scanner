@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T23:01:59.353Z",
-  "total": 127,
-  "uniqueSlugs": 127,
+  "generatedAt": "2026-07-10T00:06:09.776Z",
+  "total": 129,
+  "uniqueSlugs": 129,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 109,
+    "generic": 111,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 63,
+    "deep": 65,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Security misconfiguration": 9,
     "Information disclosure": 13,
-    "Broken authentication": 8,
-    "Injection": 16,
+    "Broken authentication": 9,
+    "Injection": 17,
     "Cross-site scripting": 8,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -52,6 +52,7 @@
     "client-side-graphql-lab-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",
+    "client-side-hackable-lab-evidence",
     "client-side-hackthissite-evidence",
     "client-side-idor-evidence",
     "client-side-invicti-practice-site-evidence",
@@ -75,6 +76,7 @@
     "client-side-sql-evidence",
     "client-side-ssrf-evidence",
     "client-side-vuln-auth-portal-evidence",
+    "client-side-vulnweb-lab-evidence",
     "client-side-websec-challenge-evidence",
     "client-side-wrongsecrets-evidence",
     "client-side-xor-auth-evidence",
