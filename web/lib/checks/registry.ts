@@ -3848,7 +3848,7 @@ const clientSideVulnwebLabEvidence: Rule = async (ctx) => {
 // --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
 const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
-    /<!--[\s\S]{0,1200}?(?:database\s+password|db\s+password|password\s+is\s+set\s+to|admin\s+password\s+is)[\s\S]{0,800}?-->/i;
+    /<!--[\s\S]{0,1200}?(?:database\s+password|db\s+password|password\s+is\s+set\s+to|admin\s+password\s+is|SECRET:\s*\w*(?:password|passwd|credential|api[_-]?key))[\s\S]{0,800}?-->/i;
   const m = ctx.combined.match(re);
   if (!m) return NEGATIVE;
   return {
@@ -5769,6 +5769,124 @@ const clientSideDamnVulnerableBankEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy / Pentest Toolkit (hack-this-site-eta.vercel.app static lab hub) -
+const CLIENT_VULNLAB_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnLab Academy pentest training ground",
+    re: /VulnLab Academy|Pentest Toolkit Lab|Ultimate Vulnerable Pentest Site/i
+  },
+  {
+    label: "Deliberately vulnerable labeled labs",
+    re: /intentionally insecure and labeled for training|deliberately vulnerable pentest training ground/i
+  },
+  {
+    label: "Tier 1 OWASP lab catalog",
+    re: /A03-006 Reflected XSS|A03-001 SQLi Error|A01-001 IDOR|OWASP Top 10 \(2021\) Labs/i
+  },
+  {
+    label: "Unprotected admin portal",
+    re: /Admin Dashboard[\s\S]{0,120}intentionally unprotected|No auth required/i
+  },
+  {
+    label: "HTML comment staging secret",
+    re: /<!--\s*SECRET:\s*staging_admin_password/i
+  }
+];
+
+const clientSideVulnlabAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnLab Academy|Pentest Toolkit|vulnerable-labs\.local/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab Academy publishes labeled OWASP Top 10 labs with unprotected admin areas and HTML comment secrets for scanner validation"
+    }
+  };
+};
+
+// --- megmogmog1965/vulnerable-web-site (CSRF/clickjacking/XSS/SSRF Next.js lab) ----
+const CLIENT_VULNERABLE_WEB_SITE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Vulnerable Web Site title",
+    re: /Vulnerable Web Site/i
+  },
+  {
+    label: "Sample application for testing vulnerabilities",
+    re: /Sample application for testing vulnerabilities/i
+  },
+  {
+    label: "CSRF clickjacking XSS SSRF lab catalog",
+    re: /CSRF \(Cross-Site Request Forgery\)|Clickjacking|Stored XSS \(Cross-Site Scripting\)|SSRF \(Server-Side Request Forgery\)/i
+  },
+  {
+    label: "vulnerable-web-site Vercel deploy",
+    re: /vulnerable-web-site\.vercel\.app|reproduce following web application vulnerabilities/i
+  }
+];
+
+const clientSideVulnerableWebSiteEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNERABLE_WEB_SITE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Vulnerable Web Site|vulnerable-web-site/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Vulnerable Web Site is a Next.js lab reproducing CSRF, clickjacking, stored XSS, and optional SSRF for security testing practice"
+    }
+  };
+};
+
+// --- Nivara security assessment platform (cybersec-demo.vercel.app) -------------------
+const CLIENT_NIVARA_SECURITY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Nivara security assessment platform",
+    re: /Nivara[\s\S]{0,40}Security Assessment Platform|Security Assessment Platform/i
+  },
+  {
+    label: "Automated external security assessments",
+    re: /Automated external security assessments|map your attack surface, test every endpoint/i
+  },
+  {
+    label: "Nivara theme localStorage key",
+    re: /nivara-theme|localStorage\.getItem\(["']nivara-theme["']\)/i
+  },
+  {
+    label: "cybersec-demo Vercel deploy",
+    re: /cybersec-demo\.vercel\.app/i
+  }
+];
+
+const clientSideNivaraSecurityEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NIVARA_SECURITY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Nivara|cybersec-demo/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Nivara advertises an automated external security assessment platform for attack-surface mapping and endpoint testing"
+    }
+  };
+};
+
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -5992,6 +6110,9 @@ export const RULES: Record<string, Rule> = {
   clientSideOwaspBricksEvidence,
   clientSideVaultappLabEvidence,
   clientSideDamnVulnerableBankEvidence,
+  clientSideVulnlabAcademyEvidence,
+  clientSideVulnerableWebSiteEvidence,
+  clientSideNivaraSecurityEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };

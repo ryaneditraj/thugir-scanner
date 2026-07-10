@@ -2742,13 +2742,91 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-academy-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab Academy pentest training platform disclosed",
+    description:
+      "VulnLab Academy (Pentest Toolkit) publishes labeled OWASP Top 10 labs with reflected XSS, SQLi error, IDOR modules, unprotected admin portals, and HTML comment secrets for scanner validation.",
+    impactOneline:
+      "Public VulnLab Academy instances expose tiered injection and access-control labs plus staging secrets in page source.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnLab Academy is intentional training — isolate lab hubs from production networks.",
+      steps: [
+        "Deploy pentest training sites only on dedicated lab infrastructure.",
+        "Remove HTML comment secrets and staging credentials from crawlable pages.",
+        "Protect admin portals with authentication even in training environments."
+      ]
+    },
+    fixPrompt:
+      "We host VulnLab Academy-style pentest training labs. Show how to isolate labeled OWASP labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnerable-web-site-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Vulnerable Web Site CSRF/XSS/SSRF lab disclosed",
+    description:
+      "megmogmog1965/vulnerable-web-site is a Next.js demo reproducing CSRF, clickjacking, stored XSS, and optional SSRF vulnerabilities for security testing practice.",
+    impactOneline:
+      "Public Vulnerable Web Site deploys advertise a multi-category web vulnerability reproduction lab for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnerableWebSiteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Vulnerable Web Site is intentional training — never deploy CSRF/XSS demo patterns to production.",
+      steps: [
+        "Run vulnerability reproduction labs only on isolated infrastructure.",
+        "Implement CSRF tokens on all state-changing forms in production.",
+        "Set X-Frame-Options or CSP frame-ancestors to prevent clickjacking."
+      ]
+    },
+    fixPrompt:
+      "We host Vulnerable Web Site-style CSRF and XSS reproduction labs. Show how to isolate them from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-nivara-security-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Nivara security assessment platform disclosed",
+    description:
+      "Nivara publishes an automated external security assessment platform that maps attack surfaces and tests endpoints for modern companies.",
+    impactOneline:
+      "Public Nivara demo instances disclose a security assessment SaaS attack surface suitable for reconnaissance drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNivaraSecurityEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Security assessment platform demos should not expose production customer data or unauthenticated scan APIs.",
+      steps: [
+        "Require authentication before exposing assessment dashboards.",
+        "Isolate demo tenants from production scan infrastructure.",
+        "Restrict API endpoints that trigger external scanning to authorized users."
+      ]
+    },
+    fixPrompt:
+      "We host Nivara-style security assessment platform demos. Show how to protect scan APIs and customer data.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "high",
     title: "Database or admin credentials in HTML comment",
     description:
-      "Page source contains an HTML comment disclosing database passwords or admin credentials readable by anyone viewing source.",
+      "Page source contains an HTML comment disclosing database passwords, admin credentials, or SECRET staging keys readable by anyone viewing source.",
     impactOneline:
       "Credential hints in HTML comments leak secrets to unauthenticated visitors and search engine caches.",
     detectorKind: "rule_ref",
