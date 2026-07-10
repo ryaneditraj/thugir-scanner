@@ -93,6 +93,14 @@ export default function ScanForm() {
   const [result, setResult] = useState<FreeResult | null>(null);
   const [step, setStep] = useState(0);
 
+  // Prefill from ?scan= after sign-in redirect
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const prefill = params.get("scan");
+    if (prefill) setUrl(prefill);
+  }, []);
+
   // Advance the live progress steps while the request is in flight. Holds on the final step
   // until the response lands, so we never claim "done" before we have the report.
   useEffect(() => {

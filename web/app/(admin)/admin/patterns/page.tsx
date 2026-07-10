@@ -81,14 +81,13 @@ export default function AdminPatternsPage() {
 
       <div className="card" style={{ marginBottom: 20 }}>
         <h3 style={{ marginTop: 0 }}>New pattern</h3>
-        <form onSubmit={create} className="grid">
+        <form onSubmit={create} className="form-grid">
           {(["slug", "platform", "category", "title", "impact_oneline"] as const).map((k) => (
             <input
               key={k}
               placeholder={k}
               value={(form as any)[k]}
               onChange={(e) => setForm({ ...form, [k]: e.target.value })}
-              style={{ padding: 10, border: "1px solid var(--line)", borderRadius: 8 }}
             />
           ))}
           <select
@@ -119,13 +118,13 @@ export default function AdminPatternsPage() {
             placeholder="detector_config (JSON)"
             value={form.detector_config}
             onChange={(e) => setForm({ ...form, detector_config: e.target.value })}
-            style={{ gridColumn: "1 / -1", padding: 10, border: "1px solid var(--line)", borderRadius: 8, fontFamily: "monospace" }}
+            style={{ gridColumn: "1 / -1", fontFamily: "var(--mono)", minHeight: 80 }}
           />
-          <button className="btn" type="submit" style={{ gridColumn: "1 / -1" }}>
+          <button className="btn btn-primary" type="submit" style={{ gridColumn: "1 / -1" }}>
             Create pattern
           </button>
         </form>
-        {msg && <p className="notice" style={{ marginTop: 12 }}>{msg}</p>}
+        {msg && <p className={`notice${msg.includes("created") ? " ok" : ""}`} style={{ marginTop: 12 }}>{msg}</p>}
       </div>
 
       <table className="table">
@@ -150,7 +149,7 @@ export default function AdminPatternsPage() {
               <td>{p.version}</td>
               <td>{p.enabled ? "yes" : "no"}</td>
               <td>
-                <button className="btn secondary" onClick={() => toggle(p)}>
+                <button className="btn btn-secondary" type="button" onClick={() => toggle(p)}>
                   {p.enabled ? "disable" : "enable"}
                 </button>
               </td>
