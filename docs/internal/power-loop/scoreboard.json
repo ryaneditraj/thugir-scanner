@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T18:12:30.720Z",
+  "updated_at": "2026-07-10T18:18:18.793Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 532,
-  "total_findings": 2182,
+  "total_sites_scanned": 540,
+  "total_findings": 2225,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 198,
-  "discovery_findings": 1389,
+  "discovery_urls_added": 203,
+  "discovery_findings": 1432,
   "improvements_shipped": 191,
-  "last_run": "2026-07-10T18:12:30.720Z",
+  "last_run": "2026-07-10T18:18:18.793Z",
   "last_run_summary": {
-    "hour_utc": "17:00",
+    "hour_utc": "18:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start 1/6 (misconfig only); retry 4/6 (gap xss,sensitive_data); staging fallback recovered 6/6",
+      "note": "Primary heroku cold-start 1/6 (misconfig only); retry 4/6 (gap sqli,auth_bypass); staging fallback recovered 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,8 +53,8 @@
             "sensitive_data"
           ],
           "retry_gap": [
-            "xss",
-            "sensitive_data"
+            "sqli",
+            "auth_bypass"
           ]
         }
       }
@@ -62,32 +62,36 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 54,
+      "urls_scanned": 8,
+      "findings": 43,
       "skipped_48h": [],
       "queued_not_scanned_this_hour": [
+        "https://apparatus.atlascrew.dev/",
+        "https://crucible.atlascrew.dev/",
+        "https://synapse.atlascrew.dev/",
+        "https://atlascrew.dev/",
+        "https://vwad.owasp.org/",
         "https://demo.securityknowledgeframework.org/",
         "http://ffuf.me/",
-        "http://www.bgabank.com/",
-        "https://bugbait.io/"
+        "https://openvaultbank.com/"
       ],
-      "focus": "BergerZvika Cyber-Lab + pwn.college dojo + React DOM XSS demo; VWAD SKF/bgabank queue tail pending",
-      "improvements_shipped_this_run": 3
+      "focus": "Atlas Crew Inferno Lab stack + OWASP VWAD directory queued; platform landing pages (hacksec/webgoat/cyberdefenders) rescanned",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 1/6→4/6 cold-start degradation",
-      "bergerzvika.github.io/Cyber-Lab: integer overflow + race + prompt injection lab evidence (2→8 findings)",
-      "pwn.college: Learn to Hack dojo platform markers + /dojos crawl (1→6 findings)",
-      "aesthetic-bubblegum-cbc86d.netlify.app: React DOM XSS vs DOMPurify lab (2→3 findings)",
-      "angular.testsparker.com: critical AWS AKID + hardcoded demo creds (5 findings)",
-      "ssrf-defense-platform.onrender.com: SSRF attack-demo mode evidence (6 findings)"
+      "cyberdefenders.org: OpenAI + Resend keys in bundle + unauthenticated API routes (8 findings)",
+      "labs.hackadvisor.io: HackAdvisor CTF lab evidence + reflected XSS (8 findings)",
+      "appsecmaster.net: Next.js RSC CVE lab page + API Security Top 10 markers (7 findings)",
+      "webgoat.org: postMessage DOM XSS + API security lab evidence (6 findings)",
+      "hacksec.in: reflected XSS on landing + robots/sitemap sensitive paths (5 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: Heroku cold-start still degrades to 1/6 before retry; staging fallback required this hour",
-      "demo.securityknowledgeframework.org: SKF demo unreachable from cloud (empty response)",
-      "www.bgabank.com: Cloudflare 522 timeout from cloud scanner",
-      "bugbait.io: expired TLS certificate blocks HTTPS scan",
-      "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud scanner"
+      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline (2 misconfig-only findings)",
+      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
+      "Atlas Crew stack (apparatus/crucible/synapse): queued at tail — marketing/docs sites not yet scanned",
+      "demo.securityknowledgeframework.org: SKF demo unreachable from cloud (empty response)"
     ]
   },
   "discovery_highlights": {
