@@ -869,6 +869,24 @@
       "slug": "spa-route-param-expansion",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: path:\"/profile/:id\" in React bundle; spaRouteTargets expands :id to /profile/1 /profile/2; vulnweb pages_crawled 1→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:security-trainer.vercel.app",
+      "slug": "vite-modulepreload-script-discovery",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lesson-content-pfC_KFwR.js only in <link rel=modulepreload>; extractScriptUrls now collects modulepreload hrefs + prioritizes lesson-content chunks; security-trainer combined crawl 72KB→934KB; benchmark staging recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:security-trainer.vercel.app",
+      "slug": "client-side-sectrainer-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecTrainer brand + sql-injection/xss-basics module catalog + CTF /ctf route in index-B9zkF_IA.js; extractSectrainerSpaSeeds; security-trainer findings 2→4; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "client-side-hackadvisor-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HackAdvisor Labs + Practice Real-World Hacking + real-world bug reports in homepage meta; labs.hackadvisor.io findings 7→8; benchmark staging 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1591,6 +1609,21 @@
       "source": "discovery:vulnweb.netlify.app",
       "slug": "spa-route-param-expansion",
       "shipped_at": "2026-07-10T00:12:00.000Z"
+    },
+    {
+      "source": "discovery:security-trainer.vercel.app",
+      "slug": "vite-modulepreload-script-discovery",
+      "shipped_at": "2026-07-10T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:security-trainer.vercel.app",
+      "slug": "client-side-sectrainer-evidence",
+      "shipped_at": "2026-07-10T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "client-side-hackadvisor-lab-evidence",
+      "shipped_at": "2026-07-10T01:20:00.000Z"
     }
   ]
 }

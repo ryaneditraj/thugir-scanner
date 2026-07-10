@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T00:06:09.776Z",
-  "total": 129,
-  "uniqueSlugs": 129,
+  "generatedAt": "2026-07-10T01:06:14.307Z",
+  "total": 131,
+  "uniqueSlugs": 131,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 111,
+    "generic": 113,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 65,
+    "deep": 67,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 25,
+    "Broken access control": 27,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -53,6 +53,7 @@
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
+    "client-side-hackadvisor-lab-evidence",
     "client-side-hackthissite-evidence",
     "client-side-idor-evidence",
     "client-side-invicti-practice-site-evidence",
@@ -69,6 +70,7 @@
     "client-side-prototype-pollution-evidence",
     "client-side-react-rsc-cve-evidence",
     "client-side-rootme-challenge-evidence",
+    "client-side-sectrainer-evidence",
     "client-side-security-game-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sixhack-ctf-lab-evidence",
