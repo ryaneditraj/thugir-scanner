@@ -677,7 +677,32 @@
       "url": "https://llm-sec.vercel.app/",
       "source": "TomAbai/llm-sec — OWASP LLM Top 10 hands-on lab platform (Vercel deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://escape.alf.nu/",
+      "source": "Erling Ellingsen escape.alf.nu — 15-stage reflected XSS filter-bypass wargame (alf.nu security challenges)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://returntrue.win/",
+      "source": "Erling Ellingsen return true to win — PHP/JS code-injection challenge series (alf.nu)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://authlab.digi.ninja/",
+      "source": "DigiNinja Authentication Lab — JWT timing/client-side auth bypass training challenges",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/",
+      "source": "Pentest-Forge hosted OWASP Mutillidae II — SQLi/XSS/CSRF public lab instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-graphql-lab.railway.app/",
+      "source": "Damn Vulnerable GraphQL Application — public Railway deploy for API security training",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-10T05:05:00.000Z"
+  "updated_at": "2026-07-10T06:05:00.000Z"
 }
