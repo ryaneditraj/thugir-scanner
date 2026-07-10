@@ -361,6 +361,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabAcademyEvidence",
   "clientSideVulnerableWebSiteEvidence",
   "clientSideNivaraSecurityEvidence",
+  "clientSideEksGoatEvidence",
+  "clientSideCtflearnEvidence",
+  "clientSideCybenchEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1165,6 +1168,49 @@ function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** OWASP EKS Goat mdBook (ekssecurity.netlify.app — cloud-native security masterclass). */
+function extractEksGoatMdbookSeeds(html: string, pageUrl: string): string[] {
+  if (!/OWASP EKS Goat|AWS EKS Security Masterclass|ekssecurity\.netlify\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/welcome/introduction", "/welcome/agenda", "/basics/lab_setup"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:welcome|basics|exploitation|defense)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** CTFlearn — seed challenge browse pages for platform markers. */
+function extractCtflearnChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/CTFlearn|ctflearn\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/challenge/1/browse", "/users/register"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti rest.vulnweb.com — seed OpenAPI docs and api_data.json for REST lab markers. */
 function extractRestVulnwebDocSeeds(html: string, origin: string): string[] {
   if (!/Invicti Vulnerable REST API|rest\.vulnweb\.com/i.test(html)) return [];
@@ -1501,6 +1547,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const damnVulnerableBankSeeds = extractDamnVulnerableBankSeeds(home.body, home.finalUrl);
   const vulnLabAcademySeeds = extractVulnLabAcademySeeds(home.body, home.finalUrl);
+  const eksGoatSeeds = extractEksGoatMdbookSeeds(home.body, home.finalUrl);
+  const ctflearnSeeds = extractCtflearnChallengeSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1550,6 +1598,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspBricksSeeds,
       ...damnVulnerableBankSeeds,
       ...vulnLabAcademySeeds,
+      ...eksGoatSeeds,
+      ...ctflearnSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
