@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 183,
   "discovery_findings": 1294,
-  "improvements_shipped": 179,
+  "improvements_shipped": 182,
   "last_run": "2026-07-10T14:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "14:00",
@@ -72,21 +72,24 @@
         "https://pwn.college/",
         "https://www.overthewire.org/wargames/",
         "https://openvaultbank.com/",
-        "https://damnvulnerable.me/",
-        "https://w3challs.com/"
+        "https://damnvulnerable.me/"
       ],
-      "focus": "Pentest-Ground DVWA/API labs + Escape Duck Store + OWASP Juice Shop variants"
+      "focus": "W3Challs wargame + InterCode IC-CTF benchmark + RS Vulnerable Lab QA honeypot evidence rules",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark 8 findings, 6/6 recall after Heroku cold-start retry",
+      "w3challs.com: W3Challs web hacking wargame platform evidence (2→3 findings)",
+      "intercode-benchmark.github.io: InterCode IC-CTF/SQL/Bash benchmark (2→3 findings)",
+      "vulnerable-lab.vercel.app: INTENTIONAL QA LAB scanner honeypot markers (7→8 findings)",
       "duck-store.escape.tech: Escape Duck Store API benchmark (7 findings — SSRF/IDOR/JWT markers)",
-      "pentest-ground.com:4280: DVWA hosted SQLi/XSS/LFI lab (5 findings)",
-      "xxe-lab.vercel.app: XXE interactive training lab (5 findings)",
-      "luisillobret2.github.io/WebGoat: static WebGoat mirror markers (3 findings)"
+      "pentest-ground.com:4280: DVWA hosted SQLi/XSS/LFI lab (5 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: cold-start still drops to 1/6 before retry — Heroku dyno warmup signal",
-      "openvaultbank.com / damnvulnerable.me / w3challs.com: queued at tail — not reached within 8-scan limit",
+      "sqli-demo.vercel.app / cyber-ctf-website.vercel.app: Vercel Security Checkpoint blocks cloud scans",
+      "mutillidae.lab.pentest-forge.com / vampi.lab.pentest-forge.com: Pentest-Forge 502 offline",
+      "damnvulnerable.me: DNS dead — DomFlow lab offline",
       "labs.hackxpert.com: added this hour — shareable lab URLs require UI interaction to expose targets"
     ]
   },
@@ -171,6 +174,7 @@
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
     "cyber-ctf-website.vercel.app": 1,
+    "vulnbank.org": 4,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 3,
     "web-security-lab.vercel.app": 3,
     "vuln-demo.vercel.app": 4,
@@ -286,6 +290,9 @@
     "acuart.phpnet.us": 2,
     "ekssecurity.netlify.app": 2,
     "ctflearn.com": 2,
-    "cybench.github.io": 4
+    "cybench.github.io": 4,
+    "w3challs.com": 3,
+    "intercode-benchmark.github.io": 3,
+    "vulnerable-lab.vercel.app": 8
   }
 }
