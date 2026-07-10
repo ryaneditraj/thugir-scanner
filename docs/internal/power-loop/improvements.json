@@ -989,6 +989,24 @@
       "slug": "client-side-xss-quiz-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yamagata21 stage2.php/stage-3.php routes seeded via extractXssQuizInt21hSeeds; printenv stub blocks evidence until quiz HTML returns; pages_crawled 1→6; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:sasanlabs.github.io/VulnerableApp",
+      "slug": "client-side-vulnerableapp-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: home Jekyll docs Deliberately Vulnerable Applications + Vulnerability Scanning Tools + OWASP VulnerableApp; broadened CLIENT_VULNERABLEAPP_RES markers; sasanlabs.github.io/VulnerableApp findings 2→3; benchmark oracle 503 this hour — staging 5/6 pre-existing sensitive_data gap"
+    },
+    {
+      "source": "discovery:ctfchallenge.co.uk",
+      "slug": "client-side-ctfchallenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF Challenge - Web App Security Challenges title + 11 challenges with 74 flags + web application hacking challenge websites; extractCtfChallengeSeeds; ctfchallenge.co.uk findings 0→3"
+    },
+    {
+      "source": "discovery:exploit.education",
+      "slug": "client-side-exploit-education-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Welcome to exploit.education + buffer overflows, format strings and heap exploitation + /phoenix/ /nebula/ VM catalog; extractExploitEducationSeeds; exploit.education findings 0→3"
     }
   ],
   "shipped": [
@@ -1811,6 +1829,21 @@
       "source": "discovery:xss-quiz.int21h.jp",
       "slug": "client-side-xss-quiz-evidence",
       "shipped_at": "2026-07-10T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:sasanlabs.github.io/VulnerableApp",
+      "slug": "client-side-vulnerableapp-home-markers",
+      "shipped_at": "2026-07-10T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:ctfchallenge.co.uk",
+      "slug": "client-side-ctfchallenge-evidence",
+      "shipped_at": "2026-07-10T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:exploit.education",
+      "slug": "client-side-exploit-education-evidence",
+      "shipped_at": "2026-07-10T08:10:00.000Z"
     }
   ]
 }
