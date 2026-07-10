@@ -358,6 +358,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideOwaspBricksEvidence",
   "clientSideVaultappLabEvidence",
   "clientSideDamnVulnerableBankEvidence",
+  "clientSideVulnlabAcademyEvidence",
+  "clientSideVulnerableWebSiteEvidence",
+  "clientSideNivaraSecurityEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1103,6 +1106,39 @@ function extractDamnVulnerableBankSeeds(html: string, pageUrl: string): string[]
   return [...out];
 }
 
+/** VulnLab Academy / Pentest Toolkit (hack-this-site-eta.vercel.app static OWASP lab hub). */
+function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
+  if (!/VulnLab Academy|Pentest Toolkit|deliberately vulnerable pentest/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/home/",
+    "/owasp/",
+    "/labs/xss-reflected.html",
+    "/labs/sqli-error.html",
+    "/labs/idor.html",
+    "/admin/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:home|owasp|admin|labs\/[^"']+)\/?)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 10) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game). */
 function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
   if (!/ctf\.hacker101\.com|Hacker101 CTF|learn to hack in a safe/i.test(html)) return [];
@@ -1464,6 +1500,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const damnVulnerableBankSeeds = extractDamnVulnerableBankSeeds(home.body, home.finalUrl);
+  const vulnLabAcademySeeds = extractVulnLabAcademySeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1512,6 +1549,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hacker101CtfSeeds,
       ...owaspBricksSeeds,
       ...damnVulnerableBankSeeds,
+      ...vulnLabAcademySeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
