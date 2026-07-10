@@ -1169,6 +1169,30 @@
       "slug": "client-side-invicti-practice-site-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: guestbookPermenantCrossSiteScripting control + /Guestbook.aspx + /administrator/Login.aspx; extractInvictiAspnetSeeds; aspnet.testsparker.com findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:apparatus.atlascrew.dev",
+      "slug": "client-side-atlas-crew-inferno-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: AI-augmented network security platform + Red Team & AI Autopilot + Nuclei vulnerability scanning; extractAtlasCrewInfernoLabSeeds; apparatus.atlascrew.dev findings 0→6; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crucible.atlascrew.dev",
+      "slug": "client-side-atlas-crew-inferno-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 80+ attack scenarios + pass/fail assessment scoring + @atlascrew/crucible; crucible.atlascrew.dev findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:synapse.atlascrew.dev",
+      "slug": "client-side-atlas-crew-edge-protection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Horizon Edge Protection Platform + Synapse WAF Engine + Fleet-aware WAF inline DLP; extractAtlasCrewEdgeProtectionSeeds; synapse.atlascrew.dev findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-owasp-vwad-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Vulnerable Web Applications Directory + numberOfItems 208 + vwad.owasp.org/app/juice-shop; extractOwaspVwadSeeds; vwad.owasp.org findings 0→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2141,6 +2165,21 @@
       "source": "discovery:aspnet.testsparker.com",
       "slug": "invicti-aspnet-guestbook-xss-markers",
       "shipped_at": "2026-07-10T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:apparatus.atlascrew.dev",
+      "slug": "client-side-atlas-crew-inferno-lab-evidence",
+      "shipped_at": "2026-07-10T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:synapse.atlascrew.dev",
+      "slug": "client-side-atlas-crew-edge-protection-evidence",
+      "shipped_at": "2026-07-10T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-owasp-vwad-evidence",
+      "shipped_at": "2026-07-10T19:15:00.000Z"
     }
   ]
 }
