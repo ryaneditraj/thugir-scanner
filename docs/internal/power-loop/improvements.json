@@ -1247,6 +1247,30 @@
       "slug": "overthewire-wargames-hub-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /wargames/ hub links Bandit/Natas/Leviathan; extractOverTheWireNatasSeeds seeds /wargames/natas + /wargames/bandit; www.overthewire.org/wargames findings 4 maintained with richer crawl; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-sql-warmup-probe",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku retry_gap sqli; juiceShopApiLive now probes /rest/products/search?q=')) for SQLITE_ERROR; staging oracle 7 findings recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Your Vulnerable Crystal Marketplace + NeuraLegion/brokencrystals + /api/goto SSRF + dangerous-html sinks; brokencrystals.com findings 14→15; benchmark staging 7 findings maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "client-side-secresearchlab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Sec Research Lab + Practice SQL injection, XSS + /labs/sql-injection /labs/xss-playground routes; extractSecResearchLabSeeds; secresearchlab.web.app findings 6→7; benchmark staging maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-bandit-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bandit.labs.overthewire.org port 2220 + username is bandit0 password is bandit0 on bandit0.html; natas0.natas.labs.overthewire.org/wargames/bandit/bandit0 findings 3→5; benchmark staging maintained"
     }
   ],
   "shipped": [
@@ -2279,6 +2303,26 @@
       "source": "discovery:www.overthewire.org",
       "slug": "overthewire-wargames-hub-crawl",
       "shipped_at": "2026-07-10T22:20:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-sql-warmup-probe",
+      "shipped_at": "2026-07-10T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-evidence",
+      "shipped_at": "2026-07-10T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "client-side-secresearchlab-evidence",
+      "shipped_at": "2026-07-10T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-bandit-evidence",
+      "shipped_at": "2026-07-10T23:10:00.000Z"
     }
   ]
 }
