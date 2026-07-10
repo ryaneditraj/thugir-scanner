@@ -1102,7 +1102,32 @@
       "url": "https://escape.tech/academy/",
       "source": "Escape GraphQL Security Academy — public GraphQL vulnerability learning platform (Awesome-Vulnerable-Labs)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://dvai-red.vercel.app/",
+      "source": "bb1nfosec/dvai — Damn Vulnerable AI Ecosystem red-team range variant (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pygoat.herokuapp.com/",
+      "source": "adeyosemanputra/pygoat — Django OWASP Top 10 training app live demo (Docker Hub / GitHub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pygoat-dep.herokuapp.com/",
+      "source": "KevinDNgo/pygoat — alternate PyGoat Heroku deployment (GitHub Live Demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsec.asia/",
+      "source": "OWASP PyGoat project homepage — intentionally vulnerable Django training platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/",
+      "source": "OWASP crAPI — official APIsec hosted API security training instance (OWASP LA 2025 guide)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T22:15:00.000Z"
+  "updated_at": "2026-07-10T23:15:00.000Z"
 }
