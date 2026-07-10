@@ -2534,6 +2534,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ctfchallenge-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CTFChallenge UK web application hacking platform disclosed",
+    description:
+      "CTFChallenge UK publishes web application security puzzles with staged vulnerability flags covering XSS, SQLi, and access-control drills.",
+    impactOneline:
+      "Public CTFChallenge instances document web hacking challenge surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfchallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFChallenge is intentional training — isolate challenge instances from production networks.",
+      steps: [
+        "Run CTF challenge platforms only on dedicated lab infrastructure.",
+        "Require authentication before serving live challenge instances.",
+        "Do not copy challenge vulnerability patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "We host CTFChallenge-style web app hacking puzzles. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-exploit-education-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Exploit Education buffer overflow VM labs disclosed",
+    description:
+      "Exploit Education provides Phoenix, Nebula, and Protostar virtual machines teaching buffer overflow, format string, and heap exploitation.",
+    impactOneline:
+      "Public Exploit Education docs catalog memory corruption lab modules attackers study for binary exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideExploitEducationEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Exploit Education VMs are intentional training — never expose memory corruption labs to the public internet.",
+      steps: [
+        "Run Phoenix/Nebula/Protostar VMs only on isolated lab networks.",
+        "Enable stack canaries, ASLR, and NX in production binaries.",
+        "Do not deploy intentionally vulnerable native binaries to production hosts."
+      ]
+    },
+    fixPrompt:
+      "We host Exploit Education-style buffer overflow VM labs. Show how to isolate native exploitation training from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",
