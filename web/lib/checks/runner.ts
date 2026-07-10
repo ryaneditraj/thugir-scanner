@@ -646,8 +646,9 @@ function extractMutillidaeLabSeeds(html: string, origin: string): string[] {
 }
 
 /** hackable.so — Next.js social platform with 12 hidden vulnerabilities. */
-function extractHackableSoSeeds(html: string, origin: string): string[] {
-  if (!/hackable\.so|12 hidden vulnerabilities/i.test(html)) return [];
+function extractHackableSoSeeds(html: string, jsBodies: string[], origin: string): string[] {
+  const corpus = html + jsBodies.join("");
+  if (!/hackable\.so|12 hidden vulnerabilities/i.test(corpus)) return [];
   const out = new Set<string>();
   for (const p of [
     "/login",
@@ -965,6 +966,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let home = await reachTarget(target, targetInput);
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const origin = target.origin;
+  const crawlOrigin = new URL(home.finalUrl).origin;
 
   // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
   // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
@@ -995,11 +997,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
-  const hackableSoSeeds = extractHackableSoSeeds(home.body, origin);
+  const hackableSoSeeds = extractHackableSoSeeds(
+    home.body,
+    earlyScripts.map((s) => s.body),
+    crawlOrigin
+  );
   const vulnwebSeeds = extractVulnwebLabSeeds(
     home.body,
     earlyScripts.map((s) => s.body),
-    origin
+    crawlOrigin
   );
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);

@@ -851,6 +851,24 @@
       "slug": "client-side-bwapp-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bWAPP, a buggy web application + 100 web bugs + OWASP Top 10 injection taxonomy on bugs.htm; extractBwappLabSeeds; www.itsecgames.com findings 1→2; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackable.so",
+      "slug": "client-side-hackable-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta 12 hidden vulnerabilities + /api/auth/login + localStorage token + /admin/users|config nav in login/admin bundles; extractHackableSoSeeds; hackable.so findings 3→6 when reachable (Vercel checkpoint may block cloud); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "client-side-vulnweb-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: intentionally vulnerable for educational purposes + IDOR/SQLi/XSS lab markers in index-CfUzmkDw.js; vulnweb.netlify.app findings 4→4 (+client-side-vulnweb-lab-evidence slug), pages_crawled 1→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "spa-route-param-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: path:\"/profile/:id\" in React bundle; spaRouteTargets expands :id to /profile/1 /profile/2; vulnweb pages_crawled 1→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1558,6 +1576,21 @@
       "source": "discovery:www.itsecgames.com",
       "slug": "client-side-bwapp-evidence",
       "shipped_at": "2026-07-09T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:hackable.so",
+      "slug": "client-side-hackable-lab-evidence",
+      "shipped_at": "2026-07-10T00:12:00.000Z"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "client-side-vulnweb-lab-evidence",
+      "shipped_at": "2026-07-10T00:12:00.000Z"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "spa-route-param-expansion",
+      "shipped_at": "2026-07-10T00:12:00.000Z"
     }
   ]
 }
