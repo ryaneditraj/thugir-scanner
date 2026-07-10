@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T03:10:00.000Z",
+  "updated_at": "2026-07-10T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 413,
-  "total_findings": 1652,
+  "total_sites_scanned": 414,
+  "total_findings": 1660,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 126,
   "discovery_findings": 973,
-  "improvements_shipped": 153,
-  "last_run": "2026-07-10T03:10:00.000Z",
+  "improvements_shipped": 155,
+  "last_run": "2026-07-10T04:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
@@ -50,43 +50,18 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 30,
-      "skipped_48h": [
-        "https://pwnshop.ctfsecurity.com/"
-      ],
-      "errors": [
-        "https://ginandjuice.shop/ (Invalid URL)",
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "queued_next": [
-        "https://labs.tegalsec.org/xss-labs/",
-        "https://labs.tegalsec.org/br0w/",
-        "https://www.bugbountyhunter.com/challenge?id=1",
-        "https://www.bugbountyhunter.com/playground",
-        "https://www.bugbountyhunter.com/"
-      ],
-      "focus": "Acunetix vulnweb trilogy + VulnerableApp/VulnForge lab evidence rules; TegalSec + BugBountyHunter queued",
-      "improvements_shipped_this_run": 3
+      "focus": "Firing Range reflected XSS regression fix; WebGoat meta-refresh stub follow",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "testasp.vulnweb.com: 4 findings — SQLi error + reflected XSS on Acunetix PHP demo",
-      "rest.vulnweb.com: Invicti REST API lab (3→4 findings) with client-side-rest-vulnweb-evidence",
-      "hackxor.net: 3 findings — reflected XSS + insecure cookies on browser CTF platform",
-      "testaspnet.vulnweb.com: 3 findings — Invicti practice-site SQLi/XSS/LFI markers",
-      "sasanlabs.github.io/VulnerableApp: OWASP scanner evaluation platform (2→3 findings)",
-      "vulnforge-academy.vercel.app: 20-level OWASP training platform (5→6 findings)",
-      "webgoat.github.io/WebGoat: 2 findings — OWASP Java training app landing"
+      "public-firing-range.appspot.com: reflected XSS restored via path priority + lab crawl (2→4 findings)",
+      "webgoat.github.io/WebGoat: meta-refresh stub now follows webgoat.org (2→4 findings)"
     ],
     "learning_gaps": [
       "ginandjuice.shop: Invalid URL from cloud scanner despite public demo",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — keep disabled in queue",
-      "vampi.lab.pentest-forge.com: 502 Bad Gateway — hosted VAmPI lab offline",
-      "webgoat.github.io/WebGoat: static landing only — live WebGoat needs docker/hosted instance",
-      "bugbountytraining.com/fastfoodhackings: 404 — zseano playground offline; use bugbountyhunter.com challenges",
-      "tegalsec + bugbountyhunter URLs: queued pending limit-8"
+      "vampi.lab.pentest-forge.com: 502 Bad Gateway — hosted VAmPI lab offline"
     ]
   },
   "discovery_highlights": {

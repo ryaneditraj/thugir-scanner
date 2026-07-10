@@ -923,6 +923,18 @@
       "slug": "client-side-vulnforge-academy-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: 20 deliberately vulnerable levels + OWASP Top 10 Covered + Learn Cybersecurity by Breaking Things; vulnforge-academy.vercel.app findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body?q=thugirXSScanary echoes raw canary; extractReflectedXssPaths now prioritizes /reflected/parameter/* before slice + extractFiringRangeCrawlSeeds; public-firing-range findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:webgoat.github.io/WebGoat",
+      "slug": "meta-refresh-stub-follow",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta refresh content=0;url=https://webgoat.org on stub page; extractStubRedirectTarget follows canonical redirect; webgoat.github.io/WebGoat findings 2→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1690,6 +1702,16 @@
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "client-side-vulnforge-academy-evidence",
       "shipped_at": "2026-07-10T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-xss-priority",
+      "shipped_at": "2026-07-10T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:webgoat.github.io/WebGoat",
+      "slug": "meta-refresh-stub-follow",
+      "shipped_at": "2026-07-10T04:10:00.000Z"
     }
   ]
 }
