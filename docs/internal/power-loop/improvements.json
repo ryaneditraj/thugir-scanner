@@ -1079,6 +1079,24 @@
       "slug": "client-side-cybench-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Cybench: Evaluating Language Models on Cybersecurity Challenges + 40 professional-level CTF + XSS/SQLi/CSRF categories; cybench.github.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:w3challs.com",
+      "slug": "client-side-w3challs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: W3Challs Hacking Challenges + web hacking wargame pwnable + No simulation. No Guessing; extractW3ChallsChallengeSeeds; w3challs.com findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:intercode-benchmark.github.io",
+      "slug": "client-side-intercode-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: InterCode Interactive Coding benchmark + IC-CTF IC-SQL IC-Bash + princeton-nlp/intercode; intercode-benchmark.github.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-lab.vercel.app",
+      "slug": "client-side-vulnerable-qa-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: INTENTIONAL QA LAB badge + RS Vulnerable Lab scanner QA + skimmer-demo.js + exposed admin/backup path catalog; extractVulnerableQaLabSeeds; vulnerable-lab.vercel.app findings 7→8; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1976,6 +1994,21 @@
       "source": "discovery:cybench.github.io",
       "slug": "client-side-cybench-evidence",
       "shipped_at": "2026-07-10T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:w3challs.com",
+      "slug": "client-side-w3challs-evidence",
+      "shipped_at": "2026-07-10T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:intercode-benchmark.github.io",
+      "slug": "client-side-intercode-evidence",
+      "shipped_at": "2026-07-10T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-lab.vercel.app",
+      "slug": "client-side-vulnerable-qa-lab-evidence",
+      "shipped_at": "2026-07-10T14:10:00.000Z"
     }
   ]
 }
