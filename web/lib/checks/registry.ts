@@ -4920,6 +4920,132 @@ const clientSideCylabAcademyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP VulnerableApp scanner evaluation platform (SasanLabs) --------------------
+const CLIENT_VULNERABLEAPP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnerableApp deliberately vulnerable disclaimer",
+    re: /deliberately vulnerable to attacks|Application is deliberately vulnerable/i
+  },
+  {
+    label: "Bank of Vulnerabilities benchmarking platform",
+    re: /Bank of Vulnerabilities|benchmarking platform to compare between multiple releases/i
+  },
+  {
+    label: "Scanner evaluation platform purpose",
+    re: /vulnerability scanning tools|Web Application Vulnerability like[\s\S]{0,80}ZAP/i
+  },
+  {
+    label: "SasanLabs VulnerableApp GitHub",
+    re: /SasanLabs\/VulnerableApp|github\.com\/SasanLabs\/VulnerableApp/i
+  },
+  {
+    label: "VulnerableApp Spring Docker REST APIs",
+    re: /annotation and path based vulnerability execution|exposes REST APIs/i
+  }
+];
+
+const clientSideVulnerableappEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNERABLEAPP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnerableApp|Vulnerable App/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP VulnerableApp is a deliberately vulnerable Spring app for scanner benchmarking and security tool evaluation"
+    }
+  };
+};
+
+// --- Invicti Vulnerable REST API (rest.vulnweb.com) ---------------------------------
+const CLIENT_REST_VULNWEB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Invicti Vulnerable REST API title",
+    re: /Invicti Vulnerable REST API/i
+  },
+  {
+    label: "REST API auth types catalog",
+    re: /JSON Web Token, Basic Authentication, OAuth2/i
+  },
+  {
+    label: "OpenAPI/Swagger import formats",
+    re: /Swagger\/OpenAPI, Postman, Fiddler/i
+  },
+  {
+    label: "Midnight auto-reset banner",
+    re: /automatically reset at every midnight/i
+  },
+  {
+    label: "REST API docs api_data.json",
+    re: /api_data\.json|\/docs\/api_data/i
+  }
+];
+
+const clientSideRestVulnwebEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_REST_VULNWEB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/vulnweb\.com|Invicti Vulnerable REST API/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Invicti rest.vulnweb.com documents deliberately vulnerable REST endpoints with JWT, Basic, and OAuth2 auth flaws"
+    }
+  };
+};
+
+// --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
+const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnForge Academy title",
+    re: /VulnForge Academy/i
+  },
+  {
+    label: "20 deliberately vulnerable levels",
+    re: /20 deliberately vulnerable levels|20 Hands-on Labs/i
+  },
+  {
+    label: "OWASP Top 10 curriculum",
+    re: /OWASP Top 10 Covered|covering OWASP Top 10/i
+  },
+  {
+    label: "Learn by breaking tagline",
+    re: /Learn Cybersecurity by Breaking Things|hack deliberately vulnerable applications/i
+  },
+  {
+    label: "CTF-style flag capture learning",
+    re: /CTF-Style Learning|Capture flags, earn points/i
+  }
+];
+
+const clientSideVulnforgeAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNFORGE_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnForge/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnForge Academy documents 20 deliberately vulnerable OWASP Top 10 levels with CTF-style flag capture"
+    }
+  };
+};
+
 // --- PentestForge hub: linked *.lab.pentest-forge.com vulnerable targets --------
 // Hub pages catalog OWASP Juice Shop, crAPI, VAmPI, etc. on sibling subdomains.
 // Probe linked origins with lab-specific routes; hub catalog alone is positive proof
@@ -5104,6 +5230,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackingLabEvidence,
   clientSideSolydTrainingEvidence,
   clientSideCylabAcademyEvidence,
+  clientSideVulnerableappEvidence,
+  clientSideRestVulnwebEvidence,
+  clientSideVulnforgeAcademyEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };

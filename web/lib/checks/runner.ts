@@ -333,6 +333,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackingLabEvidence",
   "clientSideSolydTrainingEvidence",
   "clientSideCylabAcademyEvidence",
+  "clientSideVulnerableappEvidence",
+  "clientSideRestVulnwebEvidence",
+  "clientSideVulnforgeAcademyEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -724,6 +727,52 @@ function extractGruyereCodelabSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** OWASP VulnerableApp docs (sasanlabs.github.io/VulnerableApp) — Jekyll scanner-eval platform. */
+function extractVulnerableAppDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/VulnerableApp|SasanLabs\/VulnerableApp|Vulnerable App/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const re =
+    /href\s*=\s*["'](\/VulnerableApp\/(?:Why_VulnerableApp|DesignDocumentation|HOW-TO-USE-VulnerableApp|blogs\/Overview_of_Owasp-VulnerableApp)\.html)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const path of [
+    "/VulnerableApp/Why_VulnerableApp.html",
+    "/VulnerableApp/DesignDocumentation.html",
+    "/VulnerableApp/blogs/Overview_of_Owasp-VulnerableApp.html"
+  ]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Invicti rest.vulnweb.com — seed OpenAPI docs and api_data.json for REST lab markers. */
+function extractRestVulnwebDocSeeds(html: string, origin: string): string[] {
+  if (!/Invicti Vulnerable REST API|rest\.vulnweb\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["docs/", "docs/api_data.json"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** SecTrainer — seed module + CTF SPA routes from nav catalog. */
 function extractSectrainerSpaSeeds(html: string, jsBodies: string[], origin: string): string[] {
   const corpus = [html, ...jsBodies].join("\n");
@@ -1024,6 +1073,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
+  const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
+  const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
   const hackableSoSeeds = extractHackableSoSeeds(
@@ -1058,6 +1109,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...websecSeeds,
       ...sixHackSeeds,
       ...gruyereSeeds,
+      ...vulnerableAppSeeds,
+      ...restVulnwebSeeds,
       ...mutillidaeSeeds,
       ...bwappSeeds,
       ...hackableSoSeeds,
