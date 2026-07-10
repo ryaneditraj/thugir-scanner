@@ -12,28 +12,18 @@ finding. Free scans run instantly; Deep Scans crawl the full app with 133 detect
 
 ```bash
 cd web
-cp .env.example .env.local
-```
-
-Edit `.env.local` (or copy the pre-filled hackathon file):
-
-```bash
-cp web/config/hackathon.env web/.env.local
-```
-
-Or edit `.env.local` manually:
-
-```env
-DEV_MODE=1
-DEV_TIER=deep
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-HACK_CLUB_AI_API_KEY=sk-hc-v1-...   # already in config/hackathon.env
-```
-
-**Change the AI model:** `/admin/settings` → AI models & keys → edit **Model** per tier (default `qwen/qwen3-32b`). Click **Test AI** before saving.
-
-```bash
 npm install
+npm run hackathon
+```
+
+That copies `config/hackathon.env` → `.env.local` (DEV_MODE, Hack Club AI key, deep tier) and starts the dev server.
+
+Or manually:
+
+```bash
+cd web
+npm install
+npm run setup
 npm run dev
 ```
 
@@ -130,7 +120,7 @@ See [everything.md](../everything.md) for the complete A–Z reference.
 
 ## Pre-stage checklist (run twice tonight)
 
-1. **Env:** `DEV_MODE=1` and `DEV_TIER=deep` in `web/.env.local` — without this, `/api/scan/free` returns 500.
+1. **Env:** run `npm run setup` once (or `npm run hackathon` does it automatically) — without this, `/api/scan/free` returns 500.
 2. **Live scan:** `petstore.swagger.io` from `/` — confirm 3–4 findings + sealed block at bottom.
 3. **Projector test:** Can you read severity pills, finding titles, and "The deeper report is sealed" from 10 feet?
 4. **Verify badge:** Open `/verify/demo` — seal, domain, and "Passed" pill should be obvious at a glance.
