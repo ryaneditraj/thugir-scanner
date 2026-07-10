@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T17:13:16.997Z",
-  "total": 171,
-  "uniqueSlugs": 171,
+  "generatedAt": "2026-07-10T18:04:28.307Z",
+  "total": 173,
+  "uniqueSlugs": 173,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 153,
+    "generic": 155,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 107,
+    "deep": 109,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 48,
+    "Broken access control": 49,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -31,7 +31,7 @@
     "Cross-site scripting": 14,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 5,
+    "AI security": 6,
     "general": 17
   },
   "slugs": [
@@ -47,6 +47,7 @@
     "client-side-chimera-vuln-lab-evidence",
     "client-side-cryptohack-evidence",
     "client-side-csrf-evidence",
+    "client-side-ctf-defi-evidence",
     "client-side-ctf-platform-evidence",
     "client-side-ctf-research-team-evidence",
     "client-side-ctfchallenge-evidence",
@@ -85,6 +86,7 @@
     "client-side-owasp-bricks-evidence",
     "client-side-owasp-ctf-evidence",
     "client-side-owasp-educational-lab-evidence",
+    "client-side-owasp-genai-lab-evidence",
     "client-side-path-traversal-evidence",
     "client-side-pentester-academy-lab-evidence",
     "client-side-pentesterlab-evidence",

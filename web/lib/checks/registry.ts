@@ -3000,6 +3000,18 @@ const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Acunetix vulnerability scanner marketing link",
     re: /acunetix\.com\/vulnerability-scanner/i
+  },
+  {
+    label: "Invicti ASP.NET guestbook XSS control",
+    re: /guestbookPermenantCrossSiteScripting/i
+  },
+  {
+    label: "Invicti ASP.NET guestbook route",
+    re: /\/Guestbook\.aspx/i
+  },
+  {
+    label: "Invicti ASP.NET administrator login",
+    re: /\/administrator\/Login\.aspx/i
   }
 ];
 
@@ -6560,6 +6572,90 @@ const clientSideReactDomXssLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP GenAI Security Lab (owaspbased-lessons.vercel.app) -----------------------
+const CLIENT_OWASP_GENAI_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP GenAI Security Lab title",
+    re: /OWASP GenAI Security Lab|GenAI Security Lab/i
+  },
+  {
+    label: "OWASP Top 10 for LLM applications",
+    re: /OWASP Top 10 for LLM applications|GenAI security vulnerabilities/i
+  },
+  {
+    label: "Prompt injection learning goal",
+    re: /data-goal\s*=\s*["']prompt-injection["']|value\s*=\s*["']prompt-injection["']/i
+  },
+  {
+    label: "System prompt leakage learning goal",
+    re: /data-goal\s*=\s*["']system-prompt-leakage["']|Prompt Leakage/i
+  },
+  {
+    label: "GenAI lab onboarding form",
+    re: /action\s*=\s*["']\/onboard["'][\s\S]{0,200}goals/i
+  }
+];
+
+const clientSideOwaspGenaiLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_GENAI_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/GenAI Security Lab|OWASP Top 10 for LLM/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP GenAI Security Lab documents interactive LLM Top 10 lessons covering prompt injection and system prompt leakage"
+    }
+  };
+};
+
+// --- CTF DeFi Security 101 (ctf-maker-monorepo.vercel.app) ----------------------------
+const CLIENT_CTF_DEFI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTF DeFi Security 101 title",
+    re: /CTF Defi Security 101|CTF DeFi Security 101/i
+  },
+  {
+    label: "DeFi vulnerability workshop",
+    re: /vulnerabilities[\s\S]{0,40}found in[\s\S]{0,20}DeFi|common[\s\S]{0,40}vulnerabilities[\s\S]{0,40}DeFi/i
+  },
+  {
+    label: "DeFi Security Summit Stanford repo",
+    re: /DeFi-Security-Summit-Stanford|eugenioclrc\/DeFi-Security-Summit-Stanford/i
+  },
+  {
+    label: "A-MAZE-X Stanford CTF branding",
+    re: /A-MAZE-X-Stanford|Let[`']s play!/i
+  },
+  {
+    label: "Web3 wallet CTF play route",
+    re: /href\s*=\s*["']\/play["'][\s\S]{0,120}(?:wallet|connect)/i
+  }
+];
+
+const clientSideCtfDefiEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTF_DEFI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CTF Defi Security|DeFi-Security-Summit/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTF DeFi Security 101 workshop documents smart-contract vulnerability challenges with wallet-connected play mode"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6698,6 +6794,8 @@ export const RULES: Record<string, Rule> = {
   clientSideBergerCyberLabEvidence,
   clientSidePwnCollegeEvidence,
   clientSideReactDomXssLabEvidence,
+  clientSideOwaspGenaiLabEvidence,
+  clientSideCtfDefiEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };

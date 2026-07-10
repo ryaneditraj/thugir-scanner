@@ -414,6 +414,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideBergerCyberLabEvidence",
   "clientSidePwnCollegeEvidence",
   "clientSideReactDomXssLabEvidence",
+  "clientSideOwaspGenaiLabEvidence",
+  "clientSideCtfDefiEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1341,6 +1343,59 @@ function extractBergerCyberLabSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** OWASP GenAI Security Lab — seed onboarding and lesson hub. */
+function extractOwaspGenaiLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/GenAI Security Lab|OWASP Top 10 for LLM applications/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/onboard", "/lessons", "/dashboard"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** CTF DeFi Security 101 — seed wallet play route. */
+function extractCtfDefiSeeds(html: string, pageUrl: string): string[] {
+  if (!/CTF Defi Security 101|DeFi-Security-Summit-Stanford/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/play"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Invicti ASP.NET practice site — seed guestbook XSS lab page. */
+function extractInvictiAspnetSeeds(html: string, pageUrl: string): string[] {
+  if (!/testsparker\.com|testinvicti\.com|Guestbook\.aspx|guestbookPermenantCrossSiteScripting/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/Guestbook.aspx", "/administrator/Login.aspx"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** pwn.college — seed dojo catalog and welcome module. */
 function extractPwnCollegeSeeds(html: string, pageUrl: string): string[] {
   if (!/pwn\.college|Learn to Hack!/i.test(html)) return [];
@@ -1781,6 +1836,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
   const pwnCollegeSeeds = extractPwnCollegeSeeds(home.body, home.finalUrl);
+  const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
+  const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
+  const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1840,6 +1898,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ffufMeSeeds,
       ...bergerCyberLabSeeds,
       ...pwnCollegeSeeds,
+      ...owaspGenaiLabSeeds,
+      ...ctfDefiSeeds,
+      ...invictiAspnetSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
