@@ -3660,6 +3660,94 @@ const clientSideBwappEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- hackable.so deliberately vulnerable social platform (12 hidden vulns) -----------
+const CLIENT_HACKABLE_SO_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "hackable.so 12 hidden vulnerabilities tagline",
+    re: /hackable\.so[\s\S]{0,200}12 hidden vulnerabilities|12 hidden vulnerabilities[\s\S]{0,200}hackable\.so/i
+  },
+  {
+    label: "intentionally vulnerable disclaimer",
+    re: /intentionally vulnerable[\s\S]{0,120}Do not use real passwords/i
+  },
+  {
+    label: "auth login API route",
+    re: /\/api\/auth\/login/i
+  },
+  {
+    label: "JWT token in localStorage",
+    re: /localStorage\.setItem\s*\(\s*["']token["']/i
+  },
+  {
+    label: "admin users/config nav",
+    re: /\/admin\/users[\s\S]{0,200}\/admin\/config/i
+  }
+];
+
+const clientSideHackableSoLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKABLE_SO_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/hackable\.so/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "hackable.so documents 12 hidden vulnerabilities across auth, admin, and social features"
+    }
+  };
+};
+
+// --- VulnWeb educational SPA lab (SQLi, XSS, IDOR modules) -------------------------
+const CLIENT_VULNWEB_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnWeb educational lab title",
+    re: /VulnWeb[\s\S]{0,200}Learn\s*&\s*Fix Common Security Flaws|Vulnerable Web App Lab/i
+  },
+  {
+    label: "intentionally vulnerable disclaimer",
+    re: /intentionally vulnerable for educational purposes/i
+  },
+  {
+    label: "IDOR profile lab marker",
+    re: /IDOR vulnerabilit|accessed another user'?s profile through an IDOR/i
+  },
+  {
+    label: "SQL injection search lab",
+    re: /SQL injection vulnerabilities due to unsanitized user input|vulnerable to SQL injection attacks/i
+  },
+  {
+    label: "XSS comment lab marker",
+    re: /XSS vulnerabilities due to unsanitized user input|vulnerable to script injection/i
+  },
+  {
+    label: "OWASP Top 10 vulnerability catalog",
+    re: /owasp_reference|OWASP Top 10 vulnerabilities/i
+  }
+];
+
+const clientSideVulnwebLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNWEB_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/VulnWeb|vulnerable web app lab/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnWeb SPA documents SQLi, XSS, and IDOR labs with intentionally unsanitized input handlers"
+    }
+  };
+};
+
 // --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
 const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
@@ -4804,6 +4892,8 @@ export const RULES: Record<string, Rule> = {
   clientSideGoogleGruyereCodelabEvidence,
   clientSideMutillidaeEvidence,
   clientSideBwappEvidence,
+  clientSideHackableSoLabEvidence,
+  clientSideVulnwebLabEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
