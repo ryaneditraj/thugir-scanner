@@ -1,0 +1,128 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vulnclaw"
+version = "0.3.3"
+description = "🦞 AI-powered penetration testing CLI tool for cybersecurity professionals"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+    { name = "UncleC", email = "iamloli@foxmail.com" },
+]
+keywords = ["pentest", "security", "ai", "mcp", "cli", "vulnerability", "red-team"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+]
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.0.0",
+    "prompt_toolkit>=3.0.0",
+    "httpx>=0.27.0",
+    "openai>=1.30.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "pyyaml>=6.0",
+    "toml>=0.10.0",
+    "jinja2>=3.1.0",
+    "textual>=0.40.0",
+    # ── 沙箱依赖（python_execute 运行时）──────────────────────────────
+    # LLM 在 python_execute 中可直接 import 以下库
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+    "pycryptodome>=3.19.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4.0",
+    "build>=1.2.0",
+]
+web = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+]
+kb = [
+    "chromadb>=0.4.0",
+]
+pdf = [
+    # Optional: render reports to PDF via report.pdf_exporter.
+    "reportlab>=4.0",
+]
+traffic = [
+    # Optional: sandbox-native traffic evidence backends (MIT/BSD-family).
+    # The capture/normalization/tool logic works without these; they enable the
+    # live proxy + headless browser backends inside the per-run sandbox.
+    "mitmproxy>=10.0",
+    "playwright>=1.40",
+]
+
+[project.urls]
+Homepage = "https://github.com/Unclecheng-li/VulnClaw"
+Repository = "https://github.com/Unclecheng-li/VulnClaw"
+Issues = "https://github.com/Unclecheng-li/VulnClaw/issues"
+
+[project.scripts]
+vulnclaw = "vulnclaw.cli.main:app"
+
+[tool.hatch.build]
+exclude = [
+    "/frontend/node_modules",
+    "/frontend/dist",
+    "/.test-tmp",
+    "/.pytest_cache",
+    "/dist",
+    "/build",
+    "**/__pycache__",
+    "**/*.pyc",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["vulnclaw"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/vulnclaw",
+    "/frontend",
+    "/tests",
+    "/scripts",
+    "/README.md",
+    "/README_EN.md",
+    "/LICENSE",
+    "/CONTRIBUTING.md",
+    "/pyproject.toml",
+]
+exclude = [
+    "/frontend/node_modules",
+    "/frontend/dist",
+    "/.test-tmp",
+    "/.pytest_cache",
+    "/dist",
+    "/build",
+    "**/__pycache__",
+    "**/*.pyc",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
