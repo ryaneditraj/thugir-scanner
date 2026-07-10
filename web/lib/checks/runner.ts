@@ -411,6 +411,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideOverthewireNatasEvidence",
   "clientSideFfufMeEvidence",
   "clientSideYrpreyEvidence",
+  "clientSideBergerCyberLabEvidence",
+  "clientSidePwnCollegeEvidence",
+  "clientSideReactDomXssLabEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1321,6 +1324,40 @@ function extractFfufMeSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** BergerZvika Cyber-Lab — seed integer overflow, race, and prompt injection modules. */
+function extractBergerCyberLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/Cyber-Lab|Secure Programming[\s\S]{0,20}\(Cyber\)/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["integer-overflow.html", "race-conditions.html", "prompt-injection.html"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** pwn.college — seed dojo catalog and welcome module. */
+function extractPwnCollegeSeeds(html: string, pageUrl: string): string[] {
+  if (!/pwn\.college|Learn to Hack!/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/dojos", "/dojo/welcome", "/dojo/linux-luminarium"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** CTFlearn — seed challenge browse pages for platform markers. */
 function extractCtflearnChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/CTFlearn|ctflearn\.com/i.test(html)) return [];
@@ -1742,6 +1779,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
+  const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
+  const pwnCollegeSeeds = extractPwnCollegeSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1799,6 +1838,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
       ...ffufMeSeeds,
+      ...bergerCyberLabSeeds,
+      ...pwnCollegeSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,

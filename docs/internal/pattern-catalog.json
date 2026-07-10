@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T16:05:10.498Z",
-  "total": 168,
-  "uniqueSlugs": 168,
+  "generatedAt": "2026-07-10T17:13:16.997Z",
+  "total": 171,
+  "uniqueSlugs": 171,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 150,
+    "generic": 153,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 104,
+    "deep": 107,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 46,
+    "Broken access control": 48,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -28,7 +28,7 @@
     "Information disclosure": 14,
     "Broken authentication": 11,
     "Injection": 22,
-    "Cross-site scripting": 13,
+    "Cross-site scripting": 14,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 5,
@@ -41,6 +41,7 @@
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
     "client-side-authlab-evidence",
+    "client-side-berger-cyber-lab-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bwapp-evidence",
     "client-side-chimera-vuln-lab-evidence",
@@ -89,6 +90,8 @@
     "client-side-pentesterlab-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
+    "client-side-pwn-college-evidence",
+    "client-side-react-dom-xss-lab-evidence",
     "client-side-react-rsc-cve-evidence",
     "client-side-rest-vulnweb-evidence",
     "client-side-returntrue-wargame-evidence",

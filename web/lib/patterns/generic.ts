@@ -3130,5 +3130,83 @@ export const genericPatterns: Pattern[] = [
       "We host YRprey-style vulnerability testing frameworks. Show how to isolate training apps from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-berger-cyber-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "BergerZvika Secure Programming Cyber-Lab disclosed",
+    description:
+      "BergerZvika Cyber-Lab publishes static HTML labs for integer overflow, race conditions, and prompt injection training.",
+    impactOneline:
+      "Public Cyber-Lab instances document secure-programming vulnerability patterns used in classroom and self-paced training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBergerCyberLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cyber-Lab is intentional training — isolate lab pages from production networks.",
+      steps: [
+        "Require authentication before serving interactive lab modules.",
+        "Do not reuse integer overflow or prompt injection demo patterns in production code.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host BergerZvika Cyber-Lab-style secure programming exercises. Show how to isolate lab HTML from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pwn-college-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "pwn.college cybersecurity dojo platform disclosed",
+    description:
+      "pwn.college hosts dojo-based exploit training modules covering Linux fundamentals, computing, and web/binary security challenges.",
+    impactOneline:
+      "Public pwn.college dojos expose exploit training surfaces attackers study before targeting production systems.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnCollegeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "pwn.college is intentional training — isolate dojo workspaces from production networks.",
+      steps: [
+        "Require authentication before launching challenge workspaces.",
+        "Do not reuse dojo exploit patterns in production code.",
+        "Rate-limit unauthenticated dojo enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host pwn.college-style cybersecurity dojos. Show how to isolate challenge workspaces from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-react-dom-xss-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "React DOM XSS AppSec comparison lab disclosed",
+    description:
+      "React DOM XSS labs compare vulnerable innerHTML rendering against DOMPurify-sanitized output with onerror/onfocus attack payloads.",
+    impactOneline:
+      "Public React XSS demos document DOM XSS attack patterns and sanitization bypass training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideReactDomXssLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render attacker-controlled HTML without sanitization; use DOMPurify or textContent.",
+      steps: [
+        "Replace dangerouslySetInnerHTML with textContent for user input.",
+        "Sanitize HTML with DOMPurify before rendering untrusted content.",
+        "Do not deploy XSS comparison labs on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our React app has a DOM XSS lab comparing vulnerable vs DOMPurify-sanitized rendering. Show how to fix innerHTML sinks.",
+    version: 1,
+    enabled: true
   }
 ];
