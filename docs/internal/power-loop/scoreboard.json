@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T11:17:30.081Z",
+  "updated_at": "2026-07-10T11:21:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 469,
-  "total_findings": 1890,
+  "total_sites_scanned": 477,
+  "total_findings": 1936,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 163,
-  "discovery_findings": 1150,
+  "discovery_urls_added": 168,
+  "discovery_findings": 1196,
   "improvements_shipped": 170,
-  "last_run": "2026-07-10T11:17:30.081Z",
+  "last_run": "2026-07-10T11:20:28.493Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Staging fallback 6/6; primary Heroku cold-start 1/6 (misconfig only) after retry",
+      "note": "Staging fallback 6/6; primary Heroku 1→2 findings (1/6 recall) after retry — persistent cold-start gap",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,7 +48,7 @@
           "primary_degraded": {
             "url": "https://juice-shop.herokuapp.com",
             "first_pass": {
-              "findings": 2,
+              "findings": 1,
               "categories_hit": 1,
               "gap": [
                 "xss",
@@ -59,7 +59,7 @@
               ]
             },
             "retry": {
-              "findings": 1,
+              "findings": 2,
               "categories_hit": 1,
               "gap": [
                 "xss",
@@ -77,15 +77,15 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 30,
+      "findings": 46,
       "skipped_48h": [
-        "https://yogsec.github.io/xss-labs/",
-        "https://ctf.hacker101.com/",
-        "https://ws.digi.ninja/",
+        "https://juice-shop.herokuapp.com/",
+        "https://securebank-blog.vercel.app/",
         "https://chimera.atlascrew.dev/",
-        "https://securebank-blog.vercel.app/"
+        "https://urban-vampi-production.up.railway.app/",
+        "https://websec.fr/"
       ],
-      "focus": "VAmPI Railway production + WebSec.fr SQLi challenges + DVWA Vercel XSS/SQLi + VulnBank API",
+      "focus": "GitHub Pages OWASP training labs (OGT-Cyber-Game, oopssec-store, HackLab, WebVulnsGuide) + Vulnerable Bank weblock.ru",
       "improvements_shipped_this_run": 0,
       "queued_next": [
         "https://vulnerable-web-site.vercel.app/",
@@ -93,22 +93,27 @@
         "https://vaultapp-omega.vercel.app/",
         "http://sechow.com/bricks/",
         "https://rewanthtammana.com/damn-vulnerable-bank/"
+      ],
+      "new_urls_added": [
+        "https://dvwa.lab.pentest-forge.com/",
+        "https://crapi.lab.pentest-forge.com/",
+        "https://dvga.lab.pentest-forge.com/",
+        "https://weblogic.lab.pentest-forge.com/",
+        "https://devsecops-pipeline-demo-production.up.railway.app/"
       ]
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category misses via staging oracle",
-      "urban-vampi-production.up.railway.app: critical openapi-debug-password-exposure + IDOR (5 findings)",
-      "websec.fr: client-side-sql-evidence + websec-challenge injectable PHP markers (3 findings)",
-      "dvwa.vercel.app: client-side-sql-evidence + reflected XSS bundle markers (2→4 findings)",
-      "vulnbank.org: IDOR sequential IDs + OpenAPI docs exposed (4 findings)",
-      "ucu-owasp-ctf.vercel.app: 5 findings on OWASP CTF training platform"
+      "dxx33.github.io/WebVulnsGuide: critical server-side-eval + XSS/SQLi/CSRF/prototype-pollution (8 findings)",
+      "demo.weblock.ru: IDOR sequential IDs + OpenAPI docs + prompt-injection evidence (7 findings)",
+      "koadt.github.io/oss-oopssec-store: OWASP API Security lab markers + SQLi evidence (6 findings)",
+      "gauravkhurana.com/SQLInjection: WASM SQLite login-bypass SQLi markers (6 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: Heroku cold-start yields 1-page shallow crawl (1/6 recall) — staging fallback required",
-      "acuart.phpnet.us: classic Acunetix demo shallow — headers/tech-stack only (2 findings)",
-      "hiddeninvestigations.net: react2shell lab is Docker-only — landing page lacks exploit oracles",
-      "ginandjuice.shop: Invalid URL from cloud scanner despite public availability",
-      "bwapp.net: domain parked — use bwapp.hakhub.net mirror"
+      "primary heroku retry improved to 2 findings but still 1/6 — xss,sqli,auth_bypass,sensitive_data missed on primary",
+      "vulnerable-web-site/preview-juice/vaultapp/bricks/dvb: queued but not reached within 8-scan limit",
+      "pentest-forge labs (dvwa/crapi/dvga/weblogic): added to queue — returned 502 at discovery time"
     ]
   },
   "discovery_highlights": {
