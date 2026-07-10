@@ -727,7 +727,32 @@
       "url": "https://cybench.github.io/",
       "source": "CyBench — HackTheBox/Sekai/Glacier CTF benchmark challenge index (awesome-vulnerable-labs)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/",
+      "source": "yogsec/xss-labs — frontend-only reflected/stored/DOM XSS training labs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bwapp.net/",
+      "source": "bWAPP / ITSEC Games — official buggy web application landing (Malik Mesellem)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackable-web.vercel.app/",
+      "source": "Hackable Web — intentionally vulnerable SaaS-style training app (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ctf.hacker101.com/",
+      "source": "Hacker101 CTF — HackerOne public web security challenge platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-lab.vercel.app/",
+      "source": "Vulnerable Lab — OWASP Top 10 interactive training platform (Vercel)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T07:05:00.000Z"
+  "updated_at": "2026-07-10T08:22:00.000Z"
 }
