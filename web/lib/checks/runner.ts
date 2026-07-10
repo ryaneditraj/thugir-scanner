@@ -350,6 +350,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideReturnTrueWargameEvidence",
   "clientSideAuthlabEvidence",
   "clientSideXssQuizEvidence",
+  "clientSideCtfchallengeEvidence",
+  "clientSideExploitEducationEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -961,6 +963,60 @@ function extractVulnerableAppDocSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** CTFChallenge UK web app hacking puzzles (ctfchallenge.co.uk). */
+function extractCtfChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/ctfchallenge\.co\.uk|CTF Challenge|web application hacking challenge/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/about", "/login", "/register", "/latest-flags", "/top10"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:about|login|register|latest-flags|top10))["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Exploit Education VM lab index (exploit.education — Phoenix/Nebula/Protostar). */
+function extractExploitEducationSeeds(html: string, pageUrl: string): string[] {
+  if (!/exploit\.education|Exploit Education|Welcome to exploit\.education/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/phoenix/", "/nebula/", "/protostar/stack-zero/", "/fusion/level00/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:phoenix|nebula|protostar|fusion)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti rest.vulnweb.com — seed OpenAPI docs and api_data.json for REST lab markers. */
 function extractRestVulnwebDocSeeds(html: string, origin: string): string[] {
   if (!/Invicti Vulnerable REST API|rest\.vulnweb\.com/i.test(html)) return [];
@@ -1290,6 +1346,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const returnTrueSeeds = extractReturnTrueSeeds(home.body, home.finalUrl);
   const authlabSeeds = extractAuthlabSeeds(home.body, home.finalUrl);
   const xssQuizSeeds = extractXssQuizInt21hSeeds(home.body, home.finalUrl);
+  const ctfChallengeSeeds = extractCtfChallengeSeeds(home.body, home.finalUrl);
+  const exploitEducationSeeds = extractExploitEducationSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1332,6 +1390,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...returnTrueSeeds,
       ...authlabSeeds,
       ...xssQuizSeeds,
+      ...ctfChallengeSeeds,
+      ...exploitEducationSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,

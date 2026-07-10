@@ -4939,7 +4939,7 @@ const clientSideCylabAcademyEvidence: Rule = async (ctx) => {
 const CLIENT_VULNERABLEAPP_RES: { label: string; re: RegExp }[] = [
   {
     label: "VulnerableApp deliberately vulnerable disclaimer",
-    re: /deliberately vulnerable to attacks|Application is deliberately vulnerable/i
+    re: /deliberately vulnerable to attacks|Application is deliberately vulnerable|Deliberately Vulnerable Applications/i
   },
   {
     label: "Bank of Vulnerabilities benchmarking platform",
@@ -4947,7 +4947,11 @@ const CLIENT_VULNERABLEAPP_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Scanner evaluation platform purpose",
-    re: /vulnerability scanning tools|Web Application Vulnerability like[\s\S]{0,80}ZAP/i
+    re: /vulnerability scanning tools|Vulnerability Scanning Tools|Web Application Vulnerability like[\s\S]{0,80}ZAP/i
+  },
+  {
+    label: "OWASP VulnerableApp project branding",
+    re: /OWASP VulnerableApp|learn various security vulnerabilities/i
   },
   {
     label: "SasanLabs VulnerableApp GitHub",
@@ -5425,6 +5429,90 @@ const CLIENT_XSS_QUIZ_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+// --- CTFChallenge UK web application hacking platform (ctfchallenge.co.uk) -----------
+const CLIENT_CTFCHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTF Challenge web app security title",
+    re: /<title>\s*CTF Challenge\s*-\s*Web App Security Challenges\s*<\/title>|CTF Challenge - Web App Security Challenges/i
+  },
+  {
+    label: "Web application hacking challenge catalog",
+    re: /web application hacking challenge websites|web app security puzzles/i
+  },
+  {
+    label: "Challenge and flag count",
+    re: /\d+\s+challenges with\s+\d+\s+flags to capture/i
+  },
+  {
+    label: "Vulnerability challenge exercises",
+    re: /vulnerability challenges|practical CTF exercises/i
+  },
+  {
+    label: "ctfchallenge.co.uk host",
+    re: /ctfchallenge\.co\.uk/i
+  }
+];
+
+const clientSideCtfchallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFCHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CTF Challenge|ctfchallenge\.co\.uk/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFChallenge UK publishes web application hacking puzzles with staged vulnerability flags for unauthenticated practice"
+    }
+  };
+};
+
+// --- Exploit Education VM labs (exploit.education — Phoenix/Nebula/Protostar) -------
+const CLIENT_EXPLOIT_EDUCATION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Exploit Education platform title",
+    re: /Exploit Education|Welcome to exploit\.education/i
+  },
+  {
+    label: "Buffer overflow and heap exploitation modules",
+    re: /buffer overflows, format strings and heap exploitation|basic memory corruption issues such as buffer/i
+  },
+  {
+    label: "Phoenix VM challenge series",
+    re: /href=["']\/phoenix\/["']|Phoenix introduces basic memory corruption|title=Phoenix/i
+  },
+  {
+    label: "Nebula Linux exploitation challenges",
+    re: /href=["']\/nebula\/["']|Nebula covers a variety of simple and intermediate challenges/i
+  },
+  {
+    label: "exploit.education host",
+    re: /exploit\.education/i
+  }
+];
+
+const clientSideExploitEducationEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_EXPLOIT_EDUCATION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/exploit\.education|Exploit Education/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Exploit Education documents Phoenix/Nebula/Protostar VM labs teaching buffer overflow, format string, and heap exploitation"
+    }
+  };
+};
+
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -5640,6 +5728,8 @@ export const RULES: Record<string, Rule> = {
   clientSideReturnTrueWargameEvidence,
   clientSideAuthlabEvidence,
   clientSideXssQuizEvidence,
+  clientSideCtfchallengeEvidence,
+  clientSideExploitEducationEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
