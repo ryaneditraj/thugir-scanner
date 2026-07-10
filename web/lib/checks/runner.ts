@@ -341,6 +341,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnerableappEvidence",
   "clientSideRestVulnwebEvidence",
   "clientSideVulnforgeAcademyEvidence",
+  "clientSideTegalsecLabEvidence",
+  "clientSideBugBountyHunterEvidence",
+  "clientSideZeroHealthEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -723,6 +726,23 @@ function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** TegalSec browser hacking labs (labs.tegalsec.org/br0w, xss-labs). */
+function extractTegalsecLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/HACK THE BR0W|XSS Labs \| Tegal1337|tegalsec\.org/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["chall-1.php", "chall-2.php", "instructions.php", "about.php"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Meta-refresh or canonical stub pages (e.g. webgoat.github.io → webgoat.org). */
 function extractStubRedirectTarget(html: string, pageUrl: string): string | null {
   const refresh =
@@ -1020,15 +1040,19 @@ function jsNavTargets(html: string, pageUrl: string, limit: number): string[] {
   const pageOrigin = new URL(pageUrl).origin;
   const re =
     /(?:location\.(?:href|assign|replace)|window\.location(?:\.href)?)\s*=\s*['"]([^'"]+)['"]/gi;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(html)) && out.size < limit * 2) {
-    try {
-      const u = new URL(m[1], pageUrl);
-      if (u.origin !== pageOrigin) continue;
-      if (/^javascript:/i.test(m[1])) continue;
-      out.add(u.toString());
-    } catch {
-      /* ignore */
+  const onclickRe =
+    /onclick\s*=\s*["'][^"']*?(?:location\.(?:href|assign|replace)|window\.location(?:\.href)?)\s*=\s*['"]([^'"]+)['"]/gi;
+  for (const pattern of [re, onclickRe]) {
+    let m: RegExpExecArray | null;
+    while ((m = pattern.exec(html)) && out.size < limit * 2) {
+      try {
+        const u = new URL(m[1], pageUrl);
+        if (u.origin !== pageOrigin) continue;
+        if (/^javascript:/i.test(m[1])) continue;
+        out.add(u.toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   return [...out].slice(0, limit);
@@ -1122,6 +1146,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
+  const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1159,6 +1184,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...sixHackSeeds,
       ...gruyereSeeds,
       ...firingRangeSeeds,
+      ...tegalsecSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
