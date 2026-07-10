@@ -6656,6 +6656,144 @@ const clientSideCtfDefiEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Atlas Crew Inferno Lab stack (apparatus.atlascrew.dev, crucible.atlascrew.dev) -
+const CLIENT_ATLAS_CREW_INFERNO_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Apparatus AI security testing platform",
+    re: /AI-augmented network security platform|cybersecurity testing and simulation lab/i
+  },
+  {
+    label: "Apparatus red team autopilot",
+    re: /Red Team\s*&\s*AI Autopilot|Autonomous AI red team agent/i
+  },
+  {
+    label: "Apparatus Nuclei and k6 integration",
+    re: /Nuclei vulnerability scanning|Integrated k6 load testing/i
+  },
+  {
+    label: "Crucible attack scenario catalog",
+    re: /80\+ attack scenarios|Next-generation security testing platform/i
+  },
+  {
+    label: "Crucible pass/fail assessment scoring",
+    re: /pass\/fail assessment scoring|Pass\/fail grading with detailed assertion/i
+  },
+  {
+    label: "Atlas Crew inferno npm packages",
+    re: /@atlascrew\/(?:apparatus|crucible)|atlas-crew\/Crucible|NickCrew\/apparatus/i
+  }
+];
+
+const clientSideAtlasCrewInfernoLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ATLAS_CREW_INFERNO_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/atlascrew\.dev|Apparatus|Crucible/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Atlas Crew Inferno Lab docs advertise Apparatus red-team/chaos testing and Crucible scenario-based security assessment platforms"
+    }
+  };
+};
+
+// --- Atlas Crew Horizon + Synapse edge protection (synapse.atlascrew.dev) -----------
+const CLIENT_ATLAS_CREW_EDGE_PROTECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Horizon edge protection platform",
+    re: /Horizon[\s\S]{0,60}Edge Protection Platform/i
+  },
+  {
+    label: "Synapse WAF engine docs",
+    re: /Synapse WAF Engine|embedded intelligence for API security/i
+  },
+  {
+    label: "Fleet-aware WAF and inline DLP",
+    re: /Fleet-aware WAF|inline DLP|behavioral profiling/i
+  },
+  {
+    label: "Horizon Synapse platform architecture",
+    re: /Horizon \+ Synapse platform|atlas-crew\/edge-protection/i
+  },
+  {
+    label: "Synapse interrogator bot challenges",
+    re: /Interrogator System|Cookie → JS PoW → CAPTCHA/i
+  },
+  {
+    label: "Horizon demo deployment",
+    re: /horizon-demo\.atlascrew\.dev|Synapse catches credential leaks/i
+  }
+];
+
+const clientSideAtlasCrewEdgeProtectionEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ATLAS_CREW_EDGE_PROTECTION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Horizon|Synapse|atlascrew\.dev/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Atlas Crew Horizon + Synapse docs describe fleet-aware WAF, inline DLP, and progressive bot interrogation at the edge"
+    }
+  };
+};
+
+// --- OWASP Vulnerable Web Applications Directory (vwad.owasp.org) -----------------
+const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP VWAD directory title",
+    re: /OWASP Vulnerable Web Applications Directory/i
+  },
+  {
+    label: "VWAD application registry count",
+    re: /VWAD application directory|numberOfItems["']?\s*:\s*\d{2,}/i
+  },
+  {
+    label: "Legal security testing registry",
+    re: /legal security testing and training|known vulnerable web and mobile applications/i
+  },
+  {
+    label: "VWAD juice-shop listing",
+    re: /vwad\.owasp\.org\/app\/juice-shop|OWASP Juice Shop/i
+  },
+  {
+    label: "VWAD crAPI listing",
+    re: /vwad\.owasp\.org\/app\/crapi|name":\s*"crAPI"/i
+  },
+  {
+    label: "VWAD schema ItemList apps",
+    re: /"itemListElement"[\s\S]{0,240}"name":\s*"(?:Juice Shop|DVWA|WebGoat|bWAPP)"/i
+  }
+];
+
+const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_VWAD_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/vwad\.owasp\.org|Vulnerable Web Applications Directory/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP VWAD indexes 200+ deliberately vulnerable web apps for legal security testing — linked lab URLs expose training attack surfaces"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6796,6 +6934,9 @@ export const RULES: Record<string, Rule> = {
   clientSideReactDomXssLabEvidence,
   clientSideOwaspGenaiLabEvidence,
   clientSideCtfDefiEvidence,
+  clientSideAtlasCrewInfernoLabEvidence,
+  clientSideAtlasCrewEdgeProtectionEvidence,
+  clientSideOwaspVwadEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
