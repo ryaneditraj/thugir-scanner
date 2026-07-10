@@ -1077,7 +1077,32 @@
       "url": "https://graphql-lab.vercel.app/",
       "source": "GraphQL security training lab — intentionally vulnerable GraphQL API playground (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.pythonanywhere.com/",
+      "source": "dr34mhacks/Ginger-juice-shop — live SSTI/RCE Flask lab with basic and filtered /hard routes (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenges-2023-owasp-10.vercel.app/",
+      "source": "NullChapter/Challenges_2023_OWASP_10 — OWASP Top 10 CTF easy/hard challenges (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pygoat-web.herokuapp.com/",
+      "source": "KevinDNgo/pygoat — Django OWASP Top 10 intentionally vulnerable training app (GitHub Live Demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnmachines.com/",
+      "source": "VulnMachines — online vulnerable practice/challenge platform (Awesome-Vulnerable-Labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/",
+      "source": "Escape GraphQL Security Academy — public GraphQL vulnerability learning platform (Awesome-Vulnerable-Labs)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T21:15:00.000Z"
+  "updated_at": "2026-07-10T22:15:00.000Z"
 }
