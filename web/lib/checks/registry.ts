@@ -5989,6 +5989,130 @@ const pentestForgeLinkedLabProbe: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- OWASP EKS Goat cloud security masterclass (ekssecurity.netlify.app) -----------
+const CLIENT_EKS_GOAT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP EKS Goat branding",
+    re: /OWASP EKS Goat|AWS EKS Security Masterclass/i
+  },
+  {
+    label: "Vulnerable EKS cluster walkthrough",
+    re: /vulnerable cluster deployment|exploitation and defense/i
+  },
+  {
+    label: "EKS Goat security tooling",
+    re: /Kyverno|GuardDuty|eBPF Tetragon|Tetragon/i
+  },
+  {
+    label: "EKS Goat mdBook lab chapters",
+    re: /\/basics\/lab_setup|\/welcome\/introduction|Github Codespace Setup/i
+  },
+  {
+    label: "ekssecurity Netlify deploy",
+    re: /ekssecurity\.netlify\.app/i
+  }
+];
+
+const clientSideEksGoatEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_EKS_GOAT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP EKS Goat documents vulnerable AWS EKS cluster deployment, exploitation, and defense with Kyverno, GuardDuty, and eBPF Tetragon"
+    }
+  };
+};
+
+// --- CTFlearn beginner-friendly CTF platform ----------------------------------------
+const CLIENT_CTFLEARN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTFlearn Learn to Hack branding",
+    re: /CTFlearn[\s\S]{0,40}Learn to Hack|Learn to Hack/i
+  },
+  {
+    label: "Learn Cybersecurity tagline",
+    re: /Learn Cybersecurity/i
+  },
+  {
+    label: "CTF practice challenge catalog",
+    re: /CTF Practice|CTF Problems|CTF Challenges|hundreds of challenges/i
+  },
+  {
+    label: "Beginner-friendly cyber security learning",
+    re: /beginner-friendly way to learn cyber security|most beginner-friendly/i
+  },
+  {
+    label: "ctflearn.com platform",
+    re: /ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CTFlearn|ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFlearn hosts beginner-friendly web security CTF challenges for learning injection, XSS, and reconnaissance"
+    }
+  };
+};
+
+// --- Cybench LLM cybersecurity benchmark (cybench.github.io) ------------------------
+const CLIENT_CYBENCH_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cybench cybersecurity benchmark",
+    re: /Cybench[\s\S]{0,60}Cybersecurity Challenges|Evaluating Language Models on Cybersecurity/i
+  },
+  {
+    label: "Professional CTF task benchmark",
+    re: /professional-level Capture the Flag|40 professional-level/i
+  },
+  {
+    label: "Web exploitation challenge categories",
+    re: /Cross-Site Scripting \(XSS\)|SQL Injection|Cross-Site Request Forgery \(CSRF\)/i
+  },
+  {
+    label: "Cybench GitHub benchmark repo",
+    re: /github\.com\/andyzorigin\/cybench|andyzorigin\/cybench/i
+  },
+  {
+    label: "cybench.github.io deploy",
+    re: /cybench\.github\.io/i
+  }
+];
+
+const clientSideCybenchEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBENCH_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Cybench benchmarks language models on professional CTF tasks spanning web exploitation, crypto, and binary analysis"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6113,6 +6237,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabAcademyEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
+  clientSideEksGoatEvidence,
+  clientSideCtflearnEvidence,
+  clientSideCybenchEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };

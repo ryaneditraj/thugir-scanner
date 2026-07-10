@@ -2820,6 +2820,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-eks-goat-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "OWASP EKS Goat cloud security masterclass disclosed",
+    description:
+      "OWASP EKS Goat documents vulnerable AWS EKS cluster deployment, exploitation walkthroughs, and defense with Kyverno, GuardDuty, and eBPF Tetragon.",
+    impactOneline:
+      "Public EKS Goat guides expose cloud-native attack paths and misconfigurations reusable against production Kubernetes clusters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideEksGoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "EKS Goat labs are intentional — isolate vulnerable clusters from production AWS accounts.",
+      steps: [
+        "Run EKS Goat only in dedicated sandbox AWS accounts.",
+        "Enable GuardDuty and Kyverno policies on production EKS clusters.",
+        "Restrict IAM roles and pod service accounts per least privilege."
+      ]
+    },
+    fixPrompt:
+      "We host OWASP EKS Goat cloud security training. Show how to isolate vulnerable EKS lab clusters from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctflearn-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CTFlearn beginner CTF platform disclosed",
+    description:
+      "CTFlearn advertises hundreds of beginner-friendly web security CTF challenges for learning injection, XSS, and reconnaissance.",
+    impactOneline:
+      "Public CTFlearn instances document exploit training surfaces attackers study before targeting production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn is intentional training — isolate challenge infrastructure from production networks.",
+      steps: [
+        "Require authentication before serving challenge instances.",
+        "Do not reuse CTF vulnerability patterns in production code.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn-style beginner CTF challenges. Show how to isolate challenge VMs from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cybench-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Cybench LLM cybersecurity CTF benchmark disclosed",
+    description:
+      "Cybench evaluates language models on professional Capture the Flag tasks spanning web exploitation, crypto, and binary analysis.",
+    impactOneline:
+      "Public Cybench indexes document CTF challenge categories and exploit patterns used to benchmark AI security capabilities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCybenchEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cybench is a research benchmark — isolate CTF task environments from production networks.",
+      steps: [
+        "Run Cybench CTF tasks only in isolated lab environments.",
+        "Do not expose benchmark challenge instances without authentication.",
+        "Treat published CTF writeups as training material, not production patterns."
+      ]
+    },
+    fixPrompt:
+      "We host Cybench-style LLM cybersecurity CTF benchmarks. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",
