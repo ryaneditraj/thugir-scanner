@@ -86,19 +86,19 @@ export default async function AdminOverview() {
       </p>
       <div className="grid">
         <div className="card">
-          <b>{scanCount ?? 0}</b>
+          <b className="stat">{scanCount ?? 0}</b>
           <p className="kv">total scans</p>
         </div>
         <div className="card">
-          <b>{patternCount ?? 0}</b>
+          <b className="stat">{patternCount ?? 0}</b>
           <p className="kv">active patterns</p>
         </div>
         <div className="card">
-          <b>{openCrit ?? 0}</b>
+          <b className="stat">{openCrit ?? 0}</b>
           <p className="kv">open critical findings</p>
         </div>
         <div className="card">
-          <b>{userCount ?? 0}</b>
+          <b className="stat">{userCount ?? 0}</b>
           <p className="kv">profiles</p>
         </div>
       </div>
