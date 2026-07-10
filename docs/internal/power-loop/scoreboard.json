@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T07:08:26.805Z",
+  "updated_at": "2026-07-10T07:12:31.346Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 433,
-  "total_findings": 1739,
+  "total_sites_scanned": 438,
+  "total_findings": 1755,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 140,
-  "discovery_findings": 1028,
+  "discovery_urls_added": 145,
+  "discovery_findings": 1044,
   "improvements_shipped": 161,
-  "last_run": "2026-07-10T07:08:26.805Z",
+  "last_run": "2026-07-10T07:12:31.346Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
+      "note": "First pass degraded 1/6 (misconfig only); retry recovered 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,36 +50,44 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 12,
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 16,
       "errors": [
         "https://ginandjuice.shop/ (Invalid URL)",
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
         "https://seclab.vercel.app/ (Invalid URL)"
       ],
-      "queued_next": [
-        "https://promptmap.vercel.app/",
-        "http://xss-quiz.int21h.jp/",
-        "https://escape.alf.nu/",
-        "https://returntrue.win/",
-        "https://authlab.digi.ninja/"
+      "new_urls": [
+        "https://ctfchallenge.co.uk/",
+        "https://ws.digi.ninja/",
+        "https://intercode-benchmark.github.io/",
+        "https://exploit.education/",
+        "https://cybench.github.io/"
       ],
-      "focus": "Engine evolve — alf.nu XSS wargame + LLM-sec + Defend the Web queued targets",
-      "improvements_shipped_this_run": 3
+      "queued_next": [
+        "https://defendtheweb.net/",
+        "https://alf.nu/alert1",
+        "https://promptmap.vercel.app/",
+        "https://llm-sec.vercel.app/",
+        "https://escape.alf.nu/"
+      ],
+      "focus": "NodeGoat eval + DVWA XSS/phpinfo; alf.nu XSS wargame + LLM-sec queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "alf.nu/alert1: client-side-alf-xss-wargame-evidence (2→3 findings)",
-      "llm-sec.vercel.app: client-side-llm-sec-evidence (5→6 findings)",
-      "defendtheweb.net: client-side-defendtheweb-evidence (2→3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — Heroku cold-start degraded first pass 1/6, retry recovered",
+      "nodegoat-websec.herokuapp.com: server-side-eval-evidence critical + NoSQL injection markers (5 findings)",
+      "dvwa.csalab.app: reflected XSS + phpinfo exposed (4 findings)",
+      "xss-game.appspot.com + xss-quiz.int21h.jp: reflected XSS markers (2 each)",
+      "zerohealth.aliyu.dev: client-side-zero-health-evidence (3 findings)"
     ],
     "learning_gaps": [
-      "defendtheweb.net: platform on hiatus — historical challenge markers only",
-      "promptmap.vercel.app: text-to-image research app, not LLM security lab — deprioritize",
-      "xss-quiz.int21h.jp: TLS cert hostname mismatch — scanner may miss without SSL bypass",
-      "ginandjuice.shop: Invalid URL from cloud scanner — PortSwigger lab unreachable",
-      "escape.alf.nu + returntrue.win + authlab: queued for next limit-8 pass"
+      "juice-shop.herokuapp.com: intermittent 1/6 shallow crawl on Heroku cold-start — retry recovers 6/6",
+      "ginandjuice.shop: Invalid URL from cloud scanner despite public PortSwigger lab",
+      "seclab.vercel.app: Invalid URL — DaniSam deploy offline",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — remove from queue",
+      "defendtheweb.net + alf.nu + llm-sec + escape.alf.nu: queued for next limit-8 pass"
     ]
   },
   "discovery_highlights": {
@@ -94,6 +102,8 @@
     "labs.tegalsec.org/br0w": 3,
     "bugbountyhunter.com": 2,
     "zerohealth.aliyu.dev": 3,
+    "xss-game.appspot.com": 2,
+    "xss-quiz.int21h.jp": 2,
     "dvwa.csalab.app": 4,
     "nodegoat-websec.herokuapp.com": 5,
     "xss-quiz.int21h.jp": 2,
