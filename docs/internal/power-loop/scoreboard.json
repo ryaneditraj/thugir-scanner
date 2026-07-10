@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T20:20:00.000Z",
+  "updated_at": "2026-07-10T21:14:27.255Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 558,
-  "total_findings": 2298,
+  "total_sites_scanned": 566,
+  "total_findings": 2336,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 213,
-  "discovery_findings": 1498,
+  "discovery_urls_added": 218,
+  "discovery_findings": 1529,
   "improvements_shipped": 200,
-  "last_run": "2026-07-10T20:22:15.101Z",
+  "last_run": "2026-07-10T21:14:27.255Z",
   "last_run_summary": {
-    "hour_utc": "20:00",
+    "hour_utc": "21:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku Application Error/cold-start (1 finding); retry 4–5 findings; staging fallback recovered 6/6",
+      "note": "Primary heroku 1 finding (misconfig-only); retry DNS NXDOMAIN; staging fallback 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,7 +54,11 @@
           ],
           "retry_gap": [
             "xss",
-            "sensitive_data"
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
           ]
         }
       }
@@ -62,15 +66,12 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 35,
-      "skipped_48h": [
-        "https://brokencrystals.com/",
-        "https://bwapp.hakhub.net/",
-        "https://ginandjuice.shop/"
-      ],
+      "urls_scanned": 7,
+      "findings": 31,
+      "skipped_48h": [],
       "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
+        "https://juice-shop.herokuapp.com (DNS NXDOMAIN on benchmark retry)"
       ],
       "queued_not_scanned_this_hour": [
         "https://lab.pentest-forge.com/",
@@ -78,30 +79,27 @@
         "https://azure-samples.github.io/sherpa/",
         "https://securityweb-iota.vercel.app/",
         "https://hack-yourself-first.com/",
-        "https://openvaultbank.com/",
-        "https://vwad.owasp.org/",
-        "https://insecure-app.vercel.app/",
-        "https://owaspbased-lessons.vercel.app/",
-        "https://vulnerable-graphql-demo.railway.app/",
-        "http://hackazon.webscantest.com/",
-        "https://wrongsecrets.onrender.com/"
+        "https://bypass403.vercel.app/",
+        "https://bug-hunt-vuln-detection.vercel.app/",
+        "https://cyber-quest-v1.vercel.app/",
+        "https://shiny-computing-machine.vercel.app/",
+        "https://graphql-lab.vercel.app/"
       ],
-      "focus": "Parallel runs: Atlas Crew hub + Reef MCP (engine improvements); queue sweep wrongsecrets/vapi/hacking-lab/natas + PentestForge/Sherpa URLs queued",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue sweep bWAPP/Mutillidae/picoCTF + 5 new OSS deploys (bypass403, bug-hunt, cyber-quest, shiny-computing, graphql-lab) at tail",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku outage/cold-start",
-      "atlascrew.dev: Atlas Crew Security hub + linked lab subdomains (6 findings)",
-      "reef-mcp-registry.vercel.app: MCP-RCE-26.04 supply-chain demo markers (7 findings)",
-      "wrongsecrets.herokuapp.com: Spring Boot actuator + WrongSecrets CTF markers (5 findings)",
-      "hacking-lab.com: training platform evidence root + /events (3 findings each)",
-      "natas0.natas.labs.overthewire.org: OverTheWire Natas wargame markers (3 findings)"
+      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 1/6 + DNS retry failure",
+      "computersciencesop2.vercel.app: OpenAI key + XSS sinks + GenAI lab markers (7 findings)",
+      "server.vulnapp.id/mutillidae: Mutillidae lab + phpinfo + HTML comment creds (6 findings)",
+      "bwapp.hakhub.net: phpinfo + directory listing + robots paths (6 findings)",
+      "vulnweb.netlify.app: SQLi client evidence + XSS sinks (4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku Application Error/cold-start still needs staging fallback; xss/sensitive_data missed on primary retry",
-      "http://hackazon.webscantest.com/: Rapid7 demo returns 403 to scanner UA",
-      "wrongsecrets.onrender.com: service suspended by owner",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
+      "juice-shop.herokuapp.com: Heroku DNS/cold-start — primary 1/6 then retry NXDOMAIN; staging oracle required",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
+      "New tail URLs (bypass403, bug-hunt, cyber-quest, shiny-computing, graphql-lab) queued but not reached in 8-URL limit",
+      "picoctf.org / solyd.com.br: training landing pages — challenge instances require registration"
     ]
   },
   "discovery_highlights": {
@@ -155,9 +153,11 @@
     "demo.owasp-juice.shop": 8,
     "vapi.apisec.ai": 3,
     "ginandjuice.shop": 3,
-    "secureby.design": 7,
-    "cyberscavengerhunt.com": 6,
     "bwapp.hakhub.net": 6,
+    "server.vulnapp.id/mutillidae": 6,
+    "computersciencesop2.vercel.app": 7,
+    "vulnweb.netlify.app": 4,
+    "picoctf.org": 3,
     "public-firing-range.appspot.com": 4,
     "google-gruyere.appspot.com": 3,
     "dvga.tools.escape.tech": 4,
@@ -307,7 +307,7 @@
     "hacking-lab.com": 3,
     "hacking-lab.com/events": 3,
     "natas0.natas.labs.overthewire.org": 3,
-    "ctflearn.com": 3,
+    "ctflearn.com": 2,
     "pentesteracademylab.appspot.com": 2,
     "solyd.com.br": 2,
     "picoctf.org": 3,
@@ -318,7 +318,6 @@
     "hiddeninvestigations.net": 4,
     "acuart.phpnet.us": 2,
     "ekssecurity.netlify.app": 2,
-    "ctflearn.com": 2,
     "cybench.github.io": 4,
     "w3challs.com": 3,
     "intercode-benchmark.github.io": 3,
