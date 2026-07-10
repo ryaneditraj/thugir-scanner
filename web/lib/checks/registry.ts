@@ -4797,6 +4797,129 @@ const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacking-Lab AG cyber security training platform (hacking-lab.com) ------------
+const CLIENT_HACKING_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hacking-Lab title",
+    re: /Hacking-Lab for Cyber Security Training/i
+  },
+  {
+    label: "Cyber security training keywords",
+    re: /Cyber Security Training[\s\S]{0,80}Hacking-Lab/i
+  },
+  {
+    label: "Offensive defensive skills tagline",
+    re: /offensive and defensive skills/i
+  },
+  {
+    label: "CTF platform nav",
+    re: /href=["']\/ctf_platform["']/i
+  },
+  {
+    label: "University cyber labs path",
+    re: /cyber_security_labs_for_universities/i
+  }
+];
+
+const clientSideHackingLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKING_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacking-Lab AG publishes cyber security training, CTF events, and offensive/defensive skill assessments"
+    }
+  };
+};
+
+// --- Solyd ethical hacking & pentest training (solyd.com.br) ----------------------
+const CLIENT_SOLYD_TRAINING_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Solyd hacking pentest course title",
+    re: /Introdução ao Hacking e Pentest 2\.0/i
+  },
+  {
+    label: "Ethical hacking fundamentals PT",
+    re: /hacking ético[\s\S]{0,100}teste de penetração/i
+  },
+  {
+    label: "Free cybersecurity course PT",
+    re: /cibersegurança[\s\S]{0,140}curso gratuito/i
+  },
+  {
+    label: "Solyd EAD enroll link",
+    re: /solyd\.com\.br\/ead\/enroll\/introducao-ao-hacking/i
+  },
+  {
+    label: "Pentest gradient branding",
+    re: /background-pentest(?:-free)?-gradient/i
+  }
+];
+
+const clientSideSolydTrainingEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SOLYD_TRAINING_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Solyd publishes free Introdução ao Hacking e Pentest 2.0 ethical hacking and penetration testing courses"
+    }
+  };
+};
+
+// --- CyLab Security Academy / picoCTF migration (picoctf.org) ---------------------
+const CLIENT_CYLAB_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CyLab Security Academy title",
+    re: /CyLab Security Academy/i
+  },
+  {
+    label: "picoCTF migration notice",
+    re: /picoCTF has joined CyLab Security Academy/i
+  },
+  {
+    label: "CMU cybersecurity platform",
+    re: /Carnegie Mellon University[\s\S]{0,120}cybersecurity learning/i
+  },
+  {
+    label: "cylabacademy.org login CTA",
+    re: /cylabacademy\.org/i
+  },
+  {
+    label: "AI security learning topics",
+    re: /AI security and blockchain integrity/i
+  }
+];
+
+const clientSideCylabAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYLAB_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "picoCTF migrated to CyLab Security Academy — CMU free cybersecurity learning platform with CTF competitions"
+    }
+  };
+};
+
 // --- PentestForge hub: linked *.lab.pentest-forge.com vulnerable targets --------
 // Hub pages catalog OWASP Juice Shop, crAPI, VAmPI, etc. on sibling subdomains.
 // Probe linked origins with lab-specific routes; hub catalog alone is positive proof
@@ -4978,6 +5101,9 @@ export const RULES: Record<string, Rule> = {
   clientSideBwappEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
+  clientSideHackingLabEvidence,
+  clientSideSolydTrainingEvidence,
+  clientSideCylabAcademyEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };

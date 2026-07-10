@@ -330,6 +330,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideBwappEvidence",
   "clientSideHackableSoLabEvidence",
   "clientSideVulnwebLabEvidence",
+  "clientSideHackingLabEvidence",
+  "clientSideSolydTrainingEvidence",
+  "clientSideCylabAcademyEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
