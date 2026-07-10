@@ -1193,6 +1193,24 @@
       "slug": "client-side-owasp-vwad-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: OWASP Vulnerable Web Applications Directory + numberOfItems 208 + vwad.owasp.org/app/juice-shop; extractOwaspVwadSeeds; vwad.owasp.org findings 0→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-heroku-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: Heroku Application Error on /main.js during cold-start; warmupJuiceShopHome retries + always seed /main.js; juice-shop-staging fallback 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:atlascrew.dev",
+      "slug": "client-side-atlas-crew-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Atlas Crew Security platform + Synapse/Chimera/Crucible portfolio + linked *.atlascrew.dev subdomains; extractAtlasCrewHubSeeds; atlascrew.dev findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:reef-mcp-registry.vercel.app",
+      "slug": "client-side-mcp-supply-chain-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: signed supply chain for MCP + MCP-RCE-26.04 + April 2026 Anthropic MCP exploit in SSR HTML; reef-mcp-registry.vercel.app findings 6→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2180,6 +2198,21 @@
       "source": "discovery:vwad.owasp.org",
       "slug": "client-side-owasp-vwad-evidence",
       "shipped_at": "2026-07-10T19:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-heroku-warmup-main-js-seed",
+      "shipped_at": "2026-07-10T20:20:00.000Z"
+    },
+    {
+      "source": "discovery:atlascrew.dev",
+      "slug": "client-side-atlas-crew-hub-evidence",
+      "shipped_at": "2026-07-10T20:20:00.000Z"
+    },
+    {
+      "source": "discovery:reef-mcp-registry.vercel.app",
+      "slug": "client-side-mcp-supply-chain-evidence",
+      "shipped_at": "2026-07-10T20:20:00.000Z"
     }
   ]
 }
