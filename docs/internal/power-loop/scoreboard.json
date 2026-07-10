@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T08:24:21.846Z",
+  "updated_at": "2026-07-10T08:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 150,
   "discovery_findings": 1073,
-  "improvements_shipped": 164,
-  "last_run": "2026-07-10T08:24:21.846Z",
+  "improvements_shipped": 167,
+  "last_run": "2026-07-10T08:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "08:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary juice-shop.herokuapp.com cold-start degraded 1/6 (1 page, misconfig only); retry 1/6; staging fallback 6/6",
+      "note": "Primary juice-shop.herokuapp.com cold-start degraded 1/6 twice; staging fallback 6/6 — no new benchmark category misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -66,30 +66,26 @@
       "queued_next": [
         "https://yogsec.github.io/xss-labs/",
         "https://bwapp.net/",
-        "https://hackable-web.vercel.app/",
-        "https://ctf.hacker101.com/",
-        "https://vulnerable-lab.vercel.app/",
         "https://escape.alf.nu/",
-        "https://returntrue.win/"
+        "https://ws.digi.ninja/"
       ],
-      "focus": "defendtheweb + alf.nu/alert1 + llm-sec OWASP LLM lab; hack-this-site-eta 10 findings",
-      "improvements_shipped_this_run": 0
+      "focus": "VulnerableApp regression fix + CTFChallenge UK + Exploit Education VM labs",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary Heroku cold-start 1/6 twice before fallback",
+      "sasanlabs.github.io/VulnerableApp: client-side-vulnerableapp-evidence regression fixed (2→3 findings)",
+      "ctfchallenge.co.uk: client-side-ctfchallenge-evidence — 11 challenges / 74 flags (0→3 findings)",
+      "exploit.education: client-side-exploit-education-evidence — Phoenix/Nebula buffer overflow VM catalog (0→3 findings)",
       "hack-this-site-eta.vercel.app: 10 findings incl. exposed source maps + CORS",
-      "llm-sec.vercel.app: 6 findings incl. critical AWS key + client-side-llm-sec-evidence",
-      "promptmap.vercel.app: OpenAI key in client bundle (3 findings)",
-      "alf.nu/alert1: client-side-alf-xss-wargame-evidence (3 findings)",
-      "defendtheweb.net: client-side-defendtheweb-evidence (3 findings)"
+      "llm-sec.vercel.app: 6 findings incl. client-side-llm-sec-evidence"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: intermittent Heroku cold-start yields 1-page shallow crawl (1/6 recall) — staging fallback required",
       "ginandjuice.shop: Invalid URL from cloud scanner despite public availability",
-      "seclab.vercel.app: Invalid URL — DaniSam deploy offline",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — disabled in queue",
-      "promptmap.vercel.app: text-to-image research app with exposed keys — not a dedicated LLM security lab",
-      "New queue for next pass: yogsec xss-labs, bwapp.net, hackable-web, ctf.hacker101.com, vulnerable-lab.vercel.app"
+      "ws.digi.ninja: SocketToMe temporarily down (PHP upgrade) — queued for WebSocket lab evidence",
+      "xss-quiz.int21h.jp: host serves printenv stub — yamagata21 stage pages unreachable from cloud",
+      "mutillidae.lab.pentest-forge.com: 502 Bad Gateway — offline"
     ]
   },
   "discovery_highlights": {
@@ -136,7 +132,6 @@
     "urban-vampi-staging.up.railway.app": 4,
     "secure-bank-bay.vercel.app": 6,
     "owaspbased-lessons.vercel.app": 1,
-    "hack-this-site-eta.vercel.app": 7,
     "zero-health.vercel.app": 3,
     "csrf-xss-demo.vercel.app": 4,
     "ai-security-platform-iota.vercel.app": 3,
@@ -193,7 +188,6 @@
     "web2-lab2-mck1.onrender.com": 3,
     "pentest-lab.vercel.app": 3,
     "nosql-injection-lab.vercel.app": 2,
-    "llm-sec.vercel.app": 6,
     "llm-security-lab.vercel.app": 6,
     "prototype-pollution-interactive-demo.netlify.app": 2,
     "ssrf-lab.vercel.app": 3,
@@ -231,7 +225,6 @@
     "vulnerable-graphql-demo.railway.app": 1,
     "authlab.digi.ninja": 5,
     "returntrue.win": 4,
-    "defendtheweb.net": 3,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
     "securebank-blog.vercel.app": 2,
@@ -280,6 +273,8 @@
     "solyd.com.br": 2,
     "picoctf.org": 3,
     "security-trainer.vercel.app": 4,
-    "capture-the-flag.labs.vercel.dev": 1
+    "capture-the-flag.labs.vercel.dev": 1,
+    "ctfchallenge.co.uk": 3,
+    "exploit.education": 3
   }
 }
