@@ -6748,6 +6748,89 @@ const clientSideAtlasCrewEdgeProtectionEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Atlas Crew portfolio hub (atlascrew.dev) -----------------------------------
+const CLIENT_ATLAS_CREW_HUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Atlas Crew Security platform portfolio",
+    re: /Atlas Crew Security|Open-Source Security, Careers/i
+  },
+  {
+    label: "Synapse Chimera Crucible security stack",
+    re: /Synapse.*Chimera|security \(Synapse, Chimera, Crucible\)/i
+  },
+  {
+    label: "Atlas Crew open-source security platforms",
+    re: /Open-source security platforms|Atlas Crew Security platform/i
+  },
+  {
+    label: "Linked inferno lab subdomains",
+    re: /(?:chimera|synapse|crucible|apparatus|horizon-demo)\.atlascrew\.dev/i
+  },
+  {
+    label: "Detect Decide Fire Synapse tagline",
+    re: /Detect\.\s*Decide\.\s*Fire/i
+  }
+];
+
+const clientSideAtlasCrewHubEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ATLAS_CREW_HUB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/atlascrew\.dev/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Atlas Crew portfolio hub catalogs Synapse/Chimera/Crucible/Apparatus security platforms with linked lab subdomains"
+    }
+  };
+};
+
+// --- Reef MCP supply-chain security demo (reef-mcp-registry) --------------------
+const CLIENT_MCP_SUPPLY_CHAIN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Signed MCP supply chain headline",
+    re: /signed supply chain[\s\S]{0,40}for\s+MCP/i
+  },
+  {
+    label: "MCP RCE attack pack catalog",
+    re: /MCP-RCE-26\.04|MCP STDIO Command Execution/i
+  },
+  {
+    label: "Anthropic MCP exploit disclosure",
+    re: /Anthropic MCP exploit|April 2026 Anthropic MCP/i
+  },
+  {
+    label: "OWASP Agentic ASI compliance wall",
+    re: /OWASP Agentic Top 10 \(ASI01-10\)|ASI09.*Misaligned Behaviors/i
+  },
+  {
+    label: "Reef MCP registry GitHub",
+    re: /reef-mcp-registry|Yashash4\/reef-mcp-registry/i
+  }
+];
+
+const clientSideMcpSupplyChainEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MCP_SUPPLY_CHAIN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Reef MCP registry demo documents signed MCP supply-chain controls, Anthropic MCP RCE blocking, and OWASP Agentic ASI attack packs"
+    }
+  };
+};
+
 // --- OWASP Vulnerable Web Applications Directory (vwad.owasp.org) -----------------
 const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
   {
@@ -6936,6 +7019,8 @@ export const RULES: Record<string, Rule> = {
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
   clientSideAtlasCrewEdgeProtectionEvidence,
+  clientSideAtlasCrewHubEvidence,
+  clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure

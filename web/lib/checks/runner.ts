@@ -87,6 +87,38 @@ async function applyWargameBasicAuth(
   return doc;
 }
 
+const HEROKU_APP_ERROR_RE = /Application Error|herokucdn\.com\/error-pages/i;
+
+function isJuiceShopHost(url: string): boolean {
+  try {
+    return /juice-shop/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
+/** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
+async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
+  if (!isJuiceShopHost(targetUrl) && !isJuiceShopHost(home.finalUrl)) return home;
+  let best = home;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (!HEROKU_APP_ERROR_RE.test(best.body) && /main\.js/i.test(best.body)) break;
+    await new Promise((r) => setTimeout(r, 3500));
+    const retried = await fetchDoc(best.finalUrl || targetUrl, {
+      timeoutMs: 18000,
+      maxBytes: 600_000
+    });
+    if (
+      retried.status >= 200 &&
+      retried.status < 500 &&
+      (!HEROKU_APP_ERROR_RE.test(retried.body) || retried.body.length > best.body.length)
+    ) {
+      best = retried;
+    }
+  }
+  return best;
+}
+
 async function reachTarget(target: URL, _rawInput: string): Promise<FetchedDoc> {
   const apexHost = target.hostname.replace(/^www\./i, "");
   const hadWww = target.hostname.toLowerCase().startsWith("www.");
@@ -416,8 +448,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideReactDomXssLabEvidence",
   "clientSideOwaspGenaiLabEvidence",
   "clientSideCtfDefiEvidence",
+  "clientSideAtlasCrewHubEvidence",
   "clientSideAtlasCrewInfernoLabEvidence",
   "clientSideAtlasCrewEdgeProtectionEvidence",
+  "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
@@ -1399,6 +1433,41 @@ function extractInvictiAspnetSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Atlas Crew portfolio hub — security platform docs and linked lab subdomains. */
+function extractAtlasCrewHubSeeds(html: string, pageUrl: string): string[] {
+  if (!/atlascrew\.dev/i.test(new URL(pageUrl).hostname)) return [];
+  if (!/Atlas Crew Security|Open-Source Security|Synapse.*Chimera/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/security.html",
+    "/chimera.html",
+    "/synapse.html",
+    "/crucible.html",
+    "/apparatus.html",
+    "/synapse-fleet.html"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const extRe =
+    /href="(https:\/\/(?:chimera|synapse|crucible|apparatus|horizon-demo)\.atlascrew\.dev[^"]*)"/gi;
+  let m: RegExpExecArray | null;
+  while ((m = extRe.exec(html)) && out.size < 10) {
+    try {
+      out.add(new URL(m[1]).origin + "/");
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Atlas Crew Inferno Lab — Apparatus + Crucible tutorial and feature docs. */
 function extractAtlasCrewInfernoLabSeeds(html: string, pageUrl: string): string[] {
   if (!/atlascrew\.dev|Apparatus|Crucible|@atlascrew/i.test(html)) return [];
@@ -1869,6 +1938,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const redirected = await fetchDoc(stubRedirect, { timeoutMs: 12000, maxBytes: 600_000 });
     if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
   }
+  home = await warmupJuiceShopHome(target.toString(), home);
   const origin = target.origin;
   const crawlOrigin = new URL(home.finalUrl).origin;
 
@@ -1926,6 +1996,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
+  const atlasCrewHubSeeds = extractAtlasCrewHubSeeds(home.body, home.finalUrl);
   const atlasCrewInfernoLabSeeds = extractAtlasCrewInfernoLabSeeds(home.body, home.finalUrl);
   const atlasCrewEdgeProtectionSeeds = extractAtlasCrewEdgeProtectionSeeds(home.body, home.finalUrl);
   const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
@@ -1991,6 +2062,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspGenaiLabSeeds,
       ...ctfDefiSeeds,
       ...invictiAspnetSeeds,
+      ...atlasCrewHubSeeds,
       ...atlasCrewInfernoLabSeeds,
       ...atlasCrewEdgeProtectionSeeds,
       ...owaspVwadSeeds,
@@ -2043,6 +2115,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const scriptCap = opts.maxScripts ?? 24;
   const scriptUrls = new Set<string>();
   for (const p of pages) for (const u of extractScriptUrls(p.body, p.finalUrl, scriptCap)) scriptUrls.add(u);
+  if (isJuiceShopHost(home.finalUrl)) {
+    for (const p of ["/main.js", "/polyfills.js", "/runtime.js"]) {
+      try {
+        scriptUrls.add(new URL(p, crawlOrigin).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
   const scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
     probe,
     maxBytes: 800_000,
