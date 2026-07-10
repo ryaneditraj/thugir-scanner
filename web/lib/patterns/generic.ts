@@ -2300,6 +2300,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-tegalsec-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "TegalSec browser hacking CTF lab disclosed",
+    description:
+      "TegalSec publishes Hack the br0w and XSS Labs — browser-based CTF challenges teaching client-side exploitation via user-agent tricks and reflected XSS.",
+    impactOneline:
+      "Public TegalSec labs document browser hacking challenge patterns and XSS training surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideTegalsecLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "TegalSec labs are intentional training — isolate challenge instances from production networks.",
+      steps: [
+        "Run TegalSec CTF labs only on dedicated training infrastructure.",
+        "Do not copy browser-hacking challenge patterns into production apps.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host TegalSec-style browser hacking CTF labs. Show how to isolate challenge pages from production applications.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-bugbountyhunter-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "BugBountyHunter zseano challenge platform disclosed",
+    description:
+      "BugBountyHunter.com publishes zseano-style bug bounty challenge scenarios and member playground demos for XSS and web app vulnerability hunting.",
+    impactOneline:
+      "Public BugBountyHunter challenges document real-world bug bounty hunting scenarios attackers study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBugBountyHunterEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugBountyHunter challenges are intentional training — gate active scenarios behind membership.",
+      steps: [
+        "Require authentication before serving live challenge instances.",
+        "Do not expose production-like bug bounty scenarios without access controls.",
+        "Monitor challenge endpoints for automated scanner abuse."
+      ]
+    },
+    fixPrompt:
+      "We host BugBountyHunter-style bug bounty challenge scenarios. Show how to gate live challenges behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-zero-health-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Zero Health intentionally vulnerable healthcare platform disclosed",
+    description:
+      "Zero Health is an educational healthcare security platform documenting JWT bypass, XSS, IDOR, and unsafe file upload flaws in medical technology contexts.",
+    impactOneline:
+      "Public Zero Health instances expose healthcare-themed vulnerability modules for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideZeroHealthEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never deploy healthcare lab patterns to production.",
+      steps: [
+        "Run Zero Health only in isolated Docker containers on lab networks.",
+        "Enforce JWT validation and HIPAA-compliant access controls in production healthcare apps.",
+        "Do not expose medical data APIs without authentication."
+      ]
+    },
+    fixPrompt:
+      "We host Zero Health-style intentionally vulnerable healthcare apps. Show how to enforce JWT validation and HIPAA access controls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",

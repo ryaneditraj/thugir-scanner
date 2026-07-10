@@ -5061,6 +5061,136 @@ const clientSideVulnforgeAcademyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- TegalSec browser hacking labs (labs.tegalsec.org/br0w, xss-labs) ---------------
+const CLIENT_TEGALSEC_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hack the br0w browser CTF title",
+    re: /HACK THE BR0W/i
+  },
+  {
+    label: "Play your browser tagline",
+    re: /Play your browser and learn more[\s\S]{0,40}hack fun/i
+  },
+  {
+    label: "XSS Labs Tegal1337 title",
+    re: /XSS Labs \| Tegal1337/i
+  },
+  {
+    label: "Cross-site scripting labs intro",
+    re: /Cross-site scripting labs for web application security/i
+  },
+  {
+    label: "User-agent challenge instruction",
+    re: /Change your user agent to[\s\S]{0,30}tegal1337/i
+  }
+];
+
+const clientSideTegalsecLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_TEGALSEC_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/tegalsec|tegal1337|HACK THE BR0W/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "TegalSec publishes browser hacking CTF labs (Hack the br0w, XSS Labs) with client-side challenge mechanics"
+    }
+  };
+};
+
+// --- BugBountyHunter zseano challenge platform (bugbountyhunter.com) ----------------
+const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BugBountyHunter platform title",
+    re: /BugBountyHunter\.com/i
+  },
+  {
+    label: "zseano author attribution",
+    re: /@zseano|content="@zseano"/i
+  },
+  {
+    label: "Discover all vulnerabilities meta",
+    re: /Can you discover all of the web app vulnerabilities/i
+  },
+  {
+    label: "XSS challenge scenario meta",
+    re: /Can you find any XSS\? No HTML tags allowed/i
+  },
+  {
+    label: "Bug bounty scenario recreation",
+    re: /re-created bug bounty scenario|BugBountyHunter Members Demo/i
+  }
+];
+
+const clientSideBugBountyHunterEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BUGBOUNTYHUNTER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/BugBountyHunter|@zseano/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BugBountyHunter publishes zseano-style bug bounty challenge scenarios and member playground demos"
+    }
+  };
+};
+
+// --- Zero Health healthcare security lab (zerohealth.aliyu.dev) ---------------------
+const CLIENT_ZERO_HEALTH_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Zero Health platform title",
+    re: /Zero Health[\s\S]{0,80}Educational Healthcare Security Platform/i
+  },
+  {
+    label: "Intentionally vulnerable badge",
+    re: /Intentionally Vulnerable/i
+  },
+  {
+    label: "JWT bypass feature callout",
+    re: /bypass the JWT token/i
+  },
+  {
+    label: "XSS as a Service feature",
+    re: /XSS as a Service/i
+  },
+  {
+    label: "HIPAA non-compliant certification joke",
+    re: /HIPAA Non-Compliant|Certified HIPAA Non-Compliant/i
+  },
+  {
+    label: "Deliberately vulnerable healthcare disclaimer",
+    re: /deliberately vulnerable application for educational purposes/i
+  }
+];
+
+const clientSideZeroHealthEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ZERO_HEALTH_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Zero Health|zero-health|zerohealth/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Zero Health documents intentionally vulnerable healthcare features — JWT bypass, XSS, IDOR, and file upload flaws"
+    }
+  };
+};
+
 // --- PentestForge hub: linked *.lab.pentest-forge.com vulnerable targets --------
 // Hub pages catalog OWASP Juice Shop, crAPI, VAmPI, etc. on sibling subdomains.
 // Probe linked origins with lab-specific routes; hub catalog alone is positive proof
@@ -5248,6 +5378,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnerableappEvidence,
   clientSideRestVulnwebEvidence,
   clientSideVulnforgeAcademyEvidence,
+  clientSideTegalsecLabEvidence,
+  clientSideBugBountyHunterEvidence,
+  clientSideZeroHealthEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
