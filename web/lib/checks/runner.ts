@@ -347,6 +347,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideAlfXssWargameEvidence",
   "clientSideLlmSecEvidence",
   "clientSideDefendthewebEvidence",
+  "clientSideReturnTrueWargameEvidence",
+  "clientSideAuthlabEvidence",
+  "clientSideXssQuizEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -737,6 +740,7 @@ function extractAlfNuXssSeeds(html: string, pageUrl: string): string[] {
   for (const raw of [
     "https://escape.alf.nu/",
     "https://alf.nu/alert1",
+    "https://returntrue.win/",
     "/alert1",
     "/ReturnTrue"
   ]) {
@@ -754,6 +758,105 @@ function extractAlfNuXssSeeds(html: string, pageUrl: string): string[] {
     try {
       const u = new URL(m[1], pageUrl);
       if (!/alf\.nu$/i.test(u.hostname)) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Erling Ellingsen returntrue.win code-injection wargame levels. */
+function extractReturnTrueSeeds(html: string, pageUrl: string): string[] {
+  if (!/return\s+true\s+to\s+win|returntrue\.win/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const raw of ["https://returntrue.win/", "?level=1", "?level=2", "?level=3"]) {
+    try {
+      const u = new URL(raw, pageUrl);
+      if (u.origin !== pageOrigin && !/returntrue\.win$/i.test(u.hostname)) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const levelRe = /href\s*=\s*["'](\?level=\d+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = levelRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** DigiNinja Authentication Lab challenge routes. */
+function extractAuthlabSeeds(html: string, pageUrl: string): string[] {
+  if (!/Authentication Lab|authlab\.digi\.ninja/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/Bypass",
+    "/ClientSide",
+    "/Timing",
+    "/Leaky_JWT",
+    "/Auth1",
+    "/JWT_None",
+    "/JWT_Cracking",
+    "/UserAgent"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:Bypass|ClientSide|Timing|Leaky_JWT|Auth1|JWT_None|JWT_Cracking|UserAgent))["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** yamagata21 XSS Challenges staged PHP routes (xss-quiz.int21h.jp). */
+function extractXssQuizInt21hSeeds(html: string, pageUrl: string): string[] {
+  if (!/xss-quiz\.int21h\.jp|XSS Challenges|yamagata21/i.test(html)) return [];
+  if (/printenv at xss-quiz\.int21h\.jp/i.test(html)) {
+    const out = new Set<string>();
+    const origin = new URL(pageUrl).origin;
+    for (const p of [
+      "/",
+      "/stage2.php",
+      "/stage-3.php",
+      "/stage_4.php",
+      "/stage07.php",
+      "/ranking.php"
+    ]) {
+      try {
+        out.add(new URL(p, origin).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+    return [...out];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const stageRe = /href\s*=\s*["']([^"']*stage[^"']*\.php[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = stageRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
       /* ignore */
@@ -1184,6 +1287,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
   const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
   const alfNuXssSeeds = extractAlfNuXssSeeds(home.body, home.finalUrl);
+  const returnTrueSeeds = extractReturnTrueSeeds(home.body, home.finalUrl);
+  const authlabSeeds = extractAuthlabSeeds(home.body, home.finalUrl);
+  const xssQuizSeeds = extractXssQuizInt21hSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1223,6 +1329,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...firingRangeSeeds,
       ...tegalsecSeeds,
       ...alfNuXssSeeds,
+      ...returnTrueSeeds,
+      ...authlabSeeds,
+      ...xssQuizSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,

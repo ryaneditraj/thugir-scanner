@@ -2456,6 +2456,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-returntrue-wargame-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "returntrue.win return-true-to-win code-injection wargame disclosed",
+    description:
+      "Erling Ellingsen's returntrue.win publishes PHP/JS code-injection challenges where attackers craft function arguments that evaluate to true.",
+    impactOneline:
+      "Public return-true-to-win wargame instances document unsafe eval-style code injection patterns attackers practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideReturnTrueWargameEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "returntrue.win wargames are intentional training — never expose similar unsafe eval patterns in production.",
+      steps: [
+        "Run code-injection wargame challenges only on isolated lab infrastructure.",
+        "Never pass user input into eval, assert, or dynamic code execution in production.",
+        "Validate and sandbox any user-supplied expressions server-side."
+      ]
+    },
+    fixPrompt:
+      "We host returntrue.win-style code-injection wargames. Show how to isolate unsafe eval labs from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-authlab-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "DigiNinja Authentication Lab training platform disclosed",
+    description:
+      "DigiNinja Authentication Lab catalogs JWT, timing, client-side, and auth-bypass challenges for hands-on authentication security training.",
+    impactOneline:
+      "Public Authentication Lab instances document authentication vulnerability modules scannable without login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAuthlabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authentication Lab is intentional training software — isolate challenge instances from production networks.",
+      steps: [
+        "Run Authentication Lab only on dedicated lab infrastructure.",
+        "Do not copy JWT-none or client-side XOR auth patterns into production.",
+        "Gate archived challenge content behind authentication if re-hosted."
+      ]
+    },
+    fixPrompt:
+      "We host DigiNinja Authentication Lab-style JWT and auth-bypass challenges. Show how to isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-xss-quiz-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yamagata21 XSS Challenges wargame disclosed",
+    description:
+      "yamagata21's XSS Challenges at xss-quiz.int21h.jp teach reflected and DOM XSS through staged PHP challenge levels.",
+    impactOneline:
+      "Public XSS quiz instances document staged XSS exploitation patterns for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXssQuizEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS Challenges wargame is intentional training — sanitize output and encode user input in production.",
+      steps: [
+        "Run XSS quiz challenges only on isolated lab infrastructure.",
+        "Encode and sanitize all user-controlled output in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "We host yamagata21-style XSS quiz wargames. Show how to isolate reflected XSS labs from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",

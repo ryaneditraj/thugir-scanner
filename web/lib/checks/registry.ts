@@ -5317,6 +5317,133 @@ const clientSideDefendthewebEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Erling Ellingsen returntrue.win PHP/JS code-injection wargame -------------------
+const CLIENT_RETURNTRUE_WARGAME_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "return true to win challenge title",
+    re: /return\s+true\s+to\s+win/i
+  },
+  {
+    label: "PHP foo function code challenge",
+    re: /function\s+foo\s*\(\s*\$x\s*\)|lang-php[\s\S]{0,80}function\s+foo/i
+  },
+  {
+    label: "POST argument injection form",
+    re: /name=["']argument["'][\s\S]{0,120}method=["']post["']|foo\([\s\S]{0,40}input-argument/i
+  },
+  {
+    label: "Level progression links",
+    re: /href=["']\?level=\d+["'][\s\S]{0,80}Level\s+\d+/i
+  },
+  {
+    label: "returntrue.win challenge host",
+    re: /returntrue\.win/i
+  }
+];
+
+const clientSideReturnTrueWargameEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_RETURNTRUE_WARGAME_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/return\s+true\s+to\s+win|returntrue\.win/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "returntrue.win publishes return-true-to-win PHP/JS code-injection wargame levels with user-controlled function arguments"
+    }
+  };
+};
+
+// --- DigiNinja Authentication Lab hub (authlab.digi.ninja) -------------------------
+const CLIENT_AUTHLAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Authentication Lab hub title",
+    re: /<title>\s*Authentication Lab\s*<\/title>|Welcome to the Authentication Lab/i
+  },
+  {
+    label: "Auth and authorisation vulnerability catalog",
+    re: /authentication and authorisation vulnerabilities|authentication challenges covering/i
+  },
+  {
+    label: "JWT challenge route",
+    re: /href=["']\/JWT_(?:None|Cracking)["']|JWT None Algorithm|JWT Cracking/i
+  },
+  {
+    label: "Client-side auth bypass challenge",
+    re: /href=["']\/(?:ClientSide|Bypass)["']|Client Side|Auth Bypass/i
+  },
+  {
+    label: "authlab.digi.ninja host",
+    re: /authlab\.digi\.ninja/i
+  }
+];
+
+const clientSideAuthlabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AUTHLAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Authentication Lab|authlab\.digi\.ninja/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DigiNinja Authentication Lab documents JWT, timing, client-side, and auth-bypass training challenges"
+    }
+  };
+};
+
+// --- yamagata21 XSS Challenges wargame (xss-quiz.int21h.jp) -----------------------
+const CLIENT_XSS_QUIZ_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Challenges wargame title",
+    re: /XSS Challenges|xss-quiz\.int21h\.jp/i
+  },
+  {
+    label: "yamagata21 challenge attribution",
+    re: /yamagata21|written by yamagata21/i
+  },
+  {
+    label: "Stage PHP challenge route",
+    re: /stage\d*\.php|stage[-_]\d+\.php|stage-no\d+\.php/i
+  },
+  {
+    label: "Reflected XSS search parameter lab",
+    re: /document\.domain[\s\S]{0,120}(?:search|input|value=)|alert\(document\.domain\)/i
+  },
+  {
+    label: "XSS quiz ranking page",
+    re: /RankIng20\.php|ranking\.php/i
+  }
+];
+
+const clientSideXssQuizEvidence: Rule = async (ctx) => {
+  if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XSS_QUIZ_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/xss-quiz\.int21h\.jp|XSS Challenges/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "yamagata21 XSS Challenges publish staged reflected/DOM XSS wargame levels at xss-quiz.int21h.jp"
+    }
+  };
+};
+
 // --- PentestForge hub: linked *.lab.pentest-forge.com vulnerable targets --------
 // Hub pages catalog OWASP Juice Shop, crAPI, VAmPI, etc. on sibling subdomains.
 // Probe linked origins with lab-specific routes; hub catalog alone is positive proof
@@ -5510,6 +5637,9 @@ export const RULES: Record<string, Rule> = {
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideDefendthewebEvidence,
+  clientSideReturnTrueWargameEvidence,
+  clientSideAuthlabEvidence,
+  clientSideXssQuizEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
