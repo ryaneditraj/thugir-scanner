@@ -2144,6 +2144,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacking-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hacking-Lab cyber security training platform disclosed",
+    description:
+      "Hacking-Lab AG advertises cyber security training, CTF events, offensive/defensive skill assessments, and university lab programs.",
+    impactOneline:
+      "Public training platforms expose intentionally vulnerable lab environments for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackingLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate Hacking-Lab instances behind authenticated accounts; isolate lab VMs from production.",
+      steps: [
+        "Require login before starting challenge instances.",
+        "Run lab containers on dedicated infrastructure with no production data.",
+        "Monitor lab egress for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host Hacking-Lab-style cyber security training and CTF events. Show how to gate labs behind auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-solyd-training-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Solyd ethical hacking & pentest training disclosed",
+    description:
+      "Solyd publishes Introdução ao Hacking e Pentest 2.0 — a free Portuguese course covering ethical hacking and penetration testing fundamentals.",
+    impactOneline:
+      "Public training courses document hacking and pentest techniques reusable against production applications.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSolydTrainingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training courses are intentional — ensure lab exercises never share infrastructure with production.",
+      steps: [
+        "Gate hands-on lab VMs behind course enrollment.",
+        "Do not copy course vulnerability patterns into production code.",
+        "Isolate training environments from customer data."
+      ]
+    },
+    fixPrompt:
+      "We host Solyd-style ethical hacking and pentest training courses. Show how to isolate lab VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cylab-academy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CyLab Security Academy / picoCTF platform disclosed",
+    description:
+      "picoCTF migrated to CyLab Security Academy — Carnegie Mellon University's free cybersecurity learning and CTF competition platform.",
+    impactOneline:
+      "Public CTF academies document exploit training surfaces and challenge patterns attackers study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCylabAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF academies are intentional — isolate challenge infrastructure from production networks.",
+      steps: [
+        "Require authentication before serving challenge instances.",
+        "Do not reuse CTF vulnerability patterns in production code.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our site mirrors CyLab Security Academy / picoCTF-style CTF training. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",

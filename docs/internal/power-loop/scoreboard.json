@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 121,
   "discovery_findings": 953,
-  "improvements_shipped": 147,
+  "improvements_shipped": 150,
   "last_run": "2026-07-10T02:11:48.802Z",
   "last_run_summary": {
     "hour_utc": "02:00",
@@ -75,14 +75,18 @@
       "demo.testfire.net: 6 findings — Altoro Mutual banking oracle",
       "websegura.radwarelatam.com/mutillidae: 7 findings — Mutillidae II hosted instance",
       "google-gruyere.appspot.com: 3 findings — Google codelab oracle",
-      "public-firing-range.appspot.com: 2 findings — XSS benchmark"
+      "public-firing-range.appspot.com: 2 findings — XSS benchmark",
+      "hacking-lab.com: Cyber Security Training + CTF platform markers (2→3 findings)",
+      "solyd.com.br: Introdução ao Hacking e Pentest 2.0 ethical hacking course (1→2 findings)",
+      "picoctf.org: CyLab Security Academy migration page (2→3 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: nondeterministic — first pass 4/6 (gap xss,sensitive_data), retry 6/6",
       "ginandjuice.shop: Invalid URL from cloud scanner despite public demo",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — keep disabled in queue",
       "vampi.lab.pentest-forge.com: shallow landing (1 finding) — API routes need deeper crawl",
-      "rest.vulnweb.com / testaspnet / hackxor / new queue URLs: pending next run (limit-8)"
+      "rest.vulnweb.com / testaspnet / hackxor / new queue URLs: pending next run (limit-8)",
+      "defendtheweb.net: site on hiatus — challenge content offline"
     ]
   },
   "discovery_highlights": {
@@ -271,5 +275,15 @@
     "solyd.com.br": 1,
     "security-trainer.vercel.app": 4,
     "capture-the-flag.labs.vercel.dev": 1
-  }
+  },
+  "notable_findings": [
+    "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after degraded retry",
+    "demo.testfire.net: 6 findings — Altoro Mutual banking oracle",
+    "websegura.radwarelatam.com/mutillidae: 7 findings — Mutillidae II hosted instance",
+    "google-gruyere.appspot.com: 3 findings — Google codelab oracle",
+    "public-firing-range.appspot.com: 2 findings — XSS benchmark",
+    "hacking-lab.com: Cyber Security Training + CTF platform markers (2→3 findings)",
+    "solyd.com.br: Introdução ao Hacking e Pentest 2.0 ethical hacking course (1→2 findings)",
+    "picoctf.org: CyLab Security Academy migration page (2→3 findings)"
+  ]
 }
