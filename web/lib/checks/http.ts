@@ -176,17 +176,32 @@ export async function fetchDoc(
 export function extractScriptUrls(html: string, pageUrl: string, limit = 12): string[] {
   const urls = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  const re = /<script[^>]+src=["']([^"']+)["']/gi;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(html))) {
+  const add = (raw: string) => {
     try {
-      const abs = new URL(m[1], pageUrl);
+      const abs = new URL(raw, pageUrl);
       if (abs.origin === pageOrigin) urls.add(abs.toString());
     } catch {
       /* ignore malformed */
     }
-  }
-  return [...urls].slice(0, Math.max(1, limit)); // free tier: cap scripts examined
+  };
+  const scriptRe = /<script[^>]+src=["']([^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = scriptRe.exec(html))) add(m[1]);
+  // Vite/React SPAs often lazy-load lab content via modulepreload only (e.g. SecTrainer lesson-content chunk).
+  const preloadRe = /<link[^>]+rel=["']modulepreload["'][^>]+href=["']([^"']+)["']/gi;
+  while ((m = preloadRe.exec(html))) add(m[1]);
+  const preloadReAlt = /<link[^>]+href=["']([^"']+)["'][^>]+rel=["']modulepreload["']/gi;
+  while ((m = preloadReAlt.exec(html))) add(m[1]);
+  const prioritized = [...urls].sort((a, b) => {
+    const score = (u: string) => {
+      const path = u.toLowerCase();
+      if (/lesson-content|lab-content|challenge-content/.test(path)) return 0;
+      if (/\/assets\/index-/.test(path)) return 1;
+      return 2;
+    };
+    return score(a) - score(b);
+  });
+  return prioritized.slice(0, Math.max(1, limit)); // free tier: cap scripts examined
 }
 
 // Apex helper reused by the runner's per-operator denylist.
