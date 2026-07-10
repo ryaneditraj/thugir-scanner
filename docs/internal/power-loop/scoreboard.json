@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T18:18:18.793Z",
+  "updated_at": "2026-07-10T19:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 540,
-  "total_findings": 2225,
+  "total_sites_scanned": 544,
+  "total_findings": 2245,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 203,
-  "discovery_findings": 1432,
-  "improvements_shipped": 191,
-  "last_run": "2026-07-10T18:18:18.793Z",
+  "discovery_findings": 1452,
+  "improvements_shipped": 197,
+  "last_run": "2026-07-10T19:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18:00",
+    "hour_utc": "19:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start 1/6 (misconfig only); retry 4/6 (gap sqli,auth_bypass); staging fallback recovered 6/6",
+      "note": "Primary heroku cold-start 1/6; retry still degraded; staging fallback recovered 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -44,57 +44,37 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ],
-          "first_pass_gap": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
-          ],
-          "retry_gap": [
-            "sqli",
-            "auth_bypass"
           ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 43,
-      "skipped_48h": [],
-      "queued_not_scanned_this_hour": [
-        "https://apparatus.atlascrew.dev/",
-        "https://crucible.atlascrew.dev/",
-        "https://synapse.atlascrew.dev/",
-        "https://atlascrew.dev/",
-        "https://vwad.owasp.org/",
-        "https://demo.securityknowledgeframework.org/",
-        "http://ffuf.me/",
-        "https://openvaultbank.com/"
-      ],
-      "focus": "Atlas Crew Inferno Lab stack + OWASP VWAD directory queued; platform landing pages (hacksec/webgoat/cyberdefenders) rescanned",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 20,
+      "focus": "Atlas Crew Inferno Lab (apparatus/crucible) + Horizon/Synapse edge protection + OWASP VWAD directory",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 1/6→4/6 cold-start degradation",
-      "cyberdefenders.org: OpenAI + Resend keys in bundle + unauthenticated API routes (8 findings)",
-      "labs.hackadvisor.io: HackAdvisor CTF lab evidence + reflected XSS (8 findings)",
-      "appsecmaster.net: Next.js RSC CVE lab page + API Security Top 10 markers (7 findings)",
-      "webgoat.org: postMessage DOM XSS + API security lab evidence (6 findings)",
-      "hacksec.in: reflected XSS on landing + robots/sitemap sensitive paths (5 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku 1/6 cold-start",
+      "apparatus.atlascrew.dev: Inferno Lab red-team/Nuclei docs (0→6 findings)",
+      "crucible.atlascrew.dev: 80+ attack scenario assessment platform (0→3 findings)",
+      "synapse.atlascrew.dev: Horizon + Synapse WAF/DLP edge docs (0→4 findings)",
+      "vwad.owasp.org: OWASP VWAD 208-app registry (0→7 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start still degrades to 1/6 before retry; staging fallback required this hour",
-      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline (2 misconfig-only findings)",
-      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
-      "Atlas Crew stack (apparatus/crucible/synapse): queued at tail — marketing/docs sites not yet scanned",
-      "demo.securityknowledgeframework.org: SKF demo unreachable from cloud (empty response)"
+      "juice-shop.herokuapp.com: Heroku cold-start still degrades to 1/6 before staging fallback",
+      "acuart.phpnet.us: DNS parking page — original Acuart lab offline",
+      "capture-the-flag.labs.vercel.dev: Vercel deployment not found",
+      "demo.securityknowledgeframework.org: SKF demo unreachable from cloud"
     ]
   },
   "discovery_highlights": {
+    "apparatus.atlascrew.dev": 6,
+    "crucible.atlascrew.dev": 3,
+    "synapse.atlascrew.dev": 4,
+    "vwad.owasp.org": 7,
     "bergerzvika.github.io/Cyber-Lab": 8,
     "pwn.college": 6,
     "aesthetic-bubblegum-cbc86d.netlify.app": 3,
