@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T15:13:41.679Z",
+  "updated_at": "2026-07-10T15:16:28.168Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 505,
-  "total_findings": 2065,
+  "total_sites_scanned": 513,
+  "total_findings": 2094,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 183,
-  "discovery_findings": 1294,
+  "discovery_urls_added": 188,
+  "discovery_findings": 1323,
   "improvements_shipped": 182,
-  "last_run": "2026-07-10T15:13:41.679Z",
+  "last_run": "2026-07-10T15:16:28.168Z",
   "last_run_summary": {
-    "hour_utc": "14:00",
+    "hour_utc": "15:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 8,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "First pass degraded 1/6 (misconfig only); retry recovered 8 findings 6/6 without staging fallback",
+      "note": "Primary heroku degraded 2→5 findings (gap sqli,auth_bypass on retry); staging fallback 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,8 +49,11 @@
             "xss",
             "sqli",
             "idor",
-            "auth_bypass",
             "sensitive_data"
+          ],
+          "retry_gap": [
+            "sqli",
+            "auth_bypass"
           ]
         }
       }
@@ -59,38 +62,33 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 35,
-      "skipped_48h": [
-        "https://ginandjuice.shop/",
-        "https://nextjs-cve-hackerone.vercel.app/",
-        "https://web-pentest-playground.onrender.com/"
-      ],
+      "findings": 29,
+      "skipped_48h": [],
       "queued_not_scanned_this_hour": [
-        "https://labs.hackxpert.com/",
-        "https://mlastg.vercel.app/",
-        "https://cryptohack.org/",
-        "https://pwn.college/",
-        "https://www.overthewire.org/wargames/",
+        "https://demo.securityknowledgeframework.org/",
+        "http://ffuf.me/",
+        "http://www.bgabank.com/",
+        "https://bugbait.io/",
+        "https://yrprey.com/",
         "https://openvaultbank.com/",
-        "https://damnvulnerable.me/"
+        "https://damnvulnerable.me/",
+        "https://labs.hackxpert.com/"
       ],
-      "focus": "W3Challs wargame + InterCode IC-CTF benchmark + RS Vulnerable Lab QA honeypot evidence rules",
-      "improvements_shipped_this_run": 3
+      "focus": "OWASP VWAD online labs (SKF, ffuf.me, BGA Bank, BugBait, Yrprey) + TestSparker benchmarks",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 8 findings, 6/6 recall after Heroku cold-start retry",
-      "w3challs.com: W3Challs web hacking wargame platform evidence (2→3 findings)",
-      "intercode-benchmark.github.io: InterCode IC-CTF/SQL/Bash benchmark (2→3 findings)",
-      "vulnerable-lab.vercel.app: INTENTIONAL QA LAB scanner honeypot markers (7→8 findings)",
-      "duck-store.escape.tech: Escape Duck Store API benchmark (7 findings — SSRF/IDOR/JWT markers)",
-      "pentest-ground.com:4280: DVWA hosted SQLi/XSS/LFI lab (5 findings)"
+      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 2→5 gap sqli/auth_bypass",
+      "hack-yourself-first.azurewebsites.net: Troy Hunt Supercar Showdown — 7 findings (SQLi/XSS/auth markers)",
+      "php.testsparker.com: Acunetix PHP vuln demo — 5 findings (injection/XSS evidence)",
+      "nextjs-cve-hackerone.vercel.app: Next.js RSC CVE demo — 4 findings",
+      "aspnet.testsparker.com: ASP.NET vuln demo — 4 findings"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: cold-start still drops to 1/6 before retry — Heroku dyno warmup signal",
-      "sqli-demo.vercel.app / cyber-ctf-website.vercel.app: Vercel Security Checkpoint blocks cloud scans",
-      "mutillidae.lab.pentest-forge.com / vampi.lab.pentest-forge.com: Pentest-Forge 502 offline",
-      "damnvulnerable.me: DNS dead — DomFlow lab offline",
-      "labs.hackxpert.com: added this hour — shareable lab URLs require UI interaction to expose targets"
+      "juice-shop.herokuapp.com: Heroku cold-start 1/6→4/6 on retry still misses sqli+auth_bypass — staging fallback required",
+      "owasp-finbot-ctf-demo.onrender.com: agentic AI exploit chains need authenticated CTF namespace (1 finding landing only)",
+      "lab.blackhatgraphql.com:9001: GraphQL introspection markers shallow from root (2 findings)",
+      "demo.securityknowledgeframework.org + bugbait.io + ffuf.me: added at queue tail — not scanned this hour"
     ]
   },
   "discovery_highlights": {
@@ -277,6 +275,8 @@
     "angular.testsparker.com": 5,
     "516-hackers.github.io": 2,
     "owasp-finbot-ctf.org": 3,
+    "aspnet.testsparker.com": 4,
+    "nextjs-cve-hackerone.vercel.app": 4,
     "sasanlabs.github.io/VulnerableApp": 3,
     "hacking-lab.com": 3,
     "solyd.com.br": 2,
