@@ -48,6 +48,45 @@ function compile(re: string): RegExp {
 //   4. http:// + www.
 // On success, mutates `target` in place to the URL that actually responded so downstream
 // origin/link resolution uses the reachable variant.
+/** Parse Username/Password pairs documented on wargame hub pages (e.g. OverTheWire Natas). */
+function parseDocumentedBasicAuthCreds(html: string): { user: string; pass: string } | null {
+  const m = html.match(/Username:\s*(\S+)[\s\S]{0,120}?Password:\s*(\S+)/i);
+  return m ? { user: m[1], pass: m[2] } : null;
+}
+
+/** Natas level-0 credentials are public on the wargame docs page. */
+function natasLevelBasicAuth(hostname: string): { user: string; pass: string } | null {
+  const m = hostname.match(/^natas(\d+)\.natas\.labs\.overthewire\.org$/i);
+  if (!m || m[1] !== "0") return null;
+  return { user: "natas0", pass: "natas0" };
+}
+
+function basicAuthHeader(creds: { user: string; pass: string }): Record<string, string> {
+  return { Authorization: `Basic ${Buffer.from(`${creds.user}:${creds.pass}`).toString("base64")}` };
+}
+
+async function applyWargameBasicAuth(
+  url: string,
+  doc: FetchedDoc,
+  probe: ProbeCache,
+  htmlContext: string,
+  maxBytes = 600_000
+): Promise<FetchedDoc> {
+  let host: string;
+  try {
+    host = new URL(url).hostname;
+  } catch {
+    return doc;
+  }
+  const needsAuth = doc.status === 401 || /\.natas\.labs\.overthewire\.org$/i.test(host);
+  if (!needsAuth) return doc;
+  const creds = parseDocumentedBasicAuthCreds(htmlContext) ?? natasLevelBasicAuth(host);
+  if (!creds) return doc;
+  const authed = await probe.get(url, { maxBytes, headers: basicAuthHeader(creds) });
+  if (authed.status >= 200 && authed.status < 400 && authed.body.length > doc.body.length) return authed;
+  return doc;
+}
+
 async function reachTarget(target: URL, _rawInput: string): Promise<FetchedDoc> {
   const apexHost = target.hostname.replace(/^www\./i, "");
   const hadWww = target.hostname.toLowerCase().startsWith("www.");
@@ -370,6 +409,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideMlastgEvidence",
   "clientSideCryptohackEvidence",
   "clientSideOverthewireNatasEvidence",
+  "clientSideFfufMeEvidence",
+  "clientSideYrpreyEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1263,6 +1304,23 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** FFUF.me — seed fuzzing practice lab pages. */
+function extractFfufMeSeeds(html: string, pageUrl: string): string[] {
+  if (!/FFUF\.me|ffuf\.me|practice and improve your ffuf/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/about", "/help", "/cd/basic"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** CTFlearn — seed challenge browse pages for platform markers. */
 function extractCtflearnChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/CTFlearn|ctflearn\.com/i.test(html)) return [];
@@ -1638,6 +1696,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
   // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
   const probe = new ProbeCache();
+  home = await applyWargameBasicAuth(home.finalUrl || target.toString(), home, probe, home.body);
   const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
   const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
     probe,
@@ -1682,6 +1741,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const mlastgSeeds = extractMlastgMkdocsSeeds(home.body, home.finalUrl);
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
+  const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1738,6 +1798,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...mlastgSeeds,
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
+      ...ffufMeSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
@@ -1757,7 +1818,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ])
   ]).slice(0, DEEP_MAX_PAGES - 1);
   const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
-  const extraPages = await fetchPagesBatched(pageUrls.slice(1), { probe, maxBytes: 600_000, concurrency: 3 });
+  const extraPageUrls = pageUrls.slice(1);
+  const extraPagesRaw = await fetchPagesBatched(extraPageUrls, { probe, maxBytes: 600_000, concurrency: 3 });
+  const extraPages = await Promise.all(
+    extraPageUrls.map((u, i) => applyWargameBasicAuth(u, extraPagesRaw[i]!, probe, home.body))
+  );
   let pages: FetchedDoc[] = [home, ...extraPages];
 
   const childSeeds = prioritizeSecurityLabLinks(
@@ -1767,10 +1832,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ])
   ).slice(0, 2);
   if (childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
-    const childPages = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
+    const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
+    const childPages = await Promise.all(
+      childSeeds.map((u, i) => applyWargameBasicAuth(u, childPagesRaw[i]!, probe, home.body))
+    );
     pages = [...pages.slice(0, DEEP_MAX_PAGES - childPages.length), ...childPages];
   } else if (childSeeds.length > 0) {
-    const childPages = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
+    const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
+    const childPages = await Promise.all(
+      childSeeds.map((u, i) => applyWargameBasicAuth(u, childPagesRaw[i]!, probe, home.body))
+    );
     pages = [...pages, ...childPages].slice(0, DEEP_MAX_PAGES);
   }
 
