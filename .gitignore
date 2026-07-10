@@ -31,10 +31,10 @@ worker/.venv/
 worker/venv/
 .venv/
 
-# ---- VulnClaw agent runtime ----
-services/vulnclaw/.thugir-runs/
-services/vulnclaw/.thugir-config/
-services/vulnclaw/**/__pycache__/
+# ---- Thugir Agent Engine runtime ----
+services/thugir-agent/.thugir-runs/
+services/thugir-agent/.thugir-config/
+services/thugir-agent/**/__pycache__/
 
 
 # ---- engine submodule build artifacts (if vendored at engine/) ----

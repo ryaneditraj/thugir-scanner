@@ -14,10 +14,10 @@ export {
   loadSkill,
   searchSkills,
   loadCoreOracleSummaries,
-  loadVulnClawOracleSummaries,
-  loadVulnClawSkill,
+  loadAgentOracleSummaries,
+  loadAgentSkill,
   CORE_ORACLE_SKILLS,
-  VULNCLAW_ORACLE_SKILLS,
+  AGENT_ORACLE_SKILLS,
   skillCount
 } from "./skills";
 export {

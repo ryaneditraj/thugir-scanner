@@ -1,5 +1,5 @@
 /**
- * VulnClaw power checks — plugins, dir enum, reflexion probes ported to TypeScript.
+ * Thugir power checks — JWT analysis, endpoint discovery, dir enum, reflexion probes.
  */
 import type { FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
@@ -30,7 +30,7 @@ type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
-// --- VulnClaw dir wordlist (compact subset) ---------------------------------
+// --- Directory wordlist (compact subset) ------------------------------------
 const DIR_WORDLIST = [
   "admin", "admin/login", "api", "api/v1", "graphql", "swagger", "swagger-ui.html",
   "openapi.json", "actuator", "actuator/health", "actuator/env", ".env", ".git/HEAD",
@@ -43,8 +43,8 @@ const SENSITIVE_ENDPOINT_WORDS = ["admin", "debug", "internal", "graphql", "toke
 const ENDPOINT_RE =
   /["'`]((?:https?:\/\/[^"'`\s<>()]+|\/(?:api|admin|auth|graphql|v\d|static|assets|internal)[^"'`\s<>()]*))["'`]/gi;
 
-// --- JWT claims in bundle (VulnClaw JWTClaimsPlugin) -------------------------
-export const vulnclawJwtClaims: PowerRule = async (ctx) => {
+// --- JWT claims in bundle ---------------------------------------------------
+export const thugirJwtClaims: PowerRule = async (ctx) => {
   const tokens = extractJwtCandidates(ctx.combined, 6);
   if (!tokens.length) return NEGATIVE;
 
@@ -69,8 +69,8 @@ export const vulnclawJwtClaims: PowerRule = async (ctx) => {
   };
 };
 
-// --- JS sensitive endpoints (VulnClaw JavaScriptEndpointsPlugin) --------------
-export const vulnclawJsEndpoints: PowerRule = async (ctx) => {
+// --- JS sensitive endpoints ---------------------------------------------------
+export const thugirJsEndpoints: PowerRule = async (ctx) => {
   const endpoints = new Set<string>();
   let m: RegExpExecArray | null;
   while ((m = ENDPOINT_RE.exec(ctx.combined))) {
@@ -91,8 +91,8 @@ export const vulnclawJsEndpoints: PowerRule = async (ctx) => {
   };
 };
 
-// --- Directory enumeration (VulnClaw dir_enum subset) -------------------------
-export const vulnclawDirEnum: PowerRule = async (ctx) => {
+// --- Directory enumeration ----------------------------------------------------
+export const thugirDirEnum: PowerRule = async (ctx) => {
   const hits: { path: string; status: number; kind: string }[] = [];
   const urls = DIR_WORDLIST.map((p) => new URL(p, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 4096, redirect: "manual", timeoutMs: 6000 }, 6);
@@ -224,10 +224,10 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   return NEGATIVE;
 };
 
-export const VULNCLAW_POWER_RULES = {
-  vulnclawJwtClaims,
-  vulnclawJsEndpoints,
-  vulnclawDirEnum,
+export const THUGIR_POWER_RULES = {
+  thugirJwtClaims,
+  thugirJsEndpoints,
+  thugirDirEnum,
   reflexionEscalatedXss,
   reflexionEscalatedSqli,
   reflexionEscalatedSsti

@@ -12,7 +12,7 @@
     "test:framework": "node scripts/test-framework.mjs",
     "test:smoke": "node scripts/smoke-scan.mjs",
     "power-scan": "tsx scripts/power-scan.ts",
-    "vulnclaw-check": "tsx -e \"import { vulnClawAvailability } from './lib/vulnclaw'; console.log(JSON.stringify(vulnClawAvailability(), null, 2))\"",
+    "agent-check": "tsx -e \"import { agentAvailability } from './lib/agent'; console.log(JSON.stringify(agentAvailability(), null, 2))\"",
     "ship-gate": "node scripts/ship-gate.mjs",
     "pr-integrity": "node scripts/manage-pr-integrity.mjs --audit",
     "close-orphan-prs": "node scripts/close-orphan-prs.mjs --dry-run",

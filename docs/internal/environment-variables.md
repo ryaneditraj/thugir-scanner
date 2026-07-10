@@ -18,6 +18,9 @@ Server-only (never exposed to client):
 - `CRON_SECRET` - Vercel Cron auth for `/api/cron/monitors`.
 - `RESEND_API_KEY`, `RESEND_FROM` - optional monitor delta emails.
 - `DEEP_SCAN_AMOUNT_INR`, `RAZORPAY_CONTINUOUS_PLAN_ID` - pricing (set at launch).
+- `THUGIR_AGENT_SCAN_ENABLED` - enable agent engine on worker (`1`).
+- `THUGIR_AGENT_LLM_API_KEY` - LLM key for Thugir Agent Engine.
+- `THUGIR_AGENT_PYTHON` - path to Python binary for agent engine.
 
 ## Worker (Render/Fly) - `worker/.env`
 - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`

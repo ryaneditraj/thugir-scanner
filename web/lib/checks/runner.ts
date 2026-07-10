@@ -317,7 +317,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterLabEvidence",
   "clientSideHackThisSiteEvidence",
   "openApiDebugPasswordExposure",
-  "vulnclawDirEnum",
+  "thugirDirEnum",
   "reflexionEscalatedXss",
   "reflexionEscalatedSqli",
   "reflexionEscalatedSsti"

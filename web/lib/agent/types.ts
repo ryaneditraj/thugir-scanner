@@ -1,10 +1,10 @@
-/** VulnClaw agent scan types (Thugir bridge). */
+/** Thugir Agent Engine scan types. */
 
-export type VulnClawScanMode = "quick" | "standard" | "deep";
+export type AgentScanMode = "quick" | "standard" | "deep";
 
-export interface VulnClawScanRequest {
+export interface AgentScanRequest {
   url: string;
-  scan_mode?: VulnClawScanMode;
+  scan_mode?: AgentScanMode;
   command?: string;
   api_key?: string;
   base_url?: string;
@@ -13,7 +13,7 @@ export interface VulnClawScanRequest {
   timeout_seconds?: number;
 }
 
-export interface VulnClawFinding {
+export interface AgentFinding {
   title?: string;
   severity?: string;
   vuln_type?: string;
@@ -28,14 +28,14 @@ export interface VulnClawFinding {
   [key: string]: unknown;
 }
 
-export interface VulnClawScanResult {
+export interface AgentScanResult {
   ok: boolean;
   target?: string;
-  scan_mode?: VulnClawScanMode;
+  scan_mode?: AgentScanMode;
   exit_code?: number;
   exit_meaning?: string;
   summary?: Record<string, unknown>;
-  findings?: VulnClawFinding[];
+  findings?: AgentFinding[];
   finding_count?: number;
   report_path?: string | null;
   run_dir?: string | null;
@@ -43,7 +43,7 @@ export interface VulnClawScanResult {
   stdout_tail?: string;
 }
 
-export interface VulnClawAvailability {
+export interface AgentAvailability {
   available: boolean;
   python?: string;
   runner?: string;
