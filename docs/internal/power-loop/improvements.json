@@ -1025,6 +1025,24 @@
       "slug": "client-side-sockettome-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SocketToMe title + new WebSocket('wss://ws.digi.ninja/wss/') + fuzzing sockets chat game; ws.digi.ninja findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sechow.com/bricks",
+      "slug": "client-side-owasp-bricks-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Bricks + login fields prone to code injection + Advanced SQL Injection integer id param + PHP backdoor upload docs; extractOwaspBricksSeeds; sechow.com/bricks findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "client-side-vaultapp-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Security Training Lab banner + Test credentials: player / player123 in login bundle; vaultapp-omega.vercel.app findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:rewanthtammana.com/damn-vulnerable-bank",
+      "slug": "client-side-damn-vulnerable-bank-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: intentionally vulnerable android application + REST API vulnerabilities exploit module; extractDamnVulnerableBankSeeds; rewanthtammana.com/damn-vulnerable-bank findings 0→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1877,6 +1895,21 @@
       "source": "discovery:ws.digi.ninja",
       "slug": "client-side-sockettome-evidence",
       "shipped_at": "2026-07-10T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:sechow.com/bricks",
+      "slug": "client-side-owasp-bricks-evidence",
+      "shipped_at": "2026-07-10T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "client-side-vaultapp-lab-evidence",
+      "shipped_at": "2026-07-10T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:rewanthtammana.com/damn-vulnerable-bank",
+      "slug": "client-side-damn-vulnerable-bank-evidence",
+      "shipped_at": "2026-07-10T11:10:00.000Z"
     }
   ]
 }

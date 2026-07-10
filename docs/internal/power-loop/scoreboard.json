@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 168,
   "discovery_findings": 1196,
-  "improvements_shipped": 170,
-  "last_run": "2026-07-10T11:20:28.493Z",
+  "improvements_shipped": 173,
+  "last_run": "2026-07-10T11:21:00.000Z",
   "last_run_summary": {
     "hour_utc": "11:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Staging fallback 6/6; primary Heroku 1→2 findings (1/6 recall) after retry — persistent cold-start gap",
+      "note": "Staging fallback 6/6; primary Heroku retry hit 4 findings incl. secret-resend (still 1/6 recall on primary)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,13 +59,16 @@
               ]
             },
             "retry": {
-              "findings": 2,
+              "findings": 4,
               "categories_hit": 1,
               "gap": [
                 "xss",
                 "sqli",
                 "idor",
-                "auth_bypass",
+                "auth_bypass"
+              ],
+              "hit": [
+                "misconfig",
                 "sensitive_data"
               ]
             }
@@ -73,7 +76,7 @@
         }
       }
     },
-    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
@@ -103,17 +106,17 @@
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category misses via staging oracle",
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) \u2014 no category misses via staging oracle",
       "dxx33.github.io/WebVulnsGuide: critical server-side-eval + XSS/SQLi/CSRF/prototype-pollution (8 findings)",
       "demo.weblock.ru: IDOR sequential IDs + OpenAPI docs + prompt-injection evidence (7 findings)",
       "koadt.github.io/oss-oopssec-store: OWASP API Security lab markers + SQLi evidence (6 findings)",
       "gauravkhurana.com/SQLInjection: WASM SQLite login-bypass SQLi markers (6 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start yields 1-page shallow crawl (1/6 recall) — staging fallback required",
-      "primary heroku retry improved to 2 findings but still 1/6 — xss,sqli,auth_bypass,sensitive_data missed on primary",
+      "juice-shop.herokuapp.com: Heroku cold-start yields 1-page shallow crawl (1/6 recall) \u2014 staging fallback required",
+      "primary heroku retry improved to 2 findings but still 1/6 \u2014 xss,sqli,auth_bypass,sensitive_data missed on primary",
       "vulnerable-web-site/preview-juice/vaultapp/bricks/dvb: queued but not reached within 8-scan limit",
-      "pentest-forge labs (dvwa/crapi/dvga/weblogic): added to queue — returned 502 at discovery time"
+      "pentest-forge labs (dvwa/crapi/dvga/weblogic): added to queue \u2014 returned 502 at discovery time"
     ]
   },
   "discovery_highlights": {

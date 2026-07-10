@@ -2664,6 +2664,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-owasp-bricks-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP Bricks web security learning platform disclosed",
+    description:
+      "OWASP Bricks documentation catalogs PHP login, content-page, and file-upload injection labs with SQL injection walkthroughs and arbitrary upload backdoor scenarios.",
+    impactOneline:
+      "Public OWASP Bricks docs expose injectable login and content-page oracles attackers use to practice SQLi and file-upload exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspBricksEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OWASP Bricks is intentional training — run only on isolated lab VMs, not production hosts.",
+      steps: [
+        "Deploy Bricks only on dedicated lab infrastructure behind authentication.",
+        "Use parameterized queries and input validation in production login forms.",
+        "Restrict file uploads to safe types and scan content server-side."
+      ]
+    },
+    fixPrompt:
+      "We host OWASP Bricks-style PHP injection labs. Show how to isolate SQLi and file-upload training from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vaultapp-lab-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "VaultApp finance security training lab disclosed",
+    description:
+      "VaultApp Omega publishes a Secure Personal Finance Portal security training lab with demo credentials displayed on the public login page.",
+    impactOneline:
+      "Public VaultApp training instances disclose demo login credentials and finance-app attack surface for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVaultappLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp training labs must not expose demo credentials on public login pages.",
+      steps: [
+        "Remove hardcoded test credentials from production-facing login UIs.",
+        "Run security training apps only on isolated lab infrastructure.",
+        "Require authentication before exposing finance portal functionality."
+      ]
+    },
+    fixPrompt:
+      "We host VaultApp-style finance security training labs. Show how to remove demo credentials from public login pages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-damn-vulnerable-bank-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Damn Vulnerable Bank Android security lab disclosed",
+    description:
+      "Damn Vulnerable Bank is an intentionally vulnerable Android banking application with public documentation covering REST API flaws, sensitive data disclosure, and exported activity exploits.",
+    impactOneline:
+      "Public DVB docs catalog mobile banking vulnerability modules attackers study for Android API and data exposure attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDamnVulnerableBankEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Damn Vulnerable Bank is intentional training — never ship vulnerable Android builds to app stores.",
+      steps: [
+        "Run mobile security labs only on emulators in isolated environments.",
+        "Validate REST API authorization on every endpoint in production apps.",
+        "Restrict exported Android activities and protect sensitive data at rest."
+      ]
+    },
+    fixPrompt:
+      "We host Damn Vulnerable Bank-style Android security labs. Show how to isolate mobile exploit training from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",
