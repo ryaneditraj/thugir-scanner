@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T14:12:00.000Z",
+  "updated_at": "2026-07-10T15:13:41.679Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 504,
-  "total_findings": 2058,
+  "total_sites_scanned": 505,
+  "total_findings": 2065,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 183,
   "discovery_findings": 1294,
   "improvements_shipped": 182,
-  "last_run": "2026-07-10T14:12:00.000Z",
+  "last_run": "2026-07-10T15:13:41.679Z",
   "last_run_summary": {
     "hour_utc": "14:00",
     "benchmark": {
@@ -174,7 +174,6 @@
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
     "cyber-ctf-website.vercel.app": 1,
-    "vulnbank.org": 4,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 3,
     "web-security-lab.vercel.app": 3,
     "vuln-demo.vercel.app": 4,
