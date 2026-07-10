@@ -15,13 +15,22 @@ cd web
 cp .env.example .env.local
 ```
 
-Edit `.env.local`:
+Edit `.env.local` (or copy the pre-filled hackathon file):
+
+```bash
+cp web/config/hackathon.env web/.env.local
+```
+
+Or edit `.env.local` manually:
 
 ```env
 DEV_MODE=1
 DEV_TIER=deep
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+HACK_CLUB_AI_API_KEY=sk-hc-v1-...   # already in config/hackathon.env
 ```
+
+**Change the AI model:** `/admin/settings` → AI models & keys → edit **Model** per tier (default `qwen/qwen3-32b`). Click **Test AI** before saving.
 
 ```bash
 npm install
