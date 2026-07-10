@@ -6245,6 +6245,132 @@ const clientSideVulnerableQaLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- MLASTG MLSec Application Security Testing Guide (mlastg.vercel.app) ------------
+const CLIENT_MLASTG_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "MLASTG MLSec testing guide branding",
+    re: /MLASTG[\s\S]{0,60}MLSec Application Security Testing Guide|MLSec Application Security Testing Guide/i
+  },
+  {
+    label: "MITRE ATLAS NIST AI RMF framework mapping",
+    re: /MITRE ATLAS[\s\S]{0,80}NIST AI RMF|mapped to MITRE ATLAS, NIST AI RMF/i
+  },
+  {
+    label: "168 verifiable ML/LLM security controls",
+    re: /168[\s\S]{0,40}(?:testable|verifiable) controls|168 controls across 7 categories/i
+  },
+  {
+    label: "MLASVS-LLM prompt injection control category",
+    re: /MLASVS-LLM[\s\S]{0,60}Prompt Injection|LLM-1:\s*Prompt Injection/i
+  },
+  {
+    label: "bb1nfosec/MLASTG repository",
+    re: /bb1nfosec\/MLASTG|github\.com\/bb1nfosec\/MLASTG/i
+  },
+  {
+    label: "mlastg.vercel.app deploy",
+    re: /mlastg\.vercel\.app/i
+  }
+];
+
+const clientSideMlastgEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MLASTG_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/MLASTG|mlastg\.vercel\.app|bb1nfosec\/MLASTG/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "MLASTG documents ML/LLM security testing controls mapped to MITRE ATLAS, NIST AI RMF, and OWASP AI guidance"
+    }
+  };
+};
+
+// --- CryptoHack cryptography CTF platform (cryptohack.org) ---------------------------
+const CLIENT_CRYPTOHACK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CryptoHack cryptography learning platform",
+    re: /CryptoHack[\s\S]{0,60}cryptography|A free, fun platform for learning modern cryptography/i
+  },
+  {
+    label: "Challenge and leaderboard training model",
+    re: /solving challenges[\s\S]{0,60}cracking insecure code|reach the top of the (?:scoreboard|leaderboard)/i
+  },
+  {
+    label: "Interactive crypto puzzle categories",
+    re: /interactive puzzles and challenges|breaking them|Fresh Challenges/i
+  },
+  {
+    label: "cryptohack.org platform",
+    re: /cryptohack\.org/i
+  }
+];
+
+const clientSideCryptohackEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CRYPTOHACK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CryptoHack|cryptohack\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CryptoHack hosts interactive cryptography CTF challenges for learning cipher and protocol weaknesses"
+    }
+  };
+};
+
+// --- OverTheWire Natas web-security wargame (overthewire.org / natas.labs) ------------
+const CLIENT_OVERTHEWIRE_NATAS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Natas serverside web-security wargame",
+    re: /Natas teaches the basics of serverside web-security|serverside web-security/i
+  },
+  {
+    label: "Natas challenge subdomain pattern",
+    re: /natas\d*\.natas\.labs\.overthewire\.org|http:\/\/natasX\.natas\.labs\.overthewire\.org/i
+  },
+  {
+    label: "OverTheWire wargame hub",
+    re: /OverTheWire[\s\S]{0,40}Wargames|overthewire\.org\/wargames/i
+  },
+  {
+    label: "Natas wechall level marker",
+    re: /wechallinfo[\s\S]{0,40}level["']:\s*["']natas\d|natas\d[\s\S]{0,40}password for the next level/i
+  },
+  {
+    label: "Natas credential documentation",
+    re: /Username:\s*natas0[\s\S]{0,40}Password:\s*natas0/i
+  }
+];
+
+const clientSideOverthewireNatasEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_NATAS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Natas|natas\.labs\.overthewire\.org|overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OverTheWire Natas wargame teaches serverside web vulnerabilities across staged challenge instances"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6375,6 +6501,9 @@ export const RULES: Record<string, Rule> = {
   clientSideW3challsEvidence,
   clientSideIntercodeEvidence,
   clientSideVulnerableQaLabEvidence,
+  clientSideMlastgEvidence,
+  clientSideCryptohackEvidence,
+  clientSideOverthewireNatasEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };

@@ -367,6 +367,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideW3challsEvidence",
   "clientSideIntercodeEvidence",
   "clientSideVulnerableQaLabEvidence",
+  "clientSideMlastgEvidence",
+  "clientSideCryptohackEvidence",
+  "clientSideOverthewireNatasEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1197,6 +1200,69 @@ function extractEksGoatMdbookSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** MLASTG mkdocs — seed methodology and LLM security test pages. */
+function extractMlastgMkdocsSeeds(html: string, pageUrl: string): string[] {
+  if (!/MLASTG|mlastg\.vercel\.app|bb1nfosec\/MLASTG/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/Quick-Start/", "/MLASTG/0x00-Testing-Methodology/", "/MLASVS/V3-LLM/0x30-LLM-Security-Overview/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:MLASTG|MLASVS|Quick-Start)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** CryptoHack — seed public challenge catalog. */
+function extractCryptohackChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/CryptoHack|cryptohack\.org/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/challenges/", "/scoreboard/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** OverTheWire — seed Natas wargame docs and level-0 lab host. */
+function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
+  if (!/OverTheWire|overthewire\.org|natas\.labs\.overthewire\.org/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/wargames/natas", "/wargames/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (/natas\.labs\.overthewire\.org|Username:\s*natas0/i.test(html)) {
+    out.add("http://natas0.natas.labs.overthewire.org/");
+  }
+  return [...out];
+}
+
 /** CTFlearn — seed challenge browse pages for platform markers. */
 function extractCtflearnChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/CTFlearn|ctflearn\.com/i.test(html)) return [];
@@ -1613,6 +1679,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctflearnSeeds = extractCtflearnChallengeSeeds(home.body, home.finalUrl);
   const w3challsSeeds = extractW3ChallsChallengeSeeds(home.body, home.finalUrl);
   const vulnerableQaLabSeeds = extractVulnerableQaLabSeeds(home.body, home.finalUrl);
+  const mlastgSeeds = extractMlastgMkdocsSeeds(home.body, home.finalUrl);
+  const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
+  const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1666,6 +1735,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ctflearnSeeds,
       ...w3challsSeeds,
       ...vulnerableQaLabSeeds,
+      ...mlastgSeeds,
+      ...cryptohackSeeds,
+      ...overthewireNatasSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
