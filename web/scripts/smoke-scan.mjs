@@ -9,7 +9,15 @@ async function main() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url, attest: true })
   });
-  const data = await res.json();
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    console.error("FAIL", res.status, "non-JSON response (is the dev server on port 3000?)");
+    console.error(text.slice(0, 200));
+    process.exit(1);
+  }
   if (!res.ok) {
     console.error("FAIL", res.status, data.error || data);
     process.exit(1);
