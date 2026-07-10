@@ -3208,5 +3208,57 @@ export const genericPatterns: Pattern[] = [
       "Our React app has a DOM XSS lab comparing vulnerable vs DOMPurify-sanitized rendering. Show how to fix innerHTML sinks.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-owasp-genai-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP GenAI Security Lab disclosed",
+    description:
+      "OWASP GenAI Security Lab publishes interactive lessons on LLM Top 10 risks including prompt injection and system prompt leakage.",
+    impactOneline:
+      "Public GenAI security labs document LLM abuse training surfaces for prompt injection and output-handling vulnerabilities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspGenaiLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — isolate LLM lesson apps from production agent deployments.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Do not reuse prompt-injection lesson patterns in production chatbot system prompts.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host an OWASP GenAI Security Lab with prompt injection lessons. Show how to isolate LLM training apps from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctf-defi-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CTF DeFi Security 101 workshop disclosed",
+    description:
+      "CTF DeFi Security 101 hosts wallet-connected smart-contract vulnerability challenges from the DeFi Security Summit workshop.",
+    impactOneline:
+      "Public DeFi CTF workshops document smart-contract exploit training surfaces attackers study before targeting production protocols.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfDefiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DeFi CTF workshops are intentional training — isolate challenge contracts from production networks.",
+      steps: [
+        "Require authentication before launching wallet-connected CTF challenges.",
+        "Do not deploy workshop vulnerability patterns on mainnet contracts.",
+        "Rate-limit unauthenticated DeFi CTF enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host a CTF DeFi Security 101 workshop with wallet play mode. Show how to isolate challenge contracts from production.",
+    version: 1,
+    enabled: true
   }
 ];
