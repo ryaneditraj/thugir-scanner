@@ -752,7 +752,32 @@
       "url": "https://vulnerable-lab.vercel.app/",
       "source": "Vulnerable Lab — OWASP Top 10 interactive training platform (Vercel)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/",
+      "source": "megmogmog1965/vulnerable-web-site — CSRF/SSRF/clickjacking/XSS Next.js lab (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/",
+      "source": "OWASP Juice Shop preview instance — official VWAD demo deploy (owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/",
+      "source": "MRMcyber/vaultapp — IDOR security training fintech lab (GitHub Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://sechow.com/bricks/",
+      "source": "OWASP Bricks — modular PHP/MySQL vulnerability training platform (sechow.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rewanthtammana.com/damn-vulnerable-bank/",
+      "source": "rewanthtammana/Damn-Vulnerable-Bank — intentionally vulnerable banking app demo (VWAD)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T08:22:00.000Z"
+  "updated_at": "2026-07-10T09:16:00.000Z"
 }
