@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T03:03:11.216Z",
+  "updated_at": "2026-07-10T03:08:24.220Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 407,
-  "total_findings": 1632,
+  "total_sites_scanned": 413,
+  "total_findings": 1649,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 121,
-  "discovery_findings": 953,
+  "discovery_urls_added": 126,
+  "discovery_findings": 970,
   "improvements_shipped": 150,
-  "last_run": "2026-07-10T03:03:11.216Z",
+  "last_run": "2026-07-10T03:08:24.220Z",
   "last_run_summary": {
-    "hour_utc": "02:00",
+    "hour_utc": "03:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "First pass degraded (4 findings, gap=xss,sensitive_data); retry hit 6/6 with 8 findings",
+      "note": "Stable 6/6 recall — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,41 +52,41 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 6,
-      "findings": 23,
-      "skipped_48h": [],
+      "findings": 17,
+      "skipped_48h": [
+        "https://pwnshop.ctfsecurity.com/",
+        "https://vulnforge-academy.vercel.app/"
+      ],
       "errors": [
         "https://ginandjuice.shop/ (Invalid URL)",
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
       "queued_next": [
-        "http://rest.vulnweb.com/",
-        "http://testaspnet.vulnweb.com/",
-        "https://hackxor.net/",
-        "http://testasp.vulnweb.com/",
-        "https://pwnshop.ctfsecurity.com/",
-        "https://sasanlabs.github.io/VulnerableApp/",
-        "https://vulnforge-academy.vercel.app/",
-        "https://webgoat.github.io/WebGoat/"
+        "https://labs.tegalsec.org/xss-labs/",
+        "https://labs.tegalsec.org/br0w/",
+        "https://www.bugbountyhunter.com/challenge?id=1",
+        "https://www.bugbountyhunter.com/playground",
+        "https://www.bugbountyhunter.com/"
       ],
-      "focus": "Acunetix vulnweb + OWASP VulnerableApp + pwnshop queue; Google firing-range/gruyere oracles"
+      "focus": "Acunetix vulnweb trilogy + Hackxor + OWASP VulnerableApp/WebGoat; TegalSec + BugBountyHunter queued"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after degraded retry",
-      "demo.testfire.net: 6 findings — Altoro Mutual banking oracle",
-      "websegura.radwarelatam.com/mutillidae: 7 findings — Mutillidae II hosted instance",
-      "google-gruyere.appspot.com: 3 findings — Google codelab oracle",
-      "public-firing-range.appspot.com: 2 findings — XSS benchmark",
-      "hacking-lab.com: Cyber Security Training + CTF platform markers (2→3 findings)",
-      "solyd.com.br: Introdução ao Hacking e Pentest 2.0 ethical hacking course (1→2 findings)",
-      "picoctf.org: CyLab Security Academy migration page (2→3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "testasp.vulnweb.com: 4 findings — SQLi error + reflected XSS on Acunetix PHP demo",
+      "rest.vulnweb.com: 3 findings — phpinfo exposed on REST API training site",
+      "hackxor.net: 3 findings — reflected XSS + insecure cookies on browser CTF platform",
+      "testaspnet.vulnweb.com: 3 findings — Invicti practice-site SQLi/XSS/LFI markers",
+      "sasanlabs.github.io/VulnerableApp: 2 findings — OWASP scanner evaluation platform docs",
+      "webgoat.github.io/WebGoat: 2 findings — OWASP Java training app landing"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: nondeterministic — first pass 4/6 (gap xss,sensitive_data), retry 6/6",
+      "juice-shop.herokuapp.com: nondeterministic historically — stable 6/6 this run",
       "ginandjuice.shop: Invalid URL from cloud scanner despite public demo",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — keep disabled in queue",
-      "vampi.lab.pentest-forge.com: shallow landing (1 finding) — API routes need deeper crawl",
-      "rest.vulnweb.com / testaspnet / hackxor / new queue URLs: pending next run (limit-8)",
-      "defendtheweb.net: site on hiatus — challenge content offline"
+      "sasanlabs.github.io/VulnerableApp: docs-only GitHub Pages — shallow vs full VulnerableApp docker instance",
+      "webgoat.github.io/WebGoat: static landing only — live WebGoat needs docker/hosted instance",
+      "bugbountytraining.com/fastfoodhackings: 404 — zseano playground offline; use bugbountyhunter.com challenges",
+      "tegalsec + bugbountyhunter URLs: queued pending limit-8"
     ]
   },
   "discovery_highlights": {
@@ -96,6 +96,9 @@
     "rest.vulnweb.com": 3,
     "testasp.vulnweb.com": 4,
     "testaspnet.vulnweb.com": 3,
+    "labs.tegalsec.org/xss-labs": 0,
+    "labs.tegalsec.org/br0w": 0,
+    "bugbountyhunter.com": 0,
     "dvwa.csalab.app": 4,
     "nodegoat-websec.herokuapp.com": 3,
     "crapi.apisec.ai": 4,
