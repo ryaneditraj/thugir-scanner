@@ -1211,6 +1211,24 @@
       "slug": "client-side-mcp-supply-chain-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: signed supply chain for MCP + MCP-RCE-26.04 + April 2026 Anthropic MCP exploit in SSR HTML; reef-mcp-registry.vercel.app findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-api-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku cold-start 2 findings gap xss,sqli,idor,sensitive_data; juiceShopApiLive probes /rest/admin/application-configuration + /rest/products/search; staging fallback 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securityweb-iota.vercel.app",
+      "slug": "client-side-seclab-playground-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecLab Web Vulnerability Playground + Learn XSS SQL Injection CSRF IDOR + CWE-79/89/352 lab cards; extractSecLabPlaygroundSeeds crawls /xss /sqli /csrf /idor; securityweb-iota.vercel.app findings 5→8"
+    },
+    {
+      "source": "discovery:azure-samples.github.io/sherpa",
+      "slug": "client-side-mcp-sherpa-workshop-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP Security Summit Workshop + intentionally vulnerable servers + Prompt injection defense + OWASP MCP Azure Security Guide; extractMcpSherpaWorkshopSeeds; azure-samples.github.io/sherpa findings 0→3"
     }
   ],
   "shipped": [
@@ -2213,6 +2231,21 @@
       "source": "discovery:reef-mcp-registry.vercel.app",
       "slug": "client-side-mcp-supply-chain-evidence",
       "shipped_at": "2026-07-10T20:20:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-api-warmup",
+      "shipped_at": "2026-07-10T21:18:00.000Z"
+    },
+    {
+      "source": "discovery:securityweb-iota.vercel.app",
+      "slug": "client-side-seclab-playground-evidence",
+      "shipped_at": "2026-07-10T21:18:00.000Z"
+    },
+    {
+      "source": "discovery:azure-samples.github.io/sherpa",
+      "slug": "client-side-mcp-sherpa-workshop-evidence",
+      "shipped_at": "2026-07-10T21:18:00.000Z"
     }
   ]
 }

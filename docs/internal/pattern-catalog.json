@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T20:05:34.965Z",
-  "total": 178,
-  "uniqueSlugs": 178,
+  "generatedAt": "2026-07-10T21:03:10.206Z",
+  "total": 180,
+  "uniqueSlugs": 180,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 160,
+    "generic": 162,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 114,
+    "deep": 116,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 50,
+    "Broken access control": 51,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -31,7 +31,7 @@
     "Cross-site scripting": 14,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 7,
+    "AI security": 8,
     "general": 17
   },
   "slugs": [
@@ -81,6 +81,7 @@
     "client-side-jwt-none-evidence",
     "client-side-llm-sec-evidence",
     "client-side-maestro-agentic-ai-evidence",
+    "client-side-mcp-sherpa-workshop-evidence",
     "client-side-mcp-supply-chain-evidence",
     "client-side-mlastg-evidence",
     "client-side-mutillidae-evidence",
@@ -103,6 +104,7 @@
     "client-side-rest-vulnweb-evidence",
     "client-side-returntrue-wargame-evidence",
     "client-side-rootme-challenge-evidence",
+    "client-side-seclab-playground-evidence",
     "client-side-sectrainer-evidence",
     "client-side-security-game-evidence",
     "client-side-session-hijack-evidence",
