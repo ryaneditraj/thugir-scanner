@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T23:13:10.253Z",
+  "updated_at": "2026-07-10T23:24:37.381Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 575,
-  "total_findings": 2406,
+  "total_sites_scanned": 582,
+  "total_findings": 2429,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 223,
-  "discovery_findings": 1585,
+  "discovery_urls_added": 228,
+  "discovery_findings": 1608,
   "improvements_shipped": 210,
-  "last_run": "2026-07-10T23:13:10.253Z",
+  "last_run": "2026-07-10T23:24:37.381Z",
   "last_run_summary": {
     "hour_utc": "23:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": [2, 5],
+      "primary_findings": [4, 2],
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses on staging oracle; juiceShopApiLive SQL probe added for primary cold-start sqli gap",
+      "note": "Primary heroku cold-start 4→2 findings; staging fallback 6/6 (7 findings); juiceShopApiLive SQL probe targets primary cold-start sqli gap",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,27 +46,50 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ]
+          ],
+          "first_pass_gap": ["sqli", "idor", "auth_bypass"],
+          "retry_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Broken Crystals + Sec Research Lab + OverTheWire Bandit evidence rules",
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 23,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "queued_not_reached": [
+        "https://ssti.pythonanywhere.com/",
+        "https://challenges-2023-owasp-10.vercel.app/",
+        "https://pygoat-web.herokuapp.com/",
+        "https://vulnmachines.com/",
+        "https://escape.tech/academy/",
+        "https://dvai-red.vercel.app/",
+        "https://pygoat.herokuapp.com/",
+        "https://crapi.apisec.ai/"
+      ],
+      "focus": "Classic banking demos (testfire/zero) + alf.nu/returntrue wargames + seclab XSS/SQLi labs",
       "improvements_shipped_this_run": 4
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — oracle stable",
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary heroku 4/6 gap sqli,idor,auth_bypass",
+      "demo.testfire.net: unauthenticated admin + reflected XSS (6 findings)",
+      "escape.alf.nu: client-side-alf-xss-wargame-evidence (3 findings)",
+      "returntrue.win: client-side-returntrue-wargame-evidence code-injection wargame (4 findings)",
+      "seclab.vercel.app: Resend secret + CORS misconfig on OWASP lab deploy (4 findings)",
       "brokencrystals.com: client-side-brokencrystals-evidence (14→15 findings)",
-      "secresearchlab.web.app: client-side-secresearchlab-evidence + lab route seeds (6→7 findings)",
-      "overthewire.org/wargames/bandit/bandit0: client-side-overthewire-bandit-evidence (3→5 findings)"
+      "secresearchlab.web.app: client-side-secresearchlab-evidence + lab route seeds (6→7 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku Application Error during long benchmark scan — staging fallback required",
+      "juice-shop.herokuapp.com: Heroku cold-start degrades to 3/6 before staging fallback — retry worsened to 2 findings",
+      "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com instead",
+      "demo.owasp-juice.shop: only 1 finding (misconfig) — official demo may need deeper API crawl",
       "ssti.pythonanywhere.com: Coming Soon placeholder — lab offline",
       "challenges-2023-owasp-10.vercel.app: Vercel DEPLOYMENT_NOT_FOUND",
       "pygoat-web.herokuapp.com: Heroku no-such-app",
-      "demo.securityknowledgeframework.org / bugbait.io: unreachable from cloud egress"
+      "New tail URLs (ssti.pythonanywhere, pygoat-web, crapi.apisec.ai) not reached in 8-URL queue limit"
     ]
   },
   "discovery_highlights": {
@@ -102,6 +125,8 @@
     "promptmap.vercel.app": 3,
     "brokencrystals.com": 15,
     "demo.testfire.net": 6,
+    "escape.alf.nu": 3,
+    "returntrue.win": 4,
     "zero.webappsecurity.com": 4,
     "rest.vulnweb.com": 4,
     "testasp.vulnweb.com": 4,
