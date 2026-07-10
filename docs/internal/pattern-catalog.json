@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T19:04:16.409Z",
-  "total": 176,
-  "uniqueSlugs": 176,
+  "generatedAt": "2026-07-10T20:05:34.965Z",
+  "total": 178,
+  "uniqueSlugs": 178,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 158,
+    "generic": 160,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 112,
+    "deep": 114,
     "continuous": 0
   },
   "byCategory": {
@@ -25,13 +25,13 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 15,
-    "Information disclosure": 14,
+    "Information disclosure": 15,
     "Broken authentication": 11,
     "Injection": 22,
     "Cross-site scripting": 14,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 6,
+    "AI security": 7,
     "general": 17
   },
   "slugs": [
@@ -41,6 +41,7 @@
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
     "client-side-atlas-crew-edge-protection-evidence",
+    "client-side-atlas-crew-hub-evidence",
     "client-side-atlas-crew-inferno-lab-evidence",
     "client-side-authlab-evidence",
     "client-side-berger-cyber-lab-evidence",
@@ -80,6 +81,7 @@
     "client-side-jwt-none-evidence",
     "client-side-llm-sec-evidence",
     "client-side-maestro-agentic-ai-evidence",
+    "client-side-mcp-supply-chain-evidence",
     "client-side-mlastg-evidence",
     "client-side-mutillidae-evidence",
     "client-side-nivara-security-evidence",
