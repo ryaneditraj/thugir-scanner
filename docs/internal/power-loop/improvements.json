@@ -1097,6 +1097,24 @@
       "slug": "client-side-vulnerable-qa-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: INTENTIONAL QA LAB badge + RS Vulnerable Lab scanner QA + skimmer-demo.js + exposed admin/backup path catalog; extractVulnerableQaLabSeeds; vulnerable-lab.vercel.app findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mlastg.vercel.app",
+      "slug": "client-side-mlastg-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MLASTG MLSec Application Security Testing Guide + 168 controls mapped to MITRE ATLAS, NIST AI RMF + MLASVS-LLM Prompt Injection; extractMlastgMkdocsSeeds; mlastg.vercel.app findings 5→6; benchmark 6/6 maintained (staging 7 findings)"
+    },
+    {
+      "source": "discovery:cryptohack.org",
+      "slug": "client-side-cryptohack-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CryptoHack learn cryptography through solving challenges + cracking insecure code + /challenges/ catalog; extractCryptohackChallengeSeeds; cryptohack.org findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-natas-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Natas teaches the basics of serverside web-security + natas0.natas.labs.overthewire.org + Username: natas0 Password: natas0; extractOverTheWireNatasSeeds; www.overthewire.org/wargames/natas findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2009,6 +2027,21 @@
       "source": "discovery:vulnerable-lab.vercel.app",
       "slug": "client-side-vulnerable-qa-lab-evidence",
       "shipped_at": "2026-07-10T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:mlastg.vercel.app",
+      "slug": "client-side-mlastg-evidence",
+      "shipped_at": "2026-07-10T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:cryptohack.org",
+      "slug": "client-side-cryptohack-evidence",
+      "shipped_at": "2026-07-10T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-natas-evidence",
+      "shipped_at": "2026-07-10T15:10:00.000Z"
     }
   ]
 }

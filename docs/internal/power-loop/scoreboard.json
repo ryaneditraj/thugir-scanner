@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T15:16:28.168Z",
+  "updated_at": "2026-07-10T15:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 188,
   "discovery_findings": 1323,
-  "improvements_shipped": 182,
-  "last_run": "2026-07-10T15:16:28.168Z",
+  "improvements_shipped": 185,
+  "last_run": "2026-07-10T15:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku degraded 2→5 findings (gap sqli,auth_bypass on retry); staging fallback 7 findings 6/6",
+      "note": "Primary heroku degraded 2\u21925 findings (gap sqli,auth_bypass on retry); staging fallback 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -58,7 +58,7 @@
         }
       }
     },
-    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
@@ -74,21 +74,25 @@
         "https://damnvulnerable.me/",
         "https://labs.hackxpert.com/"
       ],
-      "focus": "OWASP VWAD online labs (SKF, ffuf.me, BGA Bank, BugBait, Yrprey) + TestSparker benchmarks",
-      "improvements_shipped_this_run": 0
+      "focus": "MLASTG MLSec guide + CryptoHack CTF + OverTheWire Natas wargame evidence rules; OWASP VWAD labs queued",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 2→5 gap sqli/auth_bypass",
-      "hack-yourself-first.azurewebsites.net: Troy Hunt Supercar Showdown — 7 findings (SQLi/XSS/auth markers)",
-      "php.testsparker.com: Acunetix PHP vuln demo — 5 findings (injection/XSS evidence)",
-      "nextjs-cve-hackerone.vercel.app: Next.js RSC CVE demo — 4 findings",
-      "aspnet.testsparker.com: ASP.NET vuln demo — 4 findings"
+      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 2\u21925 gap sqli/auth_bypass",
+      "hack-yourself-first.azurewebsites.net: Troy Hunt Supercar Showdown \u2014 7 findings (SQLi/XSS/auth markers)",
+      "php.testsparker.com: Acunetix PHP vuln demo \u2014 5 findings (injection/XSS evidence)",
+      "nextjs-cve-hackerone.vercel.app: Next.js RSC CVE demo \u2014 4 findings",
+      "aspnet.testsparker.com: ASP.NET vuln demo \u2014 4 findings",
+      "mlastg.vercel.app: MITRE ATLAS + 168 ML/LLM security controls (5\u21926 findings)",
+      "cryptohack.org: cryptography CTF platform markers (3\u21924 findings)",
+      "www.overthewire.org/wargames/natas: Natas serverside web-security wargame docs (3\u21924 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start 1/6→4/6 on retry still misses sqli+auth_bypass — staging fallback required",
+      "juice-shop.herokuapp.com: Heroku cold-start 1/6\u21924/6 on retry still misses sqli+auth_bypass \u2014 staging fallback required",
       "owasp-finbot-ctf-demo.onrender.com: agentic AI exploit chains need authenticated CTF namespace (1 finding landing only)",
       "lab.blackhatgraphql.com:9001: GraphQL introspection markers shallow from root (2 findings)",
-      "demo.securityknowledgeframework.org + bugbait.io + ffuf.me: added at queue tail — not scanned this hour"
+      "demo.securityknowledgeframework.org + bugbait.io + ffuf.me: added at queue tail \u2014 not scanned this hour",
+      "natas0.natas.labs.overthewire.org: HTTP basic auth required \u2014 lab markers need credential probe"
     ]
   },
   "discovery_highlights": {
@@ -276,7 +280,6 @@
     "516-hackers.github.io": 2,
     "owasp-finbot-ctf.org": 3,
     "aspnet.testsparker.com": 4,
-    "nextjs-cve-hackerone.vercel.app": 4,
     "sasanlabs.github.io/VulnerableApp": 3,
     "hacking-lab.com": 3,
     "solyd.com.br": 2,
@@ -292,6 +295,9 @@
     "cybench.github.io": 4,
     "w3challs.com": 3,
     "intercode-benchmark.github.io": 3,
-    "vulnerable-lab.vercel.app": 8
+    "vulnerable-lab.vercel.app": 8,
+    "mlastg.vercel.app": 6,
+    "cryptohack.org": 4,
+    "www.overthewire.org": 4
   }
 }
