@@ -6999,15 +6999,19 @@ const clientSideSecResearchLabEvidence: Rule = async (ctx) => {
 const CLIENT_OVERTHEWIRE_BANDIT_RES: { label: string; re: RegExp }[] = [
   {
     label: "Bandit absolute beginners wargame",
-    re: /Bandit wargame is aimed at absolute beginners|Bandit\s*-\s*Unix\/Linux basics/i
+    re: /Bandit wargame is aimed at absolute beginners|Bandit\s*-\s*Unix\/Linux basics|renderLevelTitle\("bandit"/i
+  },
+  {
+    label: "Bandit SSH level goal",
+    re: /log into the game using SSH|beat Level 1/i
   },
   {
     label: "Bandit SSH host and port",
-    re: /bandit\.labs\.overthewire\.org[\s\S]{0,40}port\s*2220|on port 2220/i
+    re: /bandit\.labs\.overthewire\.org[\s\S]{0,60}port\s*2220|on port 2220/i
   },
   {
     label: "Bandit level-0 credentials",
-    re: /Username:\s*bandit0[\s\S]{0,40}Password:\s*bandit0/i
+    re: /(?:Username|username)\s*(?:is|:)\s*bandit0[\s\S]{0,60}(?:Password|password)\s*(?:is|:)\s*bandit0/i
   },
   {
     label: "OverTheWire wargame hub",
