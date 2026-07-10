@@ -344,6 +344,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideTegalsecLabEvidence",
   "clientSideBugBountyHunterEvidence",
   "clientSideZeroHealthEvidence",
+  "clientSideAlfXssWargameEvidence",
+  "clientSideLlmSecEvidence",
+  "clientSideDefendthewebEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -719,6 +722,39 @@ function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
   for (const p of ["/reflected/index.html", "/redirect/index.html", "/dom/index.html"]) {
     try {
       out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Erling Ellingsen alf.nu XSS wargame (escape.alf.nu, /alert1). */
+function extractAlfNuXssSeeds(html: string, pageUrl: string): string[] {
+  if (!/alf\.nu|alert\(1\)\s+to\s+win|escape\.alf\.nu/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const raw of [
+    "https://escape.alf.nu/",
+    "https://alf.nu/alert1",
+    "/alert1",
+    "/ReturnTrue"
+  ]) {
+    try {
+      const u = new URL(raw, pageUrl);
+      if (u.origin !== pageOrigin && !/alf\.nu$/i.test(u.hostname)) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*(?:escape\.alf\.nu|\/alert\d*|ReturnTrue)[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (!/alf\.nu$/i.test(u.hostname)) continue;
+      out.add(u.toString());
     } catch {
       /* ignore */
     }
@@ -1147,6 +1183,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
   const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
+  const alfNuXssSeeds = extractAlfNuXssSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1185,6 +1222,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...gruyereSeeds,
       ...firingRangeSeeds,
       ...tegalsecSeeds,
+      ...alfNuXssSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
