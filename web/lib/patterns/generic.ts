@@ -3260,5 +3260,83 @@ export const genericPatterns: Pattern[] = [
       "We host a CTF DeFi Security 101 workshop with wallet play mode. Show how to isolate challenge contracts from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-atlas-crew-inferno-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Atlas Crew Inferno Lab security testing platform disclosed",
+    description:
+      "Apparatus and Crucible docs advertise AI red-team automation, Nuclei scanning, chaos engineering, and 80+ pass/fail attack scenarios for security testing labs.",
+    impactOneline:
+      "Public Inferno Lab documentation exposes deployable offensive security tooling attackers can mirror against reachable instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAtlasCrewInfernoLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Apparatus/Crucible lab deployments on isolated networks — docs are intentional but instances must not face production.",
+      steps: [
+        "Require authentication before launching red-team or chaos scenarios.",
+        "Do not expose Apparatus/Crucible admin dashboards to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "We document Atlas Crew Apparatus and Crucible security testing platforms. Show how to keep lab deployments isolated from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-atlas-crew-edge-protection-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Atlas Crew Horizon + Synapse edge protection platform disclosed",
+    description:
+      "Horizon and Synapse docs describe fleet-aware WAF, inline DLP, behavioral profiling, and progressive bot interrogation challenges at the edge.",
+    impactOneline:
+      "Public edge-protection documentation reveals WAF bypass research targets and demo deployments attackers can probe for misconfigurations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAtlasCrewEdgeProtectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate Horizon/Synapse demo instances and architecture docs behind authenticated lab access.",
+      steps: [
+        "Do not expose horizon-demo.atlascrew.dev without IP allowlisting.",
+        "Keep Synapse interrogator challenge configs off public documentation indexes.",
+        "Segment edge-protection lab fleets from production API gateways."
+      ]
+    },
+    fixPrompt:
+      "We host Atlas Crew Horizon and Synapse edge protection docs with demo deployments. Show how to restrict public access to lab instances.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-owasp-vwad-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP Vulnerable Web Applications Directory disclosed",
+    description:
+      "OWASP VWAD indexes 200+ deliberately vulnerable web and mobile applications with per-app detail pages linking to live training instances.",
+    impactOneline:
+      "Public VWAD registry maps legal security testing targets — attackers harvest linked lab URLs for unauthenticated vulnerability practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspVwadEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VWAD is an intentional directory — lab operators should monitor listed instances for abuse and keep them isolated.",
+      steps: [
+        "Rate-limit unauthenticated enumeration of VWAD-linked lab instances.",
+        "Require authentication on training apps listed in VWAD when exposed publicly.",
+        "Monitor VWAD-listed URLs for scanner and exploit traffic spikes."
+      ]
+    },
+    fixPrompt:
+      "Our app is listed in OWASP VWAD. Show how to keep intentionally vulnerable training instances isolated and monitor for abuse.",
+    version: 1,
+    enabled: true
   }
 ];

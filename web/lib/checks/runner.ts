@@ -416,6 +416,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideReactDomXssLabEvidence",
   "clientSideOwaspGenaiLabEvidence",
   "clientSideCtfDefiEvidence",
+  "clientSideAtlasCrewInfernoLabEvidence",
+  "clientSideAtlasCrewEdgeProtectionEvidence",
+  "clientSideOwaspVwadEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1396,6 +1399,90 @@ function extractInvictiAspnetSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Atlas Crew Inferno Lab — Apparatus + Crucible tutorial and feature docs. */
+function extractAtlasCrewInfernoLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/atlascrew\.dev|Apparatus|Crucible|@atlascrew/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const host = new URL(pageUrl).hostname;
+  const paths =
+    host.includes("crucible")
+      ? ["/quick-reference", "/scenarios", "/features", "/architecture"]
+      : [
+          "/tutorial-testing-lab",
+          "/tutorial-advanced-red-team",
+          "/tutorial-live-payload-fuzzer",
+          "/features",
+          "/quick-reference"
+        ];
+  for (const p of paths) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Atlas Crew Horizon + Synapse edge protection docs (synapse.atlascrew.dev). */
+function extractAtlasCrewEdgeProtectionSeeds(html: string, pageUrl: string): string[] {
+  if (!/Horizon|Synapse|edge-protection|atlascrew\.dev/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/architecture/synapse",
+    "/reference/synapse-features",
+    "/getting-started/demo-mode",
+    "/architecture/horizon",
+    "/architecture/data-flow"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** OWASP VWAD — seed high-signal vulnerable app detail pages from directory JSON-LD. */
+function extractOwaspVwadSeeds(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org|Vulnerable Web Applications Directory/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const linkRe = /"url"\s*:\s*"(https:\/\/vwad\.owasp\.org\/app\/[^"]+)"/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      const u = new URL(m[1]);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const p of [
+    "/app/juice-shop/",
+    "/app/dvwa/",
+    "/app/webgoat/",
+    "/app/crapi/",
+    "/app/bwapp/",
+    "/app/dvga/"
+  ]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** pwn.college — seed dojo catalog and welcome module. */
 function extractPwnCollegeSeeds(html: string, pageUrl: string): string[] {
   if (!/pwn\.college|Learn to Hack!/i.test(html)) return [];
@@ -1839,6 +1926,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
+  const atlasCrewInfernoLabSeeds = extractAtlasCrewInfernoLabSeeds(home.body, home.finalUrl);
+  const atlasCrewEdgeProtectionSeeds = extractAtlasCrewEdgeProtectionSeeds(home.body, home.finalUrl);
+  const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1901,6 +1991,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspGenaiLabSeeds,
       ...ctfDefiSeeds,
       ...invictiAspnetSeeds,
+      ...atlasCrewInfernoLabSeeds,
+      ...atlasCrewEdgeProtectionSeeds,
+      ...owaspVwadSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
