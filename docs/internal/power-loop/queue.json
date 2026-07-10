@@ -977,7 +977,32 @@
       "url": "https://secure-bank-bay.vercel.app/",
       "source": "Secure Bank Bay — intentionally vulnerable fintech/banking security training app (Vercel)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/",
+      "source": "Inferno Lab Apparatus — AI-augmented network security simulation platform (Atlas Crew)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crucible.atlascrew.dev/",
+      "source": "Atlas Crew Crucible — 80+ adversary emulation scenarios with DAG assessment engine",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://synapse.atlascrew.dev/",
+      "source": "Atlas Crew Synapse Fleet — live edge security sensor demo with Horizon fleet hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://atlascrew.dev/",
+      "source": "Atlas Crew security lab hub — Chimera/Crucible/Apparatus/Synapse product landing with live demo links",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/",
+      "source": "OWASP Vulnerable Web Applications Directory — public registry of intentionally vulnerable training apps",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T17:15:00.000Z"
+  "updated_at": "2026-07-10T18:15:00.000Z"
 }
