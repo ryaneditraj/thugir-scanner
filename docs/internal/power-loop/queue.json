@@ -1052,7 +1052,32 @@
       "url": "https://hack-yourself-first.com/",
       "source": "Troy Hunt Hack Yourself First — intentionally vulnerable ASP.NET training site (VWAD online)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/",
+      "source": "Karthikdude/bypass403 — interactive 403 bypass lab with 60+ protected endpoints (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bug-hunt-vuln-detection.vercel.app/",
+      "source": "G-Hensley/bug-hunt-vuln-detection — browser AppSec training game with vuln detection levels (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cyber-quest-v1.vercel.app/",
+      "source": "YathishGP003/Cyber-Quest-v1 — gamified 10-level cybersecurity learning platform (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://shiny-computing-machine.vercel.app/",
+      "source": "Jaideep02/shiny-computing-machine — Hack the Basics CTF challenge hub (cookie/SQLi/XSS/JWT)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://graphql-lab.vercel.app/",
+      "source": "GraphQL security training lab — intentionally vulnerable GraphQL API playground (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T20:20:00.000Z"
+  "updated_at": "2026-07-10T21:15:00.000Z"
 }
