@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-09T11:05:00.000Z",
+  "updated_at": "2026-07-10T04:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -627,7 +627,31 @@
       "url": "https://www.bugbountyhunter.com/",
       "source": "BugBountyHunter — free web vulnerability challenge hub (zseano training platform)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/",
+      "source": "aligorithm/Zero-Health — deliberately vulnerable health tech + AI/LLM OWASP lab (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/",
+      "source": "DaniSam-STU/security-lab — XSS/SQLi/CSRF/IDOR side-by-side Next.js training (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/",
+      "source": "OWASP NodeGoat — Node.js intentionally insecure training app (Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.csalab.app/",
+      "source": "DVWA hosted lab — classic SQLi/XSS/CSRF training instance (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/",
+      "source": "Google XSS Game — interactive cross-site scripting challenge platform (public demo)",
+      "auth": "public_demo"
     }
-  ],
-  "updated_at": "2026-07-10T03:06:00.000Z"
+  ]
 }
