@@ -6113,6 +6113,138 @@ const clientSideCybenchEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- W3Challs offensive security challenge platform (w3challs.com) --------------------
+const CLIENT_W3CHALLS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "W3Challs hacking challenges branding",
+    re: /W3Challs[\s\S]{0,40}Hacking Challenges|Welcome[\s\S]{0,40}W3Challs/i
+  },
+  {
+    label: "Web hacking wargame categories",
+    re: /web hacking|binary pwnables|reverse engineering/i
+  },
+  {
+    label: "Realistic exploit challenge platform",
+    re: /No simulation\.?\s*No Guessing|realistic[\s\S]{0,40}exploit/i
+  },
+  {
+    label: "W3Challs challenge taxonomy",
+    re: /wargame|pwnable|shellcoding|forensics/i
+  },
+  {
+    label: "w3challs.com platform",
+    re: /w3challs\.com/i
+  }
+];
+
+const clientSideW3challsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_W3CHALLS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/W3Challs|w3challs\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "W3Challs hosts realistic web hacking, pwnable, reversing, and crypto challenges without simulated scoring"
+    }
+  };
+};
+
+// --- InterCode interactive coding security benchmark (intercode-benchmark.github.io) ----
+const CLIENT_INTERCODE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "InterCode benchmark branding",
+    re: /InterCode[\s\S]{0,60}Interactive Coding|Standardizing and Benchmarking Interactive Coding/i
+  },
+  {
+    label: "IC-CTF IC-SQL IC-Bash environments",
+    re: /IC-(?:CTF|SQL|Bash|Python|SWE)/i
+  },
+  {
+    label: "Interactive coding with execution feedback",
+    re: /interactive coding|execution feedback/i
+  },
+  {
+    label: "Princeton NLP InterCode repository",
+    re: /princeton-nlp\/intercode|github\.com\/princeton-nlp\/intercode/i
+  },
+  {
+    label: "intercode-benchmark.github.io deploy",
+    re: /intercode-benchmark\.github\.io/i
+  }
+];
+
+const clientSideIntercodeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTERCODE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/InterCode|intercode-benchmark\.github\.io|princeton-nlp\/intercode/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "InterCode benchmarks agents on interactive coding tasks across CTF, SQL, Bash, and terminal environments"
+    }
+  };
+};
+
+// --- RS Vulnerable Lab scanner QA honeypot (vulnerable-lab.vercel.app) ---------------
+const CLIENT_VULNERABLE_QA_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "INTENTIONAL QA LAB badge",
+    re: /INTENTIONAL QA LAB[\s\S]{0,40}DO NOT USE REAL DATA/i
+  },
+  {
+    label: "RS Vulnerable Lab scanner QA",
+    re: /RS Vulnerable Lab|Intentional vulnerable lab for scanner QA/i
+  },
+  {
+    label: "Harmless vulnerable signals catalog",
+    re: /Harmless vulnerable signals for testing[\s\S]{0,40}scanners/i
+  },
+  {
+    label: "Exposed attack surface path list",
+    re: /Attack surface[\s\S]{0,80}exposed admin panel|\/admin\/ exposed admin panel/i
+  },
+  {
+    label: "Web skimmer demo script",
+    re: /skimmer-demo\.js|jquery\.payment-skimmer|Web skimmer demo/i
+  },
+  {
+    label: "vulnerable-lab Vercel deploy",
+    re: /vulnerable-lab\.vercel\.app/i
+  }
+];
+
+const clientSideVulnerableQaLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNERABLE_QA_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/INTENTIONAL QA LAB|RS Vulnerable Lab|vulnerable-lab\.vercel\.app/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RS Vulnerable Lab publishes intentional scanner QA signals — exposed paths, fake credentials, and skimmer demos"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6240,6 +6372,9 @@ export const RULES: Record<string, Rule> = {
   clientSideEksGoatEvidence,
   clientSideCtflearnEvidence,
   clientSideCybenchEvidence,
+  clientSideW3challsEvidence,
+  clientSideIntercodeEvidence,
+  clientSideVulnerableQaLabEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
