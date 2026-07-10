@@ -315,6 +315,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSideHackThisSiteEvidence",
+  "clientSideSectrainerEvidence",
+  "clientSideHackAdvisorLabEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideWrongSecretsEvidence",
   "clientSideMaestroAgenticAiEvidence",
@@ -719,6 +721,30 @@ function extractGruyereCodelabSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** SecTrainer — seed module + CTF SPA routes from nav catalog. */
+function extractSectrainerSpaSeeds(html: string, jsBodies: string[], origin: string): string[] {
+  const corpus = [html, ...jsBodies].join("\n");
+  if (!/SecTrainer|securitytrainer\.vercel\.app/i.test(corpus)) return [];
+  const out = new Set<string>();
+  for (const path of ["/modules", "/modules/sql-injection", "/modules/xss-basics", "/ctf", "/paths"]) {
+    try {
+      out.add(new URL(path, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const moduleRe = /id:\s*[`'"]([a-z0-9-]+(?:injection|xss|idor|csrf)[a-z0-9-]*)[`'"]/gi;
+  let m: RegExpExecArray | null;
+  while ((m = moduleRe.exec(corpus)) && out.size < 8) {
+    try {
+      out.add(new URL(`/modules/${m[1]}`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** OWASP WrongSecrets dropdown lists /challenge/challenge-N pages with secret-hunting walkthroughs. */
 function extractWrongSecretsChallengeSeeds(html: string, origin: string): string[] {
   if (!/OWASP WrongSecrets|wrongsecrets/i.test(html)) return [];
@@ -1010,6 +1036,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
+  const sectrainerSeeds = extractSectrainerSpaSeeds(
+    home.body,
+    earlyScripts.map((s) => s.body),
+    crawlOrigin
+  );
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
@@ -1031,6 +1062,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...pentesterLabSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
+      ...sectrainerSeeds,
       ...dvwaSeeds,
       ...sitemapSeeds,
       ...spaRoutes,

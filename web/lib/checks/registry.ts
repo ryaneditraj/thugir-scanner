@@ -3220,6 +3220,88 @@ const clientSideHackThisSiteEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- SecTrainer gamified OWASP training platform (security-trainer.vercel.app) -----
+const CLIENT_SECTRAINER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SecTrainer brand",
+    re: /SecTrainer/i
+  },
+  {
+    label: "Gamified OWASP Top 10 training",
+    re: /gamified cyber security training|interactive modules on OWASP Top 10/i
+  },
+  {
+    label: "SQL injection training module id",
+    re: /id:\s*[`'"]sql-injection[`'"]/i
+  },
+  {
+    label: "XSS training module id",
+    re: /id:\s*[`'"]xss-basics[`'"]/i
+  },
+  {
+    label: "CTF challenges SPA route",
+    re: /CTF Challenges[\s\S]{0,120}path:\s*[`'"]\/ctf[`'"]/i
+  },
+  {
+    label: "Training path module catalog",
+    re: /modules:\s*\[[^\]]*owasp-intro[^\]]*sql-injection/i
+  }
+];
+
+const clientSideSectrainerEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECTRAINER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SecTrainer publishes gamified OWASP Top 10 modules with SQLi, XSS, IDOR, and CTF challenge labs"
+    }
+  };
+};
+
+// --- HackAdvisor real-world bug report CTF labs -----------------------------------
+const CLIENT_HACKADVISOR_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackAdvisor Labs branding",
+    re: /HackAdvisor Labs/i
+  },
+  {
+    label: "Practice real-world hacking tagline",
+    re: /Practice Real-World Hacking/i
+  },
+  {
+    label: "Real-world bug report challenges",
+    re: /real-world bug reports?/i
+  },
+  {
+    label: "Browser-based CTF challenges",
+    re: /browser-based[\s\S]{0,80}challenge|New challenges added regularly/i
+  }
+];
+
+const clientSideHackAdvisorLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKADVISOR_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackAdvisor Labs hosts browser-based challenges modeled on real-world bug reports"
+    }
+  };
+};
+
 // --- OWASP FinBot / agentic AI CTF platform (GenAI Security Project) ------------
 const CLIENT_AGENTIC_AI_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -4881,6 +4963,8 @@ export const RULES: Record<string, Rule> = {
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSideHackThisSiteEvidence,
+  clientSideSectrainerEvidence,
+  clientSideHackAdvisorLabEvidence,
   clientSideAgenticAiCtfEvidence,
   clientSideWrongSecretsEvidence,
   clientSideMaestroAgenticAiEvidence,

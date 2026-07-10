@@ -1754,6 +1754,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-sectrainer-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SecTrainer gamified OWASP training platform disclosed",
+    description:
+      "SecTrainer publishes interactive OWASP Top 10 modules with SQLi, XSS, IDOR, and CTF challenge labs in client bundles.",
+    impactOneline:
+      "Public training platforms expose intentionally vulnerable lab walkthroughs attackers use to tune scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSectrainerEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training platforms are intentional — gate labs behind accounts and isolate from production.",
+      steps: [
+        "Require authentication before serving injectable lab modules.",
+        "Never reuse SecTrainer-style vulnerable code snippets in production apps.",
+        "Isolate training infrastructure from customer data."
+      ]
+    },
+    fixPrompt:
+      "We host SecTrainer-style gamified OWASP labs. Show how to gate modules behind auth and isolate lab VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackadvisor-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackAdvisor real-world bug report CTF labs disclosed",
+    description:
+      "HackAdvisor Labs advertises browser-based challenges modeled on real-world bug reports and vulnerability writeups.",
+    impactOneline:
+      "Public CTF labs document exploitable patterns from real bug bounty reports reusable against production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackAdvisorLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bug-report CTF labs are intentional — isolate challenge instances from production networks.",
+      steps: [
+        "Require lab start/auth before exposing challenge instances.",
+        "Do not copy challenge vulnerability patterns into production code.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host HackAdvisor-style real-world bug report CTFs. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-agentic-ai-ctf-evidence",
     platform: "generic",
     category: "AI security",
