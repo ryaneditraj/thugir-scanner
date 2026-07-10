@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T05:04:52.816Z",
-  "total": 140,
-  "uniqueSlugs": 140,
+  "generatedAt": "2026-07-10T06:15:43.191Z",
+  "total": 143,
+  "uniqueSlugs": 143,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 122,
+    "generic": 125,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 76,
+    "deep": 79,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 33,
+    "Broken access control": 34,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -28,16 +28,17 @@
     "Information disclosure": 13,
     "Broken authentication": 9,
     "Injection": 18,
-    "Cross-site scripting": 10,
+    "Cross-site scripting": 11,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 4,
+    "AI security": 5,
     "general": 17
   },
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "client-side-agentic-ai-ctf-evidence",
+    "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bwapp-evidence",
@@ -47,6 +48,7 @@
     "client-side-ctf-research-team-evidence",
     "client-side-cyber-scavenger-hunt-evidence",
     "client-side-cylab-academy-evidence",
+    "client-side-defendtheweb-evidence",
     "client-side-devsecops-lab-evidence",
     "client-side-dom-goat-lab-evidence",
     "client-side-file-upload-evidence",
@@ -61,6 +63,7 @@
     "client-side-idor-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-jwt-none-evidence",
+    "client-side-llm-sec-evidence",
     "client-side-maestro-agentic-ai-evidence",
     "client-side-mutillidae-evidence",
     "client-side-nosql-evidence",
