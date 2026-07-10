@@ -4,7 +4,7 @@
 // Secret fields (the per-tier AI apiKey) are stored server-side only and NEVER returned to the
 // browser in plaintext — the masked read replaces them with a set/last4 indicator.
 
-export type AiProvider = "openrouter" | "anthropic" | "openai";
+export type AiProvider = "openrouter" | "anthropic" | "openai" | "hackclub";
 export type TierName = "free" | "deep" | "continuous";
 
 export interface TierAiConfig {
@@ -56,14 +56,26 @@ export interface PlatformSettingsMasked extends Omit<PlatformSettings, "ai"> {
 const DEFAULT_PROVIDERS: Record<AiProvider, { url: string; defaultModel: string }> = {
   openrouter: { url: "https://openrouter.ai/api/v1/chat/completions", defaultModel: "anthropic/claude-3.5-haiku" },
   anthropic: { url: "https://api.anthropic.com/v1/messages", defaultModel: "claude-3-5-haiku-20241022" },
-  openai: { url: "https://api.openai.com/v1/chat/completions", defaultModel: "gpt-4o-mini" }
+  openai: { url: "https://api.openai.com/v1/chat/completions", defaultModel: "gpt-4o-mini" },
+  hackclub: {
+    url: "https://ai.hackclub.com/proxy/v1/chat/completions",
+    defaultModel: "qwen/qwen3-32b"
+  }
 };
 
 export const PROVIDER_ENDPOINTS = DEFAULT_PROVIDERS;
-export const AI_PROVIDERS: AiProvider[] = ["openrouter", "anthropic", "openai"];
+export const AI_PROVIDERS: AiProvider[] = ["hackclub", "openrouter", "anthropic", "openai"];
 
-function defaultTier(model: string): TierAiConfig {
-  return { enabled: true, provider: "openrouter", baseUrl: "", model, apiKey: "", temperature: 0.2, maxTokens: 900 };
+/** Common models on the Hack Club AI proxy — editable freely in admin settings. */
+export const HACKCLUB_MODELS = [
+  "qwen/qwen3-32b",
+  "moonshotai/kimi-k2",
+  "meta-llama/llama-3.3-70b-instruct",
+  "google/gemini-2.0-flash-001"
+] as const;
+
+function defaultTier(model: string, provider: AiProvider = "hackclub"): TierAiConfig {
+  return { enabled: true, provider, baseUrl: "", model, apiKey: "", temperature: 0.2, maxTokens: 900 };
 }
 
 export const DEFAULT_SETTINGS: PlatformSettings = {
@@ -84,9 +96,9 @@ export const DEFAULT_SETTINGS: PlatformSettings = {
     analystEnabled: true,
     deepScanAiEnabled: true,
     tiers: {
-      free: { ...defaultTier("anthropic/claude-3.5-haiku") },
-      deep: { ...defaultTier("anthropic/claude-3.7-sonnet"), maxTokens: 1500 },
-      continuous: { ...defaultTier("anthropic/claude-3.7-sonnet"), maxTokens: 1500 }
+      free: { ...defaultTier("qwen/qwen3-32b") },
+      deep: { ...defaultTier("qwen/qwen3-32b"), maxTokens: 1500 },
+      continuous: { ...defaultTier("qwen/qwen3-32b"), maxTokens: 1500 }
     }
   },
   security: {

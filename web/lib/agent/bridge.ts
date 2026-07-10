@@ -53,10 +53,15 @@ export function runAgentScan(req: AgentScanRequest): AgentScanResult {
     api_key:
       req.api_key ||
       process.env.THUGIR_AGENT_LLM_API_KEY ||
+      process.env.HACK_CLUB_AI_API_KEY ||
       process.env.OPENAI_API_KEY ||
       process.env.ANTHROPIC_API_KEY,
-    base_url: req.base_url || process.env.THUGIR_AGENT_LLM_BASE_URL || process.env.OPENAI_BASE_URL,
-    model: req.model || process.env.THUGIR_AGENT_LLM_MODEL,
+    base_url:
+      req.base_url ||
+      process.env.THUGIR_AGENT_LLM_BASE_URL ||
+      process.env.HACK_CLUB_AI_BASE_URL ||
+      "https://ai.hackclub.com/proxy/v1",
+    model: req.model || process.env.THUGIR_AGENT_LLM_MODEL || process.env.HACK_CLUB_AI_MODEL || "qwen/qwen3-32b",
     provider: req.provider || process.env.THUGIR_AGENT_LLM_PROVIDER || "openai"
   };
 

@@ -6,7 +6,7 @@ import type { AiProvider, TierName } from "@/lib/settings/schema";
 export const runtime = "nodejs";
 
 const TIERS: TierName[] = ["free", "deep", "continuous"];
-const PROVIDERS: AiProvider[] = ["openrouter", "anthropic", "openai"];
+const PROVIDERS: AiProvider[] = ["hackclub", "openrouter", "anthropic", "openai"];
 
 // POST { tier, provider?, model?, baseUrl?, apiKey? }
 // Runs a tiny live prompt through the tier's AI config and reports success / precise failure.
