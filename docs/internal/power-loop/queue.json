@@ -602,7 +602,32 @@
       "url": "https://webgoat.github.io/WebGoat/",
       "source": "OWASP WebGoat — deliberately insecure Java training app landing (awesome-vuln-apps)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.tegalsec.org/xss-labs/",
+      "source": "tegal1337/0l4bs — cross-site scripting labs for web security enthusiasts (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.tegalsec.org/br0w/",
+      "source": "tegal1337/br0w — browser-based CTF security challenges (TegalSec Labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=1",
+      "source": "BugBountyHunter zseano — XSS challenge platform (real bug bounty findings recreated)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/playground",
+      "source": "BugBountyHunter zseano playground — documented XSS/redirect/IDOR training lab metadata",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/",
+      "source": "BugBountyHunter — free web vulnerability challenge hub (zseano training platform)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T02:10:00.000Z"
+  "updated_at": "2026-07-10T03:06:00.000Z"
 }
