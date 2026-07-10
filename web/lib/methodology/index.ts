@@ -14,6 +14,31 @@ export {
   loadSkill,
   searchSkills,
   loadCoreOracleSummaries,
+  loadVulnClawOracleSummaries,
+  loadVulnClawSkill,
   CORE_ORACLE_SKILLS,
+  VULNCLAW_ORACLE_SKILLS,
   skillCount
 } from "./skills";
+export {
+  escalatePayload,
+  escalationLevelFromFailures,
+  ESCALATION_HINTS,
+  REFLEXION_PROMPT,
+  SQLI_PROBES,
+  SSTI_PROBES,
+  xssCanary,
+  type EscalationLevel
+} from "./reflexion";
+export {
+  createBlackboard,
+  addFact,
+  proposeIntent,
+  claimIntent,
+  concludeIntent,
+  blackboardSummary,
+  type Blackboard,
+  type BoardFact,
+  type BoardIntent,
+  type IntentStatus
+} from "./blackboard";
