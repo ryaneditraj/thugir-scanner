@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T05:02:07.166Z",
+  "updated_at": "2026-07-10T05:07:14.094Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 421,
-  "total_findings": 1689,
+  "total_sites_scanned": 426,
+  "total_findings": 1704,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 130,
-  "discovery_findings": 994,
+  "discovery_urls_added": 135,
+  "discovery_findings": 1009,
   "improvements_shipped": 155,
-  "last_run": "2026-07-10T05:02:07.166Z",
+  "last_run": "2026-07-10T05:07:14.094Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Remote run 8 findings 6/6; local first pass degraded 1/6 before retry (7 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,35 +51,35 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 21,
+      "urls_scanned": 5,
+      "findings": 15,
       "errors": [
         "https://ginandjuice.shop/ (Invalid URL)",
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
+        "https://seclab.vercel.app/ (Invalid URL)"
       ],
       "queued_next": [
-        "https://www.bugbountyhunter.com/",
-        "https://zerohealth.aliyu.dev/",
-        "https://seclab.vercel.app/",
-        "https://nodegoat-websec.herokuapp.com/",
-        "https://dvwa.csalab.app/",
-        "https://xss-game.appspot.com/"
+        "https://defendtheweb.net/",
+        "https://alf.nu/alert1",
+        "https://promptmap.vercel.app/",
+        "https://llm-sec.vercel.app/"
       ],
-      "focus": "TegalSec XSS/br0w + BugBountyHunter; pwnshop OWASP+LLM; engine shipped Firing Range + WebGoat fixes",
-      "improvements_shipped_this_run": 2
+      "focus": "XSS wargame + LLM lab queue; drain stale eligible queue (zerohealth, nodegoat, dvwa, xss-game)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings on remote; local retry 7 after 1/6 cold-start)",
-      "pwnshop.ctfsecurity.com: 9 findings — SQLi+XSS+prototype pollution+prompt injection+API lab evidence",
-      "vulnforge-academy.vercel.app: 6 findings — OpenAI secret + OWASP training platform markers",
-      "labs.tegalsec.org/xss-labs + br0w: 2 findings each — shallow header-only on XSS/CTF labs",
-      "bugbountyhunter.com/challenge + playground: 1 finding each — shallow on zseano platform"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "nodegoat-websec.herokuapp.com: 5 findings — server-side eval evidence + tech stack disclosure",
+      "dvwa.csalab.app: 4 findings — phpinfo exposed + insecure cookies",
+      "xss-quiz.int21h.jp: 2 findings — new XSS wargame queue entry",
+      "zerohealth.aliyu.dev: 2 findings — health-tech LLM lab misconfig markers"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: intermittent Heroku cold-start causes 1-page shallow crawl before retry",
-      "ginandjuice.shop: Invalid URL from cloud scanner",
-      "tegalsec + bugbountyhunter: need reflected-XSS / JS-bundle evidence rules",
-      "zerohealth.aliyu.dev + nodegoat + dvwa.csalab + xss-game: queued pending limit-8"
+      "ginandjuice.shop: Invalid URL from cloud scanner — PortSwigger lab unreachable",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — Acunetix HTML5 demo dead",
+      "seclab.vercel.app: Invalid URL — DaniSam security-lab deploy offline",
+      "zerohealth.aliyu.dev: AI/LLM OWASP challenges need authenticated API namespace",
+      "defendtheweb.net + alf.nu + promptmap + llm-sec: queued for next limit-8 pass"
     ]
   },
   "discovery_highlights": {
@@ -93,7 +93,9 @@
     "labs.tegalsec.org/br0w": 2,
     "bugbountyhunter.com": 1,
     "dvwa.csalab.app": 4,
-    "nodegoat-websec.herokuapp.com": 3,
+    "nodegoat-websec.herokuapp.com": 5,
+    "xss-quiz.int21h.jp": 2,
+    "zerohealth.aliyu.dev": 2,
     "crapi.apisec.ai": 4,
     "wrongsecrets.herokuapp.com": 5,
     "juice-shop-staging.herokuapp.com": 7,
@@ -274,10 +276,10 @@
     "sasanlabs.github.io/VulnerableApp": 3
   },
   "notable_findings": [
-    "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings on remote; local retry 7 after 1/6 cold-start)",
-    "pwnshop.ctfsecurity.com: 9 findings — SQLi+XSS+prototype pollution+prompt injection+API lab evidence",
-    "vulnforge-academy.vercel.app: 6 findings — OpenAI secret + OWASP training platform markers",
-    "labs.tegalsec.org/xss-labs + br0w: 2 findings each — shallow header-only on XSS/CTF labs",
-    "bugbountyhunter.com/challenge + playground: 1 finding each — shallow on zseano platform"
+    "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+    "nodegoat-websec.herokuapp.com: 5 findings — server-side eval evidence + tech stack disclosure",
+    "dvwa.csalab.app: 4 findings — phpinfo exposed + insecure cookies",
+    "xss-quiz.int21h.jp: 2 findings — new XSS wargame queue entry",
+    "zerohealth.aliyu.dev: 2 findings — health-tech LLM lab misconfig markers"
   ]
 }
