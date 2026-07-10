@@ -352,6 +352,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideXssQuizEvidence",
   "clientSideCtfchallengeEvidence",
   "clientSideExploitEducationEvidence",
+  "clientSideYogsecXssLabsEvidence",
+  "clientSideHacker101CtfEvidence",
+  "clientSideSockettomeEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1017,6 +1020,49 @@ function extractExploitEducationSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** yogsec XSS Labs (yogsec.github.io/xss-labs — reflected/stored/DOM browser labs). */
+function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
+  if (!/yogsec\.github\.io\/xss-labs|XSS Labs|yogsec\/xss-labs/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const id of ["reflected", "stored", "dom", "1", "2", "3"]) {
+    try {
+      const u = new URL(`labs/lab${id}.html`, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game). */
+function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
+  if (!/ctf\.hacker101\.com|Hacker101 CTF|learn to hack in a safe/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/about", "/howtoplay", "/auth/login", "/scoreboard"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:about|howtoplay|auth\/login|scoreboard)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti rest.vulnweb.com — seed OpenAPI docs and api_data.json for REST lab markers. */
 function extractRestVulnwebDocSeeds(html: string, origin: string): string[] {
   if (!/Invicti Vulnerable REST API|rest\.vulnweb\.com/i.test(html)) return [];
@@ -1348,6 +1394,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const xssQuizSeeds = extractXssQuizInt21hSeeds(home.body, home.finalUrl);
   const ctfChallengeSeeds = extractCtfChallengeSeeds(home.body, home.finalUrl);
   const exploitEducationSeeds = extractExploitEducationSeeds(home.body, home.finalUrl);
+  const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
+  const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1392,6 +1440,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...xssQuizSeeds,
       ...ctfChallengeSeeds,
       ...exploitEducationSeeds,
+      ...yogsecXssLabsSeeds,
+      ...hacker101CtfSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
