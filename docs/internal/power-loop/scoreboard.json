@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T01:08:14.410Z",
+  "updated_at": "2026-07-10T01:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 116,
   "discovery_findings": 930,
-  "improvements_shipped": 144,
-  "last_run": "2026-07-10T01:08:14.410Z",
+  "improvements_shipped": 147,
+  "last_run": "2026-07-10T01:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 8,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — Heroku oracle stable at 6/6 (8 findings incl secret-resend)",
+      "note": "No benchmark misses — staging oracle 7 findings 6/6; production Heroku may cold-start to 567B shell",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,37 +50,18 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 16,
-      "skipped_48h": [
-        "http://rest.vulnweb.com/ (limit 8)",
-        "http://testaspnet.vulnweb.com/ (limit 8)",
-        "https://hackxor.net/ (limit 8)"
-      ],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "scan_errors": [
-        "https://ginandjuice.shop/ (Invalid URL)",
-        "http://websegura.radwarelatam.com/mutillidae/ (Invalid URL)"
-      ],
-      "focus": "Google firing-range + Gruyere codelab; TestFire/zero.webappsecurity http rescans; Pentest-Forge VAmPI",
-      "improvements_shipped_this_run": 0
+      "focus": "SecTrainer gamified OWASP labs + HackAdvisor bug-report CTFs; Vite modulepreload script fetch",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "demo.testfire.net: Altoro Mutual banking benchmark — 6 findings (auth bypass + SQLi markers)",
-      "google-gruyere.appspot.com: Gruyere codelab XSS evidence + secret-resend (3 findings)",
-      "public-firing-range.appspot.com: Google XSS range markers (2 findings)",
-      "zero.webappsecurity.com: Acunetix training demo — 4 findings (misconfig + injection)"
+      "security-trainer.vercel.app: modulepreload fix loads 484KB lesson-content chunk; SecTrainer evidence (2→4 findings)",
+      "labs.hackadvisor.io: HackAdvisor real-world bug report CTF markers (7→8 findings)",
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) maintained"
     ],
     "learning_gaps": [
-      "ginandjuice.shop: Invalid URL from cloud scanner despite HTTP 200 via curl",
-      "testhtml5.vulnweb.com: DNS dead — disabled in queue",
-      "websegura.radwarelatam.com/mutillidae: Invalid URL on fetch",
-      "vampi.lab.pentest-forge.com: Pentest-Forge shallow landing — misconfig only (1 finding)",
-      "rest.vulnweb.com / testaspnet.vulnweb.com / hackxor.net: queued but not scanned (limit 8)"
+      "juice-shop.herokuapp.com: Heroku cold start may return 567B shell — rely on staging fallback",
+      "capture-the-flag.labs.vercel.dev: Vercel deployment offline (DEPLOYMENT_NOT_FOUND)",
+      "www.root-me.org: Anubis bot-wall blocks scanner UA"
     ]
   },
   "discovery_highlights": {
@@ -183,7 +164,7 @@
     "ctf-maker-monorepo.vercel.app": 2,
     "crapi2.apisec.ai": 6,
     "agentpwn.com": 5,
-    "labs.hackadvisor.io": 7,
+    "labs.hackadvisor.io": 8,
     "sixhackacademy.com": 3,
     "platform.sixhackacademy.com": 3,
     "secresearchlab.web.app": 7,
@@ -266,7 +247,7 @@
     "computersciencesop2.vercel.app": 5,
     "www.itsecgames.com": 2,
     "solyd.com.br": 1,
-    "security-trainer.vercel.app": 2,
+    "security-trainer.vercel.app": 4,
     "capture-the-flag.labs.vercel.dev": 1
   }
 }
