@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T06:03:38.037Z",
+  "updated_at": "2026-07-10T06:07:01.963Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 427,
-  "total_findings": 1715,
+  "total_sites_scanned": 432,
+  "total_findings": 1731,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 135,
-  "discovery_findings": 1012,
+  "discovery_urls_added": 140,
+  "discovery_findings": 1028,
   "improvements_shipped": 158,
-  "last_run": "2026-07-10T06:03:38.037Z",
+  "last_run": "2026-07-10T06:07:01.963Z",
   "last_run_summary": {
-    "hour_utc": "05:00",
+    "hour_utc": "06:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings incl. secret-resend)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,7 +52,7 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 15,
+      "findings": 16,
       "errors": [
         "https://ginandjuice.shop/ (Invalid URL)",
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
@@ -62,25 +62,29 @@
         "https://defendtheweb.net/",
         "https://alf.nu/alert1",
         "https://promptmap.vercel.app/",
-        "https://llm-sec.vercel.app/"
+        "https://llm-sec.vercel.app/",
+        "https://escape.alf.nu/",
+        "https://returntrue.win/",
+        "https://authlab.digi.ninja/",
+        "https://mutillidae.lab.pentest-forge.com/",
+        "https://vulnerable-graphql-lab.railway.app/"
       ],
-      "focus": "Engine evolve — TegalSec + BugBountyHunter + Zero Health lab evidence; drain XSS wargame queue",
-      "improvements_shipped_this_run": 3
+      "focus": "Drain XSS wargame queue + auth/JWT labs; 5 new alf.nu/DigiNinja/GraphQL targets queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "labs.tegalsec.org/br0w: client-side-tegalsec-lab-evidence (2→3 findings)",
-      "bugbountyhunter.com/playground: client-side-bugbountyhunter-evidence (1→2 findings)",
-      "zerohealth.aliyu.dev: client-side-zero-health-evidence (0→3 findings)",
-      "nodegoat-websec.herokuapp.com: 5 findings — server-side eval evidence + tech stack disclosure",
-      "xss-quiz.int21h.jp: 2 findings — new XSS wargame queue entry"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — secret-resend + sqli + idor + auth_bypass + xss + sensitive_data + misconfig",
+      "nodegoat-websec.herokuapp.com: 5 findings — server-side-eval-evidence (critical) + nosql + hardcoded demo creds",
+      "dvwa.csalab.app: 4 findings — reflected-xss-query-param + phpinfo-exposed",
+      "zerohealth.aliyu.dev: 3 findings — client-side-zero-health-evidence stable",
+      "xss-game.appspot.com + xss-quiz.int21h.jp: 2 findings each — reflected XSS wargame signal"
     ],
     "learning_gaps": [
-      "ginandjuice.shop: Invalid URL from cloud scanner — PortSwigger lab unreachable",
+      "ginandjuice.shop: Invalid URL — PortSwigger lab unreachable from cloud scanner",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — Acunetix HTML5 demo dead",
-      "seclab.vercel.app: Invalid URL — DaniSam security-lab deploy offline",
-      "bugbountyhunter.com: free challenges disabled — meta markers only until platform relaunch",
-      "defendtheweb.net + alf.nu + promptmap + llm-sec: queued for next limit-8 pass"
+      "seclab.vercel.app: Invalid URL — DaniSam security-lab Vercel deploy offline",
+      "defendtheweb.net + alf.nu/alert1 + promptmap + llm-sec: queued — limit-8 consumed by 3 errors + 5 ok",
+      "escape.alf.nu + returntrue.win + authlab + mutillidae.lab + vulnerable-graphql-lab: newly queued for next pass"
     ]
   },
   "discovery_highlights": {
