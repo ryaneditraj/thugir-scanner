@@ -2586,6 +2586,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-yogsec-xss-labs-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Labs interactive training platform disclosed",
+    description:
+      "yogsec XSS Labs publishes 39 browser-side reflected, stored, and DOM XSS exercises for bug bounty and penetration testing practice.",
+    impactOneline:
+      "Public yogsec XSS Labs document client-side XSS simulation modules attackers use to practice filter bypasses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideYogsecXssLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec XSS Labs are intentional training — isolate lab pages from production applications.",
+      steps: [
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Encode and sanitize all user-controlled output in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "We host yogsec-style XSS training labs. Show how to isolate reflected and DOM XSS exercises from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacker101-ctf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hacker101 CTF web security challenge platform disclosed",
+    description:
+      "Hacker101 CTF is HackerOne's public capture-the-flag game teaching web hacking in a safe environment with staged vulnerability flags.",
+    impactOneline:
+      "Public Hacker101 CTF instances document web security challenge surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacker101CtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacker101 CTF is intentional training — isolate challenge instances from production networks.",
+      steps: [
+        "Run CTF challenge platforms only on dedicated lab infrastructure.",
+        "Require authentication before serving live challenge instances.",
+        "Do not copy challenge vulnerability patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "We host Hacker101-style CTF challenges. Show how to isolate web security challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-sockettome-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "DigiNinja SocketToMe WebSocket security lab disclosed",
+    description:
+      "SocketToMe is DigiNinja's public WebSocket fuzzing and chat game lab for socket security testing and message protocol abuse.",
+    impactOneline:
+      "Public SocketToMe instances expose WebSocket endpoints suitable for fuzzing and protocol manipulation drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSockettomeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SocketToMe is intentional training — never expose unauthenticated WebSocket labs to production traffic.",
+      steps: [
+        "Run WebSocket security labs only on isolated lab networks.",
+        "Validate and sanitize all WebSocket message payloads server-side.",
+        "Require authentication before exposing interactive socket endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host SocketToMe-style WebSocket security labs. Show how to isolate socket fuzzing exercises from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",

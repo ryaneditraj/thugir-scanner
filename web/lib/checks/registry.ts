@@ -5513,6 +5513,136 @@ const clientSideExploitEducationEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- yogsec XSS Labs (yogsec.github.io/xss-labs — 39 browser XSS training labs) ----
+const CLIENT_YOGSEC_XSS_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Labs training platform title",
+    re: /XSS Labs[\s\S]{0,80}(?:Cross Site Scripting|interactive xss labs)/i
+  },
+  {
+    label: "39 interactive XSS labs catalog",
+    re: /39 interactive labs|Practice reflected, stored and DOM XSS/i
+  },
+  {
+    label: "Reflected/stored/DOM XSS lab modules",
+    re: /Reflected XSS \(Client-Side Simulation\)|Stored XSS \(Frontend Storage\)|DOM-Based XSS/i
+  },
+  {
+    label: "yogsec xss-labs GitHub attribution",
+    re: /yogsec\/xss-labs|yogsec\.github\.io\/xss-labs/i
+  },
+  {
+    label: "labs/lab id href pattern",
+    re: /labs\/lab\$\{lab\.id\}|labs\/lab(?:reflected|stored|dom)\.html/i
+  },
+  {
+    label: "Educational XSS simulation disclaimer",
+    re: /Educational purpose only[\s\S]{0,80}simulate XSS vulnerabilities/i
+  }
+];
+
+const clientSideYogsecXssLabsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_YOGSEC_XSS_LABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/yogsec|XSS Labs|xss-labs/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "yogsec XSS Labs publishes 39 browser-side reflected, stored, and DOM XSS training exercises on GitHub Pages"
+    }
+  };
+};
+
+// --- Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game) -----
+const CLIENT_HACKER101_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hacker101 CTF title",
+    re: /<title>\s*Hacker101 CTF\s*<\/title>|Welcome to the Hacker101 CTF/i
+  },
+  {
+    label: "Learn to hack in a safe environment",
+    re: /learn to hack in a safe, rewarding environment/i
+  },
+  {
+    label: "HackerOne educational attribution",
+    re: /Hacker101 is a free educational site for hackers, run by HackerOne/i
+  },
+  {
+    label: "ctf.hacker101.com host",
+    re: /ctf\.hacker101\.com/i
+  },
+  {
+    label: "How to play / about CTF onboarding",
+    re: /href=["']\/(?:about|howtoplay)["']|how to play page/i
+  }
+];
+
+const clientSideHacker101CtfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKER101_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Hacker101 CTF|ctf\.hacker101\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacker101 CTF is HackerOne's public web security challenge game with staged vulnerability flags"
+    }
+  };
+};
+
+// --- DigiNinja SocketToMe WebSocket security lab (ws.digi.ninja) --------------------
+const CLIENT_SOCKETTOME_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SocketToMe lab title",
+    re: /<title>\s*SocketToMe\s*<\/title>|Welcome to SocketToMe/i
+  },
+  {
+    label: "WebSocket client connection",
+    re: /new WebSocket\(['"]wss?:\/\/ws\.digi\.ninja/i
+  },
+  {
+    label: "Socket fuzzing and chat game lab",
+    re: /fuzzing sockets|while away the hours chatting with friends/i
+  },
+  {
+    label: "DigiNinja Robin Wood attribution",
+    re: /Lab created by Robin Wood[\s\S]{0,40}DigiNinja|digi\.ninja/i
+  },
+  {
+    label: "WebSocket message protocol handlers",
+    re: /conn\.send\(["']G:|conn\.send\(["']C:|conn\.send\(["']N:/i
+  }
+];
+
+const clientSideSockettomeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SOCKETTOME_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/SocketToMe|ws\.digi\.ninja/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DigiNinja SocketToMe documents a public WebSocket fuzzing and chat game lab for socket security testing"
+    }
+  };
+};
+
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -5730,6 +5860,9 @@ export const RULES: Record<string, Rule> = {
   clientSideXssQuizEvidence,
   clientSideCtfchallengeEvidence,
   clientSideExploitEducationEvidence,
+  clientSideYogsecXssLabsEvidence,
+  clientSideHacker101CtfEvidence,
+  clientSideSockettomeEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
