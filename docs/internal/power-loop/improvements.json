@@ -1133,6 +1133,24 @@
       "slug": "client-side-yrprey-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta deliberately contains various vulnerabilities + Groundbreaking Framework For Practicing Security Vulnerabilities + github.com/yrprey/yrprey-application; yrprey.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bergerzvika.github.io/Cyber-Lab",
+      "slug": "client-side-berger-cyber-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Secure Programming (Cyber) Lab + Integer Overflow/Race Conditions/Prompt Injection modules + github.com/bergerzvika/Cyber-Lab; extractBergerCyberLabSeeds; bergerzvika.github.io/Cyber-Lab findings 2→8; benchmark 6/6 maintained (staging 7 findings)"
+    },
+    {
+      "source": "discovery:pwn.college",
+      "slug": "client-side-pwn-college-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Learn to Hack! + dojos split into topics + /dojo/welcome linux-luminarium; extractPwnCollegeSeeds; pwn.college findings 1→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:aesthetic-bubblegum-cbc86d.netlify.app",
+      "slug": "client-side-react-dom-xss-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: React XSS AppSec Demo + DOM XSS test (Attack 1) onerror + Vulnerable mode renders attacker-controlled HTML + DOMPurify.sanitize; aesthetic-bubblegum findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2075,6 +2093,21 @@
       "source": "discovery:yrprey.com",
       "slug": "client-side-yrprey-evidence",
       "shipped_at": "2026-07-10T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:bergerzvika.github.io/Cyber-Lab",
+      "slug": "client-side-berger-cyber-lab-evidence",
+      "shipped_at": "2026-07-10T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwn.college",
+      "slug": "client-side-pwn-college-evidence",
+      "shipped_at": "2026-07-10T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:aesthetic-bubblegum-cbc86d.netlify.app",
+      "slug": "client-side-react-dom-xss-lab-evidence",
+      "shipped_at": "2026-07-10T17:10:00.000Z"
     }
   ]
 }

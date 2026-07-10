@@ -6439,6 +6439,127 @@ const clientSideYrpreyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- BergerZvika Secure Programming Cyber-Lab (bergerzvika.github.io/Cyber-Lab) ------
+const CLIENT_BERGER_CYBER_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Secure Programming Cyber Lab hub",
+    re: /Secure Programming[\s\S]{0,40}\(Cyber\)[\s\S]{0,40}Lab|SECURE PROGRAMMING[\s\S]{0,20}\(CYBER\)/i
+  },
+  {
+    label: "Integer overflow lab module",
+    re: /Integer Overflow[\s\S]{0,120}fixed-width|Field Studies in Fixed-Width Arithmetic/i
+  },
+  {
+    label: "Race conditions lab module",
+    re: /Race Conditions?[\s\S]{0,120}concurrency|TOCTOU/i
+  },
+  {
+    label: "Prompt injection lab module",
+    re: /Prompt Injection[\s\S]{0,120}LLM|instruction override|indirect injection/i
+  },
+  {
+    label: "BergerZvika Cyber-Lab GitHub",
+    re: /github\.com\/bergerzvika\/Cyber-Lab|bergerzvika\/Cyber-Lab/i
+  }
+];
+
+const clientSideBergerCyberLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BERGER_CYBER_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Cyber-Lab|Secure Programming[\s\S]{0,20}\(Cyber\)/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BergerZvika Cyber-Lab publishes static HTML labs for integer overflow, race conditions, and prompt injection training"
+    }
+  };
+};
+
+// --- pwn.college ASU cybersecurity education platform ---------------------------------
+const CLIENT_PWN_COLLEGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "pwn.college Learn to Hack tagline",
+    re: /Learn to Hack!|pwn\.college/i
+  },
+  {
+    label: "Dojo-based curriculum",
+    re: new RegExp(
+      'material on pwn\\.college is split into a number of "dojos"|/dojo/(?:welcome|linux-luminarium|computing-101)',
+      "i"
+    )
+  },
+  {
+    label: "CTF-style challenge workspace",
+    re: /href\s*=\s*["']\/(?:dojo|workspace|dojos)/i
+  },
+  {
+    label: "ASU cybersecurity education platform",
+    re: /Arizona State University|ASU[\s\S]{0,40}cybersecurity|pwn\.college[\s\S]{0,80}exploit/i
+  }
+];
+
+const clientSidePwnCollegeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PWN_COLLEGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/pwn\.college/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "pwn.college hosts dojo-based exploit training modules covering Linux, computing fundamentals, and web/binary security"
+    }
+  };
+};
+
+// --- React DOM XSS AppSec demo (aesthetic-bubblegum / similar SPAs) -------------------
+const CLIENT_REACT_DOM_XSS_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "React XSS AppSec demo title",
+    re: /React XSS AppSec Demo|DOM XSS test \(Attack \d+\)/i
+  },
+  {
+    label: "Vulnerable vs sanitized mode toggle",
+    re: /Vulnerable mode renders attacker-controlled HTML|Sanitized mode uses[\s\S]{0,40}DOMPurify\.sanitize/i
+  },
+  {
+    label: "DOM XSS onerror/onfocus payloads",
+    re: /onerror\s*=\s*["']alert\(['"]XSS:|onfocus\s*=\s*["']alert\(['"]XSS:/i
+  },
+  {
+    label: "DOMPurify XSS lab comparison",
+    re: /DOMPurify\.sanitize|dangerouslySetInnerHTML/i
+  }
+];
+
+const clientSideReactDomXssLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_REACT_DOM_XSS_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/DOM XSS|React XSS AppSec|DOMPurify\.sanitize/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "React DOM XSS lab compares vulnerable innerHTML rendering against DOMPurify-sanitized output with onerror/onfocus attack payloads"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6574,6 +6695,9 @@ export const RULES: Record<string, Rule> = {
   clientSideOverthewireNatasEvidence,
   clientSideFfufMeEvidence,
   clientSideYrpreyEvidence,
+  clientSideBergerCyberLabEvidence,
+  clientSidePwnCollegeEvidence,
+  clientSideReactDomXssLabEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
