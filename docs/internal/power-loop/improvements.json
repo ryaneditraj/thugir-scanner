@@ -935,6 +935,24 @@
       "slug": "meta-refresh-stub-follow",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta refresh content=0;url=https://webgoat.org on stub page; extractStubRedirectTarget follows canonical redirect; webgoat.github.io/WebGoat findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:labs.tegalsec.org",
+      "slug": "client-side-tegalsec-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HACK THE BR0W + Play your browser + XSS Labs | Tegal1337 + Change your user agent to tegal1337; extractTegalsecLabSeeds + onclick jsNavTargets; labs.tegalsec.org/br0w findings 2→3, xss-labs 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "client-side-bugbountyhunter-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: @zseano + Can you discover all of the web app vulnerabilities + Can you find any XSS? No HTML tags allowed; bugbountyhunter.com/playground findings 1→2, /challenge?id=1 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "client-side-zero-health-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Intentionally Vulnerable + bypass the JWT token + XSS as a Service + HIPAA Non-Compliant; zerohealth.aliyu.dev findings 0→3; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -1712,6 +1730,21 @@
       "source": "discovery:webgoat.github.io/WebGoat",
       "slug": "meta-refresh-stub-follow",
       "shipped_at": "2026-07-10T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:labs.tegalsec.org",
+      "slug": "client-side-tegalsec-lab-evidence",
+      "shipped_at": "2026-07-10T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "client-side-bugbountyhunter-evidence",
+      "shipped_at": "2026-07-10T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "client-side-zero-health-evidence",
+      "shipped_at": "2026-07-10T05:10:00.000Z"
     }
   ]
 }
