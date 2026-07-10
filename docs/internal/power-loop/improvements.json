@@ -971,6 +971,24 @@
       "slug": "client-side-defendtheweb-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: <title>Defend the Web</title> + After 17 incredible years, Defend the Web is now on hiatus + support@defendtheweb.net; defendtheweb.net findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:returntrue.win",
+      "slug": "client-side-returntrue-wargame-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>return true to win</title> + function foo($x) lang-php + POST name=argument; extractReturnTrueSeeds crawls ?level=1-4; returntrue.win findings 3→4; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:authlab.digi.ninja",
+      "slug": "client-side-authlab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Welcome to the Authentication Lab + /JWT_None /ClientSide /Bypass challenge hrefs; extractAuthlabSeeds; authlab.digi.ninja findings 4→5; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:xss-quiz.int21h.jp",
+      "slug": "client-side-xss-quiz-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yamagata21 stage2.php/stage-3.php routes seeded via extractXssQuizInt21hSeeds; printenv stub blocks evidence until quiz HTML returns; pages_crawled 1→6; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -1778,6 +1796,21 @@
       "source": "discovery:defendtheweb.net",
       "slug": "client-side-defendtheweb-evidence",
       "shipped_at": "2026-07-10T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:returntrue.win",
+      "slug": "client-side-returntrue-wargame-evidence",
+      "shipped_at": "2026-07-10T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:authlab.digi.ninja",
+      "slug": "client-side-authlab-evidence",
+      "shipped_at": "2026-07-10T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss-quiz.int21h.jp",
+      "slug": "client-side-xss-quiz-evidence",
+      "shipped_at": "2026-07-10T07:10:00.000Z"
     }
   ]
 }
