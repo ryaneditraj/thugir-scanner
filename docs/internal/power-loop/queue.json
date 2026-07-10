@@ -927,7 +927,32 @@
       "url": "https://yrprey.com/",
       "source": "Yrprey — OWASP API Top 10 2019/2023 vuln framework landing with live lab pointers (OWASP VWAD)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://bergerzvika.github.io/Cyber-Lab/",
+      "source": "BergerZvika/Cyber-Lab — integer overflow, prompt injection, race condition browser labs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://justinsteven.github.io/gartnerpeerinsightsxssdemo/",
+      "source": "justinsteven/gartnerpeerinsightsxssdemo — postMessage DOM XSS widget exploit demo (security research)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://security-showcase.vercel.app/",
+      "source": "Security Showcase — intentionally vulnerable login/comments SQLi+XSS training app (Vercel)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-ecommerce.vercel.app/",
+      "source": "Vulnerable e-commerce — PHP-style SQLi/XSS training storefront (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://aesthetic-bubblegum-cbc86d.netlify.app/",
+      "source": "Aesthetic Bubblegum — intentionally vulnerable web security demo (Netlify OSS deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-10T15:14:00.000Z"
+  "updated_at": "2026-07-10T16:10:00.000Z"
 }
