@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T02:05:21.863Z",
+  "updated_at": "2026-07-10T02:11:48.802Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 400,
-  "total_findings": 1601,
+  "total_sites_scanned": 406,
+  "total_findings": 1624,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 116,
-  "discovery_findings": 930,
+  "discovery_urls_added": 121,
+  "discovery_findings": 953,
   "improvements_shipped": 147,
-  "last_run": "2026-07-10T02:05:21.863Z",
+  "last_run": "2026-07-10T02:11:48.802Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — staging oracle 7 findings 6/6; production Heroku may cold-start to 567B shell",
+      "note": "First pass degraded (4 findings, gap=xss,sensitive_data); retry hit 6/6 with 8 findings",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,18 +50,39 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "SecTrainer gamified OWASP labs + HackAdvisor bug-report CTFs; Vite modulepreload script fetch",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 23,
+      "skipped_48h": [],
+      "errors": [
+        "https://ginandjuice.shop/ (Invalid URL)",
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "queued_next": [
+        "http://rest.vulnweb.com/",
+        "http://testaspnet.vulnweb.com/",
+        "https://hackxor.net/",
+        "http://testasp.vulnweb.com/",
+        "https://pwnshop.ctfsecurity.com/",
+        "https://sasanlabs.github.io/VulnerableApp/",
+        "https://vulnforge-academy.vercel.app/",
+        "https://webgoat.github.io/WebGoat/"
+      ],
+      "focus": "Acunetix vulnweb + OWASP VulnerableApp + pwnshop queue; Google firing-range/gruyere oracles"
     },
     "notable_findings": [
-      "security-trainer.vercel.app: modulepreload fix loads 484KB lesson-content chunk; SecTrainer evidence (2→4 findings)",
-      "labs.hackadvisor.io: HackAdvisor real-world bug report CTF markers (7→8 findings)",
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) maintained"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after degraded retry",
+      "demo.testfire.net: 6 findings — Altoro Mutual banking oracle",
+      "websegura.radwarelatam.com/mutillidae: 7 findings — Mutillidae II hosted instance",
+      "google-gruyere.appspot.com: 3 findings — Google codelab oracle",
+      "public-firing-range.appspot.com: 2 findings — XSS benchmark"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold start may return 567B shell — rely on staging fallback",
-      "capture-the-flag.labs.vercel.dev: Vercel deployment offline (DEPLOYMENT_NOT_FOUND)",
-      "www.root-me.org: Anubis bot-wall blocks scanner UA"
+      "juice-shop.herokuapp.com: nondeterministic — first pass 4/6 (gap xss,sensitive_data), retry 6/6",
+      "ginandjuice.shop: Invalid URL from cloud scanner despite public demo",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — keep disabled in queue",
+      "vampi.lab.pentest-forge.com: shallow landing (1 finding) — API routes need deeper crawl",
+      "rest.vulnweb.com / testaspnet / hackxor / new queue URLs: pending next run (limit-8)"
     ]
   },
   "discovery_highlights": {
@@ -244,6 +265,7 @@
     "hacking-lab.com": 2,
     "picoctf.org": 2,
     "server.vulnapp.id/mutillidae": 6,
+    "websegura.radwarelatam.com/mutillidae": 7,
     "computersciencesop2.vercel.app": 5,
     "www.itsecgames.com": 2,
     "solyd.com.br": 1,
