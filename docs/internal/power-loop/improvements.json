@@ -905,6 +905,24 @@
       "slug": "client-side-cylab-academy-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: picoCTF has joined CyLab Security Academy + Carnegie Mellon cybersecurity learning platform; picoctf.org findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sasanlabs.github.io/VulnerableApp",
+      "slug": "client-side-vulnerableapp-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: deliberately vulnerable to attacks + Bank of Vulnerabilities benchmarking platform + SasanLabs/VulnerableApp; extractVulnerableAppDocSeeds; sasanlabs.github.io/VulnerableApp findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:rest.vulnweb.com",
+      "slug": "client-side-rest-vulnweb-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Invicti Vulnerable REST API title + JWT/Basic/OAuth2 auth catalog + /docs/api_data.json; extractRestVulnwebDocSeeds; rest.vulnweb.com findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "client-side-vulnforge-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 20 deliberately vulnerable levels + OWASP Top 10 Covered + Learn Cybersecurity by Breaking Things; vulnforge-academy.vercel.app findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1657,6 +1675,21 @@
       "source": "discovery:picoctf.org",
       "slug": "client-side-cylab-academy-evidence",
       "shipped_at": "2026-07-10T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:sasanlabs.github.io/VulnerableApp",
+      "slug": "client-side-vulnerableapp-evidence",
+      "shipped_at": "2026-07-10T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:rest.vulnweb.com",
+      "slug": "client-side-rest-vulnweb-evidence",
+      "shipped_at": "2026-07-10T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "client-side-vulnforge-academy-evidence",
+      "shipped_at": "2026-07-10T03:10:00.000Z"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T02:05:08.052Z",
-  "total": 134,
-  "uniqueSlugs": 134,
+  "generatedAt": "2026-07-10T03:07:19.044Z",
+  "total": 137,
+  "uniqueSlugs": 137,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 116,
+    "generic": 119,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 70,
+    "deep": 73,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 30,
+    "Broken access control": 32,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 9,
     "Information disclosure": 13,
     "Broken authentication": 9,
-    "Injection": 17,
+    "Injection": 18,
     "Cross-site scripting": 8,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -71,6 +71,7 @@
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
     "client-side-react-rsc-cve-evidence",
+    "client-side-rest-vulnweb-evidence",
     "client-side-rootme-challenge-evidence",
     "client-side-sectrainer-evidence",
     "client-side-security-game-evidence",
@@ -81,6 +82,8 @@
     "client-side-sql-evidence",
     "client-side-ssrf-evidence",
     "client-side-vuln-auth-portal-evidence",
+    "client-side-vulnerableapp-evidence",
+    "client-side-vulnforge-academy-evidence",
     "client-side-vulnweb-lab-evidence",
     "client-side-websec-challenge-evidence",
     "client-side-wrongsecrets-evidence",
