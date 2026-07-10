@@ -1398,10 +1398,10 @@ function extractMcpSherpaWorkshopSeeds(html: string, pageUrl: string): string[] 
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of [
-    "/camps/camp1-auth/",
-    "/camps/camp2-gateway/",
-    "/camps/camp3-io-security/",
-    "/camps/camp4-red-team/"
+    "camps/camp1-auth/",
+    "camps/camp2-gateway/",
+    "camps/camp3-io-security/",
+    "camps/camp4-red-team/"
   ]) {
     try {
       const u = new URL(p, pageUrl);

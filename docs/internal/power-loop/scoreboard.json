@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T21:14:27.255Z",
+  "updated_at": "2026-07-10T21:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 218,
   "discovery_findings": 1529,
-  "improvements_shipped": 200,
-  "last_run": "2026-07-10T21:14:27.255Z",
+  "improvements_shipped": 203,
+  "last_run": "2026-07-10T21:18:00.000Z",
   "last_run_summary": {
     "hour_utc": "21:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 1 finding (misconfig-only); retry DNS NXDOMAIN; staging fallback 6/6",
+      "note": "Primary heroku cold-start 2 findings (retry gap xss,sqli,idor,sensitive_data); juiceShopApiLive REST warmup added; staging fallback 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,57 +49,35 @@
             "xss",
             "sqli",
             "idor",
-            "auth_bypass",
             "sensitive_data"
           ],
           "retry_gap": [
             "xss",
             "sqli",
             "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
+            "sensitive_data"
           ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 31,
-      "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
-        "https://juice-shop.herokuapp.com (DNS NXDOMAIN on benchmark retry)"
-      ],
-      "queued_not_scanned_this_hour": [
-        "https://lab.pentest-forge.com/",
-        "https://pentest-forge.com/",
-        "https://azure-samples.github.io/sherpa/",
-        "https://securityweb-iota.vercel.app/",
-        "https://hack-yourself-first.com/",
-        "https://bypass403.vercel.app/",
-        "https://bug-hunt-vuln-detection.vercel.app/",
-        "https://cyber-quest-v1.vercel.app/",
-        "https://shiny-computing-machine.vercel.app/",
-        "https://graphql-lab.vercel.app/"
-      ],
-      "focus": "Queue sweep bWAPP/Mutillidae/picoCTF + 5 new OSS deploys (bypass403, bug-hunt, cyber-quest, shiny-computing, graphql-lab) at tail",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 11,
+      "focus": "Queued SecLab + Microsoft Sherpa MCP workshop validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 1/6 + DNS retry failure",
-      "computersciencesop2.vercel.app: OpenAI key + XSS sinks + GenAI lab markers (7 findings)",
-      "server.vulnapp.id/mutillidae: Mutillidae lab + phpinfo + HTML comment creds (6 findings)",
-      "bwapp.hakhub.net: phpinfo + directory listing + robots paths (6 findings)",
-      "vulnweb.netlify.app: SQLi client evidence + XSS sinks (4 findings)"
+      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku cold-start",
+      "securityweb-iota.vercel.app: SecLab XSS/SQLi/CSRF/IDOR lab crawl (5→8 findings)",
+      "azure-samples.github.io/sherpa: MCP Security Summit workshop markers (0→3 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku DNS/cold-start — primary 1/6 then retry NXDOMAIN; staging oracle required",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "New tail URLs (bypass403, bug-hunt, cyber-quest, shiny-computing, graphql-lab) queued but not reached in 8-URL limit",
-      "picoctf.org / solyd.com.br: training landing pages — challenge instances require registration"
+      "juice-shop.herokuapp.com: Heroku total outage/DNS still needs staging fallback; REST API warmup improves partial cold-starts",
+      "http://hackazon.webscantest.com/: Rapid7 demo returns 403 to scanner UA",
+      "wrongsecrets.onrender.com: service suspended by owner",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
@@ -178,7 +156,8 @@
     "zero-health.vercel.app": 3,
     "csrf-xss-demo.vercel.app": 4,
     "ai-security-platform-iota.vercel.app": 3,
-    "securityweb-iota.vercel.app": 5,
+    "securityweb-iota.vercel.app": 8,
+    "azure-samples.github.io/sherpa": 3,
     "sqli-lab.vercel.app": 3,
     "xss-lab.vercel.app": 3,
     "xss-attacker.vercel.app": 3,
