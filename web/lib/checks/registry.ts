@@ -460,16 +460,31 @@ function extractQueryParamPaths(text: string): string[] {
 }
 
 function extractReflectedXssPaths(text: string): string[] {
-  const paths = new Set([
+  const paths = new Set<string>();
+  // Google Firing Range — keep explicit /reflected/parameter/* probe paths (slice must not drop them).
+  const firingRangeRe = /href\s*=\s*["'](\/reflected\/parameter\/[^"'?]+)/gi;
+  let fm: RegExpExecArray | null;
+  while ((fm = firingRangeRe.exec(text))) {
+    const norm = normalizeProbePath(fm[1]);
+    if (norm) paths.add(norm);
+  }
+  for (const p of [
     ...extractSearchLikePaths(text),
     ...extractIframeSrcPaths(text),
     ...extractQueryParamPaths(text)
-  ]);
+  ]) {
+    paths.add(p);
+  }
   if (/reflected/i.test(text)) paths.add("/reflected/parameter/body");
   const levelRe = /(?:href|action)\s*=\s*["'](\/level\d+)["']/gi;
   let lm: RegExpExecArray | null;
   while ((lm = levelRe.exec(text))) paths.add(`${lm[1]}/frame`);
-  return [...paths].slice(0, 8);
+  const score = (p: string) => {
+    if (/^\/reflected\/parameter\//i.test(p)) return 0;
+    if (/reflected|\/frame$/i.test(p)) return 1;
+    return 2;
+  };
+  return [...paths].sort((a, b) => score(a) - score(b)).slice(0, 12);
 }
 
 function isReflectedXssCanary(body: string, canary: string): boolean {

@@ -209,6 +209,11 @@ export async function runFreeScan(targetInput: string, opts: FreeScanOptions = {
   if (home.status === 0) {
     throw new BlockedTargetError(reachFailureMessage(target, home.error));
   }
+  const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
+  if (stubRedirect && home.body.length < 4096) {
+    const redirected = await fetchDoc(stubRedirect, { timeoutMs: 12000, maxBytes: 600_000 });
+    if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
+  }
   const origin = target.origin;
 
   // Pull a capped set of same-origin scripts for secret scanning.
@@ -704,6 +709,44 @@ function extractBwappLabSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** Google Firing Range benchmark (public-firing-range.appspot.com) — reflected/redirect XSS modules. */
+function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
+  if (!/firing[\s-]range|public-firing-range/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/reflected/index.html", "/redirect/index.html", "/dom/index.html"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Meta-refresh or canonical stub pages (e.g. webgoat.github.io → webgoat.org). */
+function extractStubRedirectTarget(html: string, pageUrl: string): string | null {
+  const refresh =
+    html.match(/<meta[^>]*http-equiv\s*=\s*["']refresh["'][^>]*content\s*=\s*["'][^"']*url\s*=\s*([^"';]+)/i) ??
+    html.match(/content\s*=\s*["'][^"']*url\s*=\s*([^"';]+)[^"']*["'][^>]*http-equiv\s*=\s*["']refresh["']/i);
+  if (refresh?.[1]) {
+    try {
+      return new URL(refresh[1].trim(), pageUrl).toString();
+    } catch {
+      /* ignore */
+    }
+  }
+  const canonical = html.match(/<link[^>]*rel\s*=\s*["']canonical["'][^>]*href\s*=\s*["']([^"']+)["']/i);
+  if (canonical?.[1] && /moved to|page been moved|redirect/i.test(html)) {
+    try {
+      const u = new URL(canonical[1].trim(), pageUrl);
+      if (u.origin !== new URL(pageUrl).origin) return u.toString();
+    } catch {
+      /* ignore */
+    }
+  }
+  return null;
+}
+
 /** Google Gruyere codelab (google-gruyere.appspot.com) — multi-part XSS/SQLi/XSRF walkthrough. */
 function extractGruyereCodelabSeeds(html: string, origin: string): string[] {
   if (!/gruyere\.appspot\.com|Web Application Exploits and Defenses/i.test(html)) return [];
@@ -1043,6 +1086,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   let home = await reachTarget(target, targetInput);
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
+  const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
+  if (stubRedirect && home.body.length < 4096) {
+    const redirected = await fetchDoc(stubRedirect, { timeoutMs: 12000, maxBytes: 600_000 });
+    if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
+  }
   const origin = target.origin;
   const crawlOrigin = new URL(home.finalUrl).origin;
 
@@ -1073,6 +1121,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
+  const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1109,6 +1158,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...websecSeeds,
       ...sixHackSeeds,
       ...gruyereSeeds,
+      ...firingRangeSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
