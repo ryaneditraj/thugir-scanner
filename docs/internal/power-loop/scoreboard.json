@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T13:06:03.348Z",
+  "updated_at": "2026-07-10T13:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 178,
   "discovery_findings": 1259,
-  "improvements_shipped": 176,
-  "last_run": "2026-07-10T13:06:03.349Z",
+  "improvements_shipped": 179,
+  "last_run": "2026-07-10T13:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "13:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku 6/6 on first pass (8 findings) — no retry or staging fallback needed",
+      "note": "Primary Heroku 8 findings 6/6 on first pass — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,28 +51,23 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 26,
-      "skipped_48h": [
-        "https://juice-shop.herokuapp.com/",
-        "https://securebank-blog.vercel.app/",
-        "https://hack-health-tutorial.vercel.app/",
-        "https://preview-zeroday-sec.vercel.app/",
-        "https://hack-this-site-eta.vercel.app/"
-      ],
-      "focus": "DOM XSS hubs (damnvulnerable.me, domgo.at), W3Challs, webscantest, LLMsec GitHack; queue picked earlier unscanned OSS deploys",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 3,
+      "findings": 8,
+      "skipped_48h": [],
+      "focus": "EKS Goat mdBook + CTFlearn + Cybench LLM CTF benchmark evidence rules",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 recall (8 findings) — stable first pass, no misses",
-      "webexp05.vercel.app: SQLi+XSS+JWT-none+LFI lab evidence (6 findings)",
-      "weaponsforge.github.io/hacker-friendly-app: Firebase misconfig + XSS markers (4 findings)",
-      "tempehs.github.io/The_Unsecure_PWA: insecure PWA training markers (3 findings)"
+      "juice-shop.herokuapp.com: benchmark 8 findings, 6/6 recall on first pass",
+      "ekssecurity.netlify.app: OWASP EKS Goat cloud security masterclass markers (1→2 findings)",
+      "ctflearn.com: CTFlearn Learn to Hack platform evidence slug added",
+      "cybench.github.io: Cybench LLM cybersecurity CTF benchmark (3→4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: intermittent cold-start degradation observed in prior runs — monitor first-pass recall",
-      "damnvulnerable.me / domgo.at / w3challs / webscantest / llmsec: queued at end of queue — not reached this hour (limit 8)",
-      "openvaultbank.com / juice-shop.demo.escape.tech / demo.corgea.com: high-value API/benchmark targets still queued"
+      "juice-shop.herokuapp.com: intermittent cold-start degradation observed in prior runs — retry logic retained",
+      "demo.corgea.com: DNS dead — Corgea Juice Shop showcase offline",
+      "aspnet.testsparker.com: DNS dead — use angular/php.testsparker.com instead",
+      "natas0.natas.labs.overthewire.org: HTTP Basic auth required — credentials not in public queue"
     ]
   },
   "discovery_highlights": {
@@ -115,7 +110,7 @@
     "ginandjuice.shop": 3,
     "bwapp.hakhub.net": 6,
     "public-firing-range.appspot.com": 4,
-    "google-gruyere.appspot.com": 2,
+    "google-gruyere.appspot.com": 3,
     "dvga.tools.escape.tech": 4,
     "hackxor.net": 3,
     "seclab.vercel.app": 4,
@@ -192,7 +187,7 @@
     "ctf-maker-monorepo.vercel.app": 2,
     "crapi2.apisec.ai": 6,
     "agentpwn.com": 5,
-    "labs.hackadvisor.io": 7,
+    "labs.hackadvisor.io": 8,
     "sixhackacademy.com": 3,
     "secresearchlab.web.app": 5,
     "skillaudit.vercel.app": 6,
@@ -268,6 +263,9 @@
     "ctfchallenge.co.uk": 3,
     "exploit.education": 3,
     "hiddeninvestigations.net": 4,
-    "acuart.phpnet.us": 2
+    "acuart.phpnet.us": 2,
+    "ekssecurity.netlify.app": 2,
+    "ctflearn.com": 2,
+    "cybench.github.io": 4
   }
 }

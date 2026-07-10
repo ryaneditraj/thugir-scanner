@@ -1061,6 +1061,24 @@
       "slug": "client-side-nivara-security-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Nivara — Security Assessment Platform + Automated external security assessments + nivara-theme localStorage; cybersec-demo.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ekssecurity.netlify.app",
+      "slug": "client-side-eks-goat-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP EKS Goat: AWS EKS Security Masterclass + vulnerable cluster deployment + Kyverno/GuardDuty/Tetragon in mdBook sidebar; extractEksGoatMdbookSeeds; ekssecurity.netlify.app findings 1→2; benchmark 8 findings 6/6"
+    },
+    {
+      "source": "discovery:ctflearn.com",
+      "slug": "client-side-ctflearn-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTFlearn - Learn to Hack + Learn Cybersecurity + hundreds of challenges + /challenge/1/browse; extractCtflearnChallengeSeeds; ctflearn.com gains client-side-ctflearn-evidence slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cybench.github.io",
+      "slug": "client-side-cybench-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Cybench: Evaluating Language Models on Cybersecurity Challenges + 40 professional-level CTF + XSS/SQLi/CSRF categories; cybench.github.io findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1943,6 +1961,21 @@
       "source": "discovery:cybersec-demo.vercel.app",
       "slug": "client-side-nivara-security-evidence",
       "shipped_at": "2026-07-10T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:ekssecurity.netlify.app",
+      "slug": "client-side-eks-goat-evidence",
+      "shipped_at": "2026-07-10T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:ctflearn.com",
+      "slug": "client-side-ctflearn-evidence",
+      "shipped_at": "2026-07-10T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:cybench.github.io",
+      "slug": "client-side-cybench-evidence",
+      "shipped_at": "2026-07-10T13:10:00.000Z"
     }
   ]
 }
