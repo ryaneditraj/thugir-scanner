@@ -83,6 +83,7 @@ export function parseAiJson<T>(s: string): T | null {
 export function envKeyFor(provider: AiProvider): string {
   if (provider === "anthropic") return process.env.ANTHROPIC_API_KEY || "";
   if (provider === "openai") return process.env.OPENAI_API_KEY || "";
+  if (provider === "hackclub") return process.env.HACK_CLUB_AI_API_KEY || "";
   return process.env.OPENROUTER_API_KEY || "";
 }
 
