@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T12:13:00.000Z",
+  "updated_at": "2026-07-10T13:06:03.348Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 486,
-  "total_findings": 1981,
+  "total_sites_scanned": 495,
+  "total_findings": 2015,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 173,
-  "discovery_findings": 1233,
+  "discovery_urls_added": 178,
+  "discovery_findings": 1259,
   "improvements_shipped": 176,
-  "last_run": "2026-07-10T12:13:00.000Z",
+  "last_run": "2026-07-10T13:06:03.349Z",
   "last_run_summary": {
-    "hour_utc": "12:00",
+    "hour_utc": "13:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku recovered 6/6 on retry (8 findings); first pass degraded 1 finding",
+      "note": "Primary Heroku 6/6 on first pass (8 findings) — no retry or staging fallback needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -44,21 +44,7 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ],
-          "primary_degraded": {
-            "url": "https://juice-shop.herokuapp.com",
-            "first_pass": {
-              "findings": 1,
-              "categories_hit": 1,
-              "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
-            },
-            "retry": {
-              "findings": 8,
-              "categories_hit": 6,
-              "gap": [],
-              "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
-            }
-          }
+          ]
         }
       }
     },
@@ -66,21 +52,27 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 37,
-      "skipped_48h": [],
-      "focus": "VulnLab Academy + Vulnerable Web Site + Nivara security platform evidence rules",
-      "improvements_shipped_this_run": 3
+      "findings": 26,
+      "skipped_48h": [
+        "https://juice-shop.herokuapp.com/",
+        "https://securebank-blog.vercel.app/",
+        "https://hack-health-tutorial.vercel.app/",
+        "https://preview-zeroday-sec.vercel.app/",
+        "https://hack-this-site-eta.vercel.app/"
+      ],
+      "focus": "DOM XSS hubs (damnvulnerable.me, domgo.at), W3Challs, webscantest, LLMsec GitHack; queue picked earlier unscanned OSS deploys",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark retry 8 findings, 6/6 recall (first pass 1 finding degraded)",
-      "hack-this-site-eta.vercel.app: VulnLab Academy + html-comment SECRET staging_admin_password (10→12 findings)",
-      "vulnerable-web-site.vercel.app: CSRF/XSS/SSRF lab meta evidence (2→3 findings)",
-      "cybersec-demo.vercel.app: Nivara security assessment platform markers (3→4 findings)"
+      "juice-shop.herokuapp.com: benchmark 6/6 recall (8 findings) — stable first pass, no misses",
+      "webexp05.vercel.app: SQLi+XSS+JWT-none+LFI lab evidence (6 findings)",
+      "weaponsforge.github.io/hacker-friendly-app: Firebase misconfig + XSS markers (4 findings)",
+      "tempehs.github.io/The_Unsecure_PWA: insecure PWA training markers (3 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start still yields 1-finding shallow crawl on first pass — retry required",
-      "acuart.phpnet.us: DNS dead — classic Acunetix demo offline",
-      "vulnerable-web-site /api/user: Vercel FUNCTION_INVOCATION_TIMEOUT blocks live API probes"
+      "juice-shop.herokuapp.com: intermittent cold-start degradation observed in prior runs — monitor first-pass recall",
+      "damnvulnerable.me / domgo.at / w3challs / webscantest / llmsec: queued at end of queue — not reached this hour (limit 8)",
+      "openvaultbank.com / juice-shop.demo.escape.tech / demo.corgea.com: high-value API/benchmark targets still queued"
     ]
   },
   "discovery_highlights": {
@@ -243,8 +235,8 @@
     "dvai.vercel.app": 3,
     "fvb.vchan.in": 2,
     "weaponsforge.github.io/hacker-friendly-app": 4,
-    "webexp05.vercel.app": 2,
-    "idor-challenge.vercel.app": 2,
+    "webexp05.vercel.app": 6,
+    "idor-challenge.vercel.app": 3,
     "luisillobret2.github.io/WebGoat": 2,
     "vuln-portal.vercel.app": 2,
     "pentest-ground.com:4280": 5,

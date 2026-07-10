@@ -852,7 +852,32 @@
       "url": "https://owasp-demo.vulcanlab.ai/",
       "source": "VulcanLab OWASP demo — intentionally vulnerable web security training instance (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://damnvulnerable.me/",
+      "source": "skepticfx/damnvulnerable.me — deliberately vulnerable DOM XSS/clobbering training app (BlackHat DomFlow)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://w3challs.com/",
+      "source": "W3Challs — public offensive security challenge platform with real-world vuln scenarios",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.webscantest.com/",
+      "source": "Classic Acunetix webscantest.com — intentionally vulnerable PHP demo for scanner benchmarking",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/",
+      "source": "Mario Heiderich domgo.at — DOM XSS/CXSS training hub (root; complements cxss/intro path)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://raw.githack.com/sheshakandula/llmsec/main/frontend/index.html",
+      "source": "sheshakandula/llmsec — OWASP LLM Top 10 prompt-injection training demo (GitHack deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-10T12:05:00.000Z"
+  "updated_at": "2026-07-10T13:05:00.000Z"
 }
