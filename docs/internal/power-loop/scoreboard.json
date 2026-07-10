@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T16:13:42.858Z",
+  "updated_at": "2026-07-10T17:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 522,
-  "total_findings": 2131,
+  "total_sites_scanned": 531,
+  "total_findings": 2175,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 193,
-  "discovery_findings": 1352,
+  "discovery_urls_added": 198,
+  "discovery_findings": 1389,
   "improvements_shipped": 188,
-  "last_run": "2026-07-10T16:13:42.858Z",
+  "last_run": "2026-07-10T17:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "16:00",
+    "hour_utc": "17:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 8,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start 1/6 (misconfig only); retry recovered 8 findings 6/6 without staging fallback",
+      "note": "Primary heroku cold-start 1/6 (misconfig only); retry 4/6 (gap xss,sensitive_data); staging fallback recovered 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,7 +52,10 @@
             "auth_bypass",
             "sensitive_data"
           ],
-          "retry_gap": []
+          "retry_gap": [
+            "xss",
+            "sensitive_data"
+          ]
         }
       }
     },
@@ -60,38 +63,36 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 29,
+      "findings": 37,
       "skipped_48h": [],
       "queued_not_scanned_this_hour": [
+        "https://bugy-database-cve-2024-53900.vercel.app/",
+        "https://nosql-injection-lab.vercel.app/",
+        "https://prototype-pollution-interactive-demo.netlify.app/",
+        "https://llm-security-lab.vercel.app/",
+        "https://secure-bank-bay.vercel.app/",
         "https://demo.securityknowledgeframework.org/",
         "http://ffuf.me/",
-        "http://www.bgabank.com/",
-        "https://bugbait.io/",
-        "https://yrprey.com/",
-        "https://bergerzvika.github.io/Cyber-Lab/",
-        "https://justinsteven.github.io/gartnerpeerinsightsxssdemo/",
-        "https://security-showcase.vercel.app/"
+        "https://openvaultbank.com/"
       ],
-      "focus": "BergerZvika secure-programming labs + Gartner postMessage XSS demo + OWASP VWAD SKF/ffuf/bgabank queue tail; engine shipped natas/ffuf/yrprey evidence rules",
-      "improvements_shipped_this_run": 3
+      "focus": "NoSQL/prototype-pollution/LLM labs + secure-bank-bay queue tail; TestSparker Angular + SSRF Defense + GraphQL bookstore rescans",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 (8 findings) after first-pass 1/6 cold-start gap xss,sqli,idor,auth_bypass,sensitive_data",
-      "hack-yourself-first.azurewebsites.net: Troy Hunt Supercar Showdown — 7 findings (reflected XSS + cleartext API passwords)",
-      "php.testsparker.com: Invicti PHP vuln demo — 5 findings (phpinfo + reflected XSS + injection markers)",
-      "nextjs-cve-hackerone.vercel.app: Next.js RSC CVE lab — 4 findings (critical RSC CVE evidence)",
-      "aspnet.testsparker.com: ASP.NET vuln demo — 4 findings",
-      "natas0.natas.labs.overthewire.org: basic-auth probe unlocks wechall markers (engine improvement)",
-      "ffuf.me + yrprey.com: fuzzing lab + vuln framework evidence rules shipped"
+      "juice-shop-staging: benchmark 6/6 (7 findings) after primary heroku 1/6→4/6 cold-start degradation",
+      "angular.testsparker.com: critical AWS AKID + hardcoded demo creds (5 findings)",
+      "ssrf-defense-platform.onrender.com: SSRF attack-demo mode evidence (6 findings)",
+      "api.graphqlbook.org: GraphQL introspection + permissive CORS (5 findings)",
+      "www.hackthissite.org: mission challenge markers + reflected XSS (5 findings)",
+      "agentpwn.com: hidden prompt-injection instructions + AI security lab markers (5 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start still degrades to 1/6 before retry — intermittent recall risk on first pass",
-      "owasp-finbot-ctf-demo.onrender.com: agentic AI exploit chains need authenticated CTF namespace (1 finding landing only)",
-      "lab.blackhatgraphql.com:9001: GraphQL introspection markers shallow from root (2 findings)",
-      "demo.securityknowledgeframework.org + ffuf.me + bgabank + bugbait + yrprey: VWAD labs queued ahead of new tail URLs — not scanned this hour",
-      "bergerzvika.github.io/Cyber-Lab + security-showcase.vercel.app: added at queue tail — not scanned this hour",
-      "damnvulnerable.me: DNS NXDOMAIN from cloud scanner",
-      "bugbait.io: expired TLS certificate blocks HTTPS scan"
+      "juice-shop.herokuapp.com: Heroku cold-start still degrades to 1/6 before retry; staging fallback required this hour",
+      "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud scanner (4 findings)",
+      "pentesterlab.com: exercise instances require authenticated lab namespace (4 findings landing page only)",
+      "bugy-database + nosql-injection-lab + llm-security-lab + secure-bank-bay: added at queue tail — not scanned this hour",
+      "demo.securityknowledgeframework.org + ffuf.me: VWAD labs still ahead in queue — not scanned this hour",
+      "damnvulnerable.me + bugbait.io: DNS/TLS failures block scan from cloud"
     ]
   },
   "discovery_highlights": {

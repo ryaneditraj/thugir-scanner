@@ -952,7 +952,32 @@
       "url": "https://aesthetic-bubblegum-cbc86d.netlify.app/",
       "source": "Aesthetic Bubblegum — intentionally vulnerable web security demo (Netlify OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bugy-database-cve-2024-53900.vercel.app/",
+      "source": "Gokul-Krishnan-V-R/CVE-2024-53900 — Mongoose NoSQL injection RCE CTF lab (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://nosql-injection-lab.vercel.app/",
+      "source": "NoSQL injection interactive training lab — MongoDB operator injection demos (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prototype-pollution-interactive-demo.netlify.app/",
+      "source": "Prototype pollution to XSS interactive security demo (Netlify OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://llm-security-lab.vercel.app/",
+      "source": "LLM security lab — prompt injection and AI app vulnerability training (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/",
+      "source": "Secure Bank Bay — intentionally vulnerable fintech/banking security training app (Vercel)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-10T16:10:00.000Z"
+  "updated_at": "2026-07-10T17:15:00.000Z"
 }
