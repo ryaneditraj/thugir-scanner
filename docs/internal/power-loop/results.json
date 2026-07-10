@@ -1,56 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-09T05:04:19.736Z",
-      "url": "https://ashimkoirala.github.io/HackLab/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 233,
-      "status": "ok",
-      "scanned_at": "2026-07-09T05:04:19.736Z"
-    },
-    {
       "run_id": "2026-07-09T05:04:21.052Z",
       "url": "https://vulnshop.vercel.app/",
       "auth": "oss_deploy",
@@ -7798,7 +7748,7 @@
       "scanned_at": "2026-07-10T08:24:17.953Z"
     },
     {
-      "run_id": "2026-07-10T09:02:03.954Z",
+      "run_id": "2026-07-10T09:02:10.547Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -7818,40 +7768,10 @@
       "pages_crawled": 1,
       "probes_run": 235,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:02:03.954Z"
+      "scanned_at": "2026-07-10T09:02:10.547Z"
     },
     {
-      "run_id": "2026-07-10T09:16:11.515Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 235,
-      "status": "ok",
-      "scanned_at": "2026-07-10T09:16:11.515Z"
-    },
-    {
-      "run_id": "2026-07-10T09:24:57.625Z",
+      "run_id": "2026-07-10T09:08:16.030Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -7871,10 +7791,10 @@
       "pages_crawled": 1,
       "probes_run": 235,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:24:57.625Z"
+      "scanned_at": "2026-07-10T09:08:16.030Z"
     },
     {
-      "run_id": "2026-07-10T09:31:45.380Z",
+      "run_id": "2026-07-10T09:16:20.575Z",
       "url": "https://juice-shop-staging.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -7936,33 +7856,10 @@
       "pages_crawled": 1,
       "probes_run": 226,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:31:45.380Z"
+      "scanned_at": "2026-07-10T09:16:20.575Z"
     },
     {
-      "run_id": "2026-07-10T09:33:44.867Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 235,
-      "status": "ok",
-      "scanned_at": "2026-07-10T09:33:44.867Z"
-    },
-    {
-      "run_id": "2026-07-10T09:58:05.696Z",
+      "run_id": "2026-07-10T09:18:03.089Z",
       "url": "https://securebank-blog.vercel.app/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -8009,10 +7906,10 @@
       "pages_crawled": 1,
       "probes_run": 234,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:05.696Z"
+      "scanned_at": "2026-07-10T09:18:03.089Z"
     },
     {
-      "run_id": "2026-07-10T09:58:07.418Z",
+      "run_id": "2026-07-10T09:18:04.647Z",
       "url": "https://hack-health-tutorial.vercel.app/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -8052,10 +7949,10 @@
       "pages_crawled": 6,
       "probes_run": 265,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:07.418Z"
+      "scanned_at": "2026-07-10T09:18:04.647Z"
     },
     {
-      "run_id": "2026-07-10T09:58:09.669Z",
+      "run_id": "2026-07-10T09:18:06.835Z",
       "url": "https://preview-zeroday-sec.vercel.app/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8088,10 +7985,10 @@
       "pages_crawled": 1,
       "probes_run": 238,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:09.669Z"
+      "scanned_at": "2026-07-10T09:18:06.835Z"
     },
     {
-      "run_id": "2026-07-10T09:58:10.895Z",
+      "run_id": "2026-07-10T09:18:08.278Z",
       "url": "https://chimera.atlascrew.dev/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8173,10 +8070,10 @@
       "pages_crawled": 6,
       "probes_run": 255,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:10.895Z"
+      "scanned_at": "2026-07-10T09:18:08.278Z"
     },
     {
-      "run_id": "2026-07-10T09:58:14.124Z",
+      "run_id": "2026-07-10T09:18:11.348Z",
       "url": "https://archon-eight.vercel.app/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -8223,10 +8120,125 @@
       "pages_crawled": 6,
       "probes_run": 263,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:14.124Z"
+      "scanned_at": "2026-07-10T09:18:11.348Z"
     },
     {
-      "run_id": "2026-07-10T09:58:42.003Z",
+      "run_id": "2026-07-10T09:18:16.703Z",
+      "url": "https://cybersec-demo.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 257,
+      "status": "ok",
+      "scanned_at": "2026-07-10T09:18:16.703Z"
+    },
+    {
+      "run_id": "2026-07-10T09:18:19.375Z",
+      "url": "https://ctb-pi.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": "supabase",
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 280,
+      "status": "ok",
+      "scanned_at": "2026-07-10T09:18:19.375Z"
+    },
+    {
+      "run_id": "2026-07-10T09:18:28.483Z",
+      "url": "https://vuln-portal.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-vuln-auth-portal-evidence",
+          "title": "Intentionally vulnerable auth portal terminal (VulnPortal-style)",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 238,
+      "status": "ok",
+      "scanned_at": "2026-07-10T09:18:28.483Z"
+    },
+    {
+      "run_id": "2026-07-10T10:01:17.321Z",
       "url": "https://yogsec.github.io/xss-labs/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -8273,10 +8285,10 @@
       "pages_crawled": 6,
       "probes_run": 239,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:42.003Z"
+      "scanned_at": "2026-07-10T10:01:17.321Z"
     },
     {
-      "run_id": "2026-07-10T09:58:43.147Z",
+      "run_id": "2026-07-10T10:01:18.436Z",
       "url": "https://ctf.hacker101.com/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -8309,10 +8321,10 @@
       "pages_crawled": 6,
       "probes_run": 259,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:43.147Z"
+      "scanned_at": "2026-07-10T10:01:18.436Z"
     },
     {
-      "run_id": "2026-07-10T09:58:55.409Z",
+      "run_id": "2026-07-10T10:01:28.370Z",
       "url": "https://ws.digi.ninja/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -8338,7 +8350,7 @@
       "pages_crawled": 1,
       "probes_run": 235,
       "status": "ok",
-      "scanned_at": "2026-07-10T09:58:55.409Z"
+      "scanned_at": "2026-07-10T10:01:28.370Z"
     }
   ],
   "teacher_delta_runs": [
@@ -8788,6 +8800,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T08:22:00.000Z"
+    },
+    {
+      "run_id": "2026-07-10T09:16:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1/6 misconfig-only; retry 1/6; staging fallback 6/6)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings",
+      "scanned_at": "2026-07-10T09:16:00.000Z"
     }
   ]
 }
