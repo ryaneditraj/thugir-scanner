@@ -6911,6 +6911,128 @@ const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Broken Crystals API security benchmark (brokencrystals.com) ----------------------
+const CLIENT_BROKENCRYSTALS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Vulnerable Crystal Marketplace hero",
+    re: /Your Vulnerable Crystal Marketplace|BROKEN CRYSTALS/i
+  },
+  {
+    label: "NeuraLegion brokencrystals repo",
+    re: /github\.com\/NeuraLegion\/brokencrystals|NeuraLegion\/brokencrystals/i
+  },
+  {
+    label: "SSRF goto API route",
+    re: /\/api\/goto\?url=|response_from_mechanic_api/i
+  },
+  {
+    label: "Dangerous HTML sink class",
+    re: /dangerous-html|bypassSecurityTrustHtml/i
+  },
+  {
+    label: "OWASP A01 access control lab",
+    re: /A01[\s_]*2021[\s-]*Broken_Access_Control|Vertical access controls/i
+  }
+];
+
+const clientSideBrokencrystalsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BROKENCRYSTALS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Broken Crystals|brokencrystals\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Broken Crystals is an intentional API/web security benchmark with SSRF, XSS, and access-control flaws"
+    }
+  };
+};
+
+// --- Sec Research Lab interactive training (secresearchlab.web.app) -------------------
+const CLIENT_SECRESEARCHLAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Sec Research Lab branding",
+    re: /Sec Research Lab|secresearchlab\.web\.app/i
+  },
+  {
+    label: "Interactive cybersecurity labs tagline",
+    re: /Interactive Cybersecurity Labs|Practice SQL injection, XSS/i
+  },
+  {
+    label: "SQL injection training module",
+    re: /SQL Injection[\s\S]{0,80}UNION attacks|\/labs\/sql-injection/i
+  },
+  {
+    label: "XSS playground module",
+    re: /XSS Playground|\/labs\/xss-playground/i
+  },
+  {
+    label: "OWASP Top 10 alignment",
+    re: /aligned with the\s*OWASP Top 10|OWASP Top 10/i
+  }
+];
+
+const clientSideSecResearchLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECRESEARCHLAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Sec Research Lab|secresearchlab\.web\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Sec Research Lab publishes browser-based SQLi, XSS, SSRF, and JWT training modules"
+    }
+  };
+};
+
+// --- OverTheWire Bandit beginner wargame (overthewire.org / bandit.labs) --------------
+const CLIENT_OVERTHEWIRE_BANDIT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Bandit absolute beginners wargame",
+    re: /Bandit wargame is aimed at absolute beginners|Bandit\s*-\s*Unix\/Linux basics/i
+  },
+  {
+    label: "Bandit SSH host and port",
+    re: /bandit\.labs\.overthewire\.org[\s\S]{0,40}port\s*2220|on port 2220/i
+  },
+  {
+    label: "Bandit level-0 credentials",
+    re: /Username:\s*bandit0[\s\S]{0,40}Password:\s*bandit0/i
+  },
+  {
+    label: "OverTheWire wargame hub",
+    re: /OverTheWire[\s\S]{0,40}Wargames|overthewire\.org\/wargames/i
+  }
+];
+
+const clientSideOverthewireBanditEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_BANDIT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Bandit|bandit\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OverTheWire Bandit wargame teaches Unix/Linux basics via SSH challenges on bandit.labs.overthewire.org:2220"
+    }
+  };
+};
+
 // --- Microsoft Sherpa MCP Security Summit workshop (azure-samples.github.io/sherpa) -
 const CLIENT_MCP_SHERPA_WORKSHOP_RES: { label: string; re: RegExp }[] = [
   {
@@ -7146,6 +7268,9 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   clientSideSecLabPlaygroundEvidence,
+  clientSideSecResearchLabEvidence,
+  clientSideBrokencrystalsEvidence,
+  clientSideOverthewireBanditEvidence,
   clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
