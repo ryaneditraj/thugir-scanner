@@ -88,11 +88,11 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Attackers bypass the UI entirely and read/write data via Supabase/API — total account takeover at scale.",
   "exposed-source-maps":
     "Unminified source reveals hidden admin routes, hardcoded secrets, and business logic flaws attackers chain into full breach.",
-  "vulnclaw-jwt-weak-claims":
+  "thugir-jwt-weak-claims":
     "Forged JWTs mint admin sessions — every account impersonated, data exfiltrated, and irreversible trust collapse.",
-  "vulnclaw-sensitive-js-endpoints":
+  "thugir-sensitive-js-endpoints":
     "Hidden admin and debug APIs are hit first — faster full compromise before you can patch or rotate credentials.",
-  "vulnclaw-dir-discovery":
+  "thugir-dir-discovery":
     "Exposed actuator/swagger/.git paths hand attackers live config, credentials, and a roadmap to RCE.",
   "reflexion-escalated-xss":
     "WAF-bypass XSS steals every logged-in session — mass account takeover and fraudulent actions as victims.",

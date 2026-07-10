@@ -1,6 +1,7 @@
 import { getServiceSupabase } from "@/lib/supabase/server";
 import { IS_DEV_MODE } from "@/lib/devmode";
 import { STATIC_PATTERNS } from "@/lib/patterns";
+import { agentAvailability } from "@/lib/agent";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,8 @@ export default async function AdminOverview() {
     supabaseOk = false;
   }
 
+  const agent = agentAvailability();
+
   const health: [string, "ok" | "warn" | "bad", string][] = [
     [
       "Supabase",
@@ -67,6 +70,11 @@ export default async function AdminOverview() {
       "AI analyst",
       envStatus("OPENROUTER_API_KEY") === "ok" ? "ok" : "warn",
       process.env.OPENROUTER_API_KEY ? "OpenRouter ready" : "Optional — scans work without it"
+    ],
+    [
+      "Agent engine",
+      agent.available ? "ok" : "warn",
+      agent.available ? `Python ready (${agent.python})` : agent.reason || "Optional — local/worker only"
     ]
   ];
 

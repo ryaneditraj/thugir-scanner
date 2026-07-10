@@ -20,6 +20,7 @@ thugir-scanner/
 │                  all API routes, and SEO/marketing pages.
 ├── worker/        Python (FastAPI) → deploys to Render/Fly.
 │                  Deep Scan executor. Imports the thugir-node engine with hard caps.
+├── services/thugir-agent/  Thugir Agent Engine (Python AI pentester, optional).
 ├── supabase/      SQL migrations (0001–0006) + optional pattern seed.
 ├── docs/
 │   ├── internal/  architecture, pattern-library spec, admin runbook, incident
@@ -132,11 +133,14 @@ or point `THUGIR_ENGINE_ROOT` at a local checkout. The **free tier does not need
 
 | Doc | Purpose |
 |---|---|
+| **[everything.md](everything.md)** | **Complete A–Z reference for everything implemented** |
+| **[docs/HACKATHON_GUIDE.md](docs/HACKATHON_GUIDE.md)** | Quick hackathon demo guide |
 | [docs/internal/dev-setup.md](docs/internal/dev-setup.md) | Local development from scratch |
 | [docs/internal/environment-variables.md](docs/internal/environment-variables.md) | Every environment variable |
 | [docs/internal/architecture.md](docs/internal/architecture.md) | System architecture & data flow |
 | [docs/internal/pattern-library-spec.md](docs/internal/pattern-library-spec.md) | How patterns are authored |
 | [docs/internal/admin-runbook.md](docs/internal/admin-runbook.md) | Operating the admin panel |
+| [docs/internal/agent-engine.md](docs/internal/agent-engine.md) | Thugir Agent Engine integration |
 | [docs/internal/incident-response.md](docs/internal/incident-response.md) | Incident response |
 | [docs/internal/MOAT_AND_ROADMAP.md](docs/internal/MOAT_AND_ROADMAP.md) | Product moat & roadmap |
 | [docs/internal/decisions.md](docs/internal/decisions.md) | Architecture decision log |

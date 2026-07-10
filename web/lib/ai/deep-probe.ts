@@ -11,7 +11,7 @@ import {
   WEB_SCANNER_SYSTEM_PREFIX,
   REFLEXION_PROMPT,
   loadCoreOracleSummaries,
-  loadVulnClawOracleSummaries
+  loadAgentOracleSummaries
 } from "../methodology";
 
 export interface DeepProbeContext {
@@ -35,7 +35,7 @@ interface AiDeepHit {
 
 const ORACLE_CONTEXT = `${loadCoreOracleSummaries(2200)}
 
-${loadVulnClawOracleSummaries(1800)}
+${loadAgentOracleSummaries(1800)}
 
 ${REFLEXION_PROMPT}`;
 

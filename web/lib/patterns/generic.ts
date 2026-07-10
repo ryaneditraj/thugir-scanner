@@ -1806,7 +1806,7 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "vulnclaw-jwt-weak-claims",
+    slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",
     severityDefault: "high",
@@ -1815,7 +1815,7 @@ export const genericPatterns: Pattern[] = [
       "A JSON Web Token was found in client-side code with alg=none/empty or missing exp/iss/aud claims — tokens may be forgeable or never expire.",
     impactOneline: "Weak JWTs in the browser enable session forgery and privilege escalation.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "vulnclawJwtClaims" },
+    detectorConfig: { rule: "thugirJwtClaims" },
     tierRequired: "free",
     remediation: {
       summary: "Never ship JWTs to the client; enforce alg, exp, iss, and aud server-side.",
@@ -1831,7 +1831,7 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "vulnclaw-sensitive-js-endpoints",
+    slug: "thugir-sensitive-js-endpoints",
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "medium",
@@ -1840,7 +1840,7 @@ export const genericPatterns: Pattern[] = [
       "The shipped JavaScript references admin, debug, graphql, or token-related API paths useful for unauthorized probing.",
     impactOneline: "Attackers map hidden endpoints from your bundle before you patch them.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "vulnclawJsEndpoints" },
+    detectorConfig: { rule: "thugirJsEndpoints" },
     tierRequired: "free",
     remediation: {
       summary: "Remove internal endpoint documentation from client bundles.",
@@ -1856,7 +1856,7 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "vulnclaw-dir-discovery",
+    slug: "thugir-dir-discovery",
     platform: "generic",
     category: "Security misconfiguration",
     severityDefault: "high",
@@ -1865,7 +1865,7 @@ export const genericPatterns: Pattern[] = [
       "Active directory enumeration found exposed admin, actuator, swagger, .git, or debug paths responding on the origin.",
     impactOneline: "Hidden admin and debug surfaces give attackers a direct map to compromise.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "vulnclawDirEnum" },
+    detectorConfig: { rule: "thugirDirEnum" },
     tierRequired: "deep",
     remediation: {
       summary: "Remove or authenticate sensitive paths; disable directory listings.",
@@ -1887,7 +1887,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Reflected XSS confirmed via encoding escalation probe",
     description:
-      "A unique XSS canary was reflected after WAF-bypass encoding escalation (VulnClaw reflexion L0–L3).",
+      "A unique XSS canary was reflected after WAF-bypass encoding escalation (Thugir reflexion L0–L3).",
     impactOneline: "XSS that survives encoding filters still steals sessions and performs actions as victims.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "reflexionEscalatedXss" },

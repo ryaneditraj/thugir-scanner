@@ -1,5 +1,5 @@
 /**
- * Lightweight blackboard — Fact/Intent tracking ported from VulnClaw solver.
+ * Lightweight blackboard — Fact/Intent tracking for probe memory.
  * Prevents probe loops: once a path is concluded, don't re-probe it.
  */
 
