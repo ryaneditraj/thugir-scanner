@@ -30,6 +30,8 @@ docs/internal/security-skills/
 Loader: `web/lib/methodology/skills.ts`  
 Methodology: `web/lib/methodology/` (3-gate, severity triage, coverage)
 
+**Agent engine (VulnClaw):** `services/vulnclaw/` — full AI pentest agent. See `docs/internal/vulnclaw-integration.md`.
+
 ---
 
 ## Create automations

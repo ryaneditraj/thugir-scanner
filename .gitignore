@@ -31,9 +31,11 @@ worker/.venv/
 worker/venv/
 .venv/
 
-# ---- local runtime data ----
-.data/
-web/.data/
+# ---- VulnClaw agent runtime ----
+services/vulnclaw/.thugir-runs/
+services/vulnclaw/.thugir-config/
+services/vulnclaw/**/__pycache__/
+
 
 # ---- engine submodule build artifacts (if vendored at engine/) ----
 engine/**/__pycache__/
