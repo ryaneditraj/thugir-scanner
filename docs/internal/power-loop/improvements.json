@@ -1043,6 +1043,24 @@
       "slug": "client-side-damn-vulnerable-bank-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: intentionally vulnerable android application + REST API vulnerabilities exploit module; extractDamnVulnerableBankSeeds; rewanthtammana.com/damn-vulnerable-bank findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VulnLab Academy + <!-- SECRET: staging_admin_password=admin123 --> + /labs/xss-reflected.html innerHTML sink; extractVulnLabAcademySeeds; hack-this-site-eta.vercel.app findings 10→12; benchmark 8 findings 6/6"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "client-side-vulnerable-web-site-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title Vulnerable Web Site + meta Sample application for testing vulnerabilities; vulnerable-web-site.vercel.app findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cybersec-demo.vercel.app",
+      "slug": "client-side-nivara-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Nivara — Security Assessment Platform + Automated external security assessments + nivara-theme localStorage; cybersec-demo.vercel.app findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1910,6 +1928,21 @@
       "source": "discovery:rewanthtammana.com/damn-vulnerable-bank",
       "slug": "client-side-damn-vulnerable-bank-evidence",
       "shipped_at": "2026-07-10T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-academy-evidence",
+      "shipped_at": "2026-07-10T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "client-side-vulnerable-web-site-evidence",
+      "shipped_at": "2026-07-10T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:cybersec-demo.vercel.app",
+      "slug": "client-side-nivara-security-evidence",
+      "shipped_at": "2026-07-10T12:10:00.000Z"
     }
   ]
 }
