@@ -97,12 +97,39 @@ function isJuiceShopHost(url: string): boolean {
   }
 }
 
+const JUICE_SHOP_API_HEALTH_PATHS = [
+  "/rest/admin/application-configuration",
+  "/rest/products/search?q=warmup"
+];
+
+/** True when Juice Shop REST API responds (not Heroku Application Error stub). */
+async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
+  for (const p of JUICE_SHOP_API_HEALTH_PATHS) {
+    try {
+      const doc = await fetchDoc(new URL(p, pageUrl).toString(), {
+        timeoutMs: 12000,
+        maxBytes: 4096
+      });
+      if (doc.status < 200 || doc.status >= 500 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
+      if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
+      if (p.includes("search") && (/"products"|"data"\s*:/i.test(doc.body) || doc.status === 200))
+        return true;
+    } catch {
+      /* ignore */
+    }
+  }
+  return false;
+}
+
 /** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
 async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
   if (!isJuiceShopHost(targetUrl) && !isJuiceShopHost(home.finalUrl)) return home;
   let best = home;
-  for (let attempt = 0; attempt < 3; attempt++) {
-    if (!HEROKU_APP_ERROR_RE.test(best.body) && /main\.js/i.test(best.body)) break;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const pageReady =
+      !HEROKU_APP_ERROR_RE.test(best.body) &&
+      (/main\.js/i.test(best.body) || (await juiceShopApiLive(best.finalUrl || targetUrl)));
+    if (pageReady) break;
     await new Promise((r) => setTimeout(r, 3500));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
       timeoutMs: 18000,
@@ -453,6 +480,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideAtlasCrewEdgeProtectionEvidence",
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
+  "clientSideSecLabPlaygroundEvidence",
+  "clientSideMcpSherpaWorkshopEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1346,6 +1375,45 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** SecLab (securityweb-iota.vercel.app) — seed XSS/SQLi/CSRF/IDOR lab routes. */
+function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
+  if (!/SecLab|Web Vulnerability Playground/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/xss", "/sqli", "/csrf", "/idor"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Microsoft Sherpa MCP Security Summit workshop — seed camp routes. */
+function extractMcpSherpaWorkshopSeeds(html: string, pageUrl: string): string[] {
+  if (!/MCP Security Summit Workshop|azure-samples\.github\.io\/sherpa/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/camps/camp1-auth/",
+    "/camps/camp2-gateway/",
+    "/camps/camp3-io-security/",
+    "/camps/camp4-red-team/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** FFUF.me — seed fuzzing practice lab pages. */
 function extractFfufMeSeeds(html: string, pageUrl: string): string[] {
   if (!/FFUF\.me|ffuf\.me|practice and improve your ffuf/i.test(html)) return [];
@@ -1990,6 +2058,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const mlastgSeeds = extractMlastgMkdocsSeeds(home.body, home.finalUrl);
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
+  const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
+  const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
   const pwnCollegeSeeds = extractPwnCollegeSeeds(home.body, home.finalUrl);
@@ -2056,6 +2126,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...mlastgSeeds,
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
+      ...seclabPlaygroundSeeds,
+      ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
       ...bergerCyberLabSeeds,
       ...pwnCollegeSeeds,

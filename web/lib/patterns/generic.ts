@@ -3390,5 +3390,57 @@ export const genericPatterns: Pattern[] = [
       "We host a public Reef MCP registry demo with MCP-RCE-26.04 attack packs. Show how to auth-gate the demo API and isolate control-plane endpoints.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-seclab-playground-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SecLab web vulnerability playground disclosed",
+    description:
+      "SecLab advertises hands-on XSS, SQL injection, CSRF, and IDOR demos with CWE-tagged vulnerability lab cards.",
+    impactOneline:
+      "Public SecLab instances expose intentionally vulnerable web security training surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecLabPlaygroundEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate SecLab demos behind auth; training labs must stay isolated from production.",
+      steps: [
+        "Require authentication before serving /xss, /sqli, /csrf, and /idor lab routes.",
+        "Run SecLab on dedicated infrastructure with no production data.",
+        "Monitor lab egress for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host SecLab-style XSS/SQLi/CSRF/IDOR vulnerability playgrounds. Show how to gate labs behind auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-mcp-sherpa-workshop-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Microsoft Sherpa MCP security workshop disclosed",
+    description:
+      "Sherpa MCP Security Summit workshop documents intentionally vulnerable MCP servers, prompt-injection defense, and OWASP MCP Azure security camps.",
+    impactOneline:
+      "Public MCP security workshop catalogs exploit→fix methodology and vulnerable MCP server camps attackers can enumerate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMcpSherpaWorkshopEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Sherpa workshop MCP servers on isolated Azure sandboxes; camps are intentional but need auth.",
+      steps: [
+        "Require Entra ID authentication on workshop MCP endpoints.",
+        "Do not expose camp vulnerable servers without network isolation.",
+        "Apply Azure AI Content Safety on all MCP I/O paths."
+      ]
+    },
+    fixPrompt:
+      "We host a public Sherpa MCP Security Summit workshop with intentionally vulnerable MCP camps. Show how to auth-gate and isolate camp servers.",
+    version: 1,
+    enabled: true
   }
 ];
