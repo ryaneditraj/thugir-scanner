@@ -2,16 +2,16 @@ import { existsSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import type { VulnClawAvailability, VulnClawScanRequest, VulnClawScanResult } from "./types";
+import type { AgentAvailability, AgentScanRequest, AgentScanResult } from "./types";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dir, "../../..");
-const VULNCLAW_ROOT = join(REPO_ROOT, "services/vulnclaw");
-const RUNNER = join(VULNCLAW_ROOT, "thugir_runner.py");
+const AGENT_ROOT = join(REPO_ROOT, "services/thugir-agent");
+const RUNNER = join(AGENT_ROOT, "thugir_runner.py");
 
 function findPython(): string | null {
   const candidates = [
-    process.env.VULNCLAW_PYTHON,
+    process.env.THUGIR_AGENT_PYTHON,
     process.env.PYTHON,
     "python3",
     "python"
@@ -24,54 +24,54 @@ function findPython(): string | null {
   return null;
 }
 
-/** Check if VulnClaw agent engine can run in this environment. */
-export function vulnClawAvailability(): VulnClawAvailability {
+/** Check if the Thugir Agent Engine can run in this environment. */
+export function agentAvailability(): AgentAvailability {
   const python = findPython();
   if (!python) {
-    return { available: false, reason: "Python 3.10+ not found (set VULNCLAW_PYTHON)" };
+    return { available: false, reason: "Python 3.10+ not found (set THUGIR_AGENT_PYTHON)" };
   }
   if (!existsSync(RUNNER)) {
     return { available: false, python, reason: `Missing runner at ${RUNNER}` };
   }
-  if (!existsSync(join(VULNCLAW_ROOT, "vulnclaw"))) {
-    return { available: false, python, reason: "VulnClaw package not vendored" };
+  if (!existsSync(join(AGENT_ROOT, "vulnclaw"))) {
+    return { available: false, python, reason: "Thugir Agent Engine package not installed" };
   }
   return { available: true, python, runner: RUNNER };
 }
 
-/** Run VulnClaw headless agent scan. Requires local Python + LLM API key. */
-export function runVulnClawScan(req: VulnClawScanRequest): VulnClawScanResult {
-  const avail = vulnClawAvailability();
+/** Run a headless Thugir Agent Engine scan. Requires local Python + LLM API key. */
+export function runAgentScan(req: AgentScanRequest): AgentScanResult {
+  const avail = agentAvailability();
   if (!avail.available || !avail.python) {
-    return { ok: false, error: avail.reason || "VulnClaw unavailable" };
+    return { ok: false, error: avail.reason || "Thugir Agent Engine unavailable" };
   }
 
-  const payload: VulnClawScanRequest = {
+  const payload: AgentScanRequest = {
     scan_mode: "quick",
     timeout_seconds: 600,
     ...req,
     api_key:
       req.api_key ||
-      process.env.VULNCLAW_LLM_API_KEY ||
+      process.env.THUGIR_AGENT_LLM_API_KEY ||
       process.env.OPENAI_API_KEY ||
       process.env.ANTHROPIC_API_KEY,
-    base_url: req.base_url || process.env.VULNCLAW_LLM_BASE_URL || process.env.OPENAI_BASE_URL,
-    model: req.model || process.env.VULNCLAW_LLM_MODEL,
-    provider: req.provider || process.env.VULNCLAW_LLM_PROVIDER || "openai"
+    base_url: req.base_url || process.env.THUGIR_AGENT_LLM_BASE_URL || process.env.OPENAI_BASE_URL,
+    model: req.model || process.env.THUGIR_AGENT_LLM_MODEL,
+    provider: req.provider || process.env.THUGIR_AGENT_LLM_PROVIDER || "openai"
   };
 
   const timeoutMs = (payload.timeout_seconds || 600) * 1000 + 30_000;
 
   const proc = spawnSync(avail.python, [RUNNER], {
-    cwd: VULNCLAW_ROOT,
+    cwd: AGENT_ROOT,
     input: JSON.stringify(payload),
     encoding: "utf8",
     timeout: timeoutMs,
     env: {
       ...process.env,
-      PYTHONPATH: VULNCLAW_ROOT,
-      VULNCLAW_CONFIG_DIR: join(VULNCLAW_ROOT, ".thugir-config"),
-      VULNCLAW_RUNS_DIR: join(VULNCLAW_ROOT, ".thugir-runs")
+      PYTHONPATH: AGENT_ROOT,
+      VULNCLAW_CONFIG_DIR: join(AGENT_ROOT, ".thugir-config"),
+      VULNCLAW_RUNS_DIR: join(AGENT_ROOT, ".thugir-runs")
     }
   });
 
@@ -90,7 +90,7 @@ export function runVulnClawScan(req: VulnClawScanRequest): VulnClawScanResult {
   }
 
   try {
-    return JSON.parse(stdout) as VulnClawScanResult;
+    return JSON.parse(stdout) as AgentScanResult;
   } catch {
     return {
       ok: false,
@@ -101,4 +101,4 @@ export function runVulnClawScan(req: VulnClawScanRequest): VulnClawScanResult {
   }
 }
 
-export const VULNCLAW_ROOT_PATH = VULNCLAW_ROOT;
+export const AGENT_ROOT_PATH = AGENT_ROOT;

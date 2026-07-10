@@ -6,13 +6,13 @@
 // they exist so the worker / future deep flow can share the same registry keys.
 
 import {
-  vulnclawJwtClaims,
-  vulnclawJsEndpoints,
-  vulnclawDirEnum,
+  thugirJwtClaims,
+  thugirJsEndpoints,
+  thugirDirEnum,
   reflexionEscalatedXss,
   reflexionEscalatedSqli,
   reflexionEscalatedSsti
-} from "./vulnclaw-power";
+} from "./agent-power";
 import { looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import {
@@ -4892,9 +4892,9 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterLabEvidence,
   clientSideHackThisSiteEvidence,
   openApiDebugPasswordExposure,
-  vulnclawJwtClaims,
-  vulnclawJsEndpoints,
-  vulnclawDirEnum,
+  thugirJwtClaims,
+  thugirJsEndpoints,
+  thugirDirEnum,
   reflexionEscalatedXss,
   reflexionEscalatedSqli,
   reflexionEscalatedSsti
@@ -4914,8 +4914,8 @@ export const FREE_RULES = new Set([
   "permissiveCors",
   "corsReflectOrigin",
   "openRedirect",
-  "vulnclawJwtClaims",
-  "vulnclawJsEndpoints",
+  "thugirJwtClaims",
+  "thugirJsEndpoints",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass

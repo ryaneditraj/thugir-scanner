@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { runVulnClawScan, vulnClawAvailability, mapVulnClawFindings } from "@/lib/vulnclaw";
+import { runAgentScan, agentAvailability, mapAgentFindings } from "@/lib/agent";
 import { IS_DEV_MODE } from "@/lib/devmode";
 import { loadSettings } from "@/lib/settings/store";
 
@@ -10,7 +10,7 @@ export const maxDuration = 300;
  * POST /api/scan/agent
  * { url, scan_mode?: "quick"|"standard"|"deep", command?: string }
  *
- * Runs the vendored VulnClaw AI agent (Python). Requires Python + LLM API key
+ * Runs the Thugir Agent Engine (Python). Requires Python + LLM API key
  * on the host — not available on serverless Vercel without a worker.
  */
 export async function POST(req: NextRequest) {
@@ -19,13 +19,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Scanning is temporarily unavailable." }, { status: 503 });
   }
 
-  const avail = vulnClawAvailability();
+  const avail = agentAvailability();
   if (!avail.available) {
     return NextResponse.json(
       {
         error: "agent_unavailable",
         reason: avail.reason,
-        hint: "Install Python 3.10+, pip install -r services/vulnclaw/requirements.txt, set VULNCLAW_LLM_API_KEY"
+        hint: "Install Python 3.10+, pip install -r services/thugir-agent/requirements.txt, set THUGIR_AGENT_LLM_API_KEY"
       },
       { status: 503 }
     );
@@ -42,18 +42,17 @@ export async function POST(req: NextRequest) {
 
   const scanMode = body.scan_mode === "deep" || body.scan_mode === "standard" ? body.scan_mode : "quick";
 
-  // Agent scans are deep-tier / dev / automation only — expensive + long-running
   if (!IS_DEV_MODE && process.env.THUGIR_AGENT_SCAN_ENABLED !== "1") {
     return NextResponse.json(
       {
         error: "agent_disabled",
-        hint: "Set THUGIR_AGENT_SCAN_ENABLED=1 on a worker with Python, or use power-scan --vulnclaw locally"
+        hint: "Set THUGIR_AGENT_SCAN_ENABLED=1 on a worker with Python, or use power-scan --agent locally"
       },
       { status: 403 }
     );
   }
 
-  const result = runVulnClawScan({
+  const result = runAgentScan({
     url: body.url,
     scan_mode: scanMode,
     command: body.command
@@ -66,10 +65,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const findings = mapVulnClawFindings(result.findings || [], body.url);
+  const findings = mapAgentFindings(result.findings || [], body.url);
 
   return NextResponse.json({
-    engine: "vulnclaw",
+    engine: "thugir-agent",
     target: result.target,
     scan_mode: result.scan_mode,
     exit_code: result.exit_code,
@@ -83,10 +82,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  const avail = vulnClawAvailability();
+  const avail = agentAvailability();
   return NextResponse.json({
-    engine: "vulnclaw",
-    version: "0.3.3",
+    engine: "thugir-agent",
     ...avail
   });
 }

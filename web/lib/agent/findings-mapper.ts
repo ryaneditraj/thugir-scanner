@@ -1,5 +1,5 @@
 import type { PatternFinding, Severity } from "../patterns/types";
-import type { VulnClawFinding } from "./types";
+import type { AgentFinding } from "./types";
 
 const SEV_MAP: Record<string, Severity> = {
   critical: "critical",
@@ -16,18 +16,15 @@ function normSeverity(raw?: string): Severity {
 }
 
 function slugFromTitle(title: string): string {
-  return `vulnclaw-${title
+  return `thugir-agent-${title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .slice(0, 48)
     .replace(/-$/, "")}`;
 }
 
-/** Map VulnClaw agent findings into Thugir PatternFinding shape. */
-export function mapVulnClawFindings(
-  findings: VulnClawFinding[],
-  target: string
-): PatternFinding[] {
+/** Map Thugir Agent Engine findings into PatternFinding shape. */
+export function mapAgentFindings(findings: AgentFinding[], target: string): PatternFinding[] {
   const out: PatternFinding[] = [];
 
   for (const f of findings) {
@@ -49,12 +46,12 @@ export function mapVulnClawFindings(
       title,
       tierRequired: "deep",
       impactOneline: verified
-        ? "Verified by VulnClaw agent with tool evidence."
-        : "Candidate finding from VulnClaw agent — needs review.",
+        ? "Verified by Thugir Agent Engine with tool evidence."
+        : "Candidate finding from Thugir Agent Engine — needs review.",
       evidence: {
         quote: evidence.slice(0, 500),
         location: (f.location as string) || target,
-        agent: "vulnclaw",
+        agent: "thugir-agent",
         verified,
         verification_status: f.verification_status || "pending",
         description: (f.description as string) || title

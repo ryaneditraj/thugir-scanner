@@ -1,5 +1,5 @@
 /**
- * Evidence anti-hallucination gate — ported from VulnClaw solver evidence checks.
+ * Evidence anti-hallucination gate — claims must appear verbatim in tool output.
  * Claims (flags, secrets, exploit proof) must appear verbatim in tool output.
  */
 
