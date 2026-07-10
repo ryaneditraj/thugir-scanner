@@ -6831,6 +6831,90 @@ const clientSideMcpSupplyChainEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- SecLab web vulnerability playground (securityweb-iota.vercel.app) --------------
+const CLIENT_SECLAB_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SecLab vulnerability playground title",
+    re: /SecLab[\s\S]{0,40}Web Vulnerability Playground/i
+  },
+  {
+    label: "XSS SQLi CSRF IDOR lab catalog",
+    re: /Learn XSS, SQL Injection, CSRF, and IDOR/i
+  },
+  {
+    label: "Educational security lab hero",
+    re: /Educational Security Lab|Break it\.[\s\S]{0,60}Understand it/i
+  },
+  {
+    label: "CWE vulnerability lab cards",
+    re: /CWE-79[\s\S]{0,160}CWE-89|CWE-352[\s\S]{0,120}CWE-639/i
+  },
+  {
+    label: "SecLab XSS lab route",
+    re: /href\s*=\s*["']\/xss["']|id:\s*"xss"[\s\S]{0,40}Cross-Site Scripting/i
+  }
+];
+
+const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECLAB_PLAYGROUND_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/SecLab|securityweb-iota\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SecLab publishes hands-on XSS, SQLi, CSRF, and IDOR vulnerability demos with CWE-tagged lab cards"
+    }
+  };
+};
+
+// --- Microsoft Sherpa MCP Security Summit workshop (azure-samples.github.io/sherpa) -
+const CLIENT_MCP_SHERPA_WORKSHOP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "MCP Security Summit Workshop",
+    re: /MCP Security Summit Workshop/i
+  },
+  {
+    label: "Intentionally vulnerable MCP servers",
+    re: /intentionally vulnerable servers|Exploit intentionally vulnerable/i
+  },
+  {
+    label: "Prompt injection defense camp",
+    re: /Prompt injection defense|Camp 3:\s*I\/O Security/i
+  },
+  {
+    label: "OWASP MCP Azure Security Guide",
+    re: /OWASP MCP Azure Security Guide|mcp-azure-security-guide/i
+  },
+  {
+    label: "Vulnerable exploit fix validate methodology",
+    re: /vulnerable\s*(?:&rarr;|→)\s*exploit\s*(?:&rarr;|→)\s*fix|vulnerable → exploit → fix/i
+  }
+];
+
+const clientSideMcpSherpaWorkshopEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MCP_SHERPA_WORKSHOP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/MCP Security Summit|azure-samples\.github\.io\/sherpa/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Microsoft Sherpa workshop documents intentionally vulnerable MCP servers, prompt-injection defense, and OWASP MCP Azure security camps"
+    }
+  };
+};
+
 // --- OWASP Vulnerable Web Applications Directory (vwad.owasp.org) -----------------
 const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
   {
@@ -7022,6 +7106,8 @@ export const RULES: Record<string, Rule> = {
   clientSideAtlasCrewHubEvidence,
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
+  clientSideSecLabPlaygroundEvidence,
+  clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
