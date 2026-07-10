@@ -3078,5 +3078,57 @@ export const genericPatterns: Pattern[] = [
       "We host OverTheWire Natas-style web security wargames. Show how to isolate challenge VMs from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-ffufme-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "FFUF.me fuzzing practice lab disclosed",
+    description:
+      "FFUF.me advertises a live playground to practice ffuf directory, parameter, and vhost fuzzing against intentional targets.",
+    impactOneline:
+      "Public FFUF.me instances document web fuzzing exploit training surfaces for directory and parameter discovery practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFfufMeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FFUF.me is intentional training — isolate fuzzing practice infrastructure from production networks.",
+      steps: [
+        "Require authentication before serving fuzzing practice targets.",
+        "Do not reuse FFUF.me discovery patterns against production without authorization.",
+        "Rate-limit unauthenticated fuzzing lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host FFUF.me-style fuzzing practice labs. Show how to isolate training targets from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-yrprey-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "YRprey vulnerability testing framework disclosed",
+    description:
+      "YRprey advertises a deliberate vulnerability testing framework for security professionals and pentesters.",
+    impactOneline:
+      "Public YRprey instances document intentional security flaw training surfaces for vulnerability identification practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideYrpreyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "YRprey is intentional training — isolate vulnerability testing frameworks from production networks.",
+      steps: [
+        "Require authentication before serving the testing framework.",
+        "Do not deploy YRprey-style intentional flaws in production environments.",
+        "Rate-limit unauthenticated framework enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host YRprey-style vulnerability testing frameworks. Show how to isolate training apps from production.",
+    version: 1,
+    enabled: true
   }
 ];

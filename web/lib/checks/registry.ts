@@ -6371,6 +6371,74 @@ const clientSideOverthewireNatasEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- FFUF.me fuzzing practice lab (ffuf.me) -------------------------------------------
+const CLIENT_FFUFME_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "FFUF target practice playground",
+    re: /FFUF\.Me is a live playground to practice and improve your ffuf usage|For FFUF Target Practice/i
+  },
+  {
+    label: "FFUF.me fuzzing lab routes",
+    re: /href\s*=\s*["']\/cd\/(?:basic|recursion|param|no404)/i
+  },
+  {
+    label: "adamtlangley ffufme source",
+    re: /github\.com\/adamtlangley\/ffufme|adamtlangley\/ffufme/i
+  }
+];
+
+const clientSideFfufMeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FFUFME_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/FFUF\.me|ffuf\.me/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "FFUF.me hosts live ffuf fuzzing practice targets for directory, parameter, and vhost discovery drills"
+    }
+  };
+};
+
+// --- YRprey vulnerability testing framework (yrprey.com) ------------------------------
+const CLIENT_YRPREY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "YRprey deliberate vulnerability framework",
+    re: /YRprey is a testing ground dedicated to security professionals|deliberately contains various vulnerabilities and security flaws/i
+  },
+  {
+    label: "Framework for practicing security vulnerabilities",
+    re: /Groundbreaking Framework For Practicing Security Vulnerabilities|ultimate playground for security enthusiasts/i
+  },
+  {
+    label: "YRprey GitHub training repos",
+    re: /github\.com\/yrprey\/yrprey-(?:frontend|backend|application)/i
+  }
+];
+
+const clientSideYrpreyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_YRPREY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/YRprey|yrprey\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "YRprey publishes an intentional vulnerability testing framework for security training and pentest practice"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -6504,6 +6572,8 @@ export const RULES: Record<string, Rule> = {
   clientSideMlastgEvidence,
   clientSideCryptohackEvidence,
   clientSideOverthewireNatasEvidence,
+  clientSideFfufMeEvidence,
+  clientSideYrpreyEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
