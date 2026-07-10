@@ -1002,7 +1002,32 @@
       "url": "https://vwad.owasp.org/",
       "source": "OWASP Vulnerable Web Applications Directory — public registry of intentionally vulnerable training apps",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://insecure-app.vercel.app/",
+      "source": "Insecure App — intentionally vulnerable Next.js OWASP Top 10 training demo (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/",
+      "source": "OWASP GenAI Security Lab — interactive LLM Top 10 lessons with vulnerability demos (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-graphql-demo.railway.app/",
+      "source": "Damn Vulnerable GraphQL Application — public Railway demo instance (VWAD)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://hackazon.webscantest.com/",
+      "source": "Rapid7 Hackazon — InsightAppSec DAST demo e-commerce vuln benchmark (Rapid7 docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.onrender.com/",
+      "source": "OWASP WrongSecrets — secrets-management CTF on Render.io (GitHub README public demo)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T18:15:00.000Z"
+  "updated_at": "2026-07-10T19:15:00.000Z"
 }
