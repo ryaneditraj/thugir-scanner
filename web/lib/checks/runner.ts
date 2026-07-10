@@ -99,7 +99,8 @@ function isJuiceShopHost(url: string): boolean {
 
 const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/admin/application-configuration",
-  "/rest/products/search?q=warmup"
+  "/rest/products/search?q=warmup",
+  "/rest/products/search?q='))"
 ];
 
 /** True when Juice Shop REST API responds (not Heroku Application Error stub). */
@@ -112,6 +113,7 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
       });
       if (doc.status < 200 || doc.status >= 500 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
+      if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return true;
       if (p.includes("search") && (/"products"|"data"\s*:/i.test(doc.body) || doc.status === 200))
         return true;
     } catch {
@@ -482,6 +484,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
   "clientSideSecLabPlaygroundEvidence",
+  "clientSideSecResearchLabEvidence",
+  "clientSideBrokencrystalsEvidence",
+  "clientSideOverthewireBanditEvidence",
   "clientSideMcpSherpaWorkshopEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
@@ -1384,6 +1389,31 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   if (/natas\.labs\.overthewire\.org|Username:\s*natas0/i.test(html)) {
     out.add("http://natas0.natas.labs.overthewire.org/");
   }
+  if (/bandit\.labs\.overthewire\.org|Username:\s*bandit0/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/bandit/bandit0.html");
+  }
+  return [...out];
+}
+
+/** Sec Research Lab (secresearchlab.web.app) — seed interactive lab routes. */
+function extractSecResearchLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/Sec Research Lab|secresearchlab\.web\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/labs/",
+    "/labs/sql-injection/",
+    "/labs/xss-playground/",
+    "/labs/ssrf-lab/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
   return [...out];
 }
 
@@ -2107,6 +2137,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const webgoatSeeds = extractWebgoatDocSeeds(home.body, home.finalUrl);
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
+  const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -2176,6 +2207,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...overthewireNatasSeeds,
       ...webgoatSeeds,
       ...seclabPlaygroundSeeds,
+      ...secResearchLabSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
       ...bergerCyberLabSeeds,

@@ -3468,5 +3468,83 @@ export const genericPatterns: Pattern[] = [
       "We host a public Sherpa MCP Security Summit workshop with intentionally vulnerable MCP camps. Show how to auth-gate and isolate camp servers.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-brokencrystals-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals intentionally vulnerable API lab disclosed",
+    description:
+      "Broken Crystals (NeuraLegion) advertises a vulnerable crystal marketplace with OWASP API Top 10 flaws, SSRF /api/goto, and dangerous HTML sinks.",
+    impactOneline:
+      "Public Broken Crystals instances expose scanner-benchmark API routes, GraphQL, and client-side XSS training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBrokencrystalsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Broken Crystals is an intentional API security benchmark — never deploy similar patterns to production.",
+      steps: [
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure.",
+        "Do not expose /api/goto SSRF or unauthenticated admin routes in production.",
+        "Remove dangerous-html sinks and client-side secret storage from production bundles."
+      ]
+    },
+    fixPrompt:
+      "We host a Broken Crystals-style API security benchmark. Show how to isolate it from production and fix SSRF/XSS patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-secresearchlab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Sec Research Lab interactive cybersecurity training disclosed",
+    description:
+      "Sec Research Lab publishes browser-based SQL injection, XSS, SSRF, and JWT labs with OWASP Top 10 walkthroughs.",
+    impactOneline:
+      "Public Sec Research Lab instances document hands-on vulnerability training modules reachable without local setup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecResearchLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive labs behind authentication.",
+      steps: [
+        "Require login before launching in-browser SQLi/XSS/SSRF modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style interactive security training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-overthewire-bandit-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "OverTheWire Bandit beginner wargame disclosed",
+    description:
+      "OverTheWire Bandit teaches Unix/Linux basics via SSH challenges at bandit.labs.overthewire.org port 2220.",
+    impactOneline:
+      "Public Bandit documentation exposes SSH wargame credentials and level progression for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireBanditEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bandit is intentional training — SSH credentials are public by design for beginners.",
+      steps: [
+        "Do not reuse Bandit-style default credentials in production systems.",
+        "Isolate wargame SSH hosts from corporate networks.",
+        "Monitor for unauthorized scanning of training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We document OverTheWire Bandit wargame levels. Show how to keep training SSH hosts isolated from production.",
+    version: 1,
+    enabled: true
   }
 ];
