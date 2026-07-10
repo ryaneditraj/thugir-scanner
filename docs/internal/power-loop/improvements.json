@@ -1229,6 +1229,24 @@
       "slug": "client-side-mcp-sherpa-workshop-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: MCP Security Summit Workshop + intentionally vulnerable servers + Prompt injection defense + OWASP MCP Azure Security Guide; extractMcpSherpaWorkshopSeeds; azure-samples.github.io/sherpa findings 0→3"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "benchmark-fallback-on-error",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku DNS error status=error probes=0; power-scan now tries fallback_url on error; staging oracle 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:luisillobret2.github.io/WebGoat",
+      "slug": "client-side-webgoat-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WebGoat is a deliberately insecure application + github.com/WebGoat/WebGoat in Jekyll docs; dedicated clientSideWebgoatEvidence rule; luisillobret2.github.io/WebGoat findings 3→3 (api-security-lab misclass removed); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "overthewire-wargames-hub-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /wargames/ hub links Bandit/Natas/Leviathan; extractOverTheWireNatasSeeds seeds /wargames/natas + /wargames/bandit; www.overthewire.org/wargames findings 4 maintained with richer crawl; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2246,6 +2264,21 @@
       "source": "discovery:azure-samples.github.io/sherpa",
       "slug": "client-side-mcp-sherpa-workshop-evidence",
       "shipped_at": "2026-07-10T21:18:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "benchmark-fallback-on-error",
+      "shipped_at": "2026-07-10T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:luisillobret2.github.io/WebGoat",
+      "slug": "client-side-webgoat-evidence",
+      "shipped_at": "2026-07-10T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "overthewire-wargames-hub-crawl",
+      "shipped_at": "2026-07-10T22:20:00.000Z"
     }
   ]
 }

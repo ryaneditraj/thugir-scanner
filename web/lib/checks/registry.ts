@@ -4800,10 +4800,6 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
     label: "API lab endpoint documentation with curl",
     re: /endpoint:\s*["'](?:GET|POST|PUT|DELETE|PATCH)\s+\/(?:api\/)?[\w/{}-]+["']/i
-  },
-  {
-    label: "OWASP WebGoat deliberately insecure training app",
-    re: /WebGoat is a deliberately insecure application|deliberately insecure web application maintained by OWASP/i
   }
 ];
 
@@ -4820,6 +4816,48 @@ const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "client bundle documents OWASP API Security Top 10 vulnerability categories (BOLA/BFLA) — broken authorization likely on API routes"
+    }
+  };
+};
+
+// --- OWASP WebGoat deliberately insecure Java training app (webgoat.org / mirrors) --
+const CLIENT_WEBGOAT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebGoat deliberately insecure application",
+    re: /WebGoat is a deliberately insecure application|deliberately insecure Web Application/i
+  },
+  {
+    label: "OWASP WebGoat project branding",
+    re: /OWASP WebGoat|www-project-webgoat/i
+  },
+  {
+    label: "WebGoat GitHub repository",
+    re: /github\.com\/WebGoat\/WebGoat|WebGoat\/WebGoat/i
+  },
+  {
+    label: "WebGoat lesson catalog",
+    re: /WebGoat.*lesson|lesson[s]?.*WebGoat|insecure application maintained by OWASP/i
+  },
+  {
+    label: "WebGoat Docker / run instructions",
+    re: /docker run.*webgoat|WebGoat.*Docker/i
+  }
+];
+
+const clientSideWebgoatEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBGOAT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/WebGoat|webgoat/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP WebGoat is a deliberately insecure Java/Spring training application with guided security lessons"
     }
   };
 };
@@ -7001,6 +7039,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNosqlEvidence,
   clientSideXxeEvidence,
   clientSideApiSecurityLabEvidence,
+  clientSideWebgoatEvidence,
   clientSideSessionHijackEvidence,
   clientSideSsrfEvidence,
   clientSideFileUploadEvidence,

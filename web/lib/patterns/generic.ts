@@ -3054,6 +3054,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-webgoat-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP WebGoat deliberately insecure training app disclosed",
+    description:
+      "OWASP WebGoat is a deliberately insecure Java application with guided lessons covering injection, auth, and access-control flaws.",
+    impactOneline:
+      "Public WebGoat instances document intentional vulnerability patterns used for security training and lesson walkthroughs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebgoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebGoat is intentional training software — never deploy to production networks.",
+      steps: [
+        "Run WebGoat only in isolated Docker containers on lab networks.",
+        "Do not expose WebGoat lesson endpoints to the public internet.",
+        "Use WebGoat findings to validate scanner rules, not as production patterns."
+      ]
+    },
+    fixPrompt:
+      "We host OWASP WebGoat for security training. Show how to keep it isolated in Docker lab environments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-natas-evidence",
     platform: "generic",
     category: "Broken access control",

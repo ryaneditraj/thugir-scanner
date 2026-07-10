@@ -386,6 +386,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideNosqlEvidence",
   "clientSideXxeEvidence",
   "clientSideApiSecurityLabEvidence",
+  "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
   "clientSideSsrfEvidence",
   "clientSideFileUploadEvidence",
@@ -1360,7 +1361,7 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   if (!/OverTheWire|overthewire\.org|natas\.labs\.overthewire\.org/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/wargames/natas", "/wargames/"]) {
+  for (const p of ["/wargames/natas", "/wargames/", "/wargames/bandit", "/wargames/leviathan"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -1369,8 +1370,54 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
+  const wargameRe = /href\s*=\s*["'](\/wargames\/(?:natas|bandit|leviathan|krypton|narnia))["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = wargameRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
   if (/natas\.labs\.overthewire\.org|Username:\s*natas0/i.test(html)) {
     out.add("http://natas0.natas.labs.overthewire.org/");
+  }
+  return [...out];
+}
+
+/** OWASP WebGoat docs (webgoat.org, GitHub Pages mirrors, meta-refresh stubs). */
+function extractWebgoatDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/WebGoat|webgoat\.org|webgoat\.github\.io/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  if (/luisillobret2\.github\.io\/WebGoat|deliberately insecure Web Application/i.test(html)) {
+    for (const p of ["/WebGoat/", "/WebGoat/README.html"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  if (/www-project-webgoat|owasp\.org\/www-project-webgoat/i.test(html)) {
+    try {
+      out.add(new URL("https://owasp.org/www-project-webgoat/").toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const docRe = /href\s*=\s*["']([^"']*\/WebGoat\/[^"']+)["']/gi;
+  let dm: RegExpExecArray | null;
+  while ((dm = docRe.exec(html))) {
+    try {
+      const u = new URL(dm[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
   }
   return [...out];
 }
@@ -2058,6 +2105,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const mlastgSeeds = extractMlastgMkdocsSeeds(home.body, home.finalUrl);
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
+  const webgoatSeeds = extractWebgoatDocSeeds(home.body, home.finalUrl);
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
@@ -2126,6 +2174,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...mlastgSeeds,
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
+      ...webgoatSeeds,
       ...seclabPlaygroundSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
