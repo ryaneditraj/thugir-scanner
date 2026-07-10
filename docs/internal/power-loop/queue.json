@@ -577,7 +577,32 @@
       "url": "https://hackxor.net/",
       "source": "Hackxor — browser-based XSS/CSRF/auth challenge platform (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://testasp.vulnweb.com/",
+      "source": "Acunetix vulnweb PHP demo — classic SQLi/XSS training site (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/",
+      "source": "r007sec/pwnshop — OWASP Top 10 2025 + LLM e-commerce lab (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sasanlabs.github.io/VulnerableApp/",
+      "source": "OWASP VulnerableApp — scanner evaluation platform docs (HN/GitHub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/",
+      "source": "VulnForge Academy — gamified CTF-style OWASP vulnerability training (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webgoat.github.io/WebGoat/",
+      "source": "OWASP WebGoat — deliberately insecure Java training app landing (awesome-vuln-apps)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T01:05:00.000Z"
+  "updated_at": "2026-07-10T02:10:00.000Z"
 }
