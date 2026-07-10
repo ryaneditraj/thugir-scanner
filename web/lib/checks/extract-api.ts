@@ -83,7 +83,13 @@ export function buildApiProbeUrls(
   const origins = [pageOrigin, ...externalBases];
   for (const origin of origins) {
     for (const path of paths) {
-      const url = new URL(path, origin).toString();
+      if (!path || path === "/" || /^\/\/+/.test(path)) continue;
+      let url: string;
+      try {
+        url = new URL(path, origin).toString();
+      } catch {
+        continue;
+      }
       if (seen.has(url)) continue;
       seen.add(url);
       urls.push(url);
