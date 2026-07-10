@@ -802,7 +802,32 @@
       "url": "https://agent-probe.vercel.app/",
       "source": "Agent probe — intentionally vulnerable AI agent security demo (Vercel OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — hosted DVWA SQLi/XSS/CSRF/LFI training instance (lab.pentest-forge.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — crAPI OWASP API Top 10 microservices lab (lab.pentest-forge.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — Damn Vulnerable GraphQL Application hosted instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://weblogic.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — WebLogic CVE-2023-21839 RCE training target",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://devsecops-pipeline-demo-production.up.railway.app/",
+      "source": "Roma-rgb-tech/devsecops-pipeline-demo — FastAPI REST lab on Railway (GitHub README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-10T10:24:00.000Z"
+  "updated_at": "2026-07-10T11:20:00.000Z"
 }
