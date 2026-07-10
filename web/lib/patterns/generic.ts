@@ -2040,6 +2040,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hackable-lab-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "hackable.so deliberately vulnerable social platform disclosed",
+    description:
+      "hackable.so advertises 12 hidden vulnerabilities across auth, admin panel, and social features with JWT stored in localStorage.",
+    impactOneline:
+      "Public hackable.so instances expose intentional auth bypass and admin routes scannable without registration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackableSoLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "hackable.so is an intentional CTF platform — never deploy its patterns to production.",
+      steps: [
+        "Run hackable.so only as an isolated training environment.",
+        "Do not store JWTs in localStorage on production apps.",
+        "Require authentication before exposing /admin routes."
+      ]
+    },
+    fixPrompt:
+      "We host a hackable.so-style vulnerable social platform. Show how to gate admin routes and avoid localStorage JWT storage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnweb-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnWeb educational vulnerability lab disclosed",
+    description:
+      "VulnWeb SPA documents intentionally vulnerable SQL injection, XSS, and IDOR modules for OWASP Top 10 training.",
+    impactOneline:
+      "Public VulnWeb labs expose unsanitized input handlers and IDOR routes documented in client bundles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnwebLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnWeb is intentional training software — never deploy lab code to production.",
+      steps: [
+        "Run VulnWeb only in isolated lab environments.",
+        "Sanitize all user input before SQL queries and HTML rendering.",
+        "Enforce authorization checks on profile/:id routes."
+      ]
+    },
+    fixPrompt:
+      "We host a VulnWeb-style educational lab with SQLi, XSS, and IDOR modules. Show how to fix unsanitized handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",
