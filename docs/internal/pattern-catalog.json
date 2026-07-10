@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T06:15:43.191Z",
-  "total": 143,
-  "uniqueSlugs": 143,
+  "generatedAt": "2026-07-10T07:13:50.998Z",
+  "total": 146,
+  "uniqueSlugs": 146,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 125,
+    "generic": 128,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 79,
+    "deep": 82,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Security misconfiguration": 9,
     "Information disclosure": 13,
-    "Broken authentication": 9,
-    "Injection": 18,
-    "Cross-site scripting": 11,
+    "Broken authentication": 10,
+    "Injection": 19,
+    "Cross-site scripting": 12,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 5,
@@ -40,6 +40,7 @@
     "client-side-agentic-ai-ctf-evidence",
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
+    "client-side-authlab-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bwapp-evidence",
     "client-side-chimera-vuln-lab-evidence",
@@ -76,6 +77,7 @@
     "client-side-prototype-pollution-evidence",
     "client-side-react-rsc-cve-evidence",
     "client-side-rest-vulnweb-evidence",
+    "client-side-returntrue-wargame-evidence",
     "client-side-rootme-challenge-evidence",
     "client-side-sectrainer-evidence",
     "client-side-security-game-evidence",
@@ -95,6 +97,7 @@
     "client-side-xor-auth-evidence",
     "client-side-xss-c2-collector-evidence",
     "client-side-xss-evidence",
+    "client-side-xss-quiz-evidence",
     "client-side-xxe-evidence",
     "client-side-zero-health-evidence",
     "client-side-zeroday-training-evidence",
