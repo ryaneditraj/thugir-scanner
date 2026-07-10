@@ -527,7 +527,32 @@
       "url": "https://skillaudit.vercel.app/",
       "source": "SkillAudit — AI/agent security skill assessment vulnerable demo (web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://security-trainer.vercel.app/",
+      "source": "forbiddenlink/security-trainer — interactive OWASP Top 10 training platform (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://capture-the-flag.labs.vercel.dev/",
+      "source": "vercel-labs/capture-the-flag — AI-powered CTF arena with vulnerable apps (Vercel Labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/",
+      "source": "OWASP Juice Shop official demo instance (owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.lab.pentest-forge.com/",
+      "source": "Pentest-Forge hosted Juice Shop — OWASP benchmark lab instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi.lab.pentest-forge.com/",
+      "source": "Pentest-Forge hosted VAmPI — OWASP API Top 10 training lab",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-09T23:05:00.000Z"
+  "updated_at": "2026-07-10T00:15:00.000Z"
 }
