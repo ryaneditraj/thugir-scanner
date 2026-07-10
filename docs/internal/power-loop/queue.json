@@ -902,7 +902,32 @@
       "url": "https://www.overthewire.org/wargames/",
       "source": "OverTheWire wargames — public security wargame hub including Natas web challenges (awesome-vulnerable-apps)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.securityknowledgeframework.org/",
+      "source": "OWASP SKF Labs — 64+ interactive practice labs with public demo instance (OWASP VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://ffuf.me/",
+      "source": "FFUF.me — adamtlangley/ffufme fuzzing target practice lab (OWASP VWAD online)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.bgabank.com/",
+      "source": "BGA Vulnerable BANK — .NET intentionally insecure banking demo (OWASP VWAD online)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugbait.io/",
+      "source": "BugBait — Blacklock Security vulnerable Node.js web app for pen-test training (OWASP VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yrprey.com/",
+      "source": "Yrprey — OWASP API Top 10 2019/2023 vuln framework landing with live lab pointers (OWASP VWAD)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T14:08:00.000Z"
+  "updated_at": "2026-07-10T15:14:00.000Z"
 }
