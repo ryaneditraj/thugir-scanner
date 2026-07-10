@@ -2922,5 +2922,83 @@ export const genericPatterns: Pattern[] = [
       "Our HTML includes a comment with database password hints. Show how to remove it and rotate credentials safely.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-w3challs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "W3Challs offensive security challenge platform disclosed",
+    description:
+      "W3Challs advertises realistic web hacking, pwnable, reversing, and crypto wargame challenges without simulated scoring.",
+    impactOneline:
+      "Public W3Challs instances document exploit training surfaces attackers study before targeting production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideW3challsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "W3Challs is intentional training — isolate challenge VMs from production networks.",
+      steps: [
+        "Require authentication before serving challenge instances.",
+        "Do not reuse CTF vulnerability patterns in production code.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host W3Challs-style offensive security challenges. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intercode-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "InterCode interactive coding security benchmark disclosed",
+    description:
+      "InterCode benchmarks agents on interactive coding tasks across IC-CTF, IC-SQL, IC-Bash, and terminal environments.",
+    impactOneline:
+      "Public InterCode indexes document CTF and shell exploit patterns used to benchmark AI security capabilities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntercodeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "InterCode is a research benchmark — isolate challenge environments from production networks.",
+      steps: [
+        "Run InterCode tasks only in isolated lab environments.",
+        "Do not expose benchmark challenge instances without authentication.",
+        "Treat published CTF writeups as training material, not production patterns."
+      ]
+    },
+    fixPrompt:
+      "We host InterCode-style interactive coding security benchmarks. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnerable-qa-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Intentional scanner QA vulnerable lab disclosed",
+    description:
+      "RS Vulnerable Lab publishes intentional scanner QA signals — exposed admin paths, fake credentials, skimmer demos, and confidential file listings.",
+    impactOneline:
+      "Public QA honeypots catalog misconfiguration patterns scanners flag — similar signals in production indicate real exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnerableQaLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "QA labs are intentional — do not deploy scanner honeypot patterns on production domains.",
+      steps: [
+        "Remove exposed /admin, /backup, and /.git paths from production apps.",
+        "Block public access to .env, phpinfo.php, and confidential directories.",
+        "Run scanner QA labs only on isolated test domains."
+      ]
+    },
+    fixPrompt:
+      "Our site mirrors an intentional scanner QA lab with exposed paths and fake credentials. Show how to harden production.",
+    version: 1,
+    enabled: true
   }
 ];

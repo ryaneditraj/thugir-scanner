@@ -364,6 +364,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideEksGoatEvidence",
   "clientSideCtflearnEvidence",
   "clientSideCybenchEvidence",
+  "clientSideW3challsEvidence",
+  "clientSideIntercodeEvidence",
+  "clientSideVulnerableQaLabEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1211,6 +1214,65 @@ function extractCtflearnChallengeSeeds(html: string, pageUrl: string): string[] 
   return [...out];
 }
 
+/** W3Challs — seed challenge catalog and login routes. */
+function extractW3ChallsChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/W3Challs|w3challs\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/challenges/", "/account/login", "/feeds/challenges/latest"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/challenges[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** RS Vulnerable Lab — seed exposed QA paths from attack-surface catalog. */
+function extractVulnerableQaLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/INTENTIONAL QA LAB|RS Vulnerable Lab|vulnerable-lab\.vercel\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/admin/",
+    "/backup/",
+    "/phpinfo.php",
+    "/config/.env",
+    "/login.html",
+    "/confidential/hr-salaries.xlsx"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:admin|backup|config|confidential|debug|staging)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 10) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti rest.vulnweb.com — seed OpenAPI docs and api_data.json for REST lab markers. */
 function extractRestVulnwebDocSeeds(html: string, origin: string): string[] {
   if (!/Invicti Vulnerable REST API|rest\.vulnweb\.com/i.test(html)) return [];
@@ -1549,6 +1611,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnLabAcademySeeds = extractVulnLabAcademySeeds(home.body, home.finalUrl);
   const eksGoatSeeds = extractEksGoatMdbookSeeds(home.body, home.finalUrl);
   const ctflearnSeeds = extractCtflearnChallengeSeeds(home.body, home.finalUrl);
+  const w3challsSeeds = extractW3ChallsChallengeSeeds(home.body, home.finalUrl);
+  const vulnerableQaLabSeeds = extractVulnerableQaLabSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1600,6 +1664,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnLabAcademySeeds,
       ...eksGoatSeeds,
       ...ctflearnSeeds,
+      ...w3challsSeeds,
+      ...vulnerableQaLabSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
