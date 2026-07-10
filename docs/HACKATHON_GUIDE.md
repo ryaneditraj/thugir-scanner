@@ -34,10 +34,19 @@ Open **http://localhost:3000**
 
 ### 1. Landing page — Free scan (30 sec)
 
-- Enter any public URL (e.g. a test app or `https://example.com`)
+- Enter **`petstore.swagger.io`** (primary live URL — 4 findings, no criticals, fast)
+- Backup URLs if conference Wi‑Fi blocks it: **`httpbin.org`** (5 findings) or **`example.com`** (1 finding, boring but always works)
 - Click **Scan now**
 - Show findings with severity, impact, and evidence
-- Point out locked Deep-tier teaser cards (upsell mechanic)
+- Scroll to the **sealed Deep Scan** block — dashed border, blur cards, big lock (readable from 10 ft on a projector)
+
+**Offline fallback:** if live scan fails, say "conference Wi‑Fi" and jump to `/demo` immediately.
+
+### 1b. Verify badge (20 sec) — highest-leverage trust demo
+
+- Visit **`/verify/demo`** — white trust seal card, big pass/attention status
+- One line for judges: *"Anyone can verify a scan passed without seeing private findings."*
+- In production, share **`/verify/<scan-id>`** after a real Deep Scan completes
 
 ### 2. Static demo report (30 sec)
 
@@ -77,6 +86,7 @@ Highlight these differentiators:
 | URL | Purpose |
 |-----|---------|
 | `/` | Landing + free scan |
+| `/verify/demo` | Public trust badge (projector-friendly) |
 | `/how-scans-work` | Methodology explainer |
 | `/demo` | Sample report |
 | `/dashboard` | User portal |
@@ -108,6 +118,15 @@ For judges who want to see the real stack:
 5. **Agent engine** — optional Python AI layer (`services/thugir-agent/`)
 
 See [everything.md](../everything.md) for the complete A–Z reference.
+
+## Pre-stage checklist (run twice tonight)
+
+1. **Env:** `DEV_MODE=1` and `DEV_TIER=deep` in `web/.env.local` — without this, `/api/scan/free` returns 500.
+2. **Live scan:** `petstore.swagger.io` from `/` — confirm 3–4 findings + sealed block at bottom.
+3. **Projector test:** Can you read severity pills, finding titles, and "The deeper report is sealed" from 10 feet?
+4. **Verify badge:** Open `/verify/demo` — seal, domain, and "Passed" pill should be obvious at a glance.
+5. **Full flow:** `/` → `/verify/demo` → `/demo` → `/dashboard` → `/admin/patterns` — twice, on conference Wi‑Fi if possible.
+6. **Kill switch:** If live scan hangs >15s, say "conference Wi‑Fi" and open `/demo` — never stall on stage.
 
 ## Talking points
 

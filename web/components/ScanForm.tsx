@@ -312,6 +312,7 @@ export default function ScanForm() {
 
           {result.locked && result.locked.checkCount > 0 && (
             <div className="locked-preview" aria-label="The deeper report is locked">
+              <span className="locked-ribbon">Sealed · Deep Scan required</span>
               <div className="locked-cards" aria-hidden="true">
                 {[0, 1, 2].map((i) => (
                   <div className="locked-card" key={i}>
