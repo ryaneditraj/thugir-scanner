@@ -63,8 +63,12 @@ export default async function AdminOverview() {
     ],
     [
       "Worker",
-      envStatus("WORKER_URL") === "ok" ? "ok" : "warn",
-      process.env.WORKER_URL ? "Configured" : "WORKER_URL unset (inline deep-run still works)"
+      IS_DEV_MODE || envStatus("WORKER_URL") === "ok" ? "ok" : "warn",
+      IS_DEV_MODE
+        ? "Inline deep-run (dev — no worker needed)"
+        : process.env.WORKER_URL
+          ? "Configured"
+          : "WORKER_URL unset — queued Deep Scans need the Python worker"
     ],
     [
       "AI analyst",
