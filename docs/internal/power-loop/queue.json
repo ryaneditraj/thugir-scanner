@@ -827,7 +827,32 @@
       "url": "https://devsecops-pipeline-demo-production.up.railway.app/",
       "source": "Roma-rgb-tech/devsecops-pipeline-demo — FastAPI REST lab on Railway (GitHub README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/",
+      "source": "Escape.tech hosted OWASP Juice Shop v20 — scanner benchmark playground (escape.tech demo)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://openvaultbank.com/",
+      "source": "APISec OpenVault Bank — deliberately vulnerable banking API with 12 documented OWASP API flaws (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.corgea.com/",
+      "source": "Corgea Launch HN — Juice Shop vulnerability fix showcase with live SSRF/SQLi/XSS samples",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tomcat.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — Apache Tomcat CVE training target (lab.pentest-forge.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-demo.vulcanlab.ai/",
+      "source": "VulcanLab OWASP demo — intentionally vulnerable web security training instance (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T11:20:00.000Z"
+  "updated_at": "2026-07-10T12:05:00.000Z"
 }
