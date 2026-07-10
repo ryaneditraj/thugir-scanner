@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Tab = "app" | "code";
 
@@ -72,7 +72,17 @@ function CopyFix({ text }: { text: string }) {
   );
 }
 
+const DEEP_STEPS = [
+  "Crawling pages and scripts",
+  "Running full pattern library",
+  "Probing APIs and sensitive paths",
+  "AI deep analysis",
+  "Packaging evidence and fixes"
+];
+
 export default function DashboardPortal({ currentTier }: { currentTier: string }) {
+  const canDeepScan = currentTier !== "free";
+  const canCodeScan = currentTier !== "free";
   const [tab, setTab] = useState<Tab>("app");
 
   const [url, setUrl] = useState("");
@@ -80,10 +90,21 @@ export default function DashboardPortal({ currentTier }: { currentTier: string }
   const [appErr, setAppErr] = useState<string | null>(null);
   const [appRes, setAppRes] = useState<DeepResult | null>(null);
 
+  const [appStep, setAppStep] = useState(0);
+
   const [repo, setRepo] = useState("");
   const [codeBusy, setCodeBusy] = useState(false);
   const [codeErr, setCodeErr] = useState<string | null>(null);
   const [codeRes, setCodeRes] = useState<CodeResult | null>(null);
+
+  useEffect(() => {
+    if (!appBusy) return;
+    setAppStep(0);
+    const id = window.setInterval(() => {
+      setAppStep((s) => (s < DEEP_STEPS.length - 1 ? s + 1 : s));
+    }, 1200);
+    return () => clearInterval(id);
+  }, [appBusy]);
 
   async function runApp(e: React.FormEvent) {
     e.preventDefault();
@@ -129,11 +150,23 @@ export default function DashboardPortal({ currentTier }: { currentTier: string }
 
   return (
     <div className="portal">
-      <div className="portal-tabs" role="tablist">
-        <button role="tab" className={tab === "app" ? "active" : ""} onClick={() => setTab("app")}>
+      <div className="portal-tabs" role="tablist" aria-label="Scan type">
+        <button
+          role="tab"
+          type="button"
+          aria-selected={tab === "app"}
+          className={tab === "app" ? "active" : ""}
+          onClick={() => setTab("app")}
+        >
           App Deep Scan
         </button>
-        <button role="tab" className={tab === "code" ? "active" : ""} onClick={() => setTab("code")}>
+        <button
+          role="tab"
+          type="button"
+          aria-selected={tab === "code"}
+          className={tab === "code" ? "active" : ""}
+          onClick={() => setTab("code")}
+        >
           Code / Repo Scan
         </button>
       </div>
@@ -143,7 +176,10 @@ export default function DashboardPortal({ currentTier }: { currentTier: string }
           <h2>Deep Scan a live app</h2>
           <p className="portal-sub">
             Crawls a few pages, runs the full pattern library, and returns every confirmed finding
-            unlocked — with evidence and fixes. No domain verification required.
+            unlocked — with evidence and fixes.
+            {!canDeepScan && (
+              <> Requires a <b>Deep</b> or <b>Continuous</b> plan — upgrade above, or use Preview as in admin.</>
+            )}
           </p>
           <form className="scan-box" onSubmit={runApp}>
             <div className="scan-field">
@@ -157,12 +193,30 @@ export default function DashboardPortal({ currentTier }: { currentTier: string }
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 required
+                disabled={!canDeepScan && !appBusy}
+                aria-label="App URL to scan"
               />
             </div>
-            <button className="btn btn-primary" type="submit" disabled={appBusy}>
-              {appBusy ? "Scanning…" : "Run Deep Scan"}
+            <button className="btn btn-primary" type="submit" disabled={appBusy || !canDeepScan}>
+              {appBusy ? "Scanning…" : canDeepScan ? "Run Deep Scan" : "Upgrade to scan"}
             </button>
           </form>
+          {appBusy && (
+            <div className="scan-progress" role="status" aria-live="polite" style={{ marginTop: 14 }}>
+              <div className="scan-progress-head">
+                <span className="scan-progress-spin" aria-hidden="true" />
+                Deep scanning {url || "your app"}…
+              </div>
+              <ul className="scan-steps">
+                {DEEP_STEPS.map((label, i) => (
+                  <li key={label} className={i < appStep ? "done" : i === appStep ? "active" : ""}>
+                    <span className="sdot" aria-hidden="true" />
+                    {label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {appErr && <p className="notice" style={{ marginTop: 14 }}>{appErr}</p>}
 
           {appRes && (
@@ -278,8 +332,8 @@ export default function DashboardPortal({ currentTier }: { currentTier: string }
                 required
               />
             </div>
-            <button className="btn btn-primary" type="submit" disabled={codeBusy}>
-              {codeBusy ? "Scanning…" : "Scan repository"}
+            <button className="btn btn-primary" type="submit" disabled={codeBusy || !canCodeScan}>
+              {codeBusy ? "Scanning…" : canCodeScan ? "Scan repository" : "Upgrade to scan"}
             </button>
           </form>
           {codeBusy && <p className="dim" style={{ marginTop: 12 }}>Reading the repository and analysing files…</p>}
@@ -321,8 +375,8 @@ export default function DashboardPortal({ currentTier }: { currentTier: string }
 
       {currentTier === "free" && (
         <p className="portal-note">
-          You’re on the <b>free</b> plan. Deep and code scans need a Deep/Continuous plan — admins can
-          use the “Preview as” switch to test these as any tier.
+          You’re on the <b>free</b> plan. Deep and code scans unlock with a Deep or Continuous plan.
+          Free scans on the <a href="/" style={{ color: "var(--accent-bright)" }}>homepage</a> still work.
         </p>
       )}
     </div>
