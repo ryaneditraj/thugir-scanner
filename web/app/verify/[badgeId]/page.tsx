@@ -38,26 +38,29 @@ export default async function VerifyPage({ params }: { params: { badgeId: string
   }
 
   return (
-    <article>
+    <article className="page-pad">
       <h1 style={{ fontFamily: "var(--display)" }}>Scan verification</h1>
       {!summary && <p className="notice">No verified scan found for this badge.</p>}
       {summary && (
-        <div className="card">
+        <div className="card" style={{ maxWidth: 560 }}>
           <p className="kv">
             <b>{summary.domain}</b> was scanned by Thugir
             {summary.date ? ` on ${new Date(summary.date).toLocaleDateString()}` : ""}.
           </p>
           {summary.clean ? (
-            <p>
-              <span className="badge low">passed</span> No open critical issues at scan time.
+            <p style={{ marginTop: 12 }}>
+              <span className="tag low">passed</span>{" "}
+              <span className="muted">No open critical issues at scan time.</span>
             </p>
           ) : (
-            <p>
-              <span className="badge high">attention</span> {summary.criticals} open critical issue(s)
-              at scan time.
+            <p style={{ marginTop: 12 }}>
+              <span className="tag high">attention</span>{" "}
+              <span className="muted">{summary.criticals} open critical issue(s) at scan time.</span>
             </p>
           )}
-          <p className="muted">Verification reflects the state at scan time only.</p>
+          <p className="muted" style={{ marginTop: 14 }}>
+            Verification reflects the state at scan time only.
+          </p>
         </div>
       )}
     </article>
