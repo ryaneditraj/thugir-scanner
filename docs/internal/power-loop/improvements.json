@@ -1007,6 +1007,24 @@
       "slug": "client-side-exploit-education-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Welcome to exploit.education + buffer overflows, format strings and heap exploitation + /phoenix/ /nebula/ VM catalog; extractExploitEducationSeeds; exploit.education findings 0→3"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "client-side-yogsec-xss-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS Labs title + 39 interactive labs + Reflected/Stored/DOM XSS modules + labs/lab1.html innerHTML sink; extractYogsecXssLabsSeeds; yogsec.github.io/xss-labs findings 2→5; staging benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctf.hacker101.com",
+      "slug": "client-side-hacker101-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Welcome to the Hacker101 CTF + learn to hack in a safe, rewarding environment + HackerOne attribution; extractHacker101CtfSeeds; ctf.hacker101.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ws.digi.ninja",
+      "slug": "client-side-sockettome-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SocketToMe title + new WebSocket('wss://ws.digi.ninja/wss/') + fuzzing sockets chat game; ws.digi.ninja findings 1→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1844,6 +1862,21 @@
       "source": "discovery:exploit.education",
       "slug": "client-side-exploit-education-evidence",
       "shipped_at": "2026-07-10T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "client-side-yogsec-xss-labs-evidence",
+      "shipped_at": "2026-07-10T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:ctf.hacker101.com",
+      "slug": "client-side-hacker101-ctf-evidence",
+      "shipped_at": "2026-07-10T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:ws.digi.ninja",
+      "slug": "client-side-sockettome-evidence",
+      "shipped_at": "2026-07-10T09:10:00.000Z"
     }
   ]
 }
