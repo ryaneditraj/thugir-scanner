@@ -887,6 +887,24 @@
       "slug": "client-side-hackadvisor-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: HackAdvisor Labs + Practice Real-World Hacking + real-world bug reports in homepage meta; labs.hackadvisor.io findings 7→8; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "client-side-hacking-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Hacking-Lab for Cyber Security Training title + offensive/defensive skills meta + /ctf_platform nav; hacking-lab.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:solyd.com.br",
+      "slug": "client-side-solyd-training-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Introdução ao Hacking e Pentest 2.0 + hacking ético + teste de penetração + solyd.com.br/ead/enroll link; solyd findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:picoctf.org",
+      "slug": "client-side-cylab-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: picoCTF has joined CyLab Security Academy + Carnegie Mellon cybersecurity learning platform; picoctf.org findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -1624,6 +1642,21 @@
       "source": "discovery:labs.hackadvisor.io",
       "slug": "client-side-hackadvisor-lab-evidence",
       "shipped_at": "2026-07-10T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "client-side-hacking-lab-evidence",
+      "shipped_at": "2026-07-10T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:solyd.com.br",
+      "slug": "client-side-solyd-training-evidence",
+      "shipped_at": "2026-07-10T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:picoctf.org",
+      "slug": "client-side-cylab-academy-evidence",
+      "shipped_at": "2026-07-10T02:10:00.000Z"
     }
   ]
 }
