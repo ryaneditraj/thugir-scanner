@@ -3000,5 +3000,83 @@ export const genericPatterns: Pattern[] = [
       "Our site mirrors an intentional scanner QA lab with exposed paths and fake credentials. Show how to harden production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-mlastg-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "MLASTG MLSec security testing guide disclosed",
+    description:
+      "MLASTG publishes ML/LLM security testing controls mapped to MITRE ATLAS, NIST AI RMF, and OWASP AI guidance with executable harnesses.",
+    impactOneline:
+      "Public MLASTG instances document adversarial ML and prompt-injection test cases attackers study before targeting production AI systems.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMlastgEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MLASTG is intentional training documentation — isolate ML security labs from production networks.",
+      steps: [
+        "Run MLASTG harnesses only in isolated lab environments.",
+        "Do not expose production ML endpoints to unauthenticated adversarial probes.",
+        "Treat published prompt-injection patterns as training material, not production patterns."
+      ]
+    },
+    fixPrompt:
+      "We host MLASTG-style ML security testing documentation. Show how to isolate adversarial ML labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cryptohack-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CryptoHack cryptography CTF platform disclosed",
+    description:
+      "CryptoHack advertises interactive cryptography challenges for learning cipher weaknesses through puzzles and leaderboard competition.",
+    impactOneline:
+      "Public CryptoHack instances document cryptographic exploit training surfaces used to practice breaking insecure implementations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCryptohackEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CryptoHack is intentional training — isolate CTF challenge infrastructure from production networks.",
+      steps: [
+        "Require authentication before serving challenge instances.",
+        "Do not reuse CTF cryptographic vulnerability patterns in production code.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host CryptoHack-style cryptography CTF challenges. Show how to isolate challenge VMs from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-overthewire-natas-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OverTheWire Natas web-security wargame disclosed",
+    description:
+      "OverTheWire Natas teaches serverside web vulnerabilities across staged challenge sites at natas.labs.overthewire.org.",
+    impactOneline:
+      "Public Natas wargame instances document web injection and access-control exploit patterns used for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireNatasEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Natas is intentional training — isolate wargame VMs from production networks.",
+      steps: [
+        "Require authentication before serving challenge instances.",
+        "Do not reuse Natas vulnerability patterns in production code.",
+        "Rate-limit unauthenticated wargame enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host OverTheWire Natas-style web security wargames. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
   }
 ];
