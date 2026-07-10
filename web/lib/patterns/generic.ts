@@ -2222,6 +2222,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnerableapp-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP VulnerableApp scanner evaluation platform disclosed",
+    description:
+      "SasanLabs VulnerableApp is a deliberately vulnerable Spring application for benchmarking vulnerability scanners and security tools.",
+    impactOneline:
+      "Public VulnerableApp instances expose annotation-driven vulnerability modules and REST APIs for unauthenticated scanner evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnerableappEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnerableApp is intentional training software — never deploy to production or expose publicly.",
+      steps: [
+        "Run VulnerableApp only in isolated Docker containers on lab networks.",
+        "Do not expose VulnerableApp REST APIs to the public internet.",
+        "Use VulnerableApp findings to validate scanner rules, not as production patterns."
+      ]
+    },
+    fixPrompt:
+      "We host OWASP VulnerableApp for scanner benchmarking. Show how to keep it isolated in Docker lab environments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-rest-vulnweb-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti Vulnerable REST API lab disclosed",
+    description:
+      "rest.vulnweb.com documents an intentionally vulnerable REST API with JWT, Basic, and OAuth2 authentication flaws for scanner benchmarking.",
+    impactOneline:
+      "Public Invicti REST API labs expose user data and comment endpoints without proper authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRestVulnwebEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.vulnweb.com is an intentional Invicti benchmark — never deploy similar patterns to production.",
+      steps: [
+        "Run rest.vulnweb.com only as an isolated scanner evaluation target.",
+        "Enforce authorization on all REST API routes in production.",
+        "Validate JWT signatures and reject demo tokens in production APIs."
+      ]
+    },
+    fixPrompt:
+      "We host an Invicti-style vulnerable REST API lab. Show how to enforce JWT validation and authorization on API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnforge-academy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "VulnForge Academy OWASP training platform disclosed",
+    description:
+      "VulnForge Academy offers 20 deliberately vulnerable levels covering OWASP Top 10, SQLi, XSS, IDOR, SSRF, and RCE with CTF-style flag capture.",
+    impactOneline:
+      "Public VulnForge instances document exploit training surfaces and gamified vulnerability progression.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnforgeAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training software — isolate lab containers from production.",
+      steps: [
+        "Gate VulnForge lab instances behind invite-code registration.",
+        "Run vulnerable levels in isolated containers with no production data.",
+        "Do not copy VulnForge vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We host VulnForge Academy-style OWASP training with 20 vulnerable levels. Show how to isolate lab containers from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "html-comment-credential-disclosure",
     platform: "generic",
     category: "Information disclosure",
