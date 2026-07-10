@@ -89,7 +89,8 @@
       "secureby.design: OWASP VWAD Secure by Design — Resend key + postMessage DOM XSS + SKF lab evidence (7 findings)",
       "cyberscavengerhunt.com: OWASP VWAD recon training platform — scavenger hunt markers + sitemap paths (6 findings)",
       "reef-mcp-registry.vercel.app: MCP supply-chain security demo — unauthenticated API routes (6 findings)",
-      "apparatus.atlascrew.dev: Inferno Lab red-team/Nuclei docs (6 findings, parallel run)"
+      "apparatus.atlascrew.dev: Inferno Lab red-team/Nuclei docs (6 findings)",
+      "cve-2025-55182-demo.vercel.app: Next.js RSC middleware bypass lab markers (3 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: Heroku cold-start degrades primary to 4/6 before staging fallback; xss/sensitive_data intermittently missed",
@@ -148,6 +149,11 @@
     "demo.owasp-juice.shop": 8,
     "vapi.apisec.ai": 3,
     "ginandjuice.shop": 3,
+    "maestro-agentic-ai-security-demo-mon.netlify.app": 3,
+    "reef-mcp-registry.vercel.app": 6,
+    "platform.sixhackacademy.com": 3,
+    "secureby.design": 7,
+    "cyberscavengerhunt.com": 6,
     "bwapp.hakhub.net": 6,
     "public-firing-range.appspot.com": 4,
     "google-gruyere.appspot.com": 3,
