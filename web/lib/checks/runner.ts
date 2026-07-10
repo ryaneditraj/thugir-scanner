@@ -355,6 +355,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideYogsecXssLabsEvidence",
   "clientSideHacker101CtfEvidence",
   "clientSideSockettomeEvidence",
+  "clientSideOwaspBricksEvidence",
+  "clientSideVaultappLabEvidence",
+  "clientSideDamnVulnerableBankEvidence",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure"
 ]);
@@ -1037,6 +1040,69 @@ function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** OWASP Bricks (sechow.com/bricks — PHP web security learning platform documentation). */
+function extractOwaspBricksSeeds(html: string, pageUrl: string): string[] {
+  if (!/OWASP Bricks|sechow\.com\/bricks|Break the Bricks/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/docs/login-1.html",
+    "/docs/content-page-1.html",
+    "/docs/file-upload-1.html",
+    "/docs/login-pages.html",
+    "/docs/content-pages.html"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/docs\/(?:login|content-page|file-upload)-\d+\.html)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Damn Vulnerable Bank (rewanthtammana.com — Android mobile security lab docs). */
+function extractDamnVulnerableBankSeeds(html: string, pageUrl: string): string[] {
+  if (!/Damn Vulnerable Bank|damn-vulnerable-bank|rewanthtammana/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/exploits/exploit-1/",
+    "/exploits/exploit-2/",
+    "/exploits/exploit-3/",
+    "/exploits/exploit-4/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/damn-vulnerable-bank\/exploits\/exploit-\d+\/?)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 6) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game). */
 function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
   if (!/ctf\.hacker101\.com|Hacker101 CTF|learn to hack in a safe/i.test(html)) return [];
@@ -1396,6 +1462,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const exploitEducationSeeds = extractExploitEducationSeeds(home.body, home.finalUrl);
   const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
+  const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
+  const damnVulnerableBankSeeds = extractDamnVulnerableBankSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -1442,6 +1510,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...exploitEducationSeeds,
       ...yogsecXssLabsSeeds,
       ...hacker101CtfSeeds,
+      ...owaspBricksSeeds,
+      ...damnVulnerableBankSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,

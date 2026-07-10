@@ -5643,6 +5643,132 @@ const clientSideSockettomeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP Bricks (sechow.com/bricks — PHP web security learning platform docs) ------
+const CLIENT_OWASP_BRICKS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP Bricks platform title",
+    re: /Welcome to OWASP Bricks|OWASP Bricks Login page|OWASP Bricks content page/i
+  },
+  {
+    label: "Web application security learning platform",
+    re: /web application security learning platform|Break the Bricks/i
+  },
+  {
+    label: "Login fields prone to code injection",
+    re: /Both user name and password field are prone to code injection/i
+  },
+  {
+    label: "SQL injection walkthrough with OR bypass",
+    re: /password=<span[^>]*>''<\/span>\s*<span[^>]*>or<\/span>\s*<span[^>]*>'1'='1'/i
+  },
+  {
+    label: "Content page id parameter injection",
+    re: /id<\/span> parameter is prone to code injection|Advanced SQL Injection - Integer based/i
+  },
+  {
+    label: "Arbitrary file upload backdoor lab",
+    re: /Can upload PHP backdoors and get complete access to the server/i
+  }
+];
+
+const clientSideOwaspBricksEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_BRICKS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OWASP Bricks|sechow\.com\/bricks/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP Bricks docs catalog SQL injection, file upload, and content-page injection labs with exploit walkthroughs"
+    }
+  };
+};
+
+// --- VaultApp Omega (vaultapp-omega.vercel.app — finance security training SPA) -------
+const CLIENT_VAULTAPP_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VaultApp security training lab banner",
+    re: /Security Training Lab|Secure Personal Finance Portal/i
+  },
+  {
+    label: "Test credentials disclosed in UI",
+    re: /Test credentials:\s*player\s*\/\s*player123/i
+  },
+  {
+    label: "VaultApp login bundle",
+    re: /VaultApp[\s\S]{0,40}Sign in to your account|localStorage\.setItem\(["']vault_token/i
+  },
+  {
+    label: "vaultapp-omega host",
+    re: /vaultapp-omega\.vercel\.app/i
+  }
+];
+
+const clientSideVaultappLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VAULTAPP_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VaultApp|vaultapp-omega/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VaultApp Omega discloses a public finance security training lab with demo credentials on the login page"
+    }
+  };
+};
+
+// --- Damn Vulnerable Bank (rewanthtammana.com — Android mobile security lab docs) -----
+const CLIENT_DAMN_VULNERABLE_BANK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Damn Vulnerable Bank title",
+    re: /Damn Vulnerable Bank|damn-vulnerable-bank/i
+  },
+  {
+    label: "Intentionally vulnerable Android application",
+    re: /intentionally vulnerable android application|assess your android application security hacking skills/i
+  },
+  {
+    label: "REST API vulnerabilities exploit module",
+    re: /REST API vulnerabilities|looking-for-rest-api-vulnerabilities/i
+  },
+  {
+    label: "Sensitive information disclosure module",
+    re: /Sensitive Information Disclosure|Exported activities/i
+  },
+  {
+    label: "rewanthtammana GitHub project",
+    re: /rewanthtammana\/damn-vulnerable-bank/i
+  }
+];
+
+const clientSideDamnVulnerableBankEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DAMN_VULNERABLE_BANK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Damn Vulnerable Bank|damn-vulnerable-bank/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Damn Vulnerable Bank documents intentionally vulnerable Android banking app exploits including REST API and sensitive data disclosure"
+    }
+  };
+};
+
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -5863,6 +5989,9 @@ export const RULES: Record<string, Rule> = {
   clientSideYogsecXssLabsEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
+  clientSideOwaspBricksEvidence,
+  clientSideVaultappLabEvidence,
+  clientSideDamnVulnerableBankEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure
 };
