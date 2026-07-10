@@ -777,7 +777,32 @@
       "url": "https://rewanthtammana.com/damn-vulnerable-bank/",
       "source": "rewanthtammana/Damn-Vulnerable-Bank — intentionally vulnerable banking app demo (VWAD)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://34.28.235.106/",
+      "source": "JessJohn0/vuln-bank-467_W26 — GCP-hosted Vuln Bank with runtime hardening toggles (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ekssecurity.netlify.app/",
+      "source": "OWASP EKS Goat — intentionally vulnerable AWS EKS cluster security lab (shukladuo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:7001/",
+      "source": "Pentest-Ground hosted vulnerable web app — scanner benchmark playground (pentest-tools.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wiz.jock.pl/experiments/agent-arena",
+      "source": "Agent Arena — LLM/agentic red-team vulnerable experiment playground (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agent-probe.vercel.app/",
+      "source": "Agent probe — intentionally vulnerable AI agent security demo (Vercel OSS deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-10T09:16:00.000Z"
+  "updated_at": "2026-07-10T10:24:00.000Z"
 }

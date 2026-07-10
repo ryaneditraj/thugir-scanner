@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T09:58:00.000Z",
+  "updated_at": "2026-07-10T10:26:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 459,
-  "total_findings": 1846,
-  "critical_findings": 25,
+  "total_sites_scanned": 468,
+  "total_findings": 1883,
+  "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 158,
-  "discovery_findings": 1120,
+  "discovery_urls_added": 163,
+  "discovery_findings": 1150,
   "improvements_shipped": 170,
-  "last_run": "2026-07-10T09:58:00.000Z",
+  "last_run": "2026-07-10T10:26:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary Heroku cold-start 1/6; staging fallback 7 findings 6/6",
+      "note": "Staging fallback 6/6; primary Heroku cold-start 1/6 (misconfig only) after retry",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,14 +48,26 @@
           "primary_degraded": {
             "url": "https://juice-shop.herokuapp.com",
             "first_pass": {
-              "findings": 1,
+              "findings": 2,
               "categories_hit": 1,
-              "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
+              "gap": [
+                "xss",
+                "sqli",
+                "idor",
+                "auth_bypass",
+                "sensitive_data"
+              ]
             },
             "retry": {
               "findings": 1,
               "categories_hit": 1,
-              "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
+              "gap": [
+                "xss",
+                "sqli",
+                "idor",
+                "auth_bypass",
+                "sensitive_data"
+              ]
             }
           }
         }
@@ -63,27 +75,48 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 10,
-      "focus": "yogsec XSS Labs + Hacker101 CTF + DigiNinja SocketToMe WebSocket lab evidence",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 30,
+      "skipped_48h": [
+        "https://yogsec.github.io/xss-labs/",
+        "https://ctf.hacker101.com/",
+        "https://ws.digi.ninja/",
+        "https://chimera.atlascrew.dev/",
+        "https://securebank-blog.vercel.app/"
+      ],
+      "focus": "VAmPI Railway production + WebSec.fr SQLi challenges + DVWA Vercel XSS/SQLi + VulnBank API",
+      "improvements_shipped_this_run": 0,
+      "queued_next": [
+        "https://vulnerable-web-site.vercel.app/",
+        "https://preview.owasp-juice.shop/",
+        "https://vaultapp-omega.vercel.app/",
+        "http://sechow.com/bricks/",
+        "https://rewanthtammana.com/damn-vulnerable-bank/"
+      ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category misses",
-      "yogsec.github.io/xss-labs: client-side-yogsec-xss-labs-evidence + lab crawl sinks (2→5 findings)",
-      "ctf.hacker101.com: client-side-hacker101-ctf-evidence (2→3 findings)",
-      "ws.digi.ninja: client-side-sockettome-evidence WebSocket lab markers (1→2 findings)",
-      "chimera.atlascrew.dev: 10 findings incl. secret-resend + client-side-chimera-evidence"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category misses via staging oracle",
+      "urban-vampi-production.up.railway.app: critical openapi-debug-password-exposure + IDOR (5 findings)",
+      "websec.fr: client-side-sql-evidence + websec-challenge injectable PHP markers (3 findings)",
+      "dvwa.vercel.app: client-side-sql-evidence + reflected XSS bundle markers (2→4 findings)",
+      "vulnbank.org: IDOR sequential IDs + OpenAPI docs exposed (4 findings)",
+      "ucu-owasp-ctf.vercel.app: 5 findings on OWASP CTF training platform"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: intermittent Heroku cold-start yields 1-page shallow crawl (1/6 recall) — staging fallback required",
-      "bwapp.net: domain parked (HR-Assistant) — use bwapp.hakhub.net mirror instead",
+      "juice-shop.herokuapp.com: Heroku cold-start yields 1-page shallow crawl (1/6 recall) — staging fallback required",
+      "acuart.phpnet.us: classic Acunetix demo shallow — headers/tech-stack only (2 findings)",
+      "hiddeninvestigations.net: react2shell lab is Docker-only — landing page lacks exploit oracles",
       "ginandjuice.shop: Invalid URL from cloud scanner despite public availability",
-      "demo.securityknowledgeframework.org: SKF demo offline (connection failed)"
+      "bwapp.net: domain parked — use bwapp.hakhub.net mirror"
     ]
   },
   "discovery_highlights": {
+    "urban-vampi-production.up.railway.app": 5,
+    "websec.fr": 3,
+    "dvwa.vercel.app": 4,
+    "vulnbank.org": 4,
+    "ucu-owasp-ctf.vercel.app": 5,
     "yogsec.github.io/xss-labs": 5,
     "ctf.hacker101.com": 3,
     "ws.digi.ninja": 2,
@@ -140,18 +173,16 @@
     "securityweb-iota.vercel.app": 5,
     "sqli-lab.vercel.app": 3,
     "xss-lab.vercel.app": 3,
-    "ucu-owasp-ctf.vercel.app": 3,
     "xss-attacker.vercel.app": 3,
     "swarnadip-kar.github.io/xss-victim": 3,
     "playground.fabraix.com": 2,
-    "dvwa.vercel.app": 2,
     "vulnshop.vercel.app": 4,
     "ashimkoirala.github.io/HackLab": 5,
     "vulnweb.netlify.app": 6,
     "web-pentest-playground.onrender.com": 3,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "tempehs.github.io/The_Unsecure_PWA": 3,
-    "yusufarbc.github.io/apigoat": 2,
+    "yusufarbc.github.io/apigoat": 3,
     "koadt.github.io/oss-oopssec-store": 2,
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
@@ -161,7 +192,6 @@
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
     "cyber-ctf-website.vercel.app": 1,
-    "vulnbank.org": 4,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 3,
     "web-security-lab.vercel.app": 3,
     "vuln-demo.vercel.app": 4,
@@ -232,7 +262,6 @@
     "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 3,
     "cybersec-demo.vercel.app": 3,
-    "websec.fr": 3,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 4,
@@ -273,6 +302,8 @@
     "security-trainer.vercel.app": 4,
     "capture-the-flag.labs.vercel.dev": 1,
     "ctfchallenge.co.uk": 3,
-    "exploit.education": 3
+    "exploit.education": 3,
+    "hiddeninvestigations.net": 4,
+    "acuart.phpnet.us": 2
   }
 }
