@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const REF = join(__dir, "../../../docs/internal/security-skills");
+const VULNCLAW_SKILLS = join(__dir, "../../../services/vulnclaw/vulnclaw/skills");
 
 interface SkillIndexEntry {
   id: string;
@@ -53,6 +54,34 @@ export function searchSkills(query: string, limit = 10): SkillIndexEntry[] {
         e.owasp_id.toLowerCase().includes(q)
     )
     .slice(0, limit);
+}
+
+/** VulnClaw pentest skills (recon, exploitation, CTF playbooks). */
+export const VULNCLAW_ORACLE_SKILLS = [
+  "core/recon",
+  "core/vuln-discovery",
+  "core/exploitation",
+  "core/waf-bypass",
+  "specialized/ctf-web/SKILL",
+  "specialized/pentest-tools/SKILL"
+] as const;
+
+/** Load a VulnClaw skill markdown by relative path under vulnclaw/skills/. */
+export function loadVulnClawSkill(relativePath: string): string | null {
+  const normalized = relativePath.replace(/^\/+/, "");
+  const p = join(VULNCLAW_SKILLS, normalized.endsWith(".md") ? normalized : `${normalized}.md`);
+  if (!existsSync(p)) return null;
+  return readFileSync(p, "utf8");
+}
+
+export function loadVulnClawOracleSummaries(maxCharsPerSkill = 3500): string {
+  const parts: string[] = [];
+  for (const rel of VULNCLAW_ORACLE_SKILLS) {
+    const text = loadVulnClawSkill(rel);
+    if (!text) continue;
+    parts.push(`### vulnclaw:${rel}\n${text.slice(0, maxCharsPerSkill)}`);
+  }
+  return parts.join("\n\n");
 }
 
 /** Core web oracle set for benchmark / power-loop runs. */

@@ -3,11 +3,14 @@
  */
 import { THREE_GATE_PROMPT } from "./three-gate";
 import { SEVERITY_TRIAGE_PROMPT } from "./severity-triage";
+import { EVIDENCE_GATE_PROMPT } from "./evidence-gate";
 
 export const WEB_SCANNER_SYSTEM_PREFIX = `You are an elite web application security researcher.
 Test general web vulnerabilities (OWASP Top 10 + API Top 10). AI-built apps are secondary.
 
 ${THREE_GATE_PROMPT}
+
+${EVIDENCE_GATE_PROMPT}
 
 ${SEVERITY_TRIAGE_PROMPT}
 

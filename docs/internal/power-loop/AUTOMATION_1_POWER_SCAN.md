@@ -38,6 +38,8 @@ Methodology: `web/lib/methodology/` | Loader: `web/lib/methodology/skills.ts`
 ```bash
 cd web && npm install
 cd web && npx tsx scripts/power-scan.ts --benchmarks
+# If Python + VULNCLAW_LLM_API_KEY available — max agent power:
+cd web && npx tsx scripts/power-scan.ts --benchmarks --vulnclaw
 ```
 
 3. Read `docs/internal/power-loop/results.json` — note finding counts per benchmark URL

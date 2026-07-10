@@ -7,12 +7,15 @@
  *   cd web && npx tsx scripts/power-scan.ts
  *   cd web && npx tsx scripts/power-scan.ts --benchmarks
  *   cd web && npx tsx scripts/power-scan.ts --queue
+ *   cd web && npx tsx scripts/power-scan.ts --benchmarks --vulnclaw
+ *   cd web && npx tsx scripts/power-scan.ts --vulnclaw --vulnclaw-deep
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runDeepScan } from "../lib/checks/runner";
 import { aiDeepProbe } from "../lib/ai/deep-probe";
+import { runVulnClawScan, vulnClawAvailability, mapVulnClawFindings } from "../lib/vulnclaw";
 import { computeBenchmarkRecall } from "../lib/checks/benchmark-recall";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -50,6 +53,8 @@ interface ScanRunResult {
     category: string;
   }>;
   ai_findings_added: number;
+  vulnclaw_findings_added?: number;
+  vulnclaw_scan_mode?: string;
   pages_crawled: number;
   probes_run: number;
   status: "ok" | "error";
@@ -89,7 +94,11 @@ function saveResults(run: ScanRunResult) {
   writeFileSync(resultsPath, JSON.stringify(data, null, 2));
 }
 
-async function scanOne(entry: ScanEntry, kind: "benchmark" | "discovery"): Promise<ScanRunResult> {
+async function scanOne(
+  entry: ScanEntry,
+  kind: "benchmark" | "discovery",
+  opts?: { vulnclaw?: boolean; vulnclawMode?: "quick" | "standard" | "deep" }
+): Promise<ScanRunResult> {
   const run_id = new Date().toISOString();
   const base: ScanRunResult = {
     run_id,
@@ -134,6 +143,35 @@ async function scanOne(entry: ScanEntry, kind: "benchmark" | "discovery"): Promi
       /* AI layer optional */
     }
 
+    // VulnClaw agent layer (Python) — max power when available
+    if (opts?.vulnclaw) {
+      const avail = vulnClawAvailability();
+      if (avail.available) {
+        try {
+          const agent = runVulnClawScan({
+            url: entry.url,
+            scan_mode: opts.vulnclawMode || "quick"
+          });
+          if (agent.ok && agent.findings?.length) {
+            const mapped = mapVulnClawFindings(agent.findings, entry.url);
+            const slugs = new Set(findings.map((f) => f.patternSlug));
+            let added = 0;
+            for (const h of mapped) {
+              if (!slugs.has(h.patternSlug)) {
+                findings.push(h);
+                slugs.add(h.patternSlug);
+                added++;
+              }
+            }
+            base.vulnclaw_findings_added = added;
+            base.vulnclaw_scan_mode = agent.scan_mode;
+          }
+        } catch {
+          /* agent optional */
+        }
+      }
+    }
+
     base.platform = deep.detectedPlatform;
     base.pages_crawled = deep.pagesCrawled.length;
     base.probes_run = deep.probesRun;
@@ -157,6 +195,12 @@ async function main() {
   const args = new Set(process.argv.slice(2));
   const useBenchmarks = args.has("--benchmarks") || args.size === 0;
   const useQueue = args.has("--queue");
+  const useVulnclaw = args.has("--vulnclaw");
+  const vulnclawMode = args.has("--vulnclaw-deep")
+    ? "deep"
+    : args.has("--vulnclaw-standard")
+      ? "standard"
+      : "quick";
   const limit = Number(process.env.POWER_SCAN_LIMIT || "8");
 
   const targets: Array<{ entry: ScanEntry; kind: "benchmark" | "discovery" }> = [];
@@ -192,7 +236,10 @@ async function main() {
   const benchmarkRecall: Record<string, ReturnType<typeof computeBenchmarkRecall>> = {};
 
   for (const { entry, kind } of slice) {
-    const result = await scanOne(entry, kind);
+    const result = await scanOne(entry, kind, {
+      vulnclaw: useVulnclaw,
+      vulnclawMode
+    });
     saveResults(result);
     if (result.status === "ok") {
       ok++;
