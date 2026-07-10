@@ -1027,7 +1027,32 @@
       "url": "https://wrongsecrets.onrender.com/",
       "source": "OWASP WrongSecrets — secrets-management CTF on Render.io (GitHub README public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://lab.pentest-forge.com/",
+      "source": "PentestForge Lab hub — 10 live vuln targets (Juice Shop, DVWA, crAPI, DVGA, CVE labs) (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-forge.com/",
+      "source": "PentestForge marketing hub linking hosted vulnerable-app playground instances (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://azure-samples.github.io/sherpa/",
+      "source": "Microsoft MCP Security Summit — intentionally vulnerable MCP server workshop (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/",
+      "source": "DaniSam-STU/security-lab alternate Vercel deploy — XSS/SQLi/CSRF/IDOR side-by-side labs (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-yourself-first.com/",
+      "source": "Troy Hunt Hack Yourself First — intentionally vulnerable ASP.NET training site (VWAD online)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T19:15:00.000Z"
+  "updated_at": "2026-07-10T20:20:00.000Z"
 }
