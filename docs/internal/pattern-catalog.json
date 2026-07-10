@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-09T19:16:23.081Z",
-  "total": 127,
-  "uniqueSlugs": 127,
+  "generatedAt": "2026-07-10T15:33:04.923Z",
+  "total": 133,
+  "uniqueSlugs": 133,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,30 +9,30 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 97,
+    "generic": 115,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 71,
-    "deep": 52,
+    "free": 77,
+    "deep": 56,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 26,
-    "Exposed secret": 18,
+    "Exposed secret": 20,
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
-    "Security misconfiguration": 9,
-    "Information disclosure": 10,
-    "Broken authentication": 8,
-    "Injection": 14,
+    "Security misconfiguration": 10,
+    "Information disclosure": 11,
+    "Broken authentication": 9,
+    "Injection": 17,
     "Cross-site scripting": 7,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 2,
-    "general": 17
+    "general": 19
   },
   "slugs": [
     "bolt-demo-mode-shipped",
@@ -100,6 +100,9 @@
     "phpinfo-exposed",
     "postmessage-dom-xss-evidence",
     "reflected-xss-query-param",
+    "reflexion-escalated-sqli",
+    "reflexion-escalated-ssti",
+    "reflexion-escalated-xss",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",
     "robots-sensitive-paths",
@@ -161,6 +164,9 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
+    "vulnclaw-dir-discovery",
+    "vulnclaw-jwt-weak-claims",
+    "vulnclaw-sensitive-js-endpoints",
     "windsurf-public-env-leak"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."

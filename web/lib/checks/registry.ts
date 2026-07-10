@@ -5,8 +5,15 @@
 // (idorProbe, clientOnlyAuth, serverActionAuthz) intentionally do not run on the free path;
 // they exist so the worker / future deep flow can share the same registry keys.
 
-import type { FetchedDoc } from "./http";
-import { looksHtml } from "./http";
+import {
+  vulnclawJwtClaims,
+  vulnclawJsEndpoints,
+  vulnclawDirEnum,
+  reflexionEscalatedXss,
+  reflexionEscalatedSqli,
+  reflexionEscalatedSsti
+} from "./vulnclaw-power";
+import { looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import {
   extractApiPaths,
@@ -4884,7 +4891,13 @@ export const RULES: Record<string, Rule> = {
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSideHackThisSiteEvidence,
-  openApiDebugPasswordExposure
+  openApiDebugPasswordExposure,
+  vulnclawJwtClaims,
+  vulnclawJsEndpoints,
+  vulnclawDirEnum,
+  reflexionEscalatedXss,
+  reflexionEscalatedSqli,
+  reflexionEscalatedSsti
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -4901,6 +4914,8 @@ export const FREE_RULES = new Set([
   "permissiveCors",
   "corsReflectOrigin",
   "openRedirect",
+  "vulnclawJwtClaims",
+  "vulnclawJsEndpoints",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass
