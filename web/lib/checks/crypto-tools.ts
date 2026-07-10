@@ -1,5 +1,5 @@
 /**
- * Crypto toolkit — ported from VulnClaw skills/crypto_tools.py (subset for web scans).
+ * Crypto toolkit for JWT decode and token extraction in web scans.
  */
 import { createHash } from "node:crypto";
 

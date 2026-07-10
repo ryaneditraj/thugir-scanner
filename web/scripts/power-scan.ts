@@ -7,15 +7,15 @@
  *   cd web && npx tsx scripts/power-scan.ts
  *   cd web && npx tsx scripts/power-scan.ts --benchmarks
  *   cd web && npx tsx scripts/power-scan.ts --queue
- *   cd web && npx tsx scripts/power-scan.ts --benchmarks --vulnclaw
- *   cd web && npx tsx scripts/power-scan.ts --vulnclaw --vulnclaw-deep
+ *   cd web && npx tsx scripts/power-scan.ts --benchmarks --agent
+ *   cd web && npx tsx scripts/power-scan.ts --agent --agent-deep
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runDeepScan } from "../lib/checks/runner";
 import { aiDeepProbe } from "../lib/ai/deep-probe";
-import { runVulnClawScan, vulnClawAvailability, mapVulnClawFindings } from "../lib/vulnclaw";
+import { runAgentScan, agentAvailability, mapAgentFindings } from "../lib/agent";
 import { computeBenchmarkRecall } from "../lib/checks/benchmark-recall";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -53,8 +53,8 @@ interface ScanRunResult {
     category: string;
   }>;
   ai_findings_added: number;
-  vulnclaw_findings_added?: number;
-  vulnclaw_scan_mode?: string;
+  agent_findings_added?: number;
+  agent_scan_mode?: string;
   pages_crawled: number;
   probes_run: number;
   status: "ok" | "error";
@@ -97,7 +97,7 @@ function saveResults(run: ScanRunResult) {
 async function scanOne(
   entry: ScanEntry,
   kind: "benchmark" | "discovery",
-  opts?: { vulnclaw?: boolean; vulnclawMode?: "quick" | "standard" | "deep" }
+  opts?: { agent?: boolean; agentMode?: "quick" | "standard" | "deep" }
 ): Promise<ScanRunResult> {
   const run_id = new Date().toISOString();
   const base: ScanRunResult = {
@@ -143,17 +143,17 @@ async function scanOne(
       /* AI layer optional */
     }
 
-    // VulnClaw agent layer (Python) — max power when available
-    if (opts?.vulnclaw) {
-      const avail = vulnClawAvailability();
+    // Thugir Agent Engine layer (Python) — max power when available
+    if (opts?.agent) {
+      const avail = agentAvailability();
       if (avail.available) {
         try {
-          const agent = runVulnClawScan({
+          const agent = runAgentScan({
             url: entry.url,
-            scan_mode: opts.vulnclawMode || "quick"
+            scan_mode: opts.agentMode || "quick"
           });
           if (agent.ok && agent.findings?.length) {
-            const mapped = mapVulnClawFindings(agent.findings, entry.url);
+            const mapped = mapAgentFindings(agent.findings, entry.url);
             const slugs = new Set(findings.map((f) => f.patternSlug));
             let added = 0;
             for (const h of mapped) {
@@ -163,8 +163,8 @@ async function scanOne(
                 added++;
               }
             }
-            base.vulnclaw_findings_added = added;
-            base.vulnclaw_scan_mode = agent.scan_mode;
+            base.agent_findings_added = added;
+            base.agent_scan_mode = agent.scan_mode;
           }
         } catch {
           /* agent optional */
@@ -195,10 +195,10 @@ async function main() {
   const args = new Set(process.argv.slice(2));
   const useBenchmarks = args.has("--benchmarks") || args.size === 0;
   const useQueue = args.has("--queue");
-  const useVulnclaw = args.has("--vulnclaw");
-  const vulnclawMode = args.has("--vulnclaw-deep")
+  const useAgent = args.has("--agent") || args.has("--vulnclaw");
+  const agentMode = args.has("--agent-deep") || args.has("--vulnclaw-deep")
     ? "deep"
-    : args.has("--vulnclaw-standard")
+    : args.has("--agent-standard") || args.has("--vulnclaw-standard")
       ? "standard"
       : "quick";
   const limit = Number(process.env.POWER_SCAN_LIMIT || "8");
@@ -237,8 +237,8 @@ async function main() {
 
   for (const { entry, kind } of slice) {
     const result = await scanOne(entry, kind, {
-      vulnclaw: useVulnclaw,
-      vulnclawMode
+      agent: useAgent,
+      agentMode
     });
     saveResults(result);
     if (result.status === "ok") {

@@ -3,7 +3,7 @@ import type { TierName } from "../settings/schema";
 import { analyzeScan, type AiAnalysis } from "../ai/analyze";
 import { aiDeepProbe } from "../ai/deep-probe";
 import { applyStaticMaxDamage, overlayAiMaxDamage } from "../findings/max-damage";
-import { runVulnClawScan, vulnClawAvailability, mapVulnClawFindings } from "../vulnclaw";
+import { runAgentScan, agentAvailability, mapAgentFindings } from "../agent";
 
 export interface EnrichScanArgs {
   findings: PatternFinding[];
@@ -21,7 +21,7 @@ export interface EnrichedScan {
   ai: AiAnalysis | null;
   stats: {
     aiFindingsAdded: number;
-    vulnclawFindingsAdded: number;
+    agentFindingsAdded: number;
     totalFindings: number;
   };
 }
@@ -30,7 +30,7 @@ export interface EnrichedScan {
 export async function enrichScanResults(args: EnrichScanArgs): Promise<EnrichedScan> {
   let findings = [...args.findings];
   const baseCount = findings.length;
-  let vulnclawAdded = 0;
+  let agentAdded = 0;
 
   if (args.isDeep && args.combined && args.origin) {
     const aiHits = await aiDeepProbe({
@@ -49,24 +49,23 @@ export async function enrichScanResults(args: EnrichScanArgs): Promise<EnrichedS
     }
   }
 
-  // VulnClaw full agent when enabled (local worker / THUGIR_AGENT_SCAN_ENABLED)
   const agentEnabled =
     process.env.THUGIR_AGENT_SCAN_ENABLED === "1" ||
     process.env.NODE_ENV === "development";
-  if (args.isDeep && agentEnabled && vulnClawAvailability().available) {
+  if (args.isDeep && agentEnabled && agentAvailability().available) {
     try {
-      const agent = runVulnClawScan({
+      const agent = runAgentScan({
         url: args.target,
         scan_mode: process.env.THUGIR_AGENT_SCAN_MODE === "deep" ? "deep" : "quick"
       });
       if (agent.ok && agent.findings?.length) {
-        const mapped = mapVulnClawFindings(agent.findings, args.target);
+        const mapped = mapAgentFindings(agent.findings, args.target);
         const seen = new Set(findings.map((f) => f.patternSlug));
         for (const hit of mapped) {
           if (!seen.has(hit.patternSlug)) {
             seen.add(hit.patternSlug);
             findings.push(hit);
-            vulnclawAdded++;
+            agentAdded++;
           }
         }
       }
@@ -98,8 +97,8 @@ export async function enrichScanResults(args: EnrichScanArgs): Promise<EnrichedS
     findings,
     ai,
     stats: {
-      aiFindingsAdded: findings.length - baseCount - vulnclawAdded,
-      vulnclawFindingsAdded: vulnclawAdded,
+      aiFindingsAdded: findings.length - baseCount - agentAdded,
+      agentFindingsAdded: agentAdded,
       totalFindings: findings.length
     }
   };

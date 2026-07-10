@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T15:33:04.923Z",
+  "generatedAt": "2026-07-10T15:51:26.405Z",
   "total": 133,
   "uniqueSlugs": 133,
   "byPlatform": {
@@ -143,6 +143,9 @@
     "supabase-anon-key-no-rls",
     "supabase-service-role-in-bundle",
     "tech-stack-disclosure",
+    "thugir-dir-discovery",
+    "thugir-jwt-weak-claims",
+    "thugir-sensitive-js-endpoints",
     "unauthenticated-admin-endpoint",
     "unprotected-webhook-endpoint",
     "v0-openapi-routes-exposed",
@@ -164,9 +167,6 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
-    "vulnclaw-dir-discovery",
-    "vulnclaw-jwt-weak-claims",
-    "vulnclaw-sensitive-js-endpoints",
     "windsurf-public-env-leak"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."

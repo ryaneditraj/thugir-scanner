@@ -1,5 +1,5 @@
 /**
- * Reflexion payload escalation — ported from VulnClaw reflexion.py (L0–L4).
+ * Reflexion payload escalation — L0–L4 encoding when probes are blocked.
  * When a probe fails (WAF/filter), escalate encoding before giving up.
  */
 
