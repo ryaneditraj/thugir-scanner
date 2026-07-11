@@ -632,7 +632,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideFrontendXssDemoEvidence",
   "clientSideAiChatHtmlSinkEvidence",
   "clientSideAvidVulnRegistryEvidence",
-  "clientSideSecurityShepherdEvidence"
+  "clientSideSecurityShepherdEvidence",
+  "clientSideCyberDrillEvidence",
+  "clientSideDeserializationEvidence",
+  "clientSideOverthewireLeviathanEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1148,16 +1151,61 @@ function extractXssQuizInt21hSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** TegalSec browser hacking labs (labs.tegalsec.org/br0w, xss-labs). */
+/** TegalSec browser hacking labs (labs.tegalsec.org hub, br0w, xss-labs). */
 function extractTegalsecLabSeeds(html: string, pageUrl: string): string[] {
-  if (!/HACK THE BR0W|XSS Labs \| Tegal1337|tegalsec\.org/i.test(html)) return [];
+  const isHub = /Cyber Labs[\s\S]{0,60}TegalSec|Hands-on Security Training/i.test(html);
+  const isLab = /HACK THE BR0W|XSS Labs \| Tegal1337|tegalsec\.org/i.test(html);
+  if (!isHub && !isLab) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
+  if (isHub) {
+    for (const p of ["/br0w/", "/xss-labs/"]) {
+      try {
+        const u = new URL(p, pageUrl);
+        if (u.origin !== pageOrigin) continue;
+        out.add(u.toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
   for (const p of ["chall-1.php", "chall-2.php", "instructions.php", "about.php"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Cyber Drill interactive security suite (thecyberdrill.netlify.app). */
+function extractCyberDrillToolSeeds(html: string, pageUrl: string): string[] {
+  if (!/Cyber Drill|thecyberdrill\.netlify\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/sql-injection/",
+    "/phishing-demo/phishing_info",
+    "/camera-hijack/",
+    "/password-checker/",
+    "/quiz/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const toolRe = /href\s*=\s*["'](\/(?:sql-injection|phishing-demo|camera-hijack|password-checker|quiz)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = toolRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -1868,6 +1916,9 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   }
   if (/bandit\.labs\.overthewire\.org|Username:\s*bandit0/i.test(html)) {
     out.add("https://www.overthewire.org/wargames/bandit/bandit0.html");
+  }
+  if (/leviathan\.labs\.overthewire\.org|Username:\s*leviathan0/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/leviathan/");
   }
   return [...out];
 }
@@ -2671,6 +2722,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
   const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
+  const cyberDrillSeeds = extractCyberDrillToolSeeds(home.body, home.finalUrl);
   const alfNuXssSeeds = extractAlfNuXssSeeds(home.body, home.finalUrl);
   const returnTrueSeeds = extractReturnTrueSeeds(home.body, home.finalUrl);
   const authlabSeeds = extractAuthlabSeeds(home.body, home.finalUrl);
@@ -2756,6 +2808,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...gruyereSeeds,
       ...firingRangeSeeds,
       ...tegalsecSeeds,
+      ...cyberDrillSeeds,
       ...alfNuXssSeeds,
       ...returnTrueSeeds,
       ...authlabSeeds,
