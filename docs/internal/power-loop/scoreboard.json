@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T19:29:52.505Z",
+  "updated_at": "2026-07-11T20:32:35.786Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,31 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 752,
-  "total_findings": 3200,
+  "total_sites_scanned": 755,
+  "total_findings": 3223,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 326,
   "discovery_findings": 2250,
-  "improvements_shipped": 270,
-  "last_run": "2026-07-11T19:28:58.871Z",
+  "improvements_shipped": 273,
+  "last_run": "2026-07-11T20:32:35.786Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "degraded_passes": [
-        "pass1: 2 findings, gap=xss,sqli,idor,sensitive_data",
-        "pass2: 4 findings, gap=xss,sensitive_data",
-        "pass3: 8 findings, 6/6 after Heroku wake retry"
-      ],
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_used": false,
       "gap": [],
-      "note": "Final recall 6/6 (8 findings) — Heroku cold-start degraded first two passes; wake retry recovered without staging fallback",
+      "note": "Benchmark recall 6/6 (8 findings) — no benchmark misses; teacher delta skipped",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -58,39 +53,21 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 31,
-      "skipped_48h": [
-        "https://brokencrystals.com/",
-        "https://ginandjuice.shop/",
-        "https://wrongsecrets.herokuapp.com/"
-      ],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/"
-      ],
-      "focus": "OverTheWire Natas19-23 queue expansion; bWAPP/Mutillidae/phpinfo; Sports Media CS training hub secrets",
+      "focus": "Angular SPA title markers; bWAPP bugs.htm injection taxonomy; CS training academy playbook",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after Heroku wake retry — cold-start gap xss,sqli,idor,sensitive_data on pass 1",
-      "computersciencesop2.vercel.app/cybersecurity: 9 findings — OpenAI key + XSS sinks + unauthenticated API routes",
-      "server.vulnapp.id/mutillidae: 6 findings — phpinfo exposed + Mutillidae lab evidence",
-      "bwapp.hakhub.net: 6 findings — directory listing + robots.txt sensitive paths",
-      "ctflearn.com: recovered from prior timeout — 3 findings (CTF platform evidence)",
-      "peruggia.sourceforge.net: controlled-vulnerabilities gallery metadata → client-side-peruggia-evidence (3→4 findings)",
-      "portswigger.net/web-security/sql-injection: SQLi tutorial markers on sub-lesson pages",
-      "hacking-lab.com: /events/ + /ctf_platform crawl seeds improve lab evidence on full pass (2→3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) maintained",
+      "hacking-lab.com/: Angular title shell now fires client-side-hacking-lab-evidence (2→3 findings)",
+      "www.itsecgames.com: bugs.htm injection taxonomy → client-side-bwapp-injection-catalog-evidence (2→3 findings)",
+      "computersciencesop2.vercel.app/cybersecurity: CS Training Academy playbook evidence (9→10 findings)"
     ],
     "learning_gaps": [
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo, should mark enabled:false in queue",
-      "natas19-23: queued but not reached in 8-URL discovery limit this run",
+      "No benchmark misses this run",
+      "No teacher delta — nuclei/thugir-node engine unavailable",
       "hackable-web.vercel.app / vulnerable-lab.vercel.app: queued next — high-value OSS deploys pending",
-      "Heroku juice-shop cold-start: first pass 2/6 recall — retry logic essential for benchmark stability",
-      "nodegoat.herokuapp.com / pygoat.herokuapp.com: Heroku no-such-app — use nodegoat-websec.herokuapp.com",
-      "sqli-demo.vercel.app / securebank-lab.vercel.app: Vercel forbidden or function crash",
-      "hack.me / bugbait.io: connection reset or TLS errors from cloud egress",
-      "ctflearn.com: timeout from cloud scanner egress"
+      "natas19-23: queued but not reached in discovery limit",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — enabled:false in queue"
     ]
   },
   "discovery_highlights": {
@@ -115,8 +92,9 @@
     "natas4.natas.labs.overthewire.org": 3,
     "bwapp.hakhub.net": 6,
     "server.vulnapp.id": 6,
-    "computersciencesop2.vercel.app": 9,
+    "computersciencesop2.vercel.app": 10,
     "ctflearn.com": 3,
-    "picoctf.org": 3
+    "picoctf.org": 3,
+    "www.itsecgames.com": 3
   }
 }
