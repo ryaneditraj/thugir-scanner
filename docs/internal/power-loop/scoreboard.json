@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T08:12:00.000Z",
+  "updated_at": "2026-07-11T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 659,
-  "total_findings": 2788,
+  "total_sites_scanned": 663,
+  "total_findings": 2812,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 273,
-  "discovery_findings": 1899,
-  "improvements_shipped": 237,
-  "last_run": "2026-07-11T08:12:00.000Z",
+  "discovery_findings": 1915,
+  "improvements_shipped": 240,
+  "last_run": "2026-07-11T09:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku full pass (8 findings, no staging fallback)",
+      "note": "No benchmark category misses — primary heroku 8 findings, 6/6 recall",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -43,45 +43,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 46,
-      "new_urls_queued": [
-        "https://railsgoat.cktricky.com/",
-        "https://www.mavensecurity.com/web_security_dojo/",
-        "https://pc-parts-store.vercel.app/",
-        "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/",
-        "http://peruggia.sourceforge.net/"
-      ],
-      "focus": "GitHub Pages OWASP training labs + Vulnerable Bank demo.weblock.ru"
+      "urls_scanned": 3,
+      "focus": "owasp-juice.shop mirror detection + RailsGoat docs + PC Parts Store XSS lab",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
-      "dxx33.github.io/WebVulnsGuide: 8 findings incl critical server-side eval + prototype pollution",
-      "demo.weblock.ru: 7 findings — IDOR + SQLi + prompt-injection banking lab",
-      "koadt.github.io/oss-oopssec-store: 6 findings — IDOR/path traversal/API Top 10 lab markers",
-      "ashimkoirala.github.io/HackLab: 6 findings — browser-only SQLi/XSS/IDOR sandbox",
-      "gauravkhurana.com/SQLInjection: 6 findings — WASM SQLite login-bypass demo"
+      "demo.owasp-juice.shop: isJuiceShopHost extended for owasp-juice domains (1→8 findings)",
+      "railsgoat.cktricky.com: OWASP RailsGoat training docs + getting_started crawl (0→3 findings)",
+      "pc-parts-store.vercel.app: dangerouslySetInnerHTML product description sink (0→5 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between retries",
-      "railsgoat.cktricky.com + pc-parts-store.vercel.app: queued at queue tail — not reached in 8-URL limit",
+      "www.mavensecurity.com/web_security_dojo: empty response from cloud scanner — site may block bots",
       "peruggia.sourceforge.net: SourceForge landing only — app requires local VM install",
-      "rootxjs grpc-goat docs: documentation index only — gRPC labs require local Docker (ports 8001–8009)"
+      "rootxjs grpc-goat docs: documentation index only — gRPC labs require local Docker",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
+    "demo.owasp-juice.shop": 8,
     "dxx33.github.io/WebVulnsGuide": 8,
     "demo.weblock.ru": 7,
-    "koadt.github.io/oss-oopssec-store": 6,
-    "ashimkoirala.github.io/HackLab": 6,
-    "gauravkhurana.com/SQLInjection": 6,
-    "ogtamimi.github.io/OGT-Cyber-Game": 5,
-    "akbarbashakm.github.io/frontend-security-examples": 5,
-    "vulnshop.vercel.app": 3,
+    "pc-parts-store.vercel.app": 5,
     "burpbountylab.com": 10,
-    "artemiskit.vercel.app": 4,
-    "urban-vampi-production.up.railway.app": 6
+    "railsgoat.cktricky.com": 3
   }
 }

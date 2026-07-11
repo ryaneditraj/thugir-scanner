@@ -91,7 +91,8 @@ const HEROKU_APP_ERROR_RE = /Application Error|herokucdn\.com\/error-pages/i;
 
 function isJuiceShopHost(url: string): boolean {
   try {
-    return /juice-shop/i.test(new URL(url).hostname);
+    const host = new URL(url).hostname;
+    return /juice-shop|owasp-juice/i.test(host);
   } catch {
     return false;
   }
@@ -563,7 +564,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideEpicdetectEvidence",
   "clientSideAlfServiceworkerEvidence",
   "clientSideBurpBountyLabEvidence",
-  "clientSideArtemisKitEvidence"
+  "clientSideArtemisKitEvidence",
+  "clientSideRailsgoatEvidence",
+  "clientSidePcPartsStoreLabEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1715,6 +1718,23 @@ function extractSecResearchLabSeeds(html: string, pageUrl: string): string[] {
 }
 
 /** OWASP WebGoat docs (webgoat.org, GitHub Pages mirrors, meta-refresh stubs). */
+/** OWASP RailsGoat documentation mirror (railsgoat.cktricky.com). */
+function extractRailsgoatDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/RailsGoat|railsgoat\.cktricky|OWASP\/railsgoat/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["getting_started.html", "faq.html", "about.html"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 function extractWebgoatDocSeeds(html: string, pageUrl: string): string[] {
   if (!/WebGoat|webgoat\.org|webgoat\.github\.io/i.test(html)) return [];
   const out = new Set<string>();
@@ -2438,6 +2458,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const mlastgSeeds = extractMlastgMkdocsSeeds(home.body, home.finalUrl);
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
+  const railsgoatSeeds = extractRailsgoatDocSeeds(home.body, home.finalUrl);
   const webgoatSeeds = extractWebgoatDocSeeds(home.body, home.finalUrl);
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
@@ -2516,6 +2537,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...mlastgSeeds,
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
+      ...railsgoatSeeds,
       ...webgoatSeeds,
       ...seclabPlaygroundSeeds,
       ...secResearchLabSeeds,
