@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T02:25:43.363Z",
+  "updated_at": "2026-07-11T03:05:28.321Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,28 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 606,
-  "total_findings": 2529,
+  "total_sites_scanned": 614,
+  "total_findings": 2564,
   "critical_findings": 26,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 243,
-  "discovery_findings": 1687,
+  "discovery_urls_added": 248,
+  "discovery_findings": 1714,
   "improvements_shipped": 219,
-  "last_run": "2026-07-11T02:25:43.363Z",
+  "last_run": "2026-07-11T03:05:28.321Z",
   "last_run_summary": {
-    "hour_utc": "02:00",
+    "hour_utc": "03:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": [
-        1,
-        1
-      ],
+      "primary_findings": 8,
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start 1 finding (misconfig only); retry unchanged; staging fallback 6/6; parallel run shipped retry-findings-merge (primary 2/6 with auth_bypass)",
+      "note": "Primary heroku full pass 8 findings 6/6 — no retry or staging fallback needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,20 +45,6 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ],
-          "first_pass_gap": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
-          ],
-          "retry_gap": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
           ]
         }
       }
@@ -71,36 +53,35 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 20,
+      "findings": 27,
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
       "queued_not_reached": [
+        "https://exploit.education/",
+        "https://cybench.github.io/",
+        "https://bwapp.net/",
+        "https://hackable-web.vercel.app/",
+        "https://hack.me/",
+        "https://maxwellcalkin.github.io/sentinel-ai/",
+        "https://vb467w26-production-b2df.up.railway.app/",
         "https://vulnerableapp.com/",
-        "https://web-production-42cbf.up.railway.app/",
-        "https://ironwasp.org/",
-        "https://gandalf.lakera.ai/",
-        "https://hacksplaining.com/",
-        "https://aigoat.co.in/",
-        "https://ctfchallenge.com/"
+        "https://gandalf.lakera.ai/"
       ],
-      "focus": "BugBountyHunter XSS challenges + DigiNinja AuthLab JWT/XOR + NodeGoat + Zero Health",
-      "improvements_shipped_this_run": 3,
-      "parallel_run": "benchmark-retry-findings-merge + pwnshop /vulnerabilities crawl shipped on same branch"
+      "focus": "HackThisSite Vercel clone + DVWA csalab + XSS game/quiz + GraphQL Railway + CTFChallenge + InterCode benchmark"
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary heroku 1/6 cold-start (misconfig only)",
-      "authlab.digi.ninja: JWT alg:none + XOR auth + reflected XSS (5 findings)",
-      "nodegoat-websec.herokuapp.com: NoSQL + client-side evidence (5 findings)",
-      "www.bugbountyhunter.com: XSS challenge platform markers (2 findings each on 3 routes)",
-      "zerohealth.aliyu.dev: medical data leak lab evidence (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — primary full pass, no cold-start regression",
+      "hack-this-site-eta.vercel.app: 12 findings — GraphQL introspection + client-side SQL/XSS/IDOR evidence",
+      "dvwa.csalab.app: phpinfo exposed + reflected XSS (4 findings)",
+      "ctfchallenge.co.uk: postMessage DOM XSS + platform markers (3 findings)",
+      "xss-game.appspot.com + xss-quiz.int21h.jp: reflected XSS confirmed (2 each)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: severe cold-start regression — 1 finding 1/6 (only misconfig); gap xss,sqli,idor,auth_bypass,sensitive_data on both passes",
-      "Primary heroku Heroku dyno sleep likely starving API probes — staging oracle remains reliable 6/6",
+      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only (1 finding), introspection/mutation probes missed",
       "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com",
-      "New tail URLs (vulnerableapp.com, qamax-adversary, ironwasp, gandalf, hacksplaining) not reached in 8-URL limit",
-      "mutillidae.lab.pentest-forge.com: 502/degraded — headers-only (1 finding)"
+      "New tail URLs (hack.me, sentinel-ai, vb467 Railway, hackxor demo, hackthis.co.uk) not reached in 8-URL limit",
+      "intercode-benchmark.github.io: static benchmark landing — client-side evidence only (3 findings)"
     ]
   },
   "discovery_highlights": {
@@ -269,6 +250,10 @@
     "authlab.digi.ninja": 5,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
+    "hack-this-site-eta.vercel.app": 12,
+    "dvwa.csalab.app": 4,
+    "ctfchallenge.co.uk": 3,
+    "intercode-benchmark.github.io": 3,
     "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 3,
     "cybersec-demo.vercel.app": 4,
@@ -329,9 +314,6 @@
     "cryptohack.org": 4,
     "www.overthewire.org": 5,
     "bypass403.vercel.app": 2,
-    "www.bugbountyhunter.com": 2,
-    "authlab.digi.ninja": 5,
-    "nodegoat-websec.herokuapp.com": 5,
-    "zerohealth.aliyu.dev": 3
+    "www.bugbountyhunter.com": 2
   }
 }

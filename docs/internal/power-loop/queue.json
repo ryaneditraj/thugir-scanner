@@ -1202,7 +1202,32 @@
       "url": "https://hacksplaining.com/",
       "source": "Hacksplaining — interactive OWASP Top 10 vulnerability training walkthroughs (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://hack.me/",
+      "source": "OWASP VWAD — community sandboxed vulnerable web app platform (eLearnSecurity Coliseum)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://maxwellcalkin.github.io/sentinel-ai/",
+      "source": "Sentinel AI — browser-based prompt injection adversarial test suite (55 cases, web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vb467w26-production-b2df.up.railway.app/",
+      "source": "schectma/vuln-bank-467_W26 — Vuln Bank with runtime hardening toggles (Railway OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://hackxor.sourceforge.net/cgi-bin/index.pl",
+      "source": "Hackxor online demo — story-driven XSS/SQLi/CSRF missions (algo/smurf, OWASP VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthis.co.uk/",
+      "source": "HackThis — UK web security challenge platform with realistic vuln levels (OWASP VWAD)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T02:22:00.000Z"
+  "updated_at": "2026-07-11T03:05:00.000Z"
 }
