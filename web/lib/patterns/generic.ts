@@ -2222,6 +2222,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-bwapp-injection-catalog-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "bWAPP injection taxonomy catalog disclosed",
+    description:
+      "bWAPP bugs.htm documents SQL/HTML/LDAP injection, XSS, CSRF, XXE, and SSRF vulnerability categories across 100+ training exercises.",
+    impactOneline:
+      "Public bWAPP bug catalogs reveal full injection and XSS challenge taxonomy used to benchmark scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBwappInjectionCatalogEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bWAPP is an intentional training application — keep installs offline from production.",
+      steps: [
+        "Install bWAPP only in local VMs (bee-box) or isolated containers.",
+        "Do not expose bWAPP instances to the public internet.",
+        "Use bWAPP taxonomy to patch similar patterns in production PHP code."
+      ]
+    },
+    fixPrompt:
+      "Our site documents bWAPP-style injection challenge catalogs. Show how to keep lab installs isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cs-training-academy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CS Training Academy vuln-app playbook disclosed",
+    description:
+      "Sports Media CS Training Academy publishes a curated cybersecurity playbook linking OWASP Juice Shop, WebGoat, DVWA, and LLM security labs.",
+    impactOneline:
+      "Public training playbooks index deliberately vulnerable lab deploys attackers use as scanner oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCsTrainingAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training playbooks should link to isolated lab instances, not production systems.",
+      steps: [
+        "Gate lab deploy links behind authenticated student portals.",
+        "Do not embed live API keys in training hub bundles.",
+        "Isolate linked vulnerable apps on separate infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We publish a CS training academy playbook with links to vulnerable lab apps. Show how to gate lab URLs and remove secrets from bundles.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackable-lab-evidence",
     platform: "generic",
     category: "Broken authentication",

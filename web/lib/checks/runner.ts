@@ -598,6 +598,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideGoogleGruyereCodelabEvidence",
   "clientSideMutillidaeEvidence",
   "clientSideBwappEvidence",
+  "clientSideBwappInjectionCatalogEvidence",
+  "clientSideCsTrainingAcademyEvidence",
   "clientSideHackableSoLabEvidence",
   "clientSideVulnwebLabEvidence",
   "clientSideHackingLabEvidence",
@@ -1072,7 +1074,7 @@ function extractVulnwebLabSeeds(html: string, jsBodies: string[], origin: string
 function extractBwappLabSeeds(html: string, origin: string): string[] {
   if (!/bWAPP|buggy web application|itsecgames/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["bugs.htm", "download.htm", "training.htm", "downloads/vulnerabilities.txt"]) {
+  for (const p of ["bugs.htm", "downloads/vulnerabilities.txt", "download.htm", "training.htm"]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {
