@@ -1427,7 +1427,32 @@
       "url": "https://alf.nu/alert2",
       "source": "ALF Security XSS lab — alert(1) to win challenge series stage 2 (alf.nu)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas3.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 3 — robots.txt / directory disclosure wargame (follows natas2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas4.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 4 — HTTP Referer header bypass wargame",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas5.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 5 — logged-in cookie/session wargame",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/sql-injection/",
+      "source": "Hacksplaining — interactive SQL injection secure-coding lesson (Product Hunt)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://academy.portswigger.net/",
+      "source": "PortSwigger Web Security Academy — free browser-based OWASP labs hub",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T11:05:00.000Z"
+  "updated_at": "2026-07-11T12:30:00.000Z"
 }
