@@ -1252,7 +1252,32 @@
       "url": "https://lab.pentestit.ru/",
       "source": "PentestIT Test Lab — emulated corporate IT infra for legal pen-test practice (awesome-vulnerable)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/",
+      "source": "Burp Bounty Lab — intentionally vulnerable app for XSS/SQLi/RCE/SSRF/SSTI/XXE/GraphQL scanner profile testing (VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bigiamchallenge.com/challenge/1",
+      "source": "Wiz Big IAM Challenge — public cloud IAM misconfiguration CTF (wiz.io research)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://k8slanparty.com/",
+      "source": "Wiz Kubernetes LAN Party — K8s network vuln/misconfig CTF challenge platform (wiz.io research)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.brokenazure.cloud/",
+      "source": "Broken Azure Cloud — Azure AD/security misconfiguration training challenge (VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securitylab.github.com/secure-code-game/",
+      "source": "GitHub Security Lab Secure Code Game — open-source in-browser secure coding CTF (GitHub Security Lab)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T04:05:00.000Z"
+  "updated_at": "2026-07-11T05:05:00.000Z"
 }
