@@ -1505,6 +1505,24 @@
       "slug": "alf-nu-alert2-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: <title>alert(1) to win</title> + /s/js/alert.min.js on /alert2; extractAlfNuXssSeeds adds alert2; alf.nu/alert2 findings 0→3 (alf-xss-wargame evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:natas3.natas.labs.overthewire.org",
+      "slug": "natas-users-txt-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: natas2 /files/users.txt lists natas3:K30JrSRHzjxq3paUQuwozY4MNvmNFyhI; bootstrapNatasCreds fetches users.txt when HTML comment missing; natas3 findings 0→3; benchmark juice-shop 8 findings 6/6"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-lesson-step-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/sql-injection/start breadcrumb nav + SQL Injection — Secure Coding Lesson title; extractHacksplainingLessonSeeds adds step paths; hacksplaining.com/lessons/sql-injection findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "client-side-portswigger-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Web Security Academy: Free Online Training from PortSwigger + /web-security/sql-injection module links; extractPortswiggerAcademySeeds; portswigger.net/web-security findings 0→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2752,6 +2770,21 @@
       "source": "discovery:alf.nu",
       "slug": "alf-nu-alert2-seed",
       "shipped_at": "2026-07-11T12:24:00.000Z"
+    },
+    {
+      "source": "discovery:natas3.natas.labs.overthewire.org",
+      "slug": "natas-users-txt-bootstrap",
+      "shipped_at": "2026-07-11T13:08:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-lesson-step-crawl",
+      "shipped_at": "2026-07-11T13:08:00.000Z"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "client-side-portswigger-academy-evidence",
+      "shipped_at": "2026-07-11T13:08:00.000Z"
     }
   ]
 }
