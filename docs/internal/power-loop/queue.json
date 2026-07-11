@@ -1552,7 +1552,32 @@
       "url": "https://h3xstream.github.io/waf-workshop/site/03-lab/",
       "source": "h3xstream WAF Bypass Workshop — SQL syntax lab with ModSecurity (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas10.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 10 — base64 auth bypass wargame (follows natas9)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas11.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 11 — cookie XOR encoding bypass wargame",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas12.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 12 — randomised cookie value wargame",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas13.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 13 — XOR with static key wargame",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sasanlabs.github.io/VulnerableApp-facade/",
+      "source": "OWASP VulnerableApp facade — scanner evaluation platform docs + DAST/SAST oracle metadata (GitHub Pages)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T16:06:00.000Z"
+  "updated_at": "2026-07-11T17:06:00.000Z"
 }
