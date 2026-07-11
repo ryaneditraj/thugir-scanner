@@ -8828,7 +8828,7 @@
       "scanned_at": "2026-07-11T10:09:38.403Z"
     },
     {
-      "run_id": "2026-07-11T11:03:34.819Z",
+      "run_id": "2026-07-11T11:07:39.353Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -8897,7 +8897,11 @@
       "pages_crawled": 1,
       "probes_run": 259,
       "status": "ok",
+<<<<<<< HEAD
       "scanned_at": "2026-07-11T11:03:34.819Z"
+=======
+      "scanned_at": "2026-07-11T11:07:39.353Z"
+>>>>>>> 93f7b9c (power-loop: benchmark validation run 2026-07-11T11:10)
     }
   ],
   "teacher_delta_runs": [
