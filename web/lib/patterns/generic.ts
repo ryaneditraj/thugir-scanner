@@ -4040,5 +4040,57 @@ export const genericPatterns: Pattern[] = [
       "We host user files on sandbox subdomains. Show how to block ServiceWorker registration and prevent persistent fetch interception after XSS.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-burp-bounty-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab scanner profile testbed disclosed",
+    description:
+      "Burp Bounty Lab is an intentionally vulnerable application cataloging XSS, SQLi, SSRF, SSTI, and XXE routes for testing Burp Bounty scanner profiles.",
+    impactOneline:
+      "Public Burp Bounty Lab instances expose live reflected XSS and error-based SQLi endpoints attackers can probe without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBurpBountyLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Burp Bounty Lab is intentional scanner training — never deploy similar vuln catalogs to production.",
+      steps: [
+        "Run Burp Bounty Lab only on isolated lab networks.",
+        "Block public access to /xss/, /sqli/, and /ssrf/ training routes in production.",
+        "Use Burp Bounty profiles only against authorized staging targets."
+      ]
+    },
+    fixPrompt:
+      "We host a Burp Bounty Lab-style scanner testbed. Show how to isolate it and prevent XSS/SQLi routes from reaching production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-artemiskit-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "ArtemisKit LLM red-team toolkit disclosed",
+    description:
+      "ArtemisKit is an open-source CLI toolkit combining LLM security red-teaming, quality evaluation, and stress testing with prompt-injection and jailbreak mutation scoring.",
+    impactOneline:
+      "Public ArtemisKit landing pages document prompt-injection and jailbreak attack catalogs useful for adversarial LLM testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideArtemisKitEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "ArtemisKit is intentional AI red-team tooling — restrict LLM attack demos to authorized lab environments.",
+      steps: [
+        "Run ArtemisKit red-team scans only against staging LLM endpoints with synthetic data.",
+        "Do not expose ArtemisKit attack mutation catalogs on public marketing pages with live API keys.",
+        "Monitor production chatbots for prompt-injection patterns ArtemisKit documents."
+      ]
+    },
+    fixPrompt:
+      "We use ArtemisKit for LLM security testing. Show how to run red-team scans safely and harden production chatbots against prompt injection.",
+    version: 1,
+    enabled: true
   }
 ];
