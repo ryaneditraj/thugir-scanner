@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T07:07:04.388Z",
-  "total": 203,
-  "uniqueSlugs": 203,
+  "generatedAt": "2026-07-11T08:04:41.617Z",
+  "total": 205,
+  "uniqueSlugs": 205,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 185,
+    "generic": 187,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 138,
+    "deep": 140,
     "continuous": 0
   },
   "byCategory": {
@@ -27,11 +27,11 @@
     "Security misconfiguration": 15,
     "Information disclosure": 15,
     "Broken authentication": 12,
-    "Injection": 25,
+    "Injection": 26,
     "Cross-site scripting": 17,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 11,
+    "AI security": 12,
     "general": 17
   },
   "slugs": [
@@ -42,6 +42,7 @@
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
     "client-side-archon-training-evidence",
+    "client-side-artemiskit-evidence",
     "client-side-atlas-crew-edge-protection-evidence",
     "client-side-atlas-crew-hub-evidence",
     "client-side-atlas-crew-inferno-lab-evidence",
@@ -49,6 +50,7 @@
     "client-side-berger-cyber-lab-evidence",
     "client-side-brokencrystals-evidence",
     "client-side-bugbountyhunter-evidence",
+    "client-side-burp-bounty-lab-evidence",
     "client-side-bwapp-evidence",
     "client-side-chimera-vuln-lab-evidence",
     "client-side-cryptohack-evidence",
