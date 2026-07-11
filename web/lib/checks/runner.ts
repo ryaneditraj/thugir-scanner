@@ -99,6 +99,7 @@ function isJuiceShopHost(url: string): boolean {
 
 const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/admin/application-configuration",
+  "/rest/track-order/1",
   "/rest/products/search?q=warmup",
   "/rest/products/search?q='))"
 ];
@@ -113,6 +114,8 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
       });
       if (doc.status < 200 || doc.status >= 500 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
+      if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
+        return true;
       if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return true;
       if (p.includes("search") && (/"products"|"data"\s*:/i.test(doc.body) || doc.status === 200))
         return true;
@@ -1344,6 +1347,33 @@ function extractMlastgMkdocsSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Archon VitePress docs — seed cybersecurity and OWASP training paths. */
+function extractArchonVitepressSeeds(html: string, pageUrl: string): string[] {
+  if (!/archon-eight\.vercel\.app|Holy Grail of Engineering Knowledge|VitePress/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/cybersecurity/", "/security/", "/security/owasp/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:cybersecurity|security)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** CryptoHack — seed public challenge catalog. */
 function extractCryptohackChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/CryptoHack|cryptohack\.org/i.test(html)) return [];
@@ -2149,6 +2179,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const atlasCrewInfernoLabSeeds = extractAtlasCrewInfernoLabSeeds(home.body, home.finalUrl);
   const atlasCrewEdgeProtectionSeeds = extractAtlasCrewEdgeProtectionSeeds(home.body, home.finalUrl);
   const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
+  const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -2219,6 +2250,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...atlasCrewInfernoLabSeeds,
       ...atlasCrewEdgeProtectionSeeds,
       ...owaspVwadSeeds,
+      ...archonVitepressSeeds,
       ...vulnerableAppSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
