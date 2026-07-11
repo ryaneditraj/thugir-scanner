@@ -1685,6 +1685,24 @@
       "slug": "juice-shop-mirror-tld-probes",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/search?q='')) returns SQLITE_ERROR; isJuiceShopHost extended to .juice.shop TLD for API/bundle priming; demo.owasp-juice.shop findings 2→8; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:google-gruyere.appspot.com",
+      "slug": "gruyere-live-instance-xss-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /start allocates instance id; GET /{id}/snippets.gtl?uid=thugirXSScanary echoes raw canary in HTML; extractGruyereLiveInstancePaths + early uid probe in reflectedXss; google-gruyere.appspot.com findings 3→4; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: KONTRA OWASP Top 10 for API + interactive application security training modules + Free Exercises hub; extractKontraTrainingSeeds; application.security/free/owasp-top-10-API findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.immersivelabs.com",
+      "slug": "client-side-immersive-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Prove Cyber Resilience with Realistic Drills + hands-on labs + cybersecurity workforce resilience platform; www.immersivelabs.com findings 0→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3082,6 +3100,21 @@
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-mirror-tld-probes",
       "shipped_at": "2026-07-11T22:05:00.000Z"
+    },
+    {
+      "source": "discovery:google-gruyere.appspot.com",
+      "slug": "gruyere-live-instance-xss-probe",
+      "shipped_at": "2026-07-11T23:38:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "shipped_at": "2026-07-11T23:38:00.000Z"
+    },
+    {
+      "source": "discovery:www.immersivelabs.com",
+      "slug": "client-side-immersive-labs-evidence",
+      "shipped_at": "2026-07-11T23:38:00.000Z"
     }
   ]
 }
