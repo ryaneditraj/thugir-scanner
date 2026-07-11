@@ -7293,6 +7293,48 @@ const clientSideSockettomeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- First Vulnerable Bank API security GitBook (fvb.vchan.in) --------------------
+const CLIENT_FVB_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "First Vulnerable Bank branding",
+    re: /First Vulnerable Bank/i
+  },
+  {
+    label: "BOLA / IDOR API vulnerability module",
+    re: /Broken Object Level Authorization\s*\(BOLA\)|Insecure Direct Object Reference\s*\(IDOR\)/i
+  },
+  {
+    label: "BOLA exploit walkthrough",
+    re: /vulnerable to broken object-level authorization|manipulating the ID of an object/i
+  },
+  {
+    label: "FVB API documentation host",
+    re: /apidoc\.fvb\.vchan\.in/i
+  },
+  {
+    label: "Authenticated route bypass module",
+    re: /Authenticated Route Bypass|authentication bypass might occur when an endpoint/i
+  }
+];
+
+const clientSideFvbLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FVB_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/First Vulnerable Bank|fvb\.vchan\.in/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "First Vulnerable Bank GitBook documents BOLA/IDOR and authentication-bypass API labs with vulnerable FastAPI code samples"
+    }
+  };
+};
+
 // --- OWASP Bricks (sechow.com/bricks — PHP web security learning platform docs) ------
 const CLIENT_OWASP_BRICKS_RES: { label: string; re: RegExp }[] = [
   {
@@ -8978,6 +9020,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,
+  clientSideFvbLabEvidence,
   clientSideVaultappLabEvidence,
   clientSideDamnVulnerableBankEvidence,
   clientSideVulnlabAcademyEvidence,
