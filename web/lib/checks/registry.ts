@@ -2983,6 +2983,132 @@ const clientSidePcPartsStoreLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- BreakTheFlask vulnerable Flask writeup labs (dghostninja.github.io)
+const CLIENT_BREAK_THE_FLASK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BreakTheFlask purposefully vulnerable Flask app",
+    re: /BreakTheFlask|purposefully vulnerable Flask app/i
+  },
+  {
+    label: "BreakTheFlask GitHub repository",
+    re: /github\.com\/DghostNinja\/BreakTheFlask|DghostNinja\/BreakTheFlask\.git/i
+  },
+  {
+    label: "Flask render_template_string SSTI sink",
+    re: /render_template_string|from flask import Flask/i
+  },
+  {
+    label: "SQLi XSS Command Injection LDAP injection modules",
+    re: /SQLi,?\s*XSS,?\s*Command Injection|LDAP Injection|Command Injection \(Terminal\)/i
+  },
+  {
+    label: "BreakTheFlask BAC IDOR admin panel routes",
+    re: /\/admin_panel|View Profile \(IDOR\)|Insecure Direct Object Reference/i
+  }
+];
+
+const clientSideBreakTheFlaskEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BREAK_THE_FLASK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/BreakTheFlask|DghostNinja\/BreakTheFlask/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BreakTheFlask writeups embed intentionally vulnerable Flask routes for SQLi, XSS, command injection, LDAP injection, and broken access control"
+    }
+  };
+};
+
+// --- gRPC Goat vulnerability practice lab docs (rootxjs.github.io)
+const CLIENT_GRPC_GOAT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "gRPC Goat vulnerability labs title",
+    re: /gRPC Goat[\s\S]{0,40}vulnerability labs|gRPC Goat vulnerability labs/i
+  },
+  {
+    label: "gRPC Goat GitHub repository",
+    re: /github\.com\/rootxjs\/grpc-goat|rootxjs\/grpc-goat\.git/i
+  },
+  {
+    label: "Nine vulnerable gRPC services",
+    re: /9 vulnerable services|Start all 9 vulnerable services/i
+  },
+  {
+    label: "gRPC reflection enabled lab",
+    re: /Reflection Enabled|gRPC reflection can expose your entire API surface/i
+  },
+  {
+    label: "gRPC SQLi command injection SSRF lab catalog",
+    re: /SQL injection in gRPC services|Command injection vulnerabilities|Server-Side Request Forgery \(SSRF\)/i
+  }
+];
+
+const clientSideGrpcGoatLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GRPC_GOAT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/gRPC Goat|grpc-goat|grpc_goat_docs/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "gRPC Goat documents nine intentionally vulnerable gRPC microservices covering reflection, plaintext TLS, mTLS bypass, SQLi, command injection, and SSRF"
+    }
+  };
+};
+
+// --- WebVuln-Runner Docker launcher for vulnerable app labs (yusufarbc.github.io)
+const CLIENT_WEBVULN_RUNNER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebVuln-Runner vulnerable app manager",
+    re: /WebVuln-Runner[\s\S]{0,40}Vulnerable App Manager|Docker-based launcher for 15\+ vulnerable web app labs/i
+  },
+  {
+    label: "WebVuln-Runner GitHub repository",
+    re: /github\.com\/yusufarbc\/webvuln-runner/i
+  },
+  {
+    label: "Juice Shop DVWA WebGoat bWAPP catalog",
+    re: /OWASP Juice Shop|Damn Vulnerable Web Application|OWASP WebGoat|bWAPP/i
+  },
+  {
+    label: "Docker powered security training launcher",
+    re: /Docker Powered|spin up isolated vulnerable environments|OWASP Top 10 vulnerabilities/i
+  },
+  {
+    label: "Whiptail TUI container manager",
+    re: /Text User Interface \(Whiptail\)|managing containers directly from your terminal/i
+  }
+];
+
+const clientSideWebvulnRunnerEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBVULN_RUNNER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/WebVuln-Runner|webvuln-runner/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebVuln-Runner is a Docker TUI launcher indexing Juice Shop, DVWA, WebGoat, bWAPP, and other OWASP Top 10 training apps"
+    }
+  };
+};
+
 // --- Erling Ellingsen alf.nu ServiceWorker sandbox attack lab -------------------
 const CLIENT_ALF_SERVICEWORKER_RES: { label: string; re: RegExp }[] = [
   {
@@ -8312,7 +8438,10 @@ export const RULES: Record<string, Rule> = {
   clientSideBurpBountyLabEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
-  clientSidePcPartsStoreLabEvidence
+  clientSidePcPartsStoreLabEvidence,
+  clientSideBreakTheFlaskEvidence,
+  clientSideGrpcGoatLabEvidence,
+  clientSideWebvulnRunnerEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

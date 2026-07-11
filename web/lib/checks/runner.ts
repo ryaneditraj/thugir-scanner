@@ -566,7 +566,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideBurpBountyLabEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
-  "clientSidePcPartsStoreLabEvidence"
+  "clientSidePcPartsStoreLabEvidence",
+  "clientSideBreakTheFlaskEvidence",
+  "clientSideGrpcGoatLabEvidence",
+  "clientSideWebvulnRunnerEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1735,6 +1738,61 @@ function extractRailsgoatDocSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** BreakTheFlask Jekyll writeups (dghostninja.github.io) — seed OWASP module posts. */
+function extractBreakTheFlaskWriteupSeeds(html: string, pageUrl: string): string[] {
+  if (!/BreakTheFlask|DghostNinja\/BreakTheFlask/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/posts/Injection/",
+    "/posts/BAC/",
+    "/posts/CRYPTOGRAPHIC-FAILURE/",
+    "/posts/Insecure-design/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const postRe = /href\s*=\s*["'](\/posts\/[^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = postRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** gRPC Goat Astro docs (rootxjs.github.io/docs/grpc_goat_docs). */
+function extractGrpcGoatDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/gRPC Goat|grpc_goat_docs|rootxjs\/grpc-goat/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/docs/grpc_goat_docs/getting-started/",
+    "/docs/grpc_goat_docs/labs/",
+    "/docs/grpc_goat_docs/walkthrough/",
+    "/docs/grpc_goat_docs/grpc-basics/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 function extractWebgoatDocSeeds(html: string, pageUrl: string): string[] {
   if (!/WebGoat|webgoat\.org|webgoat\.github\.io/i.test(html)) return [];
   const out = new Set<string>();
@@ -2459,6 +2517,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const railsgoatSeeds = extractRailsgoatDocSeeds(home.body, home.finalUrl);
+  const breakTheFlaskSeeds = extractBreakTheFlaskWriteupSeeds(home.body, home.finalUrl);
+  const grpcGoatSeeds = extractGrpcGoatDocSeeds(home.body, home.finalUrl);
   const webgoatSeeds = extractWebgoatDocSeeds(home.body, home.finalUrl);
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
@@ -2538,6 +2598,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
       ...railsgoatSeeds,
+      ...breakTheFlaskSeeds,
+      ...grpcGoatSeeds,
       ...webgoatSeeds,
       ...seclabPlaygroundSeeds,
       ...secResearchLabSeeds,
