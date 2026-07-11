@@ -4092,5 +4092,57 @@ export const genericPatterns: Pattern[] = [
       "We use ArtemisKit for LLM security testing. Show how to run red-team scans safely and harden production chatbots against prompt injection.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-railsgoat-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "OWASP RailsGoat vulnerable Rails training app disclosed",
+    description:
+      "RailsGoat is OWASP's deliberately vulnerable Ruby on Rails application documenting SQL injection, XSS, CSRF, and broken access control lessons.",
+    impactOneline:
+      "Public RailsGoat documentation mirrors advertise serious intentional vulnerabilities for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRailsgoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RailsGoat is intentional training software — never deploy similar vulnerable Rails apps to production.",
+      steps: [
+        "Run RailsGoat only on isolated lab VMs without public network binding.",
+        "Do not reuse RailsGoat vulnerability patterns in production code.",
+        "Use RailsGoat tutorials to patch SQLi, XSS, and CSRF in your own apps."
+      ]
+    },
+    fixPrompt:
+      "We host a RailsGoat-style vulnerable Rails training app. Show how to isolate it and fix the SQLi/XSS/CSRF patterns it demonstrates.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pc-parts-store-lab-evidence",
+    platform: "generic",
+    category: "XSS",
+    severityDefault: "high",
+    title: "PC Parts Store lab renders unsanitized product HTML",
+    description:
+      "The PC Parts Store vulnerable e-commerce SPA uses React dangerouslySetInnerHTML to render Commerce.js product descriptions without sanitization.",
+    impactOneline:
+      "Stored XSS is possible when product catalog descriptions include attacker-controlled HTML rendered on /details pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePcPartsStoreLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render Commerce.js or API product descriptions with dangerouslySetInnerHTML.",
+      steps: [
+        "Replace dangerouslySetInnerHTML with textContent or a strict HTML sanitizer (DOMPurify).",
+        "Validate and strip HTML from product descriptions at import time.",
+        "Run PC Parts Store labs only on isolated staging with synthetic catalog data."
+      ]
+    },
+    fixPrompt:
+      "Our React e-commerce app uses dangerouslySetInnerHTML for product descriptions. Show the safe alternative and how to sanitize Commerce.js catalog HTML.",
+    version: 1,
+    enabled: true
   }
 ];
