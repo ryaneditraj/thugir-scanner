@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T09:10:00.000Z",
+  "updated_at": "2026-07-11T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 675,
-  "total_findings": 2862,
+  "total_sites_scanned": 678,
+  "total_findings": 2874,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 278,
-  "discovery_findings": 1965,
-  "improvements_shipped": 240,
-  "last_run": "2026-07-11T09:10:00.000Z",
+  "discovery_urls_added": 281,
+  "discovery_findings": 1977,
+  "improvements_shipped": 243,
+  "last_run": "2026-07-11T10:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
@@ -50,57 +50,36 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 33,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
-      ],
-      "new_urls_queued": [
-        "https://www.hackazon.com/",
-        "https://dghostninja.github.io/posts/Injection/",
-        "https://dghostninja.github.io/posts/BAC/",
-        "https://dghostninja.github.io/posts/CRYPTOGRAPHIC-FAILURE/",
-        "https://dghostninja.github.io/posts/Insecure-design/"
-      ],
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 14,
       "improvements_shipped_this_run": 3,
-      "focus": "GitHub Pages OWASP training labs + engine markers for owasp-juice.shop/RailsGoat/PC Parts Store"
+      "focus": "BreakTheFlask Flask writeups + gRPC Goat docs + WebVuln-Runner Docker lab launcher"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
-      "vulnlab.vercel.app: 7 findings — intentionally vulnerable training platform (lovable stack)",
-      "juicesec.mrdinesh.workers.dev: 6 findings — Juice Shop variant on Cloudflare Workers",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: 6 findings — SIEM/WAF/IDS attack scenario markers",
-      "demo.owasp-juice.shop: isJuiceShopHost extended for owasp-juice domains (engine improvement)",
-      "railsgoat.cktricky.com: OWASP RailsGoat training docs + getting_started crawl (engine improvement)",
-      "pc-parts-store.vercel.app: dangerouslySetInnerHTML product description sink (engine improvement)"
+      "dghostninja.github.io/posts/Injection: BreakTheFlask embedded Flask vuln code (2→4 findings)",
+      "rootxjs.github.io/docs/grpc_goat_docs: nine vulnerable gRPC microservice labs (0→6 findings)",
+      "yusufarbc.github.io/webvuln-runner: Docker TUI for Juice Shop/DVWA/WebGoat/bWAPP (0→4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between hourly runs",
-      "hackazon.com + BreakTheFlask writeups: queued at queue tail — not reached in 8-URL limit",
-      "www.mavensecurity.com/web_security_dojo: empty response from cloud scanner — site may block bots",
+      "www.hackazon.com: domain parked (HugeDomains) — use hackazon.webscantest.com mirror (403 from cloud)",
+      "www.mavensecurity.com/web_security_dojo: empty response from cloud scanner",
       "peruggia.sourceforge.net: SourceForge landing only — app requires local VM install",
-      "testhtml5.vulnweb.com: DNS dead — remove or replace with testasp.vulnweb.com",
-      "BreakTheFlask dghostninja posts: writeup pages with embedded vuln code, not live Flask instances"
+      "xss.pwnfunction.com: DNS dead / unreachable",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp.vulnweb.com"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "demo.owasp-juice.shop": 8,
-    "dxx33.github.io/WebVulnsGuide": 8,
-    "demo.weblock.ru": 7,
-    "vulnlab.vercel.app": 7,
-    "koadt.github.io/oss-oopssec-store": 6,
-    "ashimkoirala.github.io/HackLab": 6,
-    "gauravkhurana.com/SQLInjection": 6,
-    "juicesec.mrdinesh.workers.dev": 6,
-    "everdan0075.github.io/DevSecOps-Hacking-Lab": 6,
-    "pc-parts-store.vercel.app": 5,
     "burpbountylab.com": 10,
+    "dghostninja.github.io/posts/Injection": 4,
+    "rootxjs.github.io/docs/grpc_goat_docs/getting-started": 6,
+    "yusufarbc.github.io/webvuln-runner": 4,
+    "pc-parts-store.vercel.app": 5,
     "railsgoat.cktricky.com": 3,
     "artemiskit.vercel.app": 4,
-    "urban-vampi-production.up.railway.app": 6,
-    "riglabs-cyber-lab.vercel.app": 4,
-    "mehdiaitsaid.github.io/owasp-top-10-labs": 4
+    "urban-vampi-production.up.railway.app": 6
   }
 }

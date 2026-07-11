@@ -1451,6 +1451,24 @@
       "slug": "client-side-pc-parts-store-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dangerouslySetInnerHTML:{__html:a.description} in main.e019a8dc.chunk.js + Commerce.js R.cart; pc-parts-store.vercel.app findings 0→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dghostninja.github.io",
+      "slug": "client-side-breaktheflask-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BreakTheFlask purposefully vulnerable Flask app + render_template_string + DghostNinja/BreakTheFlask.git + SQLi/XSS/Command Injection/LDAP writeup; dghostninja.github.io/posts/Injection findings 2→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:rootxjs.github.io",
+      "slug": "client-side-grpc-goat-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: gRPC Goat vulnerability labs + rootxjs/grpc-goat.git + 9 vulnerable services + Reflection Enabled/SQLi/SSRF lab table; extractGrpcGoatDocSeeds crawls labs/walkthrough; rootxjs.github.io/docs/grpc_goat_docs/getting-started findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yusufarbc.github.io/webvuln-runner",
+      "slug": "client-side-webvuln-runner-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WebVuln-Runner Docker-based launcher for 15+ vulnerable web app labs + Juice Shop/DVWA/WebGoat/bWAPP catalog + Whiptail TUI; yusufarbc.github.io/webvuln-runner findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2653,6 +2671,21 @@
       "source": "discovery:pc-parts-store.vercel.app",
       "slug": "client-side-pc-parts-store-lab-evidence",
       "shipped_at": "2026-07-11T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:dghostninja.github.io",
+      "slug": "client-side-breaktheflask-evidence",
+      "shipped_at": "2026-07-11T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:rootxjs.github.io",
+      "slug": "client-side-grpc-goat-lab-evidence",
+      "shipped_at": "2026-07-11T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:yusufarbc.github.io/webvuln-runner",
+      "slug": "client-side-webvuln-runner-evidence",
+      "shipped_at": "2026-07-11T10:10:00.000Z"
     }
   ]
 }
