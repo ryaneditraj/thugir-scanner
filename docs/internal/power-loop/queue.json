@@ -1402,7 +1402,32 @@
       "url": "https://laby.ffri.jp/WebGoat/",
       "source": "FFRI WebGoat public instance — guided OWASP Top 10 Java training lab (VWAD online collection)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp.securityshepherd.eu/",
+      "source": "OWASP Security Shepherd — official live training platform (GitHub/SourceForge try-it-live)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shepherd.fs25.isf.hslu-edu.ch/",
+      "source": "HSLU ISF Security Shepherd — public OWASP Top 10 lesson/challenge instance (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas1.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 1 — serverside web-security wargame (follows natas0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas2.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 2 — source-disclosure web-security wargame",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://alf.nu/alert2",
+      "source": "ALF Security XSS lab — alert(1) to win challenge series stage 2 (alf.nu)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T10:05:00.000Z"
+  "updated_at": "2026-07-11T11:05:00.000Z"
 }
