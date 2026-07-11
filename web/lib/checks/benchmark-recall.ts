@@ -11,6 +11,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "dom-eval-xss": ["xss"],
   "idor-sequential-ids": ["idor"],
   "spring-boot-actuator-exposed": ["misconfig"],
+  "secret-resend": ["sensitive_data"],
   "vibe-unauthenticated-api-routes": ["idor", "sensitive_data"]
 };
 

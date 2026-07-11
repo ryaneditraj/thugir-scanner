@@ -2274,6 +2274,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+    description:
+      "Pwnshop is an intentionally vulnerable e-commerce application with 51 documented web and AI/LLM security flaws aligned to OWASP Top 10 2025.",
+    impactOneline:
+      "Public Pwnshop instances expose a vulnerability catalog with IDOR, XSS, SQLi, and prompt-injection training endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pwnshop is intentional training software — never deploy similar patterns to production.",
+      steps: [
+        "Run Pwnshop only in isolated lab environments for scanner evaluation.",
+        "Do not expose Pwnshop vulnerability endpoints to the public internet without access controls.",
+        "Use Pwnshop findings to validate scanner coverage, not as production design patterns."
+      ]
+    },
+    fixPrompt:
+      "We host Pwnshop for OWASP Top 10 2025 scanner benchmarking. Show how to keep lab instances isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",

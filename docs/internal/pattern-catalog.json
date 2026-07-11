@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T01:03:53.228Z",
-  "total": 188,
-  "uniqueSlugs": 188,
+  "generatedAt": "2026-07-11T02:03:19.403Z",
+  "total": 189,
+  "uniqueSlugs": 189,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 170,
+    "generic": 171,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 123,
+    "deep": 124,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 57,
+    "Broken access control": 58,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -103,6 +103,7 @@
     "client-side-prompt-injection-evidence",
     "client-side-prototype-pollution-evidence",
     "client-side-pwn-college-evidence",
+    "client-side-pwnshop-evidence",
     "client-side-react-dom-xss-lab-evidence",
     "client-side-react-rsc-cve-evidence",
     "client-side-rest-vulnweb-evidence",
