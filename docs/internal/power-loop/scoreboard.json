@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T08:10:00.000Z",
+  "updated_at": "2026-07-11T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 651,
-  "total_findings": 2742,
-  "critical_findings": 27,
+  "total_sites_scanned": 659,
+  "total_findings": 2788,
+  "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 268,
-  "discovery_findings": 1853,
+  "discovery_urls_added": 273,
+  "discovery_findings": 1899,
   "improvements_shipped": 237,
-  "last_run": "2026-07-11T08:10:00.000Z",
+  "last_run": "2026-07-11T08:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "08:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
-      "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku 8 findings, staging oracle 6/6 maintained",
+      "note": "No benchmark category misses — primary heroku full pass (8 findings, no staging fallback)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,32 +43,45 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "urls_scanned": 3,
-      "findings": 20,
-      "focus": "Burp Bounty Lab scanner testbed + ArtemisKit LLM red-team + VAmPI API root banner",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 46,
+      "new_urls_queued": [
+        "https://railsgoat.cktricky.com/",
+        "https://www.mavensecurity.com/web_security_dojo/",
+        "https://pc-parts-store.vercel.app/",
+        "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/",
+        "http://peruggia.sourceforge.net/"
+      ],
+      "focus": "GitHub Pages OWASP training labs + Vulnerable Bank demo.weblock.ru"
     },
     "notable_findings": [
-      "burpbountylab.com: Burp Bounty Lab XSS/SQLi profile catalog + live reflected XSS/SQL error probes (0→10 findings)",
-      "artemiskit.vercel.app: LLM reliability toolkit with prompt-injection/jailbreak mutation docs (0→4 findings)",
-      "urban-vampi-production.up.railway.app: VAmPI root JSON triggers client-side-api-security-lab-evidence (5→6 findings)",
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
+      "dxx33.github.io/WebVulnsGuide: 8 findings incl critical server-side eval + prototype pollution",
+      "demo.weblock.ru: 7 findings — IDOR + SQLi + prompt-injection banking lab",
+      "koadt.github.io/oss-oopssec-store: 6 findings — IDOR/path traversal/API Top 10 lab markers",
+      "ashimkoirala.github.io/HackLab: 6 findings — browser-only SQLi/XSS/IDOR sandbox",
+      "gauravkhurana.com/SQLInjection: 6 findings — WASM SQLite login-bypass demo"
     ],
     "learning_gaps": [
-      "acuart.phpnet.us: DNS parking page — site offline, use testphp.vulnweb.com instead",
-      "xss.pwnfunction.com: DNS NXDOMAIN from cloud",
-      "hiddeninvestigations.net: react2shell RSC lab requires Docker — public landing only"
+      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between retries",
+      "railsgoat.cktricky.com + pc-parts-store.vercel.app: queued at queue tail — not reached in 8-URL limit",
+      "peruggia.sourceforge.net: SourceForge landing only — app requires local VM install",
+      "rootxjs grpc-goat docs: documentation index only — gRPC labs require local Docker (ports 8001–8009)"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 8,
+    "dxx33.github.io/WebVulnsGuide": 8,
+    "demo.weblock.ru": 7,
+    "koadt.github.io/oss-oopssec-store": 6,
+    "ashimkoirala.github.io/HackLab": 6,
+    "gauravkhurana.com/SQLInjection": 6,
+    "ogtamimi.github.io/OGT-Cyber-Game": 5,
+    "akbarbashakm.github.io/frontend-security-examples": 5,
+    "vulnshop.vercel.app": 3,
     "burpbountylab.com": 10,
     "artemiskit.vercel.app": 4,
-    "urban-vampi-production.up.railway.app": 6,
-    "juice-shop.herokuapp.com": 8,
-    "juice-shop-staging.herokuapp.com": 7,
-    "epicdetect.io": 6,
-    "ironwasp.org": 6,
-    "hiddeninvestigations.net": 4
+    "urban-vampi-production.up.railway.app": 6
   }
 }
