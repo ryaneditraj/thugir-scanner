@@ -5173,6 +5173,88 @@ const clientSideBwappEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- bWAPP bugs.htm injection taxonomy catalog (itsecgames.com/bugs.htm) ------------
+const CLIENT_BWAPP_INJECTION_CATALOG_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "bWAPP bugs page heading",
+    re: /<h1>\s*Bugs\s*<\/h1>/i
+  },
+  {
+    label: "Multi-vector injection taxonomy",
+    re: /SQL, HTML, iFrame, SSI, OS Command, PHP, XML, XPath, LDAP/i
+  },
+  {
+    label: "XSS CSRF AJAX vulnerability list",
+    re: /Cross-Site Scripting \(XSS\)[\s\S]{0,160}Cross-Site Request Forgery \(CSRF\)/i
+  },
+  {
+    label: "XXE SSRF catalog entry",
+    re: /XML External Entity attacks \(XXE\) and Server Side Request Forgery \(SSRF\)/i
+  },
+  {
+    label: "100 web bugs OWASP Top 10",
+    re: /100 web bugs[\s\S]{0,200}OWASP Top 10 project/i
+  }
+];
+
+const clientSideBwappInjectionCatalogEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BWAPP_INJECTION_CATALOG_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "bWAPP bugs catalog documents SQL/HTML/LDAP injection, XSS, CSRF, XXE, and SSRF challenge taxonomy"
+    }
+  };
+};
+
+// --- Sports Media CS Training Academy vuln-app playbook (computersciencesop2) -------
+const CLIENT_CS_TRAINING_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Sports Media CS Training Academy",
+    re: /Sports Media Inc\. Computer Science Training Academy/i
+  },
+  {
+    label: "Cybersecurity playbook for interns",
+    re: /cybersecurity playbook for interns/i
+  },
+  {
+    label: "OWASP Juice Shop training card",
+    re: /OWASP Juice Shop[\s\S]{0,160}vulnerable web app/i
+  },
+  {
+    label: "WebGoat DVWA training card",
+    re: /OWASP WebGoat \+ DVWA[\s\S]{0,120}deliberately-vulnerable/i
+  },
+  {
+    label: "OWASP LLM Top 10 curriculum",
+    re: /OWASP Top 10 for LLM Applications/i
+  }
+];
+
+const clientSideCsTrainingAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CS_TRAINING_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Sports Media CS Training Academy publishes a curated cybersecurity playbook linking OWASP Juice Shop, WebGoat, DVWA, and LLM security labs"
+    }
+  };
+};
+
 // --- hackable.so deliberately vulnerable social platform (12 hidden vulns) -----------
 const CLIENT_HACKABLE_SO_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -6283,7 +6365,11 @@ const CLIENT_HACKING_LAB_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Cyber security training keywords",
-    re: /Cyber Security Training[\s\S]{0,80}Hacking-Lab/i
+    re: /Cyber Security Training[\s\S]{0,80}Hacking-Lab|Hacking-Lab[\s\S]{0,80}Cyber Security Training/i
+  },
+  {
+    label: "Hacking-Lab title tag",
+    re: /<title>\s*Hacking-Lab for Cyber Security Training\s*<\/title>/i
   },
   {
     label: "Offensive defensive skills tagline",
@@ -9051,6 +9137,8 @@ export const RULES: Record<string, Rule> = {
   clientSideMutillidaeEvidence,
   clientSidePeruggiaEvidence,
   clientSideBwappEvidence,
+  clientSideBwappInjectionCatalogEvidence,
+  clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
   clientSideHackingLabEvidence,
