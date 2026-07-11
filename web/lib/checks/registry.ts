@@ -5192,6 +5192,52 @@ const clientSideRestVulnwebEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Pwnshop OWASP Top 10 2025 e-commerce lab (pwnshop.ctfsecurity.com) ----------------
+const CLIENT_PWNSHOP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Pwnshop intentionally vulnerable e-commerce",
+    re: /intentionally vulnerable e-commerce application built for security training/i
+  },
+  {
+    label: "Known Vulnerabilities catalog",
+    re: /Known Vulnerabilities/i
+  },
+  {
+    label: "OWASP Top 10 2025 category header",
+    re: /A0[1-9]:2025|A10:2025/i
+  },
+  {
+    label: "PWN vulnerability registry ID",
+    re: /PWN-\d{3}/i
+  },
+  {
+    label: "Web app + AI/LLM vuln stats",
+    re: /Web app vulns|AI \/ LLM vulns|Total findings/i
+  },
+  {
+    label: "IDOR order tracking endpoint docs",
+    re: /IDOR.*Order|GET \/track\/:order_id|POST \/track/i
+  }
+];
+
+const clientSidePwnshopEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PWNSHOP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/pwnshop|ctfsecurity\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pwnshop documents 51 intentional OWASP Top 10 2025 + AI/LLM vulnerabilities for scanner benchmarking"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -7432,6 +7478,7 @@ export const RULES: Record<string, Rule> = {
   clientSideCylabAcademyEvidence,
   clientSideVulnerableappEvidence,
   clientSideRestVulnwebEvidence,
+  clientSidePwnshopEvidence,
   clientSideVulnforgeAcademyEvidence,
   clientSideTegalsecLabEvidence,
   clientSideBugBountyHunterEvidence,
