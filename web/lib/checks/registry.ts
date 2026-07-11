@@ -1768,7 +1768,7 @@ async function probeUnauthenticatedAdminJson(
 const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
   const origins = [ctx.origin, ...externalBases];
-  const isJuiceShop = /juice-shop|owasp-juice/i.test(ctx.origin);
+  const isJuiceShop = /juice-shop|owasp-juice|\.juice\.shop$/i.test(ctx.origin);
 
   let jsonHit = await probeUnauthenticatedAdminJson(ctx, origins);
   if (!jsonHit && isJuiceShop) {
@@ -5226,6 +5226,48 @@ const clientSideBwappInjectionCatalogEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "bWAPP bugs catalog documents SQL/HTML/LDAP injection, XSS, CSRF, XXE, and SSRF challenge taxonomy"
+    }
+  };
+};
+
+// --- Micro Focus Fortify Zero Bank WebInspect demo (zero.webappsecurity.com) --------
+const CLIENT_ZERO_BANK_WEBINSPECT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Zero Bank training site branding",
+    re: /Zero Bank|zero\.webappsecurity\.com/i
+  },
+  {
+    label: "Fortify WebInspect product demo disclaimer",
+    re: /Micro Focus Fortify.s WebInspect products/i
+  },
+  {
+    label: "Free Online Bank Web site published for WebInspect",
+    re: /Free Online Bank Web site is published by Micro Focus Fortify/i
+  },
+  {
+    label: "Web application vulnerability detection demo",
+    re: /detecting and reporting\s+Web application vulnerabilities/i
+  },
+  {
+    label: "WebInspect download navigation",
+    re: /download_webinspect_link|Download WebInspect/i
+  }
+];
+
+const clientSideZeroBankWebinspectEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ZERO_BANK_WEBINSPECT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Zero Bank|zero\.webappsecurity/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Zero Bank is a Micro Focus Fortify WebInspect training demo site for practicing web application vulnerability detection"
     }
   };
 };
@@ -9196,6 +9238,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePeruggiaEvidence,
   clientSideBwappEvidence,
   clientSideBwappInjectionCatalogEvidence,
+  clientSideZeroBankWebinspectEvidence,
   clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,

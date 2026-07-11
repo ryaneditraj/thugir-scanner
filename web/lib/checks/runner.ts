@@ -190,7 +190,7 @@ const HEROKU_APP_ERROR_RE = /Application Error|herokucdn\.com\/error-pages/i;
 function isJuiceShopHost(url: string): boolean {
   try {
     const host = new URL(url).hostname;
-    return /juice-shop|owasp-juice/i.test(host);
+    return /juice-shop|owasp-juice|\.juice\.shop$/i.test(host);
   } catch {
     return false;
   }
@@ -599,6 +599,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideMutillidaeEvidence",
   "clientSideBwappEvidence",
   "clientSideBwappInjectionCatalogEvidence",
+  "clientSideZeroBankWebinspectEvidence",
   "clientSideCsTrainingAcademyEvidence",
   "clientSideHackableSoLabEvidence",
   "clientSideVulnwebLabEvidence",
@@ -1062,6 +1063,28 @@ function extractVulnwebLabSeeds(html: string, jsBodies: string[], origin: string
   if (!/VulnWeb|vulnerable web app lab|vulnweb\.netlify/i.test(corpus)) return [];
   const out = new Set<string>();
   for (const p of ["/login", "/search", "/comments", "/profile/1", "/profile/2"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Micro Focus Fortify Zero Bank training demo (zero.webappsecurity.com) — seed bank/login lab pages. */
+function extractZeroBankTrainingSeeds(html: string, origin: string): string[] {
+  if (!/Zero Bank|zero\.webappsecurity|WebInspect products/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "login.html",
+    "feedback.html",
+    "search.html",
+    "online-banking.html",
+    "bank/account-activity.html",
+    "bank/transfer-funds.html",
+    "bank/money-map.html"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {
@@ -2777,6 +2800,8 @@ async function extractSitemapCrawlSeeds(origin: string, probe: ProbeCache): Prom
 /** Prefer security lab HTML pages (xss/sqli/csrf/eval/prototype) over generic nav links. */
 function prioritizeSecurityLabLinks(links: string[]): string[] {
   const LAB_KEYWORD_ORDER = [
+    "bugs.htm",
+    "vulnerabilities.txt",
     "vulnerability-inventory",
     "endpoints-catalog",
     "/cybersecurity/",
@@ -3007,6 +3032,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
+  const zeroBankSeeds = extractZeroBankTrainingSeeds(home.body, origin);
   const hackableSoSeeds = extractHackableSoSeeds(
     home.body,
     earlyScripts.map((s) => s.body),
@@ -3099,6 +3125,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
       ...bwappSeeds,
+      ...zeroBankSeeds,
       ...hackableSoSeeds,
       ...vulnwebSeeds,
       ...pentesterLabSeeds,

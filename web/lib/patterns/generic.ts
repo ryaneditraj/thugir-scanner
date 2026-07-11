@@ -2248,6 +2248,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-zero-bank-webinspect-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Fortify Zero Bank WebInspect training demo disclosed",
+    description:
+      "zero.webappsecurity.com is a Micro Focus Fortify WebInspect demo bank site intentionally published for practicing web vulnerability detection.",
+    impactOneline:
+      "Public Zero Bank training demos expose Fortify WebInspect benchmark surfaces scannable without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideZeroBankWebinspectEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is an intentional Fortify training demo — never deploy similar patterns to production.",
+      steps: [
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target.",
+        "Do not mirror Zero Bank login or transfer flows in production banking apps.",
+        "Use WebInspect demo findings to tune DAST coverage, not as production code templates."
+      ]
+    },
+    fixPrompt:
+      "We host a Fortify WebInspect Zero Bank training demo. Show how to keep scanner calibration targets isolated from production banking systems.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cs-training-academy-evidence",
     platform: "generic",
     category: "Broken access control",
