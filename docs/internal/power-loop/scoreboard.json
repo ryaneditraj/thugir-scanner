@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T00:23:50.496Z",
+  "updated_at": "2026-07-11T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,61 +22,46 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 233,
   "discovery_findings": 1634,
-  "improvements_shipped": 213,
-  "last_run": "2026-07-11T00:23:50.496Z",
+  "improvements_shipped": 216,
+  "last_run": "2026-07-11T01:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00:00",
+    "hour_utc": "01:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": [2, 4],
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start 2→4 findings; staging fallback 6/6 (7 findings)",
+      "note": "No category misses on staging oracle; primeJuiceShopApiProbes pre-warms REST+bundle paths during cold-start",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
-          "first_pass_gap": ["xss", "sqli", "idor", "sensitive_data"],
-          "retry_gap": ["sqli", "idor", "auth_bypass"]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 26,
-      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"],
-      "queued_not_reached": [
-        "https://aigoat.co.in/",
-        "https://api-goat.vercel.app/",
-        "https://www.capital-ctf.com/",
-        "https://purushotham-muktha-dev-sec-ops-visu.vercel.app/",
-        "https://vulnpath.vercel.app/",
-        "https://ssti.pythonanywhere.com/",
-        "https://bypass403.vercel.app/"
-      ],
-      "focus": "Mutillidae radware + Google Firing Range XSS + Gruyere codelab + vulnweb rest",
-      "improvements_shipped_this_run": 0
+      "focus": "403 bypass lab + DevSecOps pipeline visualizer + juice-shop API prime cache",
+      "improvements_shipped_this_run": 3,
+      "validated": {
+        "bypass403.vercel.app": "0→2 findings (http-403-bypass-probe)",
+        "purushotham-muktha-dev-sec-ops-visu.vercel.app": "0→6 findings (client-side-devsecops-pipeline-visualizer-evidence)"
+      }
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary heroku 2/6 then 4/6 gap",
-      "websegura.radwarelatam.com/mutillidae: client-side-mutillidae-evidence + exposed-config-backup (8 findings)",
-      "public-firing-range.appspot.com: reflected XSS + open redirect (4 findings)",
-      "google-gruyere.appspot.com: client-side-google-gruyere-codelab-evidence (3 findings)",
-      "rest.vulnweb.com: phpinfo-exposed + Invicti practice markers (4 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) maintained after juice-shop-api-prime-probes",
+      "bypass403.vercel.app: /admin 403 bypassed via trailing slash (http-403-bypass-probe)",
+      "purushotham DevSecOps visualizer: shift-left pipeline with hardcoded-secret + SQLi demos (6 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start 2 findings (4-category gap) before staging fallback",
-      "Primary heroku misses sqli/idOR on cold-start — juiceShopApiLive probe only fires on staging",
-      "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com",
-      "vampi.lab.pentest-forge.com: login-gated — only misconfig (1 finding)",
-      "demo.owasp-juice.shop: Heroku Application Error (503) — offline",
-      "New tail URLs (aigoat.co.in, api-goat, capital-ctf, purushotham, vulnpath) not reached in 8-URL limit"
+      "juice-shop.herokuapp.com: intermittent DNS/Application Error from cloud — staging oracle remains authoritative",
+      "vampi.lab.pentest-forge.com: 502 Bad Gateway — PentestForge lab offline",
+      "aigoat.co.in: Cloudflare bot-wall blocks scanner UA",
+      "ssti.pythonanywhere.com: account suspended (Coming Soon page)",
+      "www.capital-ctf.com: DNS NXDOMAIN"
     ]
   },
   "discovery_highlights": {
@@ -173,7 +158,7 @@
     "yusufarbc.github.io/apigoat": 3,
     "koadt.github.io/oss-oopssec-store": 2,
     "dxx33.github.io/WebVulnsGuide": 6,
-    "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
+    "purushotham-muktha-dev-sec-ops-visu.vercel.app": 6,
     "lab.pentest-forge.com": 3,
     "demo.weblock.ru": 7,
     "gauravkhurana.com/SQLInjection": 6,
@@ -303,6 +288,7 @@
     "vulnerable-lab.vercel.app": 8,
     "mlastg.vercel.app": 6,
     "cryptohack.org": 4,
-    "www.overthewire.org": 5
+    "www.overthewire.org": 5,
+    "bypass403.vercel.app": 2
   }
 }

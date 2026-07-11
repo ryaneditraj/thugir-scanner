@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T00:11:50.034Z",
-  "total": 186,
-  "uniqueSlugs": 186,
+  "generatedAt": "2026-07-11T01:03:53.228Z",
+  "total": 188,
+  "uniqueSlugs": 188,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 168,
+    "generic": 170,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 64,
-    "deep": 122,
+    "free": 65,
+    "deep": 123,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 56,
+    "Broken access control": 57,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 15,
     "Information disclosure": 15,
     "Broken authentication": 12,
-    "Injection": 22,
+    "Injection": 23,
     "Cross-site scripting": 14,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -63,6 +63,7 @@
     "client-side-damn-vulnerable-bank-evidence",
     "client-side-defendtheweb-evidence",
     "client-side-devsecops-lab-evidence",
+    "client-side-devsecops-pipeline-visualizer-evidence",
     "client-side-dom-goat-lab-evidence",
     "client-side-eks-goat-evidence",
     "client-side-exploit-education-evidence",
@@ -155,6 +156,7 @@
     "graphql-introspection-enabled",
     "hidden-prompt-injection",
     "html-comment-credential-disclosure",
+    "http-403-bypass-probe",
     "idor-sequential-ids",
     "inline-state-secrets",
     "insecure-cookies",
