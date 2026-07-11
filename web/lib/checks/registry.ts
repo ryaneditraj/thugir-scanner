@@ -2994,6 +2994,90 @@ const clientSideEpicdetectEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- h3xstream WAF Bypass Workshop (h3xstream.github.io/waf-workshop) ----------------
+const CLIENT_WAF_WORKSHOP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WAF Bypass Workshop title",
+    re: /WAF Bypass Workshop/i
+  },
+  {
+    label: "ModSecurity SQL injection lab",
+    re: /ModSecurity[\s\S]{0,80}libinjection|modsecurity return a Forbidden/i
+  },
+  {
+    label: "SQL syntax lab chapter",
+    re: /SQL Syntax Lab|Finding the SQL injections/i
+  },
+  {
+    label: "WAF bypass training modules",
+    re: /Alternative Syntax Lab|Encoding Lab|What is a WAF\?/i
+  },
+  {
+    label: "h3xstream mkdocs workshop deploy",
+    re: /h3xstream\.github\.io\/waf-workshop|mkdocs-material/i
+  }
+];
+
+const clientSideWafWorkshopEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WAF_WORKSHOP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/WAF Bypass Workshop|h3xstream\.github\.io\/waf-workshop/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "h3xstream WAF Bypass Workshop teaches ModSecurity SQLi bypass via alternative syntax, encoding, and libinjection evasion labs"
+    }
+  };
+};
+
+// --- Bugforge web exploitation lab platform (bugforge.io) ---------------------------
+const CLIENT_BUGFORGE_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Bugforge lab platform branding",
+    re: /<title>\s*Bugforge|alt="Bugforge"/i
+  },
+  {
+    label: "Lab instance API routes",
+    re: /\/api\/labs\/(?:start|submit-flag|running)/i
+  },
+  {
+    label: "Start lab CTA",
+    re: /Start Lab|start lab|labSlug/i
+  },
+  {
+    label: "Difficulty-tier lab catalog",
+    re: /easy.*medium.*hard|Retired Labs|weekly lab/i
+  },
+  {
+    label: "Bugforge streak leaderboard",
+    re: /Complete a lab to get on the board|active streaks/i
+  }
+];
+
+const clientSideBugforgeLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BUGFORGE_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/bugforge\.io|Bugforge/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Bugforge hosts browser-based web exploitation labs with difficulty tiers, CTF flag submission, and on-demand lab instances"
+    }
+  };
+};
+
 // --- Burp Bounty Lab — intentionally vulnerable scanner profile testbed -----------
 const CLIENT_BURP_BOUNTY_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -7916,6 +8000,10 @@ const CLIENT_OVERTHEWIRE_NATAS_RES: { label: string; re: RegExp }[] = [
   {
     label: "Natas credential documentation",
     re: /Username:\s*natas0[\s\S]{0,40}Password:\s*natas0/i
+  },
+  {
+    label: "Natas robots.txt secret path disclosure",
+    re: /Disallow:\s*\/s3cr3t\/|natas\d+:[A-Za-z0-9]+[\s\S]{0,40}users\.txt/i
   }
 ];
 
@@ -8957,6 +9045,8 @@ export const RULES: Record<string, Rule> = {
   clientSideDeserializationEvidence,
   clientSideSecurityWriteupEvidence,
   clientSideNorthStarAgiCtfEvidence,
+  clientSideWafWorkshopEvidence,
+  clientSideBugforgeLabEvidence,
   clientSideOverthewireLeviathanEvidence
 };
 

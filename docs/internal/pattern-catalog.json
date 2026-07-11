@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T16:11:26.603Z",
-  "total": 222,
-  "uniqueSlugs": 222,
+  "generatedAt": "2026-07-11T17:04:20.015Z",
+  "total": 224,
+  "uniqueSlugs": 224,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 204,
+    "generic": 206,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 157,
+    "deep": 159,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 68,
+    "Broken access control": 69,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 18,
     "Information disclosure": 16,
     "Broken authentication": 12,
-    "Injection": 30,
+    "Injection": 31,
     "Cross-site scripting": 20,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -54,6 +54,7 @@
     "client-side-breaktheflask-evidence",
     "client-side-brokencrystals-evidence",
     "client-side-bugbountyhunter-evidence",
+    "client-side-bugforge-lab-evidence",
     "client-side-burp-bounty-lab-evidence",
     "client-side-bwapp-evidence",
     "client-side-chimera-vuln-lab-evidence",
@@ -163,6 +164,7 @@
     "client-side-vulnlab-academy-evidence",
     "client-side-vulnweb-lab-evidence",
     "client-side-w3challs-evidence",
+    "client-side-waf-workshop-evidence",
     "client-side-web-security-lab-zh-evidence",
     "client-side-webgoat-evidence",
     "client-side-websec-challenge-evidence",

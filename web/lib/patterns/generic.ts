@@ -4534,5 +4534,57 @@ export const genericPatterns: Pattern[] = [
       "We host OWASP Security Shepherd for security training. Show how to isolate challenge instances from production networks.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-waf-workshop-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "WAF bypass security workshop disclosed",
+    description:
+      "h3xstream WAF Bypass Workshop teaches ModSecurity SQL injection bypass via alternative syntax, encoding tricks, and libinjection evasion labs.",
+    impactOneline:
+      "Public WAF workshop pages document SQLi bypass techniques attackers replay against production WAF-protected endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWafWorkshopEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WAF workshops are intentional training — tune WAF rules using isolated lab instances only.",
+      steps: [
+        "Run WAF bypass labs only on dedicated ModSecurity training VMs.",
+        "Do not expose workshop SQLi payloads against production databases.",
+        "Use workshop findings to harden WAF rule sets in staging environments."
+      ]
+    },
+    fixPrompt:
+      "We host a WAF bypass training workshop. Show how to keep ModSecurity lab instances isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-bugforge-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Bugforge web exploitation lab platform disclosed",
+    description:
+      "Bugforge advertises browser-based web exploitation labs with difficulty tiers, on-demand instances, and CTF flag submission APIs.",
+    impactOneline:
+      "Public Bugforge lab platforms document intentional vulnerability training surfaces for SQLi, XSS, IDOR, and API security practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBugforgeLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge is intentional training — isolate lab instances from production networks.",
+      steps: [
+        "Require authentication before starting lab instances on private deployments.",
+        "Do not reuse Bugforge lab vulnerability patterns in production code.",
+        "Rate-limit unauthenticated lab API enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Bugforge-style web exploitation labs. Show how to isolate on-demand lab instances from production.",
+    version: 1,
+    enabled: true
   }
 ];
