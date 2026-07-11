@@ -1307,6 +1307,24 @@
       "slug": "client-side-devsecops-pipeline-visualizer-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: DevSecOps Architecture & Maturity Report + VULNERABILITY 1: Hardcoded Secrets + VULNERABILITY 2: SQL Injection + OWASP Top 10 Check in index-BD-BHL8U.js; purushotham-muktha-dev-sec-ops-visu.vercel.app findings 0→6; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "benchmark-retry-findings-merge",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku pass1+pass2 both 2 findings but disjoint category gaps (xss,sqli,idor,sensitive_data); mergeBenchmarkFindings unions by slug; staging oracle 7 findings recall 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-split-api-bundle-prime",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: Heroku wakes REST API and main.js on different timelines; primeJuiceShopApiProbes now runs independent 6×2.5s API then bundle wake loops; staging oracle 7 findings recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities Known Vulnerabilities + intentionally vulnerable e-commerce + PWN-001 IDOR + A01:2025; extractPwnshopDocSeeds; pwnshop.ctfsecurity.com findings 9→11; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2389,6 +2407,21 @@
       "source": "discovery:purushotham-muktha-dev-sec-ops-visu.vercel.app",
       "slug": "client-side-devsecops-pipeline-visualizer-evidence",
       "shipped_at": "2026-07-11T01:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "benchmark-retry-findings-merge",
+      "shipped_at": "2026-07-11T02:20:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-split-api-bundle-prime",
+      "shipped_at": "2026-07-11T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-evidence",
+      "shipped_at": "2026-07-11T02:20:00.000Z"
     }
   ]
 }
