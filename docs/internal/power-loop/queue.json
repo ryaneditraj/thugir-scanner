@@ -1152,7 +1152,32 @@
       "url": "https://vulnpath.vercel.app/",
       "source": "VulnPath CVE Attack Visualizer — MITRE ATT&CK chain explorer for web/CVE training (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ctfchallenge.com/",
+      "source": "HackingHub / CTFchallenge — public web vulnerability practice platform (Awesome-Vulnerable-Labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.altoromutual.com:8080/",
+      "source": "IBM AltoroJ Mutual — Tomcat/Java deliberately vulnerable banking demo (geeksonsecurity vuln-web-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bwapp.ywnxs.com/",
+      "source": "bWAPP alternate public host — buggy web application OWASP Top 10 training instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brutelogic.com.br/knoxss.html",
+      "source": "Brutelogic Knox XSS — public XSS challenge/test page (awesome-sites-to-test-on)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hard.altoromutual.com/",
+      "source": "IBM Hard Altoro Mutual — advanced Tomcat/Java vuln banking demo with MegaScript (geeksonsecurity)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T00:20:00.000Z"
+  "updated_at": "2026-07-11T01:15:00.000Z"
 }
