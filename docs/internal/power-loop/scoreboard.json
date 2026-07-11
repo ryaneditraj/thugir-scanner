@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T06:28:34.685Z",
+  "updated_at": "2026-07-11T06:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,21 +22,18 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 263,
   "discovery_findings": 1803,
-  "improvements_shipped": 228,
-  "last_run": "2026-07-11T06:28:34.685Z",
+  "improvements_shipped": 231,
+  "last_run": "2026-07-11T06:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "06:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 1,
-      "primary_recall": "1/6",
-      "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
-      "retry_findings": 2,
+      "primary_status": "503/cold-start degraded",
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start degraded (1→2 findings); staging fallback 6/6 — learning signal: primary URL unreliable from cloud",
+      "note": "No benchmark category misses — primary heroku unreliable; staging oracle 6/6 maintained",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,23 +56,25 @@
         "https://try2hack.net/",
         "https://epicdetect.io/"
       ],
-      "focus": "Atlascrew Chimera + Archon training labs; queue head sweep"
+      "focus": "IronWASP Sboxr + Try2Hack challenges + RogueLoop XSS course",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku 1/6 cold-start",
-      "chimera.atlascrew.dev: 9 findings — 456+ API vuln lab + JWT none + XXE markers",
-      "archon-eight.vercel.app: 8 findings — Resend key + postMessage DOM XSS + DevSecOps lab",
-      "ctb-pi.vercel.app: 5 findings — robots/sitemap sensitive paths + weak CSP",
-      "cybersec-demo.vercel.app: 4 findings — dangerous HTML sinks + Nivara platform markers"
+      "ironwasp.org: Sboxr DOM XSS scanner platform markers (5→6 findings)",
+      "try2hack.nl: oldest public security challenge site (2→3 findings)",
+      "rogueloop.github.io/xxs-course: interactive XSS course with innerHTML sinks (3→4 findings)",
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku cold-start"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start yields 1–2 findings (1/6 recall) — staging oracle required",
-      "testhtml5.vulnweb.com: DNS dead — remove or replace in queue",
-      "New tail URLs (try2hack, rogueloop xxs-course, alf.nu ServiceWorker, epicdetect) not reached in 8-URL limit",
-      "hack.me / gandalf / burpbountylab / secure-code-game still queued at tail"
+      "juice-shop.herokuapp.com: Heroku cold-start yields 1–2 findings — staging oracle required",
+      "aigoat.co.in: Cloudflare bot-wall blocks scanner UA",
+      "epicdetect.io / alf.nu/ServiceWorker: queued but not reached in discovery budget"
     ]
   },
   "discovery_highlights": {
+    "ironwasp.org": 6,
+    "try2hack.nl": 3,
+    "rogueloop.github.io/xxs-course": 4,
     "atlascrew.dev": 6,
     "reef-mcp-registry.vercel.app": 7,
     "apparatus.atlascrew.dev": 6,

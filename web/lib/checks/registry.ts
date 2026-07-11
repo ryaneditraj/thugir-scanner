@@ -2735,6 +2735,132 @@ const clientSideGandalfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- IronWASP / Sboxr DOM XSS scanner landing (ironwasp.org) --------------------
+const CLIENT_IRONWASP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Sboxr DOM XSS scanner title",
+    re: /Sboxr\s*\|\s*Scanner for DOM XSS and Client-side Security/i
+  },
+  {
+    label: "DOM XSS detection tagline",
+    re: /Finding DOM XSS is hard and slow[\s\S]{0,60}Sboxr makes it simple/i
+  },
+  {
+    label: "Sboxr 2.0 launch notice",
+    re: /Sboxr 2\.0 is launching soon/i
+  },
+  {
+    label: "Ironwasp Security footer",
+    re: /Ironwasp Security|ironwasp\.org/i
+  },
+  {
+    label: "DOM XSS intro video",
+    re: /detect DOM XSS in 3 steps|\/videos\/intro\.mp4/i
+  }
+];
+
+const clientSideIronwaspEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_IRONWASP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Sboxr|ironwasp\.org|DOM XSS and Client-side Security/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "IronWASP Sboxr markets a DOM XSS and client-side security scanner with training demos for finding browser-side vulnerabilities"
+    }
+  };
+};
+
+// --- Try2Hack security challenge platform (try2hack.nl) -------------------------
+const CLIENT_TRY2HACK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Try2Hack challenge site title",
+    re: /::\[ www\.try2hack\.nl \]::|try2hack\.nl/i
+  },
+  {
+    label: "Security oriented challenges description",
+    re: /security oriented challenges for your entertainment/i
+  },
+  {
+    label: "Oldest challenge sites tagline",
+    re: /one of the oldest challenge sites still around/i
+  },
+  {
+    label: "Progressive challenge difficulty",
+    re: /challenges are diverse and get progressively harder/i
+  },
+  {
+    label: "Levels hub path",
+    re: /href=["']\.\.\/levels\/["']|\/levels\//i
+  }
+];
+
+const clientSideTry2hackEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_TRY2HACK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/try2hack\.nl|try2hack/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Try2Hack.nl is one of the oldest public security challenge sites with progressive encryption and hacking puzzles"
+    }
+  };
+};
+
+// --- RogueLoop XSS interactive course (rogueloop.github.io/xxs-course) ------------
+const CLIENT_ROGUELOOP_XXS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS interactive course title",
+    re: /XSS \(Cross-Site Scripting\) Interactive Course/i
+  },
+  {
+    label: "Reflected XSS demo sink",
+    re: /reflectedXSSDemo|Search results for:\s*\$\{searchInput\}/i
+  },
+  {
+    label: "Stored XSS demo sink",
+    re: /storedXSSSubmit|newComment\.innerHTML = commentInput/i
+  },
+  {
+    label: "DOM XSS greeting sink",
+    re: /domXSSDemo|greetingDiv\.innerHTML = `Hello, \$\{name\}!`/i
+  },
+  {
+    label: "xxs-course path",
+    re: /rogueloop\.github\.io\/xxs-course|xxs-course/i
+  }
+];
+
+const clientSideRogueloopXxsCourseEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ROGUELOOP_XXS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/XSS \(Cross-Site Scripting\) Interactive Course|rogueloop/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RogueLoop XSS course embeds reflected, stored, and DOM XSS demo sinks with innerHTML assignments for browser security training"
+    }
+  };
+};
+
 // --- HTTP 403 bypass via path normalization (active probe) ----------------------
 const FORBIDDEN_403_PROBE_PATHS = [
   "/admin",
@@ -7911,7 +8037,10 @@ export const RULES: Record<string, Rule> = {
   clientSideGoogleXssGameEvidence,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
-  clientSideGandalfEvidence
+  clientSideGandalfEvidence,
+  clientSideIronwaspEvidence,
+  clientSideTry2hackEvidence,
+  clientSideRogueloopXxsCourseEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

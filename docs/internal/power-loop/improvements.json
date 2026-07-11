@@ -1379,6 +1379,24 @@
       "slug": "client-side-gandalf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Gandalf | Lakera – Test your AI hacking skills + Trick Gandalf into revealing + /level-images/ routes; gandalf.lakera.ai findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ironwasp.org",
+      "slug": "client-side-ironwasp-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Sboxr | Scanner for DOM XSS and Client-side Security + Finding DOM XSS is hard and slow + Ironwasp Security footer; ironwasp.org findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:try2hack.nl",
+      "slug": "client-side-try2hack-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: security oriented challenges + oldest challenge sites still around + /levels/ hub; extractTry2hackLevelSeeds; try2hack.nl findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:rogueloop.github.io/xxs-course",
+      "slug": "client-side-rogueloop-xxs-course-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS (Cross-Site Scripting) Interactive Course + reflectedXSSDemo/storedXSSSubmit/domXSSDemo innerHTML sinks; rogueloop.github.io/xxs-course findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2521,6 +2539,21 @@
       "source": "discovery:gandalf.lakera.ai",
       "slug": "client-side-gandalf-evidence",
       "shipped_at": "2026-07-11T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:ironwasp.org",
+      "slug": "client-side-ironwasp-evidence",
+      "shipped_at": "2026-07-11T06:35:00.000Z"
+    },
+    {
+      "source": "discovery:try2hack.nl",
+      "slug": "client-side-try2hack-evidence",
+      "shipped_at": "2026-07-11T06:35:00.000Z"
+    },
+    {
+      "source": "discovery:rogueloop.github.io/xxs-course",
+      "slug": "client-side-rogueloop-xxs-course-evidence",
+      "shipped_at": "2026-07-11T06:35:00.000Z"
     }
   ]
 }

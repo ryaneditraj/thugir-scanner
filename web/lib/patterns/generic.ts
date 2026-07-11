@@ -3910,5 +3910,83 @@ export const genericPatterns: Pattern[] = [
       "We host Lakera Gandalf-style prompt-injection CTF levels. Show how to isolate challenge LLM backends from production secrets.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-ironwasp-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "IronWASP Sboxr DOM XSS scanner platform disclosed",
+    description:
+      "ironwasp.org hosts Sboxr, a DOM XSS and client-side security scanner with training content for finding browser-side vulnerabilities.",
+    impactOneline:
+      "Public Sboxr landing pages document DOM XSS detection workflows attackers study for client-side security testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIronwaspEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sboxr is a security scanner product — use it for authorized testing only.",
+      steps: [
+        "Run DOM XSS scans only on applications you are authorized to test.",
+        "Do not point Sboxr demos at third-party production sites without permission.",
+        "Keep scanner training instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "We reference IronWASP Sboxr for DOM XSS training. Show how to restrict scanner use to authorized targets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-try2hack-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Try2Hack security challenge platform disclosed",
+    description:
+      "try2hack.nl is one of the oldest public security challenge sites with progressive encryption, cipher, and hacking puzzles.",
+    impactOneline:
+      "Public Try2Hack challenge hubs expose security puzzle catalogs for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideTry2hackEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Try2Hack is intentional challenge software — never mirror its puzzles on production systems.",
+      steps: [
+        "Complete Try2Hack levels only in isolated browser sessions.",
+        "Do not embed Try2Hack challenge answers in production authentication flows.",
+        "Use Try2Hack for skill building, not as a production security control."
+      ]
+    },
+    fixPrompt:
+      "We link to Try2Hack security challenges for training. Show how to keep challenge progress separate from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-rogueloop-xxs-course-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "RogueLoop XSS interactive course disclosed",
+    description:
+      "rogueloop.github.io/xxs-course embeds reflected, stored, and DOM XSS demonstrations with innerHTML sinks for browser security training.",
+    impactOneline:
+      "Public XSS course pages document exploitable innerHTML patterns that attackers replay on misconfigured apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRogueloopXxsCourseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS training courses are intentional — sanitize outputs in production instead of copying demo sinks.",
+      steps: [
+        "Host XSS course labs only on GitHub Pages or isolated training subdomains.",
+        "Replace innerHTML assignments with textContent in production code.",
+        "Use Content-Security-Policy to block inline script execution in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our XSS training course uses innerHTML demo sinks. Show how to keep the course isolated from production deployments.",
+    version: 1,
+    enabled: true
   }
 ];
