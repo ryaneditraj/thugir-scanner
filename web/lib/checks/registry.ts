@@ -4421,6 +4421,90 @@ const clientSideHackThisSiteEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CyberDefenders blue team / DFIR cyber range platform --------------------------------
+const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CyberDefenders brand",
+    re: /CyberDefenders/i
+  },
+  {
+    label: "Blue team SOC training",
+    re: /Blue Team Training for SOC Analysts|blue team training.*DFIR/i
+  },
+  {
+    label: "Cyber range investigations",
+    re: /cyber range investigations|real-world cyber range/i
+  },
+  {
+    label: "SOC analyst upskill platform",
+    re: /Upskill and benchmark SOC teams|hands-on blue team training/i
+  },
+  {
+    label: "DFIR keywords",
+    re: /DFIR|soc analyst.*blue team/i
+  }
+];
+
+const clientSideCyberDefendersEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBERDEFENDERS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CyberDefenders|cyberdefenders\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CyberDefenders publishes blue-team cyber range investigations and SOC analyst training labs"
+    }
+  };
+};
+
+// --- Chinese Web Security Lab (web-security-lab.vercel.app) -------------------------------
+const CLIENT_WEB_SECURITY_LAB_ZH_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web security lab title (zh)",
+    re: /Web 安全实验室/
+  },
+  {
+    label: "Browser-side security education",
+    re: /浏览器侧 Web 安全|面向浏览器侧 Web 安全概念/
+  },
+  {
+    label: "XSS CSRF chapter nav",
+    re: /href\s*=\s*["']\/learn\/xss["'][\s\S]{0,200}href\s*=\s*["']\/learn\/csrf["']|\/learn\/xss[\s\S]{0,120}\/learn\/csrf/i
+  },
+  {
+    label: "Educational lab disclaimer",
+    re: /教育用途|仅供教育用途/
+  },
+  {
+    label: "Same-origin XSS CSRF curriculum",
+    re: /同源与跨域|XSS|CSRF|CSP/
+  }
+];
+
+const clientSideWebSecurityLabZhEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEB_SECURITY_LAB_ZH_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Web 安全实验室|web-security-lab\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Chinese Web Security Lab documents browser-side XSS, CSRF, CSP, and same-origin educational experiments"
+    }
+  };
+};
+
 // --- SecTrainer gamified OWASP training platform (security-trainer.vercel.app) -----
 const CLIENT_SECTRAINER_RES: { label: string; re: RegExp }[] = [
   {
@@ -8679,6 +8763,8 @@ export const RULES: Record<string, Rule> = {
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSideHackThisSiteEvidence,
+  clientSideCyberDefendersEvidence,
+  clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,
   clientSideHackAdvisorLabEvidence,
   clientSideAgenticAiCtfEvidence,
