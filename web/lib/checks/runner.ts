@@ -1247,6 +1247,40 @@ function extractPromptmapSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Lucas Oliveira frontend XSS demo — seed insecure vs secure lab routes. */
+function extractFrontendXssDemoSeeds(html: string, pageUrl: string): string[] {
+  if (!/frontend-xss-demo|XSS testing.*educational demo/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/insecure", "/secure", "/inseguro", "/seguro"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** AVID vulnerability registry editor — seed /vuln listing and editor routes. */
+function extractAvidVulnEditorSeeds(html: string, pageUrl: string): string[] {
+  if (!/avid-vuln-editor|AVID Backend|href=["']\/vuln["']/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/vuln", "/editor", "/editor/1", "/faq"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Try2Hack progressive security challenges (try2hack.nl|try2hack.net /levels). */
 function extractTry2hackLevelSeeds(html: string, pageUrl: string): string[] {
   if (!/try2hack\.(?:nl|net)|security oriented challenges/i.test(html)) return [];
@@ -2540,6 +2574,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
   const googleXssGameSeeds = extractGoogleXssGameSeeds(home.body, home.finalUrl);
   const promptmapSeeds = extractPromptmapSeeds(home.body, home.finalUrl);
+  const frontendXssDemoSeeds = extractFrontendXssDemoSeeds(home.body, home.finalUrl);
+  const avidVulnEditorSeeds = extractAvidVulnEditorSeeds(home.body, home.finalUrl);
   const pwnshopSeeds = extractPwnshopDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -2621,6 +2657,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...unsecurePwaSeeds,
       ...googleXssGameSeeds,
       ...promptmapSeeds,
+      ...frontendXssDemoSeeds,
+      ...avidVulnEditorSeeds,
       ...pwnshopSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
