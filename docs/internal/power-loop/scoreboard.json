@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T21:38:42.683Z",
+  "updated_at": "2026-07-11T22:05:33.040Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,31 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 768,
-  "total_findings": 3297,
+  "total_sites_scanned": 769,
+  "total_findings": 3305,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 336,
   "discovery_findings": 2332,
-  "improvements_shipped": 276,
-  "last_run": "2026-07-11T21:38:42.683Z",
+  "improvements_shipped": 279,
+  "last_run": "2026-07-11T22:05:33.040Z",
   "last_run_summary": {
-    "hour_utc": "21:00",
+    "hour_utc": "22:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "degraded_passes": [
-        "pass1: 3 findings, gap=xss,sqli,idor,sensitive_data",
-        "pass2: merged via retry + admin JSON probe delay",
-        "pass3: final wake retry — 8 findings 6/6 on primary heroku"
-      ],
-      "fallback_url": "https://juice-shop-staging.herokuapp.com",
-      "fallback_used": false,
       "gap": [],
-      "note": "Juice Shop primary recovered 6/6 after admin JSON retry + Heroku wake retries (8 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -58,26 +51,23 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 32,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 16,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/"
-      ],
-      "focus": "SkillAudit MCP scanner evidence; security-trainer + seclab + escape.alf.nu XSS labs",
+      "dns_failures": [],
+      "focus": "bWAPP bugs.htm crawl priority; Zero Bank WebInspect evidence; juice.shop mirror probe priming",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) on primary after admin probe retry",
-      "skillaudit.vercel.app: SkillAudit MCP skill safety scanner evidence (6→8 findings)",
-      "computersciencesop2.vercel.app: CS training academy playbook evidence (9→10 findings)",
-      "security-trainer.vercel.app: 17 findings — OWASP Top 10 training platform",
-      "zero.webappsecurity.com: 4 findings — classic Acunetix-style training demo"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "www.itsecgames.com: bWAPP injection catalog via bugs.htm crawl priority (2→3 findings)",
+      "zero.webappsecurity.com: Fortify WebInspect Zero Bank training demo evidence (4→5 findings)",
+      "demo.owasp-juice.shop: full Juice Shop mirror probes on .juice.shop TLD (2→8 findings)"
     ],
     "learning_gaps": [
-      "inj3ctlab.bugbountylabs.com: DNS unreachable from cloud — cannot validate injection lab",
-      "natas19-33: queued but not reached in discovery limit — deep queue backlog",
+      "capture-the-flag.labs.vercel.dev: Vercel deployment offline (DEPLOYMENT_NOT_FOUND)",
+      "inj3ctlab.bugbountylabs.com: DNS unreachable from cloud",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo still in queue head"
     ]
   },
@@ -86,6 +76,7 @@
     "security-trainer.vercel.app": 17,
     "secresearchlab.web.app": 7,
     "juice-shop.herokuapp.com": 8,
+    "demo.owasp-juice.shop": 8,
     "juice-shop-staging.herokuapp.com": 7,
     "crapi2.apisec.ai": 6,
     "hackable.so": 6,
@@ -115,7 +106,7 @@
     "ctflearn.com": 3,
     "picoctf.org": 3,
     "www.itsecgames.com": 3,
-    "zero.webappsecurity.com": 4,
+    "zero.webappsecurity.com": 5,
     "seclab.vercel.app": 4,
     "escape.alf.nu": 3
   }
