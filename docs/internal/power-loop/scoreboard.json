@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T09:02:41.944Z",
+  "updated_at": "2026-07-11T09:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 660,
-  "total_findings": 2796,
+  "total_sites_scanned": 667,
+  "total_findings": 2829,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 273,
-  "discovery_findings": 1899,
+  "discovery_urls_added": 278,
+  "discovery_findings": 1932,
   "improvements_shipped": 237,
-  "last_run": "2026-07-11T09:02:41.944Z",
+  "last_run": "2026-07-11T09:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
@@ -51,44 +51,52 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 46,
-      "new_urls_queued": [
-        "https://railsgoat.cktricky.com/",
-        "https://www.mavensecurity.com/web_security_dojo/",
-        "https://pc-parts-store.vercel.app/",
-        "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/",
-        "http://peruggia.sourceforge.net/"
+      "urls_scanned": 7,
+      "findings": 33,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
       ],
-      "focus": "GitHub Pages OWASP training labs + Vulnerable Bank demo.weblock.ru"
+      "new_urls_queued": [
+        "https://www.hackazon.com/",
+        "https://dghostninja.github.io/posts/Injection/",
+        "https://dghostninja.github.io/posts/BAC/",
+        "https://dghostninja.github.io/posts/CRYPTOGRAPHIC-FAILURE/",
+        "https://dghostninja.github.io/posts/Insecure-design/"
+      ],
+      "focus": "GitHub Pages OWASP training labs + BreakTheFlask writeup series + Rapid7 Hackazon"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
-      "dxx33.github.io/WebVulnsGuide: 8 findings incl critical server-side eval + prototype pollution",
-      "demo.weblock.ru: 7 findings — IDOR + SQLi + prompt-injection banking lab",
-      "koadt.github.io/oss-oopssec-store: 6 findings — IDOR/path traversal/API Top 10 lab markers",
-      "ashimkoirala.github.io/HackLab: 6 findings — browser-only SQLi/XSS/IDOR sandbox",
-      "gauravkhurana.com/SQLInjection: 6 findings — WASM SQLite login-bypass demo"
+      "vulnlab.vercel.app: 7 findings — intentionally vulnerable training platform (lovable stack)",
+      "juicesec.mrdinesh.workers.dev: 6 findings — Juice Shop variant on Cloudflare Workers",
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: 6 findings — SIEM/WAF/IDS attack scenario markers",
+      "mehdiaitsaid.github.io/owasp-top-10-labs: 4 findings — interactive OWASP Top 10 modules",
+      "riglabs-cyber-lab.vercel.app: 4 findings — hands-on cyber security training lab"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between retries",
-      "railsgoat.cktricky.com + pc-parts-store.vercel.app: queued at queue tail — not reached in 8-URL limit",
-      "peruggia.sourceforge.net: SourceForge landing only — app requires local VM install",
-      "rootxjs grpc-goat docs: documentation index only — gRPC labs require local Docker (ports 8001–8009)"
+      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between hourly runs",
+      "hackazon.com + BreakTheFlask writeups: queued at queue tail — not reached in 8-URL limit",
+      "railsgoat.cktricky.com + mavensecurity dojo + pc-parts-store: still pending in queue",
+      "testhtml5.vulnweb.com: DNS dead — remove or replace with testasp.vulnweb.com",
+      "BreakTheFlask dghostninja posts: writeup pages with embedded vuln code, not live Flask instances"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "dxx33.github.io/WebVulnsGuide": 8,
     "demo.weblock.ru": 7,
+    "vulnlab.vercel.app": 7,
     "koadt.github.io/oss-oopssec-store": 6,
     "ashimkoirala.github.io/HackLab": 6,
     "gauravkhurana.com/SQLInjection": 6,
+    "juicesec.mrdinesh.workers.dev": 6,
+    "everdan0075.github.io/DevSecOps-Hacking-Lab": 6,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
-    "vulnshop.vercel.app": 3,
     "burpbountylab.com": 10,
     "artemiskit.vercel.app": 4,
-    "urban-vampi-production.up.railway.app": 6
+    "urban-vampi-production.up.railway.app": 6,
+    "riglabs-cyber-lab.vercel.app": 4,
+    "mehdiaitsaid.github.io/owasp-top-10-labs": 4
   }
 }
