@@ -1469,6 +1469,24 @@
       "slug": "client-side-webvuln-runner-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WebVuln-Runner Docker-based launcher for 15+ vulnerable web app labs + Juice Shop/DVWA/WebGoat/bWAPP catalog + Whiptail TUI; yusufarbc.github.io/webvuln-runner findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dev-lucasoliveira.github.io/frontend-xss-demo",
+      "slug": "client-side-frontend-xss-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Educational demo Cross-Site Scripting + /insecure|/secure routes + Classic img onerror XSS payloads in bundle; extractFrontendXssDemoSeeds; dev-lucasoliveira.github.io/frontend-xss-demo findings 3→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "client-side-ai-chat-html-sink-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fetch(/api/ai POST) + dangerouslySetInnerHTML:{__html:e.text.replace on model responses; DreamVator Aviation chat UI; dvai.vercel.app findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:avid-vuln-editor.vercel.app",
+      "slug": "client-side-avid-vuln-registry-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vuln nav + List of submitted vulnaribilities + AVID data_type LLM Evaluation schema; extractAvidVulnEditorSeeds; avid-vuln-editor.vercel.app findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2686,6 +2704,21 @@
       "source": "discovery:yusufarbc.github.io/webvuln-runner",
       "slug": "client-side-webvuln-runner-evidence",
       "shipped_at": "2026-07-11T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:dev-lucasoliveira.github.io/frontend-xss-demo",
+      "slug": "client-side-frontend-xss-demo-evidence",
+      "shipped_at": "2026-07-11T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "client-side-ai-chat-html-sink-evidence",
+      "shipped_at": "2026-07-11T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:avid-vuln-editor.vercel.app",
+      "slug": "client-side-avid-vuln-registry-evidence",
+      "shipped_at": "2026-07-11T11:10:00.000Z"
     }
   ]
 }
