@@ -126,6 +126,29 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
   return false;
 }
 
+/** Pre-fetch Juice Shop REST + bundle paths into probe cache after dyno wake-up. */
+async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Promise<void> {
+  const origin = new URL(pageUrl).origin;
+  const paths = [
+    "/rest/admin/application-configuration",
+    "/rest/track-order/1",
+    "/rest/products/search?q=''))",
+    "/rest/products/search?q=warmup",
+    "/main.js",
+    "/polyfills.js",
+    "/runtime.js"
+  ];
+  const urls = paths.map((p) => new URL(p, origin).toString());
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const live = await juiceShopApiLive(pageUrl);
+    if (live || attempt === 5) {
+      await probe.getMany(urls, { maxBytes: 800_000, timeoutMs: 18000 }, 3);
+      return;
+    }
+    await new Promise((r) => setTimeout(r, 2500));
+  }
+}
+
 /** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
 async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
   if (!isJuiceShopHost(targetUrl) && !isJuiceShopHost(home.finalUrl)) return home;
@@ -494,7 +517,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideOverthewireBanditEvidence",
   "clientSideMcpSherpaWorkshopEvidence",
   "htmlCommentCredentialDisclosure",
-  "openApiDebugPasswordExposure"
+  "openApiDebugPasswordExposure",
+  "http403BypassProbe",
+  "clientSideDevsecopsPipelineVisualizerEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -2124,6 +2149,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
   // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
   const probe = new ProbeCache();
+  if (isJuiceShopHost(home.finalUrl || target.toString())) {
+    await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
+  }
   home = await applyWargameBasicAuth(home.finalUrl || target.toString(), home, probe, home.body);
   const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
   const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {

@@ -2313,6 +2313,125 @@ const clientSideDevSecOpsLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DevSecOps CI/CD pipeline visualizer (shift-left training SPA) ----------------
+const CLIENT_DEVSECOPS_PIPELINE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DevSecOps Architecture & Maturity Report",
+    re: /DevSecOps Architecture\s*&\s*Maturity Report/i
+  },
+  {
+    label: "Shift-left security methodology",
+    re: /shift-left security methodology|Security as Code/i
+  },
+  {
+    label: "Hardcoded secrets vulnerability demo",
+    re: /VULNERABILITY 1:\s*Hardcoded Secrets|Hardcoded Secrets \(OWASP A07\)/i
+  },
+  {
+    label: "SQL Injection vulnerability demo",
+    re: /VULNERABILITY 2:\s*SQL Injection|SQL Injection \(OWASP A03\)/i
+  },
+  {
+    label: "SAST OWASP Top 10 pipeline stage",
+    re: /OWASP Top 10 Check|passes static checks for common web risks/i
+  },
+  {
+    label: "DevSecOps Lab Overview section",
+    re: /DevSecOps Lab Overview|From Code to Cloud with Confidence/i
+  }
+];
+
+const clientSideDevsecopsPipelineVisualizerEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DEVSECOPS_PIPELINE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (
+    !/DevSecOps Visualizer|dev-sec-ops-visu|purushotham-muktha/i.test(ctx.combined) &&
+    !/DevSecOps Architecture\s*&\s*Maturity Report/i.test(ctx.combined)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DevSecOps pipeline visualizer documents shift-left security stages with intentional hardcoded-secret and SQLi vulnerability demos"
+    }
+  };
+};
+
+// --- HTTP 403 bypass via path normalization (active probe) ----------------------
+const FORBIDDEN_403_PROBE_PATHS = [
+  "/admin",
+  "/administrator",
+  "/dashboard",
+  "/internal",
+  "/debug",
+  "/api/admin",
+  "/manage"
+];
+const FORBIDDEN_403_BYPASS_MARKERS =
+  /bypass success|access granted|access denied:\s*forbidden|flag\{|trailing slash bypass/i;
+
+function forbidden403BypassUrls(origin: string, path: string): string[] {
+  const base = path.replace(/\/+$/, "") || path;
+  const variants = [
+    `${base}/`,
+    `${base}/.`,
+    `${base}/..;/`,
+    `${base}/;/`,
+    `${base}%2f`,
+    `${base}/%2e/`
+  ];
+  const out: string[] = [];
+  for (const v of variants) {
+    try {
+      out.push(new URL(v, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return out;
+}
+
+const http403BypassProbe: Rule = async (ctx) => {
+  const baselineUrls = FORBIDDEN_403_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const baseline = await ctx.probe.getMany(baselineUrls, { maxBytes: 4096 }, 3);
+  const hits: { original: string; bypass: string; status: number; sample: string }[] = [];
+  for (const [url, doc] of baseline) {
+    if (doc.status !== 403) continue;
+    const path = new URL(url).pathname;
+    const bypassUrls = forbidden403BypassUrls(ctx.origin, path);
+    const bypassDocs = await ctx.probe.getMany(bypassUrls, { maxBytes: 4096 }, 3);
+    for (const [bypassUrl, bypassDoc] of bypassDocs) {
+      if (bypassDoc.status < 200 || bypassDoc.status >= 300) continue;
+      if (bypassDoc.body.trim() === doc.body.trim()) continue;
+      if (!FORBIDDEN_403_BYPASS_MARKERS.test(bypassDoc.body) && bypassDoc.body.length < doc.body.length + 8) {
+        continue;
+      }
+      hits.push({
+        original: url,
+        bypass: bypassUrl,
+        status: bypassDoc.status,
+        sample: bypassDoc.body.slice(0, 160).trim()
+      });
+    }
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      hits: hits.slice(0, 3),
+      note: "protected path returned 403 but path-normalization bypass reached the resource"
+    }
+  };
+};
+
 // --- Intentionally vulnerable auth portal (VulnPortal-style terminals) -----------
 const CLIENT_VULN_AUTH_PORTAL_RES: { label: string; re: RegExp }[] = [
   {
@@ -7363,7 +7482,9 @@ export const RULES: Record<string, Rule> = {
   clientSideOverthewireBanditEvidence,
   clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
-  openApiDebugPasswordExposure
+  openApiDebugPasswordExposure,
+  http403BypassProbe,
+  clientSideDevsecopsPipelineVisualizerEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -7402,5 +7523,6 @@ export const FREE_RULES = new Set([
   "domEvalXss",
   "springActuatorExposed",
   "hiddenPromptInjection",
-  "ssrfEndpointProbe"
+  "ssrfEndpointProbe",
+  "http403BypassProbe"
 ]);
