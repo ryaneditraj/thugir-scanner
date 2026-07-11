@@ -3676,5 +3676,83 @@ export const genericPatterns: Pattern[] = [
       "Our DevSecOps visualizer bundle includes hardcoded-secret and SQLi demo code. Show how to gate the lab and sanitize public training assets.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-qamax-adversary-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "QAMax adversary hostile demo store disclosed",
+    description:
+      "Quality-Max qamax-adversary-site embeds 22+ intentional client-side attack vectors including CSRF form submission, cloud metadata SSRF probes, prototype pollution, and WebSocket internal scanning.",
+    impactOneline:
+      "Public QAMax adversary demos expose hostile client-side attack routines attackers can study for scanner red-team evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideQamaxAdversaryEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "QAMax adversary stores are intentional scanner QA targets — never deploy attack-vector demos to production.",
+      steps: [
+        "Run QAMax adversary labs only on isolated Railway or lab hosts.",
+        "Do not embed CSRF auto-submit forms or metadata SSRF links in production storefronts.",
+        "Block client-side fetch/WebSocket probes to internal service hostnames in production apps."
+      ]
+    },
+    fixPrompt:
+      "We host a QAMax-style adversary demo store with embedded CSRF and SSRF attack vectors. Show how to isolate lab instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Hacksplaining interactive OWASP secure-coding lessons disclosed",
+    description:
+      "Hacksplaining publishes 45+ free interactive secure-coding lessons covering OWASP Top 10 classics and AI-era threats with exploit-then-fix XSS, SQLi, CSRF, and prompt-injection walkthroughs.",
+    impactOneline:
+      "Public Hacksplaining lesson catalogs document vulnerability exploitation patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining is intentional training — gate team dashboards and live lesson progress behind authentication.",
+      steps: [
+        "Require login before serving runnable exploit lesson instances on private deployments.",
+        "Do not copy Hacksplaining vulnerable code samples into production applications.",
+        "Rate-limit unauthenticated lesson enumeration on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style OWASP Top 10 exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackinghub-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackingHub ethical web application hacking platform disclosed",
+    description:
+      "HackingHub (ctfchallenge.com) offers training and challenges for ethical web application hacking with leaderboard, hackbox, and dashboard modules.",
+    impactOneline:
+      "Public HackingHub instances document web hacking challenge surfaces for unauthenticated CTF practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackinghubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HackingHub is intentional CTF training — isolate challenge namespaces from production applications.",
+      steps: [
+        "Require authentication before serving live challenge instances.",
+        "Run HackingHub challenge VMs on isolated lab infrastructure.",
+        "Do not expose production-like hacking challenge endpoints without access controls."
+      ]
+    },
+    fixPrompt:
+      "We host HackingHub-style ethical web application hacking challenges. Show how to isolate CTF namespaces from production apps.",
+    version: 1,
+    enabled: true
   }
 ];

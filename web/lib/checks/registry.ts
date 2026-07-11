@@ -2364,6 +2364,137 @@ const clientSideDevsecopsPipelineVisualizerEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- QAMax adversary hostile demo store (web-production-42cbf.up.railway.app) -------
+const CLIENT_QAMAX_ADVERSARY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ATTACK VECTORS section marker",
+    re: /ATTACK VECTORS START HERE/i
+  },
+  {
+    label: "CSRF auto-submit form",
+    re: /csrf-form|csrfAttack\(\)|Created via CSRF/i
+  },
+  {
+    label: "Prototype pollution attack routine",
+    re: /prototypePollution\(\)|category:\s*['"]prototype_pollution['"]/i
+  },
+  {
+    label: "Cloud metadata SSRF probe links",
+    re: /169\.254\.169\.254\/latest\/meta-data|metadata\.google\.internal/i
+  },
+  {
+    label: "Internal service fetch attack",
+    re: /ATTACK 1:\s*Network Probing|fetch\(\)\s*to internal services/i
+  },
+  {
+    label: "WebSocket internal probe",
+    re: /ATTACK 9:\s*WebSocket Probing|category:\s*['"]websocket_probe['"]/i
+  }
+];
+
+const clientSideQamaxAdversaryEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_QAMAX_ADVERSARY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/qamax-adversary|web-production-42cbf|Totally Legit Demo App/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "QAMax adversary demo store embeds 22+ client-side attack vectors — CSRF, SSRF metadata probes, prototype pollution, and WebSocket scanning"
+    }
+  };
+};
+
+// --- Hacksplaining interactive OWASP secure-coding lessons (hacksplaining.com) -----
+const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hacksplaining OWASP lesson catalog",
+    re: /45\+ lessons covering OWASP Top 10|Browse All 45\+ Lessons/i
+  },
+  {
+    label: "Exploit-then-fix training model",
+    re: /exploit attacks, then learn fixes|Learn the attacks[\s\S]{0,40}Defend your code/i
+  },
+  {
+    label: "SQL injection lesson module",
+    re: /href=["']\/lessons\/sql-injection|Exploit database queries to access or manipulate data/i
+  },
+  {
+    label: "AI prompt injection lesson",
+    re: /href=["']\/lessons\/ai-prompt-injection|Manipulate AI systems by injecting malicious instructions/i
+  },
+  {
+    label: "Cross-site scripting lesson",
+    re: /href=["']\/lessons\/xss-|Inject malicious scripts into trusted websites/i
+  },
+  {
+    label: "CSRF lesson module",
+    re: /href=["']\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
+  }
+];
+
+const clientSideHacksplainingEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Hacksplaining|hacksplaining\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining publishes 45+ interactive OWASP Top 10 secure-coding lessons with exploit-then-fix XSS, SQLi, CSRF, and prompt-injection walkthroughs"
+    }
+  };
+};
+
+// --- HackingHub / CTFchallenge web app hacking platform (ctfchallenge.com) ----------
+const CLIENT_HACKINGHUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackingHub platform title",
+    re: /<title>\s*HackingHub\s*<\/title>|"name"\s*:\s*"HackingHub"/i
+  },
+  {
+    label: "Ethical web application hacking training",
+    re: /ethical web application hacking|training and challenges for ethical web application hacking/i
+  },
+  {
+    label: "HackingHub app origin metadata",
+    re: /app\.hackinghub\.io\/og\.png|hackinghub\.io/i
+  },
+  {
+    label: "CTF hub leaderboard and hackbox features",
+    re: /show_leaderboard|show_hackbox|show_dashboard/i
+  }
+];
+
+const clientSideHackinghubEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKINGHUB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackingHub|ctfchallenge\.com|hackinghub/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackingHub (ctfchallenge.com) offers ethical web application hacking challenges with leaderboard and hackbox training modules"
+    }
+  };
+};
+
 // --- HTTP 403 bypass via path normalization (active probe) ----------------------
 const FORBIDDEN_403_PROBE_PATHS = [
   "/admin",
@@ -7531,7 +7662,10 @@ export const RULES: Record<string, Rule> = {
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure,
   http403BypassProbe,
-  clientSideDevsecopsPipelineVisualizerEvidence
+  clientSideDevsecopsPipelineVisualizerEvidence,
+  clientSideQamaxAdversaryEvidence,
+  clientSideHacksplainingEvidence,
+  clientSideHackinghubEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

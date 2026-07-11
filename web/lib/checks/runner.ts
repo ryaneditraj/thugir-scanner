@@ -1151,6 +1151,38 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Hacksplaining OWASP lesson catalog (hacksplaining.com). */
+function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[] {
+  if (!/Hacksplaining|hacksplaining\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/lessons",
+    "/lessons/sql-injection",
+    "/lessons/xss-stored",
+    "/lessons/csrf",
+    "/lessons/ai-prompt-injection"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/lessons\/[a-z0-9-]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** OWASP VulnerableApp docs (sasanlabs.github.io/VulnerableApp) — Jekyll scanner-eval platform. */
 function extractVulnerableAppDocSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnerableApp|SasanLabs\/VulnerableApp|Vulnerable App/i.test(html)) return [];
@@ -2267,6 +2299,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
+  const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const pwnshopSeeds = extractPwnshopDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -2339,6 +2372,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspVwadSeeds,
       ...archonVitepressSeeds,
       ...vulnerableAppSeeds,
+      ...hacksplainingSeeds,
       ...pwnshopSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
