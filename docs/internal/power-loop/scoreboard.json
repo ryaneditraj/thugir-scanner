@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T21:16:27.459Z",
+  "updated_at": "2026-07-11T21:36:48.119Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,36 +15,36 @@
       ]
     }
   },
-  "total_sites_scanned": 761,
-  "total_findings": 3265,
+  "total_sites_scanned": 768,
+  "total_findings": 3297,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 331,
-  "discovery_findings": 2300,
+  "discovery_urls_added": 336,
+  "discovery_findings": 2332,
   "improvements_shipped": 273,
-  "last_run": "2026-07-11T21:16:27.459Z",
+  "last_run": "2026-07-11T21:36:48.119Z",
   "last_run_summary": {
-    "hour_utc": "20:00",
+    "hour_utc": "21:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 4,
-      "primary_recall": "4/6",
+      "primary_findings": 1,
+      "primary_recall": "1/6",
       "primary_gap": [
         "xss",
+        "sqli",
+        "idor",
+        "auth_bypass",
         "sensitive_data"
       ],
       "degraded_passes": [
-        "pass1: 4 findings, gap=xss,sensitive_data",
-        "pass2: 2 findings, gap=xss,sqli,idor,auth_bypass,sensitive_data",
-        "pass3: 3 findings, gap=xss,sqli,idor,sensitive_data"
+        "pass1: 1 finding, gap=xss,sqli,idor,auth_bypass,sensitive_data (misconfig only)",
+        "pass2: 8 findings, 6/6 recall — wake retry recovered without staging fallback"
       ],
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
-      "fallback_used": true,
-      "fallback_findings": 7,
-      "fallback_recall": "6/6",
+      "fallback_used": false,
       "gap": [],
-      "note": "Primary Heroku cold-start never recovered 6/6 — staging fallback oracle 7 findings 6/6",
+      "note": "Heroku cold-start pass1 severely degraded (1 finding) — wake retry recovered full 6/6 oracle",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -65,28 +65,25 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 50,
+      "findings": 32,
       "skipped_48h": [],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/"
       ],
-      "focus": "OverTheWire Natas24-28 queue expansion; re-scan brokencrystals/crapi2/hackable.so after 48h window",
+      "focus": "OverTheWire Natas29-33 queue expansion; security-trainer + seclab + escape.alf.nu XSS labs",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) via staging fallback — primary heroku 4/6 gap xss,sensitive_data",
-      "brokencrystals.com: 15 findings — exposed .env/.git, GraphQL introspection, DB URL in bundle, postMessage XSS",
-      "secresearchlab.web.app: 7 findings — SQLi disclosure + XSS sinks + Firebase config",
-      "crapi2.apisec.ai: 6 findings — exposed .env file + unauthenticated API routes",
-      "hackable.so: 6 findings — admin endpoint + CORS + unauthenticated API",
-      "skillaudit.vercel.app: 6 findings — AI/agent security lab markers + CORS",
-      "demo.testfire.net: 6 findings — classic banking vuln benchmark (http fallback)",
-      "vulnweb.netlify.app: 4 findings — XSS sinks + unauthenticated API routes"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after wake retry — pass1 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data",
+      "security-trainer.vercel.app: 17 findings — OWASP Top 10 training platform (OpenAI key + XSS + API routes)",
+      "zero.webappsecurity.com: 4 findings — classic Acunetix-style training demo",
+      "seclab.vercel.app: 4 findings — XSS/SQLi/CSRF/IDOR side-by-side Next.js labs",
+      "escape.alf.nu: 3 findings — reflected XSS filter-bypass wargame markers"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start 4/6 on pass1 — staging fallback required this run",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo (enabled:false in queue but still scanned)",
-      "natas19-28: queued but not reached in 8-URL discovery limit — deep queue backlog",
+      "juice-shop.herokuapp.com: Heroku cold-start pass1 1/6 — wake retry required; monitor without staging fallback",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo still in queue head",
+      "natas19-33: queued but not reached in 8-URL discovery limit — deep queue backlog",
       "hackable-web.vercel.app / vulnerable-lab.vercel.app / inj3ctlab: high-value pending in queue tail"
     ]
   },
@@ -121,6 +118,10 @@
     "server.vulnapp.id": 6,
     "computersciencesop2.vercel.app": 9,
     "ctflearn.com": 3,
-    "picoctf.org": 3
+    "picoctf.org": 3,
+    "security-trainer.vercel.app": 17,
+    "zero.webappsecurity.com": 4,
+    "seclab.vercel.app": 4,
+    "escape.alf.nu": 3
   }
 }
