@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 678,
-  "total_findings": 2874,
+  "total_sites_scanned": 686,
+  "total_findings": 2902,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 283,
-  "discovery_findings": 1977,
+  "discovery_urls_added": 286,
+  "discovery_findings": 2005,
   "improvements_shipped": 243,
   "last_run": "2026-07-11T10:10:00.000Z",
   "last_run_summary": {
@@ -31,7 +31,7 @@
       "primary_findings": 8,
       "primary_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku full pass (8 findings, no staging fallback)",
+      "note": "No benchmark category misses — primary heroku full pass (8 findings incl. permissive-cors, no staging fallback)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,23 +50,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 14,
-      "improvements_shipped_this_run": 3,
-      "focus": "BreakTheFlask Flask writeups + gRPC Goat docs + WebVuln-Runner Docker lab launcher"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 28,
+      "new_urls_queued": [
+        "https://cridzy2.github.io/",
+        "http://nodegoat.herokuapp.com/",
+        "http://bwapp.wnxs.eu/",
+        "https://portswigger.net/web-security",
+        "https://laby.ffri.jp/WebGoat/"
+      ],
+      "focus": "VWAD online mirrors (NodeGoat/bWAPP/WebGoat) + JumpBox portfolio + PortSwigger academy"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
-      "dghostninja.github.io/posts/Injection: BreakTheFlask embedded Flask vuln code (2→4 findings)",
-      "rootxjs.github.io/docs/grpc_goat_docs: nine vulnerable gRPC microservice labs (0→6 findings)",
-      "yusufarbc.github.io/webvuln-runner: Docker TUI for Juice Shop/DVWA/WebGoat/bWAPP (0→4 findings)"
+      "webexp05.vercel.app: 6 findings — SQLi/XSS/JWT-none/path-traversal client-side lab markers",
+      "tempehs.github.io/The_Unsecure_PWA: 4 findings — unsecure-by-design PWA training sandbox",
+      "weaponsforge.github.io/hacker-friendly-app: 4 findings — intentionally vulnerable SPA markers",
+      "xss-attacker.vercel.app: 4 findings — cross-origin XSS C2 demo (paired with xss-victim)"
     ],
     "learning_gaps": [
-      "www.hackazon.com: domain parked (HugeDomains) — use hackazon.webscantest.com mirror (403 from cloud)",
-      "www.mavensecurity.com/web_security_dojo: empty response from cloud scanner",
-      "peruggia.sourceforge.net: SourceForge landing only — app requires local VM install",
-      "xss.pwnfunction.com: DNS dead / unreachable",
+      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between hourly runs",
+      "hack.me, gandalf.lakera.ai, burpbountylab.com: high-value VWAD targets queued but not reached in 8-URL limit",
+      "nodegoat.herokuapp.com + bwapp.wnxs.eu + laby.ffri.jp/WebGoat: newly queued — pending next run",
+      "portswigger.net/web-security: academy landing/docs — individual labs require account progression",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp.vulnweb.com"
     ]
   },
@@ -74,9 +81,13 @@
     "juice-shop.herokuapp.com": 8,
     "demo.owasp-juice.shop": 8,
     "burpbountylab.com": 10,
+    "webexp05.vercel.app": 6,
     "dghostninja.github.io/posts/Injection": 4,
     "rootxjs.github.io/docs/grpc_goat_docs/getting-started": 6,
     "yusufarbc.github.io/webvuln-runner": 4,
+    "tempehs.github.io/The_Unsecure_PWA": 4,
+    "weaponsforge.github.io/hacker-friendly-app": 4,
+    "xss-attacker.vercel.app": 4,
     "pc-parts-store.vercel.app": 5,
     "railsgoat.cktricky.com": 3,
     "artemiskit.vercel.app": 4,
