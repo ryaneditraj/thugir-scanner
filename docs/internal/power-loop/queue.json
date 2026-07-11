@@ -1327,7 +1327,32 @@
       "url": "https://usufarbc.github.io/webvuln-runner/",
       "source": "yusufarbc/webvuln-runner — static dashboard indexing Juice Shop/DVWA/WebGoat/bWAPP/XVWA deploy links (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://railsgoat.cktricky.com/",
+      "source": "OWASP RailsGoat — deliberately insecure Ruby on Rails OWASP Top 10 training app (official homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.mavensecurity.com/web_security_dojo/",
+      "source": "Maven Security Web Security Dojo — intentionally vulnerable web security training environment (VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pc-parts-store.vercel.app/",
+      "source": "jgpython/pc-parts-store-lab — intentionally vulnerable PHP/MySQL e-commerce OWASP Top 10 lab (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/",
+      "source": "rootxjs/grpc-goat — gRPC vulnerability practice lab docs with 9 CTF-style scenarios (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://peruggia.sourceforge.net/",
+      "source": "Peruggia — classic intentionally vulnerable PHP photo gallery for web security practice (SourceForge)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T07:05:00.000Z"
+  "updated_at": "2026-07-11T08:12:00.000Z"
 }
