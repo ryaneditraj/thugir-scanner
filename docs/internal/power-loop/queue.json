@@ -1127,7 +1127,32 @@
       "url": "https://crapi.apisec.ai/",
       "source": "OWASP crAPI — official APIsec hosted API security training instance (OWASP LA 2025 guide)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://aigoat.co.in/",
+      "source": "AISecurityConsortium/AIGoat — OWASP LLM Top 10 red-team playground landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://api-goat.vercel.app/",
+      "source": "yusufarbc/apigoat — OWASP API Top 10 Vercel deploy (GitHub Pages sibling)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.capital-ctf.com/",
+      "source": "Checkmarx/capital c{api}tal — OWASP API Top 10 CTF challenge hub (DEF CON 30)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://purushotham-muktha-dev-sec-ops-visu.vercel.app/",
+      "source": "DevSecOps Visualizer — live SQLi/XSS attack vs fix CI/CD security demo (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnpath.vercel.app/",
+      "source": "VulnPath CVE Attack Visualizer — MITRE ATT&CK chain explorer for web/CVE training (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-10T23:15:00.000Z"
+  "updated_at": "2026-07-11T00:20:00.000Z"
 }
