@@ -1343,6 +1343,24 @@
       "slug": "client-side-hackinghub-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: HackingHub title + ethical web application hacking + app.hackinghub.io og.png in __PLATFORM_CONFIG__; ctfchallenge.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:tempehs.github.io/The_Unsecure_PWA",
+      "slug": "client-side-unsecure-pwa-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: unsecure by-design PWA + NESA HSC Software Engineering + .student_resources/XSS README; extractUnsecurePwaSeeds; tempehs.github.io/The_Unsecure_PWA findings 3→4; benchmark 8 findings 6/6"
+    },
+    {
+      "source": "discovery:promptmap.vercel.app",
+      "slug": "client-side-promptmap-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>PromptMap</title> + prompthis-remote-api-key + t2i-prompt workflow nodes in bundle; promptmap.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "client-side-google-xss-game-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS game area + Cross-site scripting training intro + /level1 challenge routes; extractGoogleXssGameSeeds; xss-game.appspot.com findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2455,6 +2473,21 @@
       "source": "discovery:ctfchallenge.com",
       "slug": "client-side-hackinghub-evidence",
       "shipped_at": "2026-07-11T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:tempehs.github.io/The_Unsecure_PWA",
+      "slug": "client-side-unsecure-pwa-evidence",
+      "shipped_at": "2026-07-11T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:promptmap.vercel.app",
+      "slug": "client-side-promptmap-evidence",
+      "shipped_at": "2026-07-11T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "client-side-google-xss-game-evidence",
+      "shipped_at": "2026-07-11T04:10:00.000Z"
     }
   ]
 }

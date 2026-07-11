@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T04:05:00.000Z",
+  "updated_at": "2026-07-11T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 253,
   "discovery_findings": 1742,
-  "improvements_shipped": 222,
-  "last_run": "2026-07-11T04:05:00.000Z",
+  "improvements_shipped": 225,
+  "last_run": "2026-07-11T04:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "04:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "primary_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku full pass 8 findings 6/6 — no category misses, no retry or staging fallback",
+      "note": "No benchmark category misses — primary heroku 8 findings 6/6 recall maintained",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,34 +50,26 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 28,
-      "skipped_48h": "queue head skipped — 133 origins scanned within 48h",
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Queue tail rescan: securebank-blog, defendtheweb, alf.nu XSS wargame, promptmap + llm-sec AI labs, exploit.education + cybench",
-      "new_queue_tail": [
-        "https://ref.jock.pl/modern-web",
-        "https://sixhackacademy.com/en/ctf-labs/",
-        "https://hackxor.net/legacy",
-        "http://crackme.cenzic.com/",
-        "https://lab.pentestit.ru/"
+      "urls_validated": 3,
+      "findings": 11,
+      "improvements_shipped_this_run": 3,
+      "focus": "Unsecure PWA educational lab + PromptMap LLM testing + Google XSS game training markers",
+      "skipped_unreachable": [
+        "vampi.lab.pentest-forge.com (502 Bad Gateway)",
+        "mutillidae.lab.pentest-forge.com (502 Bad Gateway)",
+        "capture-the-flag.labs.vercel.dev (Vercel deployment not found)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — primary full pass",
-      "llm-sec.vercel.app: AWS AKID + OWASP GenAI lab evidence + unauthenticated API routes (7 findings)",
-      "securebank-blog.vercel.app: client-side SQLi + CSRF + XSS sinks (5 findings)",
-      "cybench.github.io: OpenAI key + LLM CTF benchmark markers (4 findings)",
-      "alf.nu/alert1: XSS wargame challenge evidence (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category misses",
+      "tempehs.github.io/The_Unsecure_PWA: unsecure-by-design HSC lab evidence (3→4 findings)",
+      "promptmap.vercel.app: PromptMap prompthis prompt workflow markers (3→4 findings)",
+      "xss-game.appspot.com: Google XSS game training program evidence (2→3 findings)"
     ],
     "learning_gaps": [
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com",
-      "hack.me / hackthis.co.uk / gandalf / hacksplaining: queued tail not reached in 8-URL limit",
-      "ref.jock.pl/modern-web: new queue entry — prompt-injection canary page for next run",
-      "sixhackacademy.com/en/ctf-labs: signup-gated CTF instances — shallow crawl may miss challenge oracles"
+      "pentest-forge *.lab.pentest-forge.com subdomains returning 502 — use primary heroku juice-shop oracle",
+      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only",
+      "xss-quiz.int21h.jp: server misconfigured (printenv page) — use xss-game.appspot.com instead"
     ]
   },
   "discovery_highlights": {
@@ -110,7 +102,7 @@
     "llm-sec.vercel.app": 6,
     "defendtheweb.net": 3,
     "alf.nu/alert1": 3,
-    "promptmap.vercel.app": 3,
+    "promptmap.vercel.app": 4,
     "brokencrystals.com": 15,
     "demo.testfire.net": 6,
     "escape.alf.nu": 3,
@@ -123,7 +115,7 @@
     "labs.tegalsec.org/br0w": 3,
     "bugbountyhunter.com": 2,
     "zerohealth.aliyu.dev": 3,
-    "xss-game.appspot.com": 2,
+    "xss-game.appspot.com": 3,
     "xss-quiz.int21h.jp": 2,
     "dvwa.csalab.app": 4,
     "nodegoat-websec.herokuapp.com": 5,
@@ -170,7 +162,7 @@
     "ashimkoirala.github.io/HackLab": 5,
     "web-pentest-playground.onrender.com": 3,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
-    "tempehs.github.io/The_Unsecure_PWA": 3,
+    "tempehs.github.io/The_Unsecure_PWA": 4,
     "yusufarbc.github.io/apigoat": 3,
     "koadt.github.io/oss-oopssec-store": 2,
     "dxx33.github.io/WebVulnsGuide": 6,
