@@ -1,348 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-10T14:11:23.183Z",
-      "url": "https://owasp-juice.shop/",
-      "auth": "benchmark",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 239,
-      "status": "ok",
-      "scanned_at": "2026-07-10T14:11:23.183Z"
-    },
-    {
-      "run_id": "2026-07-10T14:11:49.446Z",
-      "url": "https://xxe-lab.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": "v0",
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "secret-aws-akid",
-          "title": "AWS access key id exposed in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-xxe-evidence",
-          "title": "Client bundle documents XXE via external entity expansion",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 266,
-      "status": "ok",
-      "scanned_at": "2026-07-10T14:11:49.446Z"
-    },
-    {
-      "run_id": "2026-07-10T15:05:36.538Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 235,
-      "status": "ok",
-      "scanned_at": "2026-07-10T15:05:36.538Z"
-    },
-    {
-      "run_id": "2026-07-10T15:13:12.885Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 235,
-      "status": "ok",
-      "scanned_at": "2026-07-10T15:13:12.885Z"
-    },
-    {
-      "run_id": "2026-07-10T15:17:22.416Z",
-      "url": "https://juice-shop-staging.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 226,
-      "status": "ok",
-      "scanned_at": "2026-07-10T15:17:22.416Z"
-    },
-    {
-      "run_id": "2026-07-10T16:05:14.673Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 235,
-      "status": "ok",
-      "scanned_at": "2026-07-10T16:05:14.673Z"
-    },
-    {
-      "run_id": "2026-07-10T16:09:15.234Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "secret-resend",
-          "title": "Resend API key exposed in client bundle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 247,
-      "status": "ok",
-      "scanned_at": "2026-07-10T16:09:15.234Z"
-    },
-    {
-      "run_id": "2026-07-10T16:12:19.978Z",
-      "url": "https://nextjs-cve-hackerone.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-react-rsc-cve-evidence",
-          "title": "Next.js RSC CVE lab page disclosed",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 258,
-      "status": "ok",
-      "scanned_at": "2026-07-10T16:12:19.978Z"
-    },
-    {
       "run_id": "2026-07-10T16:12:27.723Z",
       "url": "https://web-pentest-playground.onrender.com/",
       "auth": "oss_deploy",
@@ -8897,11 +8555,337 @@
       "pages_crawled": 1,
       "probes_run": 259,
       "status": "ok",
-<<<<<<< HEAD
-      "scanned_at": "2026-07-11T11:03:34.819Z"
-=======
       "scanned_at": "2026-07-11T11:07:39.353Z"
->>>>>>> 93f7b9c (power-loop: benchmark validation run 2026-07-11T11:10)
+    },
+    {
+      "run_id": "2026-07-11T11:08:15.772Z",
+      "url": "https://idor-challenge.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-idor-evidence",
+          "title": "Client bundle documents IDOR-prone API routes",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 245,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:08:15.772Z"
+    },
+    {
+      "run_id": "2026-07-11T11:08:18.044Z",
+      "url": "https://luisillobret2.github.io/WebGoat/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-webgoat-evidence",
+          "title": "OWASP WebGoat deliberately insecure training app disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 246,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:08:18.044Z"
+    },
+    {
+      "run_id": "2026-07-11T11:08:19.353Z",
+      "url": "https://duck-store.escape.tech/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "secret-openai",
+          "title": "OpenAI API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 263,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:08:19.353Z"
+    },
+    {
+      "run_id": "2026-07-11T11:08:33.063Z",
+      "url": "https://dvaib.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 263,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:08:33.063Z"
+    },
+    {
+      "run_id": "2026-07-11T11:08:37.754Z",
+      "url": "https://pentest-ground.com:4280/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 254,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:08:37.754Z"
+    },
+    {
+      "run_id": "2026-07-11T11:08:49.257Z",
+      "url": "https://pentest-ground.com:9000/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 253,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:08:49.257Z"
+    },
+    {
+      "run_id": "2026-07-11T11:09:01.029Z",
+      "url": "https://capture-the-flag-official-website.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-ctf-platform-evidence",
+          "title": "CTF challenge platform SPA with public challenge APIs",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 268,
+      "status": "ok",
+      "scanned_at": "2026-07-11T11:09:01.029Z"
+    },
+    {
+      "run_id": "2026-07-11T11:09:35.436Z",
+      "url": "http://testhtml5.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-11T11:09:35.436Z",
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     }
   ],
   "teacher_delta_runs": [
@@ -9593,6 +9577,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T10:05:00.000Z"
+    },
+    {
+      "run_id": "2026-07-11T11:10:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings",
+      "scanned_at": "2026-07-11T11:10:00.000Z"
     }
   ]
 }
