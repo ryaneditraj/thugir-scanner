@@ -1271,6 +1271,24 @@
       "slug": "client-side-overthewire-bandit-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bandit.labs.overthewire.org port 2220 + username is bandit0 password is bandit0 on bandit0.html; natas0.natas.labs.overthewire.org/wargames/bandit/bandit0 findings 3→5; benchmark staging maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-idor-warmup-probe",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku cold-start 1 finding gap xss,sqli,idor,auth_bypass,sensitive_data; juiceShopApiLive now probes /rest/track-order/1 for orderId success; retry recovered 8 findings 6/6 without staging fallback"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "client-side-vapi-api-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vAPI is Vulnerable Adversely Programmed Interface + OWASP API Top 10 scenarios + roottusk/vapi GitHub; vapi.apisec.ai findings 3→4; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "client-side-archon-training-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Cybersecurity Engineering Path + OWASP Top 10 with vulnerable and fixed code + /cybersecurity/ crawl seeds; archon-eight.vercel.app findings 5→8; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2323,6 +2341,21 @@
       "source": "discovery:www.overthewire.org",
       "slug": "client-side-overthewire-bandit-evidence",
       "shipped_at": "2026-07-10T23:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-idor-warmup-probe",
+      "shipped_at": "2026-07-11T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "client-side-vapi-api-lab-evidence",
+      "shipped_at": "2026-07-11T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "client-side-archon-training-evidence",
+      "shipped_at": "2026-07-11T00:20:00.000Z"
     }
   ]
 }
