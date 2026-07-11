@@ -561,7 +561,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideTry2hackEvidence",
   "clientSideRogueloopXxsCourseEvidence",
   "clientSideEpicdetectEvidence",
-  "clientSideAlfServiceworkerEvidence"
+  "clientSideAlfServiceworkerEvidence",
+  "clientSideBurpBountyLabEvidence",
+  "clientSideArtemisKitEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1350,6 +1352,42 @@ function extractCtfChallengeSeeds(html: string, pageUrl: string): string[] {
   while ((m = linkRe.exec(html))) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Burp Bounty Lab vuln route catalog (burpbountylab.com — XSS/SQLi/SSRF/SSTI profile testbed). */
+function extractBurpBountyLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/burpbountylab\.com|Burp Bounty Lab|Intentionally vulnerable application for testing Burp Bounty profiles/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/xss/reflect?q=test",
+    "/xss/dom?msg=test",
+    "/sqli/search?q=laptop",
+    "/sqli/user?id=1",
+    "/ssrf/fetch?url=http://example.com",
+    "/ssti/render?name=test"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:xss|sqli|ssrf|ssti|xxe|graphql|rce)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 12) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
     } catch {
       /* ignore */
     }
@@ -2387,6 +2425,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const xssQuizSeeds = extractXssQuizInt21hSeeds(home.body, home.finalUrl);
   const ctfChallengeSeeds = extractCtfChallengeSeeds(home.body, home.finalUrl);
   const exploitEducationSeeds = extractExploitEducationSeeds(home.body, home.finalUrl);
+  const burpBountyLabSeeds = extractBurpBountyLabSeeds(home.body, home.finalUrl);
   const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
@@ -2464,6 +2503,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...xssQuizSeeds,
       ...ctfChallengeSeeds,
       ...exploitEducationSeeds,
+      ...burpBountyLabSeeds,
       ...yogsecXssLabsSeeds,
       ...hacker101CtfSeeds,
       ...owaspBricksSeeds,

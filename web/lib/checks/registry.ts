@@ -2819,6 +2819,90 @@ const clientSideEpicdetectEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Burp Bounty Lab — intentionally vulnerable scanner profile testbed -----------
+const CLIENT_BURP_BOUNTY_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Burp Bounty Lab title",
+    re: /Burp Bounty Lab/i
+  },
+  {
+    label: "Intentionally vulnerable Burp Bounty profile test app",
+    re: /Intentionally vulnerable application for testing Burp Bounty profiles/i
+  },
+  {
+    label: "XSS profile category catalog",
+    re: /XSS \(\d+ profiles\)|Reflected XSS|DOM Context/i
+  },
+  {
+    label: "SQLi profile category catalog",
+    re: /SQLi \(\d+ profiles\)|Error-based SQLi|Time-based SQLi/i
+  },
+  {
+    label: "Burp Bounty Pro vendor link",
+    re: /bountysecurity\.ai\/pages\/burp-bounty|Burp Bounty Pro/i
+  }
+];
+
+const clientSideBurpBountyLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BURP_BOUNTY_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/burpbountylab\.com|Burp Bounty Lab/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Burp Bounty Lab catalogs XSS, SQLi, SSRF, SSTI, and XXE routes for testing Burp Bounty scanner profiles"
+    }
+  };
+};
+
+// --- ArtemisKit open-source LLM reliability / red-team toolkit (artemiskit.vercel.app)
+const CLIENT_ARTEMIS_KIT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ArtemisKit LLM reliability toolkit title",
+    re: /ArtemisKit[\s\S]{0,60}LLM Reliability Toolkit|open-source LLM reliability toolkit/i
+  },
+  {
+    label: "Security red-teaming and stress testing",
+    re: /Security red-teaming, quality evaluation, and stress testing/i
+  },
+  {
+    label: "Prompt injection and jailbreak mutation tests",
+    re: /prompt injection, jailbreak attempts|jailbreak attempts, role spoofing/i
+  },
+  {
+    label: "ArtemisKit CLI npm package",
+    re: /@artemiskit\/cli|npm install -g @artemiskit\/cli/i
+  },
+  {
+    label: "CVSS-like LLM vulnerability scoring",
+    re: /CVSS-like severity system|Each vulnerability is scored/i
+  }
+];
+
+const clientSideArtemisKitEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ARTEMIS_KIT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/ArtemisKit|artemiskit\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "ArtemisKit documents LLM red-teaming with prompt injection, jailbreak, and multi-turn attack mutations scored via CVSS-like severity"
+    }
+  };
+};
+
 // --- Erling Ellingsen alf.nu ServiceWorker sandbox attack lab -------------------
 const CLIENT_ALF_SERVICEWORKER_RES: { label: string; re: RegExp }[] = [
   {
@@ -5509,6 +5593,14 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
     label: "API lab endpoint documentation with curl",
     re: /endpoint:\s*["'](?:GET|POST|PUT|DELETE|PATCH)\s+\/(?:api\/)?[\w/{}-]+["']/i
+  },
+  {
+    label: "VAmPI vulnerable API root banner",
+    re: /VAmPI the Vulnerable API|VAmPI is a vulnerable on purpose API/i
+  },
+  {
+    label: "VAmPI OWASP API training purpose",
+    re: /evaluate the efficiency of third party tools in identifying vulnerabilities in APIs/i
   }
 ];
 
@@ -8136,7 +8228,9 @@ export const RULES: Record<string, Rule> = {
   clientSideTry2hackEvidence,
   clientSideRogueloopXxsCourseEvidence,
   clientSideEpicdetectEvidence,
-  clientSideAlfServiceworkerEvidence
+  clientSideAlfServiceworkerEvidence,
+  clientSideBurpBountyLabEvidence,
+  clientSideArtemisKitEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
