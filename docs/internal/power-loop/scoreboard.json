@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T15:10:07.616Z",
+  "updated_at": "2026-07-11T16:05:19.697Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,36 +12,43 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "primary_gap": []
+      ]
     }
   },
-  "total_sites_scanned": 728,
-  "total_findings": 3093,
+  "total_sites_scanned": 736,
+  "total_findings": 3132,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 311,
-  "discovery_findings": 2174,
+  "discovery_urls_added": 316,
+  "discovery_findings": 2206,
   "improvements_shipped": 258,
-  "last_run": "2026-07-11T15:10:07.616Z",
+  "last_run": "2026-07-11T16:05:19.697Z",
   "last_run_summary": {
-    "hour_utc": "15:00",
+    "hour_utc": "16:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 7,
-      "primary_recall": "6/6",
-      "primary_gap": [],
+      "primary_status": "error — DNS NXDOMAIN",
+      "primary_findings": 0,
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
-      "fallback_used": false,
+      "fallback_used": true,
+      "fallback_findings": 7,
+      "fallback_recall": "6/6",
       "gap": [],
-      "note": "ProbeCache evicts Heroku Application Error stubs; primary cold-start recall 2/6→6/6 (7 findings) — full pass without staging fallback",
+      "note": "Primary Heroku DNS dead this hour; staging oracle fallback 6/6 (7 findings) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ],
           "primary_gap": []
         }
       }
@@ -49,60 +56,66 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 46,
+      "urls_scanned": 7,
+      "findings": 32,
       "new_urls_queued": [
+        "https://bugforge.io/",
+        "http://natas7.natas.labs.overthewire.org/",
+        "http://natas8.natas.labs.overthewire.org/",
+        "http://natas9.natas.labs.overthewire.org/",
+        "https://h3xstream.github.io/waf-workshop/site/03-lab/"
+      ],
+      "scanned_urls": [
+        "https://ginandjuice.shop/",
+        "https://maestro-agentic-ai-security-demo-mon.netlify.app/",
+        "https://reef-mcp-registry.vercel.app/",
+        "https://platform.sixhackacademy.com/",
+        "https://cve-2025-55182-demo.vercel.app/",
+        "https://secureby.design/",
+        "https://cyberscavengerhunt.com/"
+      ],
+      "skipped_48h": [
         "https://wrongsecrets-ctf.herokuapp.com/",
         "https://www.wrongsecrets.com/",
         "http://natas6.natas.labs.overthewire.org/",
         "https://cve-2025-29927-demo.vercel.app/",
         "https://inj3ctlab.bugbountylabs.com/"
       ],
-      "scanned_urls": [
-        "https://appsecmaster.net/",
-        "https://516-hackers.github.io/516-hackers-vuln-playground/",
-        "https://labs.hackadvisor.io/",
-        "https://sixhackacademy.com/",
-        "https://owasp-finbot-ctf.org/",
-        "https://yogsec.github.io/xss-labs/",
-        "https://bwapp.net/",
-        "https://cyberdefenders.org/",
-        "https://web-security-lab.vercel.app/"
-      ],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Probe-cache Heroku fix; CyberDefenders + Web 安全实验室 evidence; AppSecMaster + HackAdvisor queue head"
+      "focus": "PortSwigger Gin&Juice + agentic AI demos; reef-mcp-registry secret tri-stack; secureby.design RSC markers"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary benchmark recall 2/6→6/6 after probe-cache retry fix (7 findings)",
-      "cyberdefenders.org: client-side-cyberdefenders-evidence (8→9 findings)",
-      "web-security-lab.vercel.app: client-side-web-security-lab-zh-evidence + /learn/* crawl (0→4 findings)",
-      "labs.hackadvisor.io: 8 findings — Resend key + reflected XSS + CTF lab markers",
-      "appsecmaster.net: 7 findings — RSC CVE lab + reflected XSS + API security markers"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary Heroku DNS dead, staging fallback",
+      "reef-mcp-registry.vercel.app: OpenAI + Resend + Twilio keys in bundle (7 findings)",
+      "secureby.design: Resend key + RSC/React2Shell lab markers + source maps (7 findings)",
+      "cyberscavengerhunt.com: CTF scavenger hunt evidence + source maps (6 findings)",
+      "maestro-agentic-ai-security-demo: critical DATABASE_URL in client bundle (3 findings)",
+      "ginandjuice.shop: reflected XSS + insecure cookies (3 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: full power-scan with 12s+25s retries can exceed 10min when dyno hangs — use merged slug union",
-      "516-hackers-vuln-playground: GitHub Pages 404 — only weak CSP/misconfig markers (2 findings)",
+      "juice-shop.herokuapp.com: Heroku DNS NXDOMAIN this hour — staging oracle required",
       "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com",
-      "Tail URLs (hackable-web, ctf.hacker101, wrongsecrets-ctf, inj3ctlab) still behind 311-URL queue head"
-    ],
-    "improvements_shipped_this_run": 3
+      "Tail URLs (wrongsecrets-ctf, natas6-9, inj3ctlab, bugforge) still behind 316-URL queue head",
+      "cve-2025-55182-demo: simulated RSC lab — no live deserialization oracle from shallow crawl"
+    ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "juice-shop-staging.herokuapp.com": 7,
+    "reef-mcp-registry.vercel.app": 7,
+    "secureby.design": 7,
+    "cyberscavengerhunt.com": 6,
     "labs.hackadvisor.io": 8,
     "appsecmaster.net": 7,
     "cyberdefenders.org": 9,
     "web-security-lab.vercel.app": 4,
-    "thecyberdrill.netlify.app": 3,
-    "sjefersuper.netlify.app": 2,
-    "www.overthewire.org": 6,
-    "hack-yourself-first.azurewebsites.net": 7,
-    "yogsec.github.io": 5,
-    "bwapp.net": 4,
-    "owasp-finbot-ctf.org": 4,
-    "yogsec.github.io/xss-labs": 5
+    "ginandjuice.shop": 3,
+    "maestro-agentic-ai-security-demo-mon.netlify.app": 3,
+    "platform.sixhackacademy.com": 3,
+    "cve-2025-55182-demo.vercel.app": 3,
+    "yogsec.github.io/xss-labs": 5,
+    "bwapp.net": 4
   }
 }
