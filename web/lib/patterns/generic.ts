@@ -3598,5 +3598,57 @@ export const genericPatterns: Pattern[] = [
       "We publish Archon-style OWASP Top 10 vulnerable/fixed code walkthroughs. Show how to auth-gate labs and isolate training from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "http-403-bypass-probe",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "HTTP 403 bypass via path normalization",
+    description:
+      "A protected admin or internal path returns 403 Forbidden, but path-normalization tricks (trailing slash, /./, ..;/, ;/) reach the resource without authentication.",
+    impactOneline:
+      "Attackers bypass access controls using URL encoding or path normalization to reach admin-only routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "http403BypassProbe" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Normalize and canonicalize request paths before authorization checks.",
+      steps: [
+        "Reject or redirect ambiguous paths (trailing slash, dot segments, semicolon) before authz.",
+        "Apply authorization on the canonical path, not the raw request URI.",
+        "Return consistent 404 for unknown admin routes instead of distinguishable 403 responses."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route returns 403 but /admin/ bypasses it. Show how to canonicalize paths before authorization and block normalization bypasses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-devsecops-pipeline-visualizer-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "DevSecOps pipeline visualizer documents intentional vulnerability demos",
+    description:
+      "A DevSecOps CI/CD training SPA catalogs shift-left security stages with embedded hardcoded-secret, SQL injection, and OWASP Top 10 SAST demo code.",
+    impactOneline:
+      "Public DevSecOps visualizers expose intentional vulnerability patterns that attackers can study or replay on misconfigured production pipelines.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDevsecopsPipelineVisualizerEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate interactive DevSecOps vulnerability demos behind authentication on isolated lab hosts.",
+      steps: [
+        "Do not ship training microservice code with hardcoded secrets to public CDNs.",
+        "Run pipeline visualizer labs on dedicated subdomains with no production data.",
+        "Replace inline SQLi demo snippets with sanitized pseudocode in public bundles."
+      ]
+    },
+    fixPrompt:
+      "Our DevSecOps visualizer bundle includes hardcoded-secret and SQLi demo code. Show how to gate the lab and sanitize public training assets.",
+    version: 1,
+    enabled: true
   }
 ];
