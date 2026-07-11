@@ -1652,7 +1652,32 @@
       "url": "http://natas28.natas.labs.overthewire.org/",
       "source": "OverTheWire Natas level 28 — AES ECB block cipher oracle wargame (follows natas27)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas29.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 29 — log injection / PHP object injection wargame (follows natas28)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas30.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 30 — PHP type juggling / strcmp bypass wargame (follows natas29)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas31.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 31 — PHP type juggling / strcmp bypass wargame (follows natas30)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas32.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 32 — PHP type juggling / strcmp bypass wargame (follows natas31)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas33.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 33 — PHP type juggling / strcmp bypass wargame (follows natas32)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T20:33:00.000Z"
+  "updated_at": "2026-07-11T21:18:00.000Z"
 }
