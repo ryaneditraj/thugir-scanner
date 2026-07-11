@@ -1527,7 +1527,32 @@
       "url": "https://inj3ctlab.bugbountylabs.com/",
       "source": "Bug Bounty Labs Inj3ctlab — SSTI practice across PHP/Node/Python ports (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/",
+      "source": "bugforge.io — beginner-friendly web exploitation labs (SQLi, IDOR, GraphQL, SSRF; web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas7.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 7 — LFI via unsanitized page parameter (follows natas6)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas8.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 8 — custom encoding bypass challenge (follows natas7)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas9.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 9 — command injection via passthru() (follows natas8)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://h3xstream.github.io/waf-workshop/site/03-lab/",
+      "source": "h3xstream WAF Bypass Workshop — SQL syntax lab with ModSecurity (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T15:06:00.000Z"
+  "updated_at": "2026-07-11T16:06:00.000Z"
 }
