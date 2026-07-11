@@ -489,6 +489,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
+  "clientSideVapiEvidence",
+  "clientSideArchonTrainingEvidence",
   "clientSideOverthewireBanditEvidence",
   "clientSideMcpSherpaWorkshopEvidence",
   "htmlCommentCredentialDisclosure",
@@ -1982,6 +1984,8 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
   const LAB_KEYWORD_ORDER = [
     "vulnerability-inventory",
     "endpoints-catalog",
+    "/cybersecurity/",
+    "cybersecurity/",
     "sqlInjection",
     "source.php",
     "/vulnerabilities/",

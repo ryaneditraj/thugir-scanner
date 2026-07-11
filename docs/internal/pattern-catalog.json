@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-10T23:06:51.198Z",
-  "total": 184,
-  "uniqueSlugs": 184,
+  "generatedAt": "2026-07-11T00:11:50.034Z",
+  "total": 186,
+  "uniqueSlugs": 186,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 166,
+    "generic": 168,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 64,
-    "deep": 120,
+    "deep": 122,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 54,
+    "Broken access control": 56,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -40,6 +40,7 @@
     "client-side-agentic-ai-ctf-evidence",
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
+    "client-side-archon-training-evidence",
     "client-side-atlas-crew-edge-protection-evidence",
     "client-side-atlas-crew-hub-evidence",
     "client-side-atlas-crew-inferno-lab-evidence",
@@ -118,6 +119,7 @@
     "client-side-sql-evidence",
     "client-side-ssrf-evidence",
     "client-side-tegalsec-lab-evidence",
+    "client-side-vapi-api-lab-evidence",
     "client-side-vaultapp-lab-evidence",
     "client-side-vuln-auth-portal-evidence",
     "client-side-vulnerable-qa-lab-evidence",
