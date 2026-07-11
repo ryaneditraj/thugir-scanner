@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T03:10:00.000Z",
+  "updated_at": "2026-07-11T04:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 614,
-  "total_findings": 2564,
-  "critical_findings": 26,
+  "total_sites_scanned": 622,
+  "total_findings": 2600,
+  "critical_findings": 27,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 248,
-  "discovery_findings": 1714,
+  "discovery_urls_added": 253,
+  "discovery_findings": 1742,
   "improvements_shipped": 222,
-  "last_run": "2026-07-11T03:10:00.000Z",
+  "last_run": "2026-07-11T04:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku full pass 8 findings 6/6 — no category misses",
+      "note": "Primary heroku full pass 8 findings 6/6 — no category misses, no retry or staging fallback",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,28 +52,32 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "urls_validated": 3,
-      "findings": 27,
-      "improvements_shipped_this_run": 3,
-      "focus": "QAMax adversary + Hacksplaining OWASP lessons + HackingHub CTF; parallel discovery on HackThisSite Vercel, DVWA csalab, XSS game/quiz",
-      "skipped_unreachable": [
-        "https://vulnerableapp.com/ (empty response)",
-        "https://aigoat.co.in/ (Cloudflare challenge)"
+      "findings": 28,
+      "skipped_48h": "queue head skipped — 133 origins scanned within 48h",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "focus": "Queue tail rescan: securebank-blog, defendtheweb, alf.nu XSS wargame, promptmap + llm-sec AI labs, exploit.education + cybench",
+      "new_queue_tail": [
+        "https://ref.jock.pl/modern-web",
+        "https://sixhackacademy.com/en/ctf-labs/",
+        "https://hackxor.net/legacy",
+        "http://crackme.cenzic.com/",
+        "https://lab.pentestit.ru/"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — primary full pass",
-      "web-production-42cbf.up.railway.app: QAMax adversary CSRF/SSRF/prototype-pollution markers (5→6 findings)",
-      "hacksplaining.com: 45+ OWASP Top 10 exploit-then-fix lesson catalog (3→4 findings)",
-      "ctfchallenge.com: HackingHub ethical web hacking platform metadata (2→3 findings)",
-      "hack-this-site-eta.vercel.app: 12 findings — GraphQL introspection + client-side SQL/XSS/IDOR evidence",
-      "dvwa.csalab.app: phpinfo exposed + reflected XSS (4 findings)"
+      "llm-sec.vercel.app: AWS AKID + OWASP GenAI lab evidence + unauthenticated API routes (7 findings)",
+      "securebank-blog.vercel.app: client-side SQLi + CSRF + XSS sinks (5 findings)",
+      "cybench.github.io: OpenAI key + LLM CTF benchmark markers (4 findings)",
+      "alf.nu/alert1: XSS wargame challenge evidence (3 findings)"
     ],
     "learning_gaps": [
-      "vulnerableapp.com: SasanLabs DOM XSS demo returns empty — use sasanlabs.github.io/VulnerableApp docs",
-      "aigoat.co.in: Cloudflare bot-wall blocks scanner UA",
-      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only (1 finding)",
-      "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com"
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com",
+      "hack.me / hackthis.co.uk / gandalf / hacksplaining: queued tail not reached in 8-URL limit",
+      "ref.jock.pl/modern-web: new queue entry — prompt-injection canary page for next run",
+      "sixhackacademy.com/en/ctf-labs: signup-gated CTF instances — shallow crawl may miss challenge oracles"
     ]
   },
   "discovery_highlights": {
@@ -306,6 +309,10 @@
     "www.bugbountyhunter.com": 2,
     "web-production-42cbf.up.railway.app": 6,
     "hacksplaining.com": 4,
-    "ctfchallenge.com": 3
+    "ctfchallenge.com": 3,
+    "llm-sec.vercel.app": 7,
+    "securebank-blog.vercel.app": 5,
+    "alf.nu": 3,
+    "promptmap.vercel.app": 3
   }
 }
