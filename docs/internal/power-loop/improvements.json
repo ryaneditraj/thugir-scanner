@@ -1487,6 +1487,24 @@
       "slug": "client-side-avid-vuln-registry-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /vuln nav + List of submitted vulnaribilities + AVID data_type LLM Evaluation schema; extractAvidVulnEditorSeeds; avid-vuln-editor.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:natas1.natas.labs.overthewire.org",
+      "slug": "natas-chain-basic-auth",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: parseNatasLevelCreds from <!--password for natas1 is...--> + bootstrapNatasCreds chain; natas1.natas.labs.overthewire.org findings 0→3 (overthewire-natas evidence + wechallinfo); benchmark staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:shepherd.fs25.isf.hslu-edu.ch",
+      "slug": "client-side-security-shepherd-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Security Shepherd - Login + about_shepherd_blurb application security awareness + register.jsp; extractSecurityShepherdSeeds; shepherd.fs25 findings 0→3; benchmark staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:alf.nu",
+      "slug": "alf-nu-alert2-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>alert(1) to win</title> + /s/js/alert.min.js on /alert2; extractAlfNuXssSeeds adds alert2; alf.nu/alert2 findings 0→3 (alf-xss-wargame evidence); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2719,6 +2737,21 @@
       "source": "discovery:avid-vuln-editor.vercel.app",
       "slug": "client-side-avid-vuln-registry-evidence",
       "shipped_at": "2026-07-11T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:natas1.natas.labs.overthewire.org",
+      "slug": "natas-chain-basic-auth",
+      "shipped_at": "2026-07-11T12:24:00.000Z"
+    },
+    {
+      "source": "discovery:shepherd.fs25.isf.hslu-edu.ch",
+      "slug": "client-side-security-shepherd-evidence",
+      "shipped_at": "2026-07-11T12:24:00.000Z"
+    },
+    {
+      "source": "discovery:alf.nu",
+      "slug": "alf-nu-alert2-seed",
+      "shipped_at": "2026-07-11T12:24:00.000Z"
     }
   ]
 }

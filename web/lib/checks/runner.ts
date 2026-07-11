@@ -54,11 +54,47 @@ function parseDocumentedBasicAuthCreds(html: string): { user: string; pass: stri
   return m ? { user: m[1], pass: m[2] } : null;
 }
 
+/** Extract Natas level password from HTML comment or wechallinfo on prior level page. */
+function parseNatasLevelCreds(hostname: string, html: string): { user: string; pass: string } | null {
+  const levelM = hostname.match(/^natas(\d+)\.natas\.labs\.overthewire\.org$/i);
+  if (!levelM) return null;
+  const level = levelM[1];
+  if (level === "0") return { user: "natas0", pass: "natas0" };
+  const commentRe = new RegExp(`password for natas${level} is (\\S+)`, "i");
+  const cm = html.match(commentRe);
+  if (cm) return { user: `natas${level}`, pass: cm[1] };
+  const wechallRe = new RegExp(
+    `wechallinfo\\s*=\\s*\\{[^}]*"level"\\s*:\\s*"natas${level}"[^}]*"pass"\\s*:\\s*"([^"]+)"`,
+    "i"
+  );
+  const wm = html.match(wechallRe);
+  if (wm) return { user: `natas${level}`, pass: wm[1] };
+  return null;
+}
+
 /** Natas level-0 credentials are public on the wargame docs page. */
 function natasLevelBasicAuth(hostname: string): { user: string; pass: string } | null {
   const m = hostname.match(/^natas(\d+)\.natas\.labs\.overthewire\.org$/i);
   if (!m || m[1] !== "0") return null;
   return { user: "natas0", pass: "natas0" };
+}
+
+/** Bootstrap Natas chain creds by walking prior levels when queue hits natas1+ directly. */
+async function bootstrapNatasCreds(
+  targetLevel: number,
+  probe: ProbeCache,
+  maxBytes: number
+): Promise<{ user: string; pass: string } | null> {
+  if (targetLevel <= 0) return { user: "natas0", pass: "natas0" };
+  const priorCreds = await bootstrapNatasCreds(targetLevel - 1, probe, maxBytes);
+  if (!priorCreds) return null;
+  const priorUrl = `http://natas${targetLevel - 1}.natas.labs.overthewire.org/`;
+  const priorDoc = await probe.get(priorUrl, { maxBytes, headers: basicAuthHeader(priorCreds) });
+  if (priorDoc.status < 200 || priorDoc.status >= 400) return null;
+  return parseNatasLevelCreds(
+    `natas${targetLevel}.natas.labs.overthewire.org`,
+    priorDoc.body
+  );
 }
 
 function basicAuthHeader(creds: { user: string; pass: string }): Record<string, string> {
@@ -80,7 +116,16 @@ async function applyWargameBasicAuth(
   }
   const needsAuth = doc.status === 401 || /\.natas\.labs\.overthewire\.org$/i.test(host);
   if (!needsAuth) return doc;
-  const creds = parseDocumentedBasicAuthCreds(htmlContext) ?? natasLevelBasicAuth(host);
+  let creds =
+    parseNatasLevelCreds(host, htmlContext) ??
+    parseDocumentedBasicAuthCreds(htmlContext) ??
+    natasLevelBasicAuth(host);
+  if (!creds) {
+    const levelM = host.match(/^natas(\d+)\.natas\.labs\.overthewire\.org$/i);
+    if (levelM && levelM[1] !== "0") {
+      creds = await bootstrapNatasCreds(parseInt(levelM[1], 10), probe, maxBytes);
+    }
+  }
   if (!creds) return doc;
   const authed = await probe.get(url, { maxBytes, headers: basicAuthHeader(creds) });
   if (authed.status >= 200 && authed.status < 400 && authed.body.length > doc.body.length) return authed;
@@ -572,7 +617,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebvulnRunnerEvidence",
   "clientSideFrontendXssDemoEvidence",
   "clientSideAiChatHtmlSinkEvidence",
-  "clientSideAvidVulnRegistryEvidence"
+  "clientSideAvidVulnRegistryEvidence",
+  "clientSideSecurityShepherdEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -961,8 +1007,10 @@ function extractAlfNuXssSeeds(html: string, pageUrl: string): string[] {
   for (const raw of [
     "https://escape.alf.nu/",
     "https://alf.nu/alert1",
+    "https://alf.nu/alert2",
     "https://returntrue.win/",
     "/alert1",
+    "/alert2",
     "/ReturnTrue"
   ]) {
     try {
@@ -1171,6 +1219,31 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
       out.add(new URL(m[1], pageUrl).toString());
     } catch {
       /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** OWASP Security Shepherd — seed login/about and mirror instances. */
+function extractSecurityShepherdSeeds(html: string, pageUrl: string): string[] {
+  if (!/Security Shepherd|securityshepherd|about_shepherd_blurb/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/", "/login", "/register.jsp"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const mirror of [
+    "https://owasp.securityshepherd.eu/",
+    "https://shepherd.fs25.isf.hslu-edu.ch/"
+  ]) {
+    if (/securityshepherd|Security Shepherd/i.test(html) || pageUrl.includes(mirror)) {
+      out.add(mirror);
     }
   }
   return [...out];
@@ -1728,6 +1801,11 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   }
   if (/natas\.labs\.overthewire\.org|Username:\s*natas0/i.test(html)) {
     out.add("http://natas0.natas.labs.overthewire.org/");
+  }
+  const natasNextRe = /password for natas(\d+) is \S+/gi;
+  let natasNext: RegExpExecArray | null;
+  while ((natasNext = natasNextRe.exec(html))) {
+    out.add(`http://natas${natasNext[1]}.natas.labs.overthewire.org/`);
   }
   if (/bandit\.labs\.overthewire\.org|Username:\s*bandit0/i.test(html)) {
     out.add("https://www.overthewire.org/wargames/bandit/bandit0.html");
@@ -2575,6 +2653,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const try2hackSeeds = extractTry2hackLevelSeeds(home.body, home.finalUrl);
   const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
+  const securityShepherdSeeds = extractSecurityShepherdSeeds(home.body, home.finalUrl);
   const googleXssGameSeeds = extractGoogleXssGameSeeds(home.body, home.finalUrl);
   const promptmapSeeds = extractPromptmapSeeds(home.body, home.finalUrl);
   const frontendXssDemoSeeds = extractFrontendXssDemoSeeds(home.body, home.finalUrl);
@@ -2658,6 +2737,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hacksplainingSeeds,
       ...try2hackSeeds,
       ...unsecurePwaSeeds,
+      ...securityShepherdSeeds,
       ...googleXssGameSeeds,
       ...promptmapSeeds,
       ...frontendXssDemoSeeds,

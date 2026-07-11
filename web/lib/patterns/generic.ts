@@ -4300,5 +4300,31 @@ export const genericPatterns: Pattern[] = [
       "We deploy an AVID-style vulnerability registry with /vuln listings. Show how to auth-gate editor routes on non-public instances.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-security-shepherd-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP Security Shepherd training platform disclosed",
+    description:
+      "OWASP Security Shepherd hosts staged web application security challenges for XSS, injection, access control, and misconfiguration training.",
+    impactOneline:
+      "Public Security Shepherd instances document intentionally vulnerable challenge labs used for application security education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecurityShepherdEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Security Shepherd is intentional training — isolate lab instances from production networks.",
+      steps: [
+        "Require authentication before serving challenge modules on private deployments.",
+        "Do not expose Security Shepherd admin or lesson routes to the public internet without access controls.",
+        "Run Shepherd labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host OWASP Security Shepherd for security training. Show how to isolate challenge instances from production networks.",
+    version: 1,
+    enabled: true
   }
 ];

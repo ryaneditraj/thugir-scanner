@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T11:10:00.000Z",
+  "updated_at": "2026-07-11T12:24:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 694,
-  "total_findings": 2940,
+  "total_sites_scanned": 697,
+  "total_findings": 2949,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 291,
-  "discovery_findings": 2035,
-  "improvements_shipped": 246,
-  "last_run": "2026-07-11T11:10:00.000Z",
+  "discovery_findings": 2044,
+  "improvements_shipped": 249,
+  "last_run": "2026-07-11T12:24:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11:00",
+    "hour_utc": "12:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
-      "primary_recall": "6/6",
+      "primary_findings": 4,
+      "primary_recall": "4/6",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "fallback_findings": 7,
+      "fallback_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — juice-shop.herokuapp.com full pass (8 findings)",
+      "note": "No benchmark category misses — primary heroku degraded (sqli,auth_bypass); staging fallback 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,47 +53,36 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 30,
-      "new_urls_queued": [
-        "https://owasp.securityshepherd.eu/",
-        "https://shepherd.fs25.isf.hslu-edu.ch/",
-        "http://natas1.natas.labs.overthewire.org/",
-        "http://natas2.natas.labs.overthewire.org/",
-        "https://alf.nu/alert2"
-      ],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — already disabled in queue)"
-      ],
-      "focus": "Security Shepherd + Natas + alf.nu queued; duck-store/pentest-ground/idor-challenge scanned",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 9,
+      "focus": "Natas chain auth + Security Shepherd + alf.nu alert2 from queued VWAD targets",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
-      "duck-store.escape.tech: 7 findings — OpenAI key in bundle + API security lab markers",
-      "pentest-ground.com:4280: 5 findings — scanner benchmark playground",
-      "dev-lucasoliveira.github.io/frontend-xss-demo: /insecure vs /secure XSS lab markers (3→4 findings)",
-      "dvai.vercel.app: AI chat dangerouslySetInnerHTML on /api/ai model output (3→4 findings)",
-      "avid-vuln-editor.vercel.app: AVID ML vulnerability registry /vuln listing (3→4 findings)",
-      "idor-challenge.vercel.app: 3 findings — client-side IDOR evidence + permissive CORS"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category gaps",
+      "natas1.natas.labs.overthewire.org: chained basic auth from natas0 password comment → overthewire-natas evidence (0→3 findings)",
+      "shepherd.fs25.isf.hslu-edu.ch: OWASP Security Shepherd login + about blurb (0→3 findings)",
+      "alf.nu/alert2: alert(1)-to-win XSS wargame stage 2 (0→3 findings)"
     ],
     "learning_gaps": [
-      "owasp.securityshepherd.eu + shepherd.fs25 + natas1/2 + alf.nu/alert2: newly queued — not reached in 8-URL limit",
-      "hack.me, gandalf.lakera.ai, burpbountylab.com: high-value VWAD targets still queued ahead of new tail",
-      "nodegoat.herokuapp.com: Heroku app deleted (no-such-app) — use nodegoat-websec.herokuapp.com",
-      "cridzy2.github.io: GitHub Pages 404 — JumpBox portfolio offline",
-      "bwapp.wnxs.eu + laby.ffri.jp/WebGoat: unreachable from cloud this run",
+      "owasp.securityshepherd.eu: DNS/connectivity unreachable from cloud — use shepherd.fs25 mirror",
+      "hack.me: empty response from cloud scans — may require browser/interactive session",
+      "natas2+: requires natas1 crawl context — chain bootstrap now handles direct queue hits",
+      "nodegoat.herokuapp.com: Heroku app deleted — use nodegoat-websec.herokuapp.com",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
-    "demo.owasp-juice.shop": 8,
+    "juice-shop-staging.herokuapp.com": 7,
     "burpbountylab.com": 10,
     "duck-store.escape.tech": 7,
     "webexp05.vercel.app": 6,
     "pentest-ground.com:4280": 5,
+    "natas1.natas.labs.overthewire.org": 3,
+    "shepherd.fs25.isf.hslu-edu.ch": 3,
+    "alf.nu/alert2": 3,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 4,
     "dvai.vercel.app": 4,
     "avid-vuln-editor.vercel.app": 4,
