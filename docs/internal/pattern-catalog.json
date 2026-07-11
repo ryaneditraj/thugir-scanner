@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T10:05:42.618Z",
-  "total": 210,
-  "uniqueSlugs": 210,
+  "generatedAt": "2026-07-11T11:08:34.348Z",
+  "total": 213,
+  "uniqueSlugs": 213,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 192,
+    "generic": 195,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 145,
+    "deep": 148,
     "continuous": 0
   },
   "byCategory": {
@@ -25,10 +25,10 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 18,
-    "Information disclosure": 15,
+    "Information disclosure": 16,
     "Broken authentication": 12,
     "Injection": 27,
-    "Cross-site scripting": 17,
+    "Cross-site scripting": 19,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 12,
@@ -39,6 +39,7 @@
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "client-side-agentic-ai-ctf-evidence",
+    "client-side-ai-chat-html-sink-evidence",
     "client-side-alf-serviceworker-evidence",
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
@@ -48,6 +49,7 @@
     "client-side-atlas-crew-hub-evidence",
     "client-side-atlas-crew-inferno-lab-evidence",
     "client-side-authlab-evidence",
+    "client-side-avid-vuln-registry-evidence",
     "client-side-berger-cyber-lab-evidence",
     "client-side-breaktheflask-evidence",
     "client-side-brokencrystals-evidence",
@@ -75,6 +77,7 @@
     "client-side-exploit-education-evidence",
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
+    "client-side-frontend-xss-demo-evidence",
     "client-side-gandalf-evidence",
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",

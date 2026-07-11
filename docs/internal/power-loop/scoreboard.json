@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T11:03:46.890Z",
+  "updated_at": "2026-07-11T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,22 +16,22 @@
     }
   },
   "total_sites_scanned": 687,
-  "total_findings": 2910,
+  "total_findings": 2911,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 286,
-  "discovery_findings": 2005,
-  "improvements_shipped": 243,
-  "last_run": "2026-07-11T11:03:46.890Z",
+  "discovery_findings": 2014,
+  "improvements_shipped": 246,
+  "last_run": "2026-07-11T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku full pass (8 findings incl. permissive-cors, no staging fallback)",
+      "note": "No benchmark category misses — juice-shop.herokuapp.com full pass (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,47 +50,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 28,
-      "new_urls_queued": [
-        "https://cridzy2.github.io/",
-        "http://nodegoat.herokuapp.com/",
-        "http://bwapp.wnxs.eu/",
-        "https://portswigger.net/web-security",
-        "https://laby.ffri.jp/WebGoat/"
-      ],
-      "focus": "VWAD online mirrors (NodeGoat/bWAPP/WebGoat) + JumpBox portfolio + PortSwigger academy"
+      "focus": "AI chat HTML sink, frontend XSS demo routes, AVID vuln registry",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
-      "webexp05.vercel.app: 6 findings — SQLi/XSS/JWT-none/path-traversal client-side lab markers",
-      "tempehs.github.io/The_Unsecure_PWA: 4 findings — unsecure-by-design PWA training sandbox",
-      "weaponsforge.github.io/hacker-friendly-app: 4 findings — intentionally vulnerable SPA markers",
-      "xss-attacker.vercel.app: 4 findings — cross-origin XSS C2 demo (paired with xss-victim)"
+      "dev-lucasoliveira.github.io/frontend-xss-demo: /insecure vs /secure XSS lab markers (3→4 findings)",
+      "dvai.vercel.app: AI chat dangerouslySetInnerHTML on /api/ai model output (3→4 findings)",
+      "avid-vuln-editor.vercel.app: AVID ML vulnerability registry /vuln listing (3→4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start can still degrade to 1–2 findings between hourly runs",
-      "hack.me, gandalf.lakera.ai, burpbountylab.com: high-value VWAD targets queued but not reached in 8-URL limit",
-      "nodegoat.herokuapp.com + bwapp.wnxs.eu + laby.ffri.jp/WebGoat: newly queued — pending next run",
-      "portswigger.net/web-security: academy landing/docs — individual labs require account progression",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp.vulnweb.com"
+      "nodegoat.herokuapp.com: Heroku app deleted (no-such-app) — use nodegoat-websec.herokuapp.com",
+      "cridzy2.github.io: GitHub Pages 404 — JumpBox portfolio offline",
+      "bwapp.wnxs.eu + laby.ffri.jp/WebGoat: unreachable from cloud this run",
+      "acuart.phpnet.us: DNS parking page — use testphp.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
-    "demo.owasp-juice.shop": 8,
-    "burpbountylab.com": 10,
+    "dev-lucasoliveira.github.io/frontend-xss-demo": 4,
+    "dvai.vercel.app": 4,
+    "avid-vuln-editor.vercel.app": 4,
     "webexp05.vercel.app": 6,
-    "dghostninja.github.io/posts/Injection": 4,
-    "rootxjs.github.io/docs/grpc_goat_docs/getting-started": 6,
-    "yusufarbc.github.io/webvuln-runner": 4,
     "tempehs.github.io/The_Unsecure_PWA": 4,
     "weaponsforge.github.io/hacker-friendly-app": 4,
-    "xss-attacker.vercel.app": 4,
-    "pc-parts-store.vercel.app": 5,
-    "railsgoat.cktricky.com": 3,
-    "artemiskit.vercel.app": 4,
-    "urban-vampi-production.up.railway.app": 6
+    "xss-attacker.vercel.app": 4
   }
 }
