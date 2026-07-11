@@ -1377,7 +1377,32 @@
       "url": "https://dghostninja.github.io/posts/Insecure-design/",
       "source": "DghostNinja/BreakTheFlask — insecure design vulnerability session (final BreakTheFlask module)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cridzy2.github.io/",
+      "source": "cridzy2/JumpBox-Vulnerable-Webserver — intentionally vulnerable AD-integrated web lab portfolio (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://nodegoat.herokuapp.com/",
+      "source": "OWASP NodeGoat official Heroku demo — Node.js OWASP Top 10 training app (VWAD / GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://bwapp.wnxs.eu/",
+      "source": "bWAPP wnxs.eu mirror — 100+ intentionally vulnerable PHP/MySQL bugs (awesome-vuln-web-apps list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger.net/web-security",
+      "source": "PortSwigger Web Security Academy — free OWASP-aligned browser labs (VWAD / awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://laby.ffri.jp/WebGoat/",
+      "source": "FFRI WebGoat public instance — guided OWASP Top 10 Java training lab (VWAD online collection)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T09:05:00.000Z"
+  "updated_at": "2026-07-11T10:05:00.000Z"
 }
