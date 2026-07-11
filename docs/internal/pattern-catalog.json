@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T02:03:19.403Z",
-  "total": 189,
-  "uniqueSlugs": 189,
+  "generatedAt": "2026-07-11T03:04:42.386Z",
+  "total": 192,
+  "uniqueSlugs": 192,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 171,
+    "generic": 174,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 124,
+    "deep": 127,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 58,
+    "Broken access control": 60,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 15,
     "Information disclosure": 15,
     "Broken authentication": 12,
-    "Injection": 23,
+    "Injection": 24,
     "Cross-site scripting": 14,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -77,6 +77,8 @@
     "client-side-hackadvisor-lab-evidence",
     "client-side-hacker101-ctf-evidence",
     "client-side-hacking-lab-evidence",
+    "client-side-hackinghub-evidence",
+    "client-side-hacksplaining-evidence",
     "client-side-hackthissite-evidence",
     "client-side-idor-evidence",
     "client-side-intercode-evidence",
@@ -104,6 +106,7 @@
     "client-side-prototype-pollution-evidence",
     "client-side-pwn-college-evidence",
     "client-side-pwnshop-evidence",
+    "client-side-qamax-adversary-evidence",
     "client-side-react-dom-xss-lab-evidence",
     "client-side-react-rsc-cve-evidence",
     "client-side-rest-vulnweb-evidence",
