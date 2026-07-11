@@ -2170,6 +2170,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-peruggia-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Peruggia vulnerable photo gallery lab disclosed",
+    description:
+      "Peruggia is a deliberately vulnerable PHP/MySQL image gallery designed as a safe environment to practice common web application attacks.",
+    impactOneline:
+      "Public Peruggia project pages document controlled SQLi, XSS, and file-upload vulnerabilities for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePeruggiaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Peruggia is intentional training software — never deploy it on production networks.",
+      steps: [
+        "Run Peruggia only in isolated lab VMs with no production data.",
+        "Do not mirror Peruggia vulnerability patterns in production photo galleries.",
+        "Block public internet access to Peruggia demo instances."
+      ]
+    },
+    fixPrompt:
+      "We reference the Peruggia vulnerable photo gallery for security training. Show how to isolate lab instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bwapp-evidence",
     platform: "generic",
     category: "Injection",

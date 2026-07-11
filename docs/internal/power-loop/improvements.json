@@ -1613,6 +1613,24 @@
       "slug": "client-side-fvb-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: llms.txt BOLA/IDOR + authenticated-route-bypass.md + apidoc.fvb.vchan.in; extractFvbGitbookSeeds + clientSideFvbLabEvidence wired in DEEP_RULES; fvb.vchan.in findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:peruggia.sourceforge.net",
+      "slug": "client-side-peruggia-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: safe legal environment + controlled vulnerabilities to practice on + PHP/MySQL image gallery in SourceForge project metadata; peruggia.sourceforge.net findings 3→4; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "portswigger-sqli-lesson-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: What is SQL Injection? Tutorial meta + find and exploit different types of SQLi on /web-security/sql-injection; client-side-portswigger-academy-evidence fires on sub-lesson pages; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-events-ctf-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackingLabSeeds seeds /events/ + /ctf_platform from Angular landing; hacking-lab.com findings 2→3 with client-side-hacking-lab-evidence on full crawl; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -2950,6 +2968,21 @@
       "source": "discovery:fvb.vchan.in",
       "slug": "client-side-fvb-lab-evidence",
       "shipped_at": "2026-07-11T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:peruggia.sourceforge.net",
+      "slug": "client-side-peruggia-evidence",
+      "shipped_at": "2026-07-11T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "portswigger-sqli-lesson-markers",
+      "shipped_at": "2026-07-11T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-events-ctf-crawl",
+      "shipped_at": "2026-07-11T19:25:00.000Z"
     }
   ]
 }

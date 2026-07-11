@@ -623,6 +623,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSockettomeEvidence",
   "clientSideOwaspBricksEvidence",
   "clientSideFvbLabEvidence",
+  "clientSidePeruggiaEvidence",
   "clientSideVaultappLabEvidence",
   "clientSideDamnVulnerableBankEvidence",
   "clientSideVulnlabAcademyEvidence",
@@ -2330,9 +2331,44 @@ function extractCtfDefiSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Hacking-Lab AG training platform — seed CTF and events hubs from Angular landing. */
+function extractHackingLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/Hacking-Lab|hacking-lab\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/events/", "/ctf_platform", "/cyber_security_labs_for_universities"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:events|ctf_platform)[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti ASP.NET practice site — seed guestbook XSS lab page. */
 function extractInvictiAspnetSeeds(html: string, pageUrl: string): string[] {
-  if (!/testsparker\.com|testinvicti\.com|Guestbook\.aspx|guestbookPermenantCrossSiteScripting/i.test(html)) {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (
+    !/testsparker\.com|testinvicti\.com/i.test(host) &&
+    !/Guestbook\.aspx|guestbookPermenantCrossSiteScripting/i.test(html)
+  ) {
     return [];
   }
   const out = new Set<string>();
@@ -2930,6 +2966,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
+  const hackingLabSeeds = extractHackingLabSeeds(home.body, home.finalUrl);
   const atlasCrewHubSeeds = extractAtlasCrewHubSeeds(home.body, home.finalUrl);
   const atlasCrewInfernoLabSeeds = extractAtlasCrewInfernoLabSeeds(home.body, home.finalUrl);
   const atlasCrewEdgeProtectionSeeds = extractAtlasCrewEdgeProtectionSeeds(home.body, home.finalUrl);
@@ -3020,6 +3057,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspGenaiLabSeeds,
       ...ctfDefiSeeds,
       ...invictiAspnetSeeds,
+      ...hackingLabSeeds,
       ...atlasCrewHubSeeds,
       ...atlasCrewInfernoLabSeeds,
       ...atlasCrewEdgeProtectionSeeds,
