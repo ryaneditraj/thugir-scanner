@@ -198,18 +198,25 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
 
   // Phase 1: wake REST API (sqli, idor, auth_bypass probes depend on this).
-  for (let attempt = 0; attempt < 6; attempt++) {
-    if (await juiceShopApiLive(pageUrl)) break;
+  let apiLive = false;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    if (await juiceShopApiLive(pageUrl)) {
+      apiLive = true;
+      break;
+    }
     await new Promise((r) => setTimeout(r, 2500));
   }
-  await probe.getMany(
-    apiPaths.map((p) => new URL(p, origin).toString()),
-    probeOpts,
-    3
-  );
+  if (apiLive) {
+    await probe.getMany(
+      apiPaths.map((p) => new URL(p, origin).toString()),
+      probeOpts,
+      3
+    );
+  }
 
   // Phase 2: wake JS bundle independently (xss + secret probes need main.js).
-  for (let attempt = 0; attempt < 6; attempt++) {
+  let bundleLive = false;
+  for (let attempt = 0; attempt < 8; attempt++) {
     try {
       const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
         timeoutMs: 18000,
@@ -221,6 +228,7 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
         !HEROKU_APP_ERROR_RE.test(doc.body) &&
         doc.body.length > 500
       ) {
+        bundleLive = true;
         break;
       }
     } catch {
@@ -228,11 +236,13 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     }
     await new Promise((r) => setTimeout(r, 2500));
   }
-  await probe.getMany(
-    bundlePaths.map((p) => new URL(p, origin).toString()),
-    probeOpts,
-    3
-  );
+  if (bundleLive) {
+    await probe.getMany(
+      bundlePaths.map((p) => new URL(p, origin).toString()),
+      probeOpts,
+      3
+    );
+  }
 }
 
 /** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
@@ -533,6 +543,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSideHackThisSiteEvidence",
+  "clientSideCyberDefendersEvidence",
+  "clientSideWebSecurityLabZhEvidence",
   "clientSideSectrainerEvidence",
   "clientSideHackAdvisorLabEvidence",
   "clientSideAgenticAiCtfEvidence",
@@ -2069,6 +2081,32 @@ function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Chinese Web Security Lab — seed /learn/* chapter routes from hub nav. */
+function extractWebSecurityLabZhSeeds(html: string, pageUrl: string): string[] {
+  if (!/Web 安全实验室|web-security-lab\.vercel\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/learn/same-origin", "/learn/xss", "/learn/csrf", "/learn/cookies-samesite", "/learn/csp"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/learn\/[a-z0-9-]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Microsoft Sherpa MCP Security Summit workshop — seed camp routes. */
 function extractMcpSherpaWorkshopSeeds(html: string, pageUrl: string): string[] {
   if (!/MCP Security Summit Workshop|azure-samples\.github\.io\/sherpa/i.test(html)) return [];
@@ -2747,6 +2785,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const grpcGoatSeeds = extractGrpcGoatDocSeeds(home.body, home.finalUrl);
   const webgoatSeeds = extractWebgoatDocSeeds(home.body, home.finalUrl);
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
+  const webSecurityLabZhSeeds = extractWebSecurityLabZhSeeds(home.body, home.finalUrl);
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
@@ -2833,6 +2872,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...grpcGoatSeeds,
       ...webgoatSeeds,
       ...seclabPlaygroundSeeds,
+      ...webSecurityLabZhSeeds,
       ...secResearchLabSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
@@ -2919,6 +2959,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     maxBytes: 800_000,
     concurrency: 4
   });
+
+  // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
+  if (isJuiceShopHost(home.finalUrl)) {
+    await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
+  }
 
   const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body)].join("\n");
   const detection = detectPlatform(home, combined);

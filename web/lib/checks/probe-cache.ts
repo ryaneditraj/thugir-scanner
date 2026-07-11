@@ -2,6 +2,16 @@ import { fetchDoc, type FetchedDoc } from "./http";
 
 type FetchOpts = Parameters<typeof fetchDoc>[1];
 
+const RETRYABLE_HEROKU_ERROR_RE = /Application Error|herokucdn\.com\/error-pages/i;
+
+/** Cold-start Heroku stubs must not poison the probe cache for the rest of the scan. */
+function isRetryableProbeResult(doc: FetchedDoc): boolean {
+  if (doc.status === 0) return true;
+  if (doc.status === 502 || doc.status === 503 || doc.status === 504) return true;
+  if (RETRYABLE_HEROKU_ERROR_RE.test(doc.body)) return true;
+  return false;
+}
+
 function cacheKey(url: string, opts: FetchOpts = {}): string {
   const method = opts.method ?? "GET";
   const body = opts.body ?? "";
@@ -19,7 +29,10 @@ export class ProbeCache {
     const key = cacheKey(url, opts);
     let p = this.pending.get(key);
     if (!p) {
-      p = fetchDoc(url, opts);
+      p = fetchDoc(url, opts).then((doc) => {
+        if (isRetryableProbeResult(doc)) this.pending.delete(key);
+        return doc;
+      });
       this.pending.set(key, p);
     }
     return p;

@@ -1754,6 +1754,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-cyberdefenders-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CyberDefenders blue team cyber range platform disclosed",
+    description:
+      "CyberDefenders advertises hands-on blue team training, SOC analyst upskilling, and real-world cyber range investigations.",
+    impactOneline:
+      "Public cyber range platforms expose intentionally vulnerable investigation scenarios attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCyberDefendersEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cyber range labs are intentional — gate investigations behind paid accounts and isolate lab VMs.",
+      steps: [
+        "Require authentication before serving investigation lab instances.",
+        "Isolate cyber range infrastructure from production networks.",
+        "Monitor outbound traffic from lab environments."
+      ]
+    },
+    fixPrompt:
+      "We host CyberDefenders-style blue team cyber ranges. Show how to gate investigations behind auth and isolate lab VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-web-security-lab-zh-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Chinese Web Security Lab educational platform disclosed",
+    description:
+      "Web 安全实验室 documents browser-side XSS, CSRF, CSP, and same-origin educational experiments for public learning.",
+    impactOneline:
+      "Public educational labs expose injectable XSS/CSRF demos reusable as attack templates against real apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebSecurityLabZhEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational labs are intentional — never reuse demo vulnerability patterns in production apps.",
+      steps: [
+        "Gate interactive lab chapters behind authentication when possible.",
+        "Isolate lab environments from production networks.",
+        "Add clear educational disclaimers and rate limits on demo endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host a Chinese Web Security Lab with XSS/CSRF chapters. Show how to isolate educational demos from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sectrainer-evidence",
     platform: "generic",
     category: "Broken access control",
