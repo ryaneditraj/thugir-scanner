@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T05:10:00.000Z",
+  "updated_at": "2026-07-11T06:28:34.685Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,62 +15,64 @@
       ]
     }
   },
-  "total_sites_scanned": 630,
-  "total_findings": 2636,
+  "total_sites_scanned": 638,
+  "total_findings": 2676,
   "critical_findings": 27,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 258,
-  "discovery_findings": 1770,
+  "discovery_urls_added": 263,
+  "discovery_findings": 1803,
   "improvements_shipped": 228,
-  "last_run": "2026-07-11T05:10:00.000Z",
+  "last_run": "2026-07-11T06:28:34.685Z",
   "last_run_summary": {
-    "hour_utc": "05:00",
+    "hour_utc": "06:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
+      "primary_findings": 1,
+      "primary_recall": "1/6",
+      "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+      "retry_findings": 2,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku 8 findings, full 6/6 recall (no staging fallback needed)",
+      "note": "Primary heroku cold-start degraded (1→2 findings); staging fallback 6/6 — learning signal: primary URL unreliable from cloud",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "findings": 3,
-      "improvements_shipped_this_run": 3,
-      "focus": "Sentinel AI adversarial guardrails + OWASP NodeGoat lab + Lakera Gandalf prompt-injection CTF markers",
-      "skipped_unreachable": [
-        "pentest-lab.vercel.app (Vercel Security Checkpoint blocks cloud scanner UA — rule deferred)",
-        "pygoat.herokuapp.com (Heroku no-such-app)",
-        "acuart.phpnet.us (DNS parking page)"
-      ]
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 33,
+      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"],
+      "new_urls": [
+        "https://try2hack.nl/",
+        "https://rogueloop.github.io/xxs-course/",
+        "https://alf.nu/ServiceWorker",
+        "https://try2hack.net/",
+        "https://epicdetect.io/"
+      ],
+      "focus": "Atlascrew Chimera + Archon training labs; queue head sweep"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category misses",
-      "maxwellcalkin.github.io/sentinel-ai: 55-case adversarial LLM guardrail suite evidence (6→7 findings)",
-      "nodegoat-websec.herokuapp.com: OWASP Node Goat training lab markers (5→6 findings)",
-      "gandalf.lakera.ai: Lakera prompt-injection CTF level evidence (6→7 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku 1/6 cold-start",
+      "chimera.atlascrew.dev: 9 findings — 456+ API vuln lab + JWT none + XXE markers",
+      "archon-eight.vercel.app: 8 findings — Resend key + postMessage DOM XSS + DevSecOps lab",
+      "ctb-pi.vercel.app: 5 findings — robots/sitemap sensitive paths + weak CSP",
+      "cybersec-demo.vercel.app: 4 findings — dangerous HTML sinks + Nivara platform markers"
     ],
     "learning_gaps": [
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "pentest-lab.vercel.app: Vercel Security Checkpoint intermittently blocks scanner from inline lab HTML",
-      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only",
-      "exploit.education: VM download hub — shallow crawl yields lab markers only, not live exploit surface"
+      "juice-shop.herokuapp.com: Heroku cold-start yields 1–2 findings (1/6 recall) — staging oracle required",
+      "testhtml5.vulnweb.com: DNS dead — remove or replace in queue",
+      "New tail URLs (try2hack, rogueloop xxs-course, alf.nu ServiceWorker, epicdetect) not reached in 8-URL limit",
+      "hack.me / gandalf / burpbountylab / secure-code-game still queued at tail"
     ]
   },
   "discovery_highlights": {
@@ -240,8 +242,8 @@
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
     "hack-health-tutorial.vercel.app": 4,
-    "preview-zeroday-sec.vercel.app": 3,
     "cybersec-demo.vercel.app": 4,
+    "preview-zeroday-sec.vercel.app": 3,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 4,
