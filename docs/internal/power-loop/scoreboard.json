@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T04:10:00.000Z",
+  "updated_at": "2026-07-11T05:05:31.314Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 622,
-  "total_findings": 2600,
+  "total_sites_scanned": 630,
+  "total_findings": 2636,
   "critical_findings": 27,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 253,
-  "discovery_findings": 1742,
+  "discovery_urls_added": 258,
+  "discovery_findings": 1770,
   "improvements_shipped": 225,
-  "last_run": "2026-07-11T04:10:00.000Z",
+  "last_run": "2026-07-11T05:05:31.314Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku 8 findings 6/6 recall maintained",
+      "note": "No benchmark category misses — primary heroku 8 findings, full 6/6 recall (no staging fallback needed)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,26 +50,34 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "findings": 11,
-      "improvements_shipped_this_run": 3,
-      "focus": "Unsecure PWA educational lab + PromptMap LLM testing + Google XSS game training markers",
-      "skipped_unreachable": [
-        "vampi.lab.pentest-forge.com (502 Bad Gateway)",
-        "mutillidae.lab.pentest-forge.com (502 Bad Gateway)",
-        "capture-the-flag.labs.vercel.dev (Vercel deployment not found)"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "urls_ok": 7,
+      "findings": 28,
+      "focus": "Banking/health OSS labs + alf.nu XSS wargame + LLM security labs (PromptMap, llm-sec) + exploit.education",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+      ],
+      "new_queue_tail": [
+        "http://burpbountylab.com/",
+        "https://bigiamchallenge.com/challenge/1",
+        "https://k8slanparty.com/",
+        "https://www.brokenazure.cloud/",
+        "https://securitylab.github.com/secure-code-game/"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category misses",
-      "tempehs.github.io/The_Unsecure_PWA: unsecure-by-design HSC lab evidence (3→4 findings)",
-      "promptmap.vercel.app: PromptMap prompthis prompt workflow markers (3→4 findings)",
-      "xss-game.appspot.com: Google XSS game training program evidence (2→3 findings)"
+      "llm-sec.vercel.app: AWS AKID + OWASP GenAI lab + unauth API (7 findings)",
+      "securebank-blog.vercel.app: SQLi/CSRF/XSS banking lab evidence (5 findings)",
+      "promptmap.vercel.app: OpenAI key + PromptMap injection workbench (4 findings)",
+      "alf.nu/alert1: XSS wargame training markers (3 findings)"
     ],
     "learning_gaps": [
-      "pentest-forge *.lab.pentest-forge.com subdomains returning 502 — use primary heroku juice-shop oracle",
-      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only",
-      "xss-quiz.int21h.jp: server misconfigured (printenv page) — use xss-game.appspot.com instead"
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
+      "exploit.education: VM download hub — shallow crawl yields lab markers only, not live exploit surface",
+      "defendtheweb.net: challenge content behind authenticated mission routes",
+      "New Wiz/Burp/GitHub tail URLs not reached in 8-URL limit (burpbountylab, bigiamchallenge, k8slanparty, brokenazure, secure-code-game)"
     ]
   },
   "discovery_highlights": {
@@ -99,7 +107,7 @@
     "archon-eight.vercel.app": 8,
     "ctb-pi.vercel.app": 5,
     "hack-this-site-eta.vercel.app": 12,
-    "llm-sec.vercel.app": 6,
+    "llm-sec.vercel.app": 7,
     "defendtheweb.net": 3,
     "alf.nu/alert1": 3,
     "promptmap.vercel.app": 4,
@@ -238,7 +246,8 @@
     "authlab.digi.ninja": 5,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
-    "hack-health-tutorial.vercel.app": 4,
+    "hack-health-tutorial.vercel.app": 3,
+    "exploit.education": 3,
     "preview-zeroday-sec.vercel.app": 3,
     "cybersec-demo.vercel.app": 4,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
@@ -302,9 +311,6 @@
     "web-production-42cbf.up.railway.app": 6,
     "hacksplaining.com": 4,
     "ctfchallenge.com": 3,
-    "llm-sec.vercel.app": 7,
-    "securebank-blog.vercel.app": 5,
-    "alf.nu": 3,
-    "promptmap.vercel.app": 3
+    "alf.nu": 3
   }
 }
