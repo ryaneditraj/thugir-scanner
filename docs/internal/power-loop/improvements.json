@@ -1433,6 +1433,24 @@
       "slug": "client-side-api-security-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET / returns {\"message\":\"VAmPI the Vulnerable API\",\"help\":\"VAmPI is a vulnerable on purpose API\"}; CLIENT_API_SECURITY_RES VAmPI patterns; urban-vampi-production findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "owasp-juice-shop-mirror-detection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/search?q=')) returns SQLITE_ERROR; isJuiceShopHost now matches owasp-juice hostnames; demo.owasp-juice.shop findings 1→8; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:railsgoat.cktricky.com",
+      "slug": "client-side-railsgoat-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: RailsGoat vulnerable Ruby on Rails application + OWASP/railsgoat + very serious vulnerabilities inside; extractRailsgoatDocSeeds crawls getting_started.html; railsgoat.cktricky.com findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "client-side-pc-parts-store-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dangerouslySetInnerHTML:{__html:a.description} in main.e019a8dc.chunk.js + Commerce.js R.cart; pc-parts-store.vercel.app findings 0→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2620,6 +2638,21 @@
       "source": "discovery:urban-vampi-production.up.railway.app",
       "slug": "vampi-api-root-banner-patterns",
       "shipped_at": "2026-07-11T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "owasp-juice-shop-mirror-detection",
+      "shipped_at": "2026-07-11T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:railsgoat.cktricky.com",
+      "slug": "client-side-railsgoat-evidence",
+      "shipped_at": "2026-07-11T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "client-side-pc-parts-store-lab-evidence",
+      "shipped_at": "2026-07-11T09:10:00.000Z"
     }
   ]
 }
