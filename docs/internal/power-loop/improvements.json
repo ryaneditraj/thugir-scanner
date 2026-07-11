@@ -1667,6 +1667,24 @@
       "slug": "cs-training-academy-regex-relaxation",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: OWASP Juice Shop + deliberately-vulnerable apps separated by Next.js HTML; widened Juice Shop/WebGoat card regex windows; computersciencesop2 findings 9→10 with client-side-cs-training-academy-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.itsecgames.com",
+      "slug": "bwapp-bugs-htm-crawl-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugs.htm <h1>Bugs</h1> + SQL/HTML/LDAP injection taxonomy + XXE/SSRF catalog; prioritizeSecurityLabLinks ranks bugs.htm first; www.itsecgames.com findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "client-side-zero-bank-webinspect-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Free Online Bank Web site published by Micro Focus Fortify + WebInspect products detecting Web application vulnerabilities; extractZeroBankTrainingSeeds crawls /bank/* routes; zero.webappsecurity.com findings 4→5; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-mirror-tld-probes",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/search?q='')) returns SQLITE_ERROR; isJuiceShopHost extended to .juice.shop TLD for API/bundle priming; demo.owasp-juice.shop findings 2→8; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -3049,6 +3067,21 @@
       "source": "discovery:computersciencesop2.vercel.app",
       "slug": "cs-training-academy-regex-relaxation",
       "shipped_at": "2026-07-11T21:38:00.000Z"
+    },
+    {
+      "source": "discovery:www.itsecgames.com",
+      "slug": "bwapp-bugs-htm-crawl-priority",
+      "shipped_at": "2026-07-11T22:05:00.000Z"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "client-side-zero-bank-webinspect-evidence",
+      "shipped_at": "2026-07-11T22:05:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-mirror-tld-probes",
+      "shipped_at": "2026-07-11T22:05:00.000Z"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T21:18:52.131Z",
-  "total": 229,
-  "uniqueSlugs": 229,
+  "generatedAt": "2026-07-11T22:04:55.526Z",
+  "total": 230,
+  "uniqueSlugs": 230,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 211,
+    "generic": 212,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 164,
+    "deep": 165,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 71,
+    "Broken access control": 72,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -182,6 +182,7 @@
     "client-side-xxe-evidence",
     "client-side-yogsec-xss-labs-evidence",
     "client-side-yrprey-evidence",
+    "client-side-zero-bank-webinspect-evidence",
     "client-side-zero-health-evidence",
     "client-side-zeroday-training-evidence",
     "cors-reflect-origin",
