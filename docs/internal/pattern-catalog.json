@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T12:03:02.294Z",
-  "total": 214,
-  "uniqueSlugs": 214,
+  "generatedAt": "2026-07-11T13:04:13.538Z",
+  "total": 215,
+  "uniqueSlugs": 215,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 196,
+    "generic": 197,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 149,
+    "deep": 150,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 18,
     "Information disclosure": 16,
     "Broken authentication": 12,
-    "Injection": 27,
+    "Injection": 28,
     "Cross-site scripting": 19,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -117,6 +117,7 @@
     "client-side-pc-parts-store-lab-evidence",
     "client-side-pentester-academy-lab-evidence",
     "client-side-pentesterlab-evidence",
+    "client-side-portswigger-academy-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-promptmap-evidence",
     "client-side-prototype-pollution-evidence",

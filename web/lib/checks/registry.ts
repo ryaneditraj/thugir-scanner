@@ -2423,19 +2423,19 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "SQL injection lesson module",
-    re: /href=["']\/lessons\/sql-injection|Exploit database queries to access or manipulate data/i
+    re: /\/lessons\/sql-injection|Exploit database queries to access or manipulate data/i
   },
   {
     label: "AI prompt injection lesson",
-    re: /href=["']\/lessons\/ai-prompt-injection|Manipulate AI systems by injecting malicious instructions/i
+    re: /\/lessons\/ai-prompt-injection|Manipulate AI systems by injecting malicious instructions/i
   },
   {
     label: "Cross-site scripting lesson",
-    re: /href=["']\/lessons\/xss-|Inject malicious scripts into trusted websites/i
+    re: /\/lessons\/xss-|Inject malicious scripts into trusted websites/i
   },
   {
     label: "CSRF lesson module",
-    re: /href=["']\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
+    re: /\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
   },
   {
     label: "SQL injection lesson step nav",
@@ -5909,6 +5909,7 @@ const CLIENT_XXE_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideXxeEvidence: Rule = async (ctx) => {
+  if (/Web Security Academy|portswigger\.net\/web-security/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_XXE_RES) {
     const m = ctx.combined.match(re);
