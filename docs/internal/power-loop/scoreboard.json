@@ -54,6 +54,7 @@
       "queued_not_reached": [
         "https://aigoat.co.in/",
         "https://api-goat.vercel.app/",
+        "https://www.capital-ctf.com/",
         "https://ctfchallenge.com/",
         "https://bwapp.ywnxs.com/",
         "https://brutelogic.com.br/knoxss.html"
@@ -78,7 +79,7 @@
       "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com",
       "aigoat.co.in: Cloudflare bot-wall blocks scanner UA",
       "www.capital-ctf.com: DNS NXDOMAIN",
-      "New tail URLs (ctfchallenge.com, altoromutual, bwapp.ywnxs, knoxss) not reached in 8-URL limit"
+      "New tail URLs (ctfchallenge.com, altoromutual, bwapp.ywnxs, knoxss, hard.altoromutual) not reached in 8-URL limit"
     ]
   },
   "discovery_highlights": {
