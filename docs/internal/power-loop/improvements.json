@@ -1397,6 +1397,24 @@
       "slug": "client-side-rogueloop-xxs-course-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: XSS (Cross-Site Scripting) Interactive Course + reflectedXSSDemo/storedXSSSubmit/domXSSDemo innerHTML sinks; rogueloop.github.io/xxs-course findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:epicdetect.io",
+      "slug": "client-side-epicdetect-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Hands-on cybersecurity training + EpicDetect bridges the gap between theory and real-world practice + Atlas Skill Tree SOC investigations; epicdetect.io findings 5→6; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:alf.nu/ServiceWorker",
+      "slug": "client-side-alf-serviceworker-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ServiceWorker is dangerous title + navigator.serviceWorker.register + sandbox domain rootkit demo; alf.nu/ServiceWorker findings 2→3 (replaces alf-xss-wargame false positive); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HackHealth tutorial nav + /cybersecurity/a03/sqlInjection path on homepage without deep crawl; hack-health-tutorial findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2554,6 +2572,21 @@
       "source": "discovery:rogueloop.github.io/xxs-course",
       "slug": "client-side-rogueloop-xxs-course-evidence",
       "shipped_at": "2026-07-11T06:35:00.000Z"
+    },
+    {
+      "source": "discovery:epicdetect.io",
+      "slug": "client-side-epicdetect-evidence",
+      "shipped_at": "2026-07-11T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:alf.nu/ServiceWorker",
+      "slug": "client-side-alf-serviceworker-evidence",
+      "shipped_at": "2026-07-11T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-lab-evidence-nav",
+      "shipped_at": "2026-07-11T07:10:00.000Z"
     }
   ]
 }
