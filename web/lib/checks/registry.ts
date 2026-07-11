@@ -2490,6 +2490,18 @@ const CLIENT_PORTSWIGGER_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "Academy dashboard",
     re: /web-security\/dashboard|web-security\/hall-of-fame/i
+  },
+  {
+    label: "SQL injection tutorial title",
+    re: /What is SQL Injection\? Tutorial/i
+  },
+  {
+    label: "SQLi exploit types lesson description",
+    re: /find and exploit different types of SQLi vulnerabilities/i
+  },
+  {
+    label: "SQLi UNION attack practitioner lab",
+    re: /sql-injection\/union-attacks|UNION attack SQL injection/i
   }
 ];
 
@@ -5074,6 +5086,48 @@ const clientSideMutillidaeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP Mutillidae documents SQLi, HTMLi, command injection, and XSS challenge routes under index.php?page="
+    }
+  };
+};
+
+// --- Peruggia intentionally vulnerable PHP photo gallery (peruggia.sourceforge.net) -
+const CLIENT_PERUGGIA_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Peruggia project branding",
+    re: /Peruggia/i
+  },
+  {
+    label: "Safe legal web attack practice environment",
+    re: /safe, legal environment to learn about and try common attacks on web applications/i
+  },
+  {
+    label: "Controlled vulnerabilities practice gallery",
+    re: /controlled vulnerabilities to practice on/i
+  },
+  {
+    label: "PHP MySQL image gallery lab",
+    re: /PHP\/MySQL web application|image gallery/i
+  },
+  {
+    label: "Common PHP web application vulnerabilities",
+    re: /common web application and PHP vulnerabilities/i
+  }
+];
+
+const clientSidePeruggiaEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PERUGGIA_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Peruggia|peruggia\.sourceforge/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Peruggia is a deliberately vulnerable PHP/MySQL photo gallery for practicing common web application attacks"
     }
   };
 };
@@ -8995,6 +9049,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSkfLabEvidence,
   clientSideGoogleGruyereCodelabEvidence,
   clientSideMutillidaeEvidence,
+  clientSidePeruggiaEvidence,
   clientSideBwappEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
