@@ -1728,6 +1728,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-kontra-application-security-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Kontra application security training platform disclosed",
+    description:
+      "Kontra application.security publishes free interactive OWASP Top 10 for Web and API training modules for developer secure-coding education.",
+    impactOneline:
+      "Public Kontra exercise hubs document API injection and BOLA patterns used to calibrate scanners against training labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideKontraApplicationSecurityEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Kontra labs are intentional training — gate free exercises behind business email verification.",
+      steps: [
+        "Require authenticated accounts before launching injectable API lab instances.",
+        "Isolate Kontra-style training environments from production API gateways.",
+        "Use Kontra findings to patch similar OWASP API Top 10 gaps in production services."
+      ]
+    },
+    fixPrompt:
+      "We host Kontra-style OWASP API Top 10 training. Show how to gate lab modules behind auth and isolate them from production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-immersive-labs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Immersive Labs cyber resilience platform disclosed",
+    description:
+      "Immersive Labs advertises browser-based cyber resilience drills, hands-on skill labs, and benchmark reporting for security teams.",
+    impactOneline:
+      "Public Immersive Labs marketing pages document training lab infrastructure attackers use to tune discovery scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideImmersiveLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Immersive Labs instances are intentional training — never expose lab VMs to production networks.",
+      steps: [
+        "Run Immersive Labs drills only on dedicated training tenants.",
+        "Require SSO before granting access to browser-based exploit labs.",
+        "Use drill findings to close skill gaps without copying vulnerable lab code to production."
+      ]
+    },
+    fixPrompt:
+      "We use Immersive Labs-style cyber drills for team training. Show how to isolate lab tenants from production and gate browser labs behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-evidence",
     platform: "generic",
     category: "Broken access control",

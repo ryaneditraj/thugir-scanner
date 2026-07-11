@@ -369,6 +369,7 @@ const REFLECTED_XSS_PARAMS = [
   "term",
   "name",
   "id",
+  "uid",
   "message",
   "text",
   "keyword",
@@ -494,16 +495,31 @@ function isReflectedXssCanary(body: string, canary: string): boolean {
   return true;
 }
 
+/** Google Gruyere codelab — /start allocates a live instance with reflected XSS on snippets.gtl?uid=. */
+async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string[]> {
+  if (!/google-gruyere\.appspot\.com/i.test(ctx.origin)) return [];
+  const startDoc = await ctx.probe.get(`${ctx.origin}/start`, { maxBytes: 4096 });
+  if (startDoc.status < 200 || startDoc.status >= 400) return [];
+  const idM =
+    startDoc.body.match(/instance id is (\d{20,})/i) ??
+    startDoc.body.match(/HREF="\/(\d{20,})"/i);
+  if (!idM) return [];
+  const id = idM[1];
+  return [`/${id}/snippets.gtl`, `/${id}/newsnippet.gtl`];
+}
+
 const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
   const homePath = new URL(ctx.home.finalUrl).pathname || "/";
   const discovered = extractReflectedXssPaths(ctx.combined);
   const discoveredSet = new Set(discovered);
+  const gruyerePaths = await extractGruyereLiveInstancePaths(ctx);
   const paths = prioritizeReflectedXssPaths(
     [
       ...new Set([
         ...discovered,
         ...extractDvwaXssProbePaths(ctx.combined),
+        ...gruyerePaths,
         homePath,
         ...REFLECTED_XSS_FALLBACK_PATHS
       ])
@@ -4488,6 +4504,86 @@ const clientSidePentesterLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab hosts 700+ hands-on web hacking exercises including Web for Pentester CVE labs"
+    }
+  };
+};
+
+// --- Kontra Application Security training (application.security) ----------------------
+const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Kontra Application Security Training",
+    re: /Kontra Application Security Training|Kontra is an Application Security Training platform/i
+  },
+  {
+    label: "OWASP Top 10 for API free exercises",
+    re: /OWASP Top 10 for API|KONTRA.s OWASP Top 10 for API/i
+  },
+  {
+    label: "Interactive API security training modules",
+    re: /interactive application security training modules.*web API endpoints/i
+  },
+  {
+    label: "Free exercises hub",
+    re: /Free Exercises|application\.security\/free/i
+  },
+  {
+    label: "Secure coding and OWASP keywords",
+    re: /secure coding training|owasp top 10.*appsec training/i
+  }
+];
+
+const clientSideKontraApplicationSecurityEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_KONTRA_APPSEC_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Kontra|application\.security/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Kontra publishes free interactive OWASP API Top 10 training modules for developer security education"
+    }
+  };
+};
+
+// --- Immersive Labs cyber resilience platform (immersivelabs.com) ---------------------
+const CLIENT_IMMERSIVE_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Immersive Labs cyber resilience platform",
+    re: /Immersive (?:One|Labs).*cyber resilience|Prove Cyber Resilience with Realistic Drills/i
+  },
+  {
+    label: "Hands-on cyber skills labs",
+    re: /hands-on labs|close skill gaps with labs|realistic drills/i
+  },
+  {
+    label: "Cybersecurity workforce resilience",
+    re: /cybersecurity workforce resilience|continuous cyber resilience/i
+  },
+  {
+    label: "Benchmark and report cyber readiness",
+    re: /benchmark performance|Prove, Improve, Benchmark and Report/i
+  }
+];
+
+const clientSideImmersiveLabsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_IMMERSIVE_LABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/immersivelabs\.com|Immersive Labs|Immersive One/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Immersive Labs hosts browser-based cyber resilience drills and hands-on security skill labs"
     }
   };
 };
@@ -9220,6 +9316,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
+  clientSideKontraApplicationSecurityEvidence,
+  clientSideImmersiveLabsEvidence,
   clientSideHackThisSiteEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,

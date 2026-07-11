@@ -582,6 +582,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
+  "clientSideKontraApplicationSecurityEvidence",
+  "clientSideImmersiveLabsEvidence",
   "clientSideHackThisSiteEvidence",
   "clientSideCyberDefendersEvidence",
   "clientSideWebSecurityLabZhEvidence",
@@ -941,6 +943,20 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
   while ((m = PENTESTERLAB_EXERCISE_RE.exec(html))) {
     try {
       out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Kontra application.security — free OWASP Top 10 web/API training hubs. */
+function extractKontraTrainingSeeds(html: string, origin: string): string[] {
+  if (!/application\.security|Kontra Application Security|OWASP Top 10 for API/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/free/owasp-top-10-API", "/free/owasp-top-10", "/free"]) {
+    try {
+      out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
@@ -3044,6 +3060,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     crawlOrigin
   );
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
+  const kontraTrainingSeeds = extractKontraTrainingSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
   const sectrainerSeeds = extractSectrainerSpaSeeds(
@@ -3129,6 +3146,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hackableSoSeeds,
       ...vulnwebSeeds,
       ...pentesterLabSeeds,
+      ...kontraTrainingSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
       ...sectrainerSeeds,
