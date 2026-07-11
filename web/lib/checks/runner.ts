@@ -129,24 +129,51 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
 /** Pre-fetch Juice Shop REST + bundle paths into probe cache after dyno wake-up. */
 async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Promise<void> {
   const origin = new URL(pageUrl).origin;
-  const paths = [
+  const apiPaths = [
     "/rest/admin/application-configuration",
     "/rest/track-order/1",
     "/rest/products/search?q=''))",
-    "/rest/products/search?q=warmup",
-    "/main.js",
-    "/polyfills.js",
-    "/runtime.js"
+    "/rest/products/search?q=warmup"
   ];
-  const urls = paths.map((p) => new URL(p, origin).toString());
+  const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
+  const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
+
+  // Phase 1: wake REST API (sqli, idor, auth_bypass probes depend on this).
   for (let attempt = 0; attempt < 6; attempt++) {
-    const live = await juiceShopApiLive(pageUrl);
-    if (live || attempt === 5) {
-      await probe.getMany(urls, { maxBytes: 800_000, timeoutMs: 18000 }, 3);
-      return;
+    if (await juiceShopApiLive(pageUrl)) break;
+    await new Promise((r) => setTimeout(r, 2500));
+  }
+  await probe.getMany(
+    apiPaths.map((p) => new URL(p, origin).toString()),
+    probeOpts,
+    3
+  );
+
+  // Phase 2: wake JS bundle independently (xss + secret probes need main.js).
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try {
+      const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
+        timeoutMs: 18000,
+        maxBytes: 8192
+      });
+      if (
+        doc.status >= 200 &&
+        doc.status < 500 &&
+        !HEROKU_APP_ERROR_RE.test(doc.body) &&
+        doc.body.length > 500
+      ) {
+        break;
+      }
+    } catch {
+      /* ignore */
     }
     await new Promise((r) => setTimeout(r, 2500));
   }
+  await probe.getMany(
+    bundlePaths.map((p) => new URL(p, origin).toString()),
+    probeOpts,
+    3
+  );
 }
 
 /** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
@@ -467,6 +494,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideCylabAcademyEvidence",
   "clientSideVulnerableappEvidence",
   "clientSideRestVulnwebEvidence",
+  "clientSidePwnshopEvidence",
   "clientSideVulnforgeAcademyEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideBugBountyHunterEvidence",
@@ -1090,6 +1118,32 @@ function extractGruyereCodelabSeeds(html: string, origin: string): string[] {
   while ((m = re.exec(html))) {
     try {
       out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Pwnshop OWASP Top 10 2025 e-commerce lab (pwnshop.ctfsecurity.com). */
+function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/pwnshop|ctfsecurity\.com/i.test(html) && !/Pwnshop/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const path of ["/vulnerabilities"]) {
+    try {
+      const u = new URL(path, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/vulnerabilities)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -2213,6 +2267,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
+  const pwnshopSeeds = extractPwnshopDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
@@ -2284,6 +2339,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspVwadSeeds,
       ...archonVitepressSeeds,
       ...vulnerableAppSeeds,
+      ...pwnshopSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,
       ...bwappSeeds,
