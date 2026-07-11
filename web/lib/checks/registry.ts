@@ -7596,6 +7596,48 @@ const clientSideOverthewireNatasEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP Security Shepherd training platform (securityshepherd.eu / ISF mirrors) -----
+const CLIENT_SECURITY_SHEPHERD_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP Security Shepherd project title",
+    re: /OWASP Security Shepherd|Security Shepherd - Login/i
+  },
+  {
+    label: "Application security awareness mission",
+    re: /fostering and improving application security awareness|application security awareness among/i
+  },
+  {
+    label: "Security Shepherd account registration",
+    re: /Security Shepherd Credentials|Security Shepherd Account|register\.jsp/i
+  },
+  {
+    label: "About Security Shepherd blurb",
+    re: /About Security Shepherd|about_shepherd_blurb/i
+  },
+  {
+    label: "ZAP proxy training recommendation",
+    re: /Download a HTTP Proxy here|zaproxy\/zaproxy/i
+  }
+];
+
+const clientSideSecurityShepherdEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECURITY_SHEPHERD_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Security Shepherd|securityshepherd/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP Security Shepherd is a deliberately vulnerable web application security training platform with staged challenges"
+    }
+  };
+};
+
 // --- FFUF.me fuzzing practice lab (ffuf.me) -------------------------------------------
 const CLIENT_FFUFME_RES: { label: string; re: RegExp }[] = [
   {
@@ -8565,7 +8607,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebvulnRunnerEvidence,
   clientSideFrontendXssDemoEvidence,
   clientSideAiChatHtmlSinkEvidence,
-  clientSideAvidVulnRegistryEvidence
+  clientSideAvidVulnRegistryEvidence,
+  clientSideSecurityShepherdEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
