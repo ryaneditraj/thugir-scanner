@@ -1541,6 +1541,24 @@
       "slug": "client-side-overthewire-leviathan-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Username: leviathan0 Password: leviathan0 + /etc/leviathan_pass on /wargames/leviathan/; extractOverTheWireNatasSeeds seeds leviathan docs; overthewire.org/wargames/leviathan findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-probe-cache-retry",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: Heroku Application Error cached during cold-start blocked sql/idor/xss re-probes; ProbeCache evicts retryable stubs + conditional prime + late re-prime; primary https://juice-shop.herokuapp.com recall 2/6→6/6 (7 findings)"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "client-side-cyberdefenders-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Blue Team Training for SOC Analysts & DFIR + cyber range investigations + CyberDefenders brand in meta; cyberdefenders.org findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-lab.vercel.app",
+      "slug": "client-side-web-security-lab-zh-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Web 安全实验室 + /learn/xss /learn/csrf chapter nav + 教育用途 disclaimer; extractWebSecurityLabZhSeeds; web-security-lab.vercel.app findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2818,6 +2836,21 @@
       "source": "discovery:www.overthewire.org",
       "slug": "client-side-overthewire-leviathan-evidence",
       "shipped_at": "2026-07-11T14:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-probe-cache-retry",
+      "shipped_at": "2026-07-11T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "client-side-cyberdefenders-evidence",
+      "shipped_at": "2026-07-11T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-lab.vercel.app",
+      "slug": "client-side-web-security-lab-zh-evidence",
+      "shipped_at": "2026-07-11T15:10:00.000Z"
     }
   ]
 }
