@@ -1,42 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-10T03:07:56.092Z",
-      "url": "https://hackxor.net/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 240,
-      "status": "ok",
-      "scanned_at": "2026-07-10T03:07:56.092Z"
-    },
-    {
       "run_id": "2026-07-10T03:08:08.854Z",
       "url": "http://testasp.vulnweb.com/",
       "auth": "public_demo",
@@ -8626,13 +8590,13 @@
       "scanned_at": "2026-07-10T23:24:26.992Z"
     },
     {
-      "run_id": "2026-07-11T00:12:15.796Z",
+      "run_id": "2026-07-11T00:03:36.060Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 1,
+      "finding_count": 2,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -8640,22 +8604,29 @@
           "severity": "medium",
           "confidence": 0.95,
           "category": "Security misconfiguration"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
         }
       ],
       "ai_findings_added": 0,
       "pages_crawled": 1,
-      "probes_run": 241,
+      "probes_run": 239,
       "status": "ok",
-      "scanned_at": "2026-07-11T00:12:15.796Z"
+      "scanned_at": "2026-07-11T00:03:36.060Z"
     },
     {
-      "run_id": "2026-07-11T00:19:09.114Z",
+      "run_id": "2026-07-11T00:08:20.150Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 8,
+      "finding_count": 4,
       "findings": [
         {
           "slug": "secret-resend",
@@ -8664,6 +8635,43 @@
           "confidence": 0.9,
           "category": "Exposed secret"
         },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 274,
+      "status": "ok",
+      "scanned_at": "2026-07-11T00:08:20.150Z"
+    },
+    {
+      "run_id": "2026-07-11T00:17:28.187Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
         {
           "slug": "missing-security-headers",
           "title": "Critical security headers missing",
@@ -8716,9 +8724,9 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 1,
-      "probes_run": 248,
+      "probes_run": 228,
       "status": "ok",
-      "scanned_at": "2026-07-11T00:19:09.114Z"
+      "scanned_at": "2026-07-11T00:17:28.187Z"
     }
   ],
   "teacher_delta_runs": [
@@ -9300,6 +9308,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T23:15:00.000Z"
+    },
+    {
+      "run_id": "2026-07-11T00:18:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 2 findings 2/6 gap xss,sqli,idor,sensitive_data; retry 4 findings 3/6 gap sqli,idor,auth_bypass; staging fallback 6/6)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings",
+      "scanned_at": "2026-07-11T00:18:00.000Z"
     }
   ]
 }
