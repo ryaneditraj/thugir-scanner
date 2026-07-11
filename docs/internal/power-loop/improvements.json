@@ -1595,6 +1595,24 @@
       "slug": "natas-robots-secret-bootstrap",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: natas3 robots.txt Disallow /s3cr3t/ → /s3cr3t/users.txt has natas4:JDrPnuZAKyl6MkiqQGFIddrqpvgOASth; bootstrapNatasCreds robots secret path; natas4 direct scan authenticates (3 findings vs 401); benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:sechow.com/bricks",
+      "slug": "owasp-bricks-subpath-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractOwaspBricksSeeds used /docs/login-1.html resolving to sechow.com/docs (404); relative docs/login-1.html now crawls /bricks/docs/login-1.html with Both user name and password field are prone to code injection; sechow.com/bricks crawl paths fixed; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:pentesteracademylab.appspot.com",
+      "slug": "pentester-academy-basic-auth-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: knownLabBasicAuth student:password unlocks Challenge 1–4 pentesteracademy.com/video hub HTML behind form-signin gate; pentesteracademylab.appspot.com corpus now includes challenge buttons; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:fvb.vchan.in",
+      "slug": "client-side-fvb-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: llms.txt BOLA/IDOR + authenticated-route-bypass.md + apidoc.fvb.vchan.in; extractFvbGitbookSeeds + clientSideFvbLabEvidence wired in DEEP_RULES; fvb.vchan.in findings 2→3; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -2917,6 +2935,21 @@
       "source": "discovery:natas3.natas.labs.overthewire.org",
       "slug": "natas-robots-secret-bootstrap",
       "shipped_at": "2026-07-11T17:16:00.000Z"
+    },
+    {
+      "source": "discovery:sechow.com/bricks",
+      "slug": "owasp-bricks-subpath-crawl",
+      "shipped_at": "2026-07-11T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesteracademylab.appspot.com",
+      "slug": "pentester-academy-basic-auth-bootstrap",
+      "shipped_at": "2026-07-11T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:fvb.vchan.in",
+      "slug": "client-side-fvb-lab-evidence",
+      "shipped_at": "2026-07-11T18:10:00.000Z"
     }
   ]
 }

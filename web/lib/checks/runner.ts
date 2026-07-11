@@ -79,6 +79,14 @@ function natasLevelBasicAuth(hostname: string): { user: string; pass: string } |
   return { user: "natas0", pass: "natas0" };
 }
 
+/** Public demo credentials for known training-lab hosts (documented on course pages). */
+function knownLabBasicAuth(hostname: string): { user: string; pass: string } | null {
+  if (/^pentesteracademylab\.appspot\.com$/i.test(hostname)) {
+    return { user: "student", pass: "password" };
+  }
+  return null;
+}
+
 /** Bootstrap Natas chain creds by walking prior levels when queue hits natas1+ directly. */
 async function bootstrapNatasCreds(
   targetLevel: number,
@@ -154,11 +162,17 @@ async function applyWargameBasicAuth(
     return doc;
   }
   const needsAuth = doc.status === 401 || /\.natas\.labs\.overthewire\.org$/i.test(host);
+  const knownCreds = knownLabBasicAuth(host);
+  if (!needsAuth && knownCreds && /Pentester Academy Lab|form-signin/i.test(doc.body)) {
+    const authed = await probe.get(url, { maxBytes, headers: basicAuthHeader(knownCreds) });
+    if (authed.status >= 200 && authed.status < 400 && authed.body.length > doc.body.length) return authed;
+  }
   if (!needsAuth) return doc;
   let creds =
     parseNatasLevelCreds(host, htmlContext) ??
     parseDocumentedBasicAuthCreds(htmlContext) ??
-    natasLevelBasicAuth(host);
+    natasLevelBasicAuth(host) ??
+    knownCreds;
   if (!creds) {
     const levelM = host.match(/^natas(\d+)\.natas\.labs\.overthewire\.org$/i);
     if (levelM && levelM[1] !== "0") {
@@ -608,6 +622,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacker101CtfEvidence",
   "clientSideSockettomeEvidence",
   "clientSideOwaspBricksEvidence",
+  "clientSideFvbLabEvidence",
   "clientSideVaultappLabEvidence",
   "clientSideDamnVulnerableBankEvidence",
   "clientSideVulnlabAcademyEvidence",
@@ -1766,12 +1781,13 @@ function extractOwaspBricksSeeds(html: string, pageUrl: string): string[] {
   if (!/OWASP Bricks|sechow\.com\/bricks|Break the Bricks/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
+  // Relative paths — absolute /docs/… drops the /bricks/ deploy prefix on sechow.com.
   for (const p of [
-    "/docs/login-1.html",
-    "/docs/content-page-1.html",
-    "/docs/file-upload-1.html",
-    "/docs/login-pages.html",
-    "/docs/content-pages.html"
+    "docs/login-1.html",
+    "docs/content-page-1.html",
+    "docs/file-upload-1.html",
+    "docs/login-pages.html",
+    "docs/content-pages.html"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -1781,7 +1797,38 @@ function extractOwaspBricksSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["'](\/docs\/(?:login|content-page|file-upload)-\d+\.html)["']/gi;
+  const linkRe = /href\s*=\s*["']((?:\.\.\/)?docs\/(?:login|content-page|file-upload)-\d+\.html)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** First Vulnerable Bank GitBook (fvb.vchan.in — REST API security walkthroughs). */
+function extractFvbGitbookSeeds(html: string, pageUrl: string): string[] {
+  if (!/First Vulnerable Bank|fvb\.vchan\.in/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "llms.txt",
+    "readme.md",
+    "api-vulnerabilities/broken-object-level-authorization.md",
+    "api-vulnerabilities/authenticated-route-bypass.md"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /\(https:\/\/fvb\.vchan\.in\/([^)\s]+\.md)\)/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html)) && out.size < 8) {
     try {
@@ -2859,6 +2906,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
+  const fvbGitbookSeeds = extractFvbGitbookSeeds(home.body, home.finalUrl);
   const damnVulnerableBankSeeds = extractDamnVulnerableBankSeeds(home.body, home.finalUrl);
   const vulnLabAcademySeeds = extractVulnLabAcademySeeds(home.body, home.finalUrl);
   const eksGoatSeeds = extractEksGoatMdbookSeeds(home.body, home.finalUrl);
@@ -2948,6 +2996,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...yogsecXssLabsSeeds,
       ...hacker101CtfSeeds,
       ...owaspBricksSeeds,
+      ...fvbGitbookSeeds,
       ...damnVulnerableBankSeeds,
       ...vulnLabAcademySeeds,
       ...eksGoatSeeds,

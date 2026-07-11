@@ -2820,6 +2820,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-fvb-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "First Vulnerable Bank API security lab disclosed",
+    description:
+      "FVB GitBook walkthroughs document BOLA/IDOR and authentication-bypass flaws in a deliberately vulnerable REST banking API.",
+    impactOneline:
+      "Public FVB docs expose injectable object-ID and auth-bypass oracles attackers use to practice OWASP API Top 10 exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFvbLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FVB is intentional training — run only on isolated lab infrastructure, not production APIs.",
+      steps: [
+        "Enforce object-level authorization on every API route that accepts user or account identifiers.",
+        "Apply authentication middleware consistently across all protected endpoints.",
+        "Host API security labs only on dedicated training networks."
+      ]
+    },
+    fixPrompt:
+      "We host First Vulnerable Bank-style API security labs. Show how to enforce BOLA checks and auth middleware on REST routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vaultapp-lab-evidence",
     platform: "generic",
     category: "Broken authentication",

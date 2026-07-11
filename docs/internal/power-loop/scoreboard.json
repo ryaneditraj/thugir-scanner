@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T18:08:00.000Z",
+  "updated_at": "2026-07-11T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,7 +12,8 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ]
+      ],
+      "primary_gap": []
     }
   },
   "total_sites_scanned": 744,
@@ -22,8 +23,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 321,
   "discovery_findings": 2219,
-  "improvements_shipped": 264,
-  "last_run": "2026-07-11T18:08:00.000Z",
+  "improvements_shipped": 267,
+  "last_run": "2026-07-11T18:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "18:00",
     "benchmark": {
@@ -34,7 +35,7 @@
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_used": false,
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings, no retry or staging fallback)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -47,46 +48,35 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ]
+          ],
+          "primary_gap": []
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 19,
-      "skipped_48h": [
-        "https://hackable-web.vercel.app/",
-        "https://vulnerable-lab.vercel.app/",
-        "https://ctf.hacker101.com/"
-      ],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "timeouts": [
-        "https://ctflearn.com/"
-      ],
-      "focus": "OverTheWire Natas14-18 SQLi chain; vAPI/wrongsecrets refresh; hacking-lab platform markers",
-      "improvements_shipped_this_run": 0
+      "focus": "OWASP Bricks subpath crawl fix; Pentester Academy basic-auth bootstrap; FVB GitBook BOLA lab evidence",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com: actuator + postMessage XSS + CTF markers (5 findings)",
-      "vapi.apisec.ai: OpenAI key + API lab evidence (4 findings)",
-      "hacking-lab.com/events: training platform markers (3 findings)",
-      "natas0.natas.labs.overthewire.org: OverTheWire wargame evidence (3 findings)"
+      "sechow.com/bricks: crawl seeds now resolve /bricks/docs/* (SQL injection doc content reachable)",
+      "pentesteracademylab.appspot.com: student:password basic auth unlocks Challenge 1–4 hub HTML",
+      "fvb.vchan.in: First Vulnerable Bank BOLA + auth-bypass GitBook evidence (2→3 findings)"
     ],
     "learning_gaps": [
-      "natas14-18: queued but not reached in 8-URL limit — prior pending URLs consumed scan budget",
+      "xss-quiz.int21h.jp: all paths return printenv stub — quiz HTML offline",
       "testhtml5.vulnweb.com: DNS dead — remove or mark enabled:false",
       "ctflearn.com: timeout from cloud scanner egress",
-      "inj3ctlab.bugbountylabs.com: DNS NXDOMAIN from cloud"
+      "516-hackers-vuln-playground: GitHub Pages 404"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "juice-shop-staging.herokuapp.com": 7,
+    "fvb.vchan.in": 3,
+    "sechow.com": 2,
+    "pentesteracademylab.appspot.com": 2,
     "wrongsecrets.herokuapp.com": 5,
     "vapi.apisec.ai": 4,
     "hacking-lab.com": 3,

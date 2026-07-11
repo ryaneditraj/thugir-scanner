@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T17:04:20.015Z",
-  "total": 224,
-  "uniqueSlugs": 224,
+  "generatedAt": "2026-07-11T18:09:59.168Z",
+  "total": 225,
+  "uniqueSlugs": 225,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 206,
+    "generic": 207,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 159,
+    "deep": 160,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 69,
+    "Broken access control": 70,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -82,6 +82,7 @@
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
     "client-side-frontend-xss-demo-evidence",
+    "client-side-fvb-lab-evidence",
     "client-side-gandalf-evidence",
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",
