@@ -1277,7 +1277,32 @@
       "url": "https://securitylab.github.com/secure-code-game/",
       "source": "GitHub Security Lab Secure Code Game — open-source in-browser secure coding CTF (GitHub Security Lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://try2hack.nl/",
+      "source": "try2hack.nl — one of the oldest public web security challenge platforms (OWASP VWAD / awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rogueloop.github.io/xxs-course/",
+      "source": "rogueloop/xxs-course — interactive reflected/stored/DOM XSS training course (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://alf.nu/ServiceWorker",
+      "source": "Erling Ellingsen alf.nu ServiceWorker lab — browser rootkit / XSS sandbox-domain attack demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://try2hack.net/",
+      "source": "try2hack.net — mirror of classic try2hack security challenge site",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://epicdetect.io/",
+      "source": "EpicDetect — Product Hunt browser-based defensive cyber academy with hands-on SPL/SIEM labs",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T05:05:00.000Z"
+  "updated_at": "2026-07-11T06:25:00.000Z"
 }
