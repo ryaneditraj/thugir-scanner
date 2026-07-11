@@ -1227,7 +1227,32 @@
       "url": "https://www.hackthis.co.uk/",
       "source": "HackThis — UK web security challenge platform with realistic vuln levels (OWASP VWAD)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ref.jock.pl/modern-web",
+      "source": "Show HN Agent Arena — hidden prompt-injection testbed paired with wiz.jock.pl/experiments/agent-arena",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sixhackacademy.com/en/ctf-labs/",
+      "source": "SixHack Academy CTF Labs — free browser OWASP Top 10 challenge platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackxor.net/legacy",
+      "source": "Hackxor legacy missions — story-driven XSS/SQLi/CSRF online demo (albinowax)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crackme.cenzic.com/",
+      "source": "Cenzic crackmebank — classic intentionally vulnerable banking demo (awesome-vulnerable vendor list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://lab.pentestit.ru/",
+      "source": "PentestIT Test Lab — emulated corporate IT infra for legal pen-test practice (awesome-vulnerable)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T03:05:00.000Z"
+  "updated_at": "2026-07-11T04:05:00.000Z"
 }
