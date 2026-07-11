@@ -1677,7 +1677,32 @@
       "url": "http://natas33.natas.labs.overthewire.org/",
       "source": "OverTheWire Natas level 33 — PHP type juggling / strcmp bypass wargame (follows natas32)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas34.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 34 — wargame finale / congratulation level (follows natas33)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free/owasp-top-10-API",
+      "source": "Kontra Application Security — free interactive OWASP API Top 10 training labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://kontra.dev/",
+      "source": "Kontra — developer application security training platform with hands-on labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.pentesterlab.com/exercises/web-for-pentester",
+      "source": "PentesterLab Web for Pentester — hosted SQLi/XSS/CSRF exercise instances (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.immersivelabs.com/",
+      "source": "Immersive Labs — public cyber skills training platform with browser labs (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T21:18:00.000Z"
+  "updated_at": "2026-07-11T22:06:00.000Z"
 }

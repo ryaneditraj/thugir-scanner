@@ -8942,7 +8942,7 @@
       "scanned_at": "2026-07-11T21:38:27.359Z"
     },
     {
-      "run_id": "2026-07-11T22:05:19.999Z",
+      "run_id": "2026-07-11T22:03:15.662Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -9011,7 +9011,7 @@
       "pages_crawled": 1,
       "probes_run": 259,
       "status": "ok",
-      "scanned_at": "2026-07-11T22:05:19.999Z"
+      "scanned_at": "2026-07-11T22:03:15.662Z"
     }
   ],
   "teacher_delta_runs": [
@@ -9813,6 +9813,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T21:18:00.000Z"
+    },
+    {
+      "run_id": "2026-07-11T22:06:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap, no staging fallback)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings",
+      "scanned_at": "2026-07-11T22:06:00.000Z"
     }
   ]
 }
