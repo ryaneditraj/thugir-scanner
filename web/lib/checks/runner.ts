@@ -653,6 +653,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
   "clientSideSecLabPlaygroundEvidence",
+  "clientSideSkillauditEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
   "clientSideVapiEvidence",
@@ -2071,6 +2072,23 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** SkillAudit MCP skill scanner (skillaudit.vercel.app) — seed docs/rules for agent-security markers. */
+function extractSkillauditDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/SkillAudit|skillaudit\.vercel\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/docs", "/rules", "/integrations", "/openapi.json"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Sec Research Lab (secresearchlab.web.app) — seed interactive lab routes. */
 function extractSecResearchLabSeeds(html: string, pageUrl: string): string[] {
   if (!/Sec Research Lab|secresearchlab\.web\.app/i.test(html)) return [];
@@ -2961,6 +2979,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
   const webSecurityLabZhSeeds = extractWebSecurityLabZhSeeds(home.body, home.finalUrl);
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
+  const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -3052,6 +3071,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...seclabPlaygroundSeeds,
       ...webSecurityLabZhSeeds,
       ...secResearchLabSeeds,
+      ...skillauditSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
       ...bergerCyberLabSeeds,

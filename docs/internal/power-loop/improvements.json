@@ -1649,6 +1649,24 @@
       "slug": "client-side-cs-training-academy-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Sports Media Inc. Computer Science Training Academy + cybersecurity playbook for interns + OWASP Top 10 for LLM Applications; computersciencesop2.vercel.app/cybersecurity findings 9→10; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:skillaudit.vercel.app",
+      "slug": "client-side-skillaudit-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title SkillAudit — AI Agent Security Scanner | MCP Skill Safety Auditor + credential theft, data exfiltration, prompt injection + MCP Threat Chains; extractSkillauditDocSeeds crawls /docs /rules; skillaudit.vercel.app findings 6→8; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-admin-probe-retry",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: pass1 findings=3 gap=xss,sqli,idor,sensitive_data missing auth_bypass; probeUnauthenticatedAdminJson retries after 4s on juice-shop hosts; final pass 8 findings 6/6 on primary heroku without staging fallback"
+    },
+    {
+      "source": "discovery:computersciencesop2.vercel.app",
+      "slug": "cs-training-academy-regex-relaxation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Juice Shop + deliberately-vulnerable apps separated by Next.js HTML; widened Juice Shop/WebGoat card regex windows; computersciencesop2 findings 9→10 with client-side-cs-training-academy-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3016,6 +3034,21 @@
       "source": "discovery:computersciencesop2.vercel.app",
       "slug": "client-side-cs-training-academy-evidence",
       "shipped_at": "2026-07-11T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:skillaudit.vercel.app",
+      "slug": "client-side-skillaudit-evidence",
+      "shipped_at": "2026-07-11T21:38:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-admin-probe-retry",
+      "shipped_at": "2026-07-11T21:38:00.000Z"
+    },
+    {
+      "source": "discovery:computersciencesop2.vercel.app",
+      "slug": "cs-training-academy-regex-relaxation",
+      "shipped_at": "2026-07-11T21:38:00.000Z"
     }
   ]
 }

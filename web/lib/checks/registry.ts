@@ -1732,9 +1732,10 @@ function isExposedAdminShellHtml(body: string): boolean {
   return true;
 }
 
-const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
-  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
-  const origins = [ctx.origin, ...externalBases];
+async function probeUnauthenticatedAdminJson(
+  ctx: RuleContext,
+  origins: string[]
+): Promise<RuleResult | null> {
   const urls: string[] = [];
   const seen = new Set<string>();
   for (const base of origins) {
@@ -1761,6 +1762,21 @@ const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
       }
     };
   }
+  return null;
+}
+
+const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
+  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
+  const origins = [ctx.origin, ...externalBases];
+  const isJuiceShop = /juice-shop|owasp-juice/i.test(ctx.origin);
+
+  let jsonHit = await probeUnauthenticatedAdminJson(ctx, origins);
+  if (!jsonHit && isJuiceShop) {
+    // Heroku cold-start often serves track-order/sqli before admin config is ready.
+    await new Promise((r) => setTimeout(r, 4000));
+    jsonHit = await probeUnauthenticatedAdminJson(ctx, origins);
+  }
+  if (jsonHit) return jsonHit;
 
   const htmlUrls = ADMIN_HTML_LOGIN_PATHS.map((p) => new URL(p, ctx.origin).toString());
   const htmlDocs = await ctx.probe.getMany(htmlUrls, { maxBytes: 8192 }, 2);
@@ -5226,11 +5242,11 @@ const CLIENT_CS_TRAINING_ACADEMY_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "OWASP Juice Shop training card",
-    re: /OWASP Juice Shop[\s\S]{0,160}vulnerable web app/i
+    re: /OWASP Juice Shop[\s\S]{0,320}(?:vulnerable|insecure|deliberately)/i
   },
   {
     label: "WebGoat DVWA training card",
-    re: /OWASP WebGoat \+ DVWA[\s\S]{0,120}deliberately-vulnerable/i
+    re: /OWASP WebGoat \+ DVWA[\s\S]{0,280}deliberately[- ]vulnerable/i
   },
   {
     label: "OWASP LLM Top 10 curriculum",
@@ -8781,6 +8797,48 @@ const clientSideBrokencrystalsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- SkillAudit MCP skill safety scanner (skillaudit.vercel.app) ---------------------
+const CLIENT_SKILLAUDIT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SkillAudit AI agent security scanner title",
+    re: /SkillAudit[\s\S]{0,80}AI Agent Security Scanner|MCP Skill Safety Auditor/i
+  },
+  {
+    label: "MCP skill scan tagline",
+    re: /Scan any MCP skill or agent tool for security threats/i
+  },
+  {
+    label: "Credential theft and prompt injection detection",
+    re: /credential theft, data exfiltration, prompt injection/i
+  },
+  {
+    label: "MCP threat chains capability",
+    re: /MCP Threat Chains|Dangerous capability combinations/i
+  },
+  {
+    label: "Reverse shells in MCP skills",
+    re: /reverse shells? in MCP skills/i
+  }
+];
+
+const clientSideSkillauditEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SKILLAUDIT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/SkillAudit|skillaudit\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SkillAudit publishes an MCP skill safety scanner detecting credential theft, prompt injection, and dangerous agent capability chains"
+    }
+  };
+};
+
 // --- Sec Research Lab interactive training (secresearchlab.web.app) -------------------
 const CLIENT_SECRESEARCHLAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -9191,6 +9249,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   clientSideSecLabPlaygroundEvidence,
+  clientSideSkillauditEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   clientSideVapiEvidence,
