@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T06:35:00.000Z",
+  "updated_at": "2026-07-11T07:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,60 +15,67 @@
       ]
     }
   },
-  "total_sites_scanned": 638,
-  "total_findings": 2676,
+  "total_sites_scanned": 647,
+  "total_findings": 2714,
   "critical_findings": 27,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 263,
-  "discovery_findings": 1803,
+  "discovery_urls_added": 268,
+  "discovery_findings": 1833,
   "improvements_shipped": 231,
-  "last_run": "2026-07-11T06:35:00.000Z",
+  "last_run": "2026-07-11T07:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "503/cold-start degraded",
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
-      "oracle_recall": "6/6",
+      "primary_findings": 8,
+      "primary_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — primary heroku unreliable; staging oracle 6/6 maintained",
+      "note": "No benchmark misses — primary heroku full pass (8 findings, 6/6 recall, no staging fallback)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 33,
-      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"],
+      "urls_scanned": 8,
+      "findings": 30,
       "new_urls": [
-        "https://try2hack.nl/",
-        "https://rogueloop.github.io/xxs-course/",
-        "https://alf.nu/ServiceWorker",
-        "https://try2hack.net/",
-        "https://epicdetect.io/"
+        "https://artemiskit.vercel.app/",
+        "https://demo.ctfd.io/",
+        "http://testphp.vulnweb.com/",
+        "https://xss.pwnfunction.com/",
+        "https://usufarbc.github.io/webvuln-runner/"
       ],
-      "focus": "IronWASP Sboxr + Try2Hack challenges + RogueLoop XSS course",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue backlog — VAmPI Railway, hiddeninvestigations react2shell, Acuart phpnet, websec.fr, vulnbank",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "ironwasp.org: Sboxr DOM XSS scanner platform markers (5→6 findings)",
-      "try2hack.nl: oldest public security challenge site (2→3 findings)",
-      "rogueloop.github.io/xxs-course: interactive XSS course with innerHTML sinks (3→4 findings)",
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku cold-start"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — primary full pass",
+      "urban-vampi-production.up.railway.app: OWASP API Top 10 VAmPI markers (5 findings)",
+      "ucu-owasp-ctf.vercel.app: CTF platform + Firebase config evidence (5 findings)",
+      "vulnbank.org: banking/API/LLM lab markers (4 findings)",
+      "hiddeninvestigations.net: react2shell CVE lab landing evidence (4 findings)",
+      "websec.fr: client-side SQL evidence on French challenge platform (3 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start yields 1–2 findings — staging oracle required",
-      "aigoat.co.in: Cloudflare bot-wall blocks scanner UA",
-      "epicdetect.io / alf.nu/ServiceWorker: queued but not reached in discovery budget"
+      "artemiskit/demo.ctfd/testphp/xss.pwnfunction/webvuln-runner: queued at tail — not reached in 8-URL discovery budget",
+      "hiddeninvestigations.net: react2shell RSC lab requires Docker — public landing only",
+      "acuart.phpnet.us: shallow crawl — classic PHP SQLi/XSS oracles need deeper path probes",
+      "testphp.vulnweb.com: queued but DNS historically flaky from cloud — verify next run"
     ]
   },
   "discovery_highlights": {
