@@ -609,6 +609,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideDevsecopsPipelineVisualizerEvidence",
   "clientSideQamaxAdversaryEvidence",
   "clientSideHacksplainingEvidence",
+  "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
   "clientSidePromptmapEvidence",
