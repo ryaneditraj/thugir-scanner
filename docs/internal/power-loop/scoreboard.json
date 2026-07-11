@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T19:28:58.871Z",
+  "updated_at": "2026-07-11T19:29:52.505Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 326,
   "discovery_findings": 2250,
-  "improvements_shipped": 267,
+  "improvements_shipped": 270,
   "last_run": "2026-07-11T19:28:58.871Z",
   "last_run_summary": {
     "hour_utc": "19:00",
@@ -70,31 +70,40 @@
         "http://testhtml5.vulnweb.com/"
       ],
       "focus": "OverTheWire Natas19-23 queue expansion; bWAPP/Mutillidae/phpinfo; Sports Media CS training hub secrets",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after Heroku wake retry — cold-start gap xss,sqli,idor,sensitive_data on pass 1",
       "computersciencesop2.vercel.app/cybersecurity: 9 findings — OpenAI key + XSS sinks + unauthenticated API routes",
       "server.vulnapp.id/mutillidae: 6 findings — phpinfo exposed + Mutillidae lab evidence",
       "bwapp.hakhub.net: 6 findings — directory listing + robots.txt sensitive paths",
-      "ctflearn.com: recovered from prior timeout — 3 findings (CTF platform evidence)"
+      "ctflearn.com: recovered from prior timeout — 3 findings (CTF platform evidence)",
+      "peruggia.sourceforge.net: controlled-vulnerabilities gallery metadata → client-side-peruggia-evidence (3→4 findings)",
+      "portswigger.net/web-security/sql-injection: SQLi tutorial markers on sub-lesson pages",
+      "hacking-lab.com: /events/ + /ctf_platform crawl seeds improve lab evidence on full pass (2→3 findings)"
     ],
     "learning_gaps": [
       "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo, should mark enabled:false in queue",
       "natas19-23: queued but not reached in 8-URL discovery limit this run",
       "hackable-web.vercel.app / vulnerable-lab.vercel.app: queued next — high-value OSS deploys pending",
-      "Heroku juice-shop cold-start: first pass 2/6 recall — retry logic essential for benchmark stability"
+      "Heroku juice-shop cold-start: first pass 2/6 recall — retry logic essential for benchmark stability",
+      "nodegoat.herokuapp.com / pygoat.herokuapp.com: Heroku no-such-app — use nodegoat-websec.herokuapp.com",
+      "sqli-demo.vercel.app / securebank-lab.vercel.app: Vercel forbidden or function crash",
+      "hack.me / bugbait.io: connection reset or TLS errors from cloud egress",
+      "ctflearn.com: timeout from cloud scanner egress"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "juice-shop-staging.herokuapp.com": 7,
+    "peruggia.sourceforge.net": 4,
+    "portswigger.net": 3,
+    "hacking-lab.com": 3,
     "fvb.vchan.in": 3,
     "sechow.com": 2,
     "pentesteracademylab.appspot.com": 2,
     "wrongsecrets.herokuapp.com": 5,
     "vapi.apisec.ai": 4,
-    "hacking-lab.com": 3,
     "natas0.natas.labs.overthewire.org": 3,
     "hackable-web.vercel.app": 6,
     "cyberdefenders.org": 9,
