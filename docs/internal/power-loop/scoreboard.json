@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 687,
-  "total_findings": 2911,
+  "total_sites_scanned": 694,
+  "total_findings": 2940,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 286,
-  "discovery_findings": 2014,
+  "discovery_urls_added": 291,
+  "discovery_findings": 2035,
   "improvements_shipped": 246,
   "last_run": "2026-07-11T11:10:00.000Z",
   "last_run_summary": {
@@ -50,30 +50,53 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "AI chat HTML sink, frontend XSS demo routes, AVID vuln registry",
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 30,
+      "new_urls_queued": [
+        "https://owasp.securityshepherd.eu/",
+        "https://shepherd.fs25.isf.hslu-edu.ch/",
+        "http://natas1.natas.labs.overthewire.org/",
+        "http://natas2.natas.labs.overthewire.org/",
+        "https://alf.nu/alert2"
+      ],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — already disabled in queue)"
+      ],
+      "focus": "Security Shepherd + Natas + alf.nu queued; duck-store/pentest-ground/idor-challenge scanned",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category gaps",
+      "duck-store.escape.tech: 7 findings — OpenAI key in bundle + API security lab markers",
+      "pentest-ground.com:4280: 5 findings — scanner benchmark playground",
       "dev-lucasoliveira.github.io/frontend-xss-demo: /insecure vs /secure XSS lab markers (3→4 findings)",
       "dvai.vercel.app: AI chat dangerouslySetInnerHTML on /api/ai model output (3→4 findings)",
-      "avid-vuln-editor.vercel.app: AVID ML vulnerability registry /vuln listing (3→4 findings)"
+      "avid-vuln-editor.vercel.app: AVID ML vulnerability registry /vuln listing (3→4 findings)",
+      "idor-challenge.vercel.app: 3 findings — client-side IDOR evidence + permissive CORS"
     ],
     "learning_gaps": [
+      "owasp.securityshepherd.eu + shepherd.fs25 + natas1/2 + alf.nu/alert2: newly queued — not reached in 8-URL limit",
+      "hack.me, gandalf.lakera.ai, burpbountylab.com: high-value VWAD targets still queued ahead of new tail",
       "nodegoat.herokuapp.com: Heroku app deleted (no-such-app) — use nodegoat-websec.herokuapp.com",
       "cridzy2.github.io: GitHub Pages 404 — JumpBox portfolio offline",
       "bwapp.wnxs.eu + laby.ffri.jp/WebGoat: unreachable from cloud this run",
-      "acuart.phpnet.us: DNS parking page — use testphp.vulnweb.com instead"
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
+    "demo.owasp-juice.shop": 8,
+    "burpbountylab.com": 10,
+    "duck-store.escape.tech": 7,
+    "webexp05.vercel.app": 6,
+    "pentest-ground.com:4280": 5,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 4,
     "dvai.vercel.app": 4,
     "avid-vuln-editor.vercel.app": 4,
-    "webexp05.vercel.app": 6,
     "tempehs.github.io/The_Unsecure_PWA": 4,
     "weaponsforge.github.io/hacker-friendly-app": 4,
-    "xss-attacker.vercel.app": 4
+    "xss-attacker.vercel.app": 4,
+    "urban-vampi-production.up.railway.app": 6
   }
 }
