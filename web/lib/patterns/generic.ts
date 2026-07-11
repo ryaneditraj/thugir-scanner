@@ -4222,5 +4222,83 @@ export const genericPatterns: Pattern[] = [
       "We use WebVuln-Runner to spin up Juice Shop and DVWA containers. Show network isolation best practices so lab apps never reach production subnets.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-frontend-xss-demo-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Frontend XSS educational demo with insecure vs secure routes",
+    description:
+      "Educational XSS demos document side-by-side insecure and sanitized rendering routes with classic reflected XSS payload examples.",
+    impactOneline:
+      "Public XSS training SPAs expose /insecure routes that render unsanitized HTML for classroom exploitation practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFrontendXssDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS training demos are intentional — never copy /insecure rendering patterns into production.",
+      steps: [
+        "Keep educational /insecure routes off production domains.",
+        "Use DOMPurify or textContent for all user-controlled HTML in production.",
+        "Gate training demos behind classroom auth when self-hosting."
+      ]
+    },
+    fixPrompt:
+      "We host a frontend XSS educational demo with /insecure and /secure routes. Show how to keep training-only XSS sinks off production builds.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ai-chat-html-sink-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "AI chatbot renders model output via dangerouslySetInnerHTML",
+    description:
+      "Damn Vulnerable AI and similar chat UIs POST to /api/ai then inject LLM responses into the DOM with dangerouslySetInnerHTML.",
+    impactOneline:
+      "Prompt-injection or XSS in LLM output becomes stored/reflected DOM XSS when chat UIs trust model HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiChatHtmlSinkEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render LLM output as HTML — sanitize or use text-only rendering.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or markdown-to-safe-html.",
+        "Sanitize LLM output with DOMPurify before any HTML rendering.",
+        "Treat /api/ai endpoints as untrusted input sources in threat models."
+      ]
+    },
+    fixPrompt:
+      "Our AI chat UI uses dangerouslySetInnerHTML to render /api/ai model responses. Show the safe text-only or sanitized rendering alternative.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-avid-vuln-registry-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "AVID ML vulnerability registry editor disclosed",
+    description:
+      "AVID vulnerability editors publish submitted ML/LLM flaw reports with structured metadata at /vuln and /editor routes.",
+    impactOneline:
+      "Public AVID registries document ML vulnerability taxonomies and evaluation flaws attackers study for AI red-team targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAvidVulnRegistryEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AVID registries are research tooling — gate editor routes behind authentication on non-public deployments.",
+      steps: [
+        "Require auth before /editor submission forms on private AVID instances.",
+        "Do not expose draft vulnerability reports on public domains.",
+        "Separate public research catalogs from internal flaw tracking."
+      ]
+    },
+    fixPrompt:
+      "We deploy an AVID-style vulnerability registry with /vuln listings. Show how to auth-gate editor routes on non-public instances.",
+    version: 1,
+    enabled: true
   }
 ];

@@ -2659,6 +2659,127 @@ const clientSideSentinelAiEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Frontend XSS demo SPA (dev-lucasoliveira.github.io/frontend-xss-demo) ------
+const CLIENT_FRONTEND_XSS_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Educational XSS demo meta description",
+    re: /Educational demo:\s*Cross-Site Scripting|unsafe vs sanitized HTML/i
+  },
+  {
+    label: "Insecure vs secure XSS route pair",
+    re: /\/insecure["']|path:"\/insecure"|\/inseguro["']/
+  },
+  {
+    label: "Classic reflected XSS payload examples",
+    re: /Classic (?:img onerror|audio onerror) XSS|alert\('Classic/i
+  },
+  {
+    label: "XSS testing educational demo title",
+    re: /XSS testing\s*[—-]\s*educational demo/i
+  }
+];
+
+const clientSideFrontendXssDemoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FRONTEND_XSS_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/frontend-xss-demo|XSS testing.*educational demo/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Frontend XSS demo documents side-by-side insecure vs sanitized rendering routes with classic reflected XSS payloads"
+    }
+  };
+};
+
+// --- AI chatbot HTML sink (dvai.vercel.app / DreamVator Aviation) ---------------
+const CLIENT_AI_CHAT_HTML_SINK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Chat API POST endpoint",
+    re: /fetch\s*\(\s*["']\/api\/ai["']|\/api\/ai["'],\s*\{method:\s*["']POST["']/
+  },
+  {
+    label: "Model response dangerouslySetInnerHTML sink",
+    re: /dangerouslySetInnerHTML\s*:\s*\{__html:\s*[a-z]\.text\.replace/
+  },
+  {
+    label: "User/model chat role markers",
+    re: /role:\s*["']model["']|role:\s*["']user["']/
+  },
+  {
+    label: "Aviation AI co-pilot branding",
+    re: /DreamVator Aviation|AI Co-Pilot for Aviation/i
+  }
+];
+
+const clientSideAiChatHtmlSinkEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AI_CHAT_HTML_SINK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (
+    !/dvai\.vercel\.app|dvai-red\.vercel\.app|DreamVator Aviation|Damn Vulnerable AI/i.test(
+      ctx.combined
+    )
+  ) {
+    return NEGATIVE;
+  }
+  if (!/dangerouslySetInnerHTML|\/api\/ai/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "AI chat SPA renders unsanitized model responses via dangerouslySetInnerHTML — prompt-injection or XSS in LLM output becomes DOM XSS"
+    }
+  };
+};
+
+// --- AVID vulnerability registry editor (avid-vuln-editor.vercel.app) -------------
+const CLIENT_AVID_VULN_REGISTRY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "AVID vulnerability list page heading",
+    re: /List of submitted vulnaribilities|submitted vulnaribilities/i
+  },
+  {
+    label: "AVID vulnerability editor nav",
+    re: /href=["']\/vuln["']|Vulnerabilites/i
+  },
+  {
+    label: "AVID ML vulnerability schema",
+    re: /"data_type"\s*:\s*"AVID"|LLM Evaluation|problemtype/i
+  },
+  {
+    label: "AVID backend branding",
+    re: /AVID Backend|avidml\.org/i
+  }
+];
+
+const clientSideAvidVulnRegistryEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AVID_VULN_REGISTRY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/avid-vuln-editor|AVID Backend|avidml\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "AVID vulnerability registry editor publishes ML/LLM flaw submissions with /vuln listing and structured AVID metadata"
+    }
+  };
+};
+
 // --- OWASP NodeGoat training app (nodegoat-websec.herokuapp.com) ------------------
 const CLIENT_NODEGOAT_RES: { label: string; re: RegExp }[] = [
   {
@@ -8441,7 +8562,10 @@ export const RULES: Record<string, Rule> = {
   clientSidePcPartsStoreLabEvidence,
   clientSideBreakTheFlaskEvidence,
   clientSideGrpcGoatLabEvidence,
-  clientSideWebvulnRunnerEvidence
+  clientSideWebvulnRunnerEvidence,
+  clientSideFrontendXssDemoEvidence,
+  clientSideAiChatHtmlSinkEvidence,
+  clientSideAvidVulnRegistryEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
