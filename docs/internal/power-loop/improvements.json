@@ -1631,6 +1631,24 @@
       "slug": "hacking-lab-events-ctf-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackingLabSeeds seeds /events/ + /ctf_platform from Angular landing; hacking-lab.com findings 2→3 with client-side-hacking-lab-evidence on full crawl; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-spa-title-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>Hacking-Lab for Cyber Security Training</title> on Angular shell; bidirectional Cyber Security Training + Hacking-Lab markers; hacking-lab.com/ findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:www.itsecgames.com",
+      "slug": "client-side-bwapp-injection-catalog-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugs.htm <h1>Bugs</h1> + SQL/HTML/LDAP injection taxonomy + XXE/SSRF catalog; extractBwappLabSeeds prioritizes bugs.htm; www.itsecgames.com findings 2→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:computersciencesop2.vercel.app",
+      "slug": "client-side-cs-training-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Sports Media Inc. Computer Science Training Academy + cybersecurity playbook for interns + OWASP Top 10 for LLM Applications; computersciencesop2.vercel.app/cybersecurity findings 9→10; benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -2983,6 +3001,21 @@
       "source": "discovery:hacking-lab.com",
       "slug": "hacking-lab-events-ctf-crawl",
       "shipped_at": "2026-07-11T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-spa-title-markers",
+      "shipped_at": "2026-07-11T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:www.itsecgames.com",
+      "slug": "client-side-bwapp-injection-catalog-evidence",
+      "shipped_at": "2026-07-11T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:computersciencesop2.vercel.app",
+      "slug": "client-side-cs-training-academy-evidence",
+      "shipped_at": "2026-07-11T20:32:00.000Z"
     }
   ]
 }
