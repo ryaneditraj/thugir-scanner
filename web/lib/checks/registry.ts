@@ -2541,23 +2541,23 @@ const clientSideUnsecurePwaEvidence: Rule = async (ctx) => {
 const CLIENT_PROMPTMAP_RES: { label: string; re: RegExp }[] = [
   {
     label: "PromptMap application title",
-    re: /<title>\s*PromptMap\s*<\/title>|" PromptMap "/i
+    re: /<title>\s*PromptMap\s*<\/title>/i
   },
   {
-    label: "PromptMap training onboarding",
-    re: /training-promptmap\.md|training-file.*promptmap/i
+    label: "PromptMap prompthis API configuration keys",
+    re: /prompthis-remote-api-key|prompthis-selected-chat-model|prompthis-image-generation/i
   },
   {
-    label: "Template and LLM generation modes",
-    re: /generationMode|examplePrompts|Prompt Template|Example Prompt/i
+    label: "Text-to-image prompt workflow nodes",
+    re: /t2i-prompt|type===Lt\.Prompt|Lt\.Prompt/i
   },
   {
-    label: "PromptMap dashboard route",
-    re: /path:\s*["']\/dashboard["']|push\(["']\/dashboard["']\)/i
+    label: "Prompt editing keyword and message fields",
+    re: /Keyword",node:"Node",message:"Message",prompt:"Prompt"/i
   },
   {
-    label: "Editable prompt testing surface",
-    re: /contenteditable.*PromptMap|new-training-session|new-task-session/i
+    label: "PromptMap SPA shell",
+    re: /id="app"[\s\S]{0,120}PromptMap|promptmap\.vercel\.app/i
   }
 ];
 
