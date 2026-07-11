@@ -3546,5 +3546,57 @@ export const genericPatterns: Pattern[] = [
       "We document OverTheWire Bandit wargame levels. Show how to keep training SSH hosts isolated from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-vapi-api-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI OWASP API Top 10 exercise lab disclosed",
+    description:
+      "vAPI (Vulnerable Adversely Programmed Interface) is a self-hostable Laravel API lab that mimics OWASP API Top 10 scenarios with Postman exercises.",
+    impactOneline:
+      "Public vAPI instances document broken API authorization patterns attackers can replay against production REST APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVapiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — never deploy similar broken-auth patterns to production.",
+      steps: [
+        "Run vAPI only on isolated lab infrastructure with no production data.",
+        "Enforce object-level authorization on every API route in production.",
+        "Remove vAPI Postman collection references from public marketing pages."
+      ]
+    },
+    fixPrompt:
+      "We host a vAPI-style OWASP API Top 10 exercise lab. Show how to isolate it and fix BOLA/BFLA on production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-archon-training-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Archon cybersecurity engineering training path disclosed",
+    description:
+      "Archon publishes a Cybersecurity Engineering Path with OWASP Top 10 vulnerable/fixed code walkthroughs, pentesting modules, and offensive security curriculum.",
+    impactOneline:
+      "Public Archon docs expose hands-on security training content including OWASP vulnerability patterns for unauthenticated study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideArchonTrainingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Archon training docs are educational — gate interactive labs behind authentication.",
+      steps: [
+        "Require login before serving runnable vulnerable code samples.",
+        "Keep OWASP walkthrough labs on isolated subdomains.",
+        "Do not copy vulnerable code patterns from training docs into production apps."
+      ]
+    },
+    fixPrompt:
+      "We publish Archon-style OWASP Top 10 vulnerable/fixed code walkthroughs. Show how to auth-gate labs and isolate training from production.",
+    version: 1,
+    enabled: true
   }
 ];

@@ -6995,6 +6995,90 @@ const clientSideSecResearchLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- vAPI OWASP API Top 10 self-hostable lab (vapi.apisec.ai / roottusk/vapi) --------
+const CLIENT_VAPI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "vAPI vulnerable API branding",
+    re: /Vulnerable Adversely Programmed Interface|vAPI is Vulnerable/i
+  },
+  {
+    label: "OWASP API Top 10 exercise catalog",
+    re: /OWASP API Top 10 scenarios|mimics OWASP API Top 10/i
+  },
+  {
+    label: "roottusk/vapi GitHub repository",
+    re: /github\.com\/roottusk\/vapi|roottusk\/vapi/i
+  },
+  {
+    label: "vAPI Postman workspace",
+    re: /postman\.com\/roottusk\/workspace\/vapi|vAPI\.postman_collection/i
+  },
+  {
+    label: "vAPI Laravel PHP lab stack",
+    re: /vapi\.sql|php artisan serve[\s\S]{0,40}vapi/i
+  }
+];
+
+const clientSideVapiEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VAPI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/vAPI|vapi\.apisec\.ai|roottusk\/vapi/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "vAPI is a self-hostable OWASP API Top 10 exercise lab with deliberately broken authorization and authentication"
+    }
+  };
+};
+
+// --- Archon engineering knowledge platform — cybersecurity training path --------------
+const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Archon cybersecurity engineering path",
+    re: /Cybersecurity Engineering Path|archon-eight\.vercel\.app\/cybersecurity/i
+  },
+  {
+    label: "Offensive security curriculum",
+    re: /pentesting, network attacks, cloud hacking|offensive and defensive security/i
+  },
+  {
+    label: "OWASP Top 10 vulnerable and fixed code",
+    re: /OWASP Top 10 with vulnerable and fixed code|OWASP Top 10 \(2021\)/i
+  },
+  {
+    label: "Archon security documentation section",
+    re: /\/security\/owasp|security_owasp_a0[0-9]/i
+  },
+  {
+    label: "Archon Holy Grail branding",
+    re: /Holy Grail of Engineering Knowledge|archon-eight\.vercel\.app/i
+  }
+];
+
+const clientSideArchonTrainingEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ARCHON_TRAINING_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/archon-eight\.vercel\.app|Archon/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Archon publishes cybersecurity engineering paths with OWASP Top 10 vulnerable/fixed code walkthroughs and pentesting modules"
+    }
+  };
+};
+
 // --- OverTheWire Bandit beginner wargame (overthewire.org / bandit.labs) --------------
 const CLIENT_OVERTHEWIRE_BANDIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -7274,6 +7358,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSecLabPlaygroundEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
+  clientSideVapiEvidence,
+  clientSideArchonTrainingEvidence,
   clientSideOverthewireBanditEvidence,
   clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
