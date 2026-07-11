@@ -6031,6 +6031,7 @@ const clientSideAlfXssWargameEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
+  if (/ServiceWorker is dangerous|\/ServiceWorker\//i.test(ctx.combined)) return NEGATIVE;
   if (!/alf\.nu|escape\.alf\.nu|alert\(1\)\s+to\s+win/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
