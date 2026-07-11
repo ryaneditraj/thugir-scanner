@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T05:05:31.314Z",
+  "updated_at": "2026-07-11T05:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 258,
   "discovery_findings": 1770,
-  "improvements_shipped": 225,
-  "last_run": "2026-07-11T05:05:31.314Z",
+  "improvements_shipped": 228,
+  "last_run": "2026-07-11T05:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "05:00",
     "benchmark": {
@@ -50,34 +50,27 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 7,
-      "findings": 28,
-      "focus": "Banking/health OSS labs + alf.nu XSS wargame + LLM security labs (PromptMap, llm-sec) + exploit.education",
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
-      ],
-      "new_queue_tail": [
-        "http://burpbountylab.com/",
-        "https://bigiamchallenge.com/challenge/1",
-        "https://k8slanparty.com/",
-        "https://www.brokenazure.cloud/",
-        "https://securitylab.github.com/secure-code-game/"
+      "urls_validated": 3,
+      "findings": 3,
+      "improvements_shipped_this_run": 3,
+      "focus": "Sentinel AI adversarial guardrails + OWASP NodeGoat lab + Lakera Gandalf prompt-injection CTF markers",
+      "skipped_unreachable": [
+        "pentest-lab.vercel.app (Vercel Security Checkpoint blocks cloud scanner UA — rule deferred)",
+        "pygoat.herokuapp.com (Heroku no-such-app)",
+        "acuart.phpnet.us (DNS parking page)"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no category misses",
-      "llm-sec.vercel.app: AWS AKID + OWASP GenAI lab + unauth API (7 findings)",
-      "securebank-blog.vercel.app: SQLi/CSRF/XSS banking lab evidence (5 findings)",
-      "promptmap.vercel.app: OpenAI key + PromptMap injection workbench (4 findings)",
-      "alf.nu/alert1: XSS wargame training markers (3 findings)"
+      "maxwellcalkin.github.io/sentinel-ai: 55-case adversarial LLM guardrail suite evidence (6→7 findings)",
+      "nodegoat-websec.herokuapp.com: OWASP Node Goat training lab markers (5→6 findings)",
+      "gandalf.lakera.ai: Lakera prompt-injection CTF level evidence (6→7 findings)"
     ],
     "learning_gaps": [
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "exploit.education: VM download hub — shallow crawl yields lab markers only, not live exploit surface",
-      "defendtheweb.net: challenge content behind authenticated mission routes",
-      "New Wiz/Burp/GitHub tail URLs not reached in 8-URL limit (burpbountylab, bigiamchallenge, k8slanparty, brokenazure, secure-code-game)"
+      "pentest-lab.vercel.app: Vercel Security Checkpoint intermittently blocks scanner from inline lab HTML",
+      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only",
+      "exploit.education: VM download hub — shallow crawl yields lab markers only, not live exploit surface"
     ]
   },
   "discovery_highlights": {
@@ -126,7 +119,7 @@
     "xss-game.appspot.com": 3,
     "xss-quiz.int21h.jp": 2,
     "dvwa.csalab.app": 4,
-    "nodegoat-websec.herokuapp.com": 5,
+    "nodegoat-websec.herokuapp.com": 6,
     "crapi.apisec.ai": 4,
     "vapi.apisec.ai": 4,
     "wrongsecrets.herokuapp.com": 5,
@@ -246,8 +239,7 @@
     "authlab.digi.ninja": 5,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
-    "hack-health-tutorial.vercel.app": 3,
-    "exploit.education": 3,
+    "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 3,
     "cybersec-demo.vercel.app": 4,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
@@ -296,7 +288,6 @@
     "capture-the-flag.labs.vercel.dev": 1,
     "ctfchallenge.co.uk": 3,
     "exploit.education": 3,
-    "hiddeninvestigations.net": 4,
     "acuart.phpnet.us": 2,
     "ekssecurity.netlify.app": 2,
     "cybench.github.io": 4,
@@ -311,6 +302,8 @@
     "web-production-42cbf.up.railway.app": 6,
     "hacksplaining.com": 4,
     "ctfchallenge.com": 3,
-    "alf.nu": 3
+    "alf.nu": 3,
+    "maxwellcalkin.github.io/sentinel-ai": 7,
+    "gandalf.lakera.ai": 7
   }
 }

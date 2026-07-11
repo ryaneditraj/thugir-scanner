@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T04:05:30.339Z",
-  "total": 195,
-  "uniqueSlugs": 195,
+  "generatedAt": "2026-07-11T05:17:44.226Z",
+  "total": 198,
+  "uniqueSlugs": 198,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 177,
+    "generic": 180,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 130,
+    "deep": 133,
     "continuous": 0
   },
   "byCategory": {
@@ -27,11 +27,11 @@
     "Security misconfiguration": 15,
     "Information disclosure": 15,
     "Broken authentication": 12,
-    "Injection": 24,
+    "Injection": 25,
     "Cross-site scripting": 15,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 9,
+    "AI security": 11,
     "general": 17
   },
   "slugs": [
@@ -69,6 +69,7 @@
     "client-side-exploit-education-evidence",
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
+    "client-side-gandalf-evidence",
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",
     "client-side-graphql-lab-evidence",
@@ -92,6 +93,7 @@
     "client-side-mlastg-evidence",
     "client-side-mutillidae-evidence",
     "client-side-nivara-security-evidence",
+    "client-side-nodegoat-evidence",
     "client-side-nosql-evidence",
     "client-side-overthewire-bandit-evidence",
     "client-side-overthewire-natas-evidence",
@@ -118,6 +120,7 @@
     "client-side-secresearchlab-evidence",
     "client-side-sectrainer-evidence",
     "client-side-security-game-evidence",
+    "client-side-sentinel-ai-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sixhack-ctf-lab-evidence",
     "client-side-skf-lab-evidence",

@@ -3832,5 +3832,83 @@ export const genericPatterns: Pattern[] = [
       "We mirror Google XSS game-style training levels. Show how to isolate challenge instances from production applications.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-sentinel-ai-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Sentinel AI LLM guardrails adversarial test suite disclosed",
+    description:
+      "Sentinel AI publishes safety guardrails for LLM applications with a built-in 55-case adversarial test suite covering prompt injection, jailbreaks, PII redaction, and OWASP Top 10 code scanning.",
+    impactOneline:
+      "Public Sentinel AI demos document LLM red-team evaluation workflows for unauthenticated adversarial testing lab discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSentinelAiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sentinel AI adversarial suites are intentional red-team tooling — auth-gate live guardrail evaluation on private deployments.",
+      steps: [
+        "Require authentication before exposing live adversarial test runs.",
+        "Do not ship demo API keys or private test-case corpora in client bundles.",
+        "Rate-limit unauthenticated prompt-injection fuzzing on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We self-host Sentinel AI-style LLM guardrail evaluation. Show how to auth-gate adversarial test suites on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-nodegoat-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
+    description:
+      "OWASP NodeGoat is a deliberately vulnerable Node.js application with tutorial labs covering injection, broken authentication, and NoSQL flaws.",
+    impactOneline:
+      "Public NodeGoat Heroku demos document OWASP training surfaces for unauthenticated web security lab discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNodegoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never deploy tutorial vulnerable code paths to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Do not copy NodeGoat eval/NoSQL tutorial handlers into production APIs.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "We host OWASP NodeGoat-style training apps. Show how to keep intentionally vulnerable Node.js labs isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-gandalf-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Lakera Gandalf prompt-injection CTF disclosed",
+    description:
+      "Lakera Gandalf is a public prompt-injection challenge where players attempt to trick an LLM into revealing secrets across staged levels.",
+    impactOneline:
+      "Public Gandalf CTF instances document prompt-injection attack surfaces for unauthenticated AI security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGandalfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gandalf CTF levels are intentional AI red-team challenges — do not expose production LLM secrets to unauthenticated users.",
+      steps: [
+        "Never embed real secrets in LLM system prompts reachable from public CTF levels.",
+        "Rate-limit unauthenticated prompt attempts on self-hosted Gandalf mirrors.",
+        "Monitor Gandalf-style challenges for credential harvesting abuse."
+      ]
+    },
+    fixPrompt:
+      "We host Lakera Gandalf-style prompt-injection CTF levels. Show how to isolate challenge LLM backends from production secrets.",
+    version: 1,
+    enabled: true
   }
 ];
