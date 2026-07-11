@@ -1325,6 +1325,24 @@
       "slug": "client-side-pwnshop-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities Known Vulnerabilities + intentionally vulnerable e-commerce + PWN-001 IDOR + A01:2025; extractPwnshopDocSeeds; pwnshop.ctfsecurity.com findings 9→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-production-42cbf.up.railway.app",
+      "slug": "client-side-qamax-adversary-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ATTACK VECTORS START HERE + csrfAttack() + prototypePollution() + 169.254.169.254 metadata links; web-production-42cbf.up.railway.app findings 5→6; benchmark juice-shop 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "client-side-hacksplaining-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 45+ lessons covering OWASP Top 10 + exploit attacks, then learn fixes + /lessons/sql-injection; extractHacksplainingLessonSeeds; hacksplaining.com findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctfchallenge.com",
+      "slug": "client-side-hackinghub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HackingHub title + ethical web application hacking + app.hackinghub.io og.png in __PLATFORM_CONFIG__; ctfchallenge.com findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2422,6 +2440,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "client-side-pwnshop-evidence",
       "shipped_at": "2026-07-11T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-production-42cbf.up.railway.app",
+      "slug": "client-side-qamax-adversary-evidence",
+      "shipped_at": "2026-07-11T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "client-side-hacksplaining-evidence",
+      "shipped_at": "2026-07-11T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:ctfchallenge.com",
+      "slug": "client-side-hackinghub-evidence",
+      "shipped_at": "2026-07-11T03:10:00.000Z"
     }
   ]
 }

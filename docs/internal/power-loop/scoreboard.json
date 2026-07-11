@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T03:05:28.321Z",
+  "updated_at": "2026-07-11T03:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 248,
   "discovery_findings": 1714,
-  "improvements_shipped": 219,
-  "last_run": "2026-07-11T03:05:28.321Z",
+  "improvements_shipped": 222,
+  "last_run": "2026-07-11T03:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "03:00",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku full pass 8 findings 6/6 — no retry or staging fallback needed",
+      "note": "Primary heroku full pass 8 findings 6/6 — no category misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,35 +53,28 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
+      "urls_validated": 3,
       "findings": 27,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "queued_not_reached": [
-        "https://exploit.education/",
-        "https://cybench.github.io/",
-        "https://bwapp.net/",
-        "https://hackable-web.vercel.app/",
-        "https://hack.me/",
-        "https://maxwellcalkin.github.io/sentinel-ai/",
-        "https://vb467w26-production-b2df.up.railway.app/",
-        "https://vulnerableapp.com/",
-        "https://gandalf.lakera.ai/"
-      ],
-      "focus": "HackThisSite Vercel clone + DVWA csalab + XSS game/quiz + GraphQL Railway + CTFChallenge + InterCode benchmark"
+      "improvements_shipped_this_run": 3,
+      "focus": "QAMax adversary + Hacksplaining OWASP lessons + HackingHub CTF; parallel discovery on HackThisSite Vercel, DVWA csalab, XSS game/quiz",
+      "skipped_unreachable": [
+        "https://vulnerableapp.com/ (empty response)",
+        "https://aigoat.co.in/ (Cloudflare challenge)"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — primary full pass, no cold-start regression",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — primary full pass",
+      "web-production-42cbf.up.railway.app: QAMax adversary CSRF/SSRF/prototype-pollution markers (5→6 findings)",
+      "hacksplaining.com: 45+ OWASP Top 10 exploit-then-fix lesson catalog (3→4 findings)",
+      "ctfchallenge.com: HackingHub ethical web hacking platform metadata (2→3 findings)",
       "hack-this-site-eta.vercel.app: 12 findings — GraphQL introspection + client-side SQL/XSS/IDOR evidence",
-      "dvwa.csalab.app: phpinfo exposed + reflected XSS (4 findings)",
-      "ctfchallenge.co.uk: postMessage DOM XSS + platform markers (3 findings)",
-      "xss-game.appspot.com + xss-quiz.int21h.jp: reflected XSS confirmed (2 each)"
+      "dvwa.csalab.app: phpinfo exposed + reflected XSS (4 findings)"
     ],
     "learning_gaps": [
-      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only (1 finding), introspection/mutation probes missed",
-      "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com",
-      "New tail URLs (hack.me, sentinel-ai, vb467 Railway, hackxor demo, hackthis.co.uk) not reached in 8-URL limit",
-      "intercode-benchmark.github.io: static benchmark landing — client-side evidence only (3 findings)"
+      "vulnerableapp.com: SasanLabs DOM XSS demo returns empty — use sasanlabs.github.io/VulnerableApp docs",
+      "aigoat.co.in: Cloudflare bot-wall blocks scanner UA",
+      "vulnerable-graphql-lab.railway.app: cold Railway deploy — headers-only (1 finding)",
+      "http://testhtml5.vulnweb.com/: DNS dead — use testasp/rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
@@ -250,10 +243,6 @@
     "authlab.digi.ninja": 5,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
-    "hack-this-site-eta.vercel.app": 12,
-    "dvwa.csalab.app": 4,
-    "ctfchallenge.co.uk": 3,
-    "intercode-benchmark.github.io": 3,
     "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 3,
     "cybersec-demo.vercel.app": 4,
@@ -314,6 +303,9 @@
     "cryptohack.org": 4,
     "www.overthewire.org": 5,
     "bypass403.vercel.app": 2,
-    "www.bugbountyhunter.com": 2
+    "www.bugbountyhunter.com": 2,
+    "web-production-42cbf.up.railway.app": 6,
+    "hacksplaining.com": 4,
+    "ctfchallenge.com": 3
   }
 }
