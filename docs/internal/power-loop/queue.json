@@ -1702,7 +1702,32 @@
       "url": "https://www.immersivelabs.com/",
       "source": "Immersive Labs — public cyber skills training platform with browser labs (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://playhacklab.com/",
+      "source": "HackLab — browser-based OWASP Top 10 terminal security game (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://v0-comprehensive-security-training.vercel.app/",
+      "source": "v0 comprehensive security training — web pentest modules with live lab links (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webverselabs-pro.com/",
+      "source": "WebVerse Pro — multi-service web hacking lab platform landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webverselabs-pro.com/labs/orbitdesk",
+      "source": "WebVerse Pro OrbitDesk — GraphQL IDOR/SSRF/JWT chain lab brief (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.overthewire.org/wargames/natas/",
+      "source": "OverTheWire Natas wargame index — public web security challenge series entry (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T22:06:00.000Z"
+  "updated_at": "2026-07-11T23:35:00.000Z"
 }
