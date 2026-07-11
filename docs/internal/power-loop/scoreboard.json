@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T17:16:00.000Z",
+  "updated_at": "2026-07-11T18:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,21 +12,20 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "primary_gap": []
+      ]
     }
   },
-  "total_sites_scanned": 737,
-  "total_findings": 3134,
+  "total_sites_scanned": 744,
+  "total_findings": 3161,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 316,
-  "discovery_findings": 2200,
+  "discovery_urls_added": 321,
+  "discovery_findings": 2219,
   "improvements_shipped": 264,
-  "last_run": "2026-07-11T17:16:00.000Z",
+  "last_run": "2026-07-11T18:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17:00",
+    "hour_utc": "18:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
@@ -35,47 +34,70 @@
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_used": false,
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings after retry merge)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings, no retry or staging fallback)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
-          "primary_gap": []
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "h3xstream WAF workshop mkdocs crawl; Bugforge lab platform; Natas robots.txt secret chain bootstrap",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 19,
+      "skipped_48h": [
+        "https://hackable-web.vercel.app/",
+        "https://vulnerable-lab.vercel.app/",
+        "https://ctf.hacker101.com/"
+      ],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "timeouts": [
+        "https://ctflearn.com/"
+      ],
+      "focus": "OverTheWire Natas14-18 SQLi chain; vAPI/wrongsecrets refresh; hacking-lab platform markers",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "h3xstream.github.io/waf-workshop: WAF Bypass Workshop + ModSecurity SQLi lab evidence (0→3 findings)",
-      "www.bugforge.io: Bugforge lab platform + /api/labs/start evidence (0→4 findings)",
-      "natas4.natas.labs.overthewire.org: robots.txt /s3cr3t/users.txt chain bootstrap enables auth (401→3 findings)"
+      "wrongsecrets.herokuapp.com: actuator + postMessage XSS + CTF markers (5 findings)",
+      "vapi.apisec.ai: OpenAI key + API lab evidence (4 findings)",
+      "hacking-lab.com/events: training platform markers (3 findings)",
+      "natas0.natas.labs.overthewire.org: OverTheWire wargame evidence (3 findings)"
     ],
     "learning_gaps": [
-      "cve-2025-29927-demo.vercel.app: Vercel DEPLOYMENT_NOT_FOUND",
-      "inj3ctlab.bugbountylabs.com: DNS NXDOMAIN from cloud",
-      "damnvulnerable.me: DNS NXDOMAIN from cloud",
-      "516-hackers-vuln-playground: GitHub Pages 404"
+      "natas14-18: queued but not reached in 8-URL limit — prior pending URLs consumed scan budget",
+      "testhtml5.vulnweb.com: DNS dead — remove or mark enabled:false",
+      "ctflearn.com: timeout from cloud scanner egress",
+      "inj3ctlab.bugbountylabs.com: DNS NXDOMAIN from cloud"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "juice-shop-staging.herokuapp.com": 7,
+    "wrongsecrets.herokuapp.com": 5,
+    "vapi.apisec.ai": 4,
+    "hacking-lab.com": 3,
+    "natas0.natas.labs.overthewire.org": 3,
+    "hackable-web.vercel.app": 6,
+    "cyberdefenders.org": 9,
+    "labs.hackadvisor.io": 8,
+    "appsecmaster.net": 7,
     "h3xstream.github.io": 3,
     "www.bugforge.io": 4,
     "natas3.natas.labs.overthewire.org": 3,
-    "natas4.natas.labs.overthewire.org": 3,
-    "hackable-web.vercel.app": 6,
-    "wrongsecrets.herokuapp.com": 5,
-    "vapi.apisec.ai": 4,
-    "cyberdefenders.org": 9,
-    "labs.hackadvisor.io": 8,
-    "appsecmaster.net": 7
+    "natas4.natas.labs.overthewire.org": 3
   }
 }

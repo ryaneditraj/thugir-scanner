@@ -1577,7 +1577,32 @@
       "url": "https://sasanlabs.github.io/VulnerableApp-facade/",
       "source": "OWASP VulnerableApp facade — scanner evaluation platform docs + DAST/SAST oracle metadata (GitHub Pages)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas14.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 14 — SQL injection auth bypass wargame (follows natas13)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas15.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 15 — boolean-based blind SQLi wargame (follows natas14)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas16.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 16 — blind SQLi with output filtering wargame (follows natas15)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas17.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 17 — time-based blind SQLi wargame (follows natas16)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas18.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 18 — PHP strcmp array bypass wargame (follows natas17)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T17:06:00.000Z"
+  "updated_at": "2026-07-11T18:06:00.000Z"
 }
