@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T15:06:43.189Z",
-  "total": 220,
-  "uniqueSlugs": 220,
+  "generatedAt": "2026-07-11T16:11:26.603Z",
+  "total": 222,
+  "uniqueSlugs": 222,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 202,
+    "generic": 204,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 155,
+    "deep": 157,
     "continuous": 0
   },
   "byCategory": {
@@ -28,10 +28,10 @@
     "Information disclosure": 16,
     "Broken authentication": 12,
     "Injection": 30,
-    "Cross-site scripting": 19,
+    "Cross-site scripting": 20,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 12,
+    "AI security": 13,
     "XSS": 1,
     "general": 17
   },
@@ -108,6 +108,7 @@
     "client-side-mutillidae-evidence",
     "client-side-nivara-security-evidence",
     "client-side-nodegoat-evidence",
+    "client-side-north-star-agi-ctf-evidence",
     "client-side-nosql-evidence",
     "client-side-overthewire-bandit-evidence",
     "client-side-overthewire-leviathan-evidence",
@@ -140,6 +141,7 @@
     "client-side-sectrainer-evidence",
     "client-side-security-game-evidence",
     "client-side-security-shepherd-evidence",
+    "client-side-security-writeup-evidence",
     "client-side-sentinel-ai-evidence",
     "client-side-session-hijack-evidence",
     "client-side-sixhack-ctf-lab-evidence",

@@ -647,7 +647,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecurityShepherdEvidence",
   "clientSideCyberDrillEvidence",
   "clientSideDeserializationEvidence",
-  "clientSideOverthewireLeviathanEvidence"
+  "clientSideOverthewireLeviathanEvidence",
+  "clientSideSecurityWriteupEvidence",
+  "clientSideNorthStarAgiCtfEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -759,6 +761,28 @@ function extractJekyllSecurityDocLinks(html: string, pageUrl: string): string[] 
   const pageOrigin = new URL(pageUrl).origin;
   let m: RegExpExecArray | null;
   while ((m = JEKYLL_SECURITY_DOC_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Jekyll security blogs (maz4lhacks, etc.) — /posts/ write-ups are not linked from capped internalLinks. */
+const JEKYLL_BLOG_POST_RE =
+  /href\s*=\s*["'](\/posts\/[^"'#?]+)["']/gi;
+
+function extractJekyllBlogPostSeeds(html: string, pageUrl: string): string[] {
+  if (!/Jekyll|simple-jekyll-search|site-header|jekyll/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = JEKYLL_BLOG_POST_RE.exec(html))) {
     try {
       const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -2470,7 +2494,7 @@ function extractSectrainerSpaSeeds(html: string, jsBodies: string[], origin: str
 function extractWrongSecretsChallengeSeeds(html: string, origin: string): string[] {
   if (!/OWASP WrongSecrets|wrongsecrets/i.test(html)) return [];
   const out = new Set<string>();
-  for (let i = 0; i <= 12; i++) {
+  for (let i = 0; i <= 61; i++) {
     try {
       out.add(new URL(`/challenge/challenge-${i}`, origin).toString());
     } catch {
@@ -2752,6 +2776,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
   const nextraCyberSeeds = extractNextraCybersecurityLinks(home.body, home.finalUrl);
   const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
+  const jekyllBlogPostSeeds = extractJekyllBlogPostSeeds(home.body, home.finalUrl);
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
@@ -2839,6 +2864,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...docusaurusLabSeeds,
       ...nextraCyberSeeds,
       ...jekyllSecurityDocSeeds,
+      ...jekyllBlogPostSeeds,
       ...domGoatCxssSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
