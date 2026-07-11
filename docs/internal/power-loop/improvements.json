@@ -1415,6 +1415,24 @@
       "slug": "client-side-hack-health-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: HackHealth tutorial nav + /cybersecurity/a03/sqlInjection path on homepage without deep crawl; hack-health-tutorial findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "client-side-burp-bounty-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Burp Bounty Lab title + Intentionally vulnerable application for testing Burp Bounty profiles + /xss/reflect?q=thugirXSScanary echoes canary; extractBurpBountyLabSeeds crawl; burpbountylab.com findings 0→10; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:artemiskit.vercel.app",
+      "slug": "client-side-artemiskit-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ArtemisKit LLM Reliability Toolkit + Security red-teaming, quality evaluation, and stress testing + prompt injection, jailbreak attempts; artemiskit.vercel.app findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "client-side-api-security-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / returns {\"message\":\"VAmPI the Vulnerable API\",\"help\":\"VAmPI is a vulnerable on purpose API\"}; CLIENT_API_SECURITY_RES VAmPI patterns; urban-vampi-production findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2587,6 +2605,21 @@
       "source": "discovery:hack-health-tutorial.vercel.app",
       "slug": "client-side-hack-health-lab-evidence-nav",
       "shipped_at": "2026-07-11T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "client-side-burp-bounty-lab-evidence",
+      "shipped_at": "2026-07-11T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:artemiskit.vercel.app",
+      "slug": "client-side-artemiskit-evidence",
+      "shipped_at": "2026-07-11T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-api-root-banner-patterns",
+      "shipped_at": "2026-07-11T08:10:00.000Z"
     }
   ]
 }
