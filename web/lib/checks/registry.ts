@@ -2777,11 +2777,95 @@ const clientSideIronwaspEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- EpicDetect browser-based SOC training academy (epicdetect.io) --------------
+const CLIENT_EPICDETECT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hands-on cybersecurity training tagline",
+    re: /Hands-on cybersecurity training[\s\S]{0,40}free to start/i
+  },
+  {
+    label: "EpicDetect theory-to-practice bridge",
+    re: /EpicDetect bridges the gap between theory and real-world practice/i
+  },
+  {
+    label: "Atlas skill tree progression",
+    re: /Atlas Skill Tree[\s\S]{0,80}specialization zones/i
+  },
+  {
+    label: "Story-driven SOC investigations",
+    re: /Story-Driven Adventures|join a SOC team to investigate unfolding cyber attacks/i
+  },
+  {
+    label: "Browser-based SIEM investigation skills",
+    re: /SIEM \/ Log Analysis|triaging alerts|investigating phishing campaigns/i
+  }
+];
+
+const clientSideEpicdetectEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_EPICDETECT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/EpicDetect|epicdetect\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "EpicDetect hosts browser-based SOC analyst training with Atlas skill tree, story-driven phishing/SIEM investigations, and certification prep"
+    }
+  };
+};
+
+// --- Erling Ellingsen alf.nu ServiceWorker sandbox attack lab -------------------
+const CLIENT_ALF_SERVICEWORKER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ServiceWorker is dangerous title",
+    re: /ServiceWorker is dangerous/i
+  },
+  {
+    label: "ServiceWorker fetch interception demo",
+    re: /navigator\.serviceWorker\.register|addEventListener\(['"]fetch['"]/i
+  },
+  {
+    label: "Sandbox domain rootkit explanation",
+    re: /install a permanent ['"]rootkit['"] on the sandbox domain|quarantine unfiltered user-generated content/i
+  },
+  {
+    label: "Service-Worker header mitigation",
+    re: /Service-Worker:\s*script|look out for the [`']Service-Worker[`'] HTTP header/i
+  },
+  {
+    label: "alf.nu ServiceWorker scope path",
+    re: /\/ServiceWorker\/(?:test\.js|scope)/i
+  }
+];
+
+const clientSideAlfServiceworkerEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ALF_SERVICEWORKER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/alf\.nu\/ServiceWorker|ServiceWorker is dangerous/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "alf.nu ServiceWorker lab demonstrates persistent fetch interception on sandbox subdomains — attacker rootkit persists after XSS on shared-origin file hosts"
+    }
+  };
+};
+
 // --- Try2Hack security challenge platform (try2hack.nl) -------------------------
 const CLIENT_TRY2HACK_RES: { label: string; re: RegExp }[] = [
   {
     label: "Try2Hack challenge site title",
-    re: /::\[ www\.try2hack\.nl \]::|try2hack\.nl/i
+    re: /::\[ www\.try2hack\.(?:nl|net) \]::|try2hack\.(?:nl|net)/i
   },
   {
     label: "Security oriented challenges description",
@@ -2808,13 +2892,13 @@ const clientSideTry2hackEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/try2hack\.nl|try2hack/i.test(ctx.combined)) return NEGATIVE;
+  if (!/try2hack\.(?:nl|net)|try2hack/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.88 : 0.85,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Try2Hack.nl is one of the oldest public security challenge sites with progressive encryption and hacking puzzles"
+      note: "Try2Hack is one of the oldest public security challenge sites with progressive encryption and hacking puzzles"
     }
   };
 };
@@ -3508,6 +3592,14 @@ const clientSideChimeraVulnLabEvidence: Rule = async (ctx) => {
 // --- Hack Health Nextra tutorial (hack-health-tutorial.vercel.app) --------------
 const CLIENT_HACK_HEALTH_LAB_RES: { label: string; re: RegExp }[] = [
   {
+    label: "HackHealth tutorial platform",
+    re: /HackHealth tutorial/i
+  },
+  {
+    label: "OWASP A03 SQL injection module nav",
+    re: /\/cybersecurity\/a03\/sqlInjection/i
+  },
+  {
     label: "OWASP A03 Injection module heading",
     re: /A03:2021\s*-\s*Injection/i
   },
@@ -3536,6 +3628,7 @@ const clientSideHackHealthLabEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.91 : 0.87,
@@ -8040,7 +8133,9 @@ export const RULES: Record<string, Rule> = {
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
-  clientSideRogueloopXxsCourseEvidence
+  clientSideRogueloopXxsCourseEvidence,
+  clientSideEpicdetectEvidence,
+  clientSideAlfServiceworkerEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
