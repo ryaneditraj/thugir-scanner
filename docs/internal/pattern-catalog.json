@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T22:04:55.526Z",
-  "total": 230,
-  "uniqueSlugs": 230,
+  "generatedAt": "2026-07-11T23:06:15.448Z",
+  "total": 232,
+  "uniqueSlugs": 232,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 212,
+    "generic": 214,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 165,
+    "deep": 167,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 72,
+    "Broken access control": 74,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -100,10 +100,12 @@
     "client-side-hacksplaining-evidence",
     "client-side-hackthissite-evidence",
     "client-side-idor-evidence",
+    "client-side-immersive-labs-evidence",
     "client-side-intercode-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-jwt-none-evidence",
+    "client-side-kontra-application-security-evidence",
     "client-side-llm-sec-evidence",
     "client-side-maestro-agentic-ai-evidence",
     "client-side-mcp-sherpa-workshop-evidence",
