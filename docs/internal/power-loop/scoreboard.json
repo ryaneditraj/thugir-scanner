@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T22:05:33.040Z",
+  "updated_at": "2026-07-11T22:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 769,
-  "total_findings": 3305,
-  "critical_findings": 33,
+  "total_sites_scanned": 776,
+  "total_findings": 3330,
+  "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 336,
-  "discovery_findings": 2332,
+  "discovery_urls_added": 341,
+  "discovery_findings": 2357,
   "improvements_shipped": 279,
-  "last_run": "2026-07-11T22:05:33.040Z",
+  "last_run": "2026-07-11T22:09:00.000Z",
   "last_run_summary": {
     "hour_utc": "22:00",
     "benchmark": {
@@ -31,8 +31,10 @@
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "fallback_used": false,
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
+      "note": "Juice Shop primary 6/6 on first pass (8 findings) — no staging fallback needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,24 +53,31 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 16,
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 25,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "bWAPP bugs.htm crawl priority; Zero Bank WebInspect evidence; juice.shop mirror probe priming",
-      "improvements_shipped_this_run": 3
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/"
+      ],
+      "focus": "natas34 finale + Kontra API labs + PentesterLab web-for-pentester + Immersive Labs; Mutillidae Radware + Google XSS benchmarks",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "www.itsecgames.com: bWAPP injection catalog via bugs.htm crawl priority (2→3 findings)",
-      "zero.webappsecurity.com: Fortify WebInspect Zero Bank training demo evidence (4→5 findings)",
-      "demo.owasp-juice.shop: full Juice Shop mirror probes on .juice.shop TLD (2→8 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) on primary first pass",
+      "websegura.radwarelatam.com/mutillidae: 7 findings — Mutillidae lab + exposed config backup + credential comment",
+      "public-firing-range.appspot.com: 4 findings — reflected XSS + open redirect (Google XSS benchmark)",
+      "rest.vulnweb.com: 4 findings — phpinfo + Invicti REST API lab evidence",
+      "google-gruyere.appspot.com: 3 findings — Gruyere codelab XSS evidence",
+      "demo.owasp-juice.shop: full Juice Shop mirror probes on .juice.shop TLD (8 findings)",
+      "zero.webappsecurity.com: Fortify WebInspect Zero Bank training demo evidence (5 findings)"
     ],
     "learning_gaps": [
-      "capture-the-flag.labs.vercel.dev: Vercel deployment offline (DEPLOYMENT_NOT_FOUND)",
-      "inj3ctlab.bugbountylabs.com: DNS unreachable from cloud",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo still in queue head"
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo blocks queue head slot",
+      "natas34 + Kontra/PentesterLab/Immersive Labs: added to queue but not reached in 8-URL discovery limit",
+      "hackable-web.vercel.app + vulnerable-lab.vercel.app: high-value queued targets still behind deep backlog",
+      "vampi.lab.pentest-forge.com: 1 finding only — API lab needs deeper OpenAPI/auth probes",
+      "inj3ctlab.bugbountylabs.com: DNS unreachable from cloud"
     ]
   },
   "discovery_highlights": {
@@ -78,36 +87,32 @@
     "juice-shop.herokuapp.com": 8,
     "demo.owasp-juice.shop": 8,
     "juice-shop-staging.herokuapp.com": 7,
+    "websegura.radwarelatam.com": 7,
     "crapi2.apisec.ai": 6,
     "hackable.so": 6,
     "skillaudit.vercel.app": 8,
     "demo.testfire.net": 6,
-    "vulnweb.netlify.app": 4,
-    "peruggia.sourceforge.net": 4,
-    "portswigger.net": 3,
-    "hacking-lab.com": 3,
-    "fvb.vchan.in": 3,
-    "sechow.com": 2,
-    "pentesteracademylab.appspot.com": 2,
-    "wrongsecrets.herokuapp.com": 5,
-    "vapi.apisec.ai": 4,
-    "natas0.natas.labs.overthewire.org": 3,
     "hackable-web.vercel.app": 6,
+    "computersciencesop2.vercel.app": 10,
     "cyberdefenders.org": 9,
     "labs.hackadvisor.io": 8,
-    "appsecmaster.net": 7,
-    "h3xstream.github.io": 3,
-    "www.bugforge.io": 4,
-    "natas3.natas.labs.overthewire.org": 3,
-    "natas4.natas.labs.overthewire.org": 3,
     "bwapp.hakhub.net": 6,
     "server.vulnapp.id": 6,
-    "computersciencesop2.vercel.app": 10,
+    "public-firing-range.appspot.com": 4,
+    "rest.vulnweb.com": 4,
+    "seclab.vercel.app": 4,
+    "vulnweb.netlify.app": 4,
+    "peruggia.sourceforge.net": 4,
+    "zero.webappsecurity.com": 5,
+    "google-gruyere.appspot.com": 3,
+    "testaspnet.vulnweb.com": 3,
+    "hackxor.net": 3,
+    "escape.alf.nu": 3,
+    "natas0.natas.labs.overthewire.org": 3,
+    "natas3.natas.labs.overthewire.org": 3,
+    "natas4.natas.labs.overthewire.org": 3,
     "ctflearn.com": 3,
     "picoctf.org": 3,
-    "www.itsecgames.com": 3,
-    "zero.webappsecurity.com": 5,
-    "seclab.vercel.app": 4,
-    "escape.alf.nu": 3
+    "www.itsecgames.com": 3
   }
 }
