@@ -3132,6 +3132,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-overthewire-leviathan-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OverTheWire Leviathan wargame disclosed",
+    description:
+      "OverTheWire Leviathan teaches SSH privilege-escalation challenges on leviathan.labs.overthewire.org:2223 with level passwords stored in /etc/leviathan_pass.",
+    impactOneline:
+      "Public Leviathan wargame pages expose challenge structure and default leviathan0 credentials used to bootstrap the training chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireLeviathanEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OverTheWire Leviathan is intentional training — isolate wargame VMs from production networks.",
+      steps: [
+        "Run Leviathan challenges only on dedicated training VMs with no production access.",
+        "Rotate default wargame credentials if mirroring challenges internally.",
+        "Do not copy password-file privilege patterns into production systems."
+      ]
+    },
+    fixPrompt:
+      "We host OverTheWire-style privilege escalation labs. Show how to isolate wargame instances from production infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ffufme-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -3752,6 +3778,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror PortSwigger Web Security Academy-style browser labs. Show how to auth-gate live lab instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cyberdrill-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Cyber Drill attack simulator suite disclosed",
+    description:
+      "thecyberdrill.netlify.app hosts browser-based SQL injection, phishing awareness, and camera-hijack simulators with vulnerable query-string login checks.",
+    impactOneline:
+      "Public Cyber Drill tool pages document SQLi bypass payloads and insecure client-side authentication patterns for security awareness training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCyberDrillEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cyber Drill simulators are intentional training — never copy insecure login checks into production.",
+      steps: [
+        "Run Cyber Drill attack simulators only on isolated training subdomains.",
+        "Use parameterized queries instead of string-concatenated SQL in production authentication.",
+        "Treat phishing and camera-hijack demos as awareness tools, not production features."
+      ]
+    },
+    fixPrompt:
+      "We embed Cyber Drill-style SQL injection simulators for training. Show how to keep demo login logic out of production authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-deserialization-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Unsafe deserialization educational lab disclosed",
+    description:
+      "sjefersuper.netlify.app documents Python pickle.loads and node-serialize gadget chains where __reduce__ and eval execute attacker-controlled payloads during deserialization.",
+    impactOneline:
+      "Public deserialization write-ups expose pickle and node-serialize RCE patterns attackers replay on apps that accept untrusted serialized objects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDeserializationEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted data with pickle or node-serialize — use signed JSON schemas instead.",
+      steps: [
+        "Reject user-controlled serialized blobs at API boundaries.",
+        "Replace pickle.loads with versioned JSON schemas and strict validation.",
+        "Audit dependencies for node-serialize and remove eval-based deserializers."
+      ]
+    },
+    fixPrompt:
+      "Our app accepts serialized session blobs. Show how to block pickle and node-serialize gadget chains that lead to RCE.",
     version: 1,
     enabled: true
   },
