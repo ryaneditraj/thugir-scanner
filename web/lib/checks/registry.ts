@@ -2436,6 +2436,14 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   {
     label: "CSRF lesson module",
     re: /href=["']\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
+  },
+  {
+    label: "SQL injection lesson step nav",
+    re: /lessons\/sql-injection\/(?:checking-the-code|injection-vulnerability|injection-explained|server-error)/i
+  },
+  {
+    label: "SQL injection lesson title",
+    re: /SQL Injection — Secure Coding Lesson|vulnerable to SQL Injection, attackers can run arbitrary commands/i
   }
 ];
 
@@ -2453,6 +2461,52 @@ const clientSideHacksplainingEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Hacksplaining publishes 45+ interactive OWASP Top 10 secure-coding lessons with exploit-then-fix XSS, SQLi, CSRF, and prompt-injection walkthroughs"
+    }
+  };
+};
+
+// --- PortSwigger Web Security Academy (portswigger.net/web-security) ----------------
+const CLIENT_PORTSWIGGER_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web Security Academy title",
+    re: /Web Security Academy:\s*Free Online Training from PortSwigger/i
+  },
+  {
+    label: "Free web application security training",
+    re: /free online training center for web application security|brought to you by PortSwigger/i
+  },
+  {
+    label: "SQL injection academy module",
+    re: /href=["']\/web-security\/sql-injection|\/web-security\/sql-injection/i
+  },
+  {
+    label: "Cross-site scripting academy module",
+    re: /href=["']\/web-security\/cross-site-scripting|\/web-security\/cross-site-scripting/i
+  },
+  {
+    label: "Learning paths catalog",
+    re: /web-security\/learning-paths|All topics|Authentication vulnerabilities/i
+  },
+  {
+    label: "Academy dashboard",
+    re: /web-security\/dashboard|web-security\/hall-of-fame/i
+  }
+];
+
+const clientSidePortswiggerAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PORTSWIGGER_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/PortSwigger|Web Security Academy|portswigger\.net/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PortSwigger Web Security Academy publishes free browser-based OWASP labs covering SQLi, XSS, auth, and access-control topics"
     }
   };
 };
@@ -8586,6 +8640,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
   clientSideHacksplainingEvidence,
+  clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
   clientSideUnsecurePwaEvidence,
   clientSidePromptmapEvidence,

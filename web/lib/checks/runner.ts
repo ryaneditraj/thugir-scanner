@@ -91,10 +91,23 @@ async function bootstrapNatasCreds(
   const priorUrl = `http://natas${targetLevel - 1}.natas.labs.overthewire.org/`;
   const priorDoc = await probe.get(priorUrl, { maxBytes, headers: basicAuthHeader(priorCreds) });
   if (priorDoc.status < 200 || priorDoc.status >= 400) return null;
-  return parseNatasLevelCreds(
+  const fromHtml = parseNatasLevelCreds(
     `natas${targetLevel}.natas.labs.overthewire.org`,
     priorDoc.body
   );
+  if (fromHtml) return fromHtml;
+  // Natas2+ hides next-level creds in /files/users.txt behind directory listing.
+  const usersTxtUrl = `http://natas${targetLevel - 1}.natas.labs.overthewire.org/files/users.txt`;
+  const usersDoc = await probe.get(usersTxtUrl, {
+    maxBytes: 4096,
+    headers: basicAuthHeader(priorCreds)
+  });
+  if (usersDoc.status === 200) {
+    const lineRe = new RegExp(`^natas${targetLevel}:(\\S+)`, "m");
+    const lm = usersDoc.body.match(lineRe);
+    if (lm) return { user: `natas${targetLevel}`, pass: lm[1] };
+  }
+  return null;
 }
 
 function basicAuthHeader(creds: { user: string; pass: string }): Record<string, string> {
@@ -1392,10 +1405,13 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of [
     "/lessons",
-    "/lessons/sql-injection",
-    "/lessons/xss-stored",
-    "/lessons/csrf",
-    "/lessons/ai-prompt-injection"
+    "/lessons/sql-injection/start",
+    "/lessons/sql-injection/checking-the-code",
+    "/lessons/sql-injection/injection-vulnerability",
+    "/lessons/sql-injection/injection-explained",
+    "/lessons/xss-reflected/start",
+    "/lessons/csrf/start",
+    "/lessons/ai-prompt-injection/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -1405,7 +1421,49 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["'](\/lessons\/[a-z0-9-]+)["']/gi;
+  const linkRe = /href\s*=\s*["'](\/lessons\/[a-z0-9-]+(?:\/[a-z0-9-]+)?)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const stepRe = /href\s*=\s*["']\.\/([a-z0-9-]+)["']/gi;
+  while ((m = stepRe.exec(html))) {
+    try {
+      const base = pageUrl.replace(/\/[^/]*$/, "");
+      out.add(new URL(m[1], `${base}/`).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** PortSwigger Web Security Academy hub (portswigger.net/web-security). */
+function extractPortswiggerAcademySeeds(html: string, pageUrl: string): string[] {
+  if (!/PortSwigger|Web Security Academy|portswigger\.net\/web-security/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/web-security",
+    "/web-security/sql-injection",
+    "/web-security/cross-site-scripting",
+    "/web-security/authentication",
+    "/web-security/access-control",
+    "/web-security/learning-paths"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/web-security\/[a-z0-9-]+)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
@@ -2651,6 +2709,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
+  const portswiggerSeeds = extractPortswiggerAcademySeeds(home.body, home.finalUrl);
   const try2hackSeeds = extractTry2hackLevelSeeds(home.body, home.finalUrl);
   const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
   const securityShepherdSeeds = extractSecurityShepherdSeeds(home.body, home.finalUrl);
@@ -2735,6 +2794,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...archonVitepressSeeds,
       ...vulnerableAppSeeds,
       ...hacksplainingSeeds,
+      ...portswiggerSeeds,
       ...try2hackSeeds,
       ...unsecurePwaSeeds,
       ...securityShepherdSeeds,

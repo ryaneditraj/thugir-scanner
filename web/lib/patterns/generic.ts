@@ -3730,6 +3730,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-portswigger-academy-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "PortSwigger Web Security Academy training hub disclosed",
+    description:
+      "PortSwigger Web Security Academy publishes free browser-based OWASP labs covering SQL injection, XSS, authentication, and access-control topics with guided learning paths.",
+    impactOneline:
+      "Public PortSwigger Academy hubs document vulnerability exploitation patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePortswiggerAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PortSwigger Academy is intentional training — require accounts before serving live lab instances.",
+      steps: [
+        "Require login before launching browser-based exploit labs on private deployments.",
+        "Do not copy PortSwigger vulnerable lab code into production applications.",
+        "Rate-limit unauthenticated academy topic enumeration on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror PortSwigger Web Security Academy-style browser labs. Show how to auth-gate live lab instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackinghub-evidence",
     platform: "generic",
     category: "Broken access control",
