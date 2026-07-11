@@ -1627,7 +1627,32 @@
       "url": "http://natas23.natas.labs.overthewire.org/",
       "source": "OverTheWire Natas level 23 — PHP strcmp array bypass wargame (follows natas22)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas24.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 24 — passwd file read via command injection wargame (follows natas23)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas25.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 25 — PHP preg_replace /e modifier RCE wargame (follows natas24)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas26.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 26 — PHP object injection / unserialize wargame (follows natas25)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas27.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 27 — strcmp array bypass auth wargame (follows natas26)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas28.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 28 — AES ECB block cipher oracle wargame (follows natas27)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T19:26:00.000Z"
+  "updated_at": "2026-07-11T20:33:00.000Z"
 }
