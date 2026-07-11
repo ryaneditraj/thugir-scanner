@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T09:02:44.969Z",
-  "total": 207,
-  "uniqueSlugs": 207,
+  "generatedAt": "2026-07-11T10:05:42.618Z",
+  "total": 210,
+  "uniqueSlugs": 210,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 189,
+    "generic": 192,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 142,
+    "deep": 145,
     "continuous": 0
   },
   "byCategory": {
@@ -24,10 +24,10 @@
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
-    "Security misconfiguration": 16,
+    "Security misconfiguration": 18,
     "Information disclosure": 15,
     "Broken authentication": 12,
-    "Injection": 26,
+    "Injection": 27,
     "Cross-site scripting": 17,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -49,6 +49,7 @@
     "client-side-atlas-crew-inferno-lab-evidence",
     "client-side-authlab-evidence",
     "client-side-berger-cyber-lab-evidence",
+    "client-side-breaktheflask-evidence",
     "client-side-brokencrystals-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-burp-bounty-lab-evidence",
@@ -78,6 +79,7 @@
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",
     "client-side-graphql-lab-evidence",
+    "client-side-grpc-goat-lab-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
@@ -152,6 +154,7 @@
     "client-side-w3challs-evidence",
     "client-side-webgoat-evidence",
     "client-side-websec-challenge-evidence",
+    "client-side-webvuln-runner-evidence",
     "client-side-wrongsecrets-evidence",
     "client-side-xor-auth-evidence",
     "client-side-xss-c2-collector-evidence",
