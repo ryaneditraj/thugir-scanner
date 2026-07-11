@@ -1502,7 +1502,32 @@
       "url": "https://maz4lhacks.vercel.app/",
       "source": "Maz4l Hacks — reflected XSS walkthrough + security blog demos (web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/",
+      "source": "OWASP WrongSecrets CTF Heroku demo — secrets-management p0wnable game (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.wrongsecrets.com/",
+      "source": "OWASP WrongSecrets official demo environment — secrets-in-code/config CTF (owasp.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas6.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 6 — serverside web-security wargame (follows natas5)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cve-2025-29927-demo.vercel.app/",
+      "source": "CVE-2025-29927 Next.js middleware auth bypass demo — Himalaya Tech admin panel lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://inj3ctlab.bugbountylabs.com/",
+      "source": "Bug Bounty Labs Inj3ctlab — SSTI practice across PHP/Node/Python ports (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T14:30:00.000Z"
+  "updated_at": "2026-07-11T15:06:00.000Z"
 }
