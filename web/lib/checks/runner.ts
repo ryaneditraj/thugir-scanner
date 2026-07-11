@@ -550,7 +550,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideDevsecopsPipelineVisualizerEvidence",
   "clientSideQamaxAdversaryEvidence",
   "clientSideHacksplainingEvidence",
-  "clientSideHackinghubEvidence"
+  "clientSideHackinghubEvidence",
+  "clientSideUnsecurePwaEvidence",
+  "clientSidePromptmapEvidence",
+  "clientSideGoogleXssGameEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1147,6 +1150,80 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
   while ((m = linkRe.exec(html))) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** TempeHS Unsecure PWA — seed student security module docs. */
+function extractUnsecurePwaSeeds(html: string, pageUrl: string): string[] {
+  if (!/Unsecure_PWA|unsecure by-design/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    ".student_resources/XSS/README.md",
+    ".student_resources/CSRF/README.md",
+    ".student_resources/broken_authentication_and_session_management/README.md",
+    ".student_resources/content_security_policy/README.md"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\.student_resources\/[^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Google XSS game — seed level challenge pages. */
+function extractGoogleXssGameSeeds(html: string, pageUrl: string): string[] {
+  if (!/XSS game|xss-game\.appspot\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/level1", "/level1/frame", "/level2", "/level3"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/level\d[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** PromptMap LLM testing workbench — seed dashboard and guide routes. */
+function extractPromptmapSeeds(html: string, pageUrl: string): string[] {
+  if (!/PromptMap|promptmap\.vercel\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/dashboard", "/guide", "/login"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
     } catch {
       /* ignore */
     }
@@ -2303,6 +2380,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
+  const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
+  const googleXssGameSeeds = extractGoogleXssGameSeeds(home.body, home.finalUrl);
+  const promptmapSeeds = extractPromptmapSeeds(home.body, home.finalUrl);
   const pwnshopSeeds = extractPwnshopDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
@@ -2376,6 +2456,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...archonVitepressSeeds,
       ...vulnerableAppSeeds,
       ...hacksplainingSeeds,
+      ...unsecurePwaSeeds,
+      ...googleXssGameSeeds,
+      ...promptmapSeeds,
       ...pwnshopSeeds,
       ...restVulnwebSeeds,
       ...mutillidaeSeeds,

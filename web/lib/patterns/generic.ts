@@ -3754,5 +3754,83 @@ export const genericPatterns: Pattern[] = [
       "We host HackingHub-style ethical web application hacking challenges. Show how to isolate CTF namespaces from production apps.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-unsecure-pwa-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "TempeHS Unsecure PWA educational lab disclosed",
+    description:
+      "The Unsecure PWA is an intentionally vulnerable progressive web app for HSC software engineering students to practice XSS, CSRF, authentication, and CSP testing in sandbox environments.",
+    impactOneline:
+      "Public Unsecure PWA documentation exposes educational vulnerability modules and security-testing guidance for unauthenticated lab discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideUnsecurePwaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unsecure PWA is intentional coursework — never deploy the lab app outside isolated sandboxes.",
+      steps: [
+        "Run the Flask PWA only on localhost or containerized student sandboxes.",
+        "Do not expose student_resources vulnerability walkthroughs on production domains.",
+        "Gate live vulnerable app instances behind classroom authentication when self-hosting."
+      ]
+    },
+    fixPrompt:
+      "We host TempeHS Unsecure PWA coursework. Show how to keep the intentionally vulnerable Flask app isolated in student sandboxes only.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-promptmap-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "PromptMap LLM prompt-injection testing workbench disclosed",
+    description:
+      "PromptMap provides template and LLM generation modes for red-teaming chat models, with guided training sessions and dashboard workflows for prompt-injection evaluation.",
+    impactOneline:
+      "Public PromptMap deployments document LLM adversarial testing surfaces for unauthenticated prompt-injection lab discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePromptmapEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PromptMap is intentional AI red-team tooling — require authentication before exposing live model testing.",
+      steps: [
+        "Require login before /dashboard and /new-training-session routes on private deployments.",
+        "Do not expose production LLM API keys in client bundles.",
+        "Rate-limit unauthenticated prompt fuzzing on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We self-host PromptMap-style LLM prompt-injection testing. Show how to auth-gate dashboard and training session routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-google-xss-game-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Google XSS game training program disclosed",
+    description:
+      "Google's XSS game teaches reflected and DOM XSS exploitation across staged levels modeled on real-world vulnerable web applications.",
+    impactOneline:
+      "Public XSS game instances document staged cross-site scripting challenge levels for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGoogleXssGameEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS game levels are intentional training — do not mirror vulnerable level code into production apps.",
+      steps: [
+        "Keep XSS game deployments on isolated training hosts only.",
+        "Do not copy level source patterns that echo unescaped user input into production.",
+        "Require authentication if hosting private XSS challenge mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Google XSS game-style training levels. Show how to isolate challenge instances from production applications.",
+    version: 1,
+    enabled: true
   }
 ];
