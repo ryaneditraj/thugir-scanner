@@ -556,7 +556,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideGoogleXssGameEvidence",
   "clientSideSentinelAiEvidence",
   "clientSideNodegoatEvidence",
-  "clientSideGandalfEvidence"
+  "clientSideGandalfEvidence",
+  "clientSideIronwaspEvidence",
+  "clientSideTry2hackEvidence",
+  "clientSideRogueloopXxsCourseEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1225,6 +1228,34 @@ function extractPromptmapSeeds(html: string, pageUrl: string): string[] {
   for (const p of ["/dashboard", "/guide", "/login"]) {
     try {
       const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Try2Hack progressive security challenges (try2hack.nl/levels). */
+function extractTry2hackLevelSeeds(html: string, pageUrl: string): string[] {
+  if (!/try2hack\.nl|security oriented challenges/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/levels/", "/faq/", "/rules/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*\/levels\/[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 6) {
+    try {
+      const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
@@ -2383,6 +2414,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
+  const try2hackSeeds = extractTry2hackLevelSeeds(home.body, home.finalUrl);
   const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
   const googleXssGameSeeds = extractGoogleXssGameSeeds(home.body, home.finalUrl);
   const promptmapSeeds = extractPromptmapSeeds(home.body, home.finalUrl);
@@ -2459,6 +2491,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...archonVitepressSeeds,
       ...vulnerableAppSeeds,
       ...hacksplainingSeeds,
+      ...try2hackSeeds,
       ...unsecurePwaSeeds,
       ...googleXssGameSeeds,
       ...promptmapSeeds,
