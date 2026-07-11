@@ -6386,6 +6386,120 @@ const clientSideTegalsecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Cyber Drill interactive security suite (thecyberdrill.netlify.app) ---------------
+const CLIENT_CYBERDRILL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cyber Drill suite title",
+    re: /Cyber Drill[\s\S]{0,40}Cybersecurity Suite|Welcome to Cyber Drill/i
+  },
+  {
+    label: "Attack simulators section",
+    re: /Attack Simulators|SQL Injection Simulator|Phishing Awareness Simulator/i
+  },
+  {
+    label: "Vulnerable SQL query simulation",
+    re: /simulateSQLQuery|SQL Injection successful|insecureLogin/i
+  },
+  {
+    label: "Interactive security tools catalog",
+    re: /interactive cybersecurity tools|SQL injection simulators|phishing awareness demos/i
+  }
+];
+
+const clientSideCyberDrillEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBERDRILL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Cyber Drill|thecyberdrill\.netlify\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Cyber Drill publishes browser-based SQLi, phishing, and camera-hijack attack simulators for security awareness training"
+    }
+  };
+};
+
+// --- Unsafe deserialization educational lab (sjefersuper.netlify.app) -----------------
+const CLIENT_DESERIALIZATION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Unsafe deserialization article title",
+    re: /Unsafe deserialization/i
+  },
+  {
+    label: "Python pickle.loads vulnerability",
+    re: /pickle\.loads|pickle module is not secure|EvilPickle/i
+  },
+  {
+    label: "Magic __reduce__ gadget chain",
+    re: /__reduce__|magic function.*deserialization/i
+  },
+  {
+    label: "Node serialize eval gadget",
+    re: /node-serialize|serializer\.unserialize|deserializa?tion in JS/i
+  }
+];
+
+const clientSideDeserializationEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DESERIALIZATION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/deserializ|pickle\.loads|node-serialize/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational write-up documents unsafe pickle and node-serialize gadget chains leading to remote code execution"
+    }
+  };
+};
+
+// --- OverTheWire Leviathan wargame (overthewire.org / leviathan.labs) ----------------
+const CLIENT_OVERTHEWIRE_LEVIATHAN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Leviathan wargame title",
+    re: /OverTheWire:\s*Leviathan|id="leviathan"/i
+  },
+  {
+    label: "Leviathan SSH lab host",
+    re: /leviathan\.labs\.overthewire\.org|leviathan0,\s*leviathan1/i
+  },
+  {
+    label: "Level-0 credentials disclosed",
+    re: /Username:\s*leviathan0[\s\S]{0,40}Password:\s*leviathan0/i
+  },
+  {
+    label: "Level password file path",
+    re: /\/etc\/leviathan_pass/i
+  }
+];
+
+const clientSideOverthewireLeviathanEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_LEVIATHAN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Leviathan|leviathan\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OverTheWire Leviathan wargame teaches privilege escalation via SSH challenges on leviathan.labs.overthewire.org:2223"
+    }
+  };
+};
+
 // --- BugBountyHunter zseano challenge platform (bugbountyhunter.com) ----------------
 const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
   {
@@ -8664,7 +8778,10 @@ export const RULES: Record<string, Rule> = {
   clientSideFrontendXssDemoEvidence,
   clientSideAiChatHtmlSinkEvidence,
   clientSideAvidVulnRegistryEvidence,
-  clientSideSecurityShepherdEvidence
+  clientSideSecurityShepherdEvidence,
+  clientSideCyberDrillEvidence,
+  clientSideDeserializationEvidence,
+  clientSideOverthewireLeviathanEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
