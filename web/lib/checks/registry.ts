@@ -2621,6 +2621,120 @@ const clientSideGoogleXssGameEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Sentinel AI LLM guardrails adversarial test suite (maxwellcalkin.github.io) -----
+const CLIENT_SENTINEL_AI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Sentinel AI guardrails product title",
+    re: /Sentinel AI\s*[-–—]\s*Safety Guardrails for LLM Applications/i
+  },
+  {
+    label: "Built-in adversarial test suite",
+    re: /adversarial test suite[\s\S]{0,40}55 cases/i
+  },
+  {
+    label: "Prompt injection and jailbreak detection",
+    re: /prompt injection|jailbreaks?|delimiter attacks/i
+  },
+  {
+    label: "OWASP Top 10 LLM-generated code scanning",
+    re: /OWASP Top 10 vulnerabilities.*SQL injection|Scans LLM-generated code for OWASP Top 10/i
+  }
+];
+
+const clientSideSentinelAiEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SENTINEL_AI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/sentinel-ai|Sentinel AI/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Sentinel AI documents LLM guardrails with a 55-case adversarial test suite covering prompt injection, jailbreaks, and OWASP Top 10 code scanning"
+    }
+  };
+};
+
+// --- OWASP NodeGoat training app (nodegoat-websec.herokuapp.com) ------------------
+const CLIENT_NODEGOAT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP Node Goat title",
+    re: /<title>\s*OWASP Node Goat\s*<\/title>|OWASP NodeGoat Project/i
+  },
+  {
+    label: "Intentionally insecure Node.js app",
+    re: /Insecure App|intentionally insecure/i
+  },
+  {
+    label: "NodeGoat tutorial and lab routes",
+    re: /\/tutorial|NodeGoat tutorial|learn how to hack/i
+  },
+  {
+    label: "NoSQL injection training reference",
+    re: /NoSQL and Node\.js|NoSQL injection/i
+  }
+];
+
+const clientSideNodegoatEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NODEGOAT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/nodegoat|OWASP Node Goat/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP NodeGoat is an intentionally insecure Node.js training application with tutorial labs for injection, auth, and NoSQL flaws"
+    }
+  };
+};
+
+// --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
+const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Gandalf Lakera CTF title",
+    re: /Gandalf\s*\|\s*Lakera|Gandalf.*Test your AI hacking skills/i
+  },
+  {
+    label: "Trick Gandalf prompt-injection challenge",
+    re: /Trick Gandalf into revealing|experience the limitations of large language models/i
+  },
+  {
+    label: "Level-based Gandalf challenge routes",
+    re: /\/level-images\/|level-images\/preview\.png/i
+  },
+  {
+    label: "Lakera AI security prompt CTF",
+    re: /lakera\.ai|prompt injection.*Gandalf|AI hacking skills/i
+  }
+];
+
+const clientSideGandalfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GANDALF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/gandalf\.lakera\.ai|Gandalf.*Lakera/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Lakera Gandalf is a public prompt-injection CTF where players trick an LLM into revealing secrets across staged levels"
+    }
+  };
+};
+
 // --- HTTP 403 bypass via path normalization (active probe) ----------------------
 const FORBIDDEN_403_PROBE_PATHS = [
   "/admin",
@@ -7794,7 +7908,10 @@ export const RULES: Record<string, Rule> = {
   clientSideHackinghubEvidence,
   clientSideUnsecurePwaEvidence,
   clientSidePromptmapEvidence,
-  clientSideGoogleXssGameEvidence
+  clientSideGoogleXssGameEvidence,
+  clientSideSentinelAiEvidence,
+  clientSideNodegoatEvidence,
+  clientSideGandalfEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static

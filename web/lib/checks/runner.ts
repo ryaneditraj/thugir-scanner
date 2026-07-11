@@ -553,7 +553,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
   "clientSidePromptmapEvidence",
-  "clientSideGoogleXssGameEvidence"
+  "clientSideGoogleXssGameEvidence",
+  "clientSideSentinelAiEvidence",
+  "clientSideNodegoatEvidence",
+  "clientSideGandalfEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;

@@ -1361,6 +1361,24 @@
       "slug": "client-side-google-xss-game-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: XSS game area + Cross-site scripting training intro + /level1 challenge routes; extractGoogleXssGameSeeds; xss-game.appspot.com findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:maxwellcalkin.github.io/sentinel-ai",
+      "slug": "client-side-sentinel-ai-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Sentinel AI - Safety Guardrails for LLM Applications + adversarial test suite 55 cases + prompt injection/jailbreak detection; maxwellcalkin.github.io/sentinel-ai findings 6→7; benchmark juice-shop 8 findings 6/6"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "client-side-nodegoat-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>OWASP Node Goat</title> + NodeGoat Project: Insecure App + NoSQL and Node.js tutorial; nodegoat-websec.herokuapp.com findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:gandalf.lakera.ai",
+      "slug": "client-side-gandalf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Gandalf | Lakera – Test your AI hacking skills + Trick Gandalf into revealing + /level-images/ routes; gandalf.lakera.ai findings 6→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2488,6 +2506,21 @@
       "source": "discovery:xss-game.appspot.com",
       "slug": "client-side-google-xss-game-evidence",
       "shipped_at": "2026-07-11T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:maxwellcalkin.github.io/sentinel-ai",
+      "slug": "client-side-sentinel-ai-evidence",
+      "shipped_at": "2026-07-11T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "client-side-nodegoat-evidence",
+      "shipped_at": "2026-07-11T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:gandalf.lakera.ai",
+      "slug": "client-side-gandalf-evidence",
+      "shipped_at": "2026-07-11T05:10:00.000Z"
     }
   ]
 }
