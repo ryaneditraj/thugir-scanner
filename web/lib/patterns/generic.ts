@@ -3988,5 +3988,57 @@ export const genericPatterns: Pattern[] = [
       "Our XSS training course uses innerHTML demo sinks. Show how to keep the course isolated from production deployments.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-epicdetect-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "EpicDetect browser-based SOC training academy disclosed",
+    description:
+      "epicdetect.io hosts hands-on cybersecurity training with Atlas skill tree, story-driven SOC investigations, and SIEM/phishing analysis adventures.",
+    impactOneline:
+      "Public EpicDetect landing pages document SOC analyst investigation workflows attackers study for defensive security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideEpicdetectEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "EpicDetect is a training platform — isolate lab environments from production SOC tooling.",
+      steps: [
+        "Complete EpicDetect adventures only in dedicated training browser profiles.",
+        "Do not point EpicDetect SIEM labs at production log sources without authorization.",
+        "Keep certification prep instances separate from live incident response systems."
+      ]
+    },
+    fixPrompt:
+      "We reference EpicDetect for SOC analyst training. Show how to isolate browser-based SIEM labs from production security operations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-alf-serviceworker-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "alf.nu ServiceWorker sandbox attack lab disclosed",
+    description:
+      "alf.nu/ServiceWorker demonstrates persistent fetch interception via navigator.serviceWorker.register on sandbox subdomains used for user-generated content.",
+    impactOneline:
+      "Public ServiceWorker attack lab documents how XSS on sandbox domains installs permanent fetch rootkits that steal secret file URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAlfServiceworkerEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block Service-Worker registration on sandbox file-serving origins.",
+      steps: [
+        "Reject requests with Service-Worker: script header on user-content subdomains.",
+        "Serve untrusted uploads from a separate origin without ServiceWorker scope.",
+        "Use per-file signed URLs instead of obscurity for secret file names on shared domains."
+      ]
+    },
+    fixPrompt:
+      "We host user files on sandbox subdomains. Show how to block ServiceWorker registration and prevent persistent fetch interception after XSS.",
+    version: 1,
+    enabled: true
   }
 ];

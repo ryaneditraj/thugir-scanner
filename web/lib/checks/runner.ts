@@ -1237,9 +1237,9 @@ function extractPromptmapSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** Try2Hack progressive security challenges (try2hack.nl/levels). */
+/** Try2Hack progressive security challenges (try2hack.nl|try2hack.net /levels). */
 function extractTry2hackLevelSeeds(html: string, pageUrl: string): string[] {
-  if (!/try2hack\.nl|security oriented challenges/i.test(html)) return [];
+  if (!/try2hack\.(?:nl|net)|security oriented challenges/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of ["/levels/", "/faq/", "/rules/"]) {
