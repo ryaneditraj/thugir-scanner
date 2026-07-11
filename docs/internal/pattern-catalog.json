@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T20:04:23.770Z",
-  "total": 228,
-  "uniqueSlugs": 228,
+  "generatedAt": "2026-07-11T21:18:52.131Z",
+  "total": 229,
+  "uniqueSlugs": 229,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 210,
+    "generic": 211,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 163,
+    "deep": 164,
     "continuous": 0
   },
   "byCategory": {
@@ -31,7 +31,7 @@
     "Cross-site scripting": 20,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 13,
+    "AI security": 14,
     "XSS": 1,
     "general": 17
   },
@@ -151,6 +151,7 @@
     "client-side-session-hijack-evidence",
     "client-side-sixhack-ctf-lab-evidence",
     "client-side-skf-lab-evidence",
+    "client-side-skillaudit-evidence",
     "client-side-sockettome-evidence",
     "client-side-solyd-training-evidence",
     "client-side-sql-evidence",

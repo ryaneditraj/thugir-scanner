@@ -3756,6 +3756,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-skillaudit-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "SkillAudit MCP skill safety scanner disclosed",
+    description:
+      "SkillAudit scans MCP skills and agent tool definitions for credential theft, data exfiltration, prompt injection, and reverse shells.",
+    impactOneline:
+      "Public MCP skill scanners document agentic attack surfaces attackers use to evaluate AI tool supply chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSkillauditEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MCP skill scanners are intentional — vet third-party skills before installing in production agents.",
+      steps: [
+        "Scan MCP skills in CI before publishing to agent marketplaces.",
+        "Never install unaudited skills with filesystem or network tool access.",
+        "Isolate agent runtimes from production credentials."
+      ]
+    },
+    fixPrompt:
+      "We host SkillAudit-style MCP skill scanning. Show how to gate skill installs and isolate agent credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-secresearchlab-evidence",
     platform: "generic",
     category: "Broken access control",
