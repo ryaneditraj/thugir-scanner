@@ -1177,7 +1177,32 @@
       "url": "https://hard.altoromutual.com/",
       "source": "IBM Hard Altoro Mutual — advanced Tomcat/Java vuln banking demo with MegaScript (geeksonsecurity)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerableapp.com/",
+      "source": "SasanLabs DOM XSS example — public intentionally vulnerable XSS demo page (vulnerableapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-production-42cbf.up.railway.app/",
+      "source": "Quality-Max/qamax-adversary-site — hostile demo store with 22 client-side attack vectors (Railway OSS)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ironwasp.org/",
+      "source": "IronWASP/Sboxr — DOM XSS and client-side security scanner demo landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://gandalf.lakera.ai/",
+      "source": "Lakera Gandalf — public prompt-injection CTF challenge platform (Product Hunt / AI security labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/",
+      "source": "Hacksplaining — interactive OWASP Top 10 vulnerability training walkthroughs (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T01:15:00.000Z"
+  "updated_at": "2026-07-11T02:22:00.000Z"
 }
