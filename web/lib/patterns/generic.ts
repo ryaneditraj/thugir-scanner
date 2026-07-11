@@ -4144,5 +4144,83 @@ export const genericPatterns: Pattern[] = [
       "Our React e-commerce app uses dangerouslySetInnerHTML for product descriptions. Show the safe alternative and how to sanitize Commerce.js catalog HTML.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-breaktheflask-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BreakTheFlask vulnerable Flask writeup lab disclosed",
+    description:
+      "BreakTheFlask GitHub Pages writeups embed intentionally vulnerable Flask routes for SQLi, XSS, command injection, LDAP injection, and broken access control.",
+    impactOneline:
+      "Public BreakTheFlask walkthrough pages document exploitable Flask patterns attackers can replay against similar apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBreakTheFlaskEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BreakTheFlask is intentional training material — never deploy similar vulnerable Flask routes to production.",
+      steps: [
+        "Run BreakTheFlask only on isolated lab VMs.",
+        "Replace render_template_string with parameterized queries and Jinja2 templates with autoescape.",
+        "Validate session ownership on /profile and /admin_panel routes."
+      ]
+    },
+    fixPrompt:
+      "We host BreakTheFlask-style Flask training writeups. Show how to fix SQLi, SSTI via render_template_string, command injection, and IDOR on /profile routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-grpc-goat-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "gRPC Goat vulnerability practice lab disclosed",
+    description:
+      "gRPC Goat documents nine intentionally vulnerable gRPC microservices covering reflection, plaintext transport, mTLS bypass, SQLi, command injection, and SSRF.",
+    impactOneline:
+      "Public gRPC Goat docs teach reusable attack chains against reflection-enabled and misconfigured gRPC deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGrpcGoatLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "gRPC Goat is intentional training software — disable reflection and enforce TLS/mTLS in production.",
+      steps: [
+        "Disable gRPC server reflection outside development.",
+        "Require mutual TLS with trusted CA validation on partner APIs.",
+        "Parameterize SQL queries and sanitize shell arguments in gRPC handlers."
+      ]
+    },
+    fixPrompt:
+      "We document gRPC Goat labs with reflection, plaintext auth, and SQLi. Show how to harden production gRPC services against these attack scenarios.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-webvuln-runner-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "WebVuln-Runner Docker lab launcher disclosed",
+    description:
+      "WebVuln-Runner is a Docker TUI that launches Juice Shop, DVWA, WebGoat, bWAPP, and other OWASP Top 10 training containers.",
+    impactOneline:
+      "Public WebVuln-Runner landing pages advertise one-click deployment of multiple intentionally vulnerable applications.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebvulnRunnerEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebVuln-Runner is intentional lab tooling — isolate Docker networks and block public exposure.",
+      steps: [
+        "Run WebVuln-Runner containers on host-only or lab VLAN networks.",
+        "Never expose Juice Shop/DVWA/WebGoat ports to the public internet.",
+        "Use WebVuln-Runner only for authorized security training."
+      ]
+    },
+    fixPrompt:
+      "We use WebVuln-Runner to spin up Juice Shop and DVWA containers. Show network isolation best practices so lab apps never reach production subnets.",
+    version: 1,
+    enabled: true
   }
 ];
