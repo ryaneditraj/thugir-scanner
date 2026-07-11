@@ -510,16 +510,34 @@ async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string
 
 const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
+  const gruyerePaths = await extractGruyereLiveInstancePaths(ctx);
+  if (gruyerePaths.length > 0) {
+    for (const path of gruyerePaths) {
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set("uid", canary);
+      const doc = await ctx.probe.get(u.toString(), { maxBytes: 8192 });
+      if (doc.status >= 200 && isReflectedXssCanary(doc.body, canary)) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            canary,
+            hits: [{ path, param: "uid", url: u.toString(), snippet: doc.body.slice(0, 200).trim() }],
+            note: "Gruyere live instance echoes uid unescaped in snippets.gtl — reflected XSS likely"
+          }
+        };
+      }
+    }
+  }
   const homePath = new URL(ctx.home.finalUrl).pathname || "/";
   const discovered = extractReflectedXssPaths(ctx.combined);
   const discoveredSet = new Set(discovered);
-  const gruyerePaths = await extractGruyereLiveInstancePaths(ctx);
   const paths = prioritizeReflectedXssPaths(
     [
       ...new Set([
+        ...gruyerePaths,
         ...discovered,
         ...extractDvwaXssProbePaths(ctx.combined),
-        ...gruyerePaths,
         homePath,
         ...REFLECTED_XSS_FALLBACK_PATHS
       ])
