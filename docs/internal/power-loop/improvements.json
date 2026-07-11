@@ -1523,6 +1523,24 @@
       "slug": "client-side-portswigger-academy-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Web Security Academy: Free Online Training from PortSwigger + /web-security/sql-injection module links; extractPortswiggerAcademySeeds; portswigger.net/web-security findings 0→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:thecyberdrill.netlify.app",
+      "slug": "cyberdrill-tool-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /sql-injection/ simulateSQLQuery + SQL Injection successful in script.js; extractCyberDrillToolSeeds crawls SQLi/phishing/camera-hijack tools; thecyberdrill.netlify.app findings 2→3; benchmark staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sjefersuper.netlify.app",
+      "slug": "client-side-deserialization-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pickle.loads + __reduce__ EvilPickle + node-serialize serializer.unserialize eval gadget; sjefersuper.netlify.app/unsafe-deserialization findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-leviathan-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Username: leviathan0 Password: leviathan0 + /etc/leviathan_pass on /wargames/leviathan/; extractOverTheWireNatasSeeds seeds leviathan docs; overthewire.org/wargames/leviathan findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2785,6 +2803,21 @@
       "source": "discovery:portswigger.net",
       "slug": "client-side-portswigger-academy-evidence",
       "shipped_at": "2026-07-11T13:08:00.000Z"
+    },
+    {
+      "source": "discovery:thecyberdrill.netlify.app",
+      "slug": "cyberdrill-tool-crawl",
+      "shipped_at": "2026-07-11T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:sjefersuper.netlify.app",
+      "slug": "client-side-deserialization-evidence",
+      "shipped_at": "2026-07-11T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-leviathan-evidence",
+      "shipped_at": "2026-07-11T14:15:00.000Z"
     }
   ]
 }
