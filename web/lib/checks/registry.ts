@@ -2495,6 +2495,132 @@ const clientSideHackinghubEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- TempeHS Unsecure PWA educational lab (tempehs.github.io/The_Unsecure_PWA) ------
+const CLIENT_UNSECURE_PWA_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Unsecure by-design PWA disclaimer",
+    re: /unsecure by-design|designed with a range of security vulnerabilities/i
+  },
+  {
+    label: "The Unsecure PWA Company client brief",
+    re: /The Unsecure PWA Company|Unsecure PWA Company/i
+  },
+  {
+    label: "NESA HSC software engineering course context",
+    re: /NESA HSC Software Engineering|software engineering security specialist/i
+  },
+  {
+    label: "Student security testing resource modules",
+    re: /\.student_resources\/(?:XSS|CSRF|broken_authentication)/i
+  },
+  {
+    label: "Sandbox-only security testing guidance",
+    re: /sandbox environment|white\/grey\/black box analysis/i
+  }
+];
+
+const clientSideUnsecurePwaEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_UNSECURE_PWA_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Unsecure_PWA|Unsecure PWA|tempehs\.github\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "TempeHS Unsecure PWA documents an intentionally vulnerable progressive web app for HSC software engineering security testing labs"
+    }
+  };
+};
+
+// --- PromptMap LLM prompt-injection testing tool (promptmap.vercel.app) -------------
+const CLIENT_PROMPTMAP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "PromptMap application title",
+    re: /<title>\s*PromptMap\s*<\/title>|" PromptMap "/i
+  },
+  {
+    label: "PromptMap training onboarding",
+    re: /training-promptmap\.md|training-file.*promptmap/i
+  },
+  {
+    label: "Template and LLM generation modes",
+    re: /generationMode|examplePrompts|Prompt Template|Example Prompt/i
+  },
+  {
+    label: "PromptMap dashboard route",
+    re: /path:\s*["']\/dashboard["']|push\(["']\/dashboard["']\)/i
+  },
+  {
+    label: "Editable prompt testing surface",
+    re: /contenteditable.*PromptMap|new-training-session|new-task-session/i
+  }
+];
+
+const clientSidePromptmapEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PROMPTMAP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/PromptMap|promptmap\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PromptMap is an LLM prompt-injection testing workbench with template and LLM generation modes plus guided training sessions"
+    }
+  };
+};
+
+// --- Google XSS game training program (xss-game.appspot.com) ------------------------
+const CLIENT_GOOGLE_XSS_GAME_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Google XSS game title",
+    re: /<title>\s*XSS game\s*<\/title>|XSS game area/i
+  },
+  {
+    label: "Cross-site scripting training intro",
+    re: /Cross-site scripting.*\(XSS\).*bugs are one of the most common/i
+  },
+  {
+    label: "Real-world vulnerable application levels",
+    re: /real-world applications[\s\S]{0,40}vulnerable to XSS|resembling real-world applications/i
+  },
+  {
+    label: "Level-based XSS challenge routes",
+    re: /href\s*=\s*["']\/level\d|\/level\d\/frame/i
+  },
+  {
+    label: "Google app security XSS learning program",
+    re: /appsecurity\/learning\/xss|dispatch them, pronto/i
+  }
+];
+
+const clientSideGoogleXssGameEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GOOGLE_XSS_GAME_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/xss-game\.appspot\.com|XSS game/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Google XSS game publishes staged reflected/DOM XSS training levels modeled on real-world vulnerable applications"
+    }
+  };
+};
+
 // --- HTTP 403 bypass via path normalization (active probe) ----------------------
 const FORBIDDEN_403_PROBE_PATHS = [
   "/admin",
@@ -7665,7 +7791,10 @@ export const RULES: Record<string, Rule> = {
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
   clientSideHacksplainingEvidence,
-  clientSideHackinghubEvidence
+  clientSideHackinghubEvidence,
+  clientSideUnsecurePwaEvidence,
+  clientSidePromptmapEvidence,
+  clientSideGoogleXssGameEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
