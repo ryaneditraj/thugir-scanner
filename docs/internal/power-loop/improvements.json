@@ -1577,6 +1577,24 @@
       "slug": "wrongsecrets-challenge-crawl-expansion",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge dropdown lists /challenge/challenge-61 + In CTF-mode banner; extractWrongSecretsChallengeSeeds 0–61 + CTF-mode/GitHub markers; wrongsecrets-ctf findings 5 maintained; benchmark 6/6 maintained (7 findings)"
+    },
+    {
+      "source": "discovery:h3xstream.github.io",
+      "slug": "client-side-waf-workshop-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WAF Bypass Workshop + ModSecurity libinjection + SQL Syntax Lab; extractWafWorkshopMkdocsSeeds crawls 01-lab/02-lab/03-lab; h3xstream.github.io/waf-workshop findings 0→3; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "client-side-bugforge-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Bugforge title + /api/labs/start + Start Lab + Complete a lab to get on the board in bundle; www.bugforge.io findings 0→4; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:natas3.natas.labs.overthewire.org",
+      "slug": "natas-robots-secret-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: natas3 robots.txt Disallow /s3cr3t/ → /s3cr3t/users.txt has natas4:JDrPnuZAKyl6MkiqQGFIddrqpvgOASth; bootstrapNatasCreds robots secret path; natas4 direct scan authenticates (3 findings vs 401); benchmark 6/6 maintained (8 findings)"
     }
   ],
   "shipped": [
@@ -2884,6 +2902,21 @@
       "source": "discovery:wrongsecrets-ctf.herokuapp.com",
       "slug": "wrongsecrets-challenge-crawl-expansion",
       "shipped_at": "2026-07-11T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:h3xstream.github.io",
+      "slug": "client-side-waf-workshop-evidence",
+      "shipped_at": "2026-07-11T17:16:00.000Z"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "client-side-bugforge-lab-evidence",
+      "shipped_at": "2026-07-11T17:16:00.000Z"
+    },
+    {
+      "source": "discovery:natas3.natas.labs.overthewire.org",
+      "slug": "natas-robots-secret-bootstrap",
+      "shipped_at": "2026-07-11T17:16:00.000Z"
     }
   ]
 }
