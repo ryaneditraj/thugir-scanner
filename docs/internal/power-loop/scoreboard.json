@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 243,
   "discovery_findings": 1687,
-  "improvements_shipped": 216,
+  "improvements_shipped": 219,
   "last_run": "2026-07-11T02:25:43.363Z",
   "last_run_summary": {
     "hour_utc": "02:00",
@@ -36,7 +36,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku cold-start 1 finding (misconfig only); retry unchanged; staging fallback 6/6",
+      "note": "Primary heroku cold-start 1 finding (misconfig only); retry unchanged; staging fallback 6/6; parallel run shipped retry-findings-merge (primary 2/6 with auth_bypass)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -85,7 +85,8 @@
         "https://ctfchallenge.com/"
       ],
       "focus": "BugBountyHunter XSS challenges + DigiNinja AuthLab JWT/XOR + NodeGoat + Zero Health",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3,
+      "parallel_run": "benchmark-retry-findings-merge + pwnshop /vulnerabilities crawl shipped on same branch"
     },
     "notable_findings": [
       "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary heroku 1/6 cold-start (misconfig only)",
