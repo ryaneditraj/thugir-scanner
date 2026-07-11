@@ -1289,6 +1289,24 @@
       "slug": "client-side-archon-training-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Cybersecurity Engineering Path + OWASP Top 10 with vulnerable and fixed code + /cybersecurity/ crawl seeds; archon-eight.vercel.app findings 5→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-api-prime-probes",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku cold-start retry_gap sqli,idor,auth_bypass; primeJuiceShopApiProbes polls juiceShopApiLive up to 6×2.5s then pre-fetches /rest/admin + /rest/track-order/1 + /rest/products/search?q='')) + main.js into probe cache; staging oracle 7 findings recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "http-403-bypass-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns 403 {\"message\":\"Access Denied: Forbidden\"}; GET /admin/ returns 200 {\"message\":\"Trailing slash bypass success!\"}; http403BypassProbe tries / /./ /..;/ /;/ variants; bypass403.vercel.app findings 0→2; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:purushotham-muktha-dev-sec-ops-visu.vercel.app",
+      "slug": "client-side-devsecops-pipeline-visualizer-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DevSecOps Architecture & Maturity Report + VULNERABILITY 1: Hardcoded Secrets + VULNERABILITY 2: SQL Injection + OWASP Top 10 Check in index-BD-BHL8U.js; purushotham-muktha-dev-sec-ops-visu.vercel.app findings 0→6; benchmark staging 6/6 maintained"
     }
   ],
   "shipped": [
@@ -2356,6 +2374,21 @@
       "source": "discovery:archon-eight.vercel.app",
       "slug": "client-side-archon-training-evidence",
       "shipped_at": "2026-07-11T00:20:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-api-prime-probes",
+      "shipped_at": "2026-07-11T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "http-403-bypass-probe",
+      "shipped_at": "2026-07-11T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:purushotham-muktha-dev-sec-ops-visu.vercel.app",
+      "slug": "client-side-devsecops-pipeline-visualizer-evidence",
+      "shipped_at": "2026-07-11T01:10:00.000Z"
     }
   ]
 }
