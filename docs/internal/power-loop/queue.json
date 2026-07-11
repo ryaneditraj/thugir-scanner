@@ -1352,7 +1352,32 @@
       "url": "http://peruggia.sourceforge.net/",
       "source": "Peruggia — classic intentionally vulnerable PHP photo gallery for web security practice (SourceForge)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackazon.com/",
+      "source": "Rapid7 Hackazon — intentionally vulnerable e-commerce storefront for scanner/tool benchmarking (VWAD)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dghostninja.github.io/posts/Injection/",
+      "source": "DghostNinja/BreakTheFlask — SQLi/XSS/command injection vulnerable Flask app writeup lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dghostninja.github.io/posts/BAC/",
+      "source": "DghostNinja/BreakTheFlask — broken access control (IDOR/admin) vulnerable Flask writeup lab",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dghostninja.github.io/posts/CRYPTOGRAPHIC-FAILURE/",
+      "source": "DghostNinja/BreakTheFlask — cryptographic failures training walkthrough with exploit payloads",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dghostninja.github.io/posts/Insecure-design/",
+      "source": "DghostNinja/BreakTheFlask — insecure design vulnerability session (final BreakTheFlask module)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-11T08:12:00.000Z"
+  "updated_at": "2026-07-11T09:05:00.000Z"
 }
