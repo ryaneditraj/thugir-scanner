@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T13:08:00.000Z",
+  "updated_at": "2026-07-11T13:37:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,84 +12,94 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_recall": "6/6",
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7
+      ]
     }
   },
-  "total_sites_scanned": 705,
-  "total_findings": 2980,
+  "total_sites_scanned": 712,
+  "total_findings": 3009,
   "critical_findings": 31,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 296,
-  "discovery_findings": 2067,
-  "improvements_shipped": 252,
-  "last_run": "2026-07-11T13:08:00.000Z",
+  "discovery_urls_added": 301,
+  "discovery_findings": 2104,
+  "improvements_shipped": 249,
+  "last_run": "2026-07-11T13:37:00.000Z",
   "last_run_summary": {
     "hour_utc": "13:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
-      "primary_recall": "6/6",
+      "primary_findings": 4,
+      "primary_recall": "4/6",
+      "primary_gap": ["sqli", "auth_bypass"],
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_findings": 7,
       "fallback_recall": "6/6",
       "gap": [],
-      "note": "Primary oracle 8 findings 6/6; staging fallback 7 findings — no benchmark misses",
+      "note": "Primary heroku 503/degraded 4/6; retry hung on cold-start; staging fallback 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
+          "primary_gap": ["sqli", "auth_bypass"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": [
-        "http://natas3.natas.labs.overthewire.org/",
-        "https://www.hacksplaining.com/lessons/sql-injection/",
-        "https://portswigger.net/web-security"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 37,
+      "new_urls_queued": [
+        "https://thecyberdrill.netlify.app/",
+        "https://sjefersuper.netlify.app/unsafe-deserialization/",
+        "https://labs.tegalsec.org/",
+        "https://hacksplaining.com/lessons/cross-site-scripting/",
+        "http://leviathan0.leviathan.labs.overthewire.org/"
       ],
-      "focus": "Natas users.txt chain bootstrap + Hacksplaining SQLi lesson crawl + PortSwigger Academy hub",
-      "improvements_shipped_this_run": 3
+      "queued_not_reached": [
+        "https://thecyberdrill.netlify.app/",
+        "https://sjefersuper.netlify.app/unsafe-deserialization/",
+        "https://labs.tegalsec.org/",
+        "https://hacksplaining.com/lessons/cross-site-scripting/",
+        "http://leviathan0.leviathan.labs.overthewire.org/"
+      ],
+      "focus": "TestSparker tri-stack + hack-yourself-first + SSRF/GraphQL labs; drain finbot/testsparker backlog"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings)",
-      "natas3.natas.labs.overthewire.org: users.txt bootstrap unlocks natas3 auth (0→3 findings)",
-      "hacksplaining.com/lessons/sql-injection: lesson crawl + markers (2→4 findings)",
-      "portswigger.net/web-security: Web Security Academy hub evidence (0→2 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary heroku 4/6 gap sqli,auth_bypass",
+      "hack-yourself-first.azurewebsites.net: 7 findings — Troy Hunt vulnerable training app",
+      "ssrf-defense-platform.onrender.com: 6 findings — SSRF admin panel + CORS markers",
+      "php/aspnet/angular.testsparker.com: 5 findings each — TestSparker vuln stacks",
+      "api.graphqlbook.org: 5 findings — GraphQL introspection enabled"
     ],
     "learning_gaps": [
-      "natas4/5: require deeper chain solves (robots.txt, cookie tricks) beyond users.txt",
-      "academy.portswigger.net: DNS NXDOMAIN from cloud — use portswigger.net/web-security mirror",
-      "juice-shop.herokuapp.com: intermittent 503 cold-start — staging fallback still required",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com"
+      "juice-shop.herokuapp.com: Heroku 503/cold-start — primary 4/6; retry scan hangs >10min; staging oracle required",
+      "New tail URLs (cyberdrill, sjefersuper deserialization, tegalsec hub, hacksplaining XSS, leviathan0) not reached in 8-URL limit",
+      "owasp-finbot-ctf-demo.onrender.com: headers-only (1 finding) — agentic CTF needs authenticated namespace"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "juice-shop-staging.herokuapp.com": 7,
-    "natas3.natas.labs.overthewire.org": 3,
-    "portswigger.net/web-security": 2,
-    "hacksplaining.com/lessons/sql-injection": 4,
     "xxe-lab.vercel.app": 4,
     "nextjs-cve-hackerone.vercel.app": 4,
     "cybench.github.io": 4,
     "burpbountylab.com": 10,
+    "duck-store.escape.tech": 7,
+    "webexp05.vercel.app": 6,
+    "pentest-ground.com:4280": 5,
     "natas1.natas.labs.overthewire.org": 3,
     "shepherd.fs25.isf.hslu-edu.ch": 3,
-    "alf.nu/alert2": 3
+    "alf.nu/alert2": 3,
+    "web-pentest-playground.onrender.com": 3,
+    "owasp-juice.shop": 3,
+    "hack-yourself-first.azurewebsites.net": 7,
+    "ssrf-defense-platform.onrender.com": 6,
+    "api.graphqlbook.org": 5,
+    "php.testsparker.com": 5,
+    "aspnet.testsparker.com": 5,
+    "angular.testsparker.com": 5,
   }
 }

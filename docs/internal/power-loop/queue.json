@@ -1452,7 +1452,32 @@
       "url": "https://academy.portswigger.net/",
       "source": "PortSwigger Web Security Academy — free browser-based OWASP labs hub",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://thecyberdrill.netlify.app/",
+      "source": "Cyber Drill — interactive SQLi/phishing/encryption security training suite (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sjefersuper.netlify.app/unsafe-deserialization/",
+      "source": "websec unsafe deserialization lab — PHP/Node serialize gadget demo (Netlify deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://labs.tegalsec.org/",
+      "source": "TegalSec labs hub — XSS/br0w training lab index (complements xss-labs paths)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/cross-site-scripting/",
+      "source": "Hacksplaining XSS lesson — interactive reflected/stored XSS walkthrough (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://leviathan0.leviathan.labs.overthewire.org/",
+      "source": "OverTheWire Leviathan level 0 — binary/Linux privilege wargame entry (awesome-vulnerable-apps)",
+      "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-11T12:30:00.000Z"
+  "updated_at": "2026-07-11T13:34:00.000Z"
 }
