@@ -2903,6 +2903,86 @@ const clientSideArtemisKitEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP RailsGoat Ruby on Rails training app documentation (railsgoat.cktricky.com)
+const CLIENT_RAILS_GOAT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RailsGoat vulnerable Rails application title",
+    re: /RailsGoat[\s\S]{0,40}Vulnerable Ruby on Rails Application/i
+  },
+  {
+    label: "RailsGoat security training description",
+    re: /vulnerable Ruby on Rails application for security training/i
+  },
+  {
+    label: "OWASP RailsGoat GitHub repository",
+    re: /github\.com\/OWASP\/railsgoat|OWASP\/railsgoat/i
+  },
+  {
+    label: "RailsGoat serious vulnerability warning",
+    re: /very serious vulnerabilities inside|identifying weaknesses/i
+  },
+  {
+    label: "RailsGoat Ruby on Rails version requirement",
+    re: /Ruby on Rails 8\.0|Ruby 3\.4/i
+  }
+];
+
+const clientSideRailsgoatEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_RAILS_GOAT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/RailsGoat|railsgoat/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP RailsGoat is a deliberately vulnerable Ruby on Rails application for SQLi, XSS, CSRF, and authz training"
+    }
+  };
+};
+
+// --- PC Parts Store intentionally vulnerable e-commerce SPA (pc-parts-store.vercel.app)
+const CLIENT_PC_PARTS_STORE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "React dangerouslySetInnerHTML on product description",
+    re: /dangerouslySetInnerHTML\s*:\s*\{__html:\s*a\.description\}/
+  },
+  {
+    label: "PC Parts e-commerce storefront branding",
+    re: /PC Parts|BROWSE CATERGORIES|SEE ALL PRODUCTS/i
+  },
+  {
+    label: "Commerce.js cart integration",
+    re: /R\.cart\.(?:add|retrieve|remove)|new\s*\([^)]*Commerce/i
+  },
+  {
+    label: "Product details route with checkout URL",
+    re: /\/details\/:productId|checkout_url\.display/i
+  }
+];
+
+const clientSidePcPartsStoreLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PC_PARTS_STORE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/pc-parts-store|PC Parts|dangerouslySetInnerHTML/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PC Parts Store lab renders unsanitized product descriptions via dangerouslySetInnerHTML — stored XSS when Commerce.js catalog includes HTML"
+    }
+  };
+};
+
 // --- Erling Ellingsen alf.nu ServiceWorker sandbox attack lab -------------------
 const CLIENT_ALF_SERVICEWORKER_RES: { label: string; re: RegExp }[] = [
   {
@@ -8230,7 +8310,9 @@ export const RULES: Record<string, Rule> = {
   clientSideEpicdetectEvidence,
   clientSideAlfServiceworkerEvidence,
   clientSideBurpBountyLabEvidence,
-  clientSideArtemisKitEvidence
+  clientSideArtemisKitEvidence,
+  clientSideRailsgoatEvidence,
+  clientSidePcPartsStoreLabEvidence
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
