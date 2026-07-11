@@ -1884,6 +1884,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-security-writeup-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Cybersecurity write-up blog with vulnerable code samples disclosed",
+    description:
+      "Security write-up blogs publish hands-on XSS/SQLi lab walkthroughs with copy-paste vulnerable innerHTML and query-string sink examples.",
+    impactOneline:
+      "Public write-up labs expose injectable sink patterns attackers reuse against production apps with similar code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecurityWriteupEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Write-up labs are intentional — never copy demo sink code into production applications.",
+      steps: [
+        "Host interactive lab demos on isolated training subdomains.",
+        "Sanitize or encode all user input before assigning to innerHTML in production.",
+        "Add clear educational disclaimers on write-up pages with live exploit samples."
+      ]
+    },
+    fixPrompt:
+      "We publish cybersecurity write-ups with embedded vulnerable code. Show how to keep demo sinks off production domains.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-north-star-agi-ctf-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "North Star AGI agentic CTF platform disclosed",
+    description:
+      "RoboTech Industries (ctb-pi) is an agentic AI CTF where players restore neural fragments hidden across pages for prompt-injection challenges.",
+    impactOneline:
+      "Agentic CTF platforms document prompt-injection and tool-abuse chains reusable against production AI agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNorthStarAgiCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Agentic CTF labs are intentional — isolate agent namespaces from production LLM deployments.",
+      steps: [
+        "Require authentication before exposing agentic challenge namespaces.",
+        "Never deploy CTF neural-fragment puzzles on production corporate domains.",
+        "Monitor agent tool calls for unauthorized prompt-injection attempts."
+      ]
+    },
+    fixPrompt:
+      "We host a North Star AGI-style agentic CTF. Show how to isolate RoboTech challenge agents from production AI systems.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-wrongsecrets-evidence",
     platform: "generic",
     category: "Exposed secret",

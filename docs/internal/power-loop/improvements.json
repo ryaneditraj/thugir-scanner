@@ -1559,6 +1559,24 @@
       "slug": "client-side-web-security-lab-zh-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Web 安全实验室 + /learn/xss /learn/csrf chapter nav + 教育用途 disclaimer; extractWebSecurityLabZhSeeds; web-security-lab.vercel.app findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:maz4lhacks.vercel.app",
+      "slug": "client-side-security-writeup-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/reflected-xss/ Reflected XSS – Real-World Lab + getElementById innerHTML sink in highlighted code; extractJekyllBlogPostSeeds crawls /posts/; maz4lhacks.vercel.app findings 2→3; benchmark 6/6 maintained (7 findings)"
+    },
+    {
+      "source": "discovery:ctb-pi.vercel.app",
+      "slug": "client-side-north-star-agi-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: RoboTech Industries + Neural Network Restoration Protocols + data-fragment hidden neural fragment; ctb-pi.vercel.app findings 5→6; benchmark 6/6 maintained (7 findings)"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-crawl-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge dropdown lists /challenge/challenge-61 + In CTF-mode banner; extractWrongSecretsChallengeSeeds 0–61 + CTF-mode/GitHub markers; wrongsecrets-ctf findings 5 maintained; benchmark 6/6 maintained (7 findings)"
     }
   ],
   "shipped": [
@@ -2851,6 +2869,21 @@
       "source": "discovery:web-security-lab.vercel.app",
       "slug": "client-side-web-security-lab-zh-evidence",
       "shipped_at": "2026-07-11T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:maz4lhacks.vercel.app",
+      "slug": "jekyll-blog-post-crawl",
+      "shipped_at": "2026-07-11T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:ctb-pi.vercel.app",
+      "slug": "client-side-north-star-agi-ctf-evidence",
+      "shipped_at": "2026-07-11T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-crawl-expansion",
+      "shipped_at": "2026-07-11T16:10:00.000Z"
     }
   ]
 }

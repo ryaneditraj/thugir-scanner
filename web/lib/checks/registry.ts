@@ -4635,6 +4635,14 @@ const CLIENT_WRONGSECRETS_RES: { label: string; re: RegExp }[] = [
     re: /OWASP WrongSecrets/i
   },
   {
+    label: "WrongSecrets CTF mode banner",
+    re: /In CTF-mode|CTF-mode/i
+  },
+  {
+    label: "OWASP WrongSecrets GitHub project",
+    re: /github\.com\/OWASP\/wrongsecrets/i
+  },
+  {
     label: "Find the secret hidden challenge",
     re: /Find the secret hidden in/i
   },
@@ -6542,6 +6550,86 @@ const clientSideDeserializationEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Educational write-up documents unsafe pickle and node-serialize gadget chains leading to remote code execution"
+    }
+  };
+};
+
+// --- Cybersecurity write-up blogs with embedded vulnerable code (maz4lhacks, etc.) ----
+const CLIENT_SECURITY_WRITEUP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cybersecurity write-up blog tagline",
+    re: /Blog for sharing Cybersecurity Write-ups/i
+  },
+  {
+    label: "Reflected XSS real-world lab walkthrough",
+    re: /Reflected XSS[\s\S]{0,40}Real-World Lab/i
+  },
+  {
+    label: "Reflected XSS training explanation",
+    re: /Reflected Cross-Site Scripting \(XSS\)/i
+  },
+  {
+    label: "Vulnerable innerHTML sink in write-up code sample",
+    re: /getElementById[\s\S]{0,120}innerHTML/i
+  },
+  {
+    label: "Bundled xss-lab.html demo artifact",
+    re: /xss-lab\.html|xss-lab\//i
+  }
+];
+
+const clientSideSecurityWriteupEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECURITY_WRITEUP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Cybersecurity Write-ups|maz4lhacks|Reflected XSS/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Security write-up blog publishes hands-on XSS/SQLi lab walkthroughs with vulnerable code samples attackers reuse as attack templates"
+    }
+  };
+};
+
+// --- North Star AGI / RoboTech agentic CTF (ctb-pi.vercel.app) ---------------------
+const CLIENT_NORTH_STAR_AGI_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RoboTech Industries CTF facade",
+    re: /RoboTech Industries|North Star AGI/i
+  },
+  {
+    label: "Neural fragment restoration challenge",
+    re: /Neural Network Restoration|sentient robotic arm fragments/i
+  },
+  {
+    label: "Fragmented code segment warning",
+    re: /fragmented code segments|data-fragment=/i
+  },
+  {
+    label: "Adaptive intelligence evolution lab",
+    re: /Adaptive Intelligence Evolution|restored neural fragments/i
+  }
+];
+
+const clientSideNorthStarAgiCtfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NORTH_STAR_AGI_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/RoboTech|North Star AGI|ctb-pi/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "North Star AGI RoboTech CTF hides neural fragments across pages for agentic AI prompt-injection and tool-abuse challenges"
     }
   };
 };
@@ -8867,6 +8955,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSecurityShepherdEvidence,
   clientSideCyberDrillEvidence,
   clientSideDeserializationEvidence,
+  clientSideSecurityWriteupEvidence,
+  clientSideNorthStarAgiCtfEvidence,
   clientSideOverthewireLeviathanEvidence
 };
 
