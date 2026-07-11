@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11T14:15:00.000Z",
+  "updated_at": "2026-07-11T14:35:35.215Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,65 +12,93 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ]
+      ],
+      "primary_gap": ["xss", "sqli", "idor", "sensitive_data"]
     }
   },
-  "total_sites_scanned": 715,
-  "total_findings": 3018,
+  "total_sites_scanned": 720,
+  "total_findings": 3053,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 301,
-  "discovery_findings": 2107,
+  "discovery_urls_added": 306,
+  "discovery_findings": 2141,
   "improvements_shipped": 252,
-  "last_run": "2026-07-11T14:15:00.000Z",
+  "last_run": "2026-07-11T14:35:35.215Z",
   "last_run_summary": {
     "hour_utc": "14:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_note": "Heroku cold-start — full benchmark scan may hang >5min from cloud",
-      "staging_url": "https://juice-shop-staging.herokuapp.com",
-      "staging_findings": 7,
-      "staging_recall": "6/6",
+      "primary_findings": 2,
+      "primary_recall": "2/6",
+      "primary_gap": ["xss", "sqli", "idor", "sensitive_data"],
+      "retry_findings": 1,
+      "retry_recall": "1/6",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "fallback_findings": 7,
+      "fallback_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — staging oracle 7 findings, 6/6 recall",
+      "note": "Primary heroku degraded 2/6; retry 1/6 (~10min); staging fallback 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
+          "primary_gap": ["xss", "sqli", "idor", "sensitive_data"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_queued": [
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 37,
+      "new_urls_queued": [
+        "https://ist-edu-bd.vercel.app/",
+        "https://web-security-lab-docs.vercel.app/",
+        "https://web-security-lab.vercel.app/",
+        "https://xss-payload-lab.vercel.app/",
+        "https://maz4lhacks.vercel.app/"
+      ],
+      "scanned_urls": [
+        "https://pentesterlab.com/",
+        "https://www.root-me.org/",
+        "https://www.hackthissite.org/",
+        "https://agentpwn.com/",
+        "https://hacksec.in/",
+        "https://webgoat.org/",
+        "https://cyberdefenders.org/"
+      ],
+      "queued_not_reached": [
         "https://thecyberdrill.netlify.app/",
         "https://sjefersuper.netlify.app/unsafe-deserialization/",
         "https://labs.tegalsec.org/",
         "https://hacksplaining.com/lessons/cross-site-scripting/",
-        "http://leviathan0.leviathan.labs.overthewire.org/"
+        "http://leviathan0.leviathan.labs.overthewire.org/",
+        "https://ist-edu-bd.vercel.app/",
+        "https://web-security-lab.vercel.app/",
+        "https://xss-payload-lab.vercel.app/"
       ],
-      "focus": "Cyber Drill simulators, unsafe deserialization lab, OverTheWire Leviathan docs",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue head training platforms; testhtml5.vulnweb.com DNS dead"
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "thecyberdrill.netlify.app: SQLi simulator + Cyber Drill evidence (2→3 findings)",
-      "sjefersuper.netlify.app/unsafe-deserialization: pickle/node-serialize lab (1→2 findings)",
-      "overthewire.org/wargames/leviathan: Leviathan wargame evidence (5→6 findings)"
+      "cyberdefenders.org: 8 findings — OpenAI+Resend keys in client bundle, unauthenticated API routes",
+      "webgoat.org: 6 findings — Twilio SID + postMessage DOM XSS evidence",
+      "hackthissite.org: 5 findings — reflected XSS + sensitive path disclosure",
+      "agentpwn.com: 5 findings — AI agent security training platform markers"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku 503/cold-start — use staging fallback for oracle",
-      "leviathan0.leviathan.labs.overthewire.org: meta-refresh to natas — SSH wargame not web-scannable",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN"
+      "juice-shop.herokuapp.com: Heroku cold-start — primary 2/6; retry 1/6 hangs ~10min; staging oracle required",
+      "Primary misses sqli+idor on juice-shop even when auth_bypass hits — probe depth on degraded Heroku",
+      "Tail URLs (cyberdrill, sjefersuper, tegalsec, hacksplaining XSS, leviathan0) still behind 306-URL queue head",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp/rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "juice-shop-staging.herokuapp.com": 7,
+    "cyberdefenders.org": 8,
     "thecyberdrill.netlify.app": 3,
     "sjefersuper.netlify.app": 2,
     "www.overthewire.org": 6,

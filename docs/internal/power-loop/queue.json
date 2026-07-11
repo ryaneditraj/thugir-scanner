@@ -1477,7 +1477,32 @@
       "url": "http://leviathan0.leviathan.labs.overthewire.org/",
       "source": "OverTheWire Leviathan level 0 — binary/Linux privilege wargame entry (awesome-vulnerable-apps)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/",
+      "source": "zahidoverflow/damn-vulnerable-web-university — OWASP Top 10 React training app (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-lab-docs.vercel.app/",
+      "source": "Web Security Lab docs — XSS/SQLi/CSRF/JWT/IDOR training hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/",
+      "source": "Web Security Lab platform — interactive XSS/CSRF/CSP/Cookie labs (docs companion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xss-payload-lab.vercel.app/",
+      "source": "XSS Payload Lab — browser security playground with context explorer (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://maz4lhacks.vercel.app/",
+      "source": "Maz4l Hacks — reflected XSS walkthrough + security blog demos (web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-11T13:34:00.000Z"
+  "updated_at": "2026-07-11T14:30:00.000Z"
 }
