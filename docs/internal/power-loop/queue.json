@@ -1602,7 +1602,32 @@
       "url": "http://natas18.natas.labs.overthewire.org/",
       "source": "OverTheWire Natas level 18 — PHP strcmp array bypass wargame (follows natas17)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://natas19.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 19 — session ID brute-force wargame (follows natas18)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas20.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 20 — session newline injection wargame (follows natas19)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas21.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 21 — shared session storage wargame (follows natas20)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas22.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 22 — session fixation wargame (follows natas21)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://natas23.natas.labs.overthewire.org/",
+      "source": "OverTheWire Natas level 23 — PHP strcmp array bypass wargame (follows natas22)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-11T18:06:00.000Z"
+  "updated_at": "2026-07-11T19:26:00.000Z"
 }
