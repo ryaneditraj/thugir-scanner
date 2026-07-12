@@ -1991,6 +1991,24 @@
       "slug": "post-login-sql-bypass",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=' OR 1=1 -- returns 302 Location /dashboard + session cookie; sql-injection-lab.vercel.app findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-heroku-bootstrap-combined",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: merge REST/main.js probe bodies into combined after primeJuiceShopApiProbes when Heroku stub serves pages_crawled=1; juice-shop-staging.herokuapp.com recall 6/6 maintained (7 findings); primary heroku Application Error this hour"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-login-crawl-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractVaultappSeeds crawls /login with Security Training Lab + Test credentials: player / player123; vaultapp-omega.vercel.app findings 4→5; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.xplat-demo.threatx.io",
+      "slug": "dvga-xplat-demo-live-instance",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql returns __schema queryType; X-DVGA-MODE Beginner/Expert + /import_paste sidebar on dvga.xplat-demo.threatx.io; findings 0→4 (graphql-introspection-enabled, client-side-graphql-lab-evidence); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3633,6 +3651,21 @@
       "source": "discovery:sql-injection-lab.vercel.app",
       "slug": "post-login-sql-bypass",
       "shipped_at": "2026-07-12T15:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-heroku-bootstrap-combined",
+      "shipped_at": "2026-07-12T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-login-crawl-seed",
+      "shipped_at": "2026-07-12T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvga.xplat-demo.threatx.io",
+      "slug": "dvga-xplat-demo-live-instance",
+      "shipped_at": "2026-07-12T16:10:00.000Z"
     }
   ]
 }
