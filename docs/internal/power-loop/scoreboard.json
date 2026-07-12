@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T17:10:00.000Z",
+  "updated_at": "2026-07-12T17:39:32.800Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,75 +15,99 @@
       ]
     }
   },
-  "total_sites_scanned": 920,
-  "total_findings": 3974,
+  "total_sites_scanned": 927,
+  "total_findings": 4009,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 427,
-  "discovery_findings": 2910,
+  "discovery_urls_added": 432,
+  "discovery_findings": 2938,
   "improvements_shipped": 334,
-  "last_run": "2026-07-12T17:10:00.000Z",
+  "last_run": "2026-07-12T17:39:32.800Z",
   "last_run_summary": {
     "hour_utc": "17:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 1,
-      "primary_recall": "1/6",
-      "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+      "primary_findings": 7,
+      "primary_recall": "6/6",
+      "primary_gap": [
+        "xss",
+        "sqli",
+        "idor",
+        "auth_bypass",
+        "sensitive_data"
+      ],
       "pages_crawled": 1,
-      "probes_run": 29,
-      "primary_note": "Heroku Application Error — dyno fully down; staging oracle used for recall",
+      "probes_run": 286,
+      "primary_note": "pass1 1/6 pages_crawled=1; retry 3 findings; wake retry recovered 7 findings 6/6 on primary without staging fallback",
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
-      "oracle_recall": "6/6",
+      "oracle_findings": null,
+      "oracle_recall": null,
       "gap": [],
-      "note": "No benchmark category misses — staging oracle 6/6 (7 findings) validated after this run",
+      "note": "No benchmark category misses — wake retry on primary heroku 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
-          "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ],
+          "primary_gap": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data"
+          ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 28,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "escape.alf.nu level seeds, RedTiger direct level pages, IEEE-VIT ctf.vercel.app CTF SPA",
-      "improvements_shipped_this_run": 3,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
+        "http://34.28.235.106/ (GCP vuln-bank connection reset)"
+      ],
+      "focus": "bbh #5, escape L4, RedTiger L2, TIWAP, Hacksplaining open-redirects",
       "validated_targets": [
-        "juice-shop-staging.herokuapp.com (7 findings, 6/6 recall maintained)",
-        "escape.alf.nu/level2 (1→3 findings — client-side-alf-xss-wargame-evidence)",
-        "redtiger.labs.overthewire.org/level1.php (0→2 findings — client-side-redtiger-hackit-evidence)",
-        "ctf.vercel.app (0→6 findings — client-side-ctf-platform-evidence + bundle markers)",
-        "fabraix.com/playground (0→2 findings — client-side-prompt-injection-evidence bonus)"
+        "juice-shop.demo.escape.tech (8 findings — full OWASP Juice Shop v20 on Escape.tech)",
+        "yogsec.github.io/xss-labs (5 findings — XSS training platform markers)",
+        "bwapp.net (5 findings — reflected XSS + AWS/Twilio secrets in bundle)",
+        "owasp-finbot-ctf.org (4 findings — agentic AI CTF + OpenAPI docs)",
+        "maestro-agentic-ai-security-demo-mon.netlify.app (3 findings — DB URL in bundle)",
+        "ginandjuice.shop (3 findings — reflected XSS + insecure cookies)"
       ],
       "queued_not_reached": [
-        "escape.alf.nu/level3",
-        "www.bugbountyhunter.com/challenge?id=4 (challenges disabled)",
-        "aigoat.app (domain parking)",
-        "hacksplaining.com/lessons/csrf/"
+        "www.bugbountyhunter.com/challenge?id=5",
+        "escape.alf.nu/level4",
+        "redtiger.labs.overthewire.org/level2.php",
+        "tiwap.com",
+        "hacksplaining.com/lessons/open-redirects/"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) maintained — no benchmark misses",
-      "escape.alf.nu/level2: alert(1) to win XSS wargame detected via /level1-/level3 crawl seeds",
-      "redtiger level1.php: Welcome to level 1 + level1_users table markers on direct level URL",
-      "ctf.vercel.app: IEEE-VIT Conquer The World CTF SPA with checkFlag API in bundle",
-      "fabraix.com/playground: Adversarial Verification for AI Agents marketing markers"
+      "juice-shop.herokuapp.com: wake retry 6/6 on primary (7 findings) — no staging fallback needed",
+      "juice-shop.demo.escape.tech: Escape.tech hosted Juice Shop v20 full 6/6 category coverage (8 findings)",
+      "yogsec.github.io/xss-labs: interactive XSS labs with dangerous HTML sinks (5 findings)",
+      "bwapp.net: reflected XSS + secret-aws-akid + secret-twilio in bundle (5 findings)",
+      "owasp-finbot-ctf.org: agentic AI CTF + prompt-injection evidence (4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku Application Error on all endpoints — staging fallback required",
+      "juice-shop.herokuapp.com: cold-start pass1 1/6 pages_crawled=1 — wake retry required before full recall",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "bugbountyhunter.com/challenge?id=4: free challenges disabled during platform rebuild",
-      "aigoat.app: domain parking page only — no AIGoat lab content reachable"
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
+      "34.28.235.106: JessJohn0 vuln-bank GCP host offline from cloud",
+      "new tail URLs (bbh #5, escape L4, RedTiger L2, TIWAP, hacksplaining open-redirects) queued but not reached — 8-URL head-first limit"
     ]
   },
   "discovery_highlights": {

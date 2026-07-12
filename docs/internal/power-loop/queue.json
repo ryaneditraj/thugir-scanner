@@ -2087,7 +2087,32 @@
       "url": "https://hacksplaining.com/lessons/csrf/",
       "source": "Hacksplaining — interactive CSRF secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=5",
+      "source": "BugBountyHunter zseano — web vulnerability challenge #5 (training platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level4",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 4 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/level2.php",
+      "source": "OverTheWire RedTiger level 2 — SQLi/login-bypass web security wargame (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://tiwap.com/",
+      "source": "TIWAP — intentionally vulnerable web app with 20 vuln types × 3 difficulty levels (educational demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/open-redirects/",
+      "source": "Hacksplaining — interactive open-redirect secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T16:49:00.000Z"
+  "updated_at": "2026-07-12T17:37:00.000Z"
 }
