@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T21:04:06.723Z",
-  "total": 272,
-  "uniqueSlugs": 272,
+  "generatedAt": "2026-07-12T22:03:27.398Z",
+  "total": 275,
+  "uniqueSlugs": 275,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 254,
+    "generic": 257,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 207,
+    "deep": 210,
     "continuous": 0
   },
   "byCategory": {
@@ -31,7 +31,7 @@
     "Cross-site scripting": 26,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 16,
+    "AI security": 19,
     "XSS": 1,
     "general": 17
   },
@@ -61,6 +61,7 @@
     "client-side-bug-collection-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bugforge-lab-evidence",
+    "client-side-bugzap-prompt-defense-evidence",
     "client-side-burp-bounty-lab-evidence",
     "client-side-bwapp-evidence",
     "client-side-bwapp-injection-catalog-evidence",
@@ -167,10 +168,12 @@
     "client-side-railsgoat-evidence",
     "client-side-react-dom-xss-lab-evidence",
     "client-side-react-rsc-cve-evidence",
+    "client-side-redlockx-prompt-firewall-evidence",
     "client-side-redtiger-hackit-evidence",
     "client-side-rest-vulnweb-evidence",
     "client-side-returntrue-wargame-evidence",
     "client-side-ringzer0-ctf-evidence",
+    "client-side-rogue-studio-evidence",
     "client-side-rogueloop-xxs-course-evidence",
     "client-side-rootme-challenge-evidence",
     "client-side-sec-code-educational-evidence",
