@@ -2898,6 +2898,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-clawguard-ai-audit-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "ClawGuard EU AI Act compliance audit platform disclosed",
+    description:
+      "prompttools.co ClawGuard advertises deterministic EU AI Act compliance audits for KI agents and MCP servers against hundreds of threat patterns.",
+    impactOneline:
+      "Public AI compliance audit landing pages document MCP and agent security assessment surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideClawguardAiAuditEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Compliance audit tools should not expose live agent/MCP probe endpoints without authentication.",
+      steps: [
+        "Gate AI compliance scans behind authenticated customer portals.",
+        "Do not expose MCP server probe APIs on public marketing pages.",
+        "Isolate audit sandboxes from production agent infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We publish a ClawGuard-style EU AI Act audit landing page for KI agents and MCP servers. Show how to gate audit APIs behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-defendtheweb-evidence",
     platform: "generic",
     category: "Broken access control",
