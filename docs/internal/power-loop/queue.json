@@ -1702,7 +1702,32 @@
       "url": "https://www.immersivelabs.com/",
       "source": "Immersive Labs — public cyber skills training platform with browser labs (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.llm-sec.dev/",
+      "source": "TomAbai/llm-sec — official OWASP LLM Top 10 interactive labs with threat model diagram (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompttools.co/",
+      "source": "joergmichno/prompt-lab — live prompt injection playground with ClawGuard detection patterns (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free/llm",
+      "source": "Kontra OWASP Top 10 for LLM 2025 — free interactive prompt injection and agency labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/",
+      "source": "dolevf/DVGA — Damn Vulnerable GraphQL Application public Escape.tech demo (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://jjirik77.github.io/sec_code/interactive.html",
+      "source": "jjirik77/sec_code — secure coding interactive lessons with XSS/SQLi exploit demos (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-11T22:06:00.000Z"
+  "updated_at": "2026-07-12T04:10:00.000Z"
 }
