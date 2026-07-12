@@ -4899,6 +4899,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-bug-collection-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BUG Collection OWASP Top 10 training app disclosed",
+    description:
+      "BUG Collection (valentin-panov/bug-collection) is an intentionally vulnerable React/Next/MongoDB app with markup injection, NoSQL/SQLi, broken access control, and prototype-pollution test modules.",
+    impactOneline:
+      "Public BUG Collection instances document OWASP Top 10 flaw patterns attackers can replay against production React/Next APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBugCollectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BUG Collection is intentional training — never deploy similar injection or access-control flaws to production.",
+      steps: [
+        "Run BUG Collection only on isolated lab infrastructure with no production data.",
+        "Remove testLib injection modules and hardcoded secrets from production bundles.",
+        "Enforce authorization on every /api route before exposing dashboard data."
+      ]
+    },
+    fixPrompt:
+      "We host a BUG Collection-style vulnerable Next.js training app. Show how to isolate testLib labs and fix MongoDB injection on production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-archon-training-evidence",
     platform: "generic",
     category: "Broken access control",

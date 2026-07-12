@@ -647,6 +647,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideNimbusVaultEvidence",
   "clientSideSecurebankBlogEvidence",
   "clientSideBugBountyHunterEvidence",
+  "clientSideBugCollectionEvidence",
   "clientSideZeroHealthEvidence",
   "clientSideAlfXssWargameEvidence",
   "clientSideLlmSecEvidence",
@@ -1686,6 +1687,20 @@ function extractTry2hackLevelSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Valentin Panov BUG Collection vulnerable Next.js training app. */
+function extractBugCollectionSeeds(html: string, pageUrl: string): string[] {
+  if (!/BUG Collection|bug-collection\.vercel\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/login", "/signup", "/dashboard", "/account"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Hacksplaining OWASP lesson catalog (hacksplaining.com). */
 function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[] {
   if (!/Hacksplaining|hacksplaining\.com/i.test(html)) return [];
@@ -1700,7 +1715,10 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/xss-reflected/start",
     "/lessons/csrf/start",
     "/lessons/open-redirects/start",
-    "/lessons/ai-prompt-injection/start"
+    "/lessons/ai-prompt-injection/start",
+    "/lessons/directory-traversal/start",
+    "/lessons/ssrf/start",
+    "/lessons/broken-access-control/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -3585,6 +3603,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const archonHostFallbackSeeds = extractArchonHostFallbackSeeds(home.finalUrl);
   const secCodeEducationalSeeds = extractSecCodeEducationalSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
+  const bugCollectionSeeds = extractBugCollectionSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const portswiggerSeeds = extractPortswiggerAcademySeeds(home.body, home.finalUrl);
   const hackTheBoxSeeds = extractHackTheBoxSeeds(home.body, home.finalUrl);
@@ -3697,6 +3716,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...archonVitepressSeeds,
       ...secCodeEducationalSeeds,
       ...vulnerableAppSeeds,
+      ...bugCollectionSeeds,
       ...hacksplainingSeeds,
       ...portswiggerSeeds,
       ...hackTheBoxSeeds,
