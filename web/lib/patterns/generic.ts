@@ -5833,5 +5833,83 @@ export const genericPatterns: Pattern[] = [
       "We host an ATTP-style agent trust transport demo. Show how to authenticate agent wire-protocol endpoints in production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-bugzap-prompt-defense-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "BugZap prompt-injection defense demo disclosed",
+    description:
+      "BugZap vercel.app publishes an interactive Next.js demo for basic prompt-injection prevention and LLM application hardening.",
+    impactOneline:
+      "Public BugZap demos document LLM input-sanitization patterns attackers study to bypass prompt-injection defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBugzapPromptDefenseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugZap is a training demo — never ship unauthenticated LLM chat endpoints without server-side guardrails.",
+      steps: [
+        "Validate and sanitize all user prompts server-side before forwarding to LLM providers.",
+        "Isolate prompt-injection defense demos on lab-only Vercel deployments.",
+        "Rate-limit and authenticate LLM proxy routes exposed by Next.js API handlers."
+      ]
+    },
+    fixPrompt:
+      "We host a BugZap-style Next.js prompt-injection defense demo. Show how to gate LLM proxy routes and sanitize user prompts server-side.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-redlockx-prompt-firewall-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "RedLockX prompt-injection firewall demo disclosed",
+    description:
+      "RedLockX vercel.app documents a hybrid + DeBERTa-v3 ML pipeline for real-time prompt-injection and jailbreak detection.",
+    impactOneline:
+      "Public RedLockX demos expose adversarial prompt-classification surfaces attackers probe to evade LLM guardrails.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRedlockxPromptFirewallEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RedLockX is a guardrail research demo — do not expose unauthenticated prompt-classification APIs in production.",
+      steps: [
+        "Authenticate all prompt-scoring endpoints before accepting user text.",
+        "Run ML guardrail demos on isolated infrastructure, not production LLM apps.",
+        "Monitor for jailbreak probe patterns against public classifier endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host a RedLockX-style prompt-injection firewall demo. Show how to authenticate ML guardrail endpoints and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-rogue-studio-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Rogue Studio uncensored security-research IDE disclosed",
+    description:
+      "Rogue Studio vercel.app advertises an autonomous AI IDE with zero safety filters, exploit modes, payload forging, and Tor/IPFS tooling for penetration testers.",
+    impactOneline:
+      "Public Rogue Studio demos document unrestricted agentic exploit workflows relevant to autonomous offensive-security tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRogueStudioEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rogue Studio is intentional research infrastructure — never deploy uncensored agent loops on internet-facing hosts.",
+      steps: [
+        "Air-gap autonomous security-research IDEs from production networks.",
+        "Require authentication before exposing agentic exploit or payload-forge modes.",
+        "Audit Tor/Ollama bootstrap scripts for outbound network access on shared hosts."
+      ]
+    },
+    fixPrompt:
+      "We host a Rogue Studio-style autonomous security-research IDE. Show how to air-gap uncensored agent modes from production infrastructure.",
+    version: 1,
+    enabled: true
   }
 ];
