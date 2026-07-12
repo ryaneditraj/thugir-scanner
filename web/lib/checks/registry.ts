@@ -2598,6 +2598,10 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /\/lessons\/xss-|Inject malicious scripts into trusted websites/i
   },
   {
+    label: "Stored XSS lesson module",
+    re: /\/lessons\/xss-stored|Stored XSS — Secure Coding Lesson/i
+  },
+  {
     label: "CSRF lesson module",
     re: /\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
   },
@@ -4859,6 +4863,10 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
     label: "OWASP Top 10 for LLM free exercises",
     re: /OWASP Top 10 for LLM(?:\s*-\s*2025)?/i
+  },
+  {
+    label: "LLM prompt injection training module",
+    re: /\/free\/llm\/prompt-injection|Prompt Injection \| Kontra/i
   },
   {
     label: "Free exercises hub",
@@ -7458,6 +7466,10 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Landing chat widget invites prompt injection testing",
     re: /testing some prompt injection attacks/i
+  },
+  {
+    label: "Kontra OWASP Top 10 for LLM training hub",
+    re: /OWASP Top 10 for LLM(?:\s*-\s*2025)?|detailed best practices for LLMs based on the OWASP top 10/i
   },
   {
     label: "AI banking assistant prompt injection demo",

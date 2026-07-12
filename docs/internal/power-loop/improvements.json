@@ -2057,6 +2057,24 @@
       "slug": "hacksplaining-ssrf-dirtraversal-bac-lessons",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Directory Traversal — Secure Coding Lesson + SSRF probe your internal network + Broken Access Control lesson titles; CLIENT_HACKSPLAINING_RES + extractHacksplainingLessonSeeds seeds /lessons/directory-traversal|ssrf|broken-access-control/start; lesson URLs findings 0→4 each; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security/free/llm",
+      "slug": "kontra-llm-prompt-injection-hub",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>OWASP Top 10 for LLM - 2025</title> + detailed best practices for LLMs based on the OWASP top 10; extractKontraTrainingSeeds LLM guard + /free/llm/prompt-injection seed + CLIENT_PROMPT_INJECTION_RES Kontra hub marker; application.security/free/llm findings 3→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level6-10-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub table links level1.php–level10.php + special1.php; extractRedTigerHackitSeeds seeds all 10 levels from hub/level pages; redtiger hub crawl now includes level10.php; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=12/9/10/14 links + /playground on hub; extractBugBountyHunterChallengeSeeds seeds challenge?id=1-15 + playground; challenge?id=2 crawl 2→6 pages (playground + challenges 1-4); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3754,6 +3772,21 @@
       "source": "discovery:hacksplaining.com",
       "slug": "hacksplaining-ssrf-dirtraversal-bac-lessons",
       "shipped_at": "2026-07-12T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security/free/llm",
+      "slug": "kontra-llm-prompt-injection-hub",
+      "shipped_at": "2026-07-12T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level6-10-hub-seeds",
+      "shipped_at": "2026-07-12T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-seeds",
+      "shipped_at": "2026-07-12T20:10:00.000Z"
     }
   ]
 }
