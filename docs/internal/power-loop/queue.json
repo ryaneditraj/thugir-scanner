@@ -1937,7 +1937,32 @@
       "url": "http://manpage0.manpage.labs.overthewire.org/",
       "source": "OverTheWire Manpage — Unix privilege escalation wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ringzer0ctf.com/",
+      "source": "RingZer0 Online CTF — 400+ web/sysadmin/crypto challenges with public sandboxes (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hellboundhackers.org/",
+      "source": "Hellbound Hackers — classic public web hacking challenge platform (Recorded Future / awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.wechall.net/",
+      "source": "WeChall — global CTF scoreboard with hosted SQLi/LFI/PHP exploit training challenges",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/",
+      "source": "OverTheWire RedTiger — public SQLi/login-bypass web security wargame levels (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webhacking.kr/",
+      "source": "Webhacking.kr — Korean public web vulnerability challenge platform with 80+ levels (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T08:45:00.000Z"
+  "updated_at": "2026-07-12T09:05:00.000Z"
 }
