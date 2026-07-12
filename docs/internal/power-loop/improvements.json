@@ -1739,6 +1739,24 @@
       "slug": "portswigger-all-labs-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: All labs | Web Security Academy title + Mystery lab challenge + web-security/all-labs#sql-injection taxonomy; extractPortswiggerAcademySeeds extended; portswigger.net/web-security/all-labs findings 0→3; benchmark 6/6 maintained (7 findings)"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "client-side-vulnex-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNEX — Web Hacking Playbook meta + Ready-to-use payloads, exploitation techniques + WebApplication JSON-LD; vulnex.vercel.app findings 0→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.secureflag.com",
+      "slug": "client-side-secureflag-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecureFlag and OWASP have partnered + reserved instance of the SecureFlag platform + Hands-On Secure Coding Training; owasp.html→/owasp redirect; secureflag.com findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "vulnex-playbook-sitemap-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sitemap lists /vulnerabilities /methods /recon /all taxonomy pages; extractVulnexPlaybookSeeds seeds crawl; vulnex pages_crawled 1→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3181,6 +3199,21 @@
       "source": "discovery:portswigger.net",
       "slug": "portswigger-all-labs-crawl",
       "shipped_at": "2026-07-12T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "client-side-vulnex-evidence",
+      "shipped_at": "2026-07-12T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.secureflag.com",
+      "slug": "client-side-secureflag-evidence",
+      "shipped_at": "2026-07-12T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "vulnex-playbook-sitemap-crawl",
+      "shipped_at": "2026-07-12T02:15:00.000Z"
     }
   ]
 }

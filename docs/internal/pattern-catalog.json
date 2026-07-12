@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T01:03:51.281Z",
-  "total": 236,
-  "uniqueSlugs": 236,
+  "generatedAt": "2026-07-12T02:04:51.360Z",
+  "total": 238,
+  "uniqueSlugs": 238,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 218,
+    "generic": 220,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 171,
+    "deep": 173,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 78,
+    "Broken access control": 79,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 18,
     "Information disclosure": 16,
     "Broken authentication": 12,
-    "Injection": 33,
+    "Injection": 34,
     "Cross-site scripting": 20,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -150,6 +150,7 @@
     "client-side-seclab-playground-evidence",
     "client-side-secresearchlab-evidence",
     "client-side-sectrainer-evidence",
+    "client-side-secureflag-evidence",
     "client-side-security-game-evidence",
     "client-side-security-shepherd-evidence",
     "client-side-security-writeup-evidence",
@@ -171,6 +172,7 @@
     "client-side-vulnerable-qa-lab-evidence",
     "client-side-vulnerable-web-site-evidence",
     "client-side-vulnerableapp-evidence",
+    "client-side-vulnex-evidence",
     "client-side-vulnforge-academy-evidence",
     "client-side-vulnlab-academy-evidence",
     "client-side-vulnweb-lab-evidence",
