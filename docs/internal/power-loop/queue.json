@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T04:13:57.831Z",
+  "updated_at": "2026-07-12T22:12:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -2212,7 +2212,31 @@
       "url": "https://hacksplaining.com/lessons/insecure-deserialization/",
       "source": "Hacksplaining — interactive insecure-deserialization secure-coding lesson (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/from_sqli_to_shell/",
+      "source": "PentesterLab — SQLi to admin console to RCE hosted exercise chain (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssrf_01/",
+      "source": "PentesterLab — SSRF fundamentals hosted exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-command-injection",
+      "source": "Kontra Application Security — browser-based command-injection training lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-directory-traversal",
+      "source": "Kontra Application Security — browser-based directory-traversal training lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/sqli",
+      "source": "bugforge.io — beginner SQL injection hands-on lab module (web search)",
+      "auth": "public_demo"
     }
-  ],
-  "updated_at": "2026-07-12T21:05:00.000Z"
+  ]
 }
