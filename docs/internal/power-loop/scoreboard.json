@@ -255,6 +255,10 @@
     "ekssecurity.netlify.app": 2,
     "pentest-ground.com:7001": 1,
     "dvga.xplat-demo.threatx.io": 4,
-    "ctf.vercel.app": 6
+    "ctf.vercel.app": 6,
+    "juice-shop.demo.escape.tech": 8,
+    "yogsec.github.io/xss-labs": 5,
+    "bwapp.net": 5,
+    "maestro-agentic-ai-security-demo-mon.netlify.app": 3
   }
 }
