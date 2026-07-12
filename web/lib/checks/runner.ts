@@ -587,6 +587,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
   "clientSideImmersiveLabsEvidence",
+  "clientSideHackTheBoxEvidence",
+  "clientSideHackTheBoxAcademyEvidence",
   "clientSideHackThisSiteEvidence",
   "clientSideCyberDefendersEvidence",
   "clientSideWebSecurityLabZhEvidence",
@@ -1628,8 +1630,12 @@ function extractPortswiggerAcademySeeds(html: string, pageUrl: string): string[]
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of [
     "/web-security",
+    "/web-security/all-labs",
+    "/web-security/mystery-lab-challenge",
     "/web-security/sql-injection",
     "/web-security/cross-site-scripting",
+    "/web-security/nosql-injection",
+    "/web-security/server-side-request-forgery-ssrf",
     "/web-security/authentication",
     "/web-security/access-control",
     "/web-security/learning-paths"
@@ -1647,6 +1653,65 @@ function extractPortswiggerAcademySeeds(html: string, pageUrl: string): string[]
   while ((m = linkRe.exec(html))) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Hack The Box marketing hub (hackthebox.com). */
+function extractHackTheBoxSeeds(html: string, pageUrl: string): string[] {
+  if (!/Hack The Box|hackthebox\.com|cyber readiness platform/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/", "/business/capture-the-flag", "/business/threat-hunting", "/business/cyber-range"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/(?:www\.)?hackthebox\.com\/[^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** HTB Academy training catalogue (academy.hackthebox.com). */
+function extractHackTheBoxAcademySeeds(html: string, pageUrl: string): string[] {
+  if (!/HTB Academy|academy\.hackthebox\.com|Cybersecurity Training/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/catalogue",
+    "/catalogue/paths",
+    "/preview/certifications",
+    "/academy-lab-relations",
+    "/faq",
+    "/news"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/academy\.hackthebox\.com\/[^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1]).toString());
     } catch {
       /* ignore */
     }
@@ -3045,6 +3110,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const portswiggerSeeds = extractPortswiggerAcademySeeds(home.body, home.finalUrl);
+  const hackTheBoxSeeds = extractHackTheBoxSeeds(home.body, home.finalUrl);
+  const hackTheBoxAcademySeeds = extractHackTheBoxAcademySeeds(home.body, home.finalUrl);
   const try2hackSeeds = extractTry2hackLevelSeeds(home.body, home.finalUrl);
   const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
   const securityShepherdSeeds = extractSecurityShepherdSeeds(home.body, home.finalUrl);
@@ -3139,6 +3206,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnerableAppSeeds,
       ...hacksplainingSeeds,
       ...portswiggerSeeds,
+      ...hackTheBoxSeeds,
+      ...hackTheBoxAcademySeeds,
       ...try2hackSeeds,
       ...unsecurePwaSeeds,
       ...securityShepherdSeeds,

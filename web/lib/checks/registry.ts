@@ -2552,6 +2552,18 @@ const CLIENT_PORTSWIGGER_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQLi UNION attack practitioner lab",
     re: /sql-injection\/union-attacks|UNION attack SQL injection/i
+  },
+  {
+    label: "All labs academy index",
+    re: /All labs\s*\|\s*Web Security Academy|web-security\/all-labs/i
+  },
+  {
+    label: "Mystery lab challenge",
+    re: /Mystery lab challenge|mystery-lab-challenge/i
+  },
+  {
+    label: "OWASP lab taxonomy anchors",
+    re: /web-security\/all-labs#(?:sql-injection|cross-site-scripting|server-side-request-forgery)/i
   }
 ];
 
@@ -4644,6 +4656,90 @@ const clientSideImmersiveLabsEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Immersive Labs hosts browser-based cyber resilience drills and hands-on security skill labs"
+    }
+  };
+};
+
+// --- Hack The Box CTF / cyber readiness platform (hackthebox.com) ---------------------
+const CLIENT_HACKTHEBOX_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cyber readiness platform tagline",
+    re: /leading cyber readiness platform for the agentic era/i
+  },
+  {
+    label: "Hands-on cybersecurity labs count",
+    re: /1,?500\+\s+hands-on cybersecurity labs/i
+  },
+  {
+    label: "CTF challenge platform link",
+    re: /ctf\.hackthebox\.com|Capture The Flag/i
+  },
+  {
+    label: "HTB Academy training link",
+    re: /academy\.hackthebox\.com|HTB Academy/i
+  },
+  {
+    label: "Penetration testing upskilling",
+    re: /battle-testing and upskilling both humans/i
+  }
+];
+
+const clientSideHackTheBoxEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKTHEBOX_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Hack The Box|hackthebox\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hack The Box hosts 1,500+ hands-on labs, CTF machines, and cyber readiness exercises for penetration testers"
+    }
+  };
+};
+
+// --- HTB Academy guided cybersecurity courses (academy.hackthebox.com) ----------------
+const CLIENT_HACKTHEBOX_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTB Academy site title",
+    re: /HTB Academy|Cybersecurity Training\s*:\s*HTB Academy/i
+  },
+  {
+    label: "Interactive guided training",
+    re: /guided and interactive cybersecurity training courses/i
+  },
+  {
+    label: "Hands-on exercises against real apps",
+    re: /hands-on exercises and labs made by Hack The Box|Interactive exercises against real-world applications/i
+  },
+  {
+    label: "Certified penetration testing paths",
+    re: /HTB Certified Penetration Testing|penetration testing specialist/i
+  },
+  {
+    label: "Academy module catalogue",
+    re: /academy\.hackthebox\.com\/catalogue|module-name|Academy x HTB Labs/i
+  }
+];
+
+const clientSideHackTheBoxAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKTHEBOX_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/academy\.hackthebox\.com|HTB Academy/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HTB Academy publishes guided modules covering web exploitation, penetration testing, and hands-on lab exercises"
     }
   };
 };
@@ -9417,6 +9513,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabWebForPentesterEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideImmersiveLabsEvidence,
+  clientSideHackTheBoxEvidence,
+  clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
