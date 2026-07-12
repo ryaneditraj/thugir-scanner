@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 874,
-  "total_findings": 3759,
+  "total_sites_scanned": 882,
+  "total_findings": 3797,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 397,
-  "discovery_findings": 2733,
+  "discovery_urls_added": 402,
+  "discovery_findings": 2771,
   "improvements_shipped": 318,
   "last_run": "2026-07-12T11:14:00.000Z",
   "last_run_summary": {
@@ -31,6 +31,8 @@
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
+      "pages_crawled": 1,
+      "probes_run": 269,
       "gap": [],
       "note": "Juice Shop 6/6 (8 findings) — no benchmark misses",
       "benchmark_recall": {
@@ -44,29 +46,36 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 17,
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 55,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Net-Force challenge platform, Brute Logic XSS Gym, CTFlearn Web4 SQLi lab",
+      "focus": "Brute Logic XSS Gym + CTFlearn Web4 + Net-Force validated; backlog TestSparker/DomGoat/GraphQLBook queue scans",
       "improvements_shipped_this_run": 3,
       "validated_targets": [
         "https://www.net-force.nl/hacktivity/",
         "https://x55.is/brutelogic/gym.php",
         "https://web.ctflearn.com/web4/"
+      ],
+      "new_urls_not_reached": [
+        "https://x55.is/brutelogic/xss.php",
+        "https://x55.is/brutelogic/knoxss.html"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "www.net-force.nl: Net-Force hacking challenge platform evidence (0→3 findings)",
       "x55.is/brutelogic/gym.php: Brute Logic XSS Gym innerHTML/eval sinks (0→10 findings)",
-      "web.ctflearn.com/web4: CTFlearn Web4 SQLi query disclosure (0→4 findings)"
+      "web.ctflearn.com/web4: CTFlearn Web4 SQLi query disclosure (0→4 findings)",
+      "angular.testsparker.com: 5 findings — AWS access key + hardcoded demo credentials",
+      "ssrf-defense-platform.onrender.com: 6 findings — SSRF admin panel evidence",
+      "api.graphqlbook.org: 5 findings — GraphQL introspection enabled",
+      "agentpwn.com: 5 findings — prompt-injection instructions + XSS sinks"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "www.mr-code.com/vulnerabilities: domain redirects to /lander — no challenge content reachable",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
+      "www.mr-code.com: domain parked — not a live vuln lab",
+      "x55.is/brutelogic/xss.php + knoxss.html: added at queue tail — not reached in 8-URL limit",
       "juice-shop.herokuapp.com: Heroku cold-start pass1 can miss xss,sensitive_data before retry"
     ]
   },
@@ -181,6 +190,13 @@
     "hack-yourself-first.azurewebsites.net": 7,
     "aspnet.testsparker.com": 5,
     "php.testsparker.com": 4,
-    "nextjs-cve-hackerone.vercel.app": 4
+    "nextjs-cve-hackerone.vercel.app": 4,
+    "angular.testsparker.com": 5,
+    "domgo.at/cxss/intro": 3,
+    "ssrf-defense-platform.onrender.com": 6,
+    "api.graphqlbook.org": 5,
+    "www.root-me.org": 4,
+    "www.hackthissite.org": 5,
+    "agentpwn.com": 5
   }
 }
