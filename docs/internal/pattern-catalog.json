@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T02:04:51.360Z",
-  "total": 238,
-  "uniqueSlugs": 238,
+  "generatedAt": "2026-07-12T03:08:06.586Z",
+  "total": 240,
+  "uniqueSlugs": 240,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 220,
+    "generic": 222,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 173,
+    "deep": 175,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Security misconfiguration": 18,
     "Information disclosure": 16,
     "Broken authentication": 12,
-    "Injection": 34,
-    "Cross-site scripting": 20,
+    "Injection": 35,
+    "Cross-site scripting": 21,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 14,
@@ -131,7 +131,9 @@
     "client-side-pc-parts-store-lab-evidence",
     "client-side-pentester-academy-lab-evidence",
     "client-side-pentesterlab-evidence",
+    "client-side-pentesterlab-sqli-exercise-evidence",
     "client-side-pentesterlab-web-for-pentester-evidence",
+    "client-side-pentesterlab-xss-exercise-evidence",
     "client-side-peruggia-evidence",
     "client-side-portswigger-academy-evidence",
     "client-side-prompt-injection-evidence",
