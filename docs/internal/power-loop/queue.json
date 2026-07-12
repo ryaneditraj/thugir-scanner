@@ -2012,7 +2012,32 @@
       "url": "https://web.ctflearn.com/web6/",
       "source": "CTFlearn Web6 — public web security challenge instance (CTFlearn web challenge series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://aigoat.app/",
+      "source": "AISecurityConsortium/AIGoat — open-source LLM security playground marketing + demo hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/",
+      "source": "OWASP Juice Shop staging Heroku — reliable 6/6 benchmark oracle fallback (power-loop memory)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://ctf.vercel.app/",
+      "source": "vercel-labs/capture-the-flag — AI-built vulnerable app CTF platform (GitHub README deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://fabraix.com/playground",
+      "source": "fabraix/playground — Show HN open-source AI agent red-team playground",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.xplat-demo.threatx.io/",
+      "source": "Damn Vulnerable GraphQL Application — ThreatX public xplat demo instance (awesome-vulnerable-apps)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T13:12:00.000Z"
+  "updated_at": "2026-07-12T14:05:00.000Z"
 }
