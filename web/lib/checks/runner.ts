@@ -584,6 +584,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSidePentesterlabWebForPentesterEvidence",
+  "clientSidePentesterlabSqliExerciseEvidence",
+  "clientSidePentesterlabXssExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
   "clientSideVulnexEvidence",
@@ -944,7 +946,15 @@ const PENTESTERLAB_EXERCISE_RE = /href\s*=\s*["'](\/exercises\/[a-z0-9_-]+)["']/
 function extractPentesterLabExerciseSeeds(html: string, origin: string): string[] {
   if (!/pentesterlab|700\+.*hands-on labs|Web for Pentester/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/exercises", "/exercises/web-for-pentester", "/exercises/web_for_pentester"]) {
+  for (const p of [
+    "/exercises",
+    "/exercises/web-for-pentester",
+    "/exercises/web_for_pentester",
+    "/exercises/sqli_01",
+    "/exercises/sqli-01",
+    "/exercises/xss_01",
+    "/exercises/xss-01"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {
@@ -1001,9 +1011,14 @@ function extractSecureflagOwaspSeeds(html: string, origin: string): string[] {
 
 /** Kontra application.security — free OWASP Top 10 web/API training hubs. */
 function extractKontraTrainingSeeds(html: string, origin: string): string[] {
-  if (!/application\.security|Kontra Application Security|OWASP Top 10 for API/i.test(html)) return [];
+  if (!/application\.security|Kontra Application Security|OWASP Top 10 for (?:API|Web)/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/free/owasp-top-10-API", "/free/owasp-top-10", "/free"]) {
+  for (const p of [
+    "/free/owasp-top-10-API",
+    "/free/owasp-top-10",
+    "/free-application-security-training/owasp-top-10-sql-injection",
+    "/free"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {

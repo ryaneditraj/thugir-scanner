@@ -4580,6 +4580,82 @@ const clientSidePentesterlabWebForPentesterEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab hosted SQL Injection 01 exercise (pentesterlab.com/exercises/sqli_01)
+const CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 01 course title",
+    re: /SQL Injection 01|PentesterLab:\s*SQL Injection 01/i
+  },
+  {
+    label: "Bypass login via SQL injection lab",
+    re: /bypass login pages by injecting SQL payloads|exploit improper input handling/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]01/i
+  }
+];
+
+const clientSidePentesterlabSqliExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 01 exercise documents login-bypass SQLi lab with injectable payloads"
+    }
+  };
+};
+
+// --- PentesterLab hosted XSS 01 exercise (pentesterlab.com/exercises/xss_01)
+const CLIENT_PENTESTERLAB_XSS_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 01 course title",
+    re: /XSS 01|PentesterLab:\s*XSS 01/i
+  },
+  {
+    label: "Alert-box XSS lab description",
+    re: /basics of Cross-Site Scripting \(XSS\)|creating an alert box using your unique identifier/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]01/i
+  }
+];
+
+const clientSidePentesterlabXssExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS_EXERCISE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 01 exercise documents reflected XSS lab with alert-box canary payloads"
+    }
+  };
+};
+
 // --- Kontra Application Security training (application.security) ----------------------
 const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
@@ -4591,8 +4667,20 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
     re: /OWASP Top 10 for API|KONTRA.s OWASP Top 10 for API/i
   },
   {
+    label: "OWASP Top 10 for Web free exercises",
+    re: /OWASP Top 10 for Web|owasp-top-10-sql-injection/i
+  },
+  {
     label: "Interactive API security training modules",
     re: /interactive application security training modules.*web API endpoints/i
+  },
+  {
+    label: "Interactive web security training modules",
+    re: /interactive application security training modules|developer security training of OWASP Top 10/i
+  },
+  {
+    label: "SQL injection training lab title",
+    re: /SQL Injection \| Kontra|owasp-top-10-sql-injection/i
   },
   {
     label: "Free exercises hub",
@@ -4617,7 +4705,7 @@ const clientSideKontraApplicationSecurityEvidence: Rule = async (ctx) => {
     confidence: hits.length >= 3 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Kontra publishes free interactive OWASP API Top 10 training modules for developer security education"
+      note: "Kontra publishes free interactive OWASP Top 10 for Web/API training modules including SQL injection labs"
     }
   };
 };
@@ -9595,6 +9683,8 @@ export const RULES: Record<string, Rule> = {
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSidePentesterlabWebForPentesterEvidence,
+  clientSidePentesterlabSqliExerciseEvidence,
+  clientSidePentesterlabXssExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideVulnexEvidence,
   clientSideSecureflagEvidence,
