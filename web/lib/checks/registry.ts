@@ -5060,6 +5060,82 @@ const clientSidePentesterlabXssExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab From SQL Injection to Shell exercise (pentesterlab.com/exercises/from_sqli_to_shell)
+const CLIENT_PENTESTERLAB_SQLI_TO_SHELL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "From SQL Injection to Shell course title",
+    re: /From SQL Injection to Shell|PentesterLab:\s*From SQL Injection to Shell/i
+  },
+  {
+    label: "SQLi to admin access and code execution chain",
+    re: /exploit these vulnerabilities to access administration pages and ultimately gain code execution/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"From SQL Injection to Shell"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/from[_-]sqli[_-]to[_-]shell/i
+  }
+];
+
+const clientSidePentesterlabSqliToShellEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI_TO_SHELL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab From SQL Injection to Shell exercise documents SQLi-to-RCE exploitation chain via admin pages"
+    }
+  };
+};
+
+// --- PentesterLab SSRF 01 exercise (pentesterlab.com/exercises/ssrf_01)
+const CLIENT_PENTESTERLAB_SSRF_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF 01 course title",
+    re: /Server Side Request Forgery 01|SSRF 01|PentesterLab:\s*Server Side Request Forgery/i
+  },
+  {
+    label: "Internal resource fetch via url parameter",
+    re: /access internal resources|retrieve content from a local server|modifying the <code>url<\/code> parameter/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Server Side Request Forgery 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/ssrf[_-]01/i
+  }
+];
+
+const clientSidePentesterlabSsrfExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SSRF_EXERCISE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SSRF 01 exercise documents server-side fetch of internal resources via url parameter"
+    }
+  };
+};
+
 // --- Kontra Application Security training (application.security) ----------------------
 const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
@@ -5085,6 +5161,14 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQL injection training lab title",
     re: /SQL Injection \| Kontra|owasp-top-10-sql-injection/i
+  },
+  {
+    label: "Command injection training lab title",
+    re: /Command Injection \| Kontra|owasp-top-10-command-injection/i
+  },
+  {
+    label: "Directory traversal training lab title",
+    re: /Directory Traversal \| Kontra|owasp-top-10-directory-traversal/i
   },
   {
     label: "OWASP Top 10 for LLM free exercises",
@@ -11383,6 +11467,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabWebForPentesterEvidence,
   clientSidePentesterlabSqliExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
+  clientSidePentesterlabSqliToShellEvidence,
+  clientSidePentesterlabSsrfExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideVulnexEvidence,
   clientSideSecureflagEvidence,

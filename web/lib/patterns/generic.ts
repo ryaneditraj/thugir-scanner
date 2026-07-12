@@ -1831,6 +1831,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-sqli-to-shell-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PentesterLab From SQL Injection to Shell exercise disclosed",
+    description:
+      "PentesterLab From SQL Injection to Shell exercise documents SQL injection exploitation chaining to admin access and remote code execution on the server.",
+    impactOneline:
+      "Public SQLi-to-RCE exercise reveals multi-step injection and post-exploitation patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSqliToShellEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab SQL or admin shells in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use parameterized queries and least-privilege DB accounts in production.",
+        "Isolate exercise infrastructure from production networks and admin panels."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab From SQL Injection to Shell-style multi-step labs. Show how to gate labs behind auth and prevent SQLi-to-RCE chains in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-ssrf-exercise-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "PentesterLab SSRF 01 exercise disclosed",
+    description:
+      "PentesterLab SSRF 01 hosted exercise documents server-side request forgery via url parameter to fetch internal resources on localhost.",
+    impactOneline:
+      "Public SSRF exercise instance reveals internal fetch patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSsrfExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; block internal URL fetches in production.",
+      steps: [
+        "Require authentication before serving SSRF exercise instances.",
+        "Denylist internal IPs and metadata endpoints in production URL fetchers.",
+        "Isolate exercise infrastructure from internal services."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SSRF 01-style internal fetch labs. Show how to gate labs behind auth and block SSRF in production URL handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-kontra-application-security-evidence",
     platform: "generic",
     category: "Broken access control",
