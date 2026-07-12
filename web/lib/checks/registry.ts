@@ -2608,6 +2608,14 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQL injection lesson title",
     re: /SQL Injection — Secure Coding Lesson|vulnerable to SQL Injection, attackers can run arbitrary commands/i
+  },
+  {
+    label: "Open redirect lesson module",
+    re: /\/lessons\/open-redirects|Open Redirects — Secure Coding Lesson/i
+  },
+  {
+    label: "Open redirect phishing lesson description",
+    re: /forwards to URLs supplied in a query string[\s\S]{0,80}phishing attacks/i
   }
 ];
 
@@ -5017,6 +5025,10 @@ const CLIENT_REDTIGER_HACKIT_RES: { label: string; re: RegExp }[] = [
     re: /Tablename:\s*level\d+_users/i
   },
   {
+    label: "RedTiger blind login-bypass level form",
+    re: /name="level\d+login"|level\d+login.*value="Login"/i
+  },
+  {
     label: "redtiger.labs host",
     re: /redtiger\.labs\.overthewire\.org/i
   }
@@ -5029,7 +5041,11 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/RedTiger|redtiger\.labs\.overthewire\.org|Welcome to level \d+/i.test(ctx.combined))
+  if (
+    !/RedTiger|redtiger\.labs\.overthewire\.org|Welcome to level \d+|level\d+login/i.test(
+      ctx.combined
+    )
+  )
     return NEGATIVE;
   return {
     fired: true,
