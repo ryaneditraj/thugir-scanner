@@ -622,6 +622,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopEvidence",
   "clientSideVulnforgeAcademyEvidence",
   "clientSideTegalsecLabEvidence",
+  "clientSideXvwaEvidence",
   "clientSideBugBountyHunterEvidence",
   "clientSideZeroHealthEvidence",
   "clientSideAlfXssWargameEvidence",
@@ -1421,6 +1422,19 @@ function extractStubRedirectTarget(html: string, pageUrl: string): string | null
       if (u.origin !== new URL(pageUrl).origin) return u.toString();
     } catch {
       /* ignore */
+    }
+  }
+  // Flask/Werkzeug stub pages: "You should be redirected automatically to … <a href="/auth/login">"
+  if (/redirecting/i.test(html)) {
+    const flask =
+      html.match(/redirected automatically[^<]*<a\s+href\s*=\s*["']([^"']+)["']/i) ??
+      html.match(/<a\s+href\s*=\s*["']([^"']+)["'][^>]*>[^<]*<\/a>\s*\.?\s*If not, click/i);
+    if (flask?.[1]) {
+      try {
+        return new URL(flask[1].trim(), pageUrl).toString();
+      } catch {
+        /* ignore */
+      }
     }
   }
   return null;
@@ -2918,6 +2932,46 @@ function extractWrongSecretsChallengeSeeds(html: string, origin: string): string
   return [...out];
 }
 
+/** XVWA (xvwa.vercel.app) — sidepanel lists 15+ attack modules under /xvwa/vulnerabilities/. */
+const XVWA_VULN_MODULES = [
+  "sqli",
+  "sqli_blind",
+  "cmdi",
+  "xpath",
+  "reflected_xss",
+  "stored_xss",
+  "dom_xss",
+  "ssrf_xspa",
+  "fi",
+  "idor",
+  "csrf",
+  "ssti",
+  "sessionflaws",
+  "missfunc",
+  "redirect"
+];
+
+function extractXvwaVulnSeeds(html: string, origin: string): string[] {
+  if (!/XVWA|Xtreme Vulnerable Web Application/i.test(html)) return [];
+  const out = new Set<string>();
+  const basePath = /\/xvwa\//i.test(html) ? "/xvwa" : "";
+  for (const mod of XVWA_VULN_MODULES) {
+    try {
+      out.add(new URL(`${basePath}/vulnerabilities/${mod}/`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const p of ["/instruction.php", "/sidepanel.php", "/about.html"]) {
+    try {
+      out.add(new URL(`${basePath}${p}`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** DVWA deploys (e.g. dvwa.vercel.app) may serve raw PHP source under vulnerabilities/…/source/. */
 const DVWA_VULN_MODULES = [
   "sqli",
@@ -3278,6 +3332,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     crawlOrigin
   );
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
+  const xvwaSeeds = extractXvwaVulnSeeds(home.body, origin);
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
@@ -3368,6 +3423,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...wrongSecretsSeeds,
       ...sectrainerSeeds,
       ...dvwaSeeds,
+      ...xvwaSeeds,
       ...sitemapSeeds,
       ...spaRoutes,
       ...internalLinks(home.body, home.finalUrl, (DEEP_MAX_PAGES - 1) * 8),

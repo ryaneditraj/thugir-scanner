@@ -218,22 +218,55 @@ const permissiveCors: Rule = async (ctx) => {
 // --- CORS reflects arbitrary Origin (worse than *) ----------------------------
 // Some misconfigs echo whatever Origin the browser sends — any site can read credentialed API
 // responses. We probe with a fake origin and only fire when it is reflected back.
-const corsReflectOrigin: Rule = async (ctx) => {
-  const homeAcao = (ctx.home.headers["access-control-allow-origin"] || "").trim();
-  if (homeAcao === "*") return NEGATIVE;
-  const probeOrigin = "https://evil-cors-probe.example";
-  const doc = await ctx.probe.get(ctx.origin, {
+const CORS_REFLECT_API_FALLBACKS = ["/api/profile", "/api/user", "/api/me", "/api/account"];
+
+async function probeCorsOriginReflection(
+  probe: RuleContext["probe"],
+  url: string,
+  probeOrigin: string
+): Promise<{ allowOrigin: string; allowCredentials: boolean; path: string } | null> {
+  const doc = await probe.get(url, {
     maxBytes: 512,
     headers: { Origin: probeOrigin }
   });
   const acao = (doc.headers["access-control-allow-origin"] || "").trim();
-  if (acao !== probeOrigin) return NEGATIVE;
+  if (acao !== probeOrigin) return null;
   const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
-  return {
-    fired: true,
-    confidence: creds ? 0.95 : 0.88,
-    evidence: { allowOrigin: acao, allowCredentials: creds, note: "reflects arbitrary Origin header" }
-  };
+  let path = "/";
+  try {
+    path = new URL(url).pathname || "/";
+  } catch {
+    /* ignore */
+  }
+  return { allowOrigin: acao, allowCredentials: creds, path };
+}
+
+const corsReflectOrigin: Rule = async (ctx) => {
+  const homeAcao = (ctx.home.headers["access-control-allow-origin"] || "").trim();
+  if (homeAcao === "*") return NEGATIVE;
+  const probeOrigin = "https://evil-cors-probe.example";
+  const probePaths = new Set<string>(CORS_REFLECT_API_FALLBACKS);
+  for (const m of ctx.combined.matchAll(/["'](\/api\/[a-zA-Z0-9_-]+)["']/g)) {
+    if (probePaths.size >= 10) break;
+    probePaths.add(m[1]);
+  }
+
+  const candidates = [ctx.origin, ...[...probePaths].map((p) => new URL(p, ctx.origin).toString())];
+  for (const url of candidates) {
+    const hit = await probeCorsOriginReflection(ctx.probe, url, probeOrigin);
+    if (!hit) continue;
+    return {
+      fired: true,
+      confidence: hit.allowCredentials ? 0.95 : 0.88,
+      evidence: {
+        allowOrigin: hit.allowOrigin,
+        allowCredentials: hit.allowCredentials,
+        path: hit.path,
+        note: "reflects arbitrary Origin header"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 // --- Open redirect via query parameter (read-only GET, redirect: manual) -------
@@ -7200,6 +7233,52 @@ const clientSideTegalsecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- XVWA (Xtreme Vulnerable Web Application) ------------------------------------
+const CLIENT_XVWA_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XVWA title",
+    re: /XVWA[\s\S]{0,60}Xtreme Vulnerable Web Application/i
+  },
+  {
+    label: "Intentionally vulnerable design",
+    re: /intentionally designed with many security flaws/i
+  },
+  {
+    label: "SQL Injection attack module",
+    re: /vulnerabilities\/sqli(?:_blind)?/i
+  },
+  {
+    label: "SSRF / XSPA attack module",
+    re: /vulnerabilities\/ssrf_xspa/i
+  },
+  {
+    label: "Server Side Template Injection module",
+    re: /vulnerabilities\/ssti/i
+  },
+  {
+    label: "IDOR attack module",
+    re: /vulnerabilities\/idor/i
+  }
+];
+
+const clientSideXvwaEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XVWA_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/XVWA|Xtreme Vulnerable Web Application/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "XVWA documents 15+ deliberately vulnerable attack modules (SQLi, XSS, SSRF, IDOR, SSTI, CSRF)"
+    }
+  };
+};
+
 // --- Cyber Drill interactive security suite (thecyberdrill.netlify.app) ---------------
 const CLIENT_CYBERDRILL_RES: { label: string; re: RegExp }[] = [
   {
@@ -9834,6 +9913,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopEvidence,
   clientSideVulnforgeAcademyEvidence,
   clientSideTegalsecLabEvidence,
+  clientSideXvwaEvidence,
   clientSideBugBountyHunterEvidence,
   clientSideZeroHealthEvidence,
   clientSideAlfXssWargameEvidence,
