@@ -2045,6 +2045,18 @@
       "slug": "hacksplaining-open-redirect-lesson",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lessons/open-redirects/start title Open Redirects — Secure Coding Lesson + meta forwards to URLs supplied in a query string phishing attacks; extractHacksplainingLessonSeeds + CLIENT_HACKSPLAINING_RES markers; Vercel Security Checkpoint may block cloud scans — benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bug-collection.vercel.app",
+      "slug": "client-side-bug-collection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title BUG Collection + meta keywords vulnerable, nextjs, application, security + PrototypePollution_code in bundle + bug-collection.vercel.app/api baseURL; extractBugCollectionSeeds crawls /login /signup /dashboard; bug-collection.vercel.app findings 0→5; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-ssrf-dirtraversal-bac-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Directory Traversal — Secure Coding Lesson + SSRF probe your internal network + Broken Access Control lesson titles; CLIENT_HACKSPLAINING_RES + extractHacksplainingLessonSeeds seeds /lessons/directory-traversal|ssrf|broken-access-control/start; lesson URLs findings 0→4 each; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3732,6 +3744,16 @@
       "source": "discovery:hacksplaining.com",
       "slug": "hacksplaining-open-redirect-lesson",
       "shipped_at": "2026-07-12T18:08:00.000Z"
+    },
+    {
+      "source": "discovery:bug-collection.vercel.app",
+      "slug": "client-side-bug-collection-evidence",
+      "shipped_at": "2026-07-12T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-ssrf-dirtraversal-bac-lessons",
+      "shipped_at": "2026-07-12T19:10:00.000Z"
     }
   ]
 }
