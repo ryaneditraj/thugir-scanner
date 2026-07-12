@@ -159,9 +159,12 @@
     "todoer.site": 5,
     "hackmyvm.eu": 4,
     "web-production-6e47f.up.railway.app": 5,
+<<<<<<< HEAD
     "nimbusvault.app": 4,
     "securebank-blog.vercel.app": 6,
     "swarnadip-kar.github.io/xss-victim": 4,
+=======
+>>>>>>> fdfa3b7 (power-scan: benchmark + 5 discovery, 30 findings [08 UTC])
     "webexp05.vercel.app": 6,
     "avid-vuln-editor.vercel.app": 4,
     "dvai.vercel.app": 4,
