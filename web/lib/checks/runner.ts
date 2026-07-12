@@ -988,7 +988,11 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/sqli_01",
     "/exercises/sqli-01",
     "/exercises/xss_01",
-    "/exercises/xss-01"
+    "/exercises/xss-01",
+    "/exercises/from_sqli_to_shell",
+    "/exercises/from-sqli-to-shell",
+    "/exercises/ssrf_01",
+    "/exercises/ssrf-01"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1054,6 +1058,8 @@ function extractKontraTrainingSeeds(html: string, origin: string): string[] {
     "/free/llm",
     "/free/llm/prompt-injection",
     "/free-application-security-training/owasp-top-10-sql-injection",
+    "/free-application-security-training/owasp-top-10-command-injection",
+    "/free-application-security-training/owasp-top-10-directory-traversal",
     "/free"
   ]) {
     try {
