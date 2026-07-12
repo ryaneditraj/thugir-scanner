@@ -7389,6 +7389,132 @@ const clientSideHackmyvmEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- XSS victim bank demo (paired with xss-attacker C2 collector labs) ---------------
+const CLIENT_XSS_VICTIM_BANK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS victim bank demo HTML comment",
+    re: /XSS DEMO[\s\S]{0,120}victim\.html/i
+  },
+  {
+    label: "Session cookie set at login for theft lab",
+    re: /session cookie set at login|getUsernameFromCookie|session=([^;]+)/i
+  },
+  {
+    label: "Attacker sends crafted URL separately",
+    re: /attacker sends the crafted URL|attacker sends crafted URL/i
+  },
+  {
+    label: "SecureBank victim banking homepage",
+    re: /SecureBank[\s\S]{0,40}Personal Banking|Secure<span>Bank/i
+  },
+  {
+    label: "Victim search page reads session from cookie",
+    re: /READ USERNAME FROM SESSION COOKIE|victim\.html[\s\S]{0,80}session cookie/i
+  }
+];
+
+const clientSideXssVictimBankEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XSS_VICTIM_BANK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/xss-victim|SecureBank|victim\.html/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "XSS victim bank demo documents session-cookie theft via attacker-crafted URLs on victim.html search page"
+    }
+  };
+};
+
+// --- Nimbus Vault bug-bounty knowledge platform (nimbusvault.app) -------------------
+const CLIENT_NIMBUS_VAULT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Nimbus Vault ethical hackers platform",
+    re: /Nimbus Vault[\s\S]{0,60}Ethical Hackers|Ethical Hackers['\u2019] Notebook/i
+  },
+  {
+    label: "CAVET vulnerability enumeration methodology",
+    re: /CAVET[\s\S]{0,40}Component Analysis[\s\S]{0,40}Vulnerability Enumeration/i
+  },
+  {
+    label: "Nexus Engine attack path surfacing",
+    re: /Nexus Engine[\s\S]{0,80}attack path|Nexus Engine cross-references/i
+  },
+  {
+    label: "Bug bounty hunter target platform",
+    re: /Bug bounty hunters, pentesters|knowledge infrastructure for ethical hackers/i
+  },
+  {
+    label: "nimbusvault.app deploy",
+    re: /nimbusvault\.app/i
+  }
+];
+
+const clientSideNimbusVaultEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NIMBUS_VAULT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Nimbus Vault|nimbusvault\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Nimbus Vault publishes CAVET-based bug bounty playbooks and attack-path reasoning for ethical hackers"
+    }
+  };
+};
+
+// --- SecureBank FAST-NUCES attack/secure mode educational blog ----------------------
+const CLIENT_SECUREBANK_BLOG_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SecureBank attack lab semester project",
+    re: /SecureBank[\s\S]{0,40}Attack Lab|banking app that Hacks/i
+  },
+  {
+    label: "Attack Mode vs Secure Mode toggle",
+    re: /Attack Mode[\s\S]{0,80}Secure Mode|turns all the defenses off/i
+  },
+  {
+    label: "Live SQL injection XSS CSRF walkthrough",
+    re: /SQL injection, XSS, CSRF[\s\S]{0,40}happening live|Attack 1: SQL Injection/i
+  },
+  {
+    label: "FAST-NUCES security project blog",
+    re: /FAST-NUCES|Information Security semester project/i
+  },
+  {
+    label: "Insecure SQL string concatenation demo",
+    re: /Attack mode — dangerous|directly pasting your input into the SQL string/i
+  }
+];
+
+const clientSideSecurebankBlogEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECUREBANK_BLOG_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/SecureBank|securebank-blog/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SecureBank educational blog documents live Attack Mode SQLi/XSS/CSRF demos with insecure vs secure code comparisons"
+    }
+  };
+};
+
 // --- Cyber Drill interactive security suite (thecyberdrill.netlify.app) ---------------
 const CLIENT_CYBERDRILL_RES: { label: string; re: RegExp }[] = [
   {
@@ -10026,6 +10152,9 @@ export const RULES: Record<string, Rule> = {
   clientSideXvwaEvidence,
   clientSideOpenRedirectEvidence,
   clientSideHackmyvmEvidence,
+  clientSideXssVictimBankEvidence,
+  clientSideNimbusVaultEvidence,
+  clientSideSecurebankBlogEvidence,
   clientSideBugBountyHunterEvidence,
   clientSideZeroHealthEvidence,
   clientSideAlfXssWargameEvidence,
