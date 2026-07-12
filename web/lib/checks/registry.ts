@@ -4622,6 +4622,90 @@ const clientSideKontraApplicationSecurityEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VULNEX web hacking playbook (vulnex.vercel.app) ----------------------------------
+const CLIENT_VULNEX_PLAYBOOK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VULNEX web hacking playbook branding",
+    re: /VULNEX(?:\s*[—-]\s*Web Hacking Playbook)?/i
+  },
+  {
+    label: "Bug hunter payload platform",
+    re: /security researchers and bug hunters|ultimate hacking playbook for security researchers/i
+  },
+  {
+    label: "Ready-to-use payloads and exploitation techniques",
+    re: /Ready-to-use payloads, exploitation techniques|Payloads, techniques, and tools/i
+  },
+  {
+    label: "Practical security tools and checklists",
+    re: /practical tools, and quick checklists|exploitation techniques, practical tools/i
+  },
+  {
+    label: "VULNEX WebApplication JSON-LD",
+    re: /"@type"\s*:\s*"WebApplication"[\s\S]{0,120}"name"\s*:\s*"VULNEX"/i
+  }
+];
+
+const clientSideVulnexEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNEX_PLAYBOOK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VULNEX|vulnex\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VULNEX publishes OWASP-aligned payloads, exploitation techniques, and checklists for bug hunters"
+    }
+  };
+};
+
+// --- SecureFlag hands-on secure coding labs (secureflag.com) --------------------------
+const CLIENT_SECUREFLAG_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SecureFlag hands-on secure coding training",
+    re: /SecureFlag:\s*Hands-On Secure Coding Training|Hands-On Secure Coding Training/i
+  },
+  {
+    label: "SecureFlag OWASP partnership",
+    re: /SecureFlag and OWASP have partnered|SecureFlag x OWASP/i
+  },
+  {
+    label: "Reserved SecureFlag platform instance",
+    re: /reserved instance of the SecureFlag platform|invitation code for SecureFlag membership/i
+  },
+  {
+    label: "Browser-based security labs navigation",
+    re: /routerlink="\/labs"|href="\/labs">Labs|secureflag\.com\/labs/i
+  },
+  {
+    label: "OWASP member email signup",
+    re: /OWASP email|firstname\.lastname@owasp\.org/i
+  }
+];
+
+const clientSideSecureflagEvidence: Rule = async (ctx) => {
+  if (!/secureflag\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECUREFLAG_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SecureFlag hosts browser-based OWASP Top 10 secure coding labs via OWASP member partnership"
+    }
+  };
+};
+
 // --- Immersive Labs cyber resilience platform (immersivelabs.com) ---------------------
 const CLIENT_IMMERSIVE_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -9512,6 +9596,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterLabEvidence,
   clientSidePentesterlabWebForPentesterEvidence,
   clientSideKontraApplicationSecurityEvidence,
+  clientSideVulnexEvidence,
+  clientSideSecureflagEvidence,
   clientSideImmersiveLabsEvidence,
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,
