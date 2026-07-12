@@ -1912,7 +1912,32 @@
       "url": "https://microcorruption.com/",
       "source": "Microcorruption — browser-based embedded security CTF with intentional vulns (Show HN / wargame)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://krypton0.krypton.labs.overthewire.org/",
+      "source": "OverTheWire Krypton — crypto/web-security wargame level 0 (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://narnia0.narnia.labs.overthewire.org/",
+      "source": "OverTheWire Narnia — setuid/binary exploitation wargame level 0 (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://behemoth0.behemoth.labs.overthewire.org/",
+      "source": "OverTheWire Behemoth — binary exploitation wargame level 0 (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vortex0.vortex.labs.overthewire.org/",
+      "source": "OverTheWire Vortex — shellcode/binary wargame level 0 (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://manpage0.manpage.labs.overthewire.org/",
+      "source": "OverTheWire Manpage — Unix privilege escalation wargame level 0 (awesome-vulnerable-apps)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T07:05:00.000Z"
+  "updated_at": "2026-07-12T08:45:00.000Z"
 }
