@@ -1727,7 +1727,32 @@
       "url": "https://www.overthewire.org/wargames/natas/",
       "source": "OverTheWire Natas wargame index — public web security challenge series entry (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.tryhackme.com/",
+      "source": "TryHackMe — public browser-based cybersecurity training platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger.net/web-security/all-labs",
+      "source": "PortSwigger Web Security Academy — free OWASP-aligned browser lab index (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://academy.hackthebox.com/",
+      "source": "Hack The Box Academy — public web security training and guided labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthebox.com/",
+      "source": "Hack The Box — public CTF and penetration testing challenge platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://0xk4b1r.vercel.app/",
+      "source": "0xk4b1r VulneraShop — intentionally vulnerable full-stack OWASP Top 10 practice app (Vercel OSS deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-11T23:35:00.000Z"
+  "updated_at": "2026-07-12T00:45:00.000Z"
 }
