@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T00:35:56.232Z",
-  "total": 234,
-  "uniqueSlugs": 234,
+  "generatedAt": "2026-07-12T01:03:51.281Z",
+  "total": 236,
+  "uniqueSlugs": 236,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 216,
+    "generic": 218,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 169,
+    "deep": 171,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 76,
+    "Broken access control": 78,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -98,6 +98,8 @@
     "client-side-hacking-lab-evidence",
     "client-side-hackinghub-evidence",
     "client-side-hacksplaining-evidence",
+    "client-side-hackthebox-academy-evidence",
+    "client-side-hackthebox-evidence",
     "client-side-hackthissite-evidence",
     "client-side-idor-evidence",
     "client-side-immersive-labs-evidence",
