@@ -5093,6 +5093,90 @@ const clientSideBrutelogicXssGymEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Brute Logic XSS Test Page (x55.is/brutelogic/xss.php) ------------------------
+const CLIENT_BRUTELOGIC_XSS_TEST_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Test Page title",
+    re: /XSS Test Page by Brute Logic/i
+  },
+  {
+    label: "11 URL parameter XSS cases",
+    re: /XSS in 11 URL parameters/i
+  },
+  {
+    label: "Inline HTMLi form fields",
+    re: /Inline HTMLi \(Double Quotes\)|Inline HTMLi \(Single Quotes\)/i
+  },
+  {
+    label: "HTMLi in JS block markers",
+    re: /HTMLi in Js Block|Simple Js Injection/i
+  },
+  {
+    label: "brutelogic xss.php route",
+    re: /brutelogic\/xss\.php|name=["']b[1-6]["']/i
+  }
+];
+
+const clientSideBrutelogicXssTestPageEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BRUTELOGIC_XSS_TEST_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/XSS Test|brutelogic\/xss\.php|x55\.is/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Brute Logic XSS Test Page reflects 11 URL/form parameters (a, b1–b6, c1–c6) for HTML and JS injection calibration"
+    }
+  };
+};
+
+// --- Brute Logic KNOXSS add-on test hub (x55.is/brutelogic/knoxss.html) -------------
+const CLIENT_KNOXSS_TEST_PAGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "KNOXSS add-on test page title",
+    re: /KNOXSS Add-on Test Page/i
+  },
+  {
+    label: "Source-based XSS test catalog",
+    re: /Source-Based XSS Test Cases/i
+  },
+  {
+    label: "DOM-based XSS test catalog",
+    re: /DOM-based XSS Test Cases/i
+  },
+  {
+    label: "Blind XSS test case section",
+    re: /Blind XSS Test Case/i
+  },
+  {
+    label: "xss.php case links",
+    re: /Case 0[1-9] - .* \(a\)|href=["']\/xss\.php/i
+  }
+];
+
+const clientSideKnoxssTestPageEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_KNOXSS_TEST_PAGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/KNOXSS|knoxss\.html|brutelogic/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "KNOXSS test hub links 29+ reflected/DOM/blind XSS cases across xss.php, multi/, dom/, and blind/ paths"
+    }
+  };
+};
+
 // --- CTFlearn Web4 SQLi challenge (web.ctflearn.com/web4) ---------------------------
 const CLIENT_CTFLEARN_WEBFOUR_RES: { label: string; re: RegExp }[] = [
   {
@@ -10493,6 +10577,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
   clientSideBrutelogicXssGymEvidence,
+  clientSideBrutelogicXssTestPageEvidence,
+  clientSideKnoxssTestPageEvidence,
   clientSideCtflearnWebfourEvidence,
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,

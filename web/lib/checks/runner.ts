@@ -596,6 +596,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
   "clientSideBrutelogicXssGymEvidence",
+  "clientSideBrutelogicXssTestPageEvidence",
+  "clientSideKnoxssTestPageEvidence",
   "clientSideCtflearnWebfourEvidence",
   "clientSideHackTheBoxEvidence",
   "clientSideHackTheBoxAcademyEvidence",
@@ -2389,11 +2391,11 @@ function extractNetForceChallengeSeeds(html: string, pageUrl: string): string[] 
   return [...out];
 }
 
-/** Brute Logic XSS Gym — seed gym.php from knoxss or x55.is pages. */
+/** Brute Logic XSS labs — seed gym.php, knoxss hub, xss.php, and linked challenge paths. */
 function extractBrutelogicXssGymSeeds(html: string, pageUrl: string): string[] {
-  if (!/Brute Logic|brutelogic|knoxss|XSS Gym/i.test(html)) return [];
+  if (!/Brute Logic|brutelogic|knoxss|XSS Gym|XSS Test/i.test(html)) return [];
   const out = new Set<string>();
-  const linkRe = /href\s*=\s*["']([^"']*brutelogic\/gym\.php[^"']*)["']/gi;
+  const linkRe = /href\s*=\s*["']([^"']*(?:brutelogic\/gym\.php|brutelogic\/xss\.php|brutelogic\/knoxss\.html|\/xss\.php|\/dom\/|\/multi\/|\/blind\/)[^"']*)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
@@ -2403,10 +2405,19 @@ function extractBrutelogicXssGymSeeds(html: string, pageUrl: string): string[] {
     }
   }
   if (/x55\.is|brutelogic\.com\.br/i.test(pageUrl)) {
-    try {
-      out.add(new URL("/brutelogic/gym.php", pageUrl).toString());
-    } catch {
-      /* ignore */
+    for (const p of [
+      "/brutelogic/gym.php",
+      "/brutelogic/xss.php",
+      "/brutelogic/knoxss.html",
+      "/xss.php?a=1",
+      "/dom/sinks.html?name=probe",
+      "/multi/double-html.php?p=1"
+    ]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   return [...out];
