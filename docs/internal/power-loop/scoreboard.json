@@ -12,7 +12,10 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ]
+      ],
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 8,
+      "oracle_recall": "6/6"
     }
   },
   "total_sites_scanned": 811,
@@ -22,7 +25,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 361,
   "discovery_findings": 2482,
-  "improvements_shipped": 288,
+  "improvements_shipped": 291,
   "last_run": "2026-07-12T02:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "02:00",
@@ -61,7 +64,7 @@
         "http://testhtml5.vulnweb.com/"
       ],
       "focus": "Kontra web/SQLi + PentesterLab sqli/xss + DVWU queued; queue-head alf.nu/LLM labs rescanned",
-      "improvements_shipped_this_run": 0,
+      "improvements_shipped_this_run": 3,
       "urls_not_reached": [
         "https://application.security/free/owasp-top-10",
         "https://application.security/free-application-security-training/owasp-top-10-sql-injection",
@@ -85,7 +88,8 @@
       "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo blocks queue head slot each run",
       "vulnerable-graphql-lab.railway.app: 1 finding only — GraphQL introspection/SQLi oracles need deeper API probes",
       "New Kontra/PentesterLab/DVWU URLs appended but not reached in 8-URL limit",
-      "intercode-benchmark.github.io: static GitHub Pages index — challenge instances require separate deploy links"
+      "print.alf.nu: DNS Unknown Host — archive-only; alf.nu parent has ServiceWorker lab markers",
+      "www.root-me.org/en/Challenges/Web-Server/: Anubis bot-wall blocks cloud scanner UA"
     ]
   },
   "discovery_highlights": {
@@ -96,6 +100,8 @@
     "hack-this-site-eta.vercel.app": 12,
     "pentesterlab.com": 5,
     "juice-shop.herokuapp.com": 8,
+    "vulnex.vercel.app": 4,
+    "www.secureflag.com": 3,
     "demo.owasp-juice.shop": 8,
     "juice-shop-staging.herokuapp.com": 7,
     "nodegoat-websec.herokuapp.com": 6,

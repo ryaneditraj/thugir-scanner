@@ -1858,6 +1858,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnex-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VULNEX web hacking playbook disclosed",
+    description:
+      "VULNEX publishes ready-to-use payloads, exploitation techniques, and checklists for security researchers and bug hunters.",
+    impactOneline:
+      "Public payload playbooks document OWASP-aligned injection and exploitation patterns attackers reuse against real targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnexEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Payload libraries are reference material — never deploy copy-pasted exploit strings to production apps.",
+      steps: [
+        "Use payload playbooks only in authorized lab environments.",
+        "Patch vulnerabilities matching playbook categories in production code.",
+        "Monitor for exploitation signatures documented in public payload libraries."
+      ]
+    },
+    fixPrompt:
+      "We host a VULNEX-style payload playbook. Show how to keep exploit references out of production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-secureflag-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SecureFlag OWASP secure coding labs disclosed",
+    description:
+      "SecureFlag partners with OWASP to offer browser-based hands-on secure coding training labs and vulnerability exercises.",
+    impactOneline:
+      "Public SecureFlag hubs document OWASP Top 10 lab instances used to calibrate scanners against training environments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecureflagEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureFlag labs are intentional training — gate lab VMs behind OWASP member authentication.",
+      steps: [
+        "Require OWASP email verification before launching lab instances.",
+        "Isolate SecureFlag-style training environments from production networks.",
+        "Never reuse lab-vulnerable code patterns in production applications."
+      ]
+    },
+    fixPrompt:
+      "We host SecureFlag-style OWASP training labs. Show how to gate lab access behind member auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-evidence",
     platform: "generic",
     category: "Broken access control",

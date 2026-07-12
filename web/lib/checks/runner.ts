@@ -586,6 +586,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabWebForPentesterEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
+  "clientSideVulnexEvidence",
+  "clientSideSecureflagEvidence",
   "clientSideImmersiveLabsEvidence",
   "clientSideHackTheBoxEvidence",
   "clientSideHackTheBoxAcademyEvidence",
@@ -953,6 +955,43 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
   while ((m = PENTESTERLAB_EXERCISE_RE.exec(html))) {
     try {
       out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VULNEX playbook — sitemap lists vulnerability/payload taxonomy pages. */
+function extractVulnexPlaybookSeeds(html: string, origin: string): string[] {
+  if (!/VULNEX|vulnex\.vercel\.app|Web Hacking Playbook/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/vulnerabilities", "/methods", "/recon", "/all", "/tech-specific", "/cloud"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const re = /<loc>(https?:\/\/[^<]*vulnex[^<]*\/[a-z0-9/-]+)<\/loc>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(m[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** SecureFlag — owasp.html meta-refresh lands on /owasp OWASP member labs hub. */
+function extractSecureflagOwaspSeeds(html: string, origin: string): string[] {
+  if (!/secureflag\.com|SecureFlag|Hands-On Secure Coding Training/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/owasp", "/owasp.html", "/labs", "/training"]) {
+    try {
+      out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
@@ -3135,6 +3174,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     crawlOrigin
   );
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
+  const vulnexPlaybookSeeds = extractVulnexPlaybookSeeds(home.body, origin);
+  const secureflagOwaspSeeds = extractSecureflagOwaspSeeds(home.body, origin);
   const kontraTrainingSeeds = extractKontraTrainingSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
@@ -3223,6 +3264,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hackableSoSeeds,
       ...vulnwebSeeds,
       ...pentesterLabSeeds,
+      ...vulnexPlaybookSeeds,
+      ...secureflagOwaspSeeds,
       ...kontraTrainingSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
