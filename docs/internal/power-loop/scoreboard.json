@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T20:03:09.362Z",
+  "updated_at": "2026-07-12T20:07:58.669Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 944,
-  "total_findings": 4108,
+  "total_sites_scanned": 951,
+  "total_findings": 4147,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 442,
-  "discovery_findings": 3013,
+  "discovery_urls_added": 447,
+  "discovery_findings": 3052,
   "improvements_shipped": 339,
-  "last_run": "2026-07-12T20:03:09.362Z",
+  "last_run": "2026-07-12T20:07:58.669Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
@@ -52,35 +52,46 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 5,
-      "findings": 21,
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 39,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "Queued tail URLs validated: bug-collection, escape L5, Hacksplaining directory-traversal/ssrf/broken-access-control",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "focus": "Queue head rescans after 48h; +5 new fly.dev/Hacksplaining discovery URLs",
       "validated_targets": [
-        "bug-collection.vercel.app (5 findings — OWASP Top 10 Next.js training app)",
-        "escape.alf.nu/level5 (3 findings — alf.nu XSS wargame, existing seeds)",
-        "hacksplaining.com/lessons/directory-traversal (4 findings)",
-        "hacksplaining.com/lessons/ssrf (4 findings)",
-        "hacksplaining.com/lessons/broken-access-control (4 findings)"
+        "demo.testfire.net (6 findings — reflected XSS + unauthenticated admin)",
+        "brokencrystals.com (15 findings — .env/.git + GraphQL introspection)",
+        "cyberscavengerhunt.com (6 findings)",
+        "pentesteracademylab.appspot.com (2 findings)",
+        "ctflearn.com (3 findings)",
+        "hacking-lab.com/events (3 findings)",
+        "natas0.natas.labs.overthewire.org (4 findings)"
       ],
       "queued_not_reached": [
-        "escape.alf.nu/level6–10 (newly added to queue)"
+        "zen-demo-java.fly.dev",
+        "attp-live.fly.dev",
+        "hacksplaining.com/lessons/xml-external-entities",
+        "hacksplaining.com/lessons/command-injection",
+        "hacksplaining.com/lessons/server-side-template-injection",
+        "bug-collection.vercel.app",
+        "escape.alf.nu/level5–10"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "bug-collection.vercel.app: 5 findings — BUG Collection OWASP Top 10 training app (new slug)",
-      "hacksplaining.com lessons: directory-traversal/ssrf/broken-access-control each 4 findings",
-      "escape.alf.nu/level5: 3 findings — alf-xss-wargame evidence via existing level seeds"
+      "brokencrystals.com: 15 findings — exposed .env, .git, GraphQL introspection, XXE evidence",
+      "demo.testfire.net: 6 findings — reflected XSS + unauthenticated admin endpoint",
+      "natas0.natas.labs.overthewire.org: 4 findings — OverTheWire Natas referer-bypass evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hacksplaining.com: lesson content loads client-side — static HTML markers only",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
+      "escape.alf.nu/level5–10: same-origin 48h skip after escape.alf.nu root scan",
+      "zen-demo-java.fly.dev / attp-live.fly.dev: queued at tail — not reached within 8-URL limit"
     ],
-    "improvements_shipped_this_run": 2
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -242,6 +253,8 @@
     "bug-collection.vercel.app": 5,
     "hacksplaining.com/lessons/directory-traversal": 4,
     "hacksplaining.com/lessons/ssrf": 4,
-    "hacksplaining.com/lessons/broken-access-control": 4
+    "hacksplaining.com/lessons/broken-access-control": 4,
+    "pentesteracademylab.appspot.com": 2,
+    "hacking-lab.com/events": 3
   }
 }
