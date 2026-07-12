@@ -2820,6 +2820,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-open-redirect-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Client-side open redirect validation documented in bundle",
+    description:
+      "Login or OAuth flows validate ?next= redirects client-side via /api/auth/validate-redirect while URLSearchParams reads only the first duplicate parameter — HTTP-parameter pollution can bypass allow-lists.",
+    impactOneline:
+      "Post-auth redirects can send users to attacker-controlled URLs when validation inspects a different next= value than the one used for navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOpenRedirectEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets server-side with a single canonical next parameter and an allow-list of same-origin paths.",
+      steps: [
+        "Reject protocol-relative URLs (//evil.com) and off-origin hosts in redirect handlers.",
+        "Parse only the last (or only) next= parameter server-side — never trust client-side validation alone.",
+        "Use signed redirect tokens instead of raw URL parameters after login."
+      ]
+    },
+    fixPrompt:
+      "Our SPA uses /api/auth/validate-redirect with ?next= after login. Show how to enforce same-origin allow-lists server-side and prevent HPP bypasses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackmyvm-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackMyVM boot2root CTF platform disclosed",
+    description:
+      "HackMyVM is a public CTF platform publishing boot2root virtual machines and browser-based vulnerability labs for red-team practice.",
+    impactOneline:
+      "Public HackMyVM instances expose intentionally vulnerable challenge VMs and online labs for unauthenticated exploitation practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackmyvmEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HackMyVM is intentional training infrastructure — isolate challenge VMs from production networks.",
+      steps: [
+        "Run HackMyVM challenge instances only on dedicated lab VLANs.",
+        "Do not expose boot2root VMs to the public internet without access controls.",
+        "Rate-limit unauthenticated challenge downloads and lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host HackMyVM-style boot2root CTF challenges. Show how to isolate vulnerable VMs from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bugbountyhunter-evidence",
     platform: "generic",
     category: "Cross-site scripting",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T06:06:46.615Z",
-  "total": 243,
-  "uniqueSlugs": 243,
+  "generatedAt": "2026-07-12T07:09:03.676Z",
+  "total": 245,
+  "uniqueSlugs": 245,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 225,
+    "generic": 227,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 178,
+    "deep": 180,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 79,
+    "Broken access control": 81,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -98,6 +98,7 @@
     "client-side-hacker101-ctf-evidence",
     "client-side-hacking-lab-evidence",
     "client-side-hackinghub-evidence",
+    "client-side-hackmyvm-evidence",
     "client-side-hacksplaining-evidence",
     "client-side-hackthebox-academy-evidence",
     "client-side-hackthebox-evidence",
@@ -119,6 +120,7 @@
     "client-side-nodegoat-evidence",
     "client-side-north-star-agi-ctf-evidence",
     "client-side-nosql-evidence",
+    "client-side-open-redirect-evidence",
     "client-side-overthewire-bandit-evidence",
     "client-side-overthewire-leviathan-evidence",
     "client-side-overthewire-natas-evidence",

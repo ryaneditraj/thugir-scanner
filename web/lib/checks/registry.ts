@@ -6612,6 +6612,18 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "AI banking assistant prompt injection demo",
     re: /AI banking assistant[\s\S]{0,120}prompt injection/i
+  },
+  {
+    label: "Arc Gate live red-team proxy demo",
+    re: /Arc Gate[\s\S]{0,120}Live Red Team/i
+  },
+  {
+    label: "AgentDojo indirect injection attack example",
+    re: /AgentDojo v1 attack pattern/i
+  },
+  {
+    label: "Hidden instruction indirect injection lab",
+    re: /hidden instructions[\s\S]{0,80}indirect injection/i
   }
 ];
 
@@ -7285,6 +7297,94 @@ const clientSideXvwaEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "XVWA documents 15+ deliberately vulnerable attack modules (SQLi, XSS, SSRF, IDOR, SSTI, CSRF)"
+    }
+  };
+};
+
+// --- Client-side open redirect evidence (validate-redirect HPP labs) ---------------
+const CLIENT_OPEN_REDIRECT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "validate-redirect API endpoint",
+    re: /\/api\/auth\/validate-redirect/i
+  },
+  {
+    label: "nextParam from URLSearchParams",
+    re: /nextParam\s*=\s*params\.get\(\s*["']next["']\s*\)/
+  },
+  {
+    label: "Raw query string passthrough to validator",
+    re: /location\.search\.slice\(\s*1\s*\)/
+  },
+  {
+    label: "Client redirect after validation",
+    re: /window\.location\.href\s*=\s*(?:destination|verifyUrl|redirectTo)/
+  },
+  {
+    label: "Validator returns valid but uses first next param",
+    re: /data\.valid\s*\?\s*nextParam/
+  },
+  {
+    label: "OAuth next param propagation",
+    re: /\/auth\/oauth\/[^"']+\?next=/
+  }
+];
+
+const clientSideOpenRedirectEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OPEN_REDIRECT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/\/api\/auth\/validate-redirect|nextParam|resolveRedirect/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Client bundle documents post-login redirect validation that can be abused via next/query parameter handling"
+    }
+  };
+};
+
+// --- HackMyVM CTF / boot2root platform --------------------------------------------
+const CLIENT_HACKMYVM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackMyVM platform title",
+    re: /HackMyVM/i
+  },
+  {
+    label: "Boot2root VM training catalog",
+    re: /Boot2root VMs/i
+  },
+  {
+    label: "Online vulnerability labs",
+    re: /online labs/i
+  },
+  {
+    label: "CTF platform tagline",
+    re: /CTF Platform to have fun hacking/i
+  },
+  {
+    label: "Red team boot2root keywords",
+    re: /boot2root[\s\S]{0,80}(?:hack|vulnerab|ctf)/i
+  }
+];
+
+const clientSideHackmyvmEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKMYVM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackMyVM/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackMyVM publishes boot2root VMs and browser-based vulnerability labs for CTF practice"
     }
   };
 };
@@ -9924,6 +10024,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeAcademyEvidence,
   clientSideTegalsecLabEvidence,
   clientSideXvwaEvidence,
+  clientSideOpenRedirectEvidence,
+  clientSideHackmyvmEvidence,
   clientSideBugBountyHunterEvidence,
   clientSideZeroHealthEvidence,
   clientSideAlfXssWargameEvidence,

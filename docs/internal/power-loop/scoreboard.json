@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T07:06:47.311Z",
+  "updated_at": "2026-07-12T07:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 382,
   "discovery_findings": 2640,
-  "improvements_shipped": 303,
-  "last_run": "2026-07-12T07:06:47.311Z",
+  "improvements_shipped": 306,
+  "last_run": "2026-07-12T07:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "07:00",
     "benchmark": {
@@ -32,7 +32,7 @@
       "primary_recall": "6/6",
       "primary_gap": [],
       "gap": [],
-      "note": "Juice Shop benchmark recall stable at 6/6 (8 findings, pages_crawled=1 probes=269); no benchmark misses",
+      "note": "Juice Shop benchmark recall stable at 6/6 (8 findings); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,25 +51,25 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 38,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue backlog GitHub Pages / Vercel OWASP labs; +5 wargame/SKF/Nimbus URLs at queue tail",
-      "improvements_shipped_this_run": 0
+      "focus": "Todoer open-redirect HPP evidence + HackMyVM CTF markers + Arc Gate prompt-injection demo patterns",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "vulnlab.vercel.app: 7 findings — SQLi/SSRF/XXE/file-upload client markers (critical upload evidence)",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: 6 findings — IDOR gateway bypass + exposed OpenAI key",
-      "juicesec.mrdinesh.workers.dev: 6 findings — Juice Shop variant with JWT none + SSRF markers",
-      "xss-attacker.vercel.app: 4 findings — XSS C2 collector /api/collect exfil endpoint"
+      "todoer.site: validate-redirect + nextParam HPP client-side open redirect (4→5 findings)",
+      "hackmyvm.eu: boot2root CTF platform markers (3→4 findings)",
+      "web-production-6e47f.up.railway.app/demo: Arc Gate Live Red Team prompt-injection demo (4→5 findings)"
     ],
     "learning_gaps": [
-      "vuln-academy + urban-vampi-staging + todoer.site + hackable.me + Arc Gate: still behind queue backlog (not reached in 8-URL limit)",
-      "nimbusvault + SKF main + pwnable.kr + smashthestack + microcorruption: added at queue tail this run",
-      "teacher_delta: nuclei/engine unavailable for diff-based learning"
+      "acuart.phpnet.us + hackable.me: DNS dead / domain parking — remove from active queue",
+      "vulnshop.vercel.app: Railway backend vulnshop-production.up.railway.app offline — cross-origin API probes 404",
+      "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "urban-vampi-staging + vuln-academy: existing rules already score 6 and 4 findings — queue scan backlog"
     ]
   },
   "discovery_highlights": {
@@ -151,6 +151,9 @@
     "vulnlab.vercel.app": 7,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 6,
     "juicesec.mrdinesh.workers.dev": 6,
-    "xss-attacker.vercel.app": 4
+    "xss-attacker.vercel.app": 4,
+    "todoer.site": 5,
+    "hackmyvm.eu": 4,
+    "web-production-6e47f.up.railway.app": 5
   }
 }
