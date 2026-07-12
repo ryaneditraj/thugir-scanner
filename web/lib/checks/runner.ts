@@ -594,6 +594,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideRedtigerHackitEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
+  "clientSideNetForceEvidence",
+  "clientSideBrutelogicXssGymEvidence",
+  "clientSideCtflearnWebfourEvidence",
   "clientSideHackTheBoxEvidence",
   "clientSideHackTheBoxAcademyEvidence",
   "clientSideHackThisSiteEvidence",
@@ -2360,6 +2363,76 @@ function extractWebhackingKrSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Net-Force.nl — seed challenge catalog and first training levels. */
+function extractNetForceChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/Net-Force|net-force\.nl/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/challenges/", "/hacktivity/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href="(challenge\/level\d+\/)"/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Brute Logic XSS Gym — seed gym.php from knoxss or x55.is pages. */
+function extractBrutelogicXssGymSeeds(html: string, pageUrl: string): string[] {
+  if (!/Brute Logic|brutelogic|knoxss|XSS Gym/i.test(html)) return [];
+  const out = new Set<string>();
+  const linkRe = /href\s*=\s*["']([^"']*brutelogic\/gym\.php[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (/x55\.is|brutelogic\.com\.br/i.test(pageUrl)) {
+    try {
+      out.add(new URL("/brutelogic/gym.php", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** CTFlearn Web4 — seed SQLi challenge on web.ctflearn.com subdomain. */
+function extractCtflearnWebfourSeeds(html: string, pageUrl: string): string[] {
+  if (!/CTFlearn|ctflearn\.com|web\.ctflearn\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  try {
+    out.add("https://web.ctflearn.com/web4/");
+  } catch {
+    /* ignore */
+  }
+  const linkRe = /href\s*=\s*["']([^"']*web\.ctflearn\.com\/web4[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** SkillAudit MCP skill scanner (skillaudit.vercel.app) — seed docs/rules for agent-security markers. */
 function extractSkillauditDocSeeds(html: string, pageUrl: string): string[] {
   if (!/SkillAudit|skillaudit\.vercel\.app/i.test(html)) return [];
@@ -3330,6 +3403,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
   const webhackingKrSeeds = extractWebhackingKrSeeds(home.body, home.finalUrl);
+  const netForceSeeds = extractNetForceChallengeSeeds(home.body, home.finalUrl);
+  const brutelogicXssGymSeeds = extractBrutelogicXssGymSeeds(home.body, home.finalUrl);
+  const ctflearnWebfourSeeds = extractCtflearnWebfourSeeds(home.body, home.finalUrl);
   const railsgoatSeeds = extractRailsgoatDocSeeds(home.body, home.finalUrl);
   const breakTheFlaskSeeds = extractBreakTheFlaskWriteupSeeds(home.body, home.finalUrl);
   const grpcGoatSeeds = extractGrpcGoatDocSeeds(home.body, home.finalUrl);
@@ -3436,6 +3512,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...overthewireNatasSeeds,
       ...redTigerSeeds,
       ...webhackingKrSeeds,
+      ...netForceSeeds,
+      ...brutelogicXssGymSeeds,
+      ...ctflearnWebfourSeeds,
       ...railsgoatSeeds,
       ...breakTheFlaskSeeds,
       ...grpcGoatSeeds,
