@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T04:09:32.491Z",
+  "updated_at": "2026-07-12T04:13:10.231Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 777,
-  "total_findings": 3338,
+  "total_sites_scanned": 784,
+  "total_findings": 3371,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 341,
-  "discovery_findings": 2357,
+  "discovery_urls_added": 346,
+  "discovery_findings": 2390,
   "improvements_shipped": 279,
-  "last_run": "2026-07-12T04:09:32.491Z",
+  "last_run": "2026-07-12T04:13:10.231Z",
   "last_run_summary": {
-    "hour_utc": "22:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
+      "pass1_gap": ["xss", "sensitive_data"],
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_used": false,
       "gap": [],
-      "note": "Juice Shop primary 6/6 on first pass (8 findings) — no staging fallback needed",
+      "note": "Juice Shop pass1 4/6 (4 findings, gap xss,sensitive_data); retry merge 6/6 (8 findings) — no staging fallback",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,29 +56,27 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 25,
+      "findings": 33,
       "skipped_48h": [],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/"
       ],
-      "focus": "natas34 finale + Kontra API labs + PentesterLab web-for-pentester + Immersive Labs; Mutillidae Radware + Google XSS benchmarks",
+      "focus": "Pwnshop OWASP 2025 lab + VulnForge academy + Sasan VulnerableApp + Tegalsec XSS labs; new LLM/DVGA URLs queued",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) on primary first pass",
-      "websegura.radwarelatam.com/mutillidae: 7 findings — Mutillidae lab + exposed config backup + credential comment",
-      "public-firing-range.appspot.com: 4 findings — reflected XSS + open redirect (Google XSS benchmark)",
-      "rest.vulnweb.com: 4 findings — phpinfo + Invicti REST API lab evidence",
-      "google-gruyere.appspot.com: 3 findings — Gruyere codelab XSS evidence",
-      "demo.owasp-juice.shop: full Juice Shop mirror probes on .juice.shop TLD (8 findings)",
-      "zero.webappsecurity.com: Fortify WebInspect Zero Bank training demo evidence (5 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after Heroku wake retry merge",
+      "pwnshop.ctfsecurity.com: 10 findings — OWASP 2025 e-commerce + prototype pollution + prompt injection evidence",
+      "vulnforge-academy.vercel.app: 6 findings — OpenAI key exposed + training platform markers",
+      "testasp.vulnweb.com: 4 findings — SQLi + reflected XSS on Acunetix demo",
+      "webgoat.github.io/WebGoat: 4 findings — OWASP WebGoat static mirror evidence",
+      "sasanlabs.github.io/VulnerableApp: 3 findings — OWASP VulnerableApp scanner eval platform"
     ],
     "learning_gaps": [
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo blocks queue head slot",
-      "natas34 + Kontra/PentesterLab/Immersive Labs: added to queue but not reached in 8-URL discovery limit",
-      "hackable-web.vercel.app + vulnerable-lab.vercel.app: high-value queued targets still behind deep backlog",
-      "vampi.lab.pentest-forge.com: 1 finding only — API lab needs deeper OpenAPI/auth probes",
-      "inj3ctlab.bugbountylabs.com: DNS unreachable from cloud"
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo blocks queue head slot each run",
+      "llm-sec.dev + prompttools.co + Kontra LLM + DVGA: added to queue but not reached in 8-URL limit",
+      "returntrue.win + hackable-web.vercel.app: high-value queued targets still behind backlog",
+      "Heroku cold-start: pass1 often misses xss,sensitive_data on juice-shop — retry merge required"
     ]
   },
   "discovery_highlights": {
@@ -113,6 +112,10 @@
     "natas4.natas.labs.overthewire.org": 3,
     "ctflearn.com": 3,
     "picoctf.org": 3,
-    "www.itsecgames.com": 3
+    "www.itsecgames.com": 3,
+    "pwnshop.ctfsecurity.com": 10,
+    "vulnforge-academy.vercel.app": 6,
+    "testasp.vulnweb.com": 4,
+    "webgoat.github.io": 4
   }
 }
