@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T05:10:00.000Z",
+  "updated_at": "2026-07-12T05:10:05.135Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 823,
-  "total_findings": 3528,
+  "total_sites_scanned": 831,
+  "total_findings": 3559,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 367,
-  "discovery_findings": 2525,
+  "discovery_urls_added": 372,
+  "discovery_findings": 2556,
   "improvements_shipped": 300,
-  "last_run": "2026-07-12T05:10:00.000Z",
+  "last_run": "2026-07-12T05:10:05.135Z",
   "last_run_summary": {
     "hour_utc": "05:00",
     "benchmark": {
@@ -51,24 +51,29 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 16,
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 47,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "DVGA live instance + llm-sec.dev October CTF + ClawGuard EU AI Act audit",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/"
+      ],
+      "focus": "Queue backlog (VAmPI, react2shell, acuart, websec.fr, vulnbank) + DVGA/llm-sec/ClawGuard engine pass; +5 new (appsec-ci, xvwa, cors-lab, hackmyvm, bandit)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "dvga.tools.escape.tech: 5 findings — live DVGA GraphQL lab + import_paste crawl",
+      "urban-vampi-production.up.railway.app: 6 findings — VAmPI API markers + unauthenticated debug",
       "www.llm-sec.dev: 7 findings — LLM Security Labs + October Agent Security Challenge",
+      "ucu-owasp-ctf.vercel.app: 5 findings — OWASP CTF hub + Firebase config exposed",
+      "dvga.tools.escape.tech: 5 findings — live DVGA GraphQL lab + import_paste crawl",
+      "vulnbank.org: 4 findings — banking/API/LLM vuln lab evidence",
       "prompttools.co: 4 findings — ClawGuard EU AI Act MCP audit platform"
     ],
     "learning_gaps": [
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo blocks queue head slot",
+      "appsec-ci-pipeline + xvwa + cors-lab + hackmyvm + bandit: added to queue tail, not reached in 8-URL limit",
       "returntrue.win + hackable-web.vercel.app: high-value queued targets still behind backlog",
-      "kontra.dev: empty response from cloud — use application.security mirrors",
-      "Heroku cold-start: pass1 often misses xss,sensitive_data on juice-shop — retry merge required",
       "teacher_delta: nuclei/engine unavailable for diff-based learning"
     ]
   },
@@ -131,6 +136,13 @@
     "testasp.vulnweb.com": 4,
     "webgoat.github.io": 4,
     "dvga.tools.escape.tech": 5,
-    "prompttools.co": 4
+    "prompttools.co": 4,
+    "urban-vampi-production.up.railway.app": 6,
+    "ucu-owasp-ctf.vercel.app": 5,
+    "vulnbank.org": 4,
+    "hiddeninvestigations.net": 4,
+    "dvwa.vercel.app": 4,
+    "websec.fr": 3,
+    "yusufarbc.github.io/apigoat": 3
   }
 }
