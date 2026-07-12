@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T19:02:35.466Z",
+  "updated_at": "2026-07-12T19:05:42.327Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,30 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 936,
-  "total_findings": 4061,
+  "total_sites_scanned": 943,
+  "total_findings": 4100,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 437,
-  "discovery_findings": 2974,
+  "discovery_urls_added": 442,
+  "discovery_findings": 3013,
   "improvements_shipped": 337,
-  "last_run": "2026-07-12T19:02:35.466Z",
+  "last_run": "2026-07-12T19:05:42.327Z",
   "last_run_summary": {
-    "hour_utc": "18:00",
+    "hour_utc": "19:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
       "pages_crawled": 1,
-      "probes_run": 316,
+      "probes_run": 305,
       "primary_note": "primary heroku 8 findings 6/6 — no category misses",
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": null,
-      "oracle_recall": null,
-      "gap": [],
-      "note": "No benchmark category misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,45 +54,54 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 36,
-      "skipped_48h": [],
+      "findings": 39,
+      "skipped_48h": [
+        "https://juice-shop.herokuapp.com/",
+        "https://vapi.apisec.ai/",
+        "https://wrongsecrets.herokuapp.com/",
+        "https://bwapp.hakhub.net/",
+        "https://secureby.design/"
+      ],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Head-of-queue rescans + 5 new discovery URLs (bug-collection, escape L5, Hacksplaining directory-traversal/ssrf/broken-access-control)",
+      "focus": "Head-of-queue rescans + 5 new escape.alf.nu levels 6–10 (XSS wargame series)",
       "validated_targets": [
-        "vapi.apisec.ai (4 findings — OWASP API Top 10 lab)",
-        "wrongsecrets.herokuapp.com (5 findings — secrets CTF markers)",
-        "bwapp.hakhub.net (6 findings — reflected XSS + secrets in bundle)",
-        "reef-mcp-registry.vercel.app (7 findings — MCP registry security demo)",
-        "secureby.design (8 findings — secure design training platform)"
+        "brokencrystals.com (15 findings — exposed .env/.git + GraphQL + API IDOR)",
+        "demo.testfire.net (6 findings — reflected XSS + unauthenticated admin)",
+        "cyberscavengerhunt.com (6 findings — OWASP VWAD recon lab)",
+        "natas0.natas.labs.overthewire.org (4 findings — Natas wargame markers)",
+        "ctflearn.com (3 findings — CTF platform evidence)"
       ],
       "queued_not_reached": [
         "bug-collection.vercel.app",
         "escape.alf.nu/level5",
         "hacksplaining.com/lessons/directory-traversal/",
         "hacksplaining.com/lessons/ssrf/",
-        "hacksplaining.com/lessons/broken-access-control/"
+        "hacksplaining.com/lessons/broken-access-control/",
+        "escape.alf.nu/level6–10 (newly added)"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "secureby.design: 8 findings — secure design training platform markers",
-      "reef-mcp-registry.vercel.app: 7 findings — MCP agent registry security demo",
-      "bwapp.hakhub.net: 6 findings — reflected XSS + AWS/Twilio secrets",
-      "wrongsecrets.herokuapp.com: 5 findings — OWASP secrets CTF evidence"
+      "brokencrystals.com: 15 findings — .env/.git exposure + GraphQL introspection + unauthenticated API",
+      "demo.testfire.net: 6 findings — reflected XSS + admin endpoint",
+      "cyberscavengerhunt.com: 6 findings — OWASP VWAD training platform markers",
+      "natas0.natas.labs.overthewire.org: 4 findings — OverTheWire Natas referer-bypass evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "tiwap.com: domain no longer hosts TIWAP — parked redirect to transporeon.com",
-      "hacksplaining.com: Vercel Security Checkpoint may block scanner UA from cloud pods",
       "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "new tail URLs (bug-collection, escape L5, Hacksplaining directory-traversal/ssrf/broken-access-control) queued but not reached — 8-URL head-first limit"
+      "hacksplaining.com: Vercel Security Checkpoint may block scanner UA from cloud pods",
+      "tail queue URLs (bug-collection, escape L5, Hacksplaining lessons, escape L6–10) not reached — 8-URL head-first limit"
     ],
-    "improvements_shipped_this_run": 3
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
+    "demo.testfire.net": 6,
+    "cyberscavengerhunt.com": 6,
+    "natas0.natas.labs.overthewire.org": 4,
     "security-trainer.vercel.app": 17,
     "pwnshop.ctfsecurity.com": 10,
     "computersciencesop2.vercel.app": 10,
