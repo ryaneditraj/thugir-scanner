@@ -1887,7 +1887,32 @@
       "url": "https://web-production-6e47f.up.railway.app/demo",
       "source": "Arc Gate — live AI agent red-team prompt-injection demo playground (Railway OSS deploy)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://nimbusvault.app/",
+      "source": "Nimbus Vault — bug-bounty research platform; Todoer is official practice target (Entit-y GitHub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.securityknowledgeframework.org/",
+      "source": "OWASP SKF main training portal — secure coding labs hub (distinct from demo.securityknowledgeframework.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnable.kr/",
+      "source": "Pwnable.kr — public pwn/wargame challenge platform (awesome-vulnerable-apps online)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://smashthestack.org/",
+      "source": "SmashTheStack wargames — public security challenge hub (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://microcorruption.com/",
+      "source": "Microcorruption — browser-based embedded security CTF with intentional vulns (Show HN / wargame)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T06:05:00.000Z"
+  "updated_at": "2026-07-12T07:05:00.000Z"
 }
