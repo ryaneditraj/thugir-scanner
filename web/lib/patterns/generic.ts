@@ -1858,6 +1858,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-redtiger-hackit-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "RedTiger PHP/SQL hackit disclosed",
+    description:
+      "RedTiger's Hackit on redtiger.labs.overthewire.org teaches PHP/MySQL SQL injection, blind injection, and login-bypass challenges across level1.php–level10.php.",
+    impactOneline:
+      "Public RedTiger hackit pages document SQL injection and authentication bypass training surfaces with real-world vulnerability patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRedtigerHackitEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RedTiger Hackit is intentional training — isolate hackit VMs from production networks.",
+      steps: [
+        "Run RedTiger challenges only on dedicated training VMs.",
+        "Use parameterized queries instead of string-concatenated SQL in production.",
+        "Rate-limit unauthenticated hackit enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host RedTiger-style PHP/SQL injection hackits. Show how to isolate training labs from production and fix SQLi patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ringzer0-ctf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "RingZer0 Team online CTF disclosed",
+    description:
+      "RingZer0 Team hosts ringzer0ctf.com — an online CTF platform where players solve web, crypto, and exploitation challenges to earn points.",
+    impactOneline:
+      "Public RingZer0 CTF pages document challenge infrastructure attackers use to calibrate scanners against training targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideRingzer0CtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RingZer0 CTF is intentional training — gate challenge instances behind authenticated accounts.",
+      steps: [
+        "Require login before spawning injectable CTF challenge VMs.",
+        "Isolate CTF infrastructure from production networks.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host RingZer0-style online CTF challenges. Show how to gate lab instances behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-webhacking-kr-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Webhacking.kr challenge platform disclosed",
+    description:
+      "Webhacking.kr hosts 80+ Korean web application security challenges where competitors exploit or defend vulnerabilities in web apps.",
+    impactOneline:
+      "Public Webhacking.kr pages document web injection and access-control training challenge catalogs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebhackingKrEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Webhacking.kr is intentional training — require accounts before serving challenge instances.",
+      steps: [
+        "Gate /chall.php challenge routes behind authenticated sessions.",
+        "Isolate challenge VMs from production networks.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Webhacking.kr-style web security challenges. Show how to gate challenge routes behind auth and isolate labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthebox-evidence",
     platform: "generic",
     category: "Broken access control",

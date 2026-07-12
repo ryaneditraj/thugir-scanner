@@ -591,6 +591,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnexEvidence",
   "clientSideSecureflagEvidence",
   "clientSideImmersiveLabsEvidence",
+  "clientSideRedtigerHackitEvidence",
+  "clientSideRingzer0CtfEvidence",
+  "clientSideWebhackingKrEvidence",
   "clientSideHackTheBoxEvidence",
   "clientSideHackTheBoxAcademyEvidence",
   "clientSideHackThisSiteEvidence",
@@ -2318,6 +2321,42 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
     out.add("https://www.overthewire.org/wargames/manpage/");
     out.add("http://manpage0.manpage.labs.overthewire.org/");
   }
+  if (/redtiger\.labs\.overthewire\.org|RedTiger's Hackit/i.test(html)) {
+    out.add("http://redtiger.labs.overthewire.org/");
+  }
+  return [...out];
+}
+
+/** RedTiger Hackit — seed SQLi/login-bypass level pages from index catalog. */
+function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
+  if (!/RedTiger's Hackit|redtiger\.labs\.overthewire\.org/i.test(html)) return [];
+  const out = new Set<string>();
+  const re = /href="(level\d+\.php|special1\.php)"/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Webhacking.kr — seed challenge hub and ranking pages. */
+function extractWebhackingKrSeeds(html: string, pageUrl: string): string[] {
+  if (!/Webhacking\.kr|webhacking\.kr/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/chall.php", "/rank.php", "/hof.php"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
   return [...out];
 }
 
@@ -3289,6 +3328,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const mlastgSeeds = extractMlastgMkdocsSeeds(home.body, home.finalUrl);
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
+  const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
+  const webhackingKrSeeds = extractWebhackingKrSeeds(home.body, home.finalUrl);
   const railsgoatSeeds = extractRailsgoatDocSeeds(home.body, home.finalUrl);
   const breakTheFlaskSeeds = extractBreakTheFlaskWriteupSeeds(home.body, home.finalUrl);
   const grpcGoatSeeds = extractGrpcGoatDocSeeds(home.body, home.finalUrl);
@@ -3393,6 +3434,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...mlastgSeeds,
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
+      ...redTigerSeeds,
+      ...webhackingKrSeeds,
       ...railsgoatSeeds,
       ...breakTheFlaskSeeds,
       ...grpcGoatSeeds,

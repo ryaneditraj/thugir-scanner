@@ -4883,6 +4883,128 @@ const clientSideImmersiveLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- RedTiger PHP/SQL hackit (redtiger.labs.overthewire.org) ------------------------
+const CLIENT_REDTIGER_HACKIT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RedTiger Hackit title",
+    re: /RedTiger's Hackit|RedTiger was here/i
+  },
+  {
+    label: "PHP/MySQL security hackit",
+    re: /web-hacking skills.*php and mysql security|PHP \/ SQL security/i
+  },
+  {
+    label: "SQL injection level catalog",
+    re: /Simple SQL-Injection|Blind Injection|login-bypass/i
+  },
+  {
+    label: "level1.php entry point",
+    re: /href="level1\.php"|level1\.php/i
+  },
+  {
+    label: "redtiger.labs host",
+    re: /redtiger\.labs\.overthewire\.org/i
+  }
+];
+
+const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_REDTIGER_HACKIT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/RedTiger|redtiger\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RedTiger's Hackit teaches PHP/MySQL SQL injection and login-bypass challenges across level1.php–level10.php"
+    }
+  };
+};
+
+// --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
+const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RingZer0 CTF title",
+    re: /RingZer0(?:\s+Team)?\s+Online CTF|Home - RingZer0 CTF/i
+  },
+  {
+    label: "Solve challenges earn points",
+    re: /Solve challenges earn points/i
+  },
+  {
+    label: "ringzer0ctf.com platform",
+    re: /ringzer0ctf\.com/i
+  },
+  {
+    label: "CTF challenge platform meta",
+    re: /Online CTF[\s\S]{0,40}challenges/i
+  }
+];
+
+const clientSideRingzer0CtfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_RINGZER0_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/RingZer0|ringzer0ctf\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RingZer0 Team hosts an online CTF platform with web, crypto, and exploitation challenges"
+    }
+  };
+};
+
+// --- Webhacking.kr Korean web challenge platform (webhacking.kr) ---------------------
+const CLIENT_WEBHACKING_KR_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Webhacking.kr title",
+    re: /Webhacking\.kr/i
+  },
+  {
+    label: "Korean web vulnerability challenge",
+    re: /Korean cyber-security challenge.*exploit or defend vulnerability in web application/i
+  },
+  {
+    label: "Challenge hub link",
+    re: /href="\/chall\.php"|\/chall\.php/i
+  },
+  {
+    label: "Challenge count stat",
+    re: /82[\s\S]{0,40}Challenges/i
+  },
+  {
+    label: "webhacking.kr host",
+    re: /webhacking\.kr/i
+  }
+];
+
+const clientSideWebhackingKrEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBHACKING_KR_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Webhacking\.kr|webhacking\.kr/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Webhacking.kr hosts 80+ Korean web application security challenges for SQLi, XSS, and access-control practice"
+    }
+  };
+};
+
 // --- Hack The Box CTF / cyber readiness platform (hackthebox.com) ---------------------
 const CLIENT_HACKTHEBOX_RES: { label: string; re: RegExp }[] = [
   {
@@ -10240,6 +10362,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnexEvidence,
   clientSideSecureflagEvidence,
   clientSideImmersiveLabsEvidence,
+  clientSideRedtigerHackitEvidence,
+  clientSideRingzer0CtfEvidence,
+  clientSideWebhackingKrEvidence,
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
