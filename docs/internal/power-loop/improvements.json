@@ -1829,6 +1829,24 @@
       "slug": "flask-redirect-stub-follow",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Flask stub redirects to /auth/login with VULNPORTAL + SECURE ACCESS TERMINAL + bcrypt/zxcvbn markers; extractStubRedirectTarget follows Werkzeug redirect pages; vuln-portal.vercel.app findings 1→2; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:todoer.site",
+      "slug": "client-side-open-redirect-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/auth/validate-redirect?next= + nextParam=params.get('next') + location.search.slice(1) raw qs + data.valid?nextParam; todoer.site findings 4→5; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackmyvm.eu",
+      "slug": "client-side-hackmyvm-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HackMyVM + Boot2root VMs + CTF Platform to have fun hacking meta; hackmyvm.eu findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-production-6e47f.up.railway.app",
+      "slug": "client-side-prompt-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Arc Gate Live Red Team + AgentDojo v1 attack pattern + hidden instructions indirect injection on /demo; findings 4→5; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
