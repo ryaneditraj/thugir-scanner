@@ -237,44 +237,45 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
 
-  // Phase 1: wake REST API (sqli, idor, auth_bypass probes depend on this).
-  let apiLive = false;
-  for (let attempt = 0; attempt < 8; attempt++) {
-    if (await juiceShopApiLive(pageUrl)) {
-      apiLive = true;
-      break;
+  const wakeApi = async (): Promise<boolean> => {
+    for (let attempt = 0; attempt < 8; attempt++) {
+      if (await juiceShopApiLive(pageUrl)) return true;
+      await new Promise((r) => setTimeout(r, 2500));
     }
-    await new Promise((r) => setTimeout(r, 2500));
-  }
+    return false;
+  };
+
+  const wakeBundle = async (): Promise<boolean> => {
+    for (let attempt = 0; attempt < 8; attempt++) {
+      try {
+        const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
+          timeoutMs: 18000,
+          maxBytes: 8192
+        });
+        if (
+          doc.status >= 200 &&
+          doc.status < 500 &&
+          !HEROKU_APP_ERROR_RE.test(doc.body) &&
+          doc.body.length > 500
+        ) {
+          return true;
+        }
+      } catch {
+        /* ignore */
+      }
+      await new Promise((r) => setTimeout(r, 2500));
+    }
+    return false;
+  };
+
+  // Wake API + bundle in parallel — Heroku cold-start often serves one before the other.
+  const [apiLive, bundleLive] = await Promise.all([wakeApi(), wakeBundle()]);
   if (apiLive) {
     await probe.getMany(
       apiPaths.map((p) => new URL(p, origin).toString()),
       probeOpts,
       3
     );
-  }
-
-  // Phase 2: wake JS bundle independently (xss + secret probes need main.js).
-  let bundleLive = false;
-  for (let attempt = 0; attempt < 8; attempt++) {
-    try {
-      const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
-        timeoutMs: 18000,
-        maxBytes: 8192
-      });
-      if (
-        doc.status >= 200 &&
-        doc.status < 500 &&
-        !HEROKU_APP_ERROR_RE.test(doc.body) &&
-        doc.body.length > 500
-      ) {
-        bundleLive = true;
-        break;
-      }
-    } catch {
-      /* ignore */
-    }
-    await new Promise((r) => setTimeout(r, 2500));
   }
   if (bundleLive) {
     await probe.getMany(
@@ -582,6 +583,16 @@ const DEEP_RULES = new Set<string>([
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
+  "clientSidePentesterlabWebForPentesterEvidence",
+  "clientSidePentesterlabSqliExerciseEvidence",
+  "clientSidePentesterlabXssExerciseEvidence",
+  "clientSideOverthewireNatasRefererEvidence",
+  "clientSideKontraApplicationSecurityEvidence",
+  "clientSideVulnexEvidence",
+  "clientSideSecureflagEvidence",
+  "clientSideImmersiveLabsEvidence",
+  "clientSideHackTheBoxEvidence",
+  "clientSideHackTheBoxAcademyEvidence",
   "clientSideHackThisSiteEvidence",
   "clientSideCyberDefendersEvidence",
   "clientSideWebSecurityLabZhEvidence",
@@ -654,6 +665,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
   "clientSideSecLabPlaygroundEvidence",
+  "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
@@ -894,6 +906,11 @@ function extractCtfChallengeHubLinks(html: string, pageUrl: string): string[] {
 
 /** WebSec.fr challenge levels live under /levelNN/ but are only linked in <noscript> <select> options. */
 function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
+  try {
+    if (!/websec\.fr$/i.test(new URL(origin).hostname)) return [];
+  } catch {
+    return [];
+  }
   const out = new Set<string>();
   const optRe = /<option[^>]*>\s*(level\d+)\s*<\/option>/gi;
   let m: RegExpExecArray | null;
@@ -930,7 +947,15 @@ const PENTESTERLAB_EXERCISE_RE = /href\s*=\s*["'](\/exercises\/[a-z0-9_-]+)["']/
 function extractPentesterLabExerciseSeeds(html: string, origin: string): string[] {
   if (!/pentesterlab|700\+.*hands-on labs|Web for Pentester/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/exercises", "/exercises/web-for-pentester", "/exercises/web_for_pentester"]) {
+  for (const p of [
+    "/exercises",
+    "/exercises/web-for-pentester",
+    "/exercises/web_for_pentester",
+    "/exercises/sqli_01",
+    "/exercises/sqli-01",
+    "/exercises/xss_01",
+    "/exercises/xss-01"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {
@@ -941,6 +966,63 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
   while ((m = PENTESTERLAB_EXERCISE_RE.exec(html))) {
     try {
       out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VULNEX playbook — sitemap lists vulnerability/payload taxonomy pages. */
+function extractVulnexPlaybookSeeds(html: string, origin: string): string[] {
+  if (!/VULNEX|vulnex\.vercel\.app|Web Hacking Playbook/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/vulnerabilities", "/methods", "/recon", "/all", "/tech-specific", "/cloud"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const re = /<loc>(https?:\/\/[^<]*vulnex[^<]*\/[a-z0-9/-]+)<\/loc>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(m[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** SecureFlag — owasp.html meta-refresh lands on /owasp OWASP member labs hub. */
+function extractSecureflagOwaspSeeds(html: string, origin: string): string[] {
+  if (!/secureflag\.com|SecureFlag|Hands-On Secure Coding Training/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/owasp", "/owasp.html", "/labs", "/training"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Kontra application.security — free OWASP Top 10 web/API training hubs. */
+function extractKontraTrainingSeeds(html: string, origin: string): string[] {
+  if (!/application\.security|Kontra Application Security|OWASP Top 10 for (?:API|Web)/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "/free/owasp-top-10-API",
+    "/free/owasp-top-10",
+    "/free/llm",
+    "/free-application-security-training/owasp-top-10-sql-injection",
+    "/free"
+  ]) {
+    try {
+      out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
@@ -1604,8 +1686,12 @@ function extractPortswiggerAcademySeeds(html: string, pageUrl: string): string[]
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of [
     "/web-security",
+    "/web-security/all-labs",
+    "/web-security/mystery-lab-challenge",
     "/web-security/sql-injection",
     "/web-security/cross-site-scripting",
+    "/web-security/nosql-injection",
+    "/web-security/server-side-request-forgery-ssrf",
     "/web-security/authentication",
     "/web-security/access-control",
     "/web-security/learning-paths"
@@ -1623,6 +1709,65 @@ function extractPortswiggerAcademySeeds(html: string, pageUrl: string): string[]
   while ((m = linkRe.exec(html))) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Hack The Box marketing hub (hackthebox.com). */
+function extractHackTheBoxSeeds(html: string, pageUrl: string): string[] {
+  if (!/Hack The Box|hackthebox\.com|cyber readiness platform/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/", "/business/capture-the-flag", "/business/threat-hunting", "/business/cyber-range"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/(?:www\.)?hackthebox\.com\/[^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** HTB Academy training catalogue (academy.hackthebox.com). */
+function extractHackTheBoxAcademySeeds(html: string, pageUrl: string): string[] {
+  if (!/HTB Academy|academy\.hackthebox\.com|Cybersecurity Training/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/catalogue",
+    "/catalogue/paths",
+    "/preview/certifications",
+    "/academy-lab-relations",
+    "/faq",
+    "/news"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/academy\.hackthebox\.com\/[^"'#]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1]).toString());
     } catch {
       /* ignore */
     }
@@ -2029,6 +2174,33 @@ function extractArchonVitepressSeeds(html: string, pageUrl: string): string[] {
   while ((m = linkRe.exec(html)) && out.size < 8) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Archon VitePress — hostname fallback when SPA shell omits nav on cold fetch. */
+function extractArchonHostFallbackSeeds(pageUrl: string): string[] {
+  try {
+    const u = new URL(pageUrl);
+    if (!u.hostname.includes("archon-eight.vercel.app")) return [];
+    return ["/cybersecurity/", "/security/", "/security/owasp/"].map((p) =>
+      new URL(p, u.origin).toString()
+    );
+  } catch {
+    return [];
+  }
+}
+
+/** jjirik77/sec_code — developer security & privacy lesson pages. */
+function extractSecCodeEducationalSeeds(html: string, pageUrl: string): string[] {
+  if (!/sec_code|Developer's Guide to Security|App Security\s*&\s*Privacy/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["privacy.html", "index.html"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -3018,9 +3190,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const atlasCrewEdgeProtectionSeeds = extractAtlasCrewEdgeProtectionSeeds(home.body, home.finalUrl);
   const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
+  const archonHostFallbackSeeds = extractArchonHostFallbackSeeds(home.finalUrl);
+  const secCodeEducationalSeeds = extractSecCodeEducationalSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const portswiggerSeeds = extractPortswiggerAcademySeeds(home.body, home.finalUrl);
+  const hackTheBoxSeeds = extractHackTheBoxSeeds(home.body, home.finalUrl);
+  const hackTheBoxAcademySeeds = extractHackTheBoxAcademySeeds(home.body, home.finalUrl);
   const try2hackSeeds = extractTry2hackLevelSeeds(home.body, home.finalUrl);
   const unsecurePwaSeeds = extractUnsecurePwaSeeds(home.body, home.finalUrl);
   const securityShepherdSeeds = extractSecurityShepherdSeeds(home.body, home.finalUrl);
@@ -3044,6 +3220,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     crawlOrigin
   );
   const pentesterLabSeeds = extractPentesterLabExerciseSeeds(home.body, origin);
+  const vulnexPlaybookSeeds = extractVulnexPlaybookSeeds(home.body, origin);
+  const secureflagOwaspSeeds = extractSecureflagOwaspSeeds(home.body, origin);
+  const kontraTrainingSeeds = extractKontraTrainingSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
   const sectrainerSeeds = extractSectrainerSpaSeeds(
@@ -3055,6 +3234,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...archonHostFallbackSeeds,
       ...labHubSeeds,
       ...docusaurusLabSeeds,
       ...nextraCyberSeeds,
@@ -3111,9 +3291,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...atlasCrewEdgeProtectionSeeds,
       ...owaspVwadSeeds,
       ...archonVitepressSeeds,
+      ...secCodeEducationalSeeds,
       ...vulnerableAppSeeds,
       ...hacksplainingSeeds,
       ...portswiggerSeeds,
+      ...hackTheBoxSeeds,
+      ...hackTheBoxAcademySeeds,
       ...try2hackSeeds,
       ...unsecurePwaSeeds,
       ...securityShepherdSeeds,
@@ -3129,6 +3312,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hackableSoSeeds,
       ...vulnwebSeeds,
       ...pentesterLabSeeds,
+      ...vulnexPlaybookSeeds,
+      ...secureflagOwaspSeeds,
+      ...kontraTrainingSeeds,
       ...hackThisSiteSeeds,
       ...wrongSecretsSeeds,
       ...sectrainerSeeds,
