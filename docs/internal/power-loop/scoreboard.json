@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T10:14:23.178Z",
+  "updated_at": "2026-07-12T11:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,21 +22,17 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 397,
   "discovery_findings": 2733,
-  "improvements_shipped": 315,
-  "last_run": "2026-07-12T10:14:23.178Z",
+  "improvements_shipped": 318,
+  "last_run": "2026-07-12T11:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 7,
+      "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "pass1_findings": 4,
-      "pass1_gap": ["xss", "sensitive_data"],
-      "fallback_url": "https://juice-shop-staging.herokuapp.com",
-      "fallback_used": false,
       "gap": [],
-      "note": "Juice Shop 6/6 (7 findings remote; local pass1 4/6 gap xss,sensitive_data then retry 8/6)",
+      "note": "Juice Shop 6/6 (8 findings) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,33 +44,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 29,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 17,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "CTFlearn web4, MR Code, Net-Force, Brute Logic XSS Gym queue expansion; backlog TestFire/FinBot/TestSparker labs",
+      "focus": "Net-Force challenge platform, Brute Logic XSS Gym, CTFlearn Web4 SQLi lab",
       "improvements_shipped_this_run": 3,
-      "new_urls_not_reached": [
-        "https://web.ctflearn.com/web4/",
-        "https://www.mr-code.com/vulnerabilities/",
+      "validated_targets": [
         "https://www.net-force.nl/hacktivity/",
         "https://x55.is/brutelogic/gym.php",
-        "https://web.ctflearn.com/"
+        "https://web.ctflearn.com/web4/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — pass1 cold-start gap xss,sensitive_data observed locally",
-      "hack-yourself-first.azurewebsites.net: 7 findings — reflected XSS, cleartext password API leak, insecure cookies",
-      "aspnet.testsparker.com: 5 findings — reflected XSS + Invicti practice-site markers",
-      "redtiger.labs.overthewire.org: RedTiger PHP/SQL hackit evidence (engine improvement this hour)",
-      "ringzer0ctf.com: RingZer0 online CTF platform evidence (6→7 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "www.net-force.nl: Net-Force hacking challenge platform evidence (0→3 findings)",
+      "x55.is/brutelogic/gym.php: Brute Logic XSS Gym innerHTML/eval sinks (0→10 findings)",
+      "web.ctflearn.com/web4: CTFlearn Web4 SQLi query disclosure (0→4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start pass1 can miss xss,sensitive_data before retry (pages_crawled=1)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "web.ctflearn/mr-code/net-force/x55 XSS gym: added at queue tail — not reached in 8-URL limit",
-      "www.wechall.net + www.hellboundhackers.org: Hellbound behind Cloudflare bot-wall"
+      "www.mr-code.com/vulnerabilities: domain redirects to /lander — no challenge content reachable",
+      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
+      "juice-shop.herokuapp.com: Heroku cold-start pass1 can miss xss,sensitive_data before retry"
     ]
   },
   "discovery_highlights": {
@@ -177,6 +170,9 @@
     "redtiger.labs.overthewire.org": 2,
     "ringzer0ctf.com": 7,
     "webhacking.kr": 3,
+    "www.net-force.nl": 3,
+    "x55.is": 10,
+    "web.ctflearn.com": 4,
     "duck-store.escape.tech": 7,
     "pentest-ground.com:4280": 5,
     "pentest-ground.com:9000": 4,
