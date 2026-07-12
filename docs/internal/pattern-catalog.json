@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T11:03:32.910Z",
-  "total": 257,
-  "uniqueSlugs": 257,
+  "generatedAt": "2026-07-12T12:04:31.220Z",
+  "total": 259,
+  "uniqueSlugs": 259,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 239,
+    "generic": 241,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 192,
+    "deep": 194,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Information disclosure": 16,
     "Broken authentication": 13,
     "Injection": 41,
-    "Cross-site scripting": 23,
+    "Cross-site scripting": 25,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 15,
@@ -54,6 +54,7 @@
     "client-side-breaktheflask-evidence",
     "client-side-brokencrystals-evidence",
     "client-side-brutelogic-xss-gym-evidence",
+    "client-side-brutelogic-xss-test-page-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bugforge-lab-evidence",
     "client-side-burp-bounty-lab-evidence",
@@ -111,6 +112,7 @@
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-jwt-none-evidence",
+    "client-side-knoxss-test-page-evidence",
     "client-side-kontra-application-security-evidence",
     "client-side-llm-sec-evidence",
     "client-side-maestro-agentic-ai-evidence",

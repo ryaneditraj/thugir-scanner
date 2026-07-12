@@ -1919,6 +1919,24 @@
       "slug": "client-side-ctflearn-webfour-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SELECT * FROM webfour.webfour where name = '$input' + Your Resulting Query echo on web.ctflearn.com/web4/; extractCtflearnWebfourSeeds; web.ctflearn.com/web4 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "client-side-brutelogic-xss-test-page-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS Test Page by Brute Logic + XSS in 11 URL parameters + HTMLi in Js Block + brutelogic/xss.php form fields; x55.is/brutelogic/xss.php findings 0→12; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "client-side-knoxss-test-page-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: KNOXSS Add-on Test Page + Source-Based XSS Test Cases + DOM-based XSS Test Cases + /xss.php case links; x55.is/brutelogic/knoxss.html findings 0→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "brutelogic-knoxss-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractBrutelogicXssGymSeeds now seeds knoxss.html, xss.php, dom/sinks.html, multi/ paths; xss.php crawl reaches 6 pages including gym + knoxss; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3496,6 +3514,21 @@
       "source": "discovery:web.ctflearn.com",
       "slug": "client-side-ctflearn-webfour-evidence",
       "shipped_at": "2026-07-12T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "client-side-brutelogic-xss-test-page-evidence",
+      "shipped_at": "2026-07-12T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "client-side-knoxss-test-page-evidence",
+      "shipped_at": "2026-07-12T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "brutelogic-knoxss-crawl-seeds",
+      "shipped_at": "2026-07-12T12:10:00.000Z"
     }
   ]
 }
