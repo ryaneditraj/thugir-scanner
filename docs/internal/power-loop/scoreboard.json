@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T22:12:00.000Z",
+  "updated_at": "2026-07-12T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 457,
   "discovery_findings": 3096,
-  "improvements_shipped": 348,
-  "last_run": "2026-07-12T22:12:00.000Z",
+  "improvements_shipped": 351,
+  "last_run": "2026-07-12T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22:00",
+    "hour_utc": "23:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
@@ -52,49 +52,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 47,
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 18,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Dual pass: BugZap/RedLockX prompt-defense demos + PentesterLab/Kontra/bugforge queue seeds",
-      "pass_a": [
-        "bugzap.vercel.app (5 findings — client-side-bugzap-prompt-defense-evidence 0→5)",
-        "redlockx.vercel.app (6 findings — client-side-redlockx-prompt-firewall-evidence 0→6)",
-        "rougestudio.vercel.app (rule shipped; Vercel Security Checkpoint blocked scanner UA on live rescan)"
-      ],
-      "pass_b_queued_not_reached": [
-        "https://pentesterlab.com/exercises/from_sqli_to_shell/",
-        "https://pentesterlab.com/exercises/ssrf_01/",
-        "https://application.security/free-application-security-training/owasp-top-10-command-injection",
-        "https://application.security/free-application-security-training/owasp-top-10-directory-traversal",
-        "https://bugforge.io/labs/sqli"
-      ],
-      "pass_b_scanned": [
-        "http://zero.webappsecurity.com/ (5)",
-        "https://picoctf.org/ (3)",
-        "https://server.vulnapp.id/mutillidae/ (6)",
-        "http://www.itsecgames.com/ (3)",
-        "https://computersciencesop2.vercel.app/cybersecurity (10)",
-        "https://solyd.com.br/treinamentos/introducao-ao-hacking-e-pentest (2)",
-        "https://vulnweb.netlify.app/ (4)"
+      "dns_failures": [],
+      "focus": "Queued PentesterLab from_sqli_to_shell + ssrf_01 + Kontra command-injection/directory-traversal lessons",
+      "pass_a_scanned": [
+        "https://pentesterlab.com/exercises/from_sqli_to_shell/ (4 — client-side-pentesterlab-sqli-to-shell-evidence)",
+        "https://pentesterlab.com/exercises/ssrf_01/ (4 — client-side-pentesterlab-ssrf-exercise-evidence)",
+        "https://application.security/free-application-security-training/owasp-top-10-command-injection (5 — kontra)",
+        "https://application.security/free-application-security-training/owasp-top-10-directory-traversal (5 — kontra)"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "bugzap.vercel.app: Bug Zap Next.js prompt-injection prevention demo (0→5 findings)",
-      "redlockx.vercel.app: RedLockX hybrid + DeBERTa-v3 prompt firewall (0→6 findings)",
-      "rougestudio.vercel.app: uncensored autonomous security-research IDE markers shipped (checkpoint-blocked rescan)",
-      "computersciencesop2.vercel.app/cybersecurity: 10 findings — OpenAI key + XSS/SQLi/GenAI hub",
-      "server.vulnapp.id/mutillidae: 6 findings — phpinfo + credential HTML comment"
+      "pentesterlab.com/exercises/from_sqli_to_shell: SQLi-to-RCE course JSON-LD (0→4 findings)",
+      "pentesterlab.com/exercises/ssrf_01: SSRF 01 internal fetch lab (0→4 findings)",
+      "application.security command-injection + directory-traversal: Kontra OWASP Top 10 lessons (0→5 each)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "bugforge.io/labs/sqli: SPA bundle has no SQL-specific markers — generic Bugforge rule applies",
       "rougestudio.vercel.app: Vercel Security Checkpoint blocks scanner UA",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "PentesterLab/Kontra/bugforge URLs queued at tail — not reached (limit=8 consumed by queue head)"
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
     ],
     "improvements_shipped_this_run": 3
   },
@@ -108,6 +89,10 @@
     "computersciencesop2.vercel.app": 10,
     "hack-this-site-eta.vercel.app": 12,
     "pentesterlab.com": 5,
+    "pentesterlab.com/exercises/from_sqli_to_shell": 4,
+    "pentesterlab.com/exercises/ssrf_01": 4,
+    "application.security/free-application-security-training/owasp-top-10-command-injection": 5,
+    "application.security/free-application-security-training/owasp-top-10-directory-traversal": 5,
     "juice-shop.herokuapp.com": 8,
     "chimera.atlascrew.dev": 9,
     "ctb-pi.vercel.app": 6,

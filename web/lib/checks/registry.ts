@@ -5006,9 +5006,12 @@ const CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES: { label: string; re: RegExp }[] = [
 
 const clientSidePentesterlabSqliExerciseEvidence: Rule = async (ctx) => {
   if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/sqli[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES) {
-    const m = ctx.combined.match(re);
+    const m = page.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
@@ -5044,9 +5047,12 @@ const CLIENT_PENTESTERLAB_XSS_EXERCISE_RES: { label: string; re: RegExp }[] = [
 
 const clientSidePentesterlabXssExerciseEvidence: Rule = async (ctx) => {
   if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_PENTESTERLAB_XSS_EXERCISE_RES) {
-    const m = ctx.combined.match(re);
+    const m = page.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
@@ -5082,9 +5088,12 @@ const CLIENT_PENTESTERLAB_SQLI_TO_SHELL_RES: { label: string; re: RegExp }[] = [
 
 const clientSidePentesterlabSqliToShellEvidence: Rule = async (ctx) => {
   if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/from[_-]sqli[_-]to[_-]shell/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_PENTESTERLAB_SQLI_TO_SHELL_RES) {
-    const m = ctx.combined.match(re);
+    const m = page.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
@@ -5120,9 +5129,12 @@ const CLIENT_PENTESTERLAB_SSRF_EXERCISE_RES: { label: string; re: RegExp }[] = [
 
 const clientSidePentesterlabSsrfExerciseEvidence: Rule = async (ctx) => {
   if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/ssrf[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_PENTESTERLAB_SSRF_EXERCISE_RES) {
-    const m = ctx.combined.match(re);
+    const m = page.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;

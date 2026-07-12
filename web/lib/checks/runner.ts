@@ -587,6 +587,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabWebForPentesterEvidence",
   "clientSidePentesterlabSqliExerciseEvidence",
   "clientSidePentesterlabXssExerciseEvidence",
+  "clientSidePentesterlabSqliToShellEvidence",
+  "clientSidePentesterlabSsrfExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
   "clientSideVulnexEvidence",

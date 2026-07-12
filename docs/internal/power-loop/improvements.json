@@ -2111,6 +2111,24 @@
       "slug": "client-side-rogue-studio-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Rogue Studio — AI IDE + zero safety filters + AUTONOMOUS CODING AGENT STACK ACTIVE + Web3 Black-Hat exploit modes; Vercel Security Checkpoint blocked scanner UA on live rescan — rule validated via direct HTML fetch (63KB markers); benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-to-shell-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name From SQL Injection to Shell + gain code execution on the server + /exercises/from_sqli_to_shell; pentesterlab.com/exercises/from_sqli_to_shell findings 0→4 (client-side-pentesterlab-sqli-to-shell-evidence); benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssrf-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name Server Side Request Forgery 01 + access internal resources via url parameter + /exercises/ssrf_01; pentesterlab.com/exercises/ssrf_01 findings 0→4 (client-side-pentesterlab-ssrf-exercise-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-command-traversal-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Command Injection | Kontra title + owasp-top-10-command-injection EXERCISE_ID; Directory Traversal | Kontra + owasp-top-10-directory-traversal; extractKontraTrainingSeeds + CLIENT_KONTRA_APPSEC_RES extended; application.security command-injection + directory-traversal findings 0→5 each; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3853,6 +3871,21 @@
       "source": "discovery:rougestudio.vercel.app",
       "slug": "client-side-rogue-studio-evidence",
       "shipped_at": "2026-07-12T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-to-shell-evidence",
+      "shipped_at": "2026-07-12T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssrf-exercise-evidence",
+      "shipped_at": "2026-07-12T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-command-traversal-lessons",
+      "shipped_at": "2026-07-12T23:10:00.000Z"
     }
   ]
 }
