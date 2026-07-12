@@ -2075,6 +2075,24 @@
       "slug": "bugbountyhunter-challenge-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=12/9/10/14 links + /playground on hub; extractBugBountyHunterChallengeSeeds seeds challenge?id=1-15 + playground; challenge?id=2 crawl 2→6 pages (playground + challenges 1-4); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-xxe-command-execution-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/xml-external-entities/start title XML External Entities — Secure Coding Lesson + meta Unsafe treatment of external references in XML; GET /lessons/command-execution/start title Command Execution — Secure Coding Lesson; extractHacksplainingLessonSeeds + CLIENT_HACKSPLAINING_RES extended; Vercel Security Checkpoint blocked live rescan this hour — prior ssrf/dirtraversal lessons 0→4 when reachable; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "client-side-aikido-zen-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>Zen by Aikido: Live Example</title> + test_ratelimiting_1 + test_bot_blocking + test_llm + attack_wave fetch('/.env'); zen-demo-java.fly.dev findings 2→4"
+    },
+    {
+      "source": "discovery:attp-live.fly.dev",
+      "slug": "client-side-attp-agent-trust-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>ATTP -- Agent Trust Transport Protocol</title> + IETF Standards Track + synchronous cryptographically-signed transport layer for AI agents; attp-live.fly.dev findings 2→3"
     }
   ],
   "shipped": [
@@ -3787,6 +3805,21 @@
       "source": "discovery:bugbountyhunter.com",
       "slug": "bugbountyhunter-challenge-seeds",
       "shipped_at": "2026-07-12T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-xxe-command-execution-lessons",
+      "shipped_at": "2026-07-12T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "client-side-aikido-zen-demo-evidence",
+      "shipped_at": "2026-07-12T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:attp-live.fly.dev",
+      "slug": "client-side-attp-agent-trust-evidence",
+      "shipped_at": "2026-07-12T21:10:00.000Z"
     }
   ]
 }
