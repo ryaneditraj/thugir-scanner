@@ -1,28 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-11T21:34:22.005Z",
-      "url": "https://juice-shop.lab.pentest-forge.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 0,
-      "status": "ok",
-      "scanned_at": "2026-07-11T21:34:22.005Z"
-    },
-    {
       "run_id": "2026-07-11T21:36:23.193Z",
       "url": "https://seclab.vercel.app/",
       "auth": "oss_deploy",
@@ -7961,7 +7939,7 @@
       "scanned_at": "2026-07-12T19:04:30.416Z"
     },
     {
-      "run_id": "2026-07-12T20:02:52.910Z",
+      "run_id": "2026-07-12T20:03:33.848Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -8030,10 +8008,10 @@
       "pages_crawled": 1,
       "probes_run": 305,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:02:52.910Z"
+      "scanned_at": "2026-07-12T20:03:33.848Z"
     },
     {
-      "run_id": "2026-07-12T20:06:26.516Z",
+      "run_id": "2026-07-12T20:03:57.576Z",
       "url": "http://demo.testfire.net/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8087,10 +8065,10 @@
       "pages_crawled": 6,
       "probes_run": 265,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:06:26.516Z"
+      "scanned_at": "2026-07-12T20:03:57.576Z"
     },
     {
-      "run_id": "2026-07-12T20:06:32.993Z",
+      "run_id": "2026-07-12T20:04:03.845Z",
       "url": "https://brokencrystals.com/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8207,10 +8185,10 @@
       "pages_crawled": 2,
       "probes_run": 294,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:06:32.993Z"
+      "scanned_at": "2026-07-12T20:04:03.845Z"
     },
     {
-      "run_id": "2026-07-12T20:06:34.723Z",
+      "run_id": "2026-07-12T20:04:05.501Z",
       "url": "http://testhtml5.vulnweb.com/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8221,11 +8199,11 @@
       "pages_crawled": 0,
       "probes_run": 0,
       "status": "error",
-      "scanned_at": "2026-07-12T20:06:34.723Z",
+      "scanned_at": "2026-07-12T20:04:05.501Z",
       "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
-      "run_id": "2026-07-12T20:06:44.751Z",
+      "run_id": "2026-07-12T20:04:15.520Z",
       "url": "https://cyberscavengerhunt.com/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8279,10 +8257,10 @@
       "pages_crawled": 4,
       "probes_run": 265,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:06:44.751Z"
+      "scanned_at": "2026-07-12T20:04:15.520Z"
     },
     {
-      "run_id": "2026-07-12T20:06:48.793Z",
+      "run_id": "2026-07-12T20:04:20.016Z",
       "url": "http://pentesteracademylab.appspot.com/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8308,10 +8286,10 @@
       "pages_crawled": 1,
       "probes_run": 260,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:06:48.793Z"
+      "scanned_at": "2026-07-12T20:04:20.016Z"
     },
     {
-      "run_id": "2026-07-12T20:06:54.578Z",
+      "run_id": "2026-07-12T20:04:25.749Z",
       "url": "https://ctflearn.com/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8344,10 +8322,10 @@
       "pages_crawled": 6,
       "probes_run": 275,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:06:54.578Z"
+      "scanned_at": "2026-07-12T20:04:25.749Z"
     },
     {
-      "run_id": "2026-07-12T20:06:58.576Z",
+      "run_id": "2026-07-12T20:04:34.499Z",
       "url": "https://hacking-lab.com/events/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8380,10 +8358,10 @@
       "pages_crawled": 6,
       "probes_run": 304,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:06:58.576Z"
+      "scanned_at": "2026-07-12T20:04:34.499Z"
     },
     {
-      "run_id": "2026-07-12T20:07:32.122Z",
+      "run_id": "2026-07-12T20:05:06.509Z",
       "url": "http://natas0.natas.labs.overthewire.org/",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -8423,7 +8401,79 @@
       "pages_crawled": 6,
       "probes_run": 267,
       "status": "ok",
-      "scanned_at": "2026-07-12T20:07:32.122Z"
+      "scanned_at": "2026-07-12T20:05:06.509Z"
+    },
+    {
+      "run_id": "2026-07-12T20:27:45.864Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "secret-resend",
+          "title": "Resend API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-12T20:27:45.864Z"
     }
   ],
   "teacher_delta_runs": [
@@ -9445,16 +9495,6 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T18:08:00.000Z"
-    },
-    {
-      "run_id": "2026-07-12T20:05:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
-      "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings"
     }
   ]
 }
