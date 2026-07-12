@@ -1553,9 +1553,10 @@ async function probeJsonAuthSqlInjection(ctx: RuleContext): Promise<RuleResult |
 async function probeDogViewerIdSql(ctx: RuleContext): Promise<RuleResult | null> {
   if (!/Dog Viewer/i.test(ctx.combined)) return null;
   if (!/name\s*=\s*["']id["']/i.test(ctx.combined)) return null;
-  const baseline = new URL(".", ctx.origin);
+  const basePath = new URL(ctx.home.finalUrl || ctx.origin).pathname || "/";
+  const baseline = new URL(basePath, ctx.origin);
   baseline.searchParams.set("id", "1");
-  const evil = new URL(".", ctx.origin);
+  const evil = new URL(basePath, ctx.origin);
   evil.searchParams.set("id", "1'");
   const docs = await ctx.probe.getMany([baseline.toString(), evil.toString()], { maxBytes: 8192 }, 2);
   const baseDoc = docs.get(baseline.toString());
