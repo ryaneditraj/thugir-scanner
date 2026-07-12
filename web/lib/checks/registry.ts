@@ -4234,6 +4234,14 @@ const CLIENT_GRAPHQL_LAB_RES: { label: string; re: RegExp }[] = [
     re: /\/import_paste[\s\S]{0,120}Import Paste|Import Paste[\s\S]{0,120}\/import_paste/i
   },
   {
+    label: "DVGA X-DVGA-MODE game level header",
+    re: /X-DVGA-MODE[\s\S]{0,80}(?:Beginner|Expert)/i
+  },
+  {
+    label: "DVGA xplat-demo ThreatX live host",
+    re: /xplat-demo\.threatx\.io|dvga\.xplat-demo/i
+  },
+  {
     label: "DVGA dolevf GitHub repo link",
     re: /dolevf\/Damn-Vulnerable-GraphQL-Application/i
   },
@@ -9399,7 +9407,7 @@ function labProbePathsForHost(hostname: string): string[] {
   if (h.includes("crapi")) return ["/identity/api/v2/user/vehicles", "/workshop/api/shop/orders"];
   if (h.includes("tomcat")) return ["/manager/html", "/host-manager/html"];
   if (h.includes("weblogic")) return ["/console/", "/console/login/LoginForm.jsp"];
-  if (h.includes("dvga")) return ["/graphql", "/graphiql"];
+  if (h.includes("dvga") || h.includes("xplat-demo")) return ["/graphql", "/graphiql"];
   if (h.includes("dvwa")) return ["/login.php", "/phpinfo.php"];
   if (h.includes("mutillidae")) return ["/index.php?page=login.php"];
   return ["/api/v1/users", "/rest/products/search"];

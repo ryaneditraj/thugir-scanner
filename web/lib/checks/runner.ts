@@ -2794,10 +2794,39 @@ function extractCtfDefiSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** Escape.tech hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
+/** VaultApp Omega finance security training SPA — seed login page with demo credentials. */
+function extractVaultappSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (!/vaultapp-omega\.vercel\.app/i.test(host) && !/VaultApp|Security Training Lab/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/login", "/dashboard"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Escape.tech / ThreatX hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
 function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
-  if (!/Damn Vulnerable GraphQL Application|dvga\.tools\.escape\.tech|dolevf\/Damn-Vulnerable-GraphQL/i.test(html))
-    return [];
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  const isDvga =
+    /Damn Vulnerable GraphQL Application|dvga\.tools\.escape\.tech|dolevf\/Damn-Vulnerable-GraphQL|xplat-demo\.threatx\.io/i.test(
+      html
+    ) || /xplat-demo\.threatx\.io|dvga\.tools\.escape\.tech/i.test(host);
+  if (!isDvga) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of ["/import_paste", "/create_paste", "/public_pastes", "/graphql", "/graphiql", "/audit"]) {
@@ -3507,6 +3536,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
   const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
+  const vaultappSeeds = extractVaultappSeeds(home.body, home.finalUrl);
   const llmSecDevSeeds = extractLlmSecDevSeeds(home.body, home.finalUrl);
   const hackingLabSeeds = extractHackingLabSeeds(home.body, home.finalUrl);
   const atlasCrewHubSeeds = extractAtlasCrewHubSeeds(home.body, home.finalUrl);
@@ -3619,6 +3649,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ctfDefiSeeds,
       ...invictiAspnetSeeds,
       ...dvgaLiveSeeds,
+      ...vaultappSeeds,
       ...llmSecDevSeeds,
       ...hackingLabSeeds,
       ...atlasCrewHubSeeds,
@@ -3709,11 +3740,33 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   });
 
   // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
-  if (isJuiceShopHost(home.finalUrl)) {
-    await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
+  const juiceShopOrigin = home.finalUrl || target.toString();
+  if (isJuiceShopHost(juiceShopOrigin)) {
+    await primeJuiceShopApiProbes(probe, juiceShopOrigin);
   }
 
-  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body)].join("\n");
+  // Heroku cold-start often serves a stub homepage — merge bootstrapped REST/bundle bodies so
+  // deep rules still see SQLi/IDOR/admin/XSS markers when pages_crawled=1.
+  let juiceShopBootstrap = "";
+  if (isJuiceShopHost(juiceShopOrigin)) {
+    const jsOrigin = new URL(juiceShopOrigin).origin;
+    const bootstrapPaths = [
+      "/main.js",
+      "/rest/admin/application-configuration",
+      "/rest/track-order/1",
+      "/rest/products/search?q='))"
+    ];
+    const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
+    const bootDocs = await probe.getMany(bootstrapUrls, { maxBytes: 800_000, timeoutMs: 18000 }, 3);
+    juiceShopBootstrap = [...bootDocs.values()]
+      .filter((d) => d.status >= 200 && d.status < 500 && !HEROKU_APP_ERROR_RE.test(d.body))
+      .map((d) => d.body)
+      .join("\n");
+  }
+
+  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body), juiceShopBootstrap]
+    .filter(Boolean)
+    .join("\n");
   const detection = detectPlatform(home, combined);
   const ctx: RuleContext = { origin, home, scripts, combined, probe };
 
