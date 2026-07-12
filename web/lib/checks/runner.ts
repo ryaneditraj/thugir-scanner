@@ -626,6 +626,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideZeroHealthEvidence",
   "clientSideAlfXssWargameEvidence",
   "clientSideLlmSecEvidence",
+  "clientSideClawguardAiAuditEvidence",
   "clientSideDefendthewebEvidence",
   "clientSideReturnTrueWargameEvidence",
   "clientSideAuthlabEvidence",
@@ -2546,6 +2547,50 @@ function extractCtfDefiSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Escape.tech hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
+function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
+  if (!/Damn Vulnerable GraphQL Application|dvga\.tools\.escape\.tech|dolevf\/Damn-Vulnerable-GraphQL/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/import_paste", "/create_paste", "/public_pastes", "/graphql", "/graphiql", "/audit"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** TomAbai LLM Security Labs (llm-sec.dev) — seed October CTF and lab modules. */
+function extractLlmSecDevSeeds(html: string, pageUrl: string): string[] {
+  if (!/llm-sec\.dev|LLM Security Labs|TomAbai\/llm-sec/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/october", "/labs"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/(?:october|labs)[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Hacking-Lab AG training platform — seed CTF and events hubs from Angular landing. */
 function extractHackingLabSeeds(html: string, pageUrl: string): string[] {
   if (!/Hacking-Lab|hacking-lab\.com/i.test(html)) return [];
@@ -3184,6 +3229,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
+  const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
+  const llmSecDevSeeds = extractLlmSecDevSeeds(home.body, home.finalUrl);
   const hackingLabSeeds = extractHackingLabSeeds(home.body, home.finalUrl);
   const atlasCrewHubSeeds = extractAtlasCrewHubSeeds(home.body, home.finalUrl);
   const atlasCrewInfernoLabSeeds = extractAtlasCrewInfernoLabSeeds(home.body, home.finalUrl);
@@ -3285,6 +3332,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspGenaiLabSeeds,
       ...ctfDefiSeeds,
       ...invictiAspnetSeeds,
+      ...dvgaLiveSeeds,
+      ...llmSecDevSeeds,
       ...hackingLabSeeds,
       ...atlasCrewHubSeeds,
       ...atlasCrewInfernoLabSeeds,

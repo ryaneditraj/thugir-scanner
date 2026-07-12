@@ -4114,6 +4114,18 @@ const CLIENT_GRAPHQL_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "DVGA audits/pastes GraphQL operations",
     re: /#query-audits|paste\s*\{|GraphQL\s+Operations/i
+  },
+  {
+    label: "DVGA live import_paste sidebar route",
+    re: /\/import_paste[\s\S]{0,120}Import Paste|Import Paste[\s\S]{0,120}\/import_paste/i
+  },
+  {
+    label: "DVGA dolevf GitHub repo link",
+    re: /dolevf\/Damn-Vulnerable-GraphQL-Application/i
+  },
+  {
+    label: "DVGA dvgql logo asset",
+    re: /dvgql_logo\.png/i
   }
 ];
 
@@ -7538,6 +7550,18 @@ const CLIENT_LLM_SEC_RES: { label: string; re: RegExp }[] = [
   {
     label: "Hands-on LLM security education",
     re: /hands-on interactive labs[\s\S]{0,80}LLM security/i
+  },
+  {
+    label: "October Agent Security Challenge CTF",
+    re: /October Agent Security Challenge/i
+  },
+  {
+    label: "MCP vulnerabilities agent security lab",
+    re: /MCP vulnerabilities[\s\S]{0,120}prompt injection|AI agent security through hands-on CTF/i
+  },
+  {
+    label: "llm-sec.dev canonical host",
+    re: /www\.llm-sec\.dev|llm-sec\.dev/i
   }
 ];
 
@@ -7555,6 +7579,48 @@ const clientSideLlmSecEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "LLM Security Labs documents OWASP Top 10 LLM vulnerability modules with interactive prompt-injection training"
+    }
+  };
+};
+
+// --- ClawGuard / prompttools.co EU AI Act compliance audit platform -----------------
+const CLIENT_CLAWGUARD_AI_AUDIT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ClawGuard EU AI Act audit title",
+    re: /EU AI Act Compliance Audit|ClawGuard/i
+  },
+  {
+    label: "KI-Agenten MCP-Server security audit",
+    re: /KI-Agenten[\s\S]{0,120}MCP-Server|MCP-Server[\s\S]{0,120}KI-Agenten/i
+  },
+  {
+    label: "225 threat patterns deterministic audit",
+    re: /225\s+Bedrohungsmuster|deterministische\s+Prüfung/i
+  },
+  {
+    label: "prompttools.co audit landing host",
+    re: /prompttools\.co\/audit/i
+  },
+  {
+    label: "EU AI Act Hochrisiko compliance deadline",
+    re: /Hochrisiko-KI-Systeme[\s\S]{0,80}EU AI Act|EU AI Act konform/i
+  }
+];
+
+const clientSideClawguardAiAuditEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CLAWGUARD_AI_AUDIT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/prompttools\.co|ClawGuard|EU AI Act/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "ClawGuard advertises EU AI Act compliance audits for KI agents and MCP servers with deterministic threat-pattern scanning"
     }
   };
 };
@@ -9772,6 +9838,7 @@ export const RULES: Record<string, Rule> = {
   clientSideZeroHealthEvidence,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
+  clientSideClawguardAiAuditEvidence,
   clientSideDefendthewebEvidence,
   clientSideReturnTrueWargameEvidence,
   clientSideAuthlabEvidence,
