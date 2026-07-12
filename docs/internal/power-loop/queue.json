@@ -1962,7 +1962,32 @@
       "url": "https://webhacking.kr/",
       "source": "Webhacking.kr — Korean public web vulnerability challenge platform with 80+ levels (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://x55.is/brutelogic/gym.php",
+      "source": "Brute Logic XSS Gym — 30+ XSS injection contexts on x55 universal delivery domain (research / awesome-sites-to-test-on)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web.ctflearn.com/web4/",
+      "source": "CTFlearn Web4 — Basic Injection SQLi challenge with echoed query (web search writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://web.ctflearn.com/web8/",
+      "source": "CTFlearn Web8 Inj3ction Time — UNION-based blind SQLi dog-id search lab (web search writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.net-force.nl/hacktivity/",
+      "source": "Net-Force — public web hacking challenge platform with 40k+ members (Recorded Future / awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://x55.is/brutelogic/xss.php",
+      "source": "Brute Logic XSS test page — classic reflected XSS vectors on x55.is (Brute Logic research hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T09:05:00.000Z"
+  "updated_at": "2026-07-12T12:05:00.000Z"
 }
