@@ -2137,7 +2137,32 @@
       "url": "https://hacksplaining.com/lessons/broken-access-control/",
       "source": "Hacksplaining — interactive broken-access-control secure-coding lesson (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level6",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 6 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level7",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 7 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level8",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 8 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level9",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 9 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level10",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 10 (alf.nu series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T18:08:00.000Z"
+  "updated_at": "2026-07-12T19:05:00.000Z"
 }
