@@ -2634,6 +2634,22 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /\/lessons\/broken-access-control|Broken Access Control — Secure Coding Lesson/i
   },
   {
+    label: "XML external entities lesson module",
+    re: /\/lessons\/xml-external-entities|XML External Entities — Secure Coding Lesson/i
+  },
+  {
+    label: "XXE external reference lesson description",
+    re: /Unsafe treatment of external references in XML allows an attacker to probe your file system/i
+  },
+  {
+    label: "Command execution lesson module",
+    re: /\/lessons\/command-execution|Command Execution — Secure Coding Lesson/i
+  },
+  {
+    label: "Command execution OS call lesson description",
+    re: /If your application calls out to the OS, you need to be sure command strings are securely constructed/i
+  },
+  {
     label: "Hacksplaining secure coding lesson title",
     re: /— Secure Coding Lesson \| Hacksplaining/i
   }
@@ -3275,6 +3291,94 @@ const CLIENT_BUGFORGE_LAB_RES: { label: string; re: RegExp }[] = [
     re: /Complete a lab to get on the board|active streaks/i
   }
 ];
+
+// --- Aikido Zen live security demo (zen-demo-java.fly.dev) -----------------------------
+const CLIENT_AIKIDO_ZEN_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Zen by Aikido live example title",
+    re: /Zen by Aikido:\s*Live Example/i
+  },
+  {
+    label: "Rate limiting demo endpoint",
+    re: /test_ratelimiting_1|rate limiting demo|rateLimitGroupId/i
+  },
+  {
+    label: "Bot blocking demo endpoint",
+    re: /test_bot_blocking|bot blocking demo|Bytespider/i
+  },
+  {
+    label: "LLM provider test form",
+    re: /test_llm|llmProvider|llmMessage/i
+  },
+  {
+    label: "Attack wave .env probe simulation",
+    re: /attack_wave|Simulating attack wave|fetch\(['"]\/\.env['"]\)/i
+  },
+  {
+    label: "User blocking header demo",
+    re: /test_user_blocking|user blocking demo/i
+  }
+];
+
+const clientSideAikidoZenDemoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AIKIDO_ZEN_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Zen by Aikido|zen-demo/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : hits.length >= 3 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Aikido Zen live demo exercises rate limiting, bot blocking, user blocking, LLM proxying, and attack-wave .env probing"
+    }
+  };
+};
+
+// --- ATTP Agent Trust Transport Protocol demo (attp-live.fly.dev) --------------------
+const CLIENT_ATTP_AGENT_TRUST_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ATTP protocol title",
+    re: /ATTP\s*--\s*Agent Trust Transport Protocol/i
+  },
+  {
+    label: "IETF standards track transport",
+    re: /IETF Standards Track|synchronous, cryptographically-signed transport layer for AI agents/i
+  },
+  {
+    label: "Agent trust wire protocol",
+    re: /Agent Trust Transport Protocol|synchronous wire-level transport that carries cryptograph/i
+  },
+  {
+    label: "CyberSecAI ATTP demo host",
+    re: /attp-live\.fly\.dev|attp\.cybersecai\.co\.uk/i
+  },
+  {
+    label: "OWASP agentic security references",
+    re: /OWASP.*agentic|agentic.*OWASP|LLM.*agent.*trust/i
+  }
+];
+
+const clientSideAttpAgentTrustEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ATTP_AGENT_TRUST_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/ATTP|Agent Trust Transport/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "ATTP live demo documents IETF Agent Trust Transport — cryptographically signed synchronous transport for AI agent security"
+    }
+  };
+};
 
 const clientSideBugforgeLabEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -11308,6 +11412,8 @@ export const RULES: Record<string, Rule> = {
   clientSideNorthStarAgiCtfEvidence,
   clientSideWafWorkshopEvidence,
   clientSideBugforgeLabEvidence,
+  clientSideAikidoZenDemoEvidence,
+  clientSideAttpAgentTrustEvidence,
   clientSideOverthewireLeviathanEvidence
 };
 

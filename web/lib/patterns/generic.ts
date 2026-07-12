@@ -5781,5 +5781,57 @@ export const genericPatterns: Pattern[] = [
       "We host Bugforge-style web exploitation labs. Show how to isolate on-demand lab instances from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-aikido-zen-demo-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Aikido Zen live security demo disclosed",
+    description:
+      "Zen by Aikido fly.dev demo exercises rate limiting, bot blocking, user blocking, LLM proxy endpoints, and attack-wave .env probing for WAF evaluation.",
+    impactOneline:
+      "Public Zen security demos document attack-simulation endpoints attackers study for bypassing rate limits and bot defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAikidoZenDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — never expose attack-wave or LLM test endpoints on production hosts.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev or lab infrastructure.",
+        "Block unauthenticated /.env enumeration probes at the edge.",
+        "Rate-limit and bot-filter LLM proxy test routes in staging environments."
+      ]
+    },
+    fixPrompt:
+      "We host an Aikido Zen-style security evaluation demo. Show how to isolate rate-limit and bot-blocking test endpoints from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-attp-agent-trust-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "ATTP Agent Trust Transport Protocol demo disclosed",
+    description:
+      "ATTP live demo documents the IETF Agent Trust Transport Protocol — a cryptographically signed synchronous transport layer for AI agent security.",
+    impactOneline:
+      "Public ATTP demos expose agent-trust protocol surfaces relevant to LLM agent authentication and transport security research.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAttpAgentTrustEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "ATTP demos are research infrastructure — gate agent transport endpoints behind authentication.",
+      steps: [
+        "Require mutual authentication on all agent transport channels in production.",
+        "Do not expose unsigned agent message relays on public fly.dev hosts.",
+        "Monitor agent transport endpoints for unauthorized protocol probing."
+      ]
+    },
+    fixPrompt:
+      "We host an ATTP-style agent trust transport demo. Show how to authenticate agent wire-protocol endpoints in production.",
+    version: 1,
+    enabled: true
   }
 ];
