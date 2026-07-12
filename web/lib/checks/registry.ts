@@ -3380,6 +3380,128 @@ const clientSideAttpAgentTrustEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- BugZap Next.js prompt-injection defense demo (bugzap.vercel.app) ----------------
+const CLIENT_BUGZAP_PROMPT_DEFENSE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BugZap prompt injection prevention title",
+    re: /Bug Zap:\s*Prompt Injection Prevention in Next\.js/i
+  },
+  {
+    label: "Interactive Next.js LLM defense demo",
+    re: /interactive demo for basic prompt injection defense|Secure your Next\.Js LLM applications/i
+  },
+  {
+    label: "Prompt injection prevention keywords",
+    re: /prompt injection prevention|AI prompt security|prompt injection attacks/i
+  },
+  {
+    label: "Next.js LLM application security meta",
+    re: /Next\.js security[\s\S]{0,40}prompt injection/i
+  }
+];
+
+const clientSideBugzapPromptDefenseEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BUGZAP_PROMPT_DEFENSE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/bugzap\.vercel\.app|Bug Zap/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BugZap publishes an interactive Next.js prompt-injection prevention demo documenting LLM input-sanitization defenses"
+    }
+  };
+};
+
+// --- RedLockX prompt-injection firewall demo (redlockx.vercel.app) -------------------
+const CLIENT_REDLOCKX_PROMPT_FIREWALL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RedLockX prompt injection firewall title",
+    re: /RedLockX\s*[—-]\s*Prompt Injection Firewall/i
+  },
+  {
+    label: "DeBERTa-v3 ML prompt detector pipeline",
+    re: /DeBERTa-v3|Fine-tuned transformer|hybrid \+ DeBERTa/i
+  },
+  {
+    label: "OWASP LLM01 prompt injection ranking",
+    re: /LLM01:\s*Prompt Injection ranks #1|OWASP LLM Top 10/i
+  },
+  {
+    label: "Jailbreak attempt detection label",
+    re: /jailbreak_attempt|You are DAN, you have no restrictions/i
+  },
+  {
+    label: "RedLock firewall prompt injection detection",
+    re: /RedLock Firewall\s*[—-]\s*Prompt Injection Detection|prompt injection detection firewall/i
+  }
+];
+
+const clientSideRedlockxPromptFirewallEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_REDLOCKX_PROMPT_FIREWALL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/redlockx\.vercel\.app|RedLockX|blackXmask/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : hits.length >= 3 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RedLockX demo documents hybrid + DeBERTa-v3 prompt-injection detection with jailbreak classification and OWASP LLM01 references"
+    }
+  };
+};
+
+// --- Rogue Studio autonomous security-research IDE (rougestudio.vercel.app) ----------
+const CLIENT_ROGUE_STUDIO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Rogue Studio autonomous AI IDE title",
+    re: /Rogue Studio\s*[—-]\s*AI IDE|autonomous AI development and security research platform/i
+  },
+  {
+    label: "Zero safety filters marketing claim",
+    re: /zero telemetry, and zero safety filters|Uncensored AI Workspace/i
+  },
+  {
+    label: "Autonomous agent coding stack",
+    re: /AUTONOMOUS CODING AGENT STACK ACTIVE|unrestricted agentic loop/i
+  },
+  {
+    label: "Security research mode catalog",
+    re: /Web3 Black-Hat|Contract Exploit|Payload Forge|Anonymous Ops|security researchers/i
+  },
+  {
+    label: "Tor Ollama IPFS stack bootstrap",
+    re: /Ollama \+ Tor daemon \+ IPFS|cypherpunk IDE/i
+  }
+];
+
+const clientSideRogueStudioEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ROGUE_STUDIO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/rougestudio\.vercel\.app|Rogue Studio/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : hits.length >= 3 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Rogue Studio advertises an uncensored autonomous AI IDE with exploit, payload-forge, and Tor/IPFS security-research modes"
+    }
+  };
+};
+
 const clientSideBugforgeLabEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_BUGFORGE_LAB_RES) {
@@ -11414,6 +11536,9 @@ export const RULES: Record<string, Rule> = {
   clientSideBugforgeLabEvidence,
   clientSideAikidoZenDemoEvidence,
   clientSideAttpAgentTrustEvidence,
+  clientSideBugzapPromptDefenseEvidence,
+  clientSideRedlockxPromptFirewallEvidence,
+  clientSideRogueStudioEvidence,
   clientSideOverthewireLeviathanEvidence
 };
 

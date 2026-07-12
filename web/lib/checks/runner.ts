@@ -740,7 +740,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
   "clientSideAikidoZenDemoEvidence",
-  "clientSideAttpAgentTrustEvidence"
+  "clientSideAttpAgentTrustEvidence",
+  "clientSideBugzapPromptDefenseEvidence",
+  "clientSideRedlockxPromptFirewallEvidence",
+  "clientSideRogueStudioEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
