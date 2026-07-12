@@ -2112,7 +2112,32 @@
       "url": "https://hacksplaining.com/lessons/open-redirects/",
       "source": "Hacksplaining — interactive open-redirect secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://bug-collection.vercel.app/",
+      "source": "valentin-panov/bug-collection — intentionally vulnerable React/Next MongoDB training app (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://escape.alf.nu/level5",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 5 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/directory-traversal/",
+      "source": "Hacksplaining — interactive directory-traversal secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/ssrf/",
+      "source": "Hacksplaining — interactive SSRF secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/broken-access-control/",
+      "source": "Hacksplaining — interactive broken-access-control secure-coding lesson (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T17:37:00.000Z"
+  "updated_at": "2026-07-12T18:08:00.000Z"
 }
