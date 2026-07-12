@@ -1757,6 +1757,24 @@
       "slug": "vulnex-playbook-sitemap-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: sitemap lists /vulnerabilities /methods /recon /all taxonomy pages; extractVulnexPlaybookSeeds seeds crawl; vulnex pages_crawled 1→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name SQL Injection 01 + bypass login pages by injecting SQL payloads + /exercises/sqli_01; pentesterlab.com/exercises/sqli_01 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name XSS 01 + basics of Cross-Site Scripting (XSS) alert box lab + /exercises/xss_01; pentesterlab.com/exercises/xss_01 findings 0→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Top 10 for Web title + SQL Injection | Kontra training page + owasp-top-10-sql-injection seed; application.security/free/owasp-top-10 findings 0→4; sql-injection lesson 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3214,6 +3232,21 @@
       "source": "discovery:vulnex.vercel.app",
       "slug": "vulnex-playbook-sitemap-crawl",
       "shipped_at": "2026-07-12T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-exercise-evidence",
+      "shipped_at": "2026-07-12T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-exercise-evidence",
+      "shipped_at": "2026-07-12T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-web-sqli-lab-markers",
+      "shipped_at": "2026-07-12T03:10:00.000Z"
     }
   ]
 }
