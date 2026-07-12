@@ -1973,6 +1973,24 @@
       "slug": "client-side-ctflearn-websix-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: <!-- source at source.txt --> + strcmp() in source.txt + GET ?password[]=1 returns ctf{str_comp4r3}; phpStrcmpArrayBypass live probe; web6 findings 0→4; benchmark staging 5/6 maintained"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webtwo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Web2 + POST password form + <!-- c3RvcHRoYXRqcw== --> base64 comment decodes stopthatjs on web.ctflearn.com/web2/; htmlCommentCredentialDisclosure base64 extension; web2 findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webseven-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: calc.js eval(document.getElementById('d').value) + expression POST form on web.ctflearn.com/web7/; web7 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "post-login-sql-bypass",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=' OR 1=1 -- returns 302 Location /dashboard + session cookie; sql-injection-lab.vercel.app findings 1→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3600,6 +3618,21 @@
       "source": "discovery:web.ctflearn.com",
       "slug": "php-strcmp-array-bypass",
       "shipped_at": "2026-07-12T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webtwo-evidence",
+      "shipped_at": "2026-07-12T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webseven-evidence",
+      "shipped_at": "2026-07-12T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "post-login-sql-bypass",
+      "shipped_at": "2026-07-12T15:10:00.000Z"
     }
   ]
 }
