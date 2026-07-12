@@ -1955,6 +1955,24 @@
       "slug": "client-side-appsec-master-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Application security training platform + hands-on code review CTF labs + OSWE/EWPTX/GWAPT schema.org; appsecmaster.net findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webone-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Web1 Simple + POST password form + <!-- 7xfsnj65gsklsjsdkj --> HTML comment on web.ctflearn.com/web1/; htmlCommentCredentialDisclosure extended; web1 findings 0→4; benchmark staging 7 findings 5/6 (primary heroku 503)"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webthree-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: You're not an admin. Please leave this site on web.ctflearn.com/web3/; web3 findings 0→4; benchmark staging 5/6 maintained"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-websix-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <!-- source at source.txt --> + strcmp() in source.txt + GET ?password[]=1 returns ctf{str_comp4r3}; phpStrcmpArrayBypass live probe; web6 findings 0→4; benchmark staging 5/6 maintained"
     }
   ],
   "shipped": [
@@ -3562,6 +3580,26 @@
       "source": "discovery:appsecmaster.net",
       "slug": "client-side-appsec-master-evidence",
       "shipped_at": "2026-07-12T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webone-evidence",
+      "shipped_at": "2026-07-12T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webthree-evidence",
+      "shipped_at": "2026-07-12T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-websix-evidence",
+      "shipped_at": "2026-07-12T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "php-strcmp-array-bypass",
+      "shipped_at": "2026-07-12T14:10:00.000Z"
     }
   ]
 }
