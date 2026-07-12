@@ -1244,6 +1244,9 @@ function extractAlfNuXssSeeds(html: string, pageUrl: string): string[] {
     "https://returntrue.win/",
     "/alert1",
     "/alert2",
+    "/level1",
+    "/level2",
+    "/level3",
     "/ReturnTrue"
   ]) {
     try {
@@ -2342,9 +2345,13 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** RedTiger Hackit — seed SQLi/login-bypass level pages from index catalog. */
+/** RedTiger Hackit — seed SQLi/login-bypass level pages from index catalog or direct level URL. */
 function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
-  if (!/RedTiger's Hackit|redtiger\.labs\.overthewire\.org/i.test(html)) return [];
+  const isHub = /RedTiger's Hackit|redtiger\.labs\.overthewire\.org/i.test(html);
+  const isLevel =
+    /Welcome to level \d+|simple injection|Tablename:\s*level\d+_users/i.test(html) &&
+    /redtiger\.labs\.overthewire\.org/i.test(origin);
+  if (!isHub && !isLevel) return [];
   const out = new Set<string>();
   const re = /href="(level\d+\.php|special1\.php)"/gi;
   let m: RegExpExecArray | null;
@@ -2353,6 +2360,15 @@ function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
       out.add(new URL(m[1], origin).toString());
     } catch {
       /* ignore */
+    }
+  }
+  if (isLevel) {
+    for (const p of ["level1.php", "level2.php", "level3.php", "level4.php", "level5.php"]) {
+      try {
+        out.add(new URL(p, origin).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   return [...out];
@@ -3252,13 +3268,26 @@ function extractDvwaVulnSourceSeeds(html: string, origin: string): string[] {
 
 /** Hackforge-style CTF SPAs expose challenge routes only in JS — seed from HTML meta. */
 function extractCtfPlatformSpaSeeds(html: string, origin: string): string[] {
-  if (
-    !/Hackforge|CTF Platform|Premier Cybersecurity CTF|capture the flag.*training platform/i.test(
+  const isHackforge =
+    /Hackforge|CTF Platform|Premier Cybersecurity CTF|capture the flag.*training platform/i.test(
       html
-    )
-  )
-    return [];
-  const paths = ["/practice", "/challenges", "/events", "/dashboard", "/courses"];
+    );
+  let isIeeeVit = /IEEE-VIT|CTF-Conquer The World|Conquer The World.*CTF|webpackJsonpctf/i.test(
+    html
+  );
+  if (!isIeeeVit) {
+    try {
+      isIeeeVit =
+        /ctf\.vercel\.app$/i.test(new URL(origin).hostname) &&
+        /<title>CTF<\/title>|flags\.png/i.test(html);
+    } catch {
+      /* ignore */
+    }
+  }
+  if (!isHackforge && !isIeeeVit) return [];
+  const paths = isIeeeVit
+    ? ["/get_started", "/play", "/"]
+    : ["/practice", "/challenges", "/events", "/dashboard", "/courses"];
   const out: string[] = [];
   for (const p of paths) {
     try {
