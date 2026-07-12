@@ -1937,6 +1937,24 @@
       "slug": "brutelogic-knoxss-crawl-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractBrutelogicXssGymSeeds now seeds knoxss.html, xss.php, dom/sinks.html, multi/ paths; xss.php crawl reaches 6 pages including gym + knoxss; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webeight-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Dog Viewer + name=id GET form + Name:/Breed:/Color: on web.ctflearn.com/web8/; probeDogViewerIdSql id=1 vs id=1' differential; web8 findings 0→4 (sql-error-disclosure + webeight evidence); benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.wechall.net",
+      "slug": "client-side-wechall-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WeChall hacking challenge scoreboard + /challs/MySQL|PHP|Exploit tags + module/WeChall/wc.js; extractWechallChallengeSeeds; wechall.net findings 0→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsecmaster.net",
+      "slug": "client-side-appsec-master-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Application security training platform + hands-on code review CTF labs + OSWE/EWPTX/GWAPT schema.org; appsecmaster.net findings 7→8; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3529,6 +3547,21 @@
       "source": "discovery:x55.is",
       "slug": "brutelogic-knoxss-crawl-seeds",
       "shipped_at": "2026-07-12T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webeight-evidence",
+      "shipped_at": "2026-07-12T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.wechall.net",
+      "slug": "client-side-wechall-evidence",
+      "shipped_at": "2026-07-12T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:appsecmaster.net",
+      "slug": "client-side-appsec-master-evidence",
+      "shipped_at": "2026-07-12T13:10:00.000Z"
     }
   ]
 }
