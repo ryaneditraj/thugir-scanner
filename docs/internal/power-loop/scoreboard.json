@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T17:39:32.800Z",
+  "updated_at": "2026-07-12T18:08:11.554Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,36 +15,30 @@
       ]
     }
   },
-  "total_sites_scanned": 927,
-  "total_findings": 4009,
+  "total_sites_scanned": 928,
+  "total_findings": 4017,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 432,
   "discovery_findings": 2938,
-  "improvements_shipped": 334,
-  "last_run": "2026-07-12T17:39:32.800Z",
+  "improvements_shipped": 337,
+  "last_run": "2026-07-12T18:08:11.554Z",
   "last_run_summary": {
-    "hour_utc": "17:00",
+    "hour_utc": "18:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 7,
+      "primary_findings": 8,
       "primary_recall": "6/6",
-      "primary_gap": [
-        "xss",
-        "sqli",
-        "idor",
-        "auth_bypass",
-        "sensitive_data"
-      ],
+      "primary_gap": [],
       "pages_crawled": 1,
-      "probes_run": 286,
-      "primary_note": "pass1 1/6 pages_crawled=1; retry 3 findings; wake retry recovered 7 findings 6/6 on primary without staging fallback",
+      "probes_run": 316,
+      "primary_note": "primary heroku 8 findings 6/6 — no category misses",
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": null,
       "oracle_recall": null,
       "gap": [],
-      "note": "No benchmark category misses — wake retry on primary heroku 6/6 (7 findings)",
+      "note": "No benchmark category misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -57,58 +51,41 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ],
-          "primary_gap": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
           ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 28,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 7,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
-        "http://34.28.235.106/ (GCP vuln-bank connection reset)"
-      ],
-      "focus": "bbh #5, escape L4, RedTiger L2, TIWAP, Hacksplaining open-redirects",
+      "dns_failures": [],
+      "focus": "Queued tail URLs validated: escape.alf.nu/level4, RedTiger level2, Hacksplaining open-redirects",
       "validated_targets": [
-        "juice-shop.demo.escape.tech (8 findings — full OWASP Juice Shop v20 on Escape.tech)",
-        "yogsec.github.io/xss-labs (5 findings — XSS training platform markers)",
-        "bwapp.net (5 findings — reflected XSS + AWS/Twilio secrets in bundle)",
-        "owasp-finbot-ctf.org (4 findings — agentic AI CTF + OpenAPI docs)",
-        "maestro-agentic-ai-security-demo-mon.netlify.app (3 findings — DB URL in bundle)",
-        "ginandjuice.shop (3 findings — reflected XSS + insecure cookies)"
+        "escape.alf.nu/level4 (3 findings — alf.nu XSS wargame markers on level4+)",
+        "redtiger.labs.overthewire.org/level2.php (2 findings — blind login-bypass level form)",
+        "hacksplaining.com/lessons/open-redirects (open-redirect lesson markers — Vercel checkpoint may block cloud)"
       ],
       "queued_not_reached": [
-        "www.bugbountyhunter.com/challenge?id=5",
-        "escape.alf.nu/level4",
-        "redtiger.labs.overthewire.org/level2.php",
-        "tiwap.com",
-        "hacksplaining.com/lessons/open-redirects/"
+        "www.bugbountyhunter.com/challenge?id=5 (already 2 findings via zseano platform rule)",
+        "tiwap.com (domain parked — redirects to transporeon.com)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: wake retry 6/6 on primary (7 findings) — no staging fallback needed",
-      "juice-shop.demo.escape.tech: Escape.tech hosted Juice Shop v20 full 6/6 category coverage (8 findings)",
-      "yogsec.github.io/xss-labs: interactive XSS labs with dangerous HTML sinks (5 findings)",
-      "bwapp.net: reflected XSS + secret-aws-akid + secret-twilio in bundle (5 findings)",
-      "owasp-finbot-ctf.org: agentic AI CTF + prompt-injection evidence (4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "escape.alf.nu/level4: alert(1)-to-win XSS wargame evidence on direct level scan",
+      "redtiger.labs.overthewire.org/level2.php: RedTiger hackit evidence via level2login POST form",
+      "hacksplaining open-redirect lesson markers shipped — Vercel Security Checkpoint blocks cloud UA"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: cold-start pass1 1/6 pages_crawled=1 — wake retry required before full recall",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "34.28.235.106: JessJohn0 vuln-bank GCP host offline from cloud",
-      "new tail URLs (bbh #5, escape L4, RedTiger L2, TIWAP, hacksplaining open-redirects) queued but not reached — 8-URL head-first limit"
-    ]
+      "tiwap.com: domain no longer hosts TIWAP — parked redirect to transporeon.com",
+      "hacksplaining.com: Vercel Security Checkpoint blocks scanner UA from cloud pods",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
+    ],
+    "improvements_shipped_this_run": 3
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -160,6 +137,7 @@
     "testaspnet.vulnweb.com": 3,
     "hackxor.net": 3,
     "escape.alf.nu": 3,
+    "escape.alf.nu/level4": 3,
     "natas0.natas.labs.overthewire.org": 3,
     "natas3.natas.labs.overthewire.org": 3,
     "natas4.natas.labs.overthewire.org": 3,
@@ -210,6 +188,7 @@
     "www.overthewire.org/wargames/narnia": 7,
     "www.overthewire.org/wargames/behemoth": 7,
     "redtiger.labs.overthewire.org": 2,
+    "redtiger.labs.overthewire.org/level2.php": 2,
     "ringzer0ctf.com": 7,
     "webhacking.kr": 3,
     "www.net-force.nl": 3,

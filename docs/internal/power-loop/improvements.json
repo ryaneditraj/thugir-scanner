@@ -2027,6 +2027,24 @@
       "slug": "ieee-vit-ctf-platform-spa",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta IEEE-VIT CTF-Conquer The World + bundle checkFlag/getAllQuestions; extractCtfPlatformSpaSeeds seeds /get_started; ctf.vercel.app findings 0→6 (client-side-ctf-platform-evidence); benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:escape.alf.nu",
+      "slug": "alf-nu-escape-level4-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level4 title alert(1) to win + localStorage.serverUrl alf.nu/db/true; extractAlfNuXssSeeds seeds /level4-/level10; escape.alf.nu/level4 direct scan 3 findings (client-side-alf-xss-wargame-evidence); benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level2-blind-login",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level2.php POST name=level2login password form (blind login-bypass); clientSideRedtigerHackitEvidence level2login marker; redtiger level2.php findings 0→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-open-redirect-lesson",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/open-redirects/start title Open Redirects — Secure Coding Lesson + meta forwards to URLs supplied in a query string phishing attacks; extractHacksplainingLessonSeeds + CLIENT_HACKSPLAINING_RES markers; Vercel Security Checkpoint may block cloud scans — benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3699,6 +3717,21 @@
       "source": "discovery:ctf.vercel.app",
       "slug": "ieee-vit-ctf-platform-spa",
       "shipped_at": "2026-07-12T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:escape.alf.nu",
+      "slug": "alf-nu-escape-level4-seeds",
+      "shipped_at": "2026-07-12T18:08:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level2-blind-login",
+      "shipped_at": "2026-07-12T18:08:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-open-redirect-lesson",
+      "shipped_at": "2026-07-12T18:08:00.000Z"
     }
   ]
 }
