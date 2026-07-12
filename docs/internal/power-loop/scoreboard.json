@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T15:10:00.000Z",
+  "updated_at": "2026-07-12T15:55:35.640Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,69 +15,83 @@
       ]
     }
   },
-  "total_sites_scanned": 906,
-  "total_findings": 3934,
+  "total_sites_scanned": 913,
+  "total_findings": 3958,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 417,
-  "discovery_findings": 2884,
+  "discovery_urls_added": 422,
+  "discovery_findings": 2901,
   "improvements_shipped": 330,
-  "last_run": "2026-07-12T15:10:00.000Z",
+  "last_run": "2026-07-12T15:55:35.640Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
-      "primary_recall": "6/6",
-      "primary_gap": [],
+      "primary_findings": 1,
+      "primary_recall": "1/6",
+      "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
       "pages_crawled": 1,
-      "probes_run": 269,
+      "probes_run": 6,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
+      "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings on last full pass)",
+      "note": "Primary Heroku cold-start degraded (3 passes pages_crawled=1); staging fallback 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"],
+          "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 10,
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 17,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "CTFlearn Web2/Web7 series + LZ Corp Flask SQLi lab",
-      "improvements_shipped_this_run": 3,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
+        "http://34.28.235.106/ (GCP vuln-bank host unreachable)"
+      ],
+      "focus": "VaultApp IDOR lab, OWASP Bricks, Damn Vulnerable Bank, EKS Goat, Agent Arena",
+      "improvements_shipped_this_run": 0,
       "validated_targets": [
-        "http://web.ctflearn.com/web2/ (2→4 findings)",
-        "http://web.ctflearn.com/web7/ (3→4 findings)",
-        "https://sql-injection-lab.vercel.app/ (1→2 findings)"
+        "vaultapp-omega.vercel.app (4 findings)",
+        "sechow.com/bricks (2 findings)",
+        "rewanthtammana.com/damn-vulnerable-bank (3 findings)",
+        "ekssecurity.netlify.app (2 findings)",
+        "pentest-ground.com:7001 (1 finding)",
+        "wiz.jock.pl/experiments/agent-arena (5 findings)"
+      ],
+      "queued_not_reached": [
+        "cylabacademy.org",
+        "atlascrew.dev/chimera",
+        "bugbountyhunter.com/challenge?id=2",
+        "bugbountyhunter.com/challenge?id=3",
+        "escape.alf.nu/level1",
+        "aigoat.app",
+        "ctf.vercel.app",
+        "fabraix.com/playground",
+        "dvga.xplat-demo.threatx.io"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 — no benchmark misses",
-      "web.ctflearn.com/web2: base64 HTML comment <!-- c3RvcHRoYXRqcw== --> + webtwo evidence (2→4)",
-      "web.ctflearn.com/web7: calc.js eval(expression) + webseven evidence (3→4)",
-      "sql-injection-lab.vercel.app: POST login ' OR 1=1 -- → 302 /dashboard + session (1→2)"
+      "juice-shop.herokuapp.com: primary degraded 1/6 (pages_crawled=1) — staging fallback 6/6 (7 findings)",
+      "vaultapp-omega.vercel.app: IDOR fintech training lab (4 findings)",
+      "wiz.jock.pl/experiments/agent-arena: prompt-injection + XSS sinks (5 findings)",
+      "rewanthtammana.com/damn-vulnerable-bank: banking vuln demo (3 findings)"
     ],
     "learning_gaps": [
+      "juice-shop.herokuapp.com: Heroku cold-start pages_crawled=1 misses xss,sqli,idor,auth_bypass,sensitive_data before retry/fallback",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku intermittent 503 — staging fallback for oracle when primary cold",
-      "web.ctflearn.com/web5: 404 — challenge instance offline",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "hacksec.in: password-protected WordPress — per-lab routes unreachable without site password"
+      "34.28.235.106: JessJohn0 vuln-bank GCP host offline from cloud",
+      "New tail URLs (cylabacademy, bugbountyhunter challenges, escape.alf.nu) not reached — 8-URL head-first queue limit"
     ]
   },
   "discovery_highlights": {
@@ -215,6 +229,12 @@
     "ctf.hacker101.com": 3,
     "vulnerable-lab.vercel.app": 8,
     "vulnerable-web-site.vercel.app": 3,
-    "preview.owasp-juice.shop": 7
+    "preview.owasp-juice.shop": 7,
+    "wiz.jock.pl/experiments/agent-arena": 5,
+    "vaultapp-omega.vercel.app": 4,
+    "rewanthtammana.com/damn-vulnerable-bank": 3,
+    "sechow.com/bricks": 2,
+    "ekssecurity.netlify.app": 2,
+    "pentest-ground.com:7001": 1
   }
 }
