@@ -1752,7 +1752,32 @@
       "url": "https://0xk4b1r.vercel.app/",
       "source": "0xk4b1r VulneraShop — intentionally vulnerable full-stack OWASP Top 10 practice app (Vercel OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnex.vercel.app/",
+      "source": "VULNEX — web hacking playbook with OWASP-aligned payload libraries (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://print.alf.nu/",
+      "source": "Erling Ellingsen print.alf.nu — XSS sandbox iframe challenge infrastructure (alf.nu)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.secureflag.com/owasp.html",
+      "source": "SecureFlag — browser-based OWASP Top 10 training labs hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/web_for_pentester/",
+      "source": "PentesterLab Web for Pentester exercise index — SQLi/XSS/CSRF hosted labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.root-me.org/en/Challenges/Web-Server/",
+      "source": "Root-Me Web-Server challenge index — public CTF vulnerability exercises (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T00:45:00.000Z"
+  "updated_at": "2026-07-12T01:10:00.000Z"
 }
