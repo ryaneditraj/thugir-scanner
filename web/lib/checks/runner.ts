@@ -738,7 +738,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecurityWriteupEvidence",
   "clientSideNorthStarAgiCtfEvidence",
   "clientSideWafWorkshopEvidence",
-  "clientSideBugforgeLabEvidence"
+  "clientSideBugforgeLabEvidence",
+  "clientSideAikidoZenDemoEvidence",
+  "clientSideAttpAgentTrustEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;
@@ -1720,7 +1722,10 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/ai-prompt-injection/start",
     "/lessons/directory-traversal/start",
     "/lessons/ssrf/start",
-    "/lessons/broken-access-control/start"
+    "/lessons/broken-access-control/start",
+    "/lessons/xml-external-entities/start",
+    "/lessons/command-execution/start",
+    "/lessons/remote-code-execution/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
