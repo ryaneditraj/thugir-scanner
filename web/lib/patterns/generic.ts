@@ -2794,6 +2794,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-xvwa-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "XVWA deliberately vulnerable web application disclosed",
+    description:
+      "XVWA (Xtreme Vulnerable Web Application) is an intentionally insecure PHP training app with 15+ attack modules covering SQLi, XSS, SSRF, IDOR, SSTI, and CSRF.",
+    impactOneline:
+      "Public XVWA instances expose live SQL injection, XSS, SSRF, and access-control flaws for unauthenticated exploitation practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXvwaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XVWA is intentional training software — never deploy to production or expose publicly.",
+      steps: [
+        "Run XVWA only in isolated Docker/VM lab environments.",
+        "Do not expose XVWA vulnerability modules to the public internet.",
+        "Use XVWA to validate scanner detection rules, not as a production pattern."
+      ]
+    },
+    fixPrompt:
+      "We host XVWA for application security training. Show how to keep it isolated in a lab Docker network.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bugbountyhunter-evidence",
     platform: "generic",
     category: "Cross-site scripting",
