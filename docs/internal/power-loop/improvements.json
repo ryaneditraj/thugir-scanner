@@ -1847,6 +1847,24 @@
       "slug": "client-side-prompt-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Arc Gate Live Red Team + AgentDojo v1 attack pattern + hidden instructions indirect injection on /demo; findings 4→5; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:swarnadip-kar.github.io/xss-victim",
+      "slug": "client-side-xss-victim-bank-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS DEMO victim.html HTML comment + session cookie set at login + attacker sends crafted URL + getUsernameFromCookie; swarnadip-kar.github.io/xss-victim findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nimbusvault.app",
+      "slug": "client-side-nimbus-vault-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Nimbus Vault Ethical Hackers Notebook + CAVET Component Analysis + Nexus Engine attack paths + bug bounty hunters; nimbusvault.app findings 0→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "client-side-securebank-blog-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecureBank Attack Lab + Attack Mode vs Secure Mode + SQL injection XSS CSRF live demos; securebank-blog.vercel.app findings 5→6; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3364,6 +3382,21 @@
       "source": "discovery:vuln-portal.vercel.app",
       "slug": "flask-redirect-stub-follow",
       "shipped_at": "2026-07-12T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:swarnadip-kar.github.io/xss-victim",
+      "slug": "client-side-xss-victim-bank-evidence",
+      "shipped_at": "2026-07-12T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:nimbusvault.app",
+      "slug": "client-side-nimbus-vault-evidence",
+      "shipped_at": "2026-07-12T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "client-side-securebank-blog-evidence",
+      "shipped_at": "2026-07-12T08:10:00.000Z"
     }
   ]
 }

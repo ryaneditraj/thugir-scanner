@@ -2872,6 +2872,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-xss-victim-bank-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "XSS victim bank session-theft demo disclosed",
+    description:
+      "Swarnadip-Kar xss-victim bank lab sets a session cookie at login and documents attacker-crafted URLs that steal it via victim.html innerHTML sinks.",
+    impactOneline:
+      "Public XSS victim bank demos expose session-cookie theft patterns paired with cross-origin C2 collector labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXssVictimBankEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational XSS labs must not set real session cookies on shared demo origins.",
+      steps: [
+        "Use HttpOnly and SameSite=Strict on session cookies even in demos.",
+        "Sanitize all URL parameters before assigning to innerHTML on victim pages.",
+        "Host attacker/victim pairs on isolated subdomains with no shared cookie scope."
+      ]
+    },
+    fixPrompt:
+      "We host an XSS victim bank demo with session cookies and victim.html search sinks. Show how to prevent cross-origin cookie theft.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-nimbus-vault-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Nimbus Vault bug-bounty playbook platform disclosed",
+    description:
+      "Nimbus Vault operationalizes CAVET (Component Analysis & Vulnerability Enumeration Technique) with a Nexus Engine that surfaces attack paths for ethical hackers and bug bounty hunters.",
+    impactOneline:
+      "Public Nimbus Vault docs expose bug bounty methodology, playbooks, and attack-path reasoning for unauthenticated study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNimbusVaultEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bug bounty platforms are intentional training infrastructure — gate workspace data behind auth.",
+      steps: [
+        "Require login before exposing target inventories or encoded playbooks.",
+        "Do not publish live practice target URLs without access controls.",
+        "Rate-limit unauthenticated playbook and component enumeration."
+      ]
+    },
+    fixPrompt:
+      "We run a Nimbus Vault-style bug bounty knowledge platform. Show how to auth-gate target inventories and isolate practice apps like Todoer.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-securebank-blog-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecureBank attack/secure mode educational lab disclosed",
+    description:
+      "FAST-NUCES SecureBank semester project blog documents live Attack Mode SQL injection, XSS, and CSRF demos with side-by-side secure vs insecure code.",
+    impactOneline:
+      "Public SecureBank blog walkthroughs expose intentionally vulnerable banking attack patterns for educational replay.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecurebankBlogEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Remove Attack Mode from any publicly reachable deployment.",
+        "Use parameterized queries and output encoding in all demo code paths.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our SecureBank blog documents Attack Mode SQLi/XSS/CSRF. Show how to remove attack toggles from production and isolate lab deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bugbountyhunter-evidence",
     platform: "generic",
     category: "Cross-site scripting",
