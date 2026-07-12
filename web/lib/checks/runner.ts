@@ -1247,6 +1247,13 @@ function extractAlfNuXssSeeds(html: string, pageUrl: string): string[] {
     "/level1",
     "/level2",
     "/level3",
+    "/level4",
+    "/level5",
+    "/level6",
+    "/level7",
+    "/level8",
+    "/level9",
+    "/level10",
     "/ReturnTrue"
   ]) {
     try {
@@ -1692,6 +1699,7 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/sql-injection/injection-explained",
     "/lessons/xss-reflected/start",
     "/lessons/csrf/start",
+    "/lessons/open-redirects/start",
     "/lessons/ai-prompt-injection/start"
   ]) {
     try {
@@ -2349,8 +2357,9 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
 function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
   const isHub = /RedTiger's Hackit|redtiger\.labs\.overthewire\.org/i.test(html);
   const isLevel =
-    /Welcome to level \d+|simple injection|Tablename:\s*level\d+_users/i.test(html) &&
-    /redtiger\.labs\.overthewire\.org/i.test(origin);
+    /Welcome to level \d+|simple injection|Tablename:\s*level\d+_users|level\d+login/i.test(
+      html
+    ) && /redtiger\.labs\.overthewire\.org/i.test(origin);
   if (!isHub && !isLevel) return [];
   const out = new Set<string>();
   const re = /href="(level\d+\.php|special1\.php)"/gi;
