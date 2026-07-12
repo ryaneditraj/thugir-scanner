@@ -2616,6 +2616,22 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   {
     label: "Open redirect phishing lesson description",
     re: /forwards to URLs supplied in a query string[\s\S]{0,80}phishing attacks/i
+  },
+  {
+    label: "Directory traversal lesson module",
+    re: /\/lessons\/directory-traversal|Directory Traversal — Secure Coding Lesson/i
+  },
+  {
+    label: "SSRF lesson module",
+    re: /\/lessons\/ssrf|Server-Side Request Forgery — Secure Coding Lesson/i
+  },
+  {
+    label: "Broken access control lesson module",
+    re: /\/lessons\/broken-access-control|Broken Access Control — Secure Coding Lesson/i
+  },
+  {
+    label: "Hacksplaining secure coding lesson title",
+    re: /— Secure Coding Lesson \| Hacksplaining/i
   }
 ];
 
@@ -8597,6 +8613,52 @@ const clientSideBugBountyHunterEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Valentin Panov BUG Collection (bug-collection.vercel.app) ----------------------
+const CLIENT_BUG_COLLECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BUG Collection app title",
+    re: /BUG Collection/i
+  },
+  {
+    label: "Vulnerable Next.js training app keywords",
+    re: /vulnerable,\s*nextjs,\s*application,\s*security/i
+  },
+  {
+    label: "PrototypePollution test module",
+    re: /PrototypePollution_code|poc_PrototypePollution/i
+  },
+  {
+    label: "Bug Collection API base URL",
+    re: /bug-collection\.vercel\.app\/api/i
+  },
+  {
+    label: "Auth Debugger training component",
+    re: /Auth Debugger/i
+  },
+  {
+    label: "Valentin Panov author attribution",
+    re: /Valentin Panov|valentin-panov\/bug-collection/i
+  }
+];
+
+const clientSideBugCollectionEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BUG_COLLECTION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/BUG Collection|bug-collection\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BUG Collection is an intentionally vulnerable React/Next/MongoDB training app with OWASP Top 10 injection, access-control, and prototype-pollution labs"
+    }
+  };
+};
+
 // --- Zero Health healthcare security lab (zerohealth.aliyu.dev) ---------------------
 const CLIENT_ZERO_HEALTH_RES: { label: string; re: RegExp }[] = [
   {
@@ -11143,6 +11205,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNimbusVaultEvidence,
   clientSideSecurebankBlogEvidence,
   clientSideBugBountyHunterEvidence,
+  clientSideBugCollectionEvidence,
   clientSideZeroHealthEvidence,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
