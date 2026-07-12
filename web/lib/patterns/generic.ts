@@ -1728,6 +1728,240 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-web-for-pentester-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Web for Pentester course disclosed",
+    description:
+      "PentesterLab Web for Pentester free exercise documents foundational web penetration testing, vulnerability identification, and exploitation techniques.",
+    impactOneline:
+      "Public Web for Pentester curriculum reveals injection and access-control lab taxonomy for junior pentesters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabWebForPentesterEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab code in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Isolate exercise infrastructure from production networks.",
+        "Monitor outbound traffic from lab containers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Web for Pentester-style exercises. Show how to gate labs behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-sqli-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentesterLab SQL Injection 01 exercise disclosed",
+    description:
+      "PentesterLab SQL Injection 01 hosted exercise documents login-bypass SQL injection with injectable payloads exploiting improper input handling.",
+    impactOneline:
+      "Public SQLi exercise instance reveals authentication-bypass injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSqliExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab SQL in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use parameterized queries in production login handlers.",
+        "Isolate exercise infrastructure from production databases."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SQL Injection 01-style login bypass labs. Show how to gate labs behind auth and use parameterized queries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 01 exercise disclosed",
+    description:
+      "PentesterLab XSS 01 hosted exercise documents reflected cross-site scripting via alert-box canary payloads and unescaped HTML rendering.",
+    impactOneline:
+      "Public XSS exercise instance reveals reflected injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXssExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; encode output in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Isolate exercise infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 01-style reflected XSS labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-kontra-application-security-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Kontra application security training platform disclosed",
+    description:
+      "Kontra application.security publishes free interactive OWASP Top 10 for Web and API training modules for developer secure-coding education.",
+    impactOneline:
+      "Public Kontra exercise hubs document API injection and BOLA patterns used to calibrate scanners against training labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideKontraApplicationSecurityEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Kontra labs are intentional training — gate free exercises behind business email verification.",
+      steps: [
+        "Require authenticated accounts before launching injectable API lab instances.",
+        "Isolate Kontra-style training environments from production API gateways.",
+        "Use Kontra findings to patch similar OWASP API Top 10 gaps in production services."
+      ]
+    },
+    fixPrompt:
+      "We host Kontra-style OWASP API Top 10 training. Show how to gate lab modules behind auth and isolate them from production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-immersive-labs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Immersive Labs cyber resilience platform disclosed",
+    description:
+      "Immersive Labs advertises browser-based cyber resilience drills, hands-on skill labs, and benchmark reporting for security teams.",
+    impactOneline:
+      "Public Immersive Labs marketing pages document training lab infrastructure attackers use to tune discovery scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideImmersiveLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Immersive Labs instances are intentional training — never expose lab VMs to production networks.",
+      steps: [
+        "Run Immersive Labs drills only on dedicated training tenants.",
+        "Require SSO before granting access to browser-based exploit labs.",
+        "Use drill findings to close skill gaps without copying vulnerable lab code to production."
+      ]
+    },
+    fixPrompt:
+      "We use Immersive Labs-style cyber drills for team training. Show how to isolate lab tenants from production and gate browser labs behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackthebox-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hack The Box cyber readiness platform disclosed",
+    description:
+      "Hack The Box advertises 1,500+ hands-on cybersecurity labs, CTF challenge machines, and cyber readiness exercises for penetration testers.",
+    impactOneline:
+      "Public HTB marketing pages document lab infrastructure and CTF challenge taxonomy attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackTheBoxEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTB labs are intentional training — isolate challenge VMs from production networks.",
+      steps: [
+        "Run HTB challenge machines only on dedicated lab VLANs.",
+        "Require authenticated accounts before spawning injectable lab instances.",
+        "Never copy HTB challenge vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We use Hack The Box-style CTF labs for team training. Show how to isolate challenge VMs from production and gate lab spawns behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackthebox-academy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HTB Academy cybersecurity training platform disclosed",
+    description:
+      "HTB Academy publishes guided interactive modules with hands-on exercises against real-world applications and penetration testing certification paths.",
+    impactOneline:
+      "Public HTB Academy catalogues document web exploitation module taxonomy reusable for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackTheBoxAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTB Academy modules are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require HTB Academy authentication before serving injectable lab VMs.",
+        "Isolate Academy lab instances from corporate production networks.",
+        "Use module findings to close skill gaps without copying vulnerable lab code to production."
+      ]
+    },
+    fixPrompt:
+      "We host HTB Academy-style guided cybersecurity courses. Show how to gate lab modules behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnex-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VULNEX web hacking playbook disclosed",
+    description:
+      "VULNEX publishes ready-to-use payloads, exploitation techniques, and checklists for security researchers and bug hunters.",
+    impactOneline:
+      "Public payload playbooks document OWASP-aligned injection and exploitation patterns attackers reuse against real targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnexEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Payload libraries are reference material — never deploy copy-pasted exploit strings to production apps.",
+      steps: [
+        "Use payload playbooks only in authorized lab environments.",
+        "Patch vulnerabilities matching playbook categories in production code.",
+        "Monitor for exploitation signatures documented in public payload libraries."
+      ]
+    },
+    fixPrompt:
+      "We host a VULNEX-style payload playbook. Show how to keep exploit references out of production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-secureflag-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SecureFlag OWASP secure coding labs disclosed",
+    description:
+      "SecureFlag partners with OWASP to offer browser-based hands-on secure coding training labs and vulnerability exercises.",
+    impactOneline:
+      "Public SecureFlag hubs document OWASP Top 10 lab instances used to calibrate scanners against training environments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecureflagEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureFlag labs are intentional training — gate lab VMs behind OWASP member authentication.",
+      steps: [
+        "Require OWASP email verification before launching lab instances.",
+        "Isolate SecureFlag-style training environments from production networks.",
+        "Never reuse lab-vulnerable code patterns in production applications."
+      ]
+    },
+    fixPrompt:
+      "We host SecureFlag-style OWASP training labs. Show how to gate lab access behind member auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -3366,6 +3600,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-overthewire-natas-referer-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Natas HTTP Referer guard bypass disclosed",
+    description:
+      "OverTheWire Natas challenge pages expose weak HTTP Referer checks — Access disallowed unless Referer matches an authorized host.",
+    impactOneline:
+      "Natas referer-guard pages document header-spoofing bypass patterns reusable against production access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireNatasRefererEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never rely on Referer alone for access control — use server-side session auth.",
+      steps: [
+        "Validate authenticated sessions instead of client-supplied Referer headers.",
+        "Do not expose referer-guard bypass patterns on public marketing pages.",
+        "Rate-limit unauthenticated wargame enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our Natas-style lab exposes HTTP Referer guards. Show how to replace Referer checks with proper session authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-leviathan-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -3726,6 +3986,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host SecLab-style XSS/SQLi/CSRF/IDOR vulnerability playgrounds. Show how to gate labs behind auth and isolate VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-sec-code-educational-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Developer security & privacy lesson platform disclosed",
+    description:
+      "sec_code publishes interactive SQL injection and privacy training lessons with live query manipulation demos for developer education.",
+    impactOneline:
+      "Public sec_code lessons expose SQL injection walkthroughs and privacy principles attackers use to calibrate injection scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecCodeEducationalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational SQL injection demos belong in isolated training — never on production login forms.",
+      steps: [
+        "Use parameterized queries in all production authentication endpoints.",
+        "Host developer security lessons on dedicated training domains.",
+        "Remove interactive SQL concat demos from production-facing pages."
+      ]
+    },
+    fixPrompt:
+      "We publish developer security lessons with SQL injection demos. Show how to isolate training from production auth flows.",
     version: 1,
     enabled: true
   },

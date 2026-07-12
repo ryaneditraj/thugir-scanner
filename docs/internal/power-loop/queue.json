@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-10T04:06:00.000Z",
+  "updated_at": "2026-07-12T04:13:57.831Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -1704,8 +1704,128 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://playhacklab.com/",
+      "source": "HackLab — browser-based OWASP Top 10 terminal security game (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://v0-comprehensive-security-training.vercel.app/",
+      "source": "v0 comprehensive security training — web pentest modules with live lab links (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webverselabs-pro.com/",
+      "source": "WebVerse Pro — multi-service web hacking lab platform landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webverselabs-pro.com/labs/orbitdesk",
+      "source": "WebVerse Pro OrbitDesk — GraphQL IDOR/SSRF/JWT chain lab brief (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.overthewire.org/wargames/natas/",
+      "source": "OverTheWire Natas wargame index — public web security challenge series entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.tryhackme.com/",
+      "source": "TryHackMe — public browser-based cybersecurity training platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger.net/web-security/all-labs",
+      "source": "PortSwigger Web Security Academy — free OWASP-aligned browser lab index (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://academy.hackthebox.com/",
+      "source": "Hack The Box Academy — public web security training and guided labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthebox.com/",
+      "source": "Hack The Box — public CTF and penetration testing challenge platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://0xk4b1r.vercel.app/",
+      "source": "0xk4b1r VulneraShop — intentionally vulnerable full-stack OWASP Top 10 practice app (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnex.vercel.app/",
+      "source": "VULNEX — web hacking playbook with OWASP-aligned payload libraries (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://print.alf.nu/",
+      "source": "Erling Ellingsen print.alf.nu — XSS sandbox iframe challenge infrastructure (alf.nu)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.secureflag.com/owasp.html",
+      "source": "SecureFlag — browser-based OWASP Top 10 training labs hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/web_for_pentester/",
+      "source": "PentesterLab Web for Pentester exercise index — SQLi/XSS/CSRF hosted labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.root-me.org/en/Challenges/Web-Server/",
+      "source": "Root-Me Web-Server challenge index — public CTF vulnerability exercises (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free/owasp-top-10",
+      "source": "Kontra Application Security — free interactive OWASP Top 10 Web training hub (HN/Product Hunt cited)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-sql-injection",
+      "source": "Kontra — browser-based SQL injection training lab with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/sqli_01",
+      "source": "PentesterLab SQL Injection 01 — hosted exercise instance (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/",
+      "source": "zahidoverflow/damn-vulnerable-web-university — alternate Vercel OWASP Top 10 training deploy (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_01",
+      "source": "PentesterLab XSS 01 — hosted reflected XSS exercise instance (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://jjirik77.github.io/sec_code/privacy.html",
+      "source": "jjirik77/sec_code — interactive SQLi/XSS/insecure-storage browser security lesson demos (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://www.llm-sec.dev/",
-      "source": "TomAbai/llm-sec — official OWASP LLM Top 10 interactive labs with threat model diagram (web search)",
+      "source": "llm-sec.dev — OWASP Top 10 LLM interactive browser labs with per-vulnerability environments (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free/llm",
+      "source": "Kontra — free interactive OWASP Top 10 for LLM 2025 training modules (application.security)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/",
+      "source": "Escape.tech DVGA — Damn Vulnerable GraphQL Application public hosted instance (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger.net/web-security/llm-attacks",
+      "source": "PortSwigger Web Security Academy — Web LLM Attacks hands-on lab path (web search)",
       "auth": "public_demo"
     },
     {
@@ -1714,20 +1834,9 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://application.security/free/llm",
-      "source": "Kontra OWASP Top 10 for LLM 2025 — free interactive prompt injection and agency labs (web search)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga.tools.escape.tech/",
-      "source": "dolevf/DVGA — Damn Vulnerable GraphQL Application public Escape.tech demo (awesome-vuln-apps)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://jjirik77.github.io/sec_code/interactive.html",
       "source": "jjirik77/sec_code — secure coding interactive lessons with XSS/SQLi exploit demos (GitHub Pages)",
       "auth": "oss_deploy"
     }
-  ],
-  "updated_at": "2026-07-12T04:10:00.000Z"
+  ]
 }

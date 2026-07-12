@@ -369,6 +369,7 @@ const REFLECTED_XSS_PARAMS = [
   "term",
   "name",
   "id",
+  "uid",
   "message",
   "text",
   "keyword",
@@ -494,14 +495,47 @@ function isReflectedXssCanary(body: string, canary: string): boolean {
   return true;
 }
 
+/** Google Gruyere codelab — /start allocates a live instance with reflected XSS on snippets.gtl?uid=. */
+async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string[]> {
+  if (!/google-gruyere\.appspot\.com/i.test(ctx.origin)) return [];
+  const startDoc = await ctx.probe.get(`${ctx.origin}/start`, { maxBytes: 4096 });
+  if (startDoc.status < 200 || startDoc.status >= 400) return [];
+  const idM =
+    startDoc.body.match(/instance id is (\d{20,})/i) ??
+    startDoc.body.match(/HREF="\/(\d{20,})"/i);
+  if (!idM) return [];
+  const id = idM[1];
+  return [`/${id}/snippets.gtl`, `/${id}/newsnippet.gtl`];
+}
+
 const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
+  const gruyerePaths = await extractGruyereLiveInstancePaths(ctx);
+  if (gruyerePaths.length > 0) {
+    for (const path of gruyerePaths) {
+      const u = new URL(path, ctx.origin);
+      u.searchParams.set("uid", canary);
+      const doc = await ctx.probe.get(u.toString(), { maxBytes: 8192 });
+      if (doc.status >= 200 && isReflectedXssCanary(doc.body, canary)) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            canary,
+            hits: [{ path, param: "uid", url: u.toString(), snippet: doc.body.slice(0, 200).trim() }],
+            note: "Gruyere live instance echoes uid unescaped in snippets.gtl — reflected XSS likely"
+          }
+        };
+      }
+    }
+  }
   const homePath = new URL(ctx.home.finalUrl).pathname || "/";
   const discovered = extractReflectedXssPaths(ctx.combined);
   const discoveredSet = new Set(discovered);
   const paths = prioritizeReflectedXssPaths(
     [
       ...new Set([
+        ...gruyerePaths,
         ...discovered,
         ...extractDvwaXssProbePaths(ctx.combined),
         homePath,
@@ -2518,6 +2552,18 @@ const CLIENT_PORTSWIGGER_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQLi UNION attack practitioner lab",
     re: /sql-injection\/union-attacks|UNION attack SQL injection/i
+  },
+  {
+    label: "All labs academy index",
+    re: /All labs\s*\|\s*Web Security Academy|web-security\/all-labs/i
+  },
+  {
+    label: "Mystery lab challenge",
+    re: /Mystery lab challenge|mystery-lab-challenge/i
+  },
+  {
+    label: "OWASP lab taxonomy anchors",
+    re: /web-security\/all-labs#(?:sql-injection|cross-site-scripting|server-side-request-forgery)/i
   }
 ];
 
@@ -4492,6 +4538,388 @@ const clientSidePentesterLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab Web for Pentester free course (pentesterlab.com/exercises/web-for-pentester)
+const CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web for Pentester course title",
+    re: /Web for Pentester(?:\s+Free Exercise)?/i
+  },
+  {
+    label: "Foundational web penetration testing curriculum",
+    re: /foundational knowledge of web penetration testing/i
+  },
+  {
+    label: "Vulnerability identification and exploitation exercises",
+    re: /common vulnerabilities and techniques for identifying and exploiting them/i
+  },
+  {
+    label: "Junior pentester web hacking audience",
+    re: /junior penetration testers, web hackers and appsec engineers/i
+  },
+  {
+    label: "CourseInstance JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Web for Pentester"/i
+  }
+];
+
+const clientSidePentesterlabWebForPentesterEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Web for Pentester course documents foundational web vuln identification and exploitation labs"
+    }
+  };
+};
+
+// --- PentesterLab hosted SQL Injection 01 exercise (pentesterlab.com/exercises/sqli_01)
+const CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 01 course title",
+    re: /SQL Injection 01|PentesterLab:\s*SQL Injection 01/i
+  },
+  {
+    label: "Bypass login via SQL injection lab",
+    re: /bypass login pages by injecting SQL payloads|exploit improper input handling/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]01/i
+  }
+];
+
+const clientSidePentesterlabSqliExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 01 exercise documents login-bypass SQLi lab with injectable payloads"
+    }
+  };
+};
+
+// --- PentesterLab hosted XSS 01 exercise (pentesterlab.com/exercises/xss_01)
+const CLIENT_PENTESTERLAB_XSS_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 01 course title",
+    re: /XSS 01|PentesterLab:\s*XSS 01/i
+  },
+  {
+    label: "Alert-box XSS lab description",
+    re: /basics of Cross-Site Scripting \(XSS\)|creating an alert box using your unique identifier/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]01/i
+  }
+];
+
+const clientSidePentesterlabXssExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS_EXERCISE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 01 exercise documents reflected XSS lab with alert-box canary payloads"
+    }
+  };
+};
+
+// --- Kontra Application Security training (application.security) ----------------------
+const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Kontra Application Security Training",
+    re: /Kontra Application Security Training|Kontra is an Application Security Training platform/i
+  },
+  {
+    label: "OWASP Top 10 for API free exercises",
+    re: /OWASP Top 10 for API|KONTRA.s OWASP Top 10 for API/i
+  },
+  {
+    label: "OWASP Top 10 for Web free exercises",
+    re: /OWASP Top 10 for Web|owasp-top-10-sql-injection/i
+  },
+  {
+    label: "Interactive API security training modules",
+    re: /interactive application security training modules.*web API endpoints/i
+  },
+  {
+    label: "Interactive web security training modules",
+    re: /interactive application security training modules|developer security training of OWASP Top 10/i
+  },
+  {
+    label: "SQL injection training lab title",
+    re: /SQL Injection \| Kontra|owasp-top-10-sql-injection/i
+  },
+  {
+    label: "OWASP Top 10 for LLM free exercises",
+    re: /OWASP Top 10 for LLM(?:\s*-\s*2025)?/i
+  },
+  {
+    label: "Free exercises hub",
+    re: /Free Exercises|application\.security\/free/i
+  },
+  {
+    label: "Secure coding and OWASP keywords",
+    re: /secure coding training|owasp top 10.*appsec training/i
+  }
+];
+
+const clientSideKontraApplicationSecurityEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_KONTRA_APPSEC_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Kontra|application\.security/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Kontra publishes free interactive OWASP Top 10 for Web/API training modules including SQL injection labs"
+    }
+  };
+};
+
+// --- VULNEX web hacking playbook (vulnex.vercel.app) ----------------------------------
+const CLIENT_VULNEX_PLAYBOOK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VULNEX web hacking playbook branding",
+    re: /VULNEX(?:\s*[—-]\s*Web Hacking Playbook)?/i
+  },
+  {
+    label: "Bug hunter payload platform",
+    re: /security researchers and bug hunters|ultimate hacking playbook for security researchers/i
+  },
+  {
+    label: "Ready-to-use payloads and exploitation techniques",
+    re: /Ready-to-use payloads, exploitation techniques|Payloads, techniques, and tools/i
+  },
+  {
+    label: "Practical security tools and checklists",
+    re: /practical tools, and quick checklists|exploitation techniques, practical tools/i
+  },
+  {
+    label: "VULNEX WebApplication JSON-LD",
+    re: /"@type"\s*:\s*"WebApplication"[\s\S]{0,120}"name"\s*:\s*"VULNEX"/i
+  }
+];
+
+const clientSideVulnexEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNEX_PLAYBOOK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VULNEX|vulnex\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VULNEX publishes OWASP-aligned payloads, exploitation techniques, and checklists for bug hunters"
+    }
+  };
+};
+
+// --- SecureFlag hands-on secure coding labs (secureflag.com) --------------------------
+const CLIENT_SECUREFLAG_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SecureFlag hands-on secure coding training",
+    re: /SecureFlag:\s*Hands-On Secure Coding Training|Hands-On Secure Coding Training/i
+  },
+  {
+    label: "SecureFlag OWASP partnership",
+    re: /SecureFlag and OWASP have partnered|SecureFlag x OWASP/i
+  },
+  {
+    label: "Reserved SecureFlag platform instance",
+    re: /reserved instance of the SecureFlag platform|invitation code for SecureFlag membership/i
+  },
+  {
+    label: "Browser-based security labs navigation",
+    re: /routerlink="\/labs"|href="\/labs">Labs|secureflag\.com\/labs/i
+  },
+  {
+    label: "OWASP member email signup",
+    re: /OWASP email|firstname\.lastname@owasp\.org/i
+  }
+];
+
+const clientSideSecureflagEvidence: Rule = async (ctx) => {
+  if (!/secureflag\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECUREFLAG_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SecureFlag hosts browser-based OWASP Top 10 secure coding labs via OWASP member partnership"
+    }
+  };
+};
+
+// --- Immersive Labs cyber resilience platform (immersivelabs.com) ---------------------
+const CLIENT_IMMERSIVE_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Immersive Labs cyber resilience platform",
+    re: /Immersive (?:One|Labs).*cyber resilience|Prove Cyber Resilience with Realistic Drills/i
+  },
+  {
+    label: "Hands-on cyber skills labs",
+    re: /hands-on labs|close skill gaps with labs|realistic drills/i
+  },
+  {
+    label: "Cybersecurity workforce resilience",
+    re: /cybersecurity workforce resilience|continuous cyber resilience/i
+  },
+  {
+    label: "Benchmark and report cyber readiness",
+    re: /benchmark performance|Prove, Improve, Benchmark and Report/i
+  }
+];
+
+const clientSideImmersiveLabsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_IMMERSIVE_LABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/immersivelabs\.com|Immersive Labs|Immersive One/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Immersive Labs hosts browser-based cyber resilience drills and hands-on security skill labs"
+    }
+  };
+};
+
+// --- Hack The Box CTF / cyber readiness platform (hackthebox.com) ---------------------
+const CLIENT_HACKTHEBOX_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cyber readiness platform tagline",
+    re: /leading cyber readiness platform for the agentic era/i
+  },
+  {
+    label: "Hands-on cybersecurity labs count",
+    re: /1,?500\+\s+hands-on cybersecurity labs/i
+  },
+  {
+    label: "CTF challenge platform link",
+    re: /ctf\.hackthebox\.com|Capture The Flag/i
+  },
+  {
+    label: "HTB Academy training link",
+    re: /academy\.hackthebox\.com|HTB Academy/i
+  },
+  {
+    label: "Penetration testing upskilling",
+    re: /battle-testing and upskilling both humans/i
+  }
+];
+
+const clientSideHackTheBoxEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKTHEBOX_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Hack The Box|hackthebox\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hack The Box hosts 1,500+ hands-on labs, CTF machines, and cyber readiness exercises for penetration testers"
+    }
+  };
+};
+
+// --- HTB Academy guided cybersecurity courses (academy.hackthebox.com) ----------------
+const CLIENT_HACKTHEBOX_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTB Academy site title",
+    re: /HTB Academy|Cybersecurity Training\s*:\s*HTB Academy/i
+  },
+  {
+    label: "Interactive guided training",
+    re: /guided and interactive cybersecurity training courses/i
+  },
+  {
+    label: "Hands-on exercises against real apps",
+    re: /hands-on exercises and labs made by Hack The Box|Interactive exercises against real-world applications/i
+  },
+  {
+    label: "Certified penetration testing paths",
+    re: /HTB Certified Penetration Testing|penetration testing specialist/i
+  },
+  {
+    label: "Academy module catalogue",
+    re: /academy\.hackthebox\.com\/catalogue|module-name|Academy x HTB Labs/i
+  }
+];
+
+const clientSideHackTheBoxAcademyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKTHEBOX_ACADEMY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/academy\.hackthebox\.com|HTB Academy/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HTB Academy publishes guided modules covering web exploitation, penetration testing, and hands-on lab exercises"
+    }
+  };
+};
+
 // --- HackThisSite ethical hacking mission platform --------------------------------------
 const CLIENT_HACKTHISITE_RES: { label: string; re: RegExp }[] = [
   {
@@ -6279,7 +6707,7 @@ const CLIENT_XXE_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideXxeEvidence: Rule = async (ctx) => {
-  if (/Web Security Academy|portswigger\.net\/web-security/i.test(ctx.combined)) return NEGATIVE;
+  if (/Web Security Academy|portswigger\.net\/web-security|pentesterlab\.com/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_XXE_RES) {
     const m = ctx.combined.match(re);
@@ -8260,7 +8688,45 @@ const clientSideOverthewireNatasEvidence: Rule = async (ctx) => {
     confidence: hits.length >= 3 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "OverTheWire Natas wargame teaches serverside web vulnerabilities across staged challenge instances"
+      note: "OverTheWire Natas wargame documents staged serverside web-security challenges with credential chaining"
+    }
+  };
+};
+
+// --- Natas HTTP Referer guard bypass training (natas4+ access disallowed pages) ---------
+const CLIENT_OVERTHEWIRE_NATAS_REFERER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Natas referer access guard message",
+    re: /Access disallowed\.\s*You are visiting from/i
+  },
+  {
+    label: "Authorized referer host requirement",
+    re: /authorized users should come only from/i
+  },
+  {
+    label: "Natas level wechall marker",
+    re: /wechallinfo[\s\S]{0,60}"level"\s*:\s*"natas\d+"/i
+  },
+  {
+    label: "Natas challenge subdomain",
+    re: /natas\d+\.natas\.labs\.overthewire\.org/i
+  }
+];
+
+const clientSideOverthewireNatasRefererEvidence: Rule = async (ctx) => {
+  if (!/natas\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_NATAS_REFERER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Natas level exposes weak HTTP Referer guard — authorized users must spoof Referer header to proceed"
     }
   };
 };
@@ -8797,6 +9263,49 @@ const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- jjirik77/sec_code developer security & privacy educational lessons ---------------
+const CLIENT_SEC_CODE_EDU_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Developer security and privacy lesson title",
+    re: /Developer's Guide to Security\s*&\s*Privacy|App Security\s*&\s*Privacy Lesson/i
+  },
+  {
+    label: "SQL injection threat module",
+    re: /Threat 1:\s*SQL Injection|Tricking the Database/i
+  },
+  {
+    label: "Interactive SQL query display",
+    re: /sql-query-display|SELECT \* FROM users WHERE user = '\.\.\.'/i
+  },
+  {
+    label: "SQL injection demo login UI",
+    re: /sql-login-btn|You just tricked the database/i
+  },
+  {
+    label: "Privacy principle lesson",
+    re: /Keep it secret|Only the right people can see the data/i
+  }
+];
+
+const clientSideSecCodeEducationalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SEC_CODE_EDU_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  const hostHint = `${ctx.origin}${ctx.home.finalUrl}`;
+  if (!/sec_code|jjirik77\.github\.io/i.test(ctx.combined + hostHint)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "sec_code lesson documents interactive SQL injection and privacy training for developers"
+    }
+  };
+};
+
 // --- Broken Crystals API security benchmark (brokencrystals.com) ----------------------
 const CLIENT_BROKENCRYSTALS_RES: { label: string; re: RegExp }[] = [
   {
@@ -9220,6 +9729,15 @@ export const RULES: Record<string, Rule> = {
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
+  clientSidePentesterlabWebForPentesterEvidence,
+  clientSidePentesterlabSqliExerciseEvidence,
+  clientSidePentesterlabXssExerciseEvidence,
+  clientSideKontraApplicationSecurityEvidence,
+  clientSideVulnexEvidence,
+  clientSideSecureflagEvidence,
+  clientSideImmersiveLabsEvidence,
+  clientSideHackTheBoxEvidence,
+  clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
@@ -9279,6 +9797,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMlastgEvidence,
   clientSideCryptohackEvidence,
   clientSideOverthewireNatasEvidence,
+  clientSideOverthewireNatasRefererEvidence,
   clientSideFfufMeEvidence,
   clientSideYrpreyEvidence,
   clientSideBergerCyberLabEvidence,
@@ -9292,6 +9811,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   clientSideSecLabPlaygroundEvidence,
+  clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,

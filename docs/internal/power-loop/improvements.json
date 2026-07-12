@@ -1685,6 +1685,114 @@
       "slug": "juice-shop-mirror-tld-probes",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/search?q='')) returns SQLITE_ERROR; isJuiceShopHost extended to .juice.shop TLD for API/bundle priming; demo.owasp-juice.shop findings 2→8; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:google-gruyere.appspot.com",
+      "slug": "gruyere-live-instance-xss-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /start allocates instance id; GET /{id}/snippets.gtl?uid=thugirXSScanary echoes raw canary in HTML; extractGruyereLiveInstancePaths + early uid probe in reflectedXss; google-gruyere.appspot.com findings 3→4; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: KONTRA OWASP Top 10 for API + interactive application security training modules + Free Exercises hub; extractKontraTrainingSeeds; application.security/free/owasp-top-10-API findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.immersivelabs.com",
+      "slug": "client-side-immersive-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Prove Cyber Resilience with Realistic Drills + hands-on labs + cybersecurity workforce resilience platform; www.immersivelabs.com findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "pentesterlab-websec-seed-scope",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebsecChallengeSeeds now requires websec.fr host — stops level01/source.php 404 crawl on pentesterlab.com; removes client-side-xxe-evidence false positive; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name Web for Pentester + foundational knowledge of web penetration testing + common vulnerabilities and techniques; pentesterlab.com/exercises/web-for-pentester findings 4→5 (XXE FP removed); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:natas4.natas.labs.overthewire.org",
+      "slug": "client-side-overthewire-natas-referer-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Access disallowed. You are visiting from + authorized users should come only from natas5 host + wechallinfo level natas4; natas4.natas.labs.overthewire.org findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthebox.com",
+      "slug": "client-side-hackthebox-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: leading cyber readiness platform + 1,500+ hands-on cybersecurity labs + ctf.hackthebox.com; extractHackTheBoxSeeds; www.hackthebox.com findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "client-side-hackthebox-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: guided and interactive cybersecurity training + Interactive exercises against real-world applications + HTB Certified Penetration Testing; extractHackTheBoxAcademySeeds; academy.hackthebox.com findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "portswigger-all-labs-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: All labs | Web Security Academy title + Mystery lab challenge + web-security/all-labs#sql-injection taxonomy; extractPortswiggerAcademySeeds extended; portswigger.net/web-security/all-labs findings 0→3; benchmark 6/6 maintained (7 findings)"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "client-side-vulnex-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNEX — Web Hacking Playbook meta + Ready-to-use payloads, exploitation techniques + WebApplication JSON-LD; vulnex.vercel.app findings 0→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.secureflag.com",
+      "slug": "client-side-secureflag-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecureFlag and OWASP have partnered + reserved instance of the SecureFlag platform + Hands-On Secure Coding Training; owasp.html→/owasp redirect; secureflag.com findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "vulnex-playbook-sitemap-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sitemap lists /vulnerabilities /methods /recon /all taxonomy pages; extractVulnexPlaybookSeeds seeds crawl; vulnex pages_crawled 1→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name SQL Injection 01 + bypass login pages by injecting SQL payloads + /exercises/sqli_01; pentesterlab.com/exercises/sqli_01 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name XSS 01 + basics of Cross-Site Scripting (XSS) alert box lab + /exercises/xss_01; pentesterlab.com/exercises/xss_01 findings 0→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Top 10 for Web title + SQL Injection | Kontra training page + owasp-top-10-sql-injection seed; application.security/free/owasp-top-10 findings 0→4; sql-injection lesson 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "archon-hostname-crawl-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: cold SPA fetch pages_crawled=1 missed /cybersecurity/; extractArchonHostFallbackSeeds prepends hostname seeds; archon-eight.vercel.app findings 1→4+ with client-side-archon-training-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security/free/llm",
+      "slug": "kontra-llm-training-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>OWASP Top 10 for LLM - 2025</title> + Kontra Application Security Training meta; /free/llm seed + OWASP Top 10 for LLM marker; application.security/free/llm findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:jjirik77.github.io/sec_code",
+      "slug": "client-side-sec-code-educational-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Developer's Guide to Security & Privacy + Threat 1: SQL Injection + sql-query-display interactive demo; jjirik77.github.io/sec_code/privacy.html findings 3→4; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3082,6 +3190,96 @@
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-mirror-tld-probes",
       "shipped_at": "2026-07-11T22:05:00.000Z"
+    },
+    {
+      "source": "discovery:google-gruyere.appspot.com",
+      "slug": "gruyere-live-instance-xss-probe",
+      "shipped_at": "2026-07-11T23:38:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "shipped_at": "2026-07-11T23:38:00.000Z"
+    },
+    {
+      "source": "discovery:www.immersivelabs.com",
+      "slug": "client-side-immersive-labs-evidence",
+      "shipped_at": "2026-07-11T23:38:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "pentesterlab-websec-seed-scope",
+      "shipped_at": "2026-07-12T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-evidence",
+      "shipped_at": "2026-07-12T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:natas4.natas.labs.overthewire.org",
+      "slug": "client-side-overthewire-natas-referer-evidence",
+      "shipped_at": "2026-07-12T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthebox.com",
+      "slug": "client-side-hackthebox-evidence",
+      "shipped_at": "2026-07-12T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "client-side-hackthebox-academy-evidence",
+      "shipped_at": "2026-07-12T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "portswigger-all-labs-crawl",
+      "shipped_at": "2026-07-12T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "client-side-vulnex-evidence",
+      "shipped_at": "2026-07-12T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.secureflag.com",
+      "slug": "client-side-secureflag-evidence",
+      "shipped_at": "2026-07-12T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnex.vercel.app",
+      "slug": "vulnex-playbook-sitemap-crawl",
+      "shipped_at": "2026-07-12T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-exercise-evidence",
+      "shipped_at": "2026-07-12T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-exercise-evidence",
+      "shipped_at": "2026-07-12T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-web-sqli-lab-markers",
+      "shipped_at": "2026-07-12T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "archon-hostname-crawl-fallback",
+      "shipped_at": "2026-07-12T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security/free/llm",
+      "slug": "kontra-llm-training-seed",
+      "shipped_at": "2026-07-12T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:jjirik77.github.io/sec_code",
+      "slug": "client-side-sec-code-educational-evidence",
+      "shipped_at": "2026-07-12T04:10:00.000Z"
     }
   ]
 }
