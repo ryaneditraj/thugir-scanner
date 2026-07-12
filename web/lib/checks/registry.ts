@@ -9294,7 +9294,8 @@ const clientSideSecCodeEducationalEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/sec_code|jjirik77\.github\.io/i.test(ctx.combined)) return NEGATIVE;
+  const hostHint = `${ctx.origin}${ctx.home.finalUrl}`;
+  if (!/sec_code|jjirik77\.github\.io/i.test(ctx.combined + hostHint)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.89 : 0.86,
