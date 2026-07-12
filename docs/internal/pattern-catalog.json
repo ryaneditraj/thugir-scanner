@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T23:06:15.448Z",
-  "total": 232,
-  "uniqueSlugs": 232,
+  "generatedAt": "2026-07-12T00:35:56.232Z",
+  "total": 234,
+  "uniqueSlugs": 234,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 214,
+    "generic": 216,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 167,
+    "deep": 169,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 74,
+    "Broken access control": 76,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -119,6 +119,7 @@
     "client-side-overthewire-bandit-evidence",
     "client-side-overthewire-leviathan-evidence",
     "client-side-overthewire-natas-evidence",
+    "client-side-overthewire-natas-referer-evidence",
     "client-side-owasp-bricks-evidence",
     "client-side-owasp-ctf-evidence",
     "client-side-owasp-educational-lab-evidence",
@@ -128,6 +129,7 @@
     "client-side-pc-parts-store-lab-evidence",
     "client-side-pentester-academy-lab-evidence",
     "client-side-pentesterlab-evidence",
+    "client-side-pentesterlab-web-for-pentester-evidence",
     "client-side-peruggia-evidence",
     "client-side-portswigger-academy-evidence",
     "client-side-prompt-injection-evidence",

@@ -1703,6 +1703,24 @@
       "slug": "client-side-immersive-labs-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Prove Cyber Resilience with Realistic Drills + hands-on labs + cybersecurity workforce resilience platform; www.immersivelabs.com findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "pentesterlab-websec-seed-scope",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebsecChallengeSeeds now requires websec.fr host — stops level01/source.php 404 crawl on pentesterlab.com; removes client-side-xxe-evidence false positive; benchmark staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course name Web for Pentester + foundational knowledge of web penetration testing + common vulnerabilities and techniques; pentesterlab.com/exercises/web-for-pentester findings 4→5 (XXE FP removed); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:natas4.natas.labs.overthewire.org",
+      "slug": "client-side-overthewire-natas-referer-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Access disallowed. You are visiting from + authorized users should come only from natas5 host + wechallinfo level natas4; natas4.natas.labs.overthewire.org findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3115,6 +3133,21 @@
       "source": "discovery:www.immersivelabs.com",
       "slug": "client-side-immersive-labs-evidence",
       "shipped_at": "2026-07-11T23:38:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "pentesterlab-websec-seed-scope",
+      "shipped_at": "2026-07-12T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-evidence",
+      "shipped_at": "2026-07-12T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:natas4.natas.labs.overthewire.org",
+      "slug": "client-side-overthewire-natas-referer-evidence",
+      "shipped_at": "2026-07-12T00:15:00.000Z"
     }
   ]
 }

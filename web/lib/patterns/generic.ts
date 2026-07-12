@@ -1728,6 +1728,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-web-for-pentester-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Web for Pentester course disclosed",
+    description:
+      "PentesterLab Web for Pentester free exercise documents foundational web penetration testing, vulnerability identification, and exploitation techniques.",
+    impactOneline:
+      "Public Web for Pentester curriculum reveals injection and access-control lab taxonomy for junior pentesters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabWebForPentesterEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab code in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Isolate exercise infrastructure from production networks.",
+        "Monitor outbound traffic from lab containers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Web for Pentester-style exercises. Show how to gate labs behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-kontra-application-security-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -3414,6 +3440,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host OverTheWire Natas-style web security wargames. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-overthewire-natas-referer-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Natas HTTP Referer guard bypass disclosed",
+    description:
+      "OverTheWire Natas challenge pages expose weak HTTP Referer checks — Access disallowed unless Referer matches an authorized host.",
+    impactOneline:
+      "Natas referer-guard pages document header-spoofing bypass patterns reusable against production access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireNatasRefererEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never rely on Referer alone for access control — use server-side session auth.",
+      steps: [
+        "Validate authenticated sessions instead of client-supplied Referer headers.",
+        "Do not expose referer-guard bypass patterns on public marketing pages.",
+        "Rate-limit unauthenticated wargame enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our Natas-style lab exposes HTTP Referer guards. Show how to replace Referer checks with proper session authorization.",
     version: 1,
     enabled: true
   },
