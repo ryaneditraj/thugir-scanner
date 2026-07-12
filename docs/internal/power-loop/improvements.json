@@ -1793,6 +1793,24 @@
       "slug": "client-side-sec-code-educational-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Developer's Guide to Security & Privacy + Threat 1: SQL Injection + sql-query-display interactive demo; jjirik77.github.io/sec_code/privacy.html findings 3→4; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.tools.escape.tech",
+      "slug": "client-side-graphql-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Damn Vulnerable GraphQL Application title + /import_paste sidebar + dolevf/Damn-Vulnerable-GraphQL-Application; extractDvgaLiveSeeds crawls import_paste/create_paste; dvga.tools.escape.tech findings 0→5; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.llm-sec.dev",
+      "slug": "client-side-llm-sec-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Interactive LLM Security Labs + October Agent Security Challenge + MCP vulnerabilities CTF; extractLlmSecDevSeeds crawls /october; www.llm-sec.dev findings 0→7; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:prompttools.co",
+      "slug": "client-side-clawguard-ai-audit-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: EU AI Act Compliance Audit + KI-Agenten MCP-Server + 225 Bedrohungsmuster; meta-refresh stub to /audit/; prompttools.co findings 0→4; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3280,6 +3298,21 @@
       "source": "discovery:jjirik77.github.io/sec_code",
       "slug": "client-side-sec-code-educational-evidence",
       "shipped_at": "2026-07-12T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvga.tools.escape.tech",
+      "slug": "dvga-live-instance-crawl",
+      "shipped_at": "2026-07-12T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.llm-sec.dev",
+      "slug": "llm-sec-october-lab-crawl",
+      "shipped_at": "2026-07-12T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:prompttools.co",
+      "slug": "client-side-clawguard-ai-audit-evidence",
+      "shipped_at": "2026-07-12T05:10:00.000Z"
     }
   ]
 }
