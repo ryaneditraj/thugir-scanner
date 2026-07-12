@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T13:16:36.480Z",
+  "updated_at": "2026-07-12T14:06:58.606Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,28 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 898,
-  "total_findings": 3886,
+  "total_sites_scanned": 906,
+  "total_findings": 3928,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 412,
-  "discovery_findings": 2844,
-  "improvements_shipped": 324,
-  "last_run": "2026-07-12T13:16:36.480Z",
+  "discovery_urls_added": 417,
+  "discovery_findings": 2878,
+  "improvements_shipped": 321,
+  "last_run": "2026-07-12T14:06:58.606Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "pass1_findings": 1,
-      "pass1_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
       "pages_crawled": 1,
       "probes_run": 269,
       "gap": [],
-      "note": "Heroku cold-start pass1 degraded 1/6 — retry merged 6/6 (8 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings, first pass)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,29 +53,41 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 21,
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 34,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "CTFlearn Web8 Inj3ction Time + WeChall global scoreboard + AppSecMaster Docker lab platform",
-      "improvements_shipped_this_run": 3,
-      "validated_targets": [
-        "http://web.ctflearn.com/web8/ (0→4 findings)",
-        "https://www.wechall.net/ (0→9 findings)",
-        "https://appsecmaster.net/ (7→8 findings)"
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+      ],
+      "focus": "Exploit Education VM labs + CyBench LLM CTF + hackable-web + Hacker101 CTF + vulnerable-lab QA oracle",
+      "improvements_shipped_this_run": 0,
+      "urls_added_list": [
+        "https://aigoat.app/",
+        "https://juice-shop-staging.herokuapp.com/",
+        "https://ctf.vercel.app/",
+        "https://fabraix.com/playground",
+        "https://dvga.xplat-demo.threatx.io/"
+      ],
+      "tail_not_reached": [
+        "https://aigoat.app/",
+        "https://juice-shop-staging.herokuapp.com/",
+        "https://ctf.vercel.app/",
+        "https://fabraix.com/playground",
+        "https://dvga.xplat-demo.threatx.io/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after Heroku retry",
-      "web.ctflearn.com/web8: Dog Viewer id SQLi differential probe + client-side-webeight-evidence (0→4)",
-      "www.wechall.net: 180+ challenge scoreboard with MySQL/PHP/Exploit taxonomy (0→9)",
-      "appsecmaster.net: Docker web hacking lab + OSWE prep markers (7→8)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "vulnerable-lab.vercel.app: 8 findings (intentional scanner QA lab)",
+      "preview.owasp-juice.shop: 7 findings (Juice Shop preview benchmark)",
+      "hackable-web.vercel.app: 6 findings (hackable.so social vuln platform)",
+      "cybench.github.io: 4 findings (LLM CTF benchmark, OpenAI key in bundle)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku cold-start pages_crawled=1 — pass1 recall 1/6 before retry merge",
-      "hacksec.in: password-protected WordPress — per-lab routes unreachable without site password"
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "New tail URLs (aigoat.app, juice-shop-staging, ctf.vercel.app, fabraix playground, dvga.xplat-demo) at queue tail not reached (8-URL head-first limit)"
     ]
   },
   "discovery_highlights": {
@@ -208,6 +218,7 @@
     "cybench.github.io": 4,
     "ctf.hacker101.com": 3,
     "vulnerable-lab.vercel.app": 8,
+    "vulnerable-web-site.vercel.app": 3,
     "preview.owasp-juice.shop": 7
   }
 }
