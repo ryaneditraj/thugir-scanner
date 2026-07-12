@@ -7304,6 +7304,364 @@
       "probes_run": 269,
       "status": "ok",
       "scanned_at": "2026-07-12T13:11:39.913Z"
+    },
+    {
+      "run_id": "2026-07-12T13:14:35.946Z",
+      "url": "http://testhtml5.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-12T13:14:35.946Z",
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-12T13:14:46.014Z",
+      "url": "https://exploit.education/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-exploit-education-evidence",
+          "title": "Exploit Education buffer overflow VM labs disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 249,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:14:46.014Z"
+    },
+    {
+      "run_id": "2026-07-12T13:14:47.994Z",
+      "url": "https://cybench.github.io/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "secret-openai",
+          "title": "OpenAI API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-cybench-evidence",
+          "title": "Cybench LLM cybersecurity CTF benchmark disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 250,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:14:47.994Z"
+    },
+    {
+      "run_id": "2026-07-12T13:14:49.817Z",
+      "url": "https://hackable-web.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.84,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-hackable-lab-evidence",
+          "title": "hackable.so deliberately vulnerable social platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 303,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:14:49.817Z"
+    },
+    {
+      "run_id": "2026-07-12T13:15:06.984Z",
+      "url": "https://ctf.hacker101.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-hacker101-ctf-evidence",
+          "title": "Hacker101 CTF web security challenge platform disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 270,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:15:06.984Z"
+    },
+    {
+      "run_id": "2026-07-12T13:15:20.405Z",
+      "url": "https://vulnerable-lab.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.86,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "client-side-vulnerable-qa-lab-evidence",
+          "title": "Intentional scanner QA vulnerable lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 266,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:15:20.405Z"
+    },
+    {
+      "run_id": "2026-07-12T13:15:23.984Z",
+      "url": "https://vulnerable-web-site.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-vulnerable-web-site-evidence",
+          "title": "Vulnerable Web Site CSRF/XSS/SSRF lab disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 268,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:15:23.984Z"
+    },
+    {
+      "run_id": "2026-07-12T13:15:53.441Z",
+      "url": "https://preview.owasp-juice.shop/",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 245,
+      "status": "ok",
+      "scanned_at": "2026-07-12T13:15:53.441Z"
     }
   ],
   "teacher_delta_runs": [
@@ -8270,6 +8628,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T12:05:00.000Z"
+    },
+    {
+      "run_id": "2026-07-12T13:12:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 8 findings, 6/6 recall after Heroku retry (pass1 degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings",
+      "scanned_at": "2026-07-12T13:12:00.000Z"
     }
   ]
 }

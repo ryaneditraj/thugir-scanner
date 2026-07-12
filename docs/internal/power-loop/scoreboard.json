@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T12:14:00.000Z",
+  "updated_at": "2026-07-12T13:16:36.480Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 890,
-  "total_findings": 3844,
+  "total_sites_scanned": 898,
+  "total_findings": 3886,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 407,
-  "discovery_findings": 2810,
-  "improvements_shipped": 321,
-  "last_run": "2026-07-12T12:14:00.000Z",
+  "discovery_urls_added": 412,
+  "discovery_findings": 2844,
+  "improvements_shipped": 318,
+  "last_run": "2026-07-12T13:16:36.480Z",
   "last_run_summary": {
-    "hour_utc": "12:00",
+    "hour_utc": "13:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
+      "pass1_findings": 1,
+      "pass1_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
       "pages_crawled": 1,
       "probes_run": 269,
-      "gap": [],
-      "note": "Juice Shop 6/6 (8 findings) — no benchmark misses on first pass",
+      "note": "Heroku cold-start pass1 degraded 1/6 — retry merged 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,35 +56,37 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 39,
+      "findings": 34,
       "skipped_48h": [],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Queue backlog hacksec/webgoat/cyberdefenders/appsecmaster/hackadvisor; +5 tail URLs (x55 gym, ctflearn web4/web8, net-force, xss.php); concurrent agent shipped x55 xss.php/knoxss engine rules",
-      "improvements_shipped_this_run": 3,
+      "focus": "Queue head backlog (exploit.education, cybench, hackable-web, hacker101, vulnerable-lab); +5 tail URLs (sql-injection-lab, x55 knoxss, ctflearn web1/web3/web6)",
+      "improvements_shipped_this_run": 0,
       "new_urls_not_reached": [
+        "https://sql-injection-lab.vercel.app/",
+        "https://x55.is/brutelogic/knoxss.html",
+        "https://web.ctflearn.com/web1/",
+        "https://web.ctflearn.com/web3/",
+        "https://web.ctflearn.com/web6/",
         "https://x55.is/brutelogic/gym.php",
         "https://web.ctflearn.com/web4/",
-        "http://web.ctflearn.com/web8/",
-        "https://www.net-force.nl/hacktivity/",
-        "https://x55.is/brutelogic/xss.php"
+        "http://web.ctflearn.com/web8/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "cyberdefenders.org: 9 findings — OpenAI/Resend keys + unauthenticated API routes",
-      "labs.hackadvisor.io: 8 findings — bug-bounty CTF challenge platform evidence",
-      "appsecmaster.net: 7 findings — Docker web hacking lab platform markers",
-      "hacksec.in: 5 findings — reflected XSS + WordPress lab landing",
-      "webgoat.org: 5 findings — OWASP WebGoat training app + postMessage DOM XSS",
-      "x55.is/brutelogic/xss.php + knoxss.html: engine rules shipped (concurrent agent)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after Heroku retry — pass1 gap xss,sqli,idor,auth_bypass,sensitive_data",
+      "vulnerable-lab.vercel.app: 8 findings — intentional scanner QA lab + unauth admin",
+      "hackable-web.vercel.app: 6 findings — hackable.so vuln social platform + XSS sinks",
+      "preview.owasp-juice.shop: 7 findings — Juice Shop preview instance (sqli/xss/idor)",
+      "cybench.github.io: 4 findings — LLM CTF benchmark + exposed OpenAI key marker",
+      "exploit.education: 3 findings — buffer overflow VM lab platform evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "x55/ctflearn/net-force URLs at queue tail — not reached in 8-URL head-first limit",
-      "juice-shop.herokuapp.com: pages_crawled=1 on Heroku cold-start — recall stable 6/6 this hour"
+      "juice-shop.herokuapp.com: Heroku cold-start pages_crawled=1 — pass1 recall 1/6 before retry merge",
+      "New tail URLs (sql-injection-lab, knoxss, ctflearn web1/web3/web6) not reached in 8-URL head-first limit"
     ]
   },
   "discovery_highlights": {
@@ -207,6 +210,11 @@
     "agentpwn.com": 5,
     "hacksec.in": 5,
     "webgoat.org": 5,
-    "appsecmaster.net": 7
+    "appsecmaster.net": 7,
+    "exploit.education": 3,
+    "cybench.github.io": 4,
+    "ctf.hacker101.com": 3,
+    "vulnerable-lab.vercel.app": 8,
+    "preview.owasp-juice.shop": 7
   }
 }
