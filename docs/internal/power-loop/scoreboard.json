@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T03:10:00.000Z",
+  "updated_at": "2026-07-12T03:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -18,15 +18,15 @@
       "oracle_recall": "6/6"
     }
   },
-  "total_sites_scanned": 815,
-  "total_findings": 3494,
+  "total_sites_scanned": 822,
+  "total_findings": 3520,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 361,
-  "discovery_findings": 2499,
+  "discovery_urls_added": 366,
+  "discovery_findings": 2525,
   "improvements_shipped": 294,
-  "last_run": "2026-07-12T03:10:00.000Z",
+  "last_run": "2026-07-12T03:14:00.000Z",
   "last_run_summary": {
     "hour_utc": "03:00",
     "benchmark": {
@@ -34,10 +34,11 @@
       "primary_findings": 7,
       "primary_recall": "6/6",
       "primary_gap": [],
+      "pass1_note": "Local scan pass1 degraded 4/6 gap xss,sensitive_data; retry merged 8 findings 6/6",
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_used": false,
       "gap": [],
-      "note": "Primary heroku 6/6 (7 findings) — no benchmark misses",
+      "note": "Benchmark 6/6 — remote validation 7 findings; local retry path hit 8 findings with merge",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,33 +57,42 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 17,
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 43,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "PentesterLab sqli_01/xss_01 hosted exercises + Kontra OWASP Web/SQLi training hubs",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/"
+      ],
+      "focus": "PentesterLab/Kontra validated (prior) + LLM/GraphQL/sec_code URLs queued; Vercel lab queue-head rescanned",
       "improvements_shipped_this_run": 3,
-      "urls_validated": [
+      "urls_validated_prior": [
         "https://pentesterlab.com/exercises/sqli_01",
         "https://pentesterlab.com/exercises/xss_01",
         "https://application.security/free/owasp-top-10",
         "https://application.security/free-application-security-training/owasp-top-10-sql-injection"
+      ],
+      "urls_not_reached": [
+        "https://jjirik77.github.io/sec_code/privacy.html",
+        "https://www.llm-sec.dev/",
+        "https://application.security/free/llm",
+        "https://dvga.tools.escape.tech/",
+        "https://portswigger.net/web-security/llm-attacks"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 (7 findings) — no benchmark misses",
-      "pentesterlab.com/exercises/sqli_01: SQL Injection 01 JSON-LD + login-bypass lab markers (0→4 findings)",
-      "pentesterlab.com/exercises/xss_01: XSS 01 alert-box lab markers (0→5 findings)",
-      "application.security/free/owasp-top-10: Kontra OWASP Top 10 for Web hub (0→4 findings)",
-      "application.security/.../owasp-top-10-sql-injection: Kontra SQL injection training (0→4 findings)"
+      "juice-shop.herokuapp.com: benchmark 6/6 — pass1 4/6 gap xss,sensitive_data on cold Heroku; retry/validation 7-8 findings",
+      "chimera.atlascrew.dev: 9 findings — 456+ API vuln markers + JWT none + XXE + prompt-injection",
+      "pentesterlab.com/exercises/sqli_01: SQLi 01 lab markers (4 findings)",
+      "pentesterlab.com/exercises/xss_01: XSS 01 alert-box lab (5 findings)",
+      "ctb-pi.vercel.app: 6 findings — North Star AGI CTF + sitemap sensitive paths"
     ],
     "learning_gaps": [
-      "vulnerable-graphql-lab.railway.app: Railway placeholder — GraphQL lab offline",
-      "print.alf.nu: DNS Unknown Host — alf.nu/alert1 has wargame markers",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo",
-      "www.root-me.org: Anubis bot-wall blocks cloud scanner UA",
-      "playhacklab.com: Vercel 404 Application not found"
+      "juice-shop.herokuapp.com: pass1 4/6 on cold Heroku (pages_crawled=1) — xss/sensitive_data need retry merge",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN — dead Acunetix demo blocks queue head slot",
+      "New llm-sec.dev / DVGA / Kontra LLM / PortSwigger LLM URLs queued but not reached in 8-URL limit",
+      "archon-eight.vercel.app: finding count varies 1-9 across runs — SPA bundle timing",
+      "vulnerable-graphql-lab.railway.app: Railway placeholder — GraphQL lab offline"
     ]
   },
   "discovery_highlights": {
@@ -92,7 +102,9 @@
     "computersciencesop2.vercel.app": 10,
     "hack-this-site-eta.vercel.app": 12,
     "pentesterlab.com": 5,
-    "juice-shop.herokuapp.com": 7,
+    "juice-shop.herokuapp.com": 8,
+    "chimera.atlascrew.dev": 9,
+    "ctb-pi.vercel.app": 6,
     "vulnex.vercel.app": 4,
     "www.secureflag.com": 3,
     "demo.owasp-juice.shop": 8,
@@ -101,22 +113,12 @@
     "application.security": 6,
     "google-gruyere.appspot.com": 4,
     "dvwa.csalab.app": 4,
-    "www.itsecgames.com": 3,
-    "natas4.natas.labs.overthewire.org": 4,
-    "www.bugbountyhunter.com": 2,
-    "www.hackthebox.com": 4,
-    "academy.hackthebox.com": 6,
-    "portswigger.net": 3,
-    "authlab.digi.ninja": 5,
-    "securebank-blog.vercel.app": 5,
-    "llm-sec.vercel.app": 7,
-    "promptmap.vercel.app": 4,
-    "alf.nu": 3,
-    "ctfchallenge.co.uk": 3,
-    "defendtheweb.net": 3,
-    "intercode-benchmark.github.io": 3,
     "pentesterlab.com/exercises/sqli_01": 4,
     "pentesterlab.com/exercises/xss_01": 5,
-    "application.security/free/owasp-top-10": 4
+    "application.security/free/owasp-top-10": 4,
+    "llm-sec.vercel.app": 7,
+    "promptmap.vercel.app": 4,
+    "cybersec-demo.vercel.app": 4,
+    "preview-zeroday-sec.vercel.app": 3
   }
 }
