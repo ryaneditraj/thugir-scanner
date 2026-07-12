@@ -2037,7 +2037,32 @@
       "url": "https://dvga.xplat-demo.threatx.io/",
       "source": "Damn Vulnerable GraphQL Application — ThreatX public xplat demo instance (awesome-vulnerable-apps)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://cylabacademy.org/",
+      "source": "CMU CyLab Security Academy — picoCTF rebrand with year-round web/security challenges (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://atlascrew.dev/chimera",
+      "source": "Atlas Crew Chimera — 456+ vulnerable API endpoints product landing with live demo hub (GitHub/inferno-lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=2",
+      "source": "BugBountyHunter zseano — XSS challenge #2 (real bug bounty findings recreated)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=3",
+      "source": "BugBountyHunter zseano — web vulnerability challenge #3 (training platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level1",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 1 entry (alf.nu security challenges)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T14:05:00.000Z"
+  "updated_at": "2026-07-12T15:55:00.000Z"
 }
