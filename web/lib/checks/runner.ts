@@ -665,6 +665,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
   "clientSideSecLabPlaygroundEvidence",
+  "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
@@ -1016,6 +1017,7 @@ function extractKontraTrainingSeeds(html: string, origin: string): string[] {
   for (const p of [
     "/free/owasp-top-10-API",
     "/free/owasp-top-10",
+    "/free/llm",
     "/free-application-security-training/owasp-top-10-sql-injection",
     "/free"
   ]) {
@@ -2179,6 +2181,33 @@ function extractArchonVitepressSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Archon VitePress — hostname fallback when SPA shell omits nav on cold fetch. */
+function extractArchonHostFallbackSeeds(pageUrl: string): string[] {
+  try {
+    const u = new URL(pageUrl);
+    if (!u.hostname.includes("archon-eight.vercel.app")) return [];
+    return ["/cybersecurity/", "/security/", "/security/owasp/"].map((p) =>
+      new URL(p, u.origin).toString()
+    );
+  } catch {
+    return [];
+  }
+}
+
+/** jjirik77/sec_code — developer security & privacy lesson pages. */
+function extractSecCodeEducationalSeeds(html: string, pageUrl: string): string[] {
+  if (!/sec_code|Developer's Guide to Security|App Security\s*&\s*Privacy/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["privacy.html", "index.html"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** CryptoHack — seed public challenge catalog. */
 function extractCryptohackChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/CryptoHack|cryptohack\.org/i.test(html)) return [];
@@ -3161,6 +3190,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const atlasCrewEdgeProtectionSeeds = extractAtlasCrewEdgeProtectionSeeds(home.body, home.finalUrl);
   const owaspVwadSeeds = extractOwaspVwadSeeds(home.body, home.finalUrl);
   const archonVitepressSeeds = extractArchonVitepressSeeds(home.body, home.finalUrl);
+  const archonHostFallbackSeeds = extractArchonHostFallbackSeeds(home.finalUrl);
+  const secCodeEducationalSeeds = extractSecCodeEducationalSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const portswiggerSeeds = extractPortswiggerAcademySeeds(home.body, home.finalUrl);
@@ -3203,6 +3234,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...archonHostFallbackSeeds,
       ...labHubSeeds,
       ...docusaurusLabSeeds,
       ...nextraCyberSeeds,
@@ -3259,6 +3291,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...atlasCrewEdgeProtectionSeeds,
       ...owaspVwadSeeds,
       ...archonVitepressSeeds,
+      ...secCodeEducationalSeeds,
       ...vulnerableAppSeeds,
       ...hacksplainingSeeds,
       ...portswiggerSeeds,
