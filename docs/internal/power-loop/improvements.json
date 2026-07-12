@@ -1901,6 +1901,24 @@
       "slug": "client-side-webhacking-kr-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Webhacking.kr + Korean cyber-security challenge + /chall.php hub; extractWebhackingKrSeeds; webhacking.kr findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Online community with hacking challenges + try our security and 'hack' challenges + /challenge/level101/ catalog; extractNetForceChallengeSeeds; www.net-force.nl/hacktivity findings 0→3; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "client-side-brutelogic-xss-gym-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS Gym - Train your XSS Muscles + More than 30 different XSS cases + getElementById('h1').innerHTML + eval('n.p='); x55.is/brutelogic/gym.php findings 0→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webfour-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SELECT * FROM webfour.webfour where name = '$input' + Your Resulting Query echo on web.ctflearn.com/web4/; extractCtflearnWebfourSeeds; web.ctflearn.com/web4 findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3463,6 +3481,21 @@
       "source": "discovery:webhacking.kr",
       "slug": "client-side-webhacking-kr-evidence",
       "shipped_at": "2026-07-12T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-evidence",
+      "shipped_at": "2026-07-12T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:x55.is",
+      "slug": "client-side-brutelogic-xss-gym-evidence",
+      "shipped_at": "2026-07-12T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:web.ctflearn.com",
+      "slug": "client-side-ctflearn-webfour-evidence",
+      "shipped_at": "2026-07-12T11:10:00.000Z"
     }
   ]
 }
