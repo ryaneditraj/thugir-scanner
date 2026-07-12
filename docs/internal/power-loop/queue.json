@@ -1862,7 +1862,32 @@
       "url": "http://bandit.labs.overthewire.org/",
       "source": "OverTheWire Bandit — classic wargame entry for web/shell vulnerability training (awesome-vuln-apps)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-academy.vercel.app/",
+      "source": "VulnAcademy — OWASP Top 10 interactive training platform with SQLi/XSS/SVG upload labs (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/",
+      "source": "apisec-inc/urban-VAmPI — OWASP API Top 10 staging Railway deploy (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://todoer.site/",
+      "source": "Entit-y/Todoer — intentionally vulnerable full-stack task manager (Nimbus Vault practice target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackable.me/",
+      "source": "OWASP VWAD — community sandboxed vulnerable web app platform (eLearnSecurity Coliseum)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-production-6e47f.up.railway.app/demo",
+      "source": "Arc Gate — live AI agent red-team prompt-injection demo playground (Railway OSS deploy)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T05:12:00.000Z"
+  "updated_at": "2026-07-12T06:05:00.000Z"
 }
