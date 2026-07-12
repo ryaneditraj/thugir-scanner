@@ -1936,6 +1936,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-net-force-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Net-Force.nl hacking challenge platform disclosed",
+    description:
+      "Net-Force.nl is an online community with web, JavaScript, and cryptography hacking challenges at /challenge/levelNN/.",
+    impactOneline:
+      "Public Net-Force pages document injectable challenge instances used for web security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNetForceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Net-Force is intentional training — require login before serving challenge instances.",
+      steps: [
+        "Gate /challenge/ routes behind authenticated accounts.",
+        "Isolate challenge VMs from production networks.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Net-Force-style hacking challenges. Show how to gate challenge routes behind auth and isolate labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-brutelogic-xss-gym-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Brute Logic XSS Gym disclosed",
+    description:
+      "Brute Logic XSS Gym at x55.is/brutelogic/gym.php exposes 30+ DOM XSS cases with innerHTML and eval sinks for PoC training.",
+    impactOneline:
+      "Public XSS Gym pages document DOM XSS sinks attackers use to calibrate reflected and DOM-based XSS scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBrutelogicXssGymEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS Gym is intentional training — do not deploy eval/innerHTML patterns to production.",
+      steps: [
+        "Run XSS Gym only on isolated training hosts.",
+        "Replace innerHTML with textContent for user-controlled data in production.",
+        "Never use eval() on URL parameters or form input."
+      ]
+    },
+    fixPrompt:
+      "We host Brute Logic-style XSS gyms for training. Show how to isolate DOM XSS labs and fix innerHTML/eval sinks in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctflearn-webfour-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "CTFlearn Web4 SQLi challenge disclosed",
+    description:
+      "CTFlearn Web4 at web.ctflearn.com/web4/ discloses string-concatenated SQL against webfour.webfour — a beginner SQL injection training challenge.",
+    impactOneline:
+      "Public Web4 pages echo injectable SQL queries — SQLi likely if the pattern is wired to a live database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWebfourEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web4 is intentional training — use parameterized queries in production.",
+      steps: [
+        "Run Web4 challenges only on dedicated training databases.",
+        "Replace string-concatenated SQL with prepared statements.",
+        "Rate-limit unauthenticated SQLi probe traffic on lab hosts."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web4-style SQLi labs. Show how to isolate training databases and fix string-concatenated SQL in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthebox-evidence",
     platform: "generic",
     category: "Broken access control",

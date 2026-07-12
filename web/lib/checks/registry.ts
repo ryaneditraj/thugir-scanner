@@ -2240,6 +2240,10 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "CTF SQL Slammer challenge documented injectable query",
     re: /SELECT \* FROM users WHERE username='\$input' AND password='\$input'/i
+  },
+  {
+    label: "CTFlearn Web4 SQLi lab discloses injectable query",
+    re: /SELECT \* FROM webfour\.webfour where name = '\$input'/i
   }
 ];
 
@@ -5001,6 +5005,128 @@ const clientSideWebhackingKrEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Webhacking.kr hosts 80+ Korean web application security challenges for SQLi, XSS, and access-control practice"
+    }
+  };
+};
+
+// --- Net-Force.nl hacking challenge community (net-force.nl) ------------------------
+const CLIENT_NET_FORCE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Net-Force hacking challenges meta",
+    re: /Online community with hacking challenges/i
+  },
+  {
+    label: "Security and hack challenges welcome",
+    re: /try our <strong>security<\/strong> and <strong>'hack'<\/strong> challenges/i
+  },
+  {
+    label: "Net-Force challenge catalog",
+    re: /href="challenges\/"|>Challenges</i
+  },
+  {
+    label: "Challenge level entry point",
+    re: /href="challenge\/level\d+\/"/i
+  },
+  {
+    label: "net-force.nl host",
+    re: /net-force\.nl/i
+  }
+];
+
+const clientSideNetForceEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NET_FORCE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Net-Force|net-force\.nl/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Net-Force.nl hosts web, JavaScript, and cryptography hacking challenges at /challenge/levelNN/"
+    }
+  };
+};
+
+// --- Brute Logic XSS Gym (x55.is/brutelogic/gym.php) --------------------------------
+const CLIENT_BRUTELOGIC_XSS_GYM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Gym title",
+    re: /XSS Gym - Train your XSS Muscles/i
+  },
+  {
+    label: "30+ XSS cases tagline",
+    re: /More than 30 different XSS cases/i
+  },
+  {
+    label: "Brute Logic XSS gym branding",
+    re: /Brute Logic|brutelogic\/gym\.php/i
+  },
+  {
+    label: "innerHTML sink in gym script",
+    re: /getElementById\(['"]h1['"]\)\.innerHTML/i
+  },
+  {
+    label: "eval sink in gym script",
+    re: /eval\(['"]n\.p=/i
+  }
+];
+
+const clientSideBrutelogicXssGymEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BRUTELOGIC_XSS_GYM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/XSS Gym|brutelogic\/gym\.php|x55\.is/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Brute Logic XSS Gym exposes 30+ DOM XSS cases with innerHTML and eval sinks for PoC training"
+    }
+  };
+};
+
+// --- CTFlearn Web4 SQLi challenge (web.ctflearn.com/web4) ---------------------------
+const CLIENT_CTFLEARN_WEBFOUR_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTFlearn Web4 challenge title",
+    re: /You know what to do/i
+  },
+  {
+    label: "Webfour SQL query disclosure",
+    re: /SELECT \* FROM webfour\.webfour where name = '\$input'/i
+  },
+  {
+    label: "Resulting query echo",
+    re: /Your Resulting Query:/i
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWebfourEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBFOUR_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/webfour|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFlearn Web4 challenge discloses string-concatenated SQL against webfour.webfour — SQLi training surface"
     }
   };
 };
@@ -10365,6 +10491,9 @@ export const RULES: Record<string, Rule> = {
   clientSideRedtigerHackitEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
+  clientSideNetForceEvidence,
+  clientSideBrutelogicXssGymEvidence,
+  clientSideCtflearnWebfourEvidence,
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
