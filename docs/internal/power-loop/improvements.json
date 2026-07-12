@@ -1811,6 +1811,24 @@
       "slug": "client-side-clawguard-ai-audit-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: EU AI Act Compliance Audit + KI-Agenten MCP-Server + 225 Bedrohungsmuster; meta-refresh stub to /audit/; prompttools.co findings 0→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:cors-lab.vercel.app",
+      "slug": "cors-reflect-origin",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/profile Origin:https://evil-cors-probe.example returns access-control-allow-origin echoed + allow-credentials:true; corsReflectOrigin now probes /api/* when homepage returns ACAO:*; cors-lab.vercel.app findings 0→2; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xvwa.vercel.app",
+      "slug": "client-side-xvwa-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>XVWA - Xtreme Vulnerable Web Application</title> + include(\"sidepanel.php\") raw PHP + about.html intentionally designed with many security flaws; xvwa.vercel.app findings 0→3; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "flask-redirect-stub-follow",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Flask stub redirects to /auth/login with VULNPORTAL + SECURE ACCESS TERMINAL + bcrypt/zxcvbn markers; extractStubRedirectTarget follows Werkzeug redirect pages; vuln-portal.vercel.app findings 1→2; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3313,6 +3331,21 @@
       "source": "discovery:prompttools.co",
       "slug": "client-side-clawguard-ai-audit-evidence",
       "shipped_at": "2026-07-12T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:cors-lab.vercel.app",
+      "slug": "cors-reflect-origin-api-probe",
+      "shipped_at": "2026-07-12T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:xvwa.vercel.app",
+      "slug": "client-side-xvwa-evidence",
+      "shipped_at": "2026-07-12T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "flask-redirect-stub-follow",
+      "shipped_at": "2026-07-12T06:10:00.000Z"
     }
   ]
 }

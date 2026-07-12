@@ -243,7 +243,6 @@ async function probeCorsOriginReflection(
 
 const corsReflectOrigin: Rule = async (ctx) => {
   const homeAcao = (ctx.home.headers["access-control-allow-origin"] || "").trim();
-  if (homeAcao === "*") return NEGATIVE;
   const probeOrigin = "https://evil-cors-probe.example";
   const probePaths = new Set<string>(CORS_REFLECT_API_FALLBACKS);
   for (const m of ctx.combined.matchAll(/["'](\/api\/[a-zA-Z0-9_-]+)["']/g)) {
@@ -251,7 +250,10 @@ const corsReflectOrigin: Rule = async (ctx) => {
     probePaths.add(m[1]);
   }
 
-  const candidates = [ctx.origin, ...[...probePaths].map((p) => new URL(p, ctx.origin).toString())];
+  const candidates: string[] = [];
+  if (homeAcao !== "*") candidates.push(ctx.origin);
+  for (const p of probePaths) candidates.push(new URL(p, ctx.origin).toString());
+
   for (const url of candidates) {
     const hit = await probeCorsOriginReflection(ctx.probe, url, probeOrigin);
     if (!hit) continue;
@@ -7242,6 +7244,14 @@ const CLIENT_XVWA_RES: { label: string; re: RegExp }[] = [
   {
     label: "Intentionally vulnerable design",
     re: /intentionally designed with many security flaws/i
+  },
+  {
+    label: "XVWA PHP sidepanel include",
+    re: /include\(["']sidepanel\.php["']\)/i
+  },
+  {
+    label: "XVWA about.html include",
+    re: /include(?:_once)?\(['"]about\.html['"]\)/i
   },
   {
     label: "SQL Injection attack module",

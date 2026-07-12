@@ -2933,38 +2933,20 @@ function extractWrongSecretsChallengeSeeds(html: string, origin: string): string
 }
 
 /** XVWA (xvwa.vercel.app) — sidepanel lists 15+ attack modules under /xvwa/vulnerabilities/. */
-const XVWA_VULN_MODULES = [
-  "sqli",
-  "sqli_blind",
-  "cmdi",
-  "xpath",
-  "reflected_xss",
-  "stored_xss",
-  "dom_xss",
-  "ssrf_xspa",
-  "fi",
-  "idor",
-  "csrf",
-  "ssti",
-  "sessionflaws",
-  "missfunc",
-  "redirect"
-];
-
 function extractXvwaVulnSeeds(html: string, origin: string): string[] {
   if (!/XVWA|Xtreme Vulnerable Web Application/i.test(html)) return [];
   const out = new Set<string>();
   const basePath = /\/xvwa\//i.test(html) ? "/xvwa" : "";
-  for (const mod of XVWA_VULN_MODULES) {
+  for (const p of [`${basePath}/about.html`, `${basePath}/instruction.php`, `${basePath}/sidepanel.php`]) {
     try {
-      out.add(new URL(`${basePath}/vulnerabilities/${mod}/`, origin).toString());
+      out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
   }
-  for (const p of ["/instruction.php", "/sidepanel.php", "/about.html"]) {
+  for (const mod of ["sqli", "reflected_xss", "ssrf_xspa", "idor", "ssti"]) {
     try {
-      out.add(new URL(`${basePath}${p}`, origin).toString());
+      out.add(new URL(`${basePath}/vulnerabilities/${mod}/`, origin).toString());
     } catch {
       /* ignore */
     }

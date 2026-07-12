@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T05:04:36.035Z",
-  "total": 242,
-  "uniqueSlugs": 242,
+  "generatedAt": "2026-07-12T06:06:46.615Z",
+  "total": 243,
+  "uniqueSlugs": 243,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 224,
+    "generic": 225,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 177,
+    "deep": 178,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 18,
     "Information disclosure": 16,
     "Broken authentication": 12,
-    "Injection": 36,
+    "Injection": 37,
     "Cross-site scripting": 21,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -191,6 +191,7 @@
     "client-side-xss-c2-collector-evidence",
     "client-side-xss-evidence",
     "client-side-xss-quiz-evidence",
+    "client-side-xvwa-evidence",
     "client-side-xxe-evidence",
     "client-side-yogsec-xss-labs-evidence",
     "client-side-yrprey-evidence",
