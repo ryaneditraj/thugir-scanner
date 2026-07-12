@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T14:15:26.873Z",
-  "total": 266,
-  "uniqueSlugs": 266,
+  "generatedAt": "2026-07-12T15:07:13.336Z",
+  "total": 269,
+  "uniqueSlugs": 269,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 248,
+    "generic": 251,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 201,
+    "deep": 204,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Security misconfiguration": 18,
     "Information disclosure": 16,
-    "Broken authentication": 16,
-    "Injection": 42,
-    "Cross-site scripting": 25,
+    "Broken authentication": 17,
+    "Injection": 43,
+    "Cross-site scripting": 26,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
     "AI security": 15,
@@ -74,8 +74,10 @@
     "client-side-ctflearn-webeight-evidence",
     "client-side-ctflearn-webfour-evidence",
     "client-side-ctflearn-webone-evidence",
+    "client-side-ctflearn-webseven-evidence",
     "client-side-ctflearn-websix-evidence",
     "client-side-ctflearn-webthree-evidence",
+    "client-side-ctflearn-webtwo-evidence",
     "client-side-cybench-evidence",
     "client-side-cyber-scavenger-hunt-evidence",
     "client-side-cyberdefenders-evidence",
@@ -247,6 +249,7 @@
     "permissive-cors",
     "php-strcmp-array-bypass",
     "phpinfo-exposed",
+    "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
     "reflected-xss-query-param",
     "replit-exposed-dot-replit",

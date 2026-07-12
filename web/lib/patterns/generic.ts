@@ -485,6 +485,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "post-login-sql-bypass",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL injection bypasses POST login authentication",
+    description:
+      "A POST login form accepts SQL injection payloads in the username field, returning a session cookie and redirect to a protected dashboard — positive proof of authentication bypass via SQLi.",
+    impactOneline: "Attackers can log in without valid credentials by injecting SQL into the login form.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "postLoginSqlBypass" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL; never concatenate user input.",
+      steps: [
+        "Replace f-string or concatenated login queries with prepared statements.",
+        "Return generic login failure messages without SQL details.",
+        "Add rate limiting and monitoring on login endpoints."
+      ]
+    },
+    fixPrompt:
+      "My Flask login accepts SQLi payloads like ' OR 1=1 -- and issues a session redirect. Switch to parameterized queries and show the fixed login handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "unauthenticated-admin-endpoint",
     platform: "generic",
     category: "Broken authentication",
@@ -2140,6 +2165,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host CTFlearn Web3-style admin gate labs. Show how to enforce server-side authorization on admin routes in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctflearn-webtwo-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "CTFlearn Web2 base64 HTML comment credential disclosed",
+    description:
+      "CTFlearn Web2 at web.ctflearn.com/web2/ hides the login password in a base64-encoded HTML comment beside a POST password form.",
+    impactOneline:
+      "Public Web2 pages leak base64-encoded credentials in view-source comments — authentication bypass likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWebtwoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web2 is intentional training — never embed credentials in HTML comments in production.",
+      steps: [
+        "Run Web2 challenges only on dedicated training hosts.",
+        "Remove secrets from HTML comments and client-visible markup.",
+        "Store credentials server-side with proper hashing."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web2-style base64 comment credential labs. Show how to remove HTML comment secrets in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctflearn-webseven-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "CTFlearn Web7 calculator eval challenge disclosed",
+    description:
+      "CTFlearn Web7 at web.ctflearn.com/web7/ uses eval() on calculator expression input in calc.js — DOM code injection training challenge.",
+    impactOneline:
+      "Public Web7 calculator passes user input to eval() — arbitrary JavaScript execution likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWebsevenEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web7 is intentional training — never pass user input to eval() in production.",
+      steps: [
+        "Run Web7 challenges only on dedicated training hosts.",
+        "Replace eval() with safe expression parsers.",
+        "Sanitize and validate all calculator input server-side when applicable."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web7-style calculator eval labs. Show how to replace eval() with safe parsers in production.",
     version: 1,
     enabled: true
   },

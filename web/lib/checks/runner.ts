@@ -541,6 +541,7 @@ const DEEP_RULES = new Set<string>([
   "idorProbe",
   "unauthenticatedApiRoutes",
   "sqlErrorDisclosure",
+  "postLoginSqlBypass",
   "sstiTemplateInjection",
   "clientSideXorAuthEvidence",
   "idorObjectAccess",
@@ -601,8 +602,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideCtflearnWebfourEvidence",
   "clientSideCtflearnWebeightEvidence",
   "clientSideCtflearnWeboneEvidence",
+  "clientSideCtflearnWebtwoEvidence",
   "clientSideCtflearnWebthreeEvidence",
   "clientSideCtflearnWebsixEvidence",
+  "clientSideCtflearnWebsevenEvidence",
   "phpStrcmpArrayBypass",
   "clientSideWechallEvidence",
   "clientSideAppsecMasterEvidence",
@@ -2472,18 +2475,18 @@ function extractCtflearnWebeightSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** CTFlearn Web1/Web3/Web6 — seed beginner web challenge instances on web.ctflearn.com. */
+/** CTFlearn Web1/Web2/Web3/Web6/Web7 — seed beginner web challenge instances on web.ctflearn.com. */
 function extractCtflearnWebChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/CTFlearn|ctflearn\.com|web\.ctflearn\.com/i.test(html)) return [];
   const out = new Set<string>();
-  for (const path of ["/web1/", "/web3/", "/web6/"]) {
+  for (const path of ["/web1/", "/web2/", "/web3/", "/web6/", "/web7/"]) {
     try {
       out.add(new URL(path, "http://web.ctflearn.com").toString());
     } catch {
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["']([^"']*web\.ctflearn\.com\/web(?:1|3|6)[^"']*)["']/gi;
+  const linkRe = /href\s*=\s*["']([^"']*web\.ctflearn\.com\/web(?:1|2|3|6|7)[^"']*)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {

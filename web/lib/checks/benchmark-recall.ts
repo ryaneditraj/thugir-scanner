@@ -2,6 +2,7 @@
 
 const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "sql-error-disclosure": ["sqli"],
+  "post-login-sql-bypass": ["sqli", "auth_bypass"],
   "client-side-sql-evidence": ["sqli"],
   "client-side-nosql-evidence": ["sqli"],
   "client-side-xxe-evidence": ["sqli"],
