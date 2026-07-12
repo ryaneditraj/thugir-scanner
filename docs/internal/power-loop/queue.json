@@ -1777,7 +1777,32 @@
       "url": "https://www.root-me.org/en/Challenges/Web-Server/",
       "source": "Root-Me Web-Server challenge index — public CTF vulnerability exercises (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free/owasp-top-10",
+      "source": "Kontra Application Security — free interactive OWASP Top 10 Web training hub (HN/Product Hunt cited)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-sql-injection",
+      "source": "Kontra — browser-based SQL injection training lab with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/sqli_01",
+      "source": "PentesterLab SQL Injection 01 — hosted exercise instance (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/",
+      "source": "zahidoverflow/damn-vulnerable-web-university — alternate Vercel OWASP Top 10 training deploy (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_01",
+      "source": "PentesterLab XSS 01 — hosted reflected XSS exercise instance (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T01:10:00.000Z"
+  "updated_at": "2026-07-12T02:10:00.000Z"
 }
