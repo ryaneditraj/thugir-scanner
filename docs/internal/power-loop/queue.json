@@ -1837,6 +1837,32 @@
       "url": "https://jjirik77.github.io/sec_code/interactive.html",
       "source": "jjirik77/sec_code — secure coding interactive lessons with XSS/SQLi exploit demos (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/",
+      "source": "gauthamram57/appsec-ci-pipeline — deliberately vulnerable Django app with stored XSS + SQLi (Render deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xvwa.vercel.app/",
+      "source": "s4n7h0/xvwa — Xtreme Vulnerable Web Application public Vercel deploy (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cors-lab.vercel.app/",
+      "source": "CORS Lab — intentionally vulnerable Origin-reflection training stand with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackmyvm.eu/",
+      "source": "HackMyVM — public boot2root CTF platform with online vulnerability labs (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://bandit.labs.overthewire.org/",
+      "source": "OverTheWire Bandit — classic wargame entry for web/shell vulnerability training (awesome-vuln-apps)",
+      "auth": "public_demo"
     }
-  ]
+  ],
+  "updated_at": "2026-07-12T05:12:00.000Z"
 }
