@@ -5282,6 +5282,150 @@ const clientSideCtflearnWebeightEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CTFlearn Web1 Simple password challenge (web.ctflearn.com/web1) ------------------
+const CLIENT_CTFLEARN_WEBONE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web1 Simple challenge title",
+    re: /Web\s*1[\s\S]{0,80}Simple/i
+  },
+  {
+    label: "POST password form",
+    re: /<form[^>]*method\s*=\s*["']post["'][\s\S]{0,400}?name\s*=\s*["']password["']/i
+  },
+  {
+    label: "HTML comment credential hint",
+    re: /<!--\s*[a-z0-9]{10,}\s*-->/i
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWeboneEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBONE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Web\s*1|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFlearn Web1 Simple challenge hides the password in an HTML comment beside a POST login form — credential disclosure training surface"
+    }
+  };
+};
+
+// --- CTFlearn Web3 admin gate challenge (web.ctflearn.com/web3) ---------------------
+const CLIENT_CTFLEARN_WEBTHREE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Admin gate denial message",
+    re: /You(?:'|&#0?39;)re not an admin/i
+  },
+  {
+    label: "Please leave this site prompt",
+    re: /Please leave this site/i
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWebthreeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBTHREE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/not an admin|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "CTFlearn Web3 exposes an unauthenticated admin gate — broken access control / auth bypass training surface"
+    }
+  };
+};
+
+// --- CTFlearn Web6 strcmp challenge (web.ctflearn.com/web6) -------------------------
+const CLIENT_CTFLEARN_WEBSIX_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Some things are just not secure tagline",
+    re: /Some things are just not secure/i
+  },
+  {
+    label: "GET password form",
+    re: /<form[^>]*method\s*=\s*["']get["'][\s\S]{0,400}?name\s*=\s*["']password["']/i
+  },
+  {
+    label: "source.txt disclosure hint",
+    re: /<!--\s*source\s+at\s+source\.txt\s*-->/i
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWebsixEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBSIX_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/source\.txt|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFlearn Web6 points to source.txt beside a GET password check — PHP strcmp type-juggling training surface"
+    }
+  };
+};
+
+async function probePhpStrcmpArrayBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  const hasHint = /<!--\s*source\s+at\s+source\.txt\s*-->/i.test(ctx.combined);
+  const pagePath = new URL(ctx.home.finalUrl || ctx.origin).pathname || "/";
+  const dir = pagePath.endsWith("/") ? pagePath : pagePath.replace(/\/[^/]*$/, "/") || "/";
+  const sourceUrl = new URL("source.txt", new URL(dir, ctx.origin)).toString();
+  const sourceDoc = await ctx.probe.get(sourceUrl, { maxBytes: 4096 });
+  if (!sourceDoc || sourceDoc.status >= 400) return null;
+  if (!/strcmp\s*\(/i.test(sourceDoc.body)) {
+    if (!hasHint) return null;
+  }
+  const bypass = new URL(pagePath.endsWith("/") ? pagePath : dir, ctx.origin);
+  bypass.searchParams.set("password[]", "1");
+  const bypassDoc = await ctx.probe.get(bypass.toString(), { maxBytes: 8192 });
+  if (!bypassDoc || bypassDoc.status >= 500) return null;
+  const flagMatch = bypassDoc.body.match(/ctf\{[^}<]+\}|flag\{[^}<]+\}/i);
+  if (!flagMatch) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: bypass.toString(),
+      sourceSnippet: sourceDoc.body.match(/strcmp\s*\([^)]+\)/i)?.[0]?.slice(0, 80) || "strcmp()",
+      flagSnippet: flagMatch[0],
+      note: "PHP strcmp password check bypassed via password[] array parameter — type juggling auth bypass"
+    }
+  };
+}
+
+const phpStrcmpArrayBypass: Rule = async (ctx) => {
+  const hit = await probePhpStrcmpArrayBypass(ctx);
+  if (hit?.fired) return hit;
+  return NEGATIVE;
+};
+
 // --- Hack The Box CTF / cyber readiness platform (hackthebox.com) ---------------------
 const CLIENT_WECHALL_RES: { label: string; re: RegExp }[] = [
   {
@@ -6368,15 +6512,32 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
     /<!--[\s\S]{0,1200}?(?:database\s+password|db\s+password|password\s+is\s+set\s+to|admin\s+password\s+is|SECRET:\s*\w*(?:password|passwd|credential|api[_-]?key))[\s\S]{0,800}?-->/i;
   const m = ctx.combined.match(re);
-  if (!m) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.9,
-    evidence: {
-      sample: m[0].slice(0, 220).replace(/\s+/g, " ").trim(),
-      note: "HTML comment discloses database or admin credentials viewable in page source"
-    }
-  };
+  if (m) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        sample: m[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+        note: "HTML comment discloses database or admin credentials viewable in page source"
+      }
+    };
+  }
+  const passwordFormSecret =
+    /<form[\s\S]{0,900}?name\s*=\s*["']password["'][\s\S]{0,1400}?<!--\s*[a-z0-9]{10,}\s*-->/i;
+  const bare = ctx.combined.match(passwordFormSecret);
+  if (bare) {
+    const secret = bare[0].match(/<!--\s*([a-z0-9]{10,})\s*-->/)?.[1];
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        sample: bare[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+        secretHint: secret?.slice(0, 24),
+        note: "HTML comment beside password form discloses credential viewable in page source"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
@@ -10736,6 +10897,10 @@ export const RULES: Record<string, Rule> = {
   clientSideKnoxssTestPageEvidence,
   clientSideCtflearnWebfourEvidence,
   clientSideCtflearnWebeightEvidence,
+  clientSideCtflearnWeboneEvidence,
+  clientSideCtflearnWebthreeEvidence,
+  clientSideCtflearnWebsixEvidence,
+  phpStrcmpArrayBypass,
   clientSideWechallEvidence,
   clientSideAppsecMasterEvidence,
   clientSideHackTheBoxEvidence,

@@ -600,6 +600,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideKnoxssTestPageEvidence",
   "clientSideCtflearnWebfourEvidence",
   "clientSideCtflearnWebeightEvidence",
+  "clientSideCtflearnWeboneEvidence",
+  "clientSideCtflearnWebthreeEvidence",
+  "clientSideCtflearnWebsixEvidence",
+  "phpStrcmpArrayBypass",
   "clientSideWechallEvidence",
   "clientSideAppsecMasterEvidence",
   "clientSideHackTheBoxEvidence",
@@ -2468,6 +2472,29 @@ function extractCtflearnWebeightSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** CTFlearn Web1/Web3/Web6 — seed beginner web challenge instances on web.ctflearn.com. */
+function extractCtflearnWebChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/CTFlearn|ctflearn\.com|web\.ctflearn\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const path of ["/web1/", "/web3/", "/web6/"]) {
+    try {
+      out.add(new URL(path, "http://web.ctflearn.com").toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*web\.ctflearn\.com\/web(?:1|3|6)[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** WeChall — seed challenge catalog categories from global CTF scoreboard. */
 function extractWechallChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/WeChall|wechall\.net/i.test(html)) return [];
@@ -3459,6 +3486,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const brutelogicXssGymSeeds = extractBrutelogicXssGymSeeds(home.body, home.finalUrl);
   const ctflearnWebfourSeeds = extractCtflearnWebfourSeeds(home.body, home.finalUrl);
   const ctflearnWebeightSeeds = extractCtflearnWebeightSeeds(home.body, home.finalUrl);
+  const ctflearnWebChallengeSeeds = extractCtflearnWebChallengeSeeds(home.body, home.finalUrl);
   const wechallSeeds = extractWechallChallengeSeeds(home.body, home.finalUrl);
   const railsgoatSeeds = extractRailsgoatDocSeeds(home.body, home.finalUrl);
   const breakTheFlaskSeeds = extractBreakTheFlaskWriteupSeeds(home.body, home.finalUrl);
@@ -3570,6 +3598,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...brutelogicXssGymSeeds,
       ...ctflearnWebfourSeeds,
       ...ctflearnWebeightSeeds,
+      ...ctflearnWebChallengeSeeds,
       ...wechallSeeds,
       ...railsgoatSeeds,
       ...breakTheFlaskSeeds,
