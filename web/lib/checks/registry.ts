@@ -4526,6 +4526,48 @@ const clientSidePentesterLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab Web for Pentester free course (pentesterlab.com/exercises/web-for-pentester)
+const CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web for Pentester course title",
+    re: /Web for Pentester(?:\s+Free Exercise)?/i
+  },
+  {
+    label: "Foundational web penetration testing curriculum",
+    re: /foundational knowledge of web penetration testing/i
+  },
+  {
+    label: "Vulnerability identification and exploitation exercises",
+    re: /common vulnerabilities and techniques for identifying and exploiting them/i
+  },
+  {
+    label: "Junior pentester web hacking audience",
+    re: /junior penetration testers, web hackers and appsec engineers/i
+  },
+  {
+    label: "CourseInstance JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Web for Pentester"/i
+  }
+];
+
+const clientSidePentesterlabWebForPentesterEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Web for Pentester course documents foundational web vuln identification and exploitation labs"
+    }
+  };
+};
+
 // --- Kontra Application Security training (application.security) ----------------------
 const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
@@ -6393,7 +6435,7 @@ const CLIENT_XXE_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideXxeEvidence: Rule = async (ctx) => {
-  if (/Web Security Academy|portswigger\.net\/web-security/i.test(ctx.combined)) return NEGATIVE;
+  if (/Web Security Academy|portswigger\.net\/web-security|pentesterlab\.com/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_XXE_RES) {
     const m = ctx.combined.match(re);
@@ -8374,7 +8416,45 @@ const clientSideOverthewireNatasEvidence: Rule = async (ctx) => {
     confidence: hits.length >= 3 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "OverTheWire Natas wargame teaches serverside web vulnerabilities across staged challenge instances"
+      note: "OverTheWire Natas wargame documents staged serverside web-security challenges with credential chaining"
+    }
+  };
+};
+
+// --- Natas HTTP Referer guard bypass training (natas4+ access disallowed pages) ---------
+const CLIENT_OVERTHEWIRE_NATAS_REFERER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Natas referer access guard message",
+    re: /Access disallowed\.\s*You are visiting from/i
+  },
+  {
+    label: "Authorized referer host requirement",
+    re: /authorized users should come only from/i
+  },
+  {
+    label: "Natas level wechall marker",
+    re: /wechallinfo[\s\S]{0,60}"level"\s*:\s*"natas\d+"/i
+  },
+  {
+    label: "Natas challenge subdomain",
+    re: /natas\d+\.natas\.labs\.overthewire\.org/i
+  }
+];
+
+const clientSideOverthewireNatasRefererEvidence: Rule = async (ctx) => {
+  if (!/natas\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_NATAS_REFERER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Natas level exposes weak HTTP Referer guard — authorized users must spoof Referer header to proceed"
     }
   };
 };
@@ -9334,6 +9414,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
+  clientSidePentesterlabWebForPentesterEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideImmersiveLabsEvidence,
   clientSideHackThisSiteEvidence,
@@ -9395,6 +9476,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMlastgEvidence,
   clientSideCryptohackEvidence,
   clientSideOverthewireNatasEvidence,
+  clientSideOverthewireNatasRefererEvidence,
   clientSideFfufMeEvidence,
   clientSideYrpreyEvidence,
   clientSideBergerCyberLabEvidence,

@@ -237,44 +237,45 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
 
-  // Phase 1: wake REST API (sqli, idor, auth_bypass probes depend on this).
-  let apiLive = false;
-  for (let attempt = 0; attempt < 8; attempt++) {
-    if (await juiceShopApiLive(pageUrl)) {
-      apiLive = true;
-      break;
+  const wakeApi = async (): Promise<boolean> => {
+    for (let attempt = 0; attempt < 8; attempt++) {
+      if (await juiceShopApiLive(pageUrl)) return true;
+      await new Promise((r) => setTimeout(r, 2500));
     }
-    await new Promise((r) => setTimeout(r, 2500));
-  }
+    return false;
+  };
+
+  const wakeBundle = async (): Promise<boolean> => {
+    for (let attempt = 0; attempt < 8; attempt++) {
+      try {
+        const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
+          timeoutMs: 18000,
+          maxBytes: 8192
+        });
+        if (
+          doc.status >= 200 &&
+          doc.status < 500 &&
+          !HEROKU_APP_ERROR_RE.test(doc.body) &&
+          doc.body.length > 500
+        ) {
+          return true;
+        }
+      } catch {
+        /* ignore */
+      }
+      await new Promise((r) => setTimeout(r, 2500));
+    }
+    return false;
+  };
+
+  // Wake API + bundle in parallel — Heroku cold-start often serves one before the other.
+  const [apiLive, bundleLive] = await Promise.all([wakeApi(), wakeBundle()]);
   if (apiLive) {
     await probe.getMany(
       apiPaths.map((p) => new URL(p, origin).toString()),
       probeOpts,
       3
     );
-  }
-
-  // Phase 2: wake JS bundle independently (xss + secret probes need main.js).
-  let bundleLive = false;
-  for (let attempt = 0; attempt < 8; attempt++) {
-    try {
-      const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
-        timeoutMs: 18000,
-        maxBytes: 8192
-      });
-      if (
-        doc.status >= 200 &&
-        doc.status < 500 &&
-        !HEROKU_APP_ERROR_RE.test(doc.body) &&
-        doc.body.length > 500
-      ) {
-        bundleLive = true;
-        break;
-      }
-    } catch {
-      /* ignore */
-    }
-    await new Promise((r) => setTimeout(r, 2500));
   }
   if (bundleLive) {
     await probe.getMany(
@@ -582,6 +583,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
+  "clientSidePentesterlabWebForPentesterEvidence",
+  "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
   "clientSideImmersiveLabsEvidence",
   "clientSideHackThisSiteEvidence",
@@ -896,6 +899,11 @@ function extractCtfChallengeHubLinks(html: string, pageUrl: string): string[] {
 
 /** WebSec.fr challenge levels live under /levelNN/ but are only linked in <noscript> <select> options. */
 function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
+  try {
+    if (!/websec\.fr$/i.test(new URL(origin).hostname)) return [];
+  } catch {
+    return [];
+  }
   const out = new Set<string>();
   const optRe = /<option[^>]*>\s*(level\d+)\s*<\/option>/gi;
   let m: RegExpExecArray | null;
