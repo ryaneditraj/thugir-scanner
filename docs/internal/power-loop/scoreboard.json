@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T16:49:06.857Z",
+  "updated_at": "2026-07-12T16:52:58.468Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 914,
-  "total_findings": 3965,
+  "total_sites_scanned": 920,
+  "total_findings": 3974,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 427,
-  "discovery_findings": 2901,
+  "discovery_findings": 2910,
   "improvements_shipped": 328,
-  "last_run": "2026-07-12T16:49:06.857Z",
+  "last_run": "2026-07-12T16:52:58.468Z",
   "last_run_summary": {
     "hour_utc": "16:00",
     "benchmark": {
@@ -70,10 +70,46 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 0,
-      "findings": 0,
-      "pending": true
-    }
+      "urls_scanned": 6,
+      "findings": 9,
+      "skipped_48h": [],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
+        "http://34.28.235.106/ (GCP vuln-bank connection reset)"
+      ],
+      "focus": "Pentest-Forge lab instances + agent-probe AI security demo",
+      "validated_targets": [
+        "agent-probe.vercel.app (4 findings — XSS sinks + prompt-injection evidence)",
+        "dvwa.lab.pentest-forge.com (1 finding)",
+        "crapi.lab.pentest-forge.com (1 finding)",
+        "dvga.lab.pentest-forge.com (1 finding)",
+        "weblogic.lab.pentest-forge.com (1 finding)",
+        "devsecops-pipeline-demo-production.up.railway.app (1 finding)"
+      ],
+      "queued_not_reached": [
+        "escape.alf.nu/level2",
+        "escape.alf.nu/level3",
+        "bugbountyhunter.com/challenge?id=4",
+        "redtiger.labs.overthewire.org/level1.php",
+        "hacksplaining.com/lessons/csrf",
+        "aigoat.app",
+        "ctf.vercel.app",
+        "fabraix.com/playground"
+      ]
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: primary degraded 1/6 (3 passes pages_crawled=1) — staging fallback 6/6 (7 findings)",
+      "agent-probe.vercel.app: XSS sinks + prompt-injection red-team markers (4 findings)",
+      "pentest-forge labs: 5 hosted targets mostly misconfig-only (pages_crawled=1, probes=0 on cold instances)"
+    ],
+    "learning_gaps": [
+      "juice-shop.herokuapp.com: Heroku cold-start pages_crawled=1 misses xss,sqli,idor,auth_bypass,sensitive_data before staging fallback",
+      "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "pentest-forge lab instances: shallow crawl (probes_run=0) — hosted labs may need warm-up or auth",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "34.28.235.106: JessJohn0 vuln-bank GCP host offline from cloud",
+      "New tail URLs (escape L2/L3, bbh #4, redtiger L1) not reached — 8-URL head-first queue limit"
+    ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -90,6 +126,7 @@
     "demo.owasp-juice.shop": 8,
     "juice-shop-staging.herokuapp.com": 7,
     "nodegoat-websec.herokuapp.com": 6,
+    "agent-probe.vercel.app": 4,
     "application.security": 6,
     "google-gruyere.appspot.com": 3,
     "dvwa.csalab.app": 4,
