@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T19:05:42.327Z",
+  "updated_at": "2026-07-12T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 442,
   "discovery_findings": 3013,
-  "improvements_shipped": 337,
-  "last_run": "2026-07-12T19:05:42.327Z",
+  "improvements_shipped": 339,
+  "last_run": "2026-07-12T19:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "19:00",
     "benchmark": {
@@ -52,50 +52,35 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 39,
-      "skipped_48h": [
-        "https://juice-shop.herokuapp.com/",
-        "https://vapi.apisec.ai/",
-        "https://wrongsecrets.herokuapp.com/",
-        "https://bwapp.hakhub.net/",
-        "https://secureby.design/"
-      ],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Head-of-queue rescans + 5 new escape.alf.nu levels 6–10 (XSS wargame series)",
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 21,
+      "skipped_48h": [],
+      "dns_failures": [],
+      "focus": "Queued tail URLs validated: bug-collection, escape L5, Hacksplaining directory-traversal/ssrf/broken-access-control",
       "validated_targets": [
-        "brokencrystals.com (15 findings — exposed .env/.git + GraphQL + API IDOR)",
-        "demo.testfire.net (6 findings — reflected XSS + unauthenticated admin)",
-        "cyberscavengerhunt.com (6 findings — OWASP VWAD recon lab)",
-        "natas0.natas.labs.overthewire.org (4 findings — Natas wargame markers)",
-        "ctflearn.com (3 findings — CTF platform evidence)"
+        "bug-collection.vercel.app (5 findings — OWASP Top 10 Next.js training app)",
+        "escape.alf.nu/level5 (3 findings — alf.nu XSS wargame, existing seeds)",
+        "hacksplaining.com/lessons/directory-traversal (4 findings)",
+        "hacksplaining.com/lessons/ssrf (4 findings)",
+        "hacksplaining.com/lessons/broken-access-control (4 findings)"
       ],
       "queued_not_reached": [
-        "bug-collection.vercel.app",
-        "escape.alf.nu/level5",
-        "hacksplaining.com/lessons/directory-traversal/",
-        "hacksplaining.com/lessons/ssrf/",
-        "hacksplaining.com/lessons/broken-access-control/",
-        "escape.alf.nu/level6–10 (newly added)"
+        "escape.alf.nu/level6–10 (newly added to queue)"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "brokencrystals.com: 15 findings — .env/.git exposure + GraphQL introspection + unauthenticated API",
-      "demo.testfire.net: 6 findings — reflected XSS + admin endpoint",
-      "cyberscavengerhunt.com: 6 findings — OWASP VWAD training platform markers",
-      "natas0.natas.labs.overthewire.org: 4 findings — OverTheWire Natas referer-bypass evidence"
+      "bug-collection.vercel.app: 5 findings — BUG Collection OWASP Top 10 training app (new slug)",
+      "hacksplaining.com lessons: directory-traversal/ssrf/broken-access-control each 4 findings",
+      "escape.alf.nu/level5: 3 findings — alf-xss-wargame evidence via existing level seeds"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "hacksplaining.com: Vercel Security Checkpoint may block scanner UA from cloud pods",
-      "tail queue URLs (bug-collection, escape L5, Hacksplaining lessons, escape L6–10) not reached — 8-URL head-first limit"
+      "hacksplaining.com: lesson content loads client-side — static HTML markers only",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
     ],
-    "improvements_shipped_this_run": 0
+    "improvements_shipped_this_run": 2
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -135,7 +120,6 @@
     "crapi2.apisec.ai": 6,
     "hackable.so": 6,
     "skillaudit.vercel.app": 8,
-    "demo.testfire.net": 6,
     "hackable-web.vercel.app": 6,
     "cyberdefenders.org": 9,
     "labs.hackadvisor.io": 8,
@@ -151,7 +135,7 @@
     "hackxor.net": 3,
     "escape.alf.nu": 3,
     "escape.alf.nu/level4": 3,
-    "natas0.natas.labs.overthewire.org": 3,
+    "escape.alf.nu/level5": 3,
     "natas3.natas.labs.overthewire.org": 3,
     "natas4.natas.labs.overthewire.org": 3,
     "ctflearn.com": 3,
@@ -254,6 +238,10 @@
     "maestro-agentic-ai-security-demo-mon.netlify.app": 3,
     "secureby.design": 8,
     "reef-mcp-registry.vercel.app": 7,
-    "wrongsecrets.herokuapp.com": 5
+    "wrongsecrets.herokuapp.com": 5,
+    "bug-collection.vercel.app": 5,
+    "hacksplaining.com/lessons/directory-traversal": 4,
+    "hacksplaining.com/lessons/ssrf": 4,
+    "hacksplaining.com/lessons/broken-access-control": 4
   }
 }
