@@ -3849,6 +3849,22 @@ const CLIENT_CTF_PLATFORM_RES: { label: string; re: RegExp }[] = [
   {
     label: "CTF Platform Admin console",
     re: /CTF Platform Admin/i
+  },
+  {
+    label: "IEEE-VIT Conquer The World CTF title",
+    re: /CTF-Conquer The World|Conquer The World.*CTF/i
+  },
+  {
+    label: "IEEE-VIT cybersecurity competition description",
+    re: /cybersecurity competition[\s\S]{0,120}IEEE[\s-]*VIT/i
+  },
+  {
+    label: "CTF flag check API client",
+    re: /checkFlag|\/user\/checkFlag/i
+  },
+  {
+    label: "CTF challenge questions API",
+    re: /getAllQuestions|\/user\/getAllQuestions/i
   }
 ];
 
@@ -4989,6 +5005,18 @@ const CLIENT_REDTIGER_HACKIT_RES: { label: string; re: RegExp }[] = [
     re: /href="level1\.php"|level1\.php/i
   },
   {
+    label: "RedTiger level challenge welcome",
+    re: /Welcome to level \d+/i
+  },
+  {
+    label: "RedTiger simple SQL injection drill",
+    re: /(?:Lets|Let's) start with a simple injection/i
+  },
+  {
+    label: "RedTiger level users table disclosure",
+    re: /Tablename:\s*level\d+_users/i
+  },
+  {
     label: "redtiger.labs host",
     re: /redtiger\.labs\.overthewire\.org/i
   }
@@ -5001,7 +5029,8 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/RedTiger|redtiger\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  if (!/RedTiger|redtiger\.labs\.overthewire\.org|Welcome to level \d+/i.test(ctx.combined))
+    return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -7413,6 +7442,18 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Hidden instruction indirect injection lab",
     re: /hidden instructions[\s\S]{0,80}indirect injection/i
+  },
+  {
+    label: "Fabraix adversarial verification product title",
+    re: /Adversarial Verification for AI Agents/i
+  },
+  {
+    label: "Fabraix red-teaming AI agents marketing",
+    re: /red-teaming AI agents that continuously find security vulnerabilities/i
+  },
+  {
+    label: "Fabraix automated adversarial verification tagline",
+    re: /Automated adversarial verification for AI agents/i
   }
 ];
 
