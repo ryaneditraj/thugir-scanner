@@ -2092,6 +2092,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ctflearn-webone-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "CTFlearn Web1 HTML comment credential disclosed",
+    description:
+      "CTFlearn Web1 at web.ctflearn.com/web1/ hides the login password in an HTML comment beside a POST password form — Simple credential disclosure training challenge.",
+    impactOneline:
+      "Public Web1 pages leak the password in view-source comments — authentication bypass likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWeboneEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web1 is intentional training — never embed credentials in HTML comments in production.",
+      steps: [
+        "Run Web1 challenges only on dedicated training hosts.",
+        "Remove secrets from HTML comments and client-visible markup.",
+        "Store credentials server-side with proper hashing."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web1-style credential disclosure labs. Show how to remove HTML comment secrets and secure password checks in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctflearn-webthree-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CTFlearn Web3 admin gate challenge disclosed",
+    description:
+      "CTFlearn Web3 at web.ctflearn.com/web3/ presents an unauthenticated admin gate with a denial message — broken access control training challenge.",
+    impactOneline:
+      "Public Web3 pages expose an admin-only surface without authentication — auth bypass training surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWebthreeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web3 is intentional training — enforce server-side authorization in production.",
+      steps: [
+        "Run Web3 challenges only on dedicated training hosts.",
+        "Require authenticated sessions before serving admin routes.",
+        "Never rely on client-visible gate messages for access control."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web3-style admin gate labs. Show how to enforce server-side authorization on admin routes in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctflearn-websix-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "CTFlearn Web6 PHP strcmp challenge disclosed",
+    description:
+      "CTFlearn Web6 at web.ctflearn.com/web6/ points to source.txt with a GET password strcmp check — PHP type-juggling training challenge.",
+    impactOneline:
+      "Public Web6 pages expose strcmp source and accept array password[] bypass — authentication bypass likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWebsixEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web6 is intentional training — use strict comparison and type checks in production.",
+      steps: [
+        "Run Web6 challenges only on dedicated training hosts.",
+        "Replace strcmp with hash_equals for secrets.",
+        "Reject array parameters on password inputs."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web6-style strcmp labs. Show how to fix PHP strcmp type juggling and array parameter bypass in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "php-strcmp-array-bypass",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "PHP strcmp bypass via array password parameter",
+    description:
+      "Live probe confirms PHP strcmp password check bypassed when password[] array is supplied — type juggling returns flag or success marker.",
+    impactOneline:
+      "GET password[]=1 bypasses strcmp auth and returns a CTF flag — critical authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "phpStrcmpArrayBypass" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-string password input and use hash_equals for secret comparison.",
+      steps: [
+        "Validate password is a string before strcmp or hash_equals.",
+        "Use hash_equals instead of strcmp for credential checks.",
+        "Return generic errors without leaking flags on failure."
+      ]
+    },
+    fixPrompt:
+      "Our PHP login uses strcmp on $_GET password. Show how to block array type juggling and use hash_equals.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-wechall-evidence",
     platform: "generic",
     category: "Broken access control",
