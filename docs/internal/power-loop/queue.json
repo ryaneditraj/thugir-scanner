@@ -2237,6 +2237,32 @@
       "url": "https://bugforge.io/labs/sqli",
       "source": "bugforge.io — beginner SQL injection hands-on lab module (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-labs.vercel.app/",
+      "source": "AI Security Lab v2.0 — LLM red-teaming and adversarial AI offensive security training sandbox (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/",
+      "source": "Code-Breaking Puzzles — open-source code-audit challenges (PHP/Node/Java/Python RCE/SQLi) on fly.dev (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sanitize-web.fly.dev/",
+      "source": "Sanitize Online Demo — HTML sanitizer bypass / XSS filter-evasion practice lab on fly.dev (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pokemorty.fly.dev/",
+      "source": "Morty's Pokedex CTF — public web security capture-the-flag challenge on fly.dev (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-cross-site-scripting",
+      "source": "Kontra Application Security — browser-based XSS training lab with live exploit demo (web search)",
+      "auth": "public_demo"
     }
-  ]
+  ],
+  "updated_at": "2026-07-12T23:08:00.000Z"
 }
