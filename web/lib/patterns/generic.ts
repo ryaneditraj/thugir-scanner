@@ -3990,6 +3990,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-sec-code-educational-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Developer security & privacy lesson platform disclosed",
+    description:
+      "sec_code publishes interactive SQL injection and privacy training lessons with live query manipulation demos for developer education.",
+    impactOneline:
+      "Public sec_code lessons expose SQL injection walkthroughs and privacy principles attackers use to calibrate injection scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecCodeEducationalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational SQL injection demos belong in isolated training — never on production login forms.",
+      steps: [
+        "Use parameterized queries in all production authentication endpoints.",
+        "Host developer security lessons on dedicated training domains.",
+        "Remove interactive SQL concat demos from production-facing pages."
+      ]
+    },
+    fixPrompt:
+      "We publish developer security lessons with SQL injection demos. Show how to isolate training from production auth flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-mcp-sherpa-workshop-evidence",
     platform: "generic",
     category: "AI security",

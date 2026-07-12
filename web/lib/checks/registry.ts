@@ -4683,6 +4683,10 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
     re: /SQL Injection \| Kontra|owasp-top-10-sql-injection/i
   },
   {
+    label: "OWASP Top 10 for LLM free exercises",
+    re: /OWASP Top 10 for LLM(?:\s*-\s*2025)?/i
+  },
+  {
     label: "Free exercises hub",
     re: /Free Exercises|application\.security\/free/i
   },
@@ -9259,6 +9263,48 @@ const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- jjirik77/sec_code developer security & privacy educational lessons ---------------
+const CLIENT_SEC_CODE_EDU_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Developer security and privacy lesson title",
+    re: /Developer's Guide to Security\s*&\s*Privacy|App Security\s*&\s*Privacy Lesson/i
+  },
+  {
+    label: "SQL injection threat module",
+    re: /Threat 1:\s*SQL Injection|Tricking the Database/i
+  },
+  {
+    label: "Interactive SQL query display",
+    re: /sql-query-display|SELECT \* FROM users WHERE user = '\.\.\.'/i
+  },
+  {
+    label: "SQL injection demo login UI",
+    re: /sql-login-btn|You just tricked the database/i
+  },
+  {
+    label: "Privacy principle lesson",
+    re: /Keep it secret|Only the right people can see the data/i
+  }
+];
+
+const clientSideSecCodeEducationalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SEC_CODE_EDU_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/sec_code|jjirik77\.github\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "sec_code lesson documents interactive SQL injection and privacy training for developers"
+    }
+  };
+};
+
 // --- Broken Crystals API security benchmark (brokencrystals.com) ----------------------
 const CLIENT_BROKENCRYSTALS_RES: { label: string; re: RegExp }[] = [
   {
@@ -9764,6 +9810,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   clientSideSecLabPlaygroundEvidence,
+  clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
