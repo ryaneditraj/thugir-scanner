@@ -1988,6 +1988,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-brutelogic-xss-test-page-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Brute Logic XSS Test Page disclosed",
+    description:
+      "Brute Logic XSS Test Page at x55.is/brutelogic/xss.php reflects 11 URL/form parameters (a, b1–b6, c1–c6) for HTML and JS injection calibration.",
+    impactOneline:
+      "Public XSS test pages document reflected injection surfaces attackers use to tune XSS scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBrutelogicXssTestPageEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS test pages are intentional training — encode all reflected output in production.",
+      steps: [
+        "Run Brute Logic labs only on isolated training hosts.",
+        "HTML-encode reflected user input before rendering.",
+        "Never reflect URL parameters into inline script blocks."
+      ]
+    },
+    fixPrompt:
+      "We host Brute Logic-style XSS test pages for training. Show how to isolate labs and fix reflected XSS in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-knoxss-test-page-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "KNOXSS add-on XSS test hub disclosed",
+    description:
+      "KNOXSS add-on test hub at x55.is/brutelogic/knoxss.html catalogs 29+ reflected, DOM, and blind XSS cases across xss.php, multi/, dom/, and blind/ paths.",
+    impactOneline:
+      "Public KNOXSS hubs enumerate XSS challenge routes used to calibrate browser-based XSS scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideKnoxssTestPageEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "KNOXSS test hubs are intentional training — do not expose blind-XSS collectors in production.",
+      steps: [
+        "Host KNOXSS labs on isolated training domains.",
+        "Disable blind-XSS email collectors outside authorized ranges.",
+        "Rate-limit unauthenticated XSS probe traffic on lab hosts."
+      ]
+    },
+    fixPrompt:
+      "We host KNOXSS-style XSS test hubs for training. Show how to isolate blind-XSS labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctflearn-webfour-evidence",
     platform: "generic",
     category: "Injection",
