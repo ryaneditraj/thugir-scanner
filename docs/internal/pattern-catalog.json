@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T03:08:06.586Z",
-  "total": 240,
-  "uniqueSlugs": 240,
+  "generatedAt": "2026-07-12T04:06:47.471Z",
+  "total": 241,
+  "uniqueSlugs": 241,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 222,
+    "generic": 223,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 175,
+    "deep": 176,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 18,
     "Information disclosure": 16,
     "Broken authentication": 12,
-    "Injection": 35,
+    "Injection": 36,
     "Cross-site scripting": 21,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
@@ -149,6 +149,7 @@
     "client-side-returntrue-wargame-evidence",
     "client-side-rogueloop-xxs-course-evidence",
     "client-side-rootme-challenge-evidence",
+    "client-side-sec-code-educational-evidence",
     "client-side-seclab-playground-evidence",
     "client-side-secresearchlab-evidence",
     "client-side-sectrainer-evidence",

@@ -1775,6 +1775,24 @@
       "slug": "client-side-kontra-application-security-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: OWASP Top 10 for Web title + SQL Injection | Kontra training page + owasp-top-10-sql-injection seed; application.security/free/owasp-top-10 findings 0→4; sql-injection lesson 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "archon-hostname-crawl-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: cold SPA fetch pages_crawled=1 missed /cybersecurity/; extractArchonHostFallbackSeeds prepends hostname seeds; archon-eight.vercel.app findings 1→4+ with client-side-archon-training-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security/free/llm",
+      "slug": "kontra-llm-training-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>OWASP Top 10 for LLM - 2025</title> + Kontra Application Security Training meta; /free/llm seed + OWASP Top 10 for LLM marker; application.security/free/llm findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:jjirik77.github.io/sec_code",
+      "slug": "client-side-sec-code-educational-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Developer's Guide to Security & Privacy + Threat 1: SQL Injection + sql-query-display interactive demo; jjirik77.github.io/sec_code/privacy.html findings 3→4; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3247,6 +3265,21 @@
       "source": "discovery:application.security",
       "slug": "client-side-kontra-web-sqli-lab-markers",
       "shipped_at": "2026-07-12T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "archon-hostname-crawl-fallback",
+      "shipped_at": "2026-07-12T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security/free/llm",
+      "slug": "kontra-llm-training-seed",
+      "shipped_at": "2026-07-12T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:jjirik77.github.io/sec_code",
+      "slug": "client-side-sec-code-educational-evidence",
+      "shipped_at": "2026-07-12T04:10:00.000Z"
     }
   ]
 }
