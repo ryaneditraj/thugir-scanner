@@ -1721,6 +1721,24 @@
       "slug": "client-side-overthewire-natas-referer-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Access disallowed. You are visiting from + authorized users should come only from natas5 host + wechallinfo level natas4; natas4.natas.labs.overthewire.org findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthebox.com",
+      "slug": "client-side-hackthebox-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: leading cyber readiness platform + 1,500+ hands-on cybersecurity labs + ctf.hackthebox.com; extractHackTheBoxSeeds; www.hackthebox.com findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "client-side-hackthebox-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: guided and interactive cybersecurity training + Interactive exercises against real-world applications + HTB Certified Penetration Testing; extractHackTheBoxAcademySeeds; academy.hackthebox.com findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "portswigger-all-labs-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: All labs | Web Security Academy title + Mystery lab challenge + web-security/all-labs#sql-injection taxonomy; extractPortswiggerAcademySeeds extended; portswigger.net/web-security/all-labs findings 0→3; benchmark 6/6 maintained (7 findings)"
     }
   ],
   "shipped": [
@@ -3148,6 +3166,21 @@
       "source": "discovery:natas4.natas.labs.overthewire.org",
       "slug": "client-side-overthewire-natas-referer-evidence",
       "shipped_at": "2026-07-12T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthebox.com",
+      "slug": "client-side-hackthebox-evidence",
+      "shipped_at": "2026-07-12T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "client-side-hackthebox-academy-evidence",
+      "shipped_at": "2026-07-12T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:portswigger.net",
+      "slug": "portswigger-all-labs-crawl",
+      "shipped_at": "2026-07-12T01:15:00.000Z"
     }
   ]
 }
