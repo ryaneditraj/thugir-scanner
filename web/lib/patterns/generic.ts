@@ -1806,6 +1806,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hackthebox-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hack The Box cyber readiness platform disclosed",
+    description:
+      "Hack The Box advertises 1,500+ hands-on cybersecurity labs, CTF challenge machines, and cyber readiness exercises for penetration testers.",
+    impactOneline:
+      "Public HTB marketing pages document lab infrastructure and CTF challenge taxonomy attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackTheBoxEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTB labs are intentional training — isolate challenge VMs from production networks.",
+      steps: [
+        "Run HTB challenge machines only on dedicated lab VLANs.",
+        "Require authenticated accounts before spawning injectable lab instances.",
+        "Never copy HTB challenge vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We use Hack The Box-style CTF labs for team training. Show how to isolate challenge VMs from production and gate lab spawns behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackthebox-academy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HTB Academy cybersecurity training platform disclosed",
+    description:
+      "HTB Academy publishes guided interactive modules with hands-on exercises against real-world applications and penetration testing certification paths.",
+    impactOneline:
+      "Public HTB Academy catalogues document web exploitation module taxonomy reusable for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackTheBoxAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTB Academy modules are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require HTB Academy authentication before serving injectable lab VMs.",
+        "Isolate Academy lab instances from corporate production networks.",
+        "Use module findings to close skill gaps without copying vulnerable lab code to production."
+      ]
+    },
+    fixPrompt:
+      "We host HTB Academy-style guided cybersecurity courses. Show how to gate lab modules behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-evidence",
     platform: "generic",
     category: "Broken access control",
