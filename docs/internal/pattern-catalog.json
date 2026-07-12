@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-12T04:06:47.471Z",
-  "total": 241,
-  "uniqueSlugs": 241,
+  "generatedAt": "2026-07-12T05:04:36.035Z",
+  "total": 242,
+  "uniqueSlugs": 242,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 223,
+    "generic": 224,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 176,
+    "deep": 177,
     "continuous": 0
   },
   "byCategory": {
@@ -31,7 +31,7 @@
     "Cross-site scripting": 21,
     "Server-side request forgery": 2,
     "Sensitive data exposure": 3,
-    "AI security": 14,
+    "AI security": 15,
     "XSS": 1,
     "general": 17
   },
@@ -59,6 +59,7 @@
     "client-side-bwapp-evidence",
     "client-side-bwapp-injection-catalog-evidence",
     "client-side-chimera-vuln-lab-evidence",
+    "client-side-clawguard-ai-audit-evidence",
     "client-side-cryptohack-evidence",
     "client-side-cs-training-academy-evidence",
     "client-side-csrf-evidence",
