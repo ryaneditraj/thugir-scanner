@@ -2066,6 +2066,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ctflearn-webeight-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "CTFlearn Web8 Dog Viewer SQLi challenge disclosed",
+    description:
+      "CTFlearn Web8 at web.ctflearn.com/web8/ exposes a Dog Viewer with numeric id GET parameter against dog records — UNION/blind SQLi training lab.",
+    impactOneline:
+      "Public Web8 pages accept injectable id parameters against a live dog database — SQLi likely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtflearnWebeightEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTFlearn Web8 is intentional training — use parameterized queries in production.",
+      steps: [
+        "Run Web8 challenges only on dedicated training databases.",
+        "Replace string-concatenated SQL with prepared statements.",
+        "Rate-limit unauthenticated SQLi probe traffic on lab hosts."
+      ]
+    },
+    fixPrompt:
+      "We host CTFlearn Web8-style dog-id SQLi labs. Show how to isolate training databases and fix numeric id SQL injection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-wechall-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "WeChall global CTF challenge scoreboard disclosed",
+    description:
+      "WeChall at wechall.net aggregates 180+ non-simulated hacking challenges across MySQL, PHP, exploit, and HTTP categories.",
+    impactOneline:
+      "Public WeChall pages catalogue injectable challenge taxonomy reusable for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWechallEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WeChall challenges are intentional training — isolate lab VMs from production.",
+      steps: [
+        "Run WeChall-hosted challenges only on dedicated lab infrastructure.",
+        "Require authentication before serving injectable challenge instances.",
+        "Never copy WeChall challenge vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We link to WeChall-style CTF scoreboards for team training. Show how to isolate challenge VMs from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-appsec-master-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "AppSecMaster web hacking lab platform disclosed",
+    description:
+      "AppSecMaster advertises Docker-based web application hacking labs with hands-on code review challenges, CTF labs, and OSWE certification prep.",
+    impactOneline:
+      "Public AppSecMaster marketing pages document lab infrastructure and vulnerability taxonomy for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAppsecMasterEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require AppSecMaster authentication before spawning injectable lab containers.",
+        "Isolate Docker lab instances from corporate production networks.",
+        "Use lab findings to close skill gaps without copying vulnerable patterns to production."
+      ]
+    },
+    fixPrompt:
+      "We use AppSecMaster-style Docker web hacking labs for team training. Show how to isolate lab containers from production and gate spawns behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthebox-evidence",
     platform: "generic",
     category: "Broken access control",

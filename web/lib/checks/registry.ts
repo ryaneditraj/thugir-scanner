@@ -1550,6 +1550,31 @@ async function probeJsonAuthSqlInjection(ctx: RuleContext): Promise<RuleResult |
   return null;
 }
 
+async function probeDogViewerIdSql(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/Dog Viewer/i.test(ctx.combined)) return null;
+  if (!/name\s*=\s*["']id["']/i.test(ctx.combined)) return null;
+  const baseline = new URL(".", ctx.origin);
+  baseline.searchParams.set("id", "1");
+  const evil = new URL(".", ctx.origin);
+  evil.searchParams.set("id", "1'");
+  const docs = await ctx.probe.getMany([baseline.toString(), evil.toString()], { maxBytes: 8192 }, 2);
+  const baseDoc = docs.get(baseline.toString());
+  const evilDoc = docs.get(evil.toString());
+  if (!baseDoc || !evilDoc) return null;
+  if (!/Name:\s*\w+/i.test(baseDoc.body)) return null;
+  if (!/0 results/i.test(evilDoc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: evil.toString(),
+      baselineSnippet: baseDoc.body.match(/Name:\s*\w+[^<]*/)?.[0]?.slice(0, 80) || "Name: record",
+      evilSnippet: "0 results",
+      note: "Dog Viewer id parameter accepts numeric input but quote returns empty — SQL injection likely"
+    }
+  };
+}
+
 const sqlErrorDisclosure: Rule = async (ctx) => {
   const discovered = extractSearchEndpoints(ctx.combined);
   const fallbacks = [
@@ -1615,6 +1640,9 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
 
   const postHit = await probePostFormSqlDisclosure(ctx);
   if (postHit?.fired) return postHit;
+
+  const dogViewerHit = await probeDogViewerIdSql(ctx);
+  if (dogViewerHit?.fired) return dogViewerHit;
 
   return NEGATIVE;
 };
@@ -5211,6 +5239,132 @@ const clientSideCtflearnWebfourEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "CTFlearn Web4 challenge discloses string-concatenated SQL against webfour.webfour — SQLi training surface"
+    }
+  };
+};
+
+// --- CTFlearn Web8 Inj3ction Time SQLi challenge (web.ctflearn.com/web8) --------------
+const CLIENT_CTFLEARN_WEBEIGHT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Dog Viewer challenge title",
+    re: /Dog Viewer/i
+  },
+  {
+    label: "Numeric id GET parameter form",
+    re: /name\s*=\s*["']id["'][\s\S]{0,120}method\s*=\s*["']get["']/i
+  },
+  {
+    label: "Dog record Name/Breed/Color fields",
+    re: /Name:\s*\w+[\s\S]{0,40}Breed:[\s\S]{0,40}Color:/i
+  },
+  {
+    label: "web.ctflearn.com host",
+    re: /web\.ctflearn\.com/i
+  }
+];
+
+const clientSideCtflearnWebeightEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFLEARN_WEBEIGHT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Dog Viewer|web\.ctflearn\.com/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFlearn Web8 Dog Viewer exposes numeric id GET parameter against dog records — UNION/blind SQLi training surface"
+    }
+  };
+};
+
+// --- Hack The Box CTF / cyber readiness platform (hackthebox.com) ---------------------
+const CLIENT_WECHALL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WeChall hacking challenge scoreboard",
+    re: /WeChall|wechall\.net/i
+  },
+  {
+    label: "Challenge and problem solving sites overview",
+    re: /hacking challenge and problem solving sites|Computer, Hackit, Challenges/i
+  },
+  {
+    label: "WeChall challenge taxonomy tags",
+    re: /\/challs\/(?:MySQL|PHP|Exploit|HTTP|XSS)\//i
+  },
+  {
+    label: "Non-simulated challenge catalog",
+    re: /Non Simulated|\/challs\/by\/chall_score/i
+  },
+  {
+    label: "WeChall module script",
+    re: /module\/WeChall\/wc\.js/i
+  }
+];
+
+const clientSideWechallEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WECHALL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/WeChall|wechall\.net/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WeChall hosts 180+ non-simulated hacking challenges spanning MySQL, PHP, exploit, and HTTP categories"
+    }
+  };
+};
+
+// --- AppSecMaster application security training platform (appsecmaster.net) ---------
+const CLIENT_APPSECMASTER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "AppSecMaster organization branding",
+    re: /AppSecMaster/i
+  },
+  {
+    label: "Application security training platform",
+    re: /Application security training platform/i
+  },
+  {
+    label: "Hands-on code review CTF labs",
+    re: /hands-on code review challenges[\s\S]{0,40}CTF labs/i
+  },
+  {
+    label: "Web application vulnerability labs",
+    re: /web application vulnerabilit(?:y|ies)[\s\S]{0,60}hands-on code review/i
+  },
+  {
+    label: "OSWE certification prep path",
+    re: /OSWE|EWPTX|GWAPT/i
+  },
+  {
+    label: "appsecmaster.net host",
+    re: /appsecmaster\.net/i
+  }
+];
+
+const clientSideAppsecMasterEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_APPSECMASTER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/AppSecMaster|appsecmaster\.net/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "AppSecMaster hosts Docker-based web application hacking labs with code review challenges and OSWE prep paths"
     }
   };
 };
@@ -10580,6 +10734,9 @@ export const RULES: Record<string, Rule> = {
   clientSideBrutelogicXssTestPageEvidence,
   clientSideKnoxssTestPageEvidence,
   clientSideCtflearnWebfourEvidence,
+  clientSideCtflearnWebeightEvidence,
+  clientSideWechallEvidence,
+  clientSideAppsecMasterEvidence,
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,

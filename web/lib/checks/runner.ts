@@ -599,6 +599,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideBrutelogicXssTestPageEvidence",
   "clientSideKnoxssTestPageEvidence",
   "clientSideCtflearnWebfourEvidence",
+  "clientSideCtflearnWebeightEvidence",
+  "clientSideWechallEvidence",
+  "clientSideAppsecMasterEvidence",
   "clientSideHackTheBoxEvidence",
   "clientSideHackTheBoxAcademyEvidence",
   "clientSideHackThisSiteEvidence",
@@ -2444,6 +2447,44 @@ function extractCtflearnWebfourSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** CTFlearn Web8 Inj3ction Time — seed dog-id SQLi challenge on web.ctflearn.com. */
+function extractCtflearnWebeightSeeds(html: string, pageUrl: string): string[] {
+  if (!/CTFlearn|ctflearn\.com|web\.ctflearn\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  try {
+    out.add("http://web.ctflearn.com/web8/");
+  } catch {
+    /* ignore */
+  }
+  const linkRe = /href\s*=\s*["']([^"']*web\.ctflearn\.com\/web8[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** WeChall — seed challenge catalog categories from global CTF scoreboard. */
+function extractWechallChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/WeChall|wechall\.net/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/challs", "/challs/MySQL", "/challs/PHP", "/challs/Exploit", "/challs/HTTP"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** SkillAudit MCP skill scanner (skillaudit.vercel.app) — seed docs/rules for agent-security markers. */
 function extractSkillauditDocSeeds(html: string, pageUrl: string): string[] {
   if (!/SkillAudit|skillaudit\.vercel\.app/i.test(html)) return [];
@@ -3417,6 +3458,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const netForceSeeds = extractNetForceChallengeSeeds(home.body, home.finalUrl);
   const brutelogicXssGymSeeds = extractBrutelogicXssGymSeeds(home.body, home.finalUrl);
   const ctflearnWebfourSeeds = extractCtflearnWebfourSeeds(home.body, home.finalUrl);
+  const ctflearnWebeightSeeds = extractCtflearnWebeightSeeds(home.body, home.finalUrl);
+  const wechallSeeds = extractWechallChallengeSeeds(home.body, home.finalUrl);
   const railsgoatSeeds = extractRailsgoatDocSeeds(home.body, home.finalUrl);
   const breakTheFlaskSeeds = extractBreakTheFlaskWriteupSeeds(home.body, home.finalUrl);
   const grpcGoatSeeds = extractGrpcGoatDocSeeds(home.body, home.finalUrl);
@@ -3526,6 +3569,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...netForceSeeds,
       ...brutelogicXssGymSeeds,
       ...ctflearnWebfourSeeds,
+      ...ctflearnWebeightSeeds,
+      ...wechallSeeds,
       ...railsgoatSeeds,
       ...breakTheFlaskSeeds,
       ...grpcGoatSeeds,
