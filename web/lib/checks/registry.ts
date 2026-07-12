@@ -9939,6 +9939,129 @@ const clientSideOverthewireBanditEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OverTheWire Krypton cryptography wargame ----------------------------------------
+const CLIENT_OVERTHEWIRE_KRYPTON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Krypton cryptography wargame title",
+    re: /OverTheWire:\s*Krypton|The Krypton wargame|renderLevelsMenu\("krypton"\)/i
+  },
+  {
+    label: "Krypton wargame catalog blurb",
+    re: /Krypton[\s\S]{0,80}cryptography|wargames\/krypton/i
+  },
+  {
+    label: "Krypton SSH lab host",
+    re: /krypton\.labs\.overthewire\.org/i
+  },
+  {
+    label: "OverTheWire wargame hub",
+    re: /OverTheWire[\s\S]{0,40}Wargames|overthewire\.org\/wargames/i
+  }
+];
+
+const clientSideOverthewireKryptonEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_KRYPTON_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Krypton|krypton\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OverTheWire Krypton wargame teaches cryptography challenges on krypton.labs.overthewire.org"
+    }
+  };
+};
+
+// --- OverTheWire Narnia privilege-escalation wargame --------------------------------
+const CLIENT_OVERTHEWIRE_NARNIA_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Narnia wargame title",
+    re: /OverTheWire:\s*Narnia|Narnia is a wargame|renderLevelsMenu\("narnia"\)/i
+  },
+  {
+    label: "Narnia SSH host and port",
+    re: /narnia\.labs\.overthewire\.org[\s\S]{0,60}port\s*2226|on port 2226/i
+  },
+  {
+    label: "Narnia level-0 credentials",
+    re: /(?:Username|username)\s*(?:is|:)\s*narnia0[\s\S]{0,60}(?:Password|password)\s*(?:is|:)\s*narnia0/i
+  },
+  {
+    label: "Narnia intruded.net rescue note",
+    re: /rescued from the demise of[\s\S]{0,40}intruded\.net/i
+  }
+];
+
+const clientSideOverthewireNarniaEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_NARNIA_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Narnia|narnia\.labs\.overthewire\.org/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OverTheWire Narnia wargame teaches privilege escalation via SSH on narnia.labs.overthewire.org:2226"
+    }
+  };
+};
+
+// --- OverTheWire Behemoth/Vortex/Manpage binary-exploitation wargames ----------------
+const CLIENT_OVERTHEWIRE_BEHEMOTH_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Behemoth wargame title",
+    re: /OverTheWire:\s*Behemoth|Behemoth is a wargame|renderLevelsMenu\("behemoth"\)/i
+  },
+  {
+    label: "Behemoth SSH host and port",
+    re: /behemoth\.labs\.overthewire\.org[\s\S]{0,60}port\s*2221|on port 2221/i
+  },
+  {
+    label: "Vortex wargame levels",
+    re: /OverTheWire:\s*Vortex|The Vortex wargame|renderLevelsMenu\("vortex"\)/i
+  },
+  {
+    label: "Manpage wargame and manpage audit tactic",
+    re: /OverTheWire:\s*Manpage|Manpage is a wargame|read the manpages for pitfalls/i
+  },
+  {
+    label: "Manpage SSH host and port",
+    re: /manpage\.labs\.overthewire\.org[\s\S]{0,60}port\s*2224|on port 2224/i
+  },
+  {
+    label: "Behemoth level-0 credentials",
+    re: /(?:Username|username)\s*(?:is|:)\s*behemoth0/i
+  }
+];
+
+const clientSideOverthewireBehemothEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OVERTHEWIRE_BEHEMOTH_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Behemoth|Vortex|Manpage|behemoth\.labs|vortex\.labs|manpage\.labs/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OverTheWire Behemoth/Vortex/Manpage wargames teach binary exploitation and code-audit challenges via SSH labs"
+    }
+  };
+};
+
 // --- Microsoft Sherpa MCP Security Summit workshop (azure-samples.github.io/sherpa) -
 const CLIENT_MCP_SHERPA_WORKSHOP_RES: { label: string; re: RegExp }[] = [
   {
@@ -10206,6 +10329,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVapiEvidence,
   clientSideArchonTrainingEvidence,
   clientSideOverthewireBanditEvidence,
+  clientSideOverthewireKryptonEvidence,
+  clientSideOverthewireNarniaEvidence,
+  clientSideOverthewireBehemothEvidence,
   clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure,
