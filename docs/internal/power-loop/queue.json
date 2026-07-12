@@ -2187,7 +2187,32 @@
       "url": "https://hacksplaining.com/lessons/server-side-template-injection/",
       "source": "Hacksplaining — interactive SSTI secure-coding lesson (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://bugzap.vercel.app/",
+      "source": "bondansebastian/prompt-injection-prevention-next — BugZap LLM injection prevention demo (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://redlockx.vercel.app/",
+      "source": "blackXmask/RedLockX — interactive prompt-injection analysis guardrail demo (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://attp.cybersecai.co.uk/",
+      "source": "ATTP Agent Trust Transport Protocol — SQL-gate + agent signing live demo (attp-live.fly.dev mirror)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rougestudio.vercel.app/",
+      "source": "Rogue Studio — unrestricted agentic security research IDE demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/insecure-deserialization/",
+      "source": "Hacksplaining — interactive insecure-deserialization secure-coding lesson (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T20:05:00.000Z"
+  "updated_at": "2026-07-12T21:05:00.000Z"
 }
