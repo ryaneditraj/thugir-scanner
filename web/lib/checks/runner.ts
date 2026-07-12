@@ -713,6 +713,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideCyberDrillEvidence",
   "clientSideDeserializationEvidence",
   "clientSideOverthewireLeviathanEvidence",
+  "clientSideOverthewireKryptonEvidence",
+  "clientSideOverthewireNarniaEvidence",
+  "clientSideOverthewireBehemothEvidence",
   "clientSideSecurityWriteupEvidence",
   "clientSideNorthStarAgiCtfEvidence",
   "clientSideWafWorkshopEvidence",
@@ -2250,7 +2253,17 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   if (!/OverTheWire|overthewire\.org|natas\.labs\.overthewire\.org/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/wargames/natas", "/wargames/", "/wargames/bandit", "/wargames/leviathan"]) {
+  for (const p of [
+    "/wargames/natas",
+    "/wargames/",
+    "/wargames/bandit",
+    "/wargames/leviathan",
+    "/wargames/krypton",
+    "/wargames/narnia",
+    "/wargames/behemoth",
+    "/wargames/vortex",
+    "/wargames/manpage"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -2259,7 +2272,8 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  const wargameRe = /href\s*=\s*["'](\/wargames\/(?:natas|bandit|leviathan|krypton|narnia))["']/gi;
+  const wargameRe =
+    /href\s*=\s*["'](\/wargames\/(?:natas|bandit|leviathan|krypton|narnia|behemoth|vortex|manpage))["']/gi;
   let m: RegExpExecArray | null;
   while ((m = wargameRe.exec(html))) {
     try {
@@ -2283,6 +2297,26 @@ function extractOverTheWireNatasSeeds(html: string, pageUrl: string): string[] {
   }
   if (/leviathan\.labs\.overthewire\.org|Username:\s*leviathan0/i.test(html)) {
     out.add("https://www.overthewire.org/wargames/leviathan/");
+  }
+  if (/krypton\.labs\.overthewire\.org|renderLevelsMenu\("krypton"\)/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/krypton/");
+    out.add("http://krypton0.krypton.labs.overthewire.org/");
+  }
+  if (/narnia\.labs\.overthewire\.org|Username:\s*narnia0/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/narnia/");
+    out.add("http://narnia0.narnia.labs.overthewire.org/");
+  }
+  if (/behemoth\.labs\.overthewire\.org|Username:\s*behemoth0/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/behemoth/");
+    out.add("http://behemoth0.behemoth.labs.overthewire.org/");
+  }
+  if (/vortex\.labs\.overthewire\.org|renderLevelsMenu\("vortex"\)/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/vortex/");
+    out.add("http://vortex0.vortex.labs.overthewire.org/");
+  }
+  if (/manpage\.labs\.overthewire\.org|Username:\s*manpage0/i.test(html)) {
+    out.add("https://www.overthewire.org/wargames/manpage/");
+    out.add("http://manpage0.manpage.labs.overthewire.org/");
   }
   return [...out];
 }

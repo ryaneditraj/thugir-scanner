@@ -1865,6 +1865,24 @@
       "slug": "client-side-securebank-blog-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SecureBank Attack Lab + Attack Mode vs Secure Mode + SQL injection XSS CSRF live demos; securebank-blog.vercel.app findings 5→6; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-krypton-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OverTheWire: Krypton + The Krypton wargame + krypton.labs.overthewire.org; www.overthewire.org/wargames/krypton findings 5→6; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-narnia-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Narnia wargame + narnia.labs.overthewire.org port 2226 + Username: narnia0; www.overthewire.org/wargames/narnia findings 6→7; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-behemoth-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Behemoth/Vortex/Manpage wargames + behemoth.labs port 2221 + manpage.labs port 2224; extractOverTheWireNatasSeeds extended; www.overthewire.org/wargames/behemoth findings 6→7; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3397,6 +3415,21 @@
       "source": "discovery:securebank-blog.vercel.app",
       "slug": "client-side-securebank-blog-evidence",
       "shipped_at": "2026-07-12T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-krypton-evidence",
+      "shipped_at": "2026-07-12T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-narnia-evidence",
+      "shipped_at": "2026-07-12T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.overthewire.org",
+      "slug": "client-side-overthewire-behemoth-evidence",
+      "shipped_at": "2026-07-12T09:10:00.000Z"
     }
   ]
 }

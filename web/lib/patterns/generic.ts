@@ -3834,6 +3834,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-overthewire-krypton-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "OverTheWire Krypton cryptography wargame disclosed",
+    description:
+      "OverTheWire Krypton teaches cryptography challenges on krypton.labs.overthewire.org with staged level progression.",
+    impactOneline:
+      "Public Krypton wargame pages document crypto exploit training surfaces for classical cipher and encoding challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireKryptonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Krypton is intentional training — isolate wargame VMs from production networks.",
+      steps: [
+        "Run Krypton challenges only on dedicated training VMs.",
+        "Do not reuse Krypton crypto weakness patterns in production systems.",
+        "Rate-limit unauthenticated wargame enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host OverTheWire Krypton-style crypto wargames. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-overthewire-narnia-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OverTheWire Narnia privilege-escalation wargame disclosed",
+    description:
+      "OverTheWire Narnia teaches SSH privilege-escalation challenges on narnia.labs.overthewire.org:2226 with narnia0 default credentials.",
+    impactOneline:
+      "Public Narnia wargame pages expose challenge structure and default credentials used to bootstrap the training chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireNarniaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Narnia is intentional training — isolate wargame VMs from production networks.",
+      steps: [
+        "Run Narnia challenges only on dedicated training VMs with no production access.",
+        "Rotate default wargame credentials if mirroring challenges internally.",
+        "Do not copy privilege-escalation patterns into production systems."
+      ]
+    },
+    fixPrompt:
+      "We host OverTheWire Narnia-style privilege escalation labs. Show how to isolate wargame instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-overthewire-behemoth-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OverTheWire Behemoth/Vortex/Manpage binary wargames disclosed",
+    description:
+      "OverTheWire Behemoth, Vortex, and Manpage wargames teach binary exploitation and code-audit challenges via SSH on behemoth.labs, vortex.labs, and manpage.labs hosts.",
+    impactOneline:
+      "Public Behemoth/Vortex/Manpage pages document binary exploit training surfaces with default level-0 credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOverthewireBehemothEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Behemoth/Vortex/Manpage are intentional training — isolate wargame VMs from production.",
+      steps: [
+        "Run binary wargames only on dedicated training VMs.",
+        "Do not expose default wargame credentials on public marketing pages.",
+        "Rate-limit unauthenticated wargame enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host OverTheWire Behemoth/Vortex/Manpage binary labs. Show how to isolate wargame VMs from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ffufme-evidence",
     platform: "generic",
     category: "Broken access control",
