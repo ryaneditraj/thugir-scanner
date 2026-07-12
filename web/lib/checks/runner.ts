@@ -1041,12 +1041,13 @@ function extractSecureflagOwaspSeeds(html: string, origin: string): string[] {
 
 /** Kontra application.security — free OWASP Top 10 web/API training hubs. */
 function extractKontraTrainingSeeds(html: string, origin: string): string[] {
-  if (!/application\.security|Kontra Application Security|OWASP Top 10 for (?:API|Web)/i.test(html)) return [];
+  if (!/application\.security|Kontra Application Security|OWASP Top 10 for (?:API|Web|LLM)/i.test(html)) return [];
   const out = new Set<string>();
   for (const p of [
     "/free/owasp-top-10-API",
     "/free/owasp-top-10",
     "/free/llm",
+    "/free/llm/prompt-injection",
     "/free-application-security-training/owasp-top-10-sql-injection",
     "/free"
   ]) {
@@ -1713,6 +1714,7 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/sql-injection/injection-vulnerability",
     "/lessons/sql-injection/injection-explained",
     "/lessons/xss-reflected/start",
+    "/lessons/xss-stored/start",
     "/lessons/csrf/start",
     "/lessons/open-redirects/start",
     "/lessons/ai-prompt-injection/start",
@@ -2389,13 +2391,51 @@ function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
       /* ignore */
     }
   }
-  if (isLevel) {
-    for (const p of ["level1.php", "level2.php", "level3.php", "level4.php", "level5.php"]) {
+  if (isHub || isLevel) {
+    for (let i = 1; i <= 10; i++) {
       try {
-        out.add(new URL(p, origin).toString());
+        out.add(new URL(`level${i}.php`, origin).toString());
       } catch {
         /* ignore */
       }
+    }
+    try {
+      out.add(new URL("special1.php", origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** BugBountyHunter zseano — seed numbered challenges and member playground from hub. */
+function extractBugBountyHunterChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/BugBountyHunter|bugbountyhunter\.com|@zseano/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/playground", "/challenge?id=1"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const idRe = /challenge\?id=(\d+)/gi;
+  let m: RegExpExecArray | null;
+  while ((m = idRe.exec(html))) {
+    try {
+      out.add(new URL(`challenge?id=${m[1]}`, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (let i = 1; i <= 15; i++) {
+    try {
+      out.add(new URL(`challenge?id=${i}`, pageUrl).toString());
+    } catch {
+      /* ignore */
     }
   }
   return [...out];
@@ -3569,6 +3609,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
+  const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
   const webhackingKrSeeds = extractWebhackingKrSeeds(home.body, home.finalUrl);
   const netForceSeeds = extractNetForceChallengeSeeds(home.body, home.finalUrl);
   const brutelogicXssGymSeeds = extractBrutelogicXssGymSeeds(home.body, home.finalUrl);
@@ -3683,6 +3724,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
       ...redTigerSeeds,
+      ...bugBountyHunterSeeds,
       ...webhackingKrSeeds,
       ...netForceSeeds,
       ...brutelogicXssGymSeeds,
