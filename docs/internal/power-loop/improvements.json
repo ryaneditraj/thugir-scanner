@@ -1883,6 +1883,24 @@
       "slug": "client-side-overthewire-behemoth-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Behemoth/Vortex/Manpage wargames + behemoth.labs port 2221 + manpage.labs port 2224; extractOverTheWireNatasSeeds extended; www.overthewire.org/wargames/behemoth findings 6→7; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "client-side-redtiger-hackit-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: RedTiger's Hackit + Simple SQL-Injection level catalog + href=\"level1.php\"; extractRedTigerHackitSeeds crawls level1–5; redtiger.labs.overthewire.org findings 1→2; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ringzer0ctf.com",
+      "slug": "client-side-ringzer0-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: RingZer0 Team Online CTF + Solve challenges earn points + ringzer0ctf.com meta; ringzer0ctf.com findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:webhacking.kr",
+      "slug": "client-side-webhacking-kr-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Webhacking.kr + Korean cyber-security challenge + /chall.php hub; extractWebhackingKrSeeds; webhacking.kr findings 0→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3430,6 +3448,21 @@
       "source": "discovery:www.overthewire.org",
       "slug": "client-side-overthewire-behemoth-evidence",
       "shipped_at": "2026-07-12T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "client-side-redtiger-hackit-evidence",
+      "shipped_at": "2026-07-12T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:ringzer0ctf.com",
+      "slug": "client-side-ringzer0-ctf-evidence",
+      "shipped_at": "2026-07-12T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:webhacking.kr",
+      "slug": "client-side-webhacking-kr-evidence",
+      "shipped_at": "2026-07-12T10:10:00.000Z"
     }
   ]
 }

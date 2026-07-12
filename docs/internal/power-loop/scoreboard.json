@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T09:10:00.000Z",
+  "updated_at": "2026-07-12T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,19 +22,19 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 392,
   "discovery_findings": 2704,
-  "improvements_shipped": 312,
-  "last_run": "2026-07-12T09:10:00.000Z",
+  "improvements_shipped": 315,
+  "last_run": "2026-07-12T10:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
+      "primary_findings": 7,
       "primary_recall": "6/6",
       "primary_gap": [],
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_used": false,
       "gap": [],
-      "note": "Juice Shop primary 6/6 (8 findings) on first pass — no benchmark misses",
+      "note": "Juice Shop primary 6/6 (7 findings) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,33 +46,25 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 34,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "RingZer0/Hellbound Hackers/WeChall/RedTiger/webhacking.kr queue expansion; backlog OSS labs",
-      "improvements_shipped_this_run": 3,
-      "new_urls_not_reached": [
-        "https://ringzer0ctf.com/",
-        "https://www.hellboundhackers.org/",
-        "https://www.wechall.net/",
-        "http://redtiger.labs.overthewire.org/",
-        "https://webhacking.kr/"
-      ]
+      "focus": "RedTiger Hackit + RingZer0 CTF + Webhacking.kr queue targets from 09:00 backlog",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "duck-store.escape.tech: 7 findings — OpenAI key exposed, IDOR, XSS sinks, OpenAPI docs",
-      "pentest-ground.com:4280: 5 findings — DVWA hosted SQLi/XSS/LFI markers",
-      "dvaib.com: 4 findings — prompt-injection evidence + unauthenticated API routes",
-      "xxe-lab.vercel.app: 4 findings — XXE training lab markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "redtiger.labs.overthewire.org: RedTiger PHP/SQL hackit evidence (1→2 findings)",
+      "ringzer0ctf.com: RingZer0 online CTF platform evidence (6→7 findings)",
+      "webhacking.kr: Korean web challenge platform evidence (0→3 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: intermittent Heroku cold-start can degrade primary to 2/6 before staging fallback",
+      "juice-shop.herokuapp.com: intermittent Heroku cold-start can degrade primary before retry",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "ringzer0/hellboundhackers/wechall/redtiger/webhacking.kr: added at queue tail — not reached in 8-URL limit",
-      "nimbusvault/SKF/pwnable.kr/smashthestack/microcorruption/OverTheWire krypton+: still behind queue backlog"
+      "www.wechall.net + www.hellboundhackers.org: queued but Hellbound behind Cloudflare bot-wall",
+      "pwnable.kr/smashthestack/microcorruption: binary RE platforms still behind queue backlog"
     ]
   },
   "discovery_highlights": {
@@ -172,6 +164,9 @@
     "www.overthewire.org/wargames/krypton": 6,
     "www.overthewire.org/wargames/narnia": 7,
     "www.overthewire.org/wargames/behemoth": 7,
+    "redtiger.labs.overthewire.org": 2,
+    "ringzer0ctf.com": 7,
+    "webhacking.kr": 3,
     "duck-store.escape.tech": 7,
     "pentest-ground.com:4280": 5,
     "pentest-ground.com:9000": 4,
