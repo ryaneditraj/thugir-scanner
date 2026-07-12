@@ -2162,7 +2162,32 @@
       "url": "https://escape.alf.nu/level10",
       "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 10 (alf.nu series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/",
+      "source": "Hacker News — Aikido Zen WAF playground with SQLi/shell/SSRF/path-traversal injection demos (fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://attp-live.fly.dev/",
+      "source": "ATTP Agent Trust Transport Protocol — live SQL-gate + signed agent messaging demo (fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/xml-external-entities/",
+      "source": "Hacksplaining — interactive XXE secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/command-injection/",
+      "source": "Hacksplaining — interactive command-injection secure-coding lesson (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacksplaining.com/lessons/server-side-template-injection/",
+      "source": "Hacksplaining — interactive SSTI secure-coding lesson (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T19:05:00.000Z"
+  "updated_at": "2026-07-12T20:05:00.000Z"
 }
