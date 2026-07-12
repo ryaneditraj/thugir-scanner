@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T01:18:00.000Z",
+  "updated_at": "2026-07-12T02:03:18.537Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -12,21 +12,18 @@
         "auth_bypass",
         "sensitive_data",
         "misconfig"
-      ],
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
-      "oracle_recall": "6/6"
+      ]
     }
   },
-  "total_sites_scanned": 803,
-  "total_findings": 3445,
+  "total_sites_scanned": 804,
+  "total_findings": 3453,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 356,
   "discovery_findings": 2458,
   "improvements_shipped": 288,
-  "last_run": "2026-07-12T01:18:00.000Z",
+  "last_run": "2026-07-12T02:03:18.537Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
