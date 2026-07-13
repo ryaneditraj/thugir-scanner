@@ -3703,6 +3703,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-code-breaking-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking source-code audit CTF disclosed",
+    description:
+      "Code-Breaking on code-breaking.fly.dev publishes open source-code audit puzzles where players review shipped source to reach RCE, SQL injection, and other flags.",
+    impactOneline:
+      "Public code-audit CTF instances document real vulnerability patterns from source review drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCodeBreakingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "We host Code-Breaking-style source audit CTF puzzles. Show how to isolate challenge instances from production repositories.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-sanitize-xss-demo-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Sanitize HTML filter bypass demo disclosed",
+    description:
+      "The Sanitize Online Demo on sanitize-web.fly.dev invites users to post HTML and test bypasses against Ruby Sanitize configs (default, restricted, basic, relaxed).",
+    impactOneline:
+      "Public sanitizer bypass demos document HTML filter evasion techniques applicable to production XSS defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSanitizeXssDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitizer demos are intentional — use strict allowlists and context-aware encoding in production.",
+      steps: [
+        "Never rely on a single HTML sanitizer config for all user content contexts.",
+        "Test sanitizer bypass cases in CI with a curated payload corpus.",
+        "Prefer text-only rendering for untrusted content instead of filter-and-render HTML."
+      ]
+    },
+    fixPrompt:
+      "We expose a Sanitize HTML filter demo. Show production-safe alternatives to filter-and-render user HTML.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pokemorty-ctf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Morty's Pokedex CTF disclosed",
+    description:
+      "Morty's Pokedex CTF on pokemorty.fly.dev stages Rick and Morty themed browser challenges with nickname cookies, captcha forms, and /pokedex validation puzzles.",
+    impactOneline:
+      "Public Pokemorty CTF instances document client-side and form-based challenge surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePokemortyCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pokemorty CTF is intentional training — isolate challenge apps from production networks.",
+      steps: [
+        "Run CTF challenge apps only on dedicated lab infrastructure.",
+        "Require authentication before serving multi-stage challenge routes.",
+        "Do not copy challenge cookie or captcha bypass patterns into production apps."
+      ]
+    },
+    fixPrompt:
+      "We host Morty's Pokedex-style browser CTF challenges. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctfchallenge-evidence",
     platform: "generic",
     category: "Broken access control",
