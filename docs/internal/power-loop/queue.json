@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-12T22:12:00.000Z",
+  "updated_at": "2026-07-13T09:31:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.herokuapp.com/",
@@ -8,12 +8,12 @@
     },
     {
       "url": "https://securebank-blog.vercel.app/",
-      "source": "FAST-NUCES semester project — attack/secure mode banking lab (web search)",
+      "source": "FAST-NUCES semester project \u2014 attack/secure mode banking lab (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://hack-health-tutorial.vercel.app/",
-      "source": "Hack Health tutorial — intentionally vulnerable Node/TS demo (web search)",
+      "source": "Hack Health tutorial \u2014 intentionally vulnerable Node/TS demo (web search)",
       "auth": "oss_deploy"
     },
     {
@@ -23,17 +23,17 @@
     },
     {
       "url": "https://hack-this-site-eta.vercel.app/",
-      "source": "dkyazzentwatwa/hack-this-site Vercel deploy — educational vuln platform",
+      "source": "dkyazzentwatwa/hack-this-site Vercel deploy \u2014 educational vuln platform",
       "auth": "oss_deploy"
     },
     {
       "url": "https://chimera.atlascrew.dev/",
-      "source": "inferno-lab/Chimera — 450+ vulnerable API endpoints (GitHub homepage)",
+      "source": "inferno-lab/Chimera \u2014 450+ vulnerable API endpoints (GitHub homepage)",
       "auth": "public_demo"
     },
     {
       "url": "https://archon-eight.vercel.app/",
-      "source": "Archon cybersecurity training platform — mobile/web security labs",
+      "source": "Archon cybersecurity training platform \u2014 mobile/web security labs",
       "auth": "oss_deploy"
     },
     {
@@ -43,207 +43,207 @@
     },
     {
       "url": "https://ctb-pi.vercel.app/",
-      "source": "Hurleveur/CTF — corporate cyber training CTF (GitHub homepage)",
+      "source": "Hurleveur/CTF \u2014 corporate cyber training CTF (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vuln-portal.vercel.app/",
-      "source": "VulnPortal — intentionally vulnerable auth/access terminal",
+      "source": "VulnPortal \u2014 intentionally vulnerable auth/access terminal",
       "auth": "public_demo"
     },
     {
       "url": "https://urban-vampi-production.up.railway.app/",
-      "source": "apisec-inc/urban-VAmPI — OWASP API Top 10 production Railway deploy (GitHub README)",
+      "source": "apisec-inc/urban-VAmPI \u2014 OWASP API Top 10 production Railway deploy (GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "https://hiddeninvestigations.net/",
-      "source": "hidden-investigations/react2shell-vulnlab — CVE-2025-55182 Next.js RSC lab (GitHub homepage)",
+      "source": "hidden-investigations/react2shell-vulnlab \u2014 CVE-2025-55182 Next.js RSC lab (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://acuart.phpnet.us/",
-      "source": "Acunetix acuart — classic intentionally vulnerable PHP art shop demo",
+      "source": "Acunetix acuart \u2014 classic intentionally vulnerable PHP art shop demo",
       "auth": "public_demo"
     },
     {
       "url": "https://websec.fr/",
-      "source": "WebSec.fr — French public web security challenge platform",
+      "source": "WebSec.fr \u2014 French public web security challenge platform",
       "auth": "public_demo"
     },
     {
       "url": "http://vapi.apisec.ai/",
-      "source": "APIsec hosted vAPI — OWASP API Top 10 exercise lab (roottusk/vapi)",
+      "source": "APIsec hosted vAPI \u2014 OWASP API Top 10 exercise lab (roottusk/vapi)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnbank.org/",
-      "source": "Commando-X/vuln-bank — intentionally vulnerable banking + API + LLM demo",
+      "source": "Commando-X/vuln-bank \u2014 intentionally vulnerable banking + API + LLM demo",
       "auth": "public_demo"
     },
     {
       "url": "https://dvwa.vercel.app/",
-      "source": "DVWA public Vercel deploy — classic SQLi/XSS/CSRF training app",
+      "source": "DVWA public Vercel deploy \u2014 classic SQLi/XSS/CSRF training app",
       "auth": "oss_deploy"
     },
     {
       "url": "https://yusufarbc.github.io/apigoat/",
-      "source": "yusufarbc/apigoat — OWASP API Top 10 GitHub Pages deploy",
+      "source": "yusufarbc/apigoat \u2014 OWASP API Top 10 GitHub Pages deploy",
       "auth": "oss_deploy"
     },
     {
       "url": "https://ucu-owasp-ctf.vercel.app/",
-      "source": "UCU OWASP CTF — educational vulnerability challenges (Vercel)",
+      "source": "UCU OWASP CTF \u2014 educational vulnerability challenges (Vercel)",
       "auth": "public_demo"
     },
     {
       "url": "https://ogtamimi.github.io/OGT-Cyber-Game/",
-      "source": "ogtamimi/OGT-Cyber-Game — SQLi/XSS/IDOR learning game (GitHub Pages)",
+      "source": "ogtamimi/OGT-Cyber-Game \u2014 SQLi/XSS/IDOR learning game (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/",
-      "source": "koadt/oss-oopssec-store — intentionally vulnerable e-commerce CTF (GitHub Pages)",
+      "source": "koadt/oss-oopssec-store \u2014 intentionally vulnerable e-commerce CTF (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://ashimkoirala.github.io/HackLab/",
-      "source": "AshimKoirala/HackLab — zero-dependency browser OWASP Top 10 lab (GitHub Pages)",
+      "source": "AshimKoirala/HackLab \u2014 zero-dependency browser OWASP Top 10 lab (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vulnshop.vercel.app/",
-      "source": "yashasrnair/VulnShop — OWASP Top 10 e-commerce with demo panels (Vercel)",
+      "source": "yashasrnair/VulnShop \u2014 OWASP Top 10 e-commerce with demo panels (Vercel)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://dxx33.github.io/WebVulnsGuide/",
-      "source": "dxx33/WebVulnsGuide — interactive web vulnerability guide (GitHub Pages)",
+      "source": "dxx33/WebVulnsGuide \u2014 interactive web vulnerability guide (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://akbarbashakm.github.io/frontend-security-examples/",
-      "source": "akbarbashakm/frontend-security-examples — 8-module XSS/CSRF/CSP/auth lab (web search)",
+      "source": "akbarbashakm/frontend-security-examples \u2014 8-module XSS/CSRF/CSP/auth lab (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://gauravkhurana.com/SQLInjection/",
-      "source": "gauravkhurana SQLInjection — live WASM SQLite login-bypass demo (web search)",
+      "source": "gauravkhurana SQLInjection \u2014 live WASM SQLite login-bypass demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://demo.weblock.ru/",
-      "source": "Vulnerable Bank — intentionally insecure banking + AI prompt-injection demo (web search)",
+      "source": "Vulnerable Bank \u2014 intentionally insecure banking + AI prompt-injection demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://dev-lucasoliveira.github.io/frontend-xss-demo/",
-      "source": "dev-LucasOliveira/frontend-xss-demo — insecure vs secure XSS routes (GitHub homepage)",
+      "source": "dev-LucasOliveira/frontend-xss-demo \u2014 insecure vs secure XSS routes (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://swarnadip-kar.github.io/xss-victim/",
-      "source": "Swarnadip-Kar/xss-victim — XSS victim bank for cross-origin cookie theft lab (GitHub)",
+      "source": "Swarnadip-Kar/xss-victim \u2014 XSS victim bank for cross-origin cookie theft lab (GitHub)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://everdan0075.github.io/DevSecOps-Hacking-Lab/",
-      "source": "everdan0075/DevSecOps-Hacking-Lab — SIEM/WAF/IDS lab with SQLi, IDOR, XSS attack scenarios (GitHub Pages)",
+      "source": "everdan0075/DevSecOps-Hacking-Lab \u2014 SIEM/WAF/IDS lab with SQLi, IDOR, XSS attack scenarios (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/",
-      "source": "mehdiaitsaid/owasp-top-10-labs — interactive OWASP Top 10 learning labs (GitHub Pages)",
+      "source": "mehdiaitsaid/owasp-top-10-labs \u2014 interactive OWASP Top 10 learning labs (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://riglabs-cyber-lab.vercel.app/",
-      "source": "RigLabs cyber security training lab — hands-on vuln demos (web search)",
+      "source": "RigLabs cyber security training lab \u2014 hands-on vuln demos (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnlab.vercel.app/",
-      "source": "VulnLab — intentionally vulnerable web security training platform (Vercel)",
+      "source": "VulnLab \u2014 intentionally vulnerable web security training platform (Vercel)",
       "auth": "public_demo"
     },
     {
       "url": "https://juicesec.mrdinesh.workers.dev/",
-      "source": "mrdinesh juicesec — Juice Shop variant on Cloudflare Workers (web search)",
+      "source": "mrdinesh juicesec \u2014 Juice Shop variant on Cloudflare Workers (web search)",
       "auth": "benchmark"
     },
     {
       "url": "https://xss-attacker.vercel.app/",
-      "source": "Swarnadip-Kar/xss-attacker — cross-origin XSS C2 dashboard paired with xss-victim bank (web search)",
+      "source": "Swarnadip-Kar/xss-attacker \u2014 cross-origin XSS C2 dashboard paired with xss-victim bank (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://avid-vuln-editor.vercel.app/",
-      "source": "luciolle24/avid-vuln-editor — AVID backend with /vuln module lab (web search)",
+      "source": "luciolle24/avid-vuln-editor \u2014 AVID backend with /vuln module lab (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://dvai.vercel.app/",
-      "source": "bb1nfosec/dvai — Damn Vulnerable AI Ecosystem red-team range (web search)",
+      "source": "bb1nfosec/dvai \u2014 Damn Vulnerable AI Ecosystem red-team range (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://fvb.vchan.in/",
-      "source": "vchan-in/fvb — First Vulnerable Bank REST/GraphQL API training app (web search)",
+      "source": "vchan-in/fvb \u2014 First Vulnerable Bank REST/GraphQL API training app (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://tempehs.github.io/The_Unsecure_PWA/",
-      "source": "tempehs/The_Unsecure_PWA — unsecure-by-design PWA for HSC software engineering (web search)",
+      "source": "tempehs/The_Unsecure_PWA \u2014 unsecure-by-design PWA for HSC software engineering (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://weaponsforge.github.io/hacker-friendly-app/",
-      "source": "weaponsforge/hacker-friendly-app — Firebase misconfig + XSS GitHub Pages demo (web search)",
+      "source": "weaponsforge/hacker-friendly-app \u2014 Firebase misconfig + XSS GitHub Pages demo (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://playground.fabraix.com/",
-      "source": "fabraix/playground — Show HN open-source AI agent red-team playground (web search)",
+      "source": "fabraix/playground \u2014 Show HN open-source AI agent red-team playground (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://webexp05.vercel.app/",
-      "source": "Jaideep02/shiny-computing-machine — Hack the Basics CTF (cookie/SQLi/XSS/API) (web search)",
+      "source": "Jaideep02/shiny-computing-machine \u2014 Hack the Basics CTF (cookie/SQLi/XSS/API) (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://idor-challenge.vercel.app/",
-      "source": "Albus Security internship — Simple IDOR demonstration lab (web search)",
+      "source": "Albus Security internship \u2014 Simple IDOR demonstration lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://luisillobret2.github.io/WebGoat/",
-      "source": "WebGoat static mirror — deliberately insecure OWASP training app landing (web search)",
+      "source": "WebGoat static mirror \u2014 deliberately insecure OWASP training app landing (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://duck-store.escape.tech/",
-      "source": "Escape Duck Store — intentionally vulnerable API/web app for scanner benchmarking (awesome-vulnerable-apps)",
+      "source": "Escape Duck Store \u2014 intentionally vulnerable API/web app for scanner benchmarking (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvaib.com/",
-      "source": "Damn Vulnerable AI Bank — prompt injection / LLM security training demo (web search)",
+      "source": "Damn Vulnerable AI Bank \u2014 prompt injection / LLM security training demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentest-ground.com:4280/",
-      "source": "Pentest-Ground hosted DVWA — SQLi/XSS/LFI public lab (pentest-tools.com)",
+      "source": "Pentest-Ground hosted DVWA \u2014 SQLi/XSS/LFI public lab (pentest-tools.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentest-ground.com:9000/",
-      "source": "Pentest-Ground REST API lab — API security training instance (pentest-tools.com)",
+      "source": "Pentest-Ground REST API lab \u2014 API security training instance (pentest-tools.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://capture-the-flag-official-website.vercel.app/",
-      "source": "CTF educational platform — public vuln challenge hub (web search)",
+      "source": "CTF educational platform \u2014 public vuln challenge hub (web search)",
       "auth": "oss_deploy"
     },
     {
@@ -258,174 +258,174 @@
     },
     {
       "url": "https://nextjs-cve-hackerone.vercel.app/",
-      "source": "Next.js CVE HackerOne disclosure demo — RSC/server-component vuln lab (web search)",
+      "source": "Next.js CVE HackerOne disclosure demo \u2014 RSC/server-component vuln lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-pentest-playground.onrender.com/",
-      "source": "Web pentest playground — intentionally vulnerable training app on Render (web search)",
+      "source": "Web pentest playground \u2014 intentionally vulnerable training app on Render (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://cyberdesserts.github.io/cookiejar-lab/demo",
-      "source": "cyberdesserts/cookiejar-lab — CSRF/session cookie security demo (GitHub Pages)",
+      "source": "cyberdesserts/cookiejar-lab \u2014 CSRF/session cookie security demo (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://lab.blackhatgraphql.com:9001/",
-      "source": "Damn Vulnerable GraphQL Application — BlackHat public lab endpoint (dolevf/DVGA)",
+      "source": "Damn Vulnerable GraphQL Application \u2014 BlackHat public lab endpoint (dolevf/DVGA)",
       "auth": "public_demo"
     },
     {
       "url": "https://owasp-finbot-ctf-demo.onrender.com/",
-      "source": "OWASP Agentic AI CTF FinBot — public AI/agentic security vulnerability demo (Render)",
+      "source": "OWASP Agentic AI CTF FinBot \u2014 public AI/agentic security vulnerability demo (Render)",
       "auth": "public_demo"
     },
     {
       "url": "https://hack-yourself-first.azurewebsites.net/",
-      "source": "Troy Hunt Supercar Showdown — Hack Yourself First intentionally vulnerable ASP.NET app (Azure)",
+      "source": "Troy Hunt Supercar Showdown \u2014 Hack Yourself First intentionally vulnerable ASP.NET app (Azure)",
       "auth": "public_demo"
     },
     {
       "url": "http://php.testsparker.com/",
-      "source": "Netsparker/Mavituna PHP vulnerability demo — Acunetix practice site (awesome-vuln-apps)",
+      "source": "Netsparker/Mavituna PHP vulnerability demo \u2014 Acunetix practice site (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://aspnet.testsparker.com/",
-      "source": "Netsparker/Mavituna ASP.NET vulnerability demo — Acunetix practice site (awesome-vuln-apps)",
+      "source": "Netsparker/Mavituna ASP.NET vulnerability demo \u2014 Acunetix practice site (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://angular.testsparker.com/",
-      "source": "Netsparker/Mavituna Angular SPA vulnerability demo — Acunetix practice site (awesome-vuln-apps)",
+      "source": "Netsparker/Mavituna Angular SPA vulnerability demo \u2014 Acunetix practice site (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://domgo.at/cxss/intro",
-      "source": "DOM Clobbering XSS (CXSS) training lab — Mario Heiderich domgo.at (Awesome-Vulnerable-Labs)",
+      "source": "DOM Clobbering XSS (CXSS) training lab \u2014 Mario Heiderich domgo.at (Awesome-Vulnerable-Labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://ssrf-defense-platform.onrender.com/",
-      "source": "Shashwath800/ssrf — SSRF Defense & Simulation Platform with vulnerable attack-demo mode (Render OSS)",
+      "source": "Shashwath800/ssrf \u2014 SSRF Defense & Simulation Platform with vulnerable attack-demo mode (Render OSS)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://api.graphqlbook.org/",
-      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL API (OWASP API Top 10)",
+      "source": "DghostNinja/graphql-bookstore-API \u2014 deliberately vulnerable GraphQL API (OWASP API Top 10)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentesterlab.com/",
-      "source": "PentesterLab — Web for Pentester hosted exercises and training platform (web search)",
+      "source": "PentesterLab \u2014 Web for Pentester hosted exercises and training platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.root-me.org/",
-      "source": "Root-Me — public web/server security CTF challenge platform",
+      "source": "Root-Me \u2014 public web/server security CTF challenge platform",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hackthissite.org/",
-      "source": "Hack This Site — educational vulnerability challenge platform (www origin)",
+      "source": "Hack This Site \u2014 educational vulnerability challenge platform (www origin)",
       "auth": "public_demo"
     },
     {
       "url": "https://agentpwn.com/",
-      "source": "AgentPwn — agentic AI vulnerability training lab (web search)",
+      "source": "AgentPwn \u2014 agentic AI vulnerability training lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksec.in/",
-      "source": "hacksec — Product Hunt free live web application pentest labs",
+      "source": "hacksec \u2014 Product Hunt free live web application pentest labs",
       "auth": "public_demo"
     },
     {
       "url": "https://webgoat.org/",
-      "source": "OWASP WebGoat — deliberately insecure Java training application",
+      "source": "OWASP WebGoat \u2014 deliberately insecure Java training application",
       "auth": "public_demo"
     },
     {
       "url": "https://cyberdefenders.org/",
-      "source": "CyberDefenders — public blue-team CTF and security challenge platform",
+      "source": "CyberDefenders \u2014 public blue-team CTF and security challenge platform",
       "auth": "public_demo"
     },
     {
       "url": "https://appsecmaster.net/",
-      "source": "AppSecMaster — Docker-based web application hacking lab platform",
+      "source": "AppSecMaster \u2014 Docker-based web application hacking lab platform",
       "auth": "public_demo"
     },
     {
       "url": "https://516-hackers.github.io/516-hackers-vuln-playground/",
-      "source": "516hackers/516-hackers-vuln-playground — modular DVWA-style SQLi/XSS/auth lab (GitHub Pages)",
+      "source": "516hackers/516-hackers-vuln-playground \u2014 modular DVWA-style SQLi/XSS/auth lab (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://demo.testfire.net/",
-      "source": "Altoro Mutual TestFire — IBM/Watchfire classic banking vuln benchmark (http only)",
+      "source": "Altoro Mutual TestFire \u2014 IBM/Watchfire classic banking vuln benchmark (http only)",
       "auth": "public_demo"
     },
     {
       "url": "http://zero.webappsecurity.com/",
-      "source": "Watchfire zero.webappsecurity — public Acunetix-style training demo site (http only)",
+      "source": "Watchfire zero.webappsecurity \u2014 public Acunetix-style training demo site (http only)",
       "auth": "public_demo"
     },
     {
       "url": "https://labs.hackadvisor.io/",
-      "source": "HackAdvisor Labs — browser-based real-world bug report CTF challenges (web search)",
+      "source": "HackAdvisor Labs \u2014 browser-based real-world bug report CTF challenges (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://sixhackacademy.com/",
-      "source": "SixHack Academy — free OWASP Top 10 CTF labs platform landing (web search)",
+      "source": "SixHack Academy \u2014 free OWASP Top 10 CTF labs platform landing (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/",
-      "source": "OWASP WrongSecrets — secrets management CTF Heroku demo (GitHub README)",
+      "source": "OWASP WrongSecrets \u2014 secrets management CTF Heroku demo (GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "https://owasp-finbot-ctf.org/",
-      "source": "OWASP FinBot CTF — agentic AI vulnerability training platform (owasp-finbot-ctf.org)",
+      "source": "OWASP FinBot CTF \u2014 agentic AI vulnerability training platform (owasp-finbot-ctf.org)",
       "auth": "public_demo"
     },
     {
       "url": "https://bwapp.hakhub.net/",
-      "source": "bWAPP — buggy web application public hosted instance (awesome-vulnerable-apps)",
+      "source": "bWAPP \u2014 buggy web application public hosted instance (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://brokencrystals.com/",
-      "source": "Broken Crystals — intentionally vulnerable API/web app for scanner benchmarking",
+      "source": "Broken Crystals \u2014 intentionally vulnerable API/web app for scanner benchmarking",
       "auth": "public_demo"
     },
     {
       "url": "https://ginandjuice.shop/",
-      "source": "PortSwigger Gin & Juice Shop — deliberately vulnerable e-commerce lab (web search)",
+      "source": "PortSwigger Gin & Juice Shop \u2014 deliberately vulnerable e-commerce lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://maestro-agentic-ai-security-demo-mon.netlify.app/",
-      "source": "MAESTRO Framework — ElizaOS agentic AI security demo with RAG poisoning walkthrough (web search)",
+      "source": "MAESTRO Framework \u2014 ElizaOS agentic AI security demo with RAG poisoning walkthrough (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://reef-mcp-registry.vercel.app/",
-      "source": "Reef MCP registry — signed supply chain demo blocking Anthropic MCP RCE (web search)",
+      "source": "Reef MCP registry \u2014 signed supply chain demo blocking Anthropic MCP RCE (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://testhtml5.vulnweb.com/",
-      "source": "Acunetix SecurityTweets — HTML5/Angular/Flask intentionally vulnerable benchmark (vulnweb.com)",
+      "source": "Acunetix SecurityTweets \u2014 HTML5/Angular/Flask intentionally vulnerable benchmark (vulnweb.com)",
       "auth": "public_demo",
       "enabled": false,
-      "notes": "DNS NXDOMAIN from cloud — removed from active queue"
+      "notes": "DNS NXDOMAIN from cloud \u2014 removed from active queue"
     },
     {
       "url": "https://platform.sixhackacademy.com/",
-      "source": "SixHack Academy platform — OWASP Top 10 CTF labs (sixhackacademy.com platform subdomain)",
+      "source": "SixHack Academy platform \u2014 OWASP Top 10 CTF labs (sixhackacademy.com platform subdomain)",
       "auth": "public_demo"
     },
     {
@@ -435,107 +435,107 @@
     },
     {
       "url": "https://secureby.design/",
-      "source": "OWASP VWAD — Secure by Design public demo instance",
+      "source": "OWASP VWAD \u2014 Secure by Design public demo instance",
       "auth": "public_demo"
     },
     {
       "url": "https://cyberscavengerhunt.com/",
-      "source": "OWASP VWAD — Cyber Scavenger Hunt training platform",
+      "source": "OWASP VWAD \u2014 Cyber Scavenger Hunt training platform",
       "auth": "public_demo"
     },
     {
       "url": "http://pentesteracademylab.appspot.com/",
-      "source": "Pentester Academy Lab — public App Engine vulnerable web exercises",
+      "source": "Pentester Academy Lab \u2014 public App Engine vulnerable web exercises",
       "auth": "public_demo"
     },
     {
       "url": "https://ctflearn.com/",
-      "source": "CTFlearn — free web security CTF challenge platform (OWASP VWAD)",
+      "source": "CTFlearn \u2014 free web security CTF challenge platform (OWASP VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacking-lab.com/events/",
-      "source": "Hacking-Lab — public security training events and challenge platform",
+      "source": "Hacking-Lab \u2014 public security training events and challenge platform",
       "auth": "public_demo"
     },
     {
       "url": "http://natas0.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas — serverside web-security wargame level 0 (awesome-vulnerable-apps)",
+      "source": "OverTheWire Natas \u2014 serverside web-security wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://websegura.radwarelatam.com/mutillidae/",
-      "source": "OWASP Mutillidae II — public hosted training instance (VWAD community deploy)",
+      "source": "OWASP Mutillidae II \u2014 public hosted training instance (VWAD community deploy)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacking-lab.com/",
-      "source": "Hacking-Lab — Austrian public security training platform landing",
+      "source": "Hacking-Lab \u2014 Austrian public security training platform landing",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hackthissite.org/missions/basic/",
-      "source": "Hack This Site — basic web security mission challenges (www origin)",
+      "source": "Hack This Site \u2014 basic web security mission challenges (www origin)",
       "auth": "public_demo"
     },
     {
       "url": "https://picoctf.org/",
-      "source": "picoCTF — Carnegie Mellon public CTF and cybersecurity education platform",
+      "source": "picoCTF \u2014 Carnegie Mellon public CTF and cybersecurity education platform",
       "auth": "public_demo"
     },
     {
       "url": "https://server.vulnapp.id/mutillidae/",
-      "source": "OWASP Mutillidae II — public Indonesia-hosted training instance (OWASP VWAD online)",
+      "source": "OWASP Mutillidae II \u2014 public Indonesia-hosted training instance (OWASP VWAD online)",
       "auth": "public_demo"
     },
     {
       "url": "http://www.itsecgames.com/",
-      "source": "bWAPP / ITSEC Games — 100+ OWASP Top 10 bugs landing (Malik Mesellem)",
+      "source": "bWAPP / ITSEC Games \u2014 100+ OWASP Top 10 bugs landing (Malik Mesellem)",
       "auth": "public_demo"
     },
     {
       "url": "https://computersciencesop2.vercel.app/cybersecurity",
-      "source": "Sports Media CS Training Academy — curated vuln-app playbook with live deploy links",
+      "source": "Sports Media CS Training Academy \u2014 curated vuln-app playbook with live deploy links",
       "auth": "oss_deploy"
     },
     {
       "url": "https://solyd.com.br/treinamentos/introducao-ao-hacking-e-pentest",
-      "source": "Solyd Offensive Security — free Introdução ao Hacking e Pentest training lab",
+      "source": "Solyd Offensive Security \u2014 free Introdu\u00e7\u00e3o ao Hacking e Pentest training lab",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnweb.netlify.app/",
-      "source": "VulnWeb — OWASP Top 10 interactive learning app with SQLi/XSS/IDOR/CSRF demos (web search)",
+      "source": "VulnWeb \u2014 OWASP Top 10 interactive learning app with SQLi/XSS/IDOR/CSRF demos (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://crapi2.apisec.ai/",
-      "source": "APIsec crAPI v2 — OWASP API Top 10 microservices lab (roottusk/crapi)",
+      "source": "APIsec crAPI v2 \u2014 OWASP API Top 10 microservices lab (roottusk/crapi)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackable.so/",
-      "source": "Hackable.so — intentionally vulnerable SaaS-style training platform (web search)",
+      "source": "Hackable.so \u2014 intentionally vulnerable SaaS-style training platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://secresearchlab.web.app/",
-      "source": "Secret Research Lab — secrets management vulnerability training demo (web search)",
+      "source": "Secret Research Lab \u2014 secrets management vulnerability training demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://skillaudit.vercel.app/",
-      "source": "SkillAudit — AI/agent security skill assessment vulnerable demo (web search)",
+      "source": "SkillAudit \u2014 AI/agent security skill assessment vulnerable demo (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://security-trainer.vercel.app/",
-      "source": "forbiddenlink/security-trainer — interactive OWASP Top 10 training platform (GitHub homepage)",
+      "source": "forbiddenlink/security-trainer \u2014 interactive OWASP Top 10 training platform (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://capture-the-flag.labs.vercel.dev/",
-      "source": "vercel-labs/capture-the-flag — AI-powered CTF arena with vulnerable apps (Vercel Labs)",
+      "source": "vercel-labs/capture-the-flag \u2014 AI-powered CTF arena with vulnerable apps (Vercel Labs)",
       "auth": "public_demo"
     },
     {
@@ -545,422 +545,422 @@
     },
     {
       "url": "https://juice-shop.lab.pentest-forge.com/",
-      "source": "Pentest-Forge hosted Juice Shop — OWASP benchmark lab instance",
+      "source": "Pentest-Forge hosted Juice Shop \u2014 OWASP benchmark lab instance",
       "auth": "public_demo"
     },
     {
       "url": "https://vampi.lab.pentest-forge.com/",
-      "source": "Pentest-Forge hosted VAmPI — OWASP API Top 10 training lab",
+      "source": "Pentest-Forge hosted VAmPI \u2014 OWASP API Top 10 training lab",
       "auth": "public_demo"
     },
     {
       "url": "https://public-firing-range.appspot.com/",
-      "source": "Google XSS Application Security Firing Range — public XSS benchmark (awesome-vulnerable-apps)",
+      "source": "Google XSS Application Security Firing Range \u2014 public XSS benchmark (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://google-gruyere.appspot.com/",
-      "source": "Google Gruyere codelab — intentionally vulnerable web app security training (Google Code Labs)",
+      "source": "Google Gruyere codelab \u2014 intentionally vulnerable web app security training (Google Code Labs)",
       "auth": "public_demo"
     },
     {
       "url": "http://rest.vulnweb.com/",
-      "source": "Acunetix vulnweb REST API demo — classic injection/auth training site (awesome-vuln-apps)",
+      "source": "Acunetix vulnweb REST API demo \u2014 classic injection/auth training site (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://testaspnet.vulnweb.com/",
-      "source": "Acunetix vulnweb ASP.NET demo — XSS/SQLi practice site (awesome-vuln-apps)",
+      "source": "Acunetix vulnweb ASP.NET demo \u2014 XSS/SQLi practice site (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackxor.net/",
-      "source": "Hackxor — browser-based XSS/CSRF/auth challenge platform (web search)",
+      "source": "Hackxor \u2014 browser-based XSS/CSRF/auth challenge platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://testasp.vulnweb.com/",
-      "source": "Acunetix vulnweb PHP demo — classic SQLi/XSS training site (awesome-vuln-apps)",
+      "source": "Acunetix vulnweb PHP demo \u2014 classic SQLi/XSS training site (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/",
-      "source": "r007sec/pwnshop — OWASP Top 10 2025 + LLM e-commerce lab (GitHub homepage)",
+      "source": "r007sec/pwnshop \u2014 OWASP Top 10 2025 + LLM e-commerce lab (GitHub homepage)",
       "auth": "public_demo"
     },
     {
       "url": "https://sasanlabs.github.io/VulnerableApp/",
-      "source": "OWASP VulnerableApp — scanner evaluation platform docs (HN/GitHub)",
+      "source": "OWASP VulnerableApp \u2014 scanner evaluation platform docs (HN/GitHub)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnforge-academy.vercel.app/",
-      "source": "VulnForge Academy — gamified CTF-style OWASP vulnerability training (web search)",
+      "source": "VulnForge Academy \u2014 gamified CTF-style OWASP vulnerability training (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://webgoat.github.io/WebGoat/",
-      "source": "OWASP WebGoat — deliberately insecure Java training app landing (awesome-vuln-apps)",
+      "source": "OWASP WebGoat \u2014 deliberately insecure Java training app landing (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://labs.tegalsec.org/xss-labs/",
-      "source": "tegal1337/0l4bs — cross-site scripting labs for web security enthusiasts (awesome-vulnerable-apps)",
+      "source": "tegal1337/0l4bs \u2014 cross-site scripting labs for web security enthusiasts (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://labs.tegalsec.org/br0w/",
-      "source": "tegal1337/br0w — browser-based CTF security challenges (TegalSec Labs)",
+      "source": "tegal1337/br0w \u2014 browser-based CTF security challenges (TegalSec Labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/challenge?id=1",
-      "source": "BugBountyHunter zseano — XSS challenge platform (real bug bounty findings recreated)",
+      "source": "BugBountyHunter zseano \u2014 XSS challenge platform (real bug bounty findings recreated)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/playground",
-      "source": "BugBountyHunter zseano playground — documented XSS/redirect/IDOR training lab metadata",
+      "source": "BugBountyHunter zseano playground \u2014 documented XSS/redirect/IDOR training lab metadata",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/",
-      "source": "BugBountyHunter — free web vulnerability challenge hub (zseano training platform)",
+      "source": "BugBountyHunter \u2014 free web vulnerability challenge hub (zseano training platform)",
       "auth": "public_demo"
     },
     {
       "url": "https://zerohealth.aliyu.dev/",
-      "source": "aligorithm/Zero-Health — deliberately vulnerable health tech + AI/LLM OWASP lab (GitHub homepage)",
+      "source": "aligorithm/Zero-Health \u2014 deliberately vulnerable health tech + AI/LLM OWASP lab (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://seclab.vercel.app/",
-      "source": "DaniSam-STU/security-lab — XSS/SQLi/CSRF/IDOR side-by-side Next.js training (GitHub homepage)",
+      "source": "DaniSam-STU/security-lab \u2014 XSS/SQLi/CSRF/IDOR side-by-side Next.js training (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://nodegoat-websec.herokuapp.com/",
-      "source": "OWASP NodeGoat — Node.js intentionally insecure training app (Heroku demo)",
+      "source": "OWASP NodeGoat \u2014 Node.js intentionally insecure training app (Heroku demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvwa.csalab.app/",
-      "source": "DVWA hosted lab — classic SQLi/XSS/CSRF training instance (awesome-vulnerable-apps)",
+      "source": "DVWA hosted lab \u2014 classic SQLi/XSS/CSRF training instance (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://xss-game.appspot.com/",
-      "source": "Google XSS Game — interactive cross-site scripting challenge platform (public demo)",
+      "source": "Google XSS Game \u2014 interactive cross-site scripting challenge platform (public demo)",
       "auth": "public_demo"
     },
     {
       "url": "http://xss-quiz.int21h.jp/",
-      "source": "yamagata21 XSS Challenges — 19-stage public XSS wargame (Acunetix XSS skills list)",
+      "source": "yamagata21 XSS Challenges \u2014 19-stage public XSS wargame (Acunetix XSS skills list)",
       "auth": "public_demo"
     },
     {
       "url": "https://defendtheweb.net/",
-      "source": "Defend the Web — public web security CTF challenge platform (formerly HackThis!!)",
+      "source": "Defend the Web \u2014 public web security CTF challenge platform (formerly HackThis!!)",
       "auth": "public_demo"
     },
     {
       "url": "https://alf.nu/alert1",
-      "source": "ALF Security XSS lab — classic reflected XSS challenge series entry point",
+      "source": "ALF Security XSS lab \u2014 classic reflected XSS challenge series entry point",
       "auth": "public_demo"
     },
     {
       "url": "https://promptmap.vercel.app/",
-      "source": "PromptMap — interactive prompt-injection vulnerability training demo (Vercel)",
+      "source": "PromptMap \u2014 interactive prompt-injection vulnerability training demo (Vercel)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://llm-sec.vercel.app/",
-      "source": "TomAbai/llm-sec — OWASP LLM Top 10 hands-on lab platform (Vercel deploy)",
+      "source": "TomAbai/llm-sec \u2014 OWASP LLM Top 10 hands-on lab platform (Vercel deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://escape.alf.nu/",
-      "source": "Erling Ellingsen escape.alf.nu — 15-stage reflected XSS filter-bypass wargame (alf.nu security challenges)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 15-stage reflected XSS filter-bypass wargame (alf.nu security challenges)",
       "auth": "public_demo"
     },
     {
       "url": "https://returntrue.win/",
-      "source": "Erling Ellingsen return true to win — PHP/JS code-injection challenge series (alf.nu)",
+      "source": "Erling Ellingsen return true to win \u2014 PHP/JS code-injection challenge series (alf.nu)",
       "auth": "public_demo"
     },
     {
       "url": "https://authlab.digi.ninja/",
-      "source": "DigiNinja Authentication Lab — JWT timing/client-side auth bypass training challenges",
+      "source": "DigiNinja Authentication Lab \u2014 JWT timing/client-side auth bypass training challenges",
       "auth": "public_demo"
     },
     {
       "url": "https://mutillidae.lab.pentest-forge.com/",
-      "source": "Pentest-Forge hosted OWASP Mutillidae II — SQLi/XSS/CSRF public lab instance",
+      "source": "Pentest-Forge hosted OWASP Mutillidae II \u2014 SQLi/XSS/CSRF public lab instance",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnerable-graphql-lab.railway.app/",
-      "source": "Damn Vulnerable GraphQL Application — public Railway deploy for API security training",
+      "source": "Damn Vulnerable GraphQL Application \u2014 public Railway deploy for API security training",
       "auth": "oss_deploy"
     },
     {
       "url": "https://ctfchallenge.co.uk/",
-      "source": "CTFchallenge / HackingHub — realistic multi-domain web app hacking challenge platform (web search)",
+      "source": "CTFchallenge / HackingHub \u2014 realistic multi-domain web app hacking challenge platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://ws.digi.ninja/",
-      "source": "DigiNinja SocketToMe — WebSocket security testing lab (digininja/sockettome)",
+      "source": "DigiNinja SocketToMe \u2014 WebSocket security testing lab (digininja/sockettome)",
       "auth": "public_demo"
     },
     {
       "url": "https://intercode-benchmark.github.io/",
-      "source": "InterCode-CTF benchmark — picoCTF-style web/PWN/reverse challenge set (awesome-vulnerable-labs)",
+      "source": "InterCode-CTF benchmark \u2014 picoCTF-style web/PWN/reverse challenge set (awesome-vulnerable-labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://exploit.education/",
-      "source": "Exploit Education — public VM labs for buffer overflow and web exploitation training",
+      "source": "Exploit Education \u2014 public VM labs for buffer overflow and web exploitation training",
       "auth": "public_demo"
     },
     {
       "url": "https://cybench.github.io/",
-      "source": "CyBench — HackTheBox/Sekai/Glacier CTF benchmark challenge index (awesome-vulnerable-labs)",
+      "source": "CyBench \u2014 HackTheBox/Sekai/Glacier CTF benchmark challenge index (awesome-vulnerable-labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://yogsec.github.io/xss-labs/",
-      "source": "yogsec/xss-labs — frontend-only reflected/stored/DOM XSS training labs (GitHub Pages)",
+      "source": "yogsec/xss-labs \u2014 frontend-only reflected/stored/DOM XSS training labs (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://bwapp.net/",
-      "source": "bWAPP / ITSEC Games — official buggy web application landing (Malik Mesellem)",
+      "source": "bWAPP / ITSEC Games \u2014 official buggy web application landing (Malik Mesellem)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackable-web.vercel.app/",
-      "source": "Hackable Web — intentionally vulnerable SaaS-style training app (Vercel deploy)",
+      "source": "Hackable Web \u2014 intentionally vulnerable SaaS-style training app (Vercel deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://ctf.hacker101.com/",
-      "source": "Hacker101 CTF — HackerOne public web security challenge platform",
+      "source": "Hacker101 CTF \u2014 HackerOne public web security challenge platform",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnerable-lab.vercel.app/",
-      "source": "Vulnerable Lab — OWASP Top 10 interactive training platform (Vercel)",
+      "source": "Vulnerable Lab \u2014 OWASP Top 10 interactive training platform (Vercel)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnerable-web-site.vercel.app/",
-      "source": "megmogmog1965/vulnerable-web-site — CSRF/SSRF/clickjacking/XSS Next.js lab (Vercel README)",
+      "source": "megmogmog1965/vulnerable-web-site \u2014 CSRF/SSRF/clickjacking/XSS Next.js lab (Vercel README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://preview.owasp-juice.shop/",
-      "source": "OWASP Juice Shop preview instance — official VWAD demo deploy (owasp-juice.shop)",
+      "source": "OWASP Juice Shop preview instance \u2014 official VWAD demo deploy (owasp-juice.shop)",
       "auth": "benchmark"
     },
     {
       "url": "https://vaultapp-omega.vercel.app/",
-      "source": "MRMcyber/vaultapp — IDOR security training fintech lab (GitHub Vercel deploy)",
+      "source": "MRMcyber/vaultapp \u2014 IDOR security training fintech lab (GitHub Vercel deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://sechow.com/bricks/",
-      "source": "OWASP Bricks — modular PHP/MySQL vulnerability training platform (sechow.com)",
+      "source": "OWASP Bricks \u2014 modular PHP/MySQL vulnerability training platform (sechow.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://rewanthtammana.com/damn-vulnerable-bank/",
-      "source": "rewanthtammana/Damn-Vulnerable-Bank — intentionally vulnerable banking app demo (VWAD)",
+      "source": "rewanthtammana/Damn-Vulnerable-Bank \u2014 intentionally vulnerable banking app demo (VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "http://34.28.235.106/",
-      "source": "JessJohn0/vuln-bank-467_W26 — GCP-hosted Vuln Bank with runtime hardening toggles (GitHub README)",
+      "source": "JessJohn0/vuln-bank-467_W26 \u2014 GCP-hosted Vuln Bank with runtime hardening toggles (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://ekssecurity.netlify.app/",
-      "source": "OWASP EKS Goat — intentionally vulnerable AWS EKS cluster security lab (shukladuo)",
+      "source": "OWASP EKS Goat \u2014 intentionally vulnerable AWS EKS cluster security lab (shukladuo)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentest-ground.com:7001/",
-      "source": "Pentest-Ground hosted vulnerable web app — scanner benchmark playground (pentest-tools.com)",
+      "source": "Pentest-Ground hosted vulnerable web app \u2014 scanner benchmark playground (pentest-tools.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://wiz.jock.pl/experiments/agent-arena",
-      "source": "Agent Arena — LLM/agentic red-team vulnerable experiment playground (web search)",
+      "source": "Agent Arena \u2014 LLM/agentic red-team vulnerable experiment playground (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://agent-probe.vercel.app/",
-      "source": "Agent probe — intentionally vulnerable AI agent security demo (Vercel OSS deploy)",
+      "source": "Agent probe \u2014 intentionally vulnerable AI agent security demo (Vercel OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://dvwa.lab.pentest-forge.com/",
-      "source": "PentestForge Lab — hosted DVWA SQLi/XSS/CSRF/LFI training instance (lab.pentest-forge.com)",
+      "source": "PentestForge Lab \u2014 hosted DVWA SQLi/XSS/CSRF/LFI training instance (lab.pentest-forge.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://crapi.lab.pentest-forge.com/",
-      "source": "PentestForge Lab — crAPI OWASP API Top 10 microservices lab (lab.pentest-forge.com)",
+      "source": "PentestForge Lab \u2014 crAPI OWASP API Top 10 microservices lab (lab.pentest-forge.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvga.lab.pentest-forge.com/",
-      "source": "PentestForge Lab — Damn Vulnerable GraphQL Application hosted instance",
+      "source": "PentestForge Lab \u2014 Damn Vulnerable GraphQL Application hosted instance",
       "auth": "public_demo"
     },
     {
       "url": "https://weblogic.lab.pentest-forge.com/",
-      "source": "PentestForge Lab — WebLogic CVE-2023-21839 RCE training target",
+      "source": "PentestForge Lab \u2014 WebLogic CVE-2023-21839 RCE training target",
       "auth": "public_demo"
     },
     {
       "url": "https://devsecops-pipeline-demo-production.up.railway.app/",
-      "source": "Roma-rgb-tech/devsecops-pipeline-demo — FastAPI REST lab on Railway (GitHub README)",
+      "source": "Roma-rgb-tech/devsecops-pipeline-demo \u2014 FastAPI REST lab on Railway (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://juice-shop.demo.escape.tech/",
-      "source": "Escape.tech hosted OWASP Juice Shop v20 — scanner benchmark playground (escape.tech demo)",
+      "source": "Escape.tech hosted OWASP Juice Shop v20 \u2014 scanner benchmark playground (escape.tech demo)",
       "auth": "benchmark"
     },
     {
       "url": "https://openvaultbank.com/",
-      "source": "APISec OpenVault Bank — deliberately vulnerable banking API with 12 documented OWASP API flaws (web search)",
+      "source": "APISec OpenVault Bank \u2014 deliberately vulnerable banking API with 12 documented OWASP API flaws (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://demo.corgea.com/",
-      "source": "Corgea Launch HN — Juice Shop vulnerability fix showcase with live SSRF/SQLi/XSS samples",
+      "source": "Corgea Launch HN \u2014 Juice Shop vulnerability fix showcase with live SSRF/SQLi/XSS samples",
       "auth": "public_demo"
     },
     {
       "url": "https://tomcat.lab.pentest-forge.com/",
-      "source": "PentestForge Lab — Apache Tomcat CVE training target (lab.pentest-forge.com)",
+      "source": "PentestForge Lab \u2014 Apache Tomcat CVE training target (lab.pentest-forge.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://owasp-demo.vulcanlab.ai/",
-      "source": "VulcanLab OWASP demo — intentionally vulnerable web security training instance (web search)",
+      "source": "VulcanLab OWASP demo \u2014 intentionally vulnerable web security training instance (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://damnvulnerable.me/",
-      "source": "skepticfx/damnvulnerable.me — deliberately vulnerable DOM XSS/clobbering training app (BlackHat DomFlow)",
+      "source": "skepticfx/damnvulnerable.me \u2014 deliberately vulnerable DOM XSS/clobbering training app (BlackHat DomFlow)",
       "auth": "public_demo"
     },
     {
       "url": "https://w3challs.com/",
-      "source": "W3Challs — public offensive security challenge platform with real-world vuln scenarios",
+      "source": "W3Challs \u2014 public offensive security challenge platform with real-world vuln scenarios",
       "auth": "public_demo"
     },
     {
       "url": "http://www.webscantest.com/",
-      "source": "Classic Acunetix webscantest.com — intentionally vulnerable PHP demo for scanner benchmarking",
+      "source": "Classic Acunetix webscantest.com \u2014 intentionally vulnerable PHP demo for scanner benchmarking",
       "auth": "public_demo"
     },
     {
       "url": "https://domgo.at/",
-      "source": "Mario Heiderich domgo.at — DOM XSS/CXSS training hub (root; complements cxss/intro path)",
+      "source": "Mario Heiderich domgo.at \u2014 DOM XSS/CXSS training hub (root; complements cxss/intro path)",
       "auth": "public_demo"
     },
     {
       "url": "https://raw.githack.com/sheshakandula/llmsec/main/frontend/index.html",
-      "source": "sheshakandula/llmsec — OWASP LLM Top 10 prompt-injection training demo (GitHack deploy)",
+      "source": "sheshakandula/llmsec \u2014 OWASP LLM Top 10 prompt-injection training demo (GitHack deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://labs.hackxpert.com/",
-      "source": "hackXpert — public hands-on web security lab platform with shareable challenge instances (web search)",
+      "source": "hackXpert \u2014 public hands-on web security lab platform with shareable challenge instances (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://mlastg.vercel.app/",
-      "source": "MLASTG — MLSec Application Security Testing Guide with LLM/ML vulnerability harnesses (Vercel deploy)",
+      "source": "MLASTG \u2014 MLSec Application Security Testing Guide with LLM/ML vulnerability harnesses (Vercel deploy)",
       "auth": "public_demo"
     },
     {
       "url": "https://cryptohack.org/",
-      "source": "CryptoHack — public cryptography security CTF and challenge platform (awesome-vulnerable-apps)",
+      "source": "CryptoHack \u2014 public cryptography security CTF and challenge platform (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwn.college/",
-      "source": "ASU pwn.college — open cybersecurity education platform with web/binary exploit labs",
+      "source": "ASU pwn.college \u2014 open cybersecurity education platform with web/binary exploit labs",
       "auth": "public_demo"
     },
     {
       "url": "https://www.overthewire.org/wargames/",
-      "source": "OverTheWire wargames — public security wargame hub including Natas web challenges (awesome-vulnerable-apps)",
+      "source": "OverTheWire wargames \u2014 public security wargame hub including Natas web challenges (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://demo.securityknowledgeframework.org/",
-      "source": "OWASP SKF Labs — 64+ interactive practice labs with public demo instance (OWASP VWAD)",
+      "source": "OWASP SKF Labs \u2014 64+ interactive practice labs with public demo instance (OWASP VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "http://ffuf.me/",
-      "source": "FFUF.me — adamtlangley/ffufme fuzzing target practice lab (OWASP VWAD online)",
+      "source": "FFUF.me \u2014 adamtlangley/ffufme fuzzing target practice lab (OWASP VWAD online)",
       "auth": "public_demo"
     },
     {
       "url": "http://www.bgabank.com/",
-      "source": "BGA Vulnerable BANK — .NET intentionally insecure banking demo (OWASP VWAD online)",
+      "source": "BGA Vulnerable BANK \u2014 .NET intentionally insecure banking demo (OWASP VWAD online)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugbait.io/",
-      "source": "BugBait — Blacklock Security vulnerable Node.js web app for pen-test training (OWASP VWAD)",
+      "source": "BugBait \u2014 Blacklock Security vulnerable Node.js web app for pen-test training (OWASP VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://yrprey.com/",
-      "source": "Yrprey — OWASP API Top 10 2019/2023 vuln framework landing with live lab pointers (OWASP VWAD)",
+      "source": "Yrprey \u2014 OWASP API Top 10 2019/2023 vuln framework landing with live lab pointers (OWASP VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://bergerzvika.github.io/Cyber-Lab/",
-      "source": "BergerZvika/Cyber-Lab — integer overflow, prompt injection, race condition browser labs (GitHub Pages)",
+      "source": "BergerZvika/Cyber-Lab \u2014 integer overflow, prompt injection, race condition browser labs (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://justinsteven.github.io/gartnerpeerinsightsxssdemo/",
-      "source": "justinsteven/gartnerpeerinsightsxssdemo — postMessage DOM XSS widget exploit demo (security research)",
+      "source": "justinsteven/gartnerpeerinsightsxssdemo \u2014 postMessage DOM XSS widget exploit demo (security research)",
       "auth": "public_demo"
     },
     {
       "url": "https://security-showcase.vercel.app/",
-      "source": "Security Showcase — intentionally vulnerable login/comments SQLi+XSS training app (Vercel)",
+      "source": "Security Showcase \u2014 intentionally vulnerable login/comments SQLi+XSS training app (Vercel)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vulnerable-ecommerce.vercel.app/",
-      "source": "Vulnerable e-commerce — PHP-style SQLi/XSS training storefront (Vercel OSS deploy)",
+      "source": "Vulnerable e-commerce \u2014 PHP-style SQLi/XSS training storefront (Vercel OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://aesthetic-bubblegum-cbc86d.netlify.app/",
-      "source": "Aesthetic Bubblegum — intentionally vulnerable web security demo (Netlify OSS deploy)",
+      "source": "Aesthetic Bubblegum \u2014 intentionally vulnerable web security demo (Netlify OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://bugy-database-cve-2024-53900.vercel.app/",
-      "source": "Gokul-Krishnan-V-R/CVE-2024-53900 — Mongoose NoSQL injection RCE CTF lab (GitHub homepage)",
+      "source": "Gokul-Krishnan-V-R/CVE-2024-53900 \u2014 Mongoose NoSQL injection RCE CTF lab (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://nosql-injection-lab.vercel.app/",
-      "source": "NoSQL injection interactive training lab — MongoDB operator injection demos (web search)",
+      "source": "NoSQL injection interactive training lab \u2014 MongoDB operator injection demos (web search)",
       "auth": "public_demo"
     },
     {
@@ -970,67 +970,67 @@
     },
     {
       "url": "https://llm-security-lab.vercel.app/",
-      "source": "LLM security lab — prompt injection and AI app vulnerability training (Vercel)",
+      "source": "LLM security lab \u2014 prompt injection and AI app vulnerability training (Vercel)",
       "auth": "public_demo"
     },
     {
       "url": "https://secure-bank-bay.vercel.app/",
-      "source": "Secure Bank Bay — intentionally vulnerable fintech/banking security training app (Vercel)",
+      "source": "Secure Bank Bay \u2014 intentionally vulnerable fintech/banking security training app (Vercel)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://apparatus.atlascrew.dev/",
-      "source": "Inferno Lab Apparatus — AI-augmented network security simulation platform (Atlas Crew)",
+      "source": "Inferno Lab Apparatus \u2014 AI-augmented network security simulation platform (Atlas Crew)",
       "auth": "public_demo"
     },
     {
       "url": "https://crucible.atlascrew.dev/",
-      "source": "Atlas Crew Crucible — 80+ adversary emulation scenarios with DAG assessment engine",
+      "source": "Atlas Crew Crucible \u2014 80+ adversary emulation scenarios with DAG assessment engine",
       "auth": "public_demo"
     },
     {
       "url": "https://synapse.atlascrew.dev/",
-      "source": "Atlas Crew Synapse Fleet — live edge security sensor demo with Horizon fleet hub",
+      "source": "Atlas Crew Synapse Fleet \u2014 live edge security sensor demo with Horizon fleet hub",
       "auth": "public_demo"
     },
     {
       "url": "https://atlascrew.dev/",
-      "source": "Atlas Crew security lab hub — Chimera/Crucible/Apparatus/Synapse product landing with live demo links",
+      "source": "Atlas Crew security lab hub \u2014 Chimera/Crucible/Apparatus/Synapse product landing with live demo links",
       "auth": "public_demo"
     },
     {
       "url": "https://vwad.owasp.org/",
-      "source": "OWASP Vulnerable Web Applications Directory — public registry of intentionally vulnerable training apps",
+      "source": "OWASP Vulnerable Web Applications Directory \u2014 public registry of intentionally vulnerable training apps",
       "auth": "public_demo"
     },
     {
       "url": "https://insecure-app.vercel.app/",
-      "source": "Insecure App — intentionally vulnerable Next.js OWASP Top 10 training demo (web search)",
+      "source": "Insecure App \u2014 intentionally vulnerable Next.js OWASP Top 10 training demo (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://owaspbased-lessons.vercel.app/",
-      "source": "OWASP GenAI Security Lab — interactive LLM Top 10 lessons with vulnerability demos (web search)",
+      "source": "OWASP GenAI Security Lab \u2014 interactive LLM Top 10 lessons with vulnerability demos (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnerable-graphql-demo.railway.app/",
-      "source": "Damn Vulnerable GraphQL Application — public Railway demo instance (VWAD)",
+      "source": "Damn Vulnerable GraphQL Application \u2014 public Railway demo instance (VWAD)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://hackazon.webscantest.com/",
-      "source": "Rapid7 Hackazon — InsightAppSec DAST demo e-commerce vuln benchmark (Rapid7 docs)",
+      "source": "Rapid7 Hackazon \u2014 InsightAppSec DAST demo e-commerce vuln benchmark (Rapid7 docs)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.onrender.com/",
-      "source": "OWASP WrongSecrets — secrets-management CTF on Render.io (GitHub README public demo)",
+      "source": "OWASP WrongSecrets \u2014 secrets-management CTF on Render.io (GitHub README public demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://lab.pentest-forge.com/",
-      "source": "PentestForge Lab hub — 10 live vuln targets (Juice Shop, DVWA, crAPI, DVGA, CVE labs) (web search)",
+      "source": "PentestForge Lab hub \u2014 10 live vuln targets (Juice Shop, DVWA, crAPI, DVGA, CVE labs) (web search)",
       "auth": "public_demo"
     },
     {
@@ -1040,1454 +1040,1478 @@
     },
     {
       "url": "https://azure-samples.github.io/sherpa/",
-      "source": "Microsoft MCP Security Summit — intentionally vulnerable MCP server workshop (GitHub Pages)",
+      "source": "Microsoft MCP Security Summit \u2014 intentionally vulnerable MCP server workshop (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://securityweb-iota.vercel.app/",
-      "source": "DaniSam-STU/security-lab alternate Vercel deploy — XSS/SQLi/CSRF/IDOR side-by-side labs (GitHub homepage)",
+      "source": "DaniSam-STU/security-lab alternate Vercel deploy \u2014 XSS/SQLi/CSRF/IDOR side-by-side labs (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://hack-yourself-first.com/",
-      "source": "Troy Hunt Hack Yourself First — intentionally vulnerable ASP.NET training site (VWAD online)",
+      "source": "Troy Hunt Hack Yourself First \u2014 intentionally vulnerable ASP.NET training site (VWAD online)",
       "auth": "public_demo"
     },
     {
       "url": "https://bypass403.vercel.app/",
-      "source": "Karthikdude/bypass403 — interactive 403 bypass lab with 60+ protected endpoints (GitHub homepage)",
+      "source": "Karthikdude/bypass403 \u2014 interactive 403 bypass lab with 60+ protected endpoints (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://bug-hunt-vuln-detection.vercel.app/",
-      "source": "G-Hensley/bug-hunt-vuln-detection — browser AppSec training game with vuln detection levels (GitHub homepage)",
+      "source": "G-Hensley/bug-hunt-vuln-detection \u2014 browser AppSec training game with vuln detection levels (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://cyber-quest-v1.vercel.app/",
-      "source": "YathishGP003/Cyber-Quest-v1 — gamified 10-level cybersecurity learning platform (GitHub homepage)",
+      "source": "YathishGP003/Cyber-Quest-v1 \u2014 gamified 10-level cybersecurity learning platform (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://shiny-computing-machine.vercel.app/",
-      "source": "Jaideep02/shiny-computing-machine — Hack the Basics CTF challenge hub (cookie/SQLi/XSS/JWT)",
+      "source": "Jaideep02/shiny-computing-machine \u2014 Hack the Basics CTF challenge hub (cookie/SQLi/XSS/JWT)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://graphql-lab.vercel.app/",
-      "source": "GraphQL security training lab — intentionally vulnerable GraphQL API playground (web search)",
+      "source": "GraphQL security training lab \u2014 intentionally vulnerable GraphQL API playground (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://ssti.pythonanywhere.com/",
-      "source": "dr34mhacks/Ginger-juice-shop — live SSTI/RCE Flask lab with basic and filtered /hard routes (GitHub homepage)",
+      "source": "dr34mhacks/Ginger-juice-shop \u2014 live SSTI/RCE Flask lab with basic and filtered /hard routes (GitHub homepage)",
       "auth": "public_demo"
     },
     {
       "url": "https://challenges-2023-owasp-10.vercel.app/",
-      "source": "NullChapter/Challenges_2023_OWASP_10 — OWASP Top 10 CTF easy/hard challenges (GitHub homepage)",
+      "source": "NullChapter/Challenges_2023_OWASP_10 \u2014 OWASP Top 10 CTF easy/hard challenges (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://pygoat-web.herokuapp.com/",
-      "source": "KevinDNgo/pygoat — Django OWASP Top 10 intentionally vulnerable training app (GitHub Live Demo)",
+      "source": "KevinDNgo/pygoat \u2014 Django OWASP Top 10 intentionally vulnerable training app (GitHub Live Demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnmachines.com/",
-      "source": "VulnMachines — online vulnerable practice/challenge platform (Awesome-Vulnerable-Labs)",
+      "source": "VulnMachines \u2014 online vulnerable practice/challenge platform (Awesome-Vulnerable-Labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.tech/academy/",
-      "source": "Escape GraphQL Security Academy — public GraphQL vulnerability learning platform (Awesome-Vulnerable-Labs)",
+      "source": "Escape GraphQL Security Academy \u2014 public GraphQL vulnerability learning platform (Awesome-Vulnerable-Labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvai-red.vercel.app/",
-      "source": "bb1nfosec/dvai — Damn Vulnerable AI Ecosystem red-team range variant (web search)",
+      "source": "bb1nfosec/dvai \u2014 Damn Vulnerable AI Ecosystem red-team range variant (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pygoat.herokuapp.com/",
-      "source": "adeyosemanputra/pygoat — Django OWASP Top 10 training app live demo (Docker Hub / GitHub)",
+      "source": "adeyosemanputra/pygoat \u2014 Django OWASP Top 10 training app live demo (Docker Hub / GitHub)",
       "auth": "public_demo"
     },
     {
       "url": "https://pygoat-dep.herokuapp.com/",
-      "source": "KevinDNgo/pygoat — alternate PyGoat Heroku deployment (GitHub Live Demo)",
+      "source": "KevinDNgo/pygoat \u2014 alternate PyGoat Heroku deployment (GitHub Live Demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://appsec.asia/",
-      "source": "OWASP PyGoat project homepage — intentionally vulnerable Django training platform",
+      "source": "OWASP PyGoat project homepage \u2014 intentionally vulnerable Django training platform",
       "auth": "public_demo"
     },
     {
       "url": "https://crapi.apisec.ai/",
-      "source": "OWASP crAPI — official APIsec hosted API security training instance (OWASP LA 2025 guide)",
+      "source": "OWASP crAPI \u2014 official APIsec hosted API security training instance (OWASP LA 2025 guide)",
       "auth": "public_demo"
     },
     {
       "url": "https://aigoat.co.in/",
-      "source": "AISecurityConsortium/AIGoat — OWASP LLM Top 10 red-team playground landing (web search)",
+      "source": "AISecurityConsortium/AIGoat \u2014 OWASP LLM Top 10 red-team playground landing (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://api-goat.vercel.app/",
-      "source": "yusufarbc/apigoat — OWASP API Top 10 Vercel deploy (GitHub Pages sibling)",
+      "source": "yusufarbc/apigoat \u2014 OWASP API Top 10 Vercel deploy (GitHub Pages sibling)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://www.capital-ctf.com/",
-      "source": "Checkmarx/capital c{api}tal — OWASP API Top 10 CTF challenge hub (DEF CON 30)",
+      "source": "Checkmarx/capital c{api}tal \u2014 OWASP API Top 10 CTF challenge hub (DEF CON 30)",
       "auth": "public_demo"
     },
     {
       "url": "https://purushotham-muktha-dev-sec-ops-visu.vercel.app/",
-      "source": "DevSecOps Visualizer — live SQLi/XSS attack vs fix CI/CD security demo (web search)",
+      "source": "DevSecOps Visualizer \u2014 live SQLi/XSS attack vs fix CI/CD security demo (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vulnpath.vercel.app/",
-      "source": "VulnPath CVE Attack Visualizer — MITRE ATT&CK chain explorer for web/CVE training (web search)",
+      "source": "VulnPath CVE Attack Visualizer \u2014 MITRE ATT&CK chain explorer for web/CVE training (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://ctfchallenge.com/",
-      "source": "HackingHub / CTFchallenge — public web vulnerability practice platform (Awesome-Vulnerable-Labs)",
+      "source": "HackingHub / CTFchallenge \u2014 public web vulnerability practice platform (Awesome-Vulnerable-Labs)",
       "auth": "public_demo"
     },
     {
       "url": "http://www.altoromutual.com:8080/",
-      "source": "IBM AltoroJ Mutual — Tomcat/Java deliberately vulnerable banking demo (geeksonsecurity vuln-web-apps)",
+      "source": "IBM AltoroJ Mutual \u2014 Tomcat/Java deliberately vulnerable banking demo (geeksonsecurity vuln-web-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://bwapp.ywnxs.com/",
-      "source": "bWAPP alternate public host — buggy web application OWASP Top 10 training instance",
+      "source": "bWAPP alternate public host \u2014 buggy web application OWASP Top 10 training instance",
       "auth": "public_demo"
     },
     {
       "url": "https://brutelogic.com.br/knoxss.html",
-      "source": "Brutelogic Knox XSS — public XSS challenge/test page (awesome-sites-to-test-on)",
+      "source": "Brutelogic Knox XSS \u2014 public XSS challenge/test page (awesome-sites-to-test-on)",
       "auth": "public_demo"
     },
     {
       "url": "https://hard.altoromutual.com/",
-      "source": "IBM Hard Altoro Mutual — advanced Tomcat/Java vuln banking demo with MegaScript (geeksonsecurity)",
+      "source": "IBM Hard Altoro Mutual \u2014 advanced Tomcat/Java vuln banking demo with MegaScript (geeksonsecurity)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnerableapp.com/",
-      "source": "SasanLabs DOM XSS example — public intentionally vulnerable XSS demo page (vulnerableapp.com)",
+      "source": "SasanLabs DOM XSS example \u2014 public intentionally vulnerable XSS demo page (vulnerableapp.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-production-42cbf.up.railway.app/",
-      "source": "Quality-Max/qamax-adversary-site — hostile demo store with 22 client-side attack vectors (Railway OSS)",
+      "source": "Quality-Max/qamax-adversary-site \u2014 hostile demo store with 22 client-side attack vectors (Railway OSS)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://ironwasp.org/",
-      "source": "IronWASP/Sboxr — DOM XSS and client-side security scanner demo landing (web search)",
+      "source": "IronWASP/Sboxr \u2014 DOM XSS and client-side security scanner demo landing (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://gandalf.lakera.ai/",
-      "source": "Lakera Gandalf — public prompt-injection CTF challenge platform (Product Hunt / AI security labs)",
+      "source": "Lakera Gandalf \u2014 public prompt-injection CTF challenge platform (Product Hunt / AI security labs)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/",
-      "source": "Hacksplaining — interactive OWASP Top 10 vulnerability training walkthroughs (web search)",
+      "source": "Hacksplaining \u2014 interactive OWASP Top 10 vulnerability training walkthroughs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hack.me/",
-      "source": "OWASP VWAD — community sandboxed vulnerable web app platform (eLearnSecurity Coliseum)",
+      "source": "OWASP VWAD \u2014 community sandboxed vulnerable web app platform (eLearnSecurity Coliseum)",
       "auth": "public_demo"
     },
     {
       "url": "https://maxwellcalkin.github.io/sentinel-ai/",
-      "source": "Sentinel AI — browser-based prompt injection adversarial test suite (55 cases, web search)",
+      "source": "Sentinel AI \u2014 browser-based prompt injection adversarial test suite (55 cases, web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vb467w26-production-b2df.up.railway.app/",
-      "source": "schectma/vuln-bank-467_W26 — Vuln Bank with runtime hardening toggles (Railway OSS deploy)",
+      "source": "schectma/vuln-bank-467_W26 \u2014 Vuln Bank with runtime hardening toggles (Railway OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://hackxor.sourceforge.net/cgi-bin/index.pl",
-      "source": "Hackxor online demo — story-driven XSS/SQLi/CSRF missions (algo/smurf, OWASP VWAD)",
+      "source": "Hackxor online demo \u2014 story-driven XSS/SQLi/CSRF missions (algo/smurf, OWASP VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hackthis.co.uk/",
-      "source": "HackThis — UK web security challenge platform with realistic vuln levels (OWASP VWAD)",
+      "source": "HackThis \u2014 UK web security challenge platform with realistic vuln levels (OWASP VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://ref.jock.pl/modern-web",
-      "source": "Show HN Agent Arena — hidden prompt-injection testbed paired with wiz.jock.pl/experiments/agent-arena",
+      "source": "Show HN Agent Arena \u2014 hidden prompt-injection testbed paired with wiz.jock.pl/experiments/agent-arena",
       "auth": "public_demo"
     },
     {
       "url": "https://sixhackacademy.com/en/ctf-labs/",
-      "source": "SixHack Academy CTF Labs — free browser OWASP Top 10 challenge platform (web search)",
+      "source": "SixHack Academy CTF Labs \u2014 free browser OWASP Top 10 challenge platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackxor.net/legacy",
-      "source": "Hackxor legacy missions — story-driven XSS/SQLi/CSRF online demo (albinowax)",
+      "source": "Hackxor legacy missions \u2014 story-driven XSS/SQLi/CSRF online demo (albinowax)",
       "auth": "public_demo"
     },
     {
       "url": "http://crackme.cenzic.com/",
-      "source": "Cenzic crackmebank — classic intentionally vulnerable banking demo (awesome-vulnerable vendor list)",
+      "source": "Cenzic crackmebank \u2014 classic intentionally vulnerable banking demo (awesome-vulnerable vendor list)",
       "auth": "public_demo"
     },
     {
       "url": "https://lab.pentestit.ru/",
-      "source": "PentestIT Test Lab — emulated corporate IT infra for legal pen-test practice (awesome-vulnerable)",
+      "source": "PentestIT Test Lab \u2014 emulated corporate IT infra for legal pen-test practice (awesome-vulnerable)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/",
-      "source": "Burp Bounty Lab — intentionally vulnerable app for XSS/SQLi/RCE/SSRF/SSTI/XXE/GraphQL scanner profile testing (VWAD)",
+      "source": "Burp Bounty Lab \u2014 intentionally vulnerable app for XSS/SQLi/RCE/SSRF/SSTI/XXE/GraphQL scanner profile testing (VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://bigiamchallenge.com/challenge/1",
-      "source": "Wiz Big IAM Challenge — public cloud IAM misconfiguration CTF (wiz.io research)",
+      "source": "Wiz Big IAM Challenge \u2014 public cloud IAM misconfiguration CTF (wiz.io research)",
       "auth": "public_demo"
     },
     {
       "url": "https://k8slanparty.com/",
-      "source": "Wiz Kubernetes LAN Party — K8s network vuln/misconfig CTF challenge platform (wiz.io research)",
+      "source": "Wiz Kubernetes LAN Party \u2014 K8s network vuln/misconfig CTF challenge platform (wiz.io research)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.brokenazure.cloud/",
-      "source": "Broken Azure Cloud — Azure AD/security misconfiguration training challenge (VWAD)",
+      "source": "Broken Azure Cloud \u2014 Azure AD/security misconfiguration training challenge (VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://securitylab.github.com/secure-code-game/",
-      "source": "GitHub Security Lab Secure Code Game — open-source in-browser secure coding CTF (GitHub Security Lab)",
+      "source": "GitHub Security Lab Secure Code Game \u2014 open-source in-browser secure coding CTF (GitHub Security Lab)",
       "auth": "public_demo"
     },
     {
       "url": "https://try2hack.nl/",
-      "source": "try2hack.nl — one of the oldest public web security challenge platforms (OWASP VWAD / awesome-vulnerable-apps)",
+      "source": "try2hack.nl \u2014 one of the oldest public web security challenge platforms (OWASP VWAD / awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://rogueloop.github.io/xxs-course/",
-      "source": "rogueloop/xxs-course — interactive reflected/stored/DOM XSS training course (GitHub Pages)",
+      "source": "rogueloop/xxs-course \u2014 interactive reflected/stored/DOM XSS training course (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://alf.nu/ServiceWorker",
-      "source": "Erling Ellingsen alf.nu ServiceWorker lab — browser rootkit / XSS sandbox-domain attack demo",
+      "source": "Erling Ellingsen alf.nu ServiceWorker lab \u2014 browser rootkit / XSS sandbox-domain attack demo",
       "auth": "public_demo"
     },
     {
       "url": "https://try2hack.net/",
-      "source": "try2hack.net — mirror of classic try2hack security challenge site",
+      "source": "try2hack.net \u2014 mirror of classic try2hack security challenge site",
       "auth": "public_demo"
     },
     {
       "url": "https://epicdetect.io/",
-      "source": "EpicDetect — Product Hunt browser-based defensive cyber academy with hands-on SPL/SIEM labs",
+      "source": "EpicDetect \u2014 Product Hunt browser-based defensive cyber academy with hands-on SPL/SIEM labs",
       "auth": "public_demo"
     },
     {
       "url": "https://artemiskit.vercel.app/",
-      "source": "ArtemisKit — open-source OWASP LLM Top 10 red-team / AI security testing platform (web search)",
+      "source": "ArtemisKit \u2014 open-source OWASP LLM Top 10 red-team / AI security testing platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://demo.ctfd.io/",
-      "source": "CTFd official demo instance — capture-the-flag framework for security training (GitHub README)",
+      "source": "CTFd official demo instance \u2014 capture-the-flag framework for security training (GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "http://testphp.vulnweb.com/",
-      "source": "Acunetix Acuart testphp — classic PHP SQLi/XSS/CSRF intentionally vulnerable benchmark (vulnweb.com)",
+      "source": "Acunetix Acuart testphp \u2014 classic PHP SQLi/XSS/CSRF intentionally vulnerable benchmark (vulnweb.com)",
       "auth": "public_demo"
     },
     {
       "url": "https://xss.pwnfunction.com/",
-      "source": "PwnFunction XSS challenges — interactive DOM/reflected XSS wargame (XSS-Resources / awesome-vuln-apps)",
+      "source": "PwnFunction XSS challenges \u2014 interactive DOM/reflected XSS wargame (XSS-Resources / awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://yusufarbc.github.io/webvuln-runner/",
-      "source": "yusufarbc/webvuln-runner — static dashboard indexing Juice Shop/DVWA/WebGoat/bWAPP/XVWA deploy links (GitHub Pages)",
+      "source": "yusufarbc/webvuln-runner \u2014 static dashboard indexing Juice Shop/DVWA/WebGoat/bWAPP/XVWA deploy links (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://railsgoat.cktricky.com/",
-      "source": "OWASP RailsGoat — deliberately insecure Ruby on Rails OWASP Top 10 training app (official homepage)",
+      "source": "OWASP RailsGoat \u2014 deliberately insecure Ruby on Rails OWASP Top 10 training app (official homepage)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.mavensecurity.com/web_security_dojo/",
-      "source": "Maven Security Web Security Dojo — intentionally vulnerable web security training environment (VWAD)",
+      "source": "Maven Security Web Security Dojo \u2014 intentionally vulnerable web security training environment (VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://pc-parts-store.vercel.app/",
-      "source": "jgpython/pc-parts-store-lab — intentionally vulnerable PHP/MySQL e-commerce OWASP Top 10 lab (Vercel OSS deploy)",
+      "source": "jgpython/pc-parts-store-lab \u2014 intentionally vulnerable PHP/MySQL e-commerce OWASP Top 10 lab (Vercel OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/",
-      "source": "rootxjs/grpc-goat — gRPC vulnerability practice lab docs with 9 CTF-style scenarios (Show HN 2025)",
+      "source": "rootxjs/grpc-goat \u2014 gRPC vulnerability practice lab docs with 9 CTF-style scenarios (Show HN 2025)",
       "auth": "public_demo"
     },
     {
       "url": "http://peruggia.sourceforge.net/",
-      "source": "Peruggia — classic intentionally vulnerable PHP photo gallery for web security practice (SourceForge)",
+      "source": "Peruggia \u2014 classic intentionally vulnerable PHP photo gallery for web security practice (SourceForge)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hackazon.com/",
-      "source": "Rapid7 Hackazon — intentionally vulnerable e-commerce storefront for scanner/tool benchmarking (VWAD)",
+      "source": "Rapid7 Hackazon \u2014 intentionally vulnerable e-commerce storefront for scanner/tool benchmarking (VWAD)",
       "auth": "public_demo"
     },
     {
       "url": "https://dghostninja.github.io/posts/Injection/",
-      "source": "DghostNinja/BreakTheFlask — SQLi/XSS/command injection vulnerable Flask app writeup lab (GitHub Pages)",
+      "source": "DghostNinja/BreakTheFlask \u2014 SQLi/XSS/command injection vulnerable Flask app writeup lab (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://dghostninja.github.io/posts/BAC/",
-      "source": "DghostNinja/BreakTheFlask — broken access control (IDOR/admin) vulnerable Flask writeup lab",
+      "source": "DghostNinja/BreakTheFlask \u2014 broken access control (IDOR/admin) vulnerable Flask writeup lab",
       "auth": "oss_deploy"
     },
     {
       "url": "https://dghostninja.github.io/posts/CRYPTOGRAPHIC-FAILURE/",
-      "source": "DghostNinja/BreakTheFlask — cryptographic failures training walkthrough with exploit payloads",
+      "source": "DghostNinja/BreakTheFlask \u2014 cryptographic failures training walkthrough with exploit payloads",
       "auth": "oss_deploy"
     },
     {
       "url": "https://dghostninja.github.io/posts/Insecure-design/",
-      "source": "DghostNinja/BreakTheFlask — insecure design vulnerability session (final BreakTheFlask module)",
+      "source": "DghostNinja/BreakTheFlask \u2014 insecure design vulnerability session (final BreakTheFlask module)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://cridzy2.github.io/",
-      "source": "cridzy2/JumpBox-Vulnerable-Webserver — intentionally vulnerable AD-integrated web lab portfolio (GitHub Pages)",
+      "source": "cridzy2/JumpBox-Vulnerable-Webserver \u2014 intentionally vulnerable AD-integrated web lab portfolio (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "http://nodegoat.herokuapp.com/",
-      "source": "OWASP NodeGoat official Heroku demo — Node.js OWASP Top 10 training app (VWAD / GitHub README)",
+      "source": "OWASP NodeGoat official Heroku demo \u2014 Node.js OWASP Top 10 training app (VWAD / GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "http://bwapp.wnxs.eu/",
-      "source": "bWAPP wnxs.eu mirror — 100+ intentionally vulnerable PHP/MySQL bugs (awesome-vuln-web-apps list)",
+      "source": "bWAPP wnxs.eu mirror \u2014 100+ intentionally vulnerable PHP/MySQL bugs (awesome-vuln-web-apps list)",
       "auth": "public_demo"
     },
     {
       "url": "https://portswigger.net/web-security",
-      "source": "PortSwigger Web Security Academy — free OWASP-aligned browser labs (VWAD / awesome-vulnerable-apps)",
+      "source": "PortSwigger Web Security Academy \u2014 free OWASP-aligned browser labs (VWAD / awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://laby.ffri.jp/WebGoat/",
-      "source": "FFRI WebGoat public instance — guided OWASP Top 10 Java training lab (VWAD online collection)",
+      "source": "FFRI WebGoat public instance \u2014 guided OWASP Top 10 Java training lab (VWAD online collection)",
       "auth": "public_demo"
     },
     {
       "url": "https://owasp.securityshepherd.eu/",
-      "source": "OWASP Security Shepherd — official live training platform (GitHub/SourceForge try-it-live)",
+      "source": "OWASP Security Shepherd \u2014 official live training platform (GitHub/SourceForge try-it-live)",
       "auth": "public_demo"
     },
     {
       "url": "https://shepherd.fs25.isf.hslu-edu.ch/",
-      "source": "HSLU ISF Security Shepherd — public OWASP Top 10 lesson/challenge instance (web search)",
+      "source": "HSLU ISF Security Shepherd \u2014 public OWASP Top 10 lesson/challenge instance (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas1.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 1 — serverside web-security wargame (follows natas0)",
+      "source": "OverTheWire Natas level 1 \u2014 serverside web-security wargame (follows natas0)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas2.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 2 — source-disclosure web-security wargame",
+      "source": "OverTheWire Natas level 2 \u2014 source-disclosure web-security wargame",
       "auth": "public_demo"
     },
     {
       "url": "https://alf.nu/alert2",
-      "source": "ALF Security XSS lab — alert(1) to win challenge series stage 2 (alf.nu)",
+      "source": "ALF Security XSS lab \u2014 alert(1) to win challenge series stage 2 (alf.nu)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas3.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 3 — robots.txt / directory disclosure wargame (follows natas2)",
+      "source": "OverTheWire Natas level 3 \u2014 robots.txt / directory disclosure wargame (follows natas2)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas4.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 4 — HTTP Referer header bypass wargame",
+      "source": "OverTheWire Natas level 4 \u2014 HTTP Referer header bypass wargame",
       "auth": "public_demo"
     },
     {
       "url": "http://natas5.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 5 — logged-in cookie/session wargame",
+      "source": "OverTheWire Natas level 5 \u2014 logged-in cookie/session wargame",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/sql-injection/",
-      "source": "Hacksplaining — interactive SQL injection secure-coding lesson (Product Hunt)",
+      "source": "Hacksplaining \u2014 interactive SQL injection secure-coding lesson (Product Hunt)",
       "auth": "public_demo"
     },
     {
       "url": "https://academy.portswigger.net/",
-      "source": "PortSwigger Web Security Academy — free browser-based OWASP labs hub",
+      "source": "PortSwigger Web Security Academy \u2014 free browser-based OWASP labs hub",
       "auth": "public_demo"
     },
     {
       "url": "https://thecyberdrill.netlify.app/",
-      "source": "Cyber Drill — interactive SQLi/phishing/encryption security training suite (web search)",
+      "source": "Cyber Drill \u2014 interactive SQLi/phishing/encryption security training suite (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://sjefersuper.netlify.app/unsafe-deserialization/",
-      "source": "websec unsafe deserialization lab — PHP/Node serialize gadget demo (Netlify deploy)",
+      "source": "websec unsafe deserialization lab \u2014 PHP/Node serialize gadget demo (Netlify deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://labs.tegalsec.org/",
-      "source": "TegalSec labs hub — XSS/br0w training lab index (complements xss-labs paths)",
+      "source": "TegalSec labs hub \u2014 XSS/br0w training lab index (complements xss-labs paths)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/cross-site-scripting/",
-      "source": "Hacksplaining XSS lesson — interactive reflected/stored XSS walkthrough (web search)",
+      "source": "Hacksplaining XSS lesson \u2014 interactive reflected/stored XSS walkthrough (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://leviathan0.leviathan.labs.overthewire.org/",
-      "source": "OverTheWire Leviathan level 0 — binary/Linux privilege wargame entry (awesome-vulnerable-apps)",
+      "source": "OverTheWire Leviathan level 0 \u2014 binary/Linux privilege wargame entry (awesome-vulnerable-apps)",
       "auth": "benchmark"
     },
     {
       "url": "https://ist-edu-bd.vercel.app/",
-      "source": "zahidoverflow/damn-vulnerable-web-university — OWASP Top 10 React training app (GitHub homepage)",
+      "source": "zahidoverflow/damn-vulnerable-web-university \u2014 OWASP Top 10 React training app (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-lab-docs.vercel.app/",
-      "source": "Web Security Lab docs — XSS/SQLi/CSRF/JWT/IDOR training hub (web search)",
+      "source": "Web Security Lab docs \u2014 XSS/SQLi/CSRF/JWT/IDOR training hub (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-lab.vercel.app/",
-      "source": "Web Security Lab platform — interactive XSS/CSRF/CSP/Cookie labs (docs companion)",
+      "source": "Web Security Lab platform \u2014 interactive XSS/CSRF/CSP/Cookie labs (docs companion)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://xss-payload-lab.vercel.app/",
-      "source": "XSS Payload Lab — browser security playground with context explorer (web search)",
+      "source": "XSS Payload Lab \u2014 browser security playground with context explorer (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://maz4lhacks.vercel.app/",
-      "source": "Maz4l Hacks — reflected XSS walkthrough + security blog demos (web search)",
+      "source": "Maz4l Hacks \u2014 reflected XSS walkthrough + security blog demos (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://wrongsecrets-ctf.herokuapp.com/",
-      "source": "OWASP WrongSecrets CTF Heroku demo — secrets-management p0wnable game (GitHub README)",
+      "source": "OWASP WrongSecrets CTF Heroku demo \u2014 secrets-management p0wnable game (GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.wrongsecrets.com/",
-      "source": "OWASP WrongSecrets official demo environment — secrets-in-code/config CTF (owasp.org)",
+      "source": "OWASP WrongSecrets official demo environment \u2014 secrets-in-code/config CTF (owasp.org)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas6.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 6 — serverside web-security wargame (follows natas5)",
+      "source": "OverTheWire Natas level 6 \u2014 serverside web-security wargame (follows natas5)",
       "auth": "public_demo"
     },
     {
       "url": "https://cve-2025-29927-demo.vercel.app/",
-      "source": "CVE-2025-29927 Next.js middleware auth bypass demo — Himalaya Tech admin panel lab (web search)",
+      "source": "CVE-2025-29927 Next.js middleware auth bypass demo \u2014 Himalaya Tech admin panel lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://inj3ctlab.bugbountylabs.com/",
-      "source": "Bug Bounty Labs Inj3ctlab — SSTI practice across PHP/Node/Python ports (web search)",
+      "source": "Bug Bounty Labs Inj3ctlab \u2014 SSTI practice across PHP/Node/Python ports (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugforge.io/",
-      "source": "bugforge.io — beginner-friendly web exploitation labs (SQLi, IDOR, GraphQL, SSRF; web search)",
+      "source": "bugforge.io \u2014 beginner-friendly web exploitation labs (SQLi, IDOR, GraphQL, SSRF; web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas7.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 7 — LFI via unsanitized page parameter (follows natas6)",
+      "source": "OverTheWire Natas level 7 \u2014 LFI via unsanitized page parameter (follows natas6)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas8.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 8 — custom encoding bypass challenge (follows natas7)",
+      "source": "OverTheWire Natas level 8 \u2014 custom encoding bypass challenge (follows natas7)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas9.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 9 — command injection via passthru() (follows natas8)",
+      "source": "OverTheWire Natas level 9 \u2014 command injection via passthru() (follows natas8)",
       "auth": "public_demo"
     },
     {
       "url": "https://h3xstream.github.io/waf-workshop/site/03-lab/",
-      "source": "h3xstream WAF Bypass Workshop — SQL syntax lab with ModSecurity (web search)",
+      "source": "h3xstream WAF Bypass Workshop \u2014 SQL syntax lab with ModSecurity (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas10.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 10 — base64 auth bypass wargame (follows natas9)",
+      "source": "OverTheWire Natas level 10 \u2014 base64 auth bypass wargame (follows natas9)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas11.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 11 — cookie XOR encoding bypass wargame",
+      "source": "OverTheWire Natas level 11 \u2014 cookie XOR encoding bypass wargame",
       "auth": "public_demo"
     },
     {
       "url": "http://natas12.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 12 — randomised cookie value wargame",
+      "source": "OverTheWire Natas level 12 \u2014 randomised cookie value wargame",
       "auth": "public_demo"
     },
     {
       "url": "http://natas13.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 13 — XOR with static key wargame",
+      "source": "OverTheWire Natas level 13 \u2014 XOR with static key wargame",
       "auth": "public_demo"
     },
     {
       "url": "https://sasanlabs.github.io/VulnerableApp-facade/",
-      "source": "OWASP VulnerableApp facade — scanner evaluation platform docs + DAST/SAST oracle metadata (GitHub Pages)",
+      "source": "OWASP VulnerableApp facade \u2014 scanner evaluation platform docs + DAST/SAST oracle metadata (GitHub Pages)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas14.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 14 — SQL injection auth bypass wargame (follows natas13)",
+      "source": "OverTheWire Natas level 14 \u2014 SQL injection auth bypass wargame (follows natas13)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas15.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 15 — boolean-based blind SQLi wargame (follows natas14)",
+      "source": "OverTheWire Natas level 15 \u2014 boolean-based blind SQLi wargame (follows natas14)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas16.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 16 — blind SQLi with output filtering wargame (follows natas15)",
+      "source": "OverTheWire Natas level 16 \u2014 blind SQLi with output filtering wargame (follows natas15)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas17.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 17 — time-based blind SQLi wargame (follows natas16)",
+      "source": "OverTheWire Natas level 17 \u2014 time-based blind SQLi wargame (follows natas16)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas18.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 18 — PHP strcmp array bypass wargame (follows natas17)",
+      "source": "OverTheWire Natas level 18 \u2014 PHP strcmp array bypass wargame (follows natas17)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas19.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 19 — session ID brute-force wargame (follows natas18)",
+      "source": "OverTheWire Natas level 19 \u2014 session ID brute-force wargame (follows natas18)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas20.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 20 — session newline injection wargame (follows natas19)",
+      "source": "OverTheWire Natas level 20 \u2014 session newline injection wargame (follows natas19)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas21.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 21 — shared session storage wargame (follows natas20)",
+      "source": "OverTheWire Natas level 21 \u2014 shared session storage wargame (follows natas20)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas22.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 22 — session fixation wargame (follows natas21)",
+      "source": "OverTheWire Natas level 22 \u2014 session fixation wargame (follows natas21)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas23.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 23 — PHP strcmp array bypass wargame (follows natas22)",
+      "source": "OverTheWire Natas level 23 \u2014 PHP strcmp array bypass wargame (follows natas22)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas24.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 24 — passwd file read via command injection wargame (follows natas23)",
+      "source": "OverTheWire Natas level 24 \u2014 passwd file read via command injection wargame (follows natas23)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas25.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 25 — PHP preg_replace /e modifier RCE wargame (follows natas24)",
+      "source": "OverTheWire Natas level 25 \u2014 PHP preg_replace /e modifier RCE wargame (follows natas24)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas26.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 26 — PHP object injection / unserialize wargame (follows natas25)",
+      "source": "OverTheWire Natas level 26 \u2014 PHP object injection / unserialize wargame (follows natas25)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas27.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 27 — strcmp array bypass auth wargame (follows natas26)",
+      "source": "OverTheWire Natas level 27 \u2014 strcmp array bypass auth wargame (follows natas26)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas28.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 28 — AES ECB block cipher oracle wargame (follows natas27)",
+      "source": "OverTheWire Natas level 28 \u2014 AES ECB block cipher oracle wargame (follows natas27)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas29.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 29 — log injection / PHP object injection wargame (follows natas28)",
+      "source": "OverTheWire Natas level 29 \u2014 log injection / PHP object injection wargame (follows natas28)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas30.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 30 — PHP type juggling / strcmp bypass wargame (follows natas29)",
+      "source": "OverTheWire Natas level 30 \u2014 PHP type juggling / strcmp bypass wargame (follows natas29)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas31.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 31 — PHP type juggling / strcmp bypass wargame (follows natas30)",
+      "source": "OverTheWire Natas level 31 \u2014 PHP type juggling / strcmp bypass wargame (follows natas30)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas32.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 32 — PHP type juggling / strcmp bypass wargame (follows natas31)",
+      "source": "OverTheWire Natas level 32 \u2014 PHP type juggling / strcmp bypass wargame (follows natas31)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas33.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 33 — PHP type juggling / strcmp bypass wargame (follows natas32)",
+      "source": "OverTheWire Natas level 33 \u2014 PHP type juggling / strcmp bypass wargame (follows natas32)",
       "auth": "public_demo"
     },
     {
       "url": "http://natas34.natas.labs.overthewire.org/",
-      "source": "OverTheWire Natas level 34 — wargame finale / congratulation level (follows natas33)",
+      "source": "OverTheWire Natas level 34 \u2014 wargame finale / congratulation level (follows natas33)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free/owasp-top-10-API",
-      "source": "Kontra Application Security — free interactive OWASP API Top 10 training labs (web search)",
+      "source": "Kontra Application Security \u2014 free interactive OWASP API Top 10 training labs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://kontra.dev/",
-      "source": "Kontra — developer application security training platform with hands-on labs (web search)",
+      "source": "Kontra \u2014 developer application security training platform with hands-on labs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.pentesterlab.com/exercises/web-for-pentester",
-      "source": "PentesterLab Web for Pentester — hosted SQLi/XSS/CSRF exercise instances (awesome-vuln-apps)",
+      "source": "PentesterLab Web for Pentester \u2014 hosted SQLi/XSS/CSRF exercise instances (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.immersivelabs.com/",
-      "source": "Immersive Labs — public cyber skills training platform with browser labs (web search)",
+      "source": "Immersive Labs \u2014 public cyber skills training platform with browser labs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://playhacklab.com/",
-      "source": "HackLab — browser-based OWASP Top 10 terminal security game (web search)",
+      "source": "HackLab \u2014 browser-based OWASP Top 10 terminal security game (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://v0-comprehensive-security-training.vercel.app/",
-      "source": "v0 comprehensive security training — web pentest modules with live lab links (web search)",
+      "source": "v0 comprehensive security training \u2014 web pentest modules with live lab links (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://webverselabs-pro.com/",
-      "source": "WebVerse Pro — multi-service web hacking lab platform landing (web search)",
+      "source": "WebVerse Pro \u2014 multi-service web hacking lab platform landing (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://webverselabs-pro.com/labs/orbitdesk",
-      "source": "WebVerse Pro OrbitDesk — GraphQL IDOR/SSRF/JWT chain lab brief (web search)",
+      "source": "WebVerse Pro OrbitDesk \u2014 GraphQL IDOR/SSRF/JWT chain lab brief (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.overthewire.org/wargames/natas/",
-      "source": "OverTheWire Natas wargame index — public web security challenge series entry (web search)",
+      "source": "OverTheWire Natas wargame index \u2014 public web security challenge series entry (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.tryhackme.com/",
-      "source": "TryHackMe — public browser-based cybersecurity training platform (web search)",
+      "source": "TryHackMe \u2014 public browser-based cybersecurity training platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://portswigger.net/web-security/all-labs",
-      "source": "PortSwigger Web Security Academy — free OWASP-aligned browser lab index (web search)",
+      "source": "PortSwigger Web Security Academy \u2014 free OWASP-aligned browser lab index (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://academy.hackthebox.com/",
-      "source": "Hack The Box Academy — public web security training and guided labs (web search)",
+      "source": "Hack The Box Academy \u2014 public web security training and guided labs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hackthebox.com/",
-      "source": "Hack The Box — public CTF and penetration testing challenge platform (web search)",
+      "source": "Hack The Box \u2014 public CTF and penetration testing challenge platform (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://0xk4b1r.vercel.app/",
-      "source": "0xk4b1r VulneraShop — intentionally vulnerable full-stack OWASP Top 10 practice app (Vercel OSS deploy)",
+      "source": "0xk4b1r VulneraShop \u2014 intentionally vulnerable full-stack OWASP Top 10 practice app (Vercel OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vulnex.vercel.app/",
-      "source": "VULNEX — web hacking playbook with OWASP-aligned payload libraries (web search)",
+      "source": "VULNEX \u2014 web hacking playbook with OWASP-aligned payload libraries (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://print.alf.nu/",
-      "source": "Erling Ellingsen print.alf.nu — XSS sandbox iframe challenge infrastructure (alf.nu)",
+      "source": "Erling Ellingsen print.alf.nu \u2014 XSS sandbox iframe challenge infrastructure (alf.nu)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.secureflag.com/owasp.html",
-      "source": "SecureFlag — browser-based OWASP Top 10 training labs hub (web search)",
+      "source": "SecureFlag \u2014 browser-based OWASP Top 10 training labs hub (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentesterlab.com/exercises/web_for_pentester/",
-      "source": "PentesterLab Web for Pentester exercise index — SQLi/XSS/CSRF hosted labs (web search)",
+      "source": "PentesterLab Web for Pentester exercise index \u2014 SQLi/XSS/CSRF hosted labs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.root-me.org/en/Challenges/Web-Server/",
-      "source": "Root-Me Web-Server challenge index — public CTF vulnerability exercises (web search)",
+      "source": "Root-Me Web-Server challenge index \u2014 public CTF vulnerability exercises (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free/owasp-top-10",
-      "source": "Kontra Application Security — free interactive OWASP Top 10 Web training hub (HN/Product Hunt cited)",
+      "source": "Kontra Application Security \u2014 free interactive OWASP Top 10 Web training hub (HN/Product Hunt cited)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-sql-injection",
-      "source": "Kontra — browser-based SQL injection training lab with live exploit demo (web search)",
+      "source": "Kontra \u2014 browser-based SQL injection training lab with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentesterlab.com/exercises/sqli_01",
-      "source": "PentesterLab SQL Injection 01 — hosted exercise instance (awesome-vuln-apps)",
+      "source": "PentesterLab SQL Injection 01 \u2014 hosted exercise instance (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvwu.vercel.app/",
-      "source": "zahidoverflow/damn-vulnerable-web-university — alternate Vercel OWASP Top 10 training deploy (GitHub homepage)",
+      "source": "zahidoverflow/damn-vulnerable-web-university \u2014 alternate Vercel OWASP Top 10 training deploy (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://pentesterlab.com/exercises/xss_01",
-      "source": "PentesterLab XSS 01 — hosted reflected XSS exercise instance (web search)",
+      "source": "PentesterLab XSS 01 \u2014 hosted reflected XSS exercise instance (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://jjirik77.github.io/sec_code/privacy.html",
-      "source": "jjirik77/sec_code — interactive SQLi/XSS/insecure-storage browser security lesson demos (GitHub Pages)",
+      "source": "jjirik77/sec_code \u2014 interactive SQLi/XSS/insecure-storage browser security lesson demos (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://www.llm-sec.dev/",
-      "source": "llm-sec.dev — OWASP Top 10 LLM interactive browser labs with per-vulnerability environments (web search)",
+      "source": "llm-sec.dev \u2014 OWASP Top 10 LLM interactive browser labs with per-vulnerability environments (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free/llm",
-      "source": "Kontra — free interactive OWASP Top 10 for LLM 2025 training modules (application.security)",
+      "source": "Kontra \u2014 free interactive OWASP Top 10 for LLM 2025 training modules (application.security)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvga.tools.escape.tech/",
-      "source": "Escape.tech DVGA — Damn Vulnerable GraphQL Application public hosted instance (awesome-vuln-apps)",
+      "source": "Escape.tech DVGA \u2014 Damn Vulnerable GraphQL Application public hosted instance (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://portswigger.net/web-security/llm-attacks",
-      "source": "PortSwigger Web Security Academy — Web LLM Attacks hands-on lab path (web search)",
+      "source": "PortSwigger Web Security Academy \u2014 Web LLM Attacks hands-on lab path (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://prompttools.co/",
-      "source": "joergmichno/prompt-lab — live prompt injection playground with ClawGuard detection patterns (GitHub homepage)",
+      "source": "joergmichno/prompt-lab \u2014 live prompt injection playground with ClawGuard detection patterns (GitHub homepage)",
       "auth": "public_demo"
     },
     {
       "url": "https://jjirik77.github.io/sec_code/interactive.html",
-      "source": "jjirik77/sec_code — secure coding interactive lessons with XSS/SQLi exploit demos (GitHub Pages)",
+      "source": "jjirik77/sec_code \u2014 secure coding interactive lessons with XSS/SQLi exploit demos (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://appsec-ci-pipeline.onrender.com/",
-      "source": "gauthamram57/appsec-ci-pipeline — deliberately vulnerable Django app with stored XSS + SQLi (Render deploy)",
+      "source": "gauthamram57/appsec-ci-pipeline \u2014 deliberately vulnerable Django app with stored XSS + SQLi (Render deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://xvwa.vercel.app/",
-      "source": "s4n7h0/xvwa — Xtreme Vulnerable Web Application public Vercel deploy (awesome-vuln-apps)",
+      "source": "s4n7h0/xvwa \u2014 Xtreme Vulnerable Web Application public Vercel deploy (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://cors-lab.vercel.app/",
-      "source": "CORS Lab — intentionally vulnerable Origin-reflection training stand with live exploit demo (web search)",
+      "source": "CORS Lab \u2014 intentionally vulnerable Origin-reflection training stand with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackmyvm.eu/",
-      "source": "HackMyVM — public boot2root CTF platform with online vulnerability labs (web search)",
+      "source": "HackMyVM \u2014 public boot2root CTF platform with online vulnerability labs (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://bandit.labs.overthewire.org/",
-      "source": "OverTheWire Bandit — classic wargame entry for web/shell vulnerability training (awesome-vuln-apps)",
+      "source": "OverTheWire Bandit \u2014 classic wargame entry for web/shell vulnerability training (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://vuln-academy.vercel.app/",
-      "source": "VulnAcademy — OWASP Top 10 interactive training platform with SQLi/XSS/SVG upload labs (Vercel OSS deploy)",
+      "source": "VulnAcademy \u2014 OWASP Top 10 interactive training platform with SQLi/XSS/SVG upload labs (Vercel OSS deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://urban-vampi-staging.up.railway.app/",
-      "source": "apisec-inc/urban-VAmPI — OWASP API Top 10 staging Railway deploy (GitHub README)",
+      "source": "apisec-inc/urban-VAmPI \u2014 OWASP API Top 10 staging Railway deploy (GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "https://todoer.site/",
-      "source": "Entit-y/Todoer — intentionally vulnerable full-stack task manager (Nimbus Vault practice target)",
+      "source": "Entit-y/Todoer \u2014 intentionally vulnerable full-stack task manager (Nimbus Vault practice target)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackable.me/",
-      "source": "OWASP VWAD — community sandboxed vulnerable web app platform (eLearnSecurity Coliseum)",
+      "source": "OWASP VWAD \u2014 community sandboxed vulnerable web app platform (eLearnSecurity Coliseum)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-production-6e47f.up.railway.app/demo",
-      "source": "Arc Gate — live AI agent red-team prompt-injection demo playground (Railway OSS deploy)",
+      "source": "Arc Gate \u2014 live AI agent red-team prompt-injection demo playground (Railway OSS deploy)",
       "auth": "public_demo"
     },
     {
       "url": "https://nimbusvault.app/",
-      "source": "Nimbus Vault — bug-bounty research platform; Todoer is official practice target (Entit-y GitHub)",
+      "source": "Nimbus Vault \u2014 bug-bounty research platform; Todoer is official practice target (Entit-y GitHub)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.securityknowledgeframework.org/",
-      "source": "OWASP SKF main training portal — secure coding labs hub (distinct from demo.securityknowledgeframework.org)",
+      "source": "OWASP SKF main training portal \u2014 secure coding labs hub (distinct from demo.securityknowledgeframework.org)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnable.kr/",
-      "source": "Pwnable.kr — public pwn/wargame challenge platform (awesome-vulnerable-apps online)",
+      "source": "Pwnable.kr \u2014 public pwn/wargame challenge platform (awesome-vulnerable-apps online)",
       "auth": "public_demo"
     },
     {
       "url": "https://smashthestack.org/",
-      "source": "SmashTheStack wargames — public security challenge hub (awesome-vulnerable-apps)",
+      "source": "SmashTheStack wargames \u2014 public security challenge hub (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://microcorruption.com/",
-      "source": "Microcorruption — browser-based embedded security CTF with intentional vulns (Show HN / wargame)",
+      "source": "Microcorruption \u2014 browser-based embedded security CTF with intentional vulns (Show HN / wargame)",
       "auth": "public_demo"
     },
     {
       "url": "http://krypton0.krypton.labs.overthewire.org/",
-      "source": "OverTheWire Krypton — crypto/web-security wargame level 0 (awesome-vulnerable-apps)",
+      "source": "OverTheWire Krypton \u2014 crypto/web-security wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://narnia0.narnia.labs.overthewire.org/",
-      "source": "OverTheWire Narnia — setuid/binary exploitation wargame level 0 (awesome-vulnerable-apps)",
+      "source": "OverTheWire Narnia \u2014 setuid/binary exploitation wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://behemoth0.behemoth.labs.overthewire.org/",
-      "source": "OverTheWire Behemoth — binary exploitation wargame level 0 (awesome-vulnerable-apps)",
+      "source": "OverTheWire Behemoth \u2014 binary exploitation wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://vortex0.vortex.labs.overthewire.org/",
-      "source": "OverTheWire Vortex — shellcode/binary wargame level 0 (awesome-vulnerable-apps)",
+      "source": "OverTheWire Vortex \u2014 shellcode/binary wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://manpage0.manpage.labs.overthewire.org/",
-      "source": "OverTheWire Manpage — Unix privilege escalation wargame level 0 (awesome-vulnerable-apps)",
+      "source": "OverTheWire Manpage \u2014 Unix privilege escalation wargame level 0 (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://ringzer0ctf.com/",
-      "source": "RingZer0 Online CTF — 400+ web/sysadmin/crypto challenges with public sandboxes (web search)",
+      "source": "RingZer0 Online CTF \u2014 400+ web/sysadmin/crypto challenges with public sandboxes (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hellboundhackers.org/",
-      "source": "Hellbound Hackers — classic public web hacking challenge platform (Recorded Future / awesome-vuln-apps)",
+      "source": "Hellbound Hackers \u2014 classic public web hacking challenge platform (Recorded Future / awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.wechall.net/",
-      "source": "WeChall — global CTF scoreboard with hosted SQLi/LFI/PHP exploit training challenges",
+      "source": "WeChall \u2014 global CTF scoreboard with hosted SQLi/LFI/PHP exploit training challenges",
       "auth": "public_demo"
     },
     {
       "url": "http://redtiger.labs.overthewire.org/",
-      "source": "OverTheWire RedTiger — public SQLi/login-bypass web security wargame levels (awesome-vulnerable-apps)",
+      "source": "OverTheWire RedTiger \u2014 public SQLi/login-bypass web security wargame levels (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://webhacking.kr/",
-      "source": "Webhacking.kr — Korean public web vulnerability challenge platform with 80+ levels (web search)",
+      "source": "Webhacking.kr \u2014 Korean public web vulnerability challenge platform with 80+ levels (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://x55.is/brutelogic/gym.php",
-      "source": "Brute Logic XSS Gym — 30+ XSS injection contexts on x55 universal delivery domain (research / awesome-sites-to-test-on)",
+      "source": "Brute Logic XSS Gym \u2014 30+ XSS injection contexts on x55 universal delivery domain (research / awesome-sites-to-test-on)",
       "auth": "public_demo"
     },
     {
       "url": "https://web.ctflearn.com/web4/",
-      "source": "CTFlearn Web4 — Basic Injection SQLi challenge with echoed query (web search writeups)",
+      "source": "CTFlearn Web4 \u2014 Basic Injection SQLi challenge with echoed query (web search writeups)",
       "auth": "public_demo"
     },
     {
       "url": "http://web.ctflearn.com/web8/",
-      "source": "CTFlearn Web8 Inj3ction Time — UNION-based blind SQLi dog-id search lab (web search writeups)",
+      "source": "CTFlearn Web8 Inj3ction Time \u2014 UNION-based blind SQLi dog-id search lab (web search writeups)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.net-force.nl/hacktivity/",
-      "source": "Net-Force — public web hacking challenge platform with 40k+ members (Recorded Future / awesome-vuln-apps)",
+      "source": "Net-Force \u2014 public web hacking challenge platform with 40k+ members (Recorded Future / awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://x55.is/brutelogic/xss.php",
-      "source": "Brute Logic XSS test page — classic reflected XSS vectors on x55.is (Brute Logic research hub)",
+      "source": "Brute Logic XSS test page \u2014 classic reflected XSS vectors on x55.is (Brute Logic research hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://sql-injection-lab.vercel.app/",
-      "source": "layer-zero-unlv/sql-injection-lab — Flask SQLi auth-bypass practice lab (GitHub homepage)",
+      "source": "layer-zero-unlv/sql-injection-lab \u2014 Flask SQLi auth-bypass practice lab (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://x55.is/brutelogic/knoxss.html",
-      "source": "Brute Logic KNOXSS test page on x55 universal delivery — source/DOM XSS cases paired with gym.php (research hub)",
+      "source": "Brute Logic KNOXSS test page on x55 universal delivery \u2014 source/DOM XSS cases paired with gym.php (research hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://web.ctflearn.com/web1/",
-      "source": "CTFlearn Web1 — public web security challenge instance (CTFlearn web challenge series)",
+      "source": "CTFlearn Web1 \u2014 public web security challenge instance (CTFlearn web challenge series)",
       "auth": "public_demo"
     },
     {
       "url": "https://web.ctflearn.com/web3/",
-      "source": "CTFlearn Web3 — public web security challenge instance (CTFlearn web challenge series)",
+      "source": "CTFlearn Web3 \u2014 public web security challenge instance (CTFlearn web challenge series)",
       "auth": "public_demo"
     },
     {
       "url": "https://web.ctflearn.com/web6/",
-      "source": "CTFlearn Web6 — public web security challenge instance (CTFlearn web challenge series)",
+      "source": "CTFlearn Web6 \u2014 public web security challenge instance (CTFlearn web challenge series)",
       "auth": "public_demo"
     },
     {
       "url": "https://aigoat.app/",
-      "source": "AISecurityConsortium/AIGoat — open-source LLM security playground marketing + demo hub (web search)",
+      "source": "AISecurityConsortium/AIGoat \u2014 open-source LLM security playground marketing + demo hub (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://juice-shop-staging.herokuapp.com/",
-      "source": "OWASP Juice Shop staging Heroku — reliable 6/6 benchmark oracle fallback (power-loop memory)",
+      "source": "OWASP Juice Shop staging Heroku \u2014 reliable 6/6 benchmark oracle fallback (power-loop memory)",
       "auth": "benchmark"
     },
     {
       "url": "https://ctf.vercel.app/",
-      "source": "vercel-labs/capture-the-flag — AI-built vulnerable app CTF platform (GitHub README deploy)",
+      "source": "vercel-labs/capture-the-flag \u2014 AI-built vulnerable app CTF platform (GitHub README deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://fabraix.com/playground",
-      "source": "fabraix/playground — Show HN open-source AI agent red-team playground",
+      "source": "fabraix/playground \u2014 Show HN open-source AI agent red-team playground",
       "auth": "public_demo"
     },
     {
       "url": "https://dvga.xplat-demo.threatx.io/",
-      "source": "Damn Vulnerable GraphQL Application — ThreatX public xplat demo instance (awesome-vulnerable-apps)",
+      "source": "Damn Vulnerable GraphQL Application \u2014 ThreatX public xplat demo instance (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://cylabacademy.org/",
-      "source": "CMU CyLab Security Academy — picoCTF rebrand with year-round web/security challenges (web search)",
+      "source": "CMU CyLab Security Academy \u2014 picoCTF rebrand with year-round web/security challenges (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://atlascrew.dev/chimera",
-      "source": "Atlas Crew Chimera — 456+ vulnerable API endpoints product landing with live demo hub (GitHub/inferno-lab)",
+      "source": "Atlas Crew Chimera \u2014 456+ vulnerable API endpoints product landing with live demo hub (GitHub/inferno-lab)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/challenge?id=2",
-      "source": "BugBountyHunter zseano — XSS challenge #2 (real bug bounty findings recreated)",
+      "source": "BugBountyHunter zseano \u2014 XSS challenge #2 (real bug bounty findings recreated)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/challenge?id=3",
-      "source": "BugBountyHunter zseano — web vulnerability challenge #3 (training platform)",
+      "source": "BugBountyHunter zseano \u2014 web vulnerability challenge #3 (training platform)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level1",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 1 entry (alf.nu security challenges)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 1 entry (alf.nu security challenges)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level2",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 2 (web search / alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 2 (web search / alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level3",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 3 (web search / alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 3 (web search / alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/challenge?id=4",
-      "source": "BugBountyHunter zseano — XSS challenge #4 (real bug bounty findings recreated)",
+      "source": "BugBountyHunter zseano \u2014 XSS challenge #4 (real bug bounty findings recreated)",
       "auth": "public_demo"
     },
     {
       "url": "http://redtiger.labs.overthewire.org/level1.php",
-      "source": "OverTheWire RedTiger level 1 — SQLi/login-bypass web security wargame entry (awesome-vulnerable-apps)",
+      "source": "OverTheWire RedTiger level 1 \u2014 SQLi/login-bypass web security wargame entry (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/csrf/",
-      "source": "Hacksplaining — interactive CSRF secure-coding lesson with live exploit demo (web search)",
+      "source": "Hacksplaining \u2014 interactive CSRF secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.bugbountyhunter.com/challenge?id=5",
-      "source": "BugBountyHunter zseano — web vulnerability challenge #5 (training platform)",
+      "source": "BugBountyHunter zseano \u2014 web vulnerability challenge #5 (training platform)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level4",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 4 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 4 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "http://redtiger.labs.overthewire.org/level2.php",
-      "source": "OverTheWire RedTiger level 2 — SQLi/login-bypass web security wargame (awesome-vulnerable-apps)",
+      "source": "OverTheWire RedTiger level 2 \u2014 SQLi/login-bypass web security wargame (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "http://tiwap.com/",
-      "source": "TIWAP — intentionally vulnerable web app with 20 vuln types × 3 difficulty levels (educational demo)",
+      "source": "TIWAP \u2014 intentionally vulnerable web app with 20 vuln types \u00d7 3 difficulty levels (educational demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/open-redirects/",
-      "source": "Hacksplaining — interactive open-redirect secure-coding lesson with live exploit demo (web search)",
+      "source": "Hacksplaining \u2014 interactive open-redirect secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://bug-collection.vercel.app/",
-      "source": "valentin-panov/bug-collection — intentionally vulnerable React/Next MongoDB training app (GitHub homepage)",
+      "source": "valentin-panov/bug-collection \u2014 intentionally vulnerable React/Next MongoDB training app (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://escape.alf.nu/level5",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 5 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 5 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/directory-traversal/",
-      "source": "Hacksplaining — interactive directory-traversal secure-coding lesson with live exploit demo (web search)",
+      "source": "Hacksplaining \u2014 interactive directory-traversal secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/ssrf/",
-      "source": "Hacksplaining — interactive SSRF secure-coding lesson with live exploit demo (web search)",
+      "source": "Hacksplaining \u2014 interactive SSRF secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/broken-access-control/",
-      "source": "Hacksplaining — interactive broken-access-control secure-coding lesson (web search)",
+      "source": "Hacksplaining \u2014 interactive broken-access-control secure-coding lesson (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level6",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 6 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 6 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level7",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 7 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 7 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level8",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 8 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 8 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level9",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 9 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 9 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://escape.alf.nu/level10",
-      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 10 (alf.nu series)",
+      "source": "Erling Ellingsen escape.alf.nu \u2014 reflected XSS filter-bypass wargame level 10 (alf.nu series)",
       "auth": "public_demo"
     },
     {
       "url": "https://zen-demo-java.fly.dev/",
-      "source": "Hacker News — Aikido Zen WAF playground with SQLi/shell/SSRF/path-traversal injection demos (fly.dev)",
+      "source": "Hacker News \u2014 Aikido Zen WAF playground with SQLi/shell/SSRF/path-traversal injection demos (fly.dev)",
       "auth": "public_demo"
     },
     {
       "url": "https://attp-live.fly.dev/",
-      "source": "ATTP Agent Trust Transport Protocol — live SQL-gate + signed agent messaging demo (fly.dev)",
+      "source": "ATTP Agent Trust Transport Protocol \u2014 live SQL-gate + signed agent messaging demo (fly.dev)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/xml-external-entities/",
-      "source": "Hacksplaining — interactive XXE secure-coding lesson with live exploit demo (web search)",
+      "source": "Hacksplaining \u2014 interactive XXE secure-coding lesson with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/command-injection/",
-      "source": "Hacksplaining — interactive command-injection secure-coding lesson (web search)",
+      "source": "Hacksplaining \u2014 interactive command-injection secure-coding lesson (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/server-side-template-injection/",
-      "source": "Hacksplaining — interactive SSTI secure-coding lesson (web search)",
+      "source": "Hacksplaining \u2014 interactive SSTI secure-coding lesson (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugzap.vercel.app/",
-      "source": "bondansebastian/prompt-injection-prevention-next — BugZap LLM injection prevention demo (GitHub homepage)",
+      "source": "bondansebastian/prompt-injection-prevention-next \u2014 BugZap LLM injection prevention demo (GitHub homepage)",
       "auth": "public_demo"
     },
     {
       "url": "https://redlockx.vercel.app/",
-      "source": "blackXmask/RedLockX — interactive prompt-injection analysis guardrail demo (GitHub homepage)",
+      "source": "blackXmask/RedLockX \u2014 interactive prompt-injection analysis guardrail demo (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://attp.cybersecai.co.uk/",
-      "source": "ATTP Agent Trust Transport Protocol — SQL-gate + agent signing live demo (attp-live.fly.dev mirror)",
+      "source": "ATTP Agent Trust Transport Protocol \u2014 SQL-gate + agent signing live demo (attp-live.fly.dev mirror)",
       "auth": "public_demo"
     },
     {
       "url": "https://rougestudio.vercel.app/",
-      "source": "Rogue Studio — unrestricted agentic security research IDE demo (web search)",
+      "source": "Rogue Studio \u2014 unrestricted agentic security research IDE demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://hacksplaining.com/lessons/insecure-deserialization/",
-      "source": "Hacksplaining — interactive insecure-deserialization secure-coding lesson (web search)",
+      "source": "Hacksplaining \u2014 interactive insecure-deserialization secure-coding lesson (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentesterlab.com/exercises/from_sqli_to_shell/",
-      "source": "PentesterLab — SQLi to admin console to RCE hosted exercise chain (web search)",
+      "source": "PentesterLab \u2014 SQLi to admin console to RCE hosted exercise chain (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pentesterlab.com/exercises/ssrf_01/",
-      "source": "PentesterLab — SSRF fundamentals hosted exercise (web search)",
+      "source": "PentesterLab \u2014 SSRF fundamentals hosted exercise (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-command-injection",
-      "source": "Kontra Application Security — browser-based command-injection training lab (web search)",
+      "source": "Kontra Application Security \u2014 browser-based command-injection training lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-directory-traversal",
-      "source": "Kontra Application Security — browser-based directory-traversal training lab (web search)",
+      "source": "Kontra Application Security \u2014 browser-based directory-traversal training lab (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugforge.io/labs/sqli",
-      "source": "bugforge.io — beginner SQL injection hands-on lab module (web search)",
+      "source": "bugforge.io \u2014 beginner SQL injection hands-on lab module (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://ai-security-labs.vercel.app/",
-      "source": "AI Security Lab v2.0 — LLM red-teaming and adversarial AI offensive security training sandbox (web search)",
+      "source": "AI Security Lab v2.0 \u2014 LLM red-teaming and adversarial AI offensive security training sandbox (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://code-breaking.fly.dev/",
-      "source": "Code-Breaking Puzzles — open-source code-audit challenges (PHP/Node/Java/Python RCE/SQLi) on fly.dev (web search)",
+      "source": "Code-Breaking Puzzles \u2014 open-source code-audit challenges (PHP/Node/Java/Python RCE/SQLi) on fly.dev (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://sanitize-web.fly.dev/",
-      "source": "Sanitize Online Demo — HTML sanitizer bypass / XSS filter-evasion practice lab on fly.dev (web search)",
+      "source": "Sanitize Online Demo \u2014 HTML sanitizer bypass / XSS filter-evasion practice lab on fly.dev (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pokemorty.fly.dev/",
-      "source": "Morty's Pokedex CTF — public web security capture-the-flag challenge on fly.dev (web search)",
+      "source": "Morty's Pokedex CTF \u2014 public web security capture-the-flag challenge on fly.dev (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-cross-site-scripting",
-      "source": "Kontra Application Security — browser-based XSS training lab with live exploit demo (web search)",
+      "source": "Kontra Application Security \u2014 browser-based XSS training lab with live exploit demo (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwn.guide/",
-      "source": "pwn.guide — 200+ hands-on cybersecurity tutorials (web, wireless, forensics; web search)",
+      "source": "pwn.guide \u2014 200+ hands-on cybersecurity tutorials (web, wireless, forensics; web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://cvebench.com/",
-      "source": "CVE-Bench — AI agent web vulnerability exploitation benchmark leaderboard (Show HN 2025)",
+      "source": "CVE-Bench \u2014 AI agent web vulnerability exploitation benchmark leaderboard (Show HN 2025)",
       "auth": "public_demo"
     },
     {
       "url": "https://oauth-fetch.oauthlabs.com/",
-      "source": "oauth-fetch playground — OAuth2/DPoP API security demo by oauthlabs.com (web search)",
+      "source": "oauth-fetch playground \u2014 OAuth2/DPoP API security demo by oauthlabs.com (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/server-side-request-forgery-in-capital-one",
-      "source": "Kontra Application Security — Capital One SSRF interactive training lab (correct lesson path from /free/owasp-top-10 hub)",
+      "source": "Kontra Application Security \u2014 Capital One SSRF interactive training lab (correct lesson path from /free/owasp-top-10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://sploitify.haxx.it/",
-      "source": "Sploitify — curated exploit database with practice lab links (awesome-web-hacking)",
+      "source": "Sploitify \u2014 curated exploit database with practice lab links (awesome-web-hacking)",
       "auth": "public_demo"
     },
     {
       "url": "https://lab.cahyo.web.id/",
-      "source": "Cahyod Vulnerable Lab — 13-app pentest training hub with SQLi/XSS/API/Juice Shop (web search)",
+      "source": "Cahyod Vulnerable Lab \u2014 13-app pentest training hub with SQLi/XSS/API/Juice Shop (web search)",
       "auth": "public_demo"
     },
     {
       "url": "http://portal.lab.cahyo.web.id/",
-      "source": "Cahyod Vulnerable Lab — PHP/MySQL news portal with SQLi and XSS (lab.cahyo.web.id)",
+      "source": "Cahyod Vulnerable Lab \u2014 PHP/MySQL news portal with SQLi and XSS (lab.cahyo.web.id)",
       "auth": "public_demo"
     },
     {
       "url": "http://juice-vuln.cahyo.web.id/",
-      "source": "Cahyod Vulnerable Lab — hosted OWASP Juice Shop instance (vuln.cahyo.web.id hub)",
+      "source": "Cahyod Vulnerable Lab \u2014 hosted OWASP Juice Shop instance (vuln.cahyo.web.id hub)",
       "auth": "benchmark"
     },
     {
       "url": "http://api-vuln.cahyo.web.id/",
-      "source": "Cahyod Vulnerable Lab — Python/SQLite vulnerable REST API (intermediate)",
+      "source": "Cahyod Vulnerable Lab \u2014 Python/SQLite vulnerable REST API (intermediate)",
       "auth": "public_demo"
     },
     {
       "url": "https://bountybench.github.io/",
-      "source": "Stanford BountyBench — real-world bug bounty benchmark for AI agent eval (web search)",
+      "source": "Stanford BountyBench \u2014 real-world bug bounty benchmark for AI agent eval (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://judgement-day-khaki.vercel.app/",
-      "source": "Judgement Day AI Red Team Arena — adversarial action induction/suppression scenarios (web search)",
+      "source": "Judgement Day AI Red Team Arena \u2014 adversarial action induction/suppression scenarios (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-clickjacking",
-      "source": "Kontra Application Security — browser-based clickjacking training lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based clickjacking training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-forced-browsing",
-      "source": "Kontra Application Security — browser-based forced-browsing / auth bypass lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based forced-browsing / auth bypass lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-horizontal-privilege-escalation",
-      "source": "Kontra Application Security — browser-based horizontal privilege escalation / IDOR lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based horizontal privilege escalation / IDOR lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-stored-cross-site-scripting",
-      "source": "Kontra Application Security — browser-based stored XSS training lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based stored XSS training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://thisislegal.com/",
-      "source": "ThisIsLegal — hacker wargames platform with web vulnerability challenges (awesome-vulnerable-apps)",
+      "source": "ThisIsLegal \u2014 hacker wargames platform with web vulnerability challenges (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://blueteamlabs.online/",
-      "source": "Blue Team Labs Online — gamified defender cyber range with free security challenges (web search)",
+      "source": "Blue Team Labs Online \u2014 gamified defender cyber range with free security challenges (web search)",
       "auth": "public_demo"
     },
     {
       "url": "https://ctf.komodosec.com/",
-      "source": "Komodo Consulting Application Security CTF — code-review vulnerability challenges (awesome-vulnerable-apps)",
+      "source": "Komodo Consulting Application Security CTF \u2014 code-review vulnerability challenges (awesome-vulnerable-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://server.vulnapp.id/",
-      "source": "OWASP VWAD Metasploitable2 hub — public Indonesia-hosted intentionally vulnerable training VM shell",
+      "source": "OWASP VWAD Metasploitable2 hub \u2014 public Indonesia-hosted intentionally vulnerable training VM shell",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/",
-      "source": "Kontra Application Security — developer-first interactive OWASP Top 10/API/LLM training hub (Product Hunt cited)",
+      "source": "Kontra Application Security \u2014 developer-first interactive OWASP Top 10/API/LLM training hub (Product Hunt cited)",
       "auth": "public_demo"
     },
     {
       "url": "https://cyber-ctf-website.vercel.app/",
-      "source": "CyberCTF — gamified OWASP hands-on lab platform with 200+ challenges (web search)",
+      "source": "CyberCTF \u2014 gamified OWASP hands-on lab platform with 200+ challenges (web search)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://pwnedlabs.io/explore",
-      "source": "Pwned Labs — Product Hunt cloud/hybrid/AI security lab catalog (pwnedlabs.io)",
+      "source": "Pwned Labs \u2014 Product Hunt cloud/hybrid/AI security lab catalog (pwnedlabs.io)",
       "auth": "public_demo"
     },
     {
       "url": "https://labs.pwnedlabs.io/hunt-for-secrets-in-git-repos",
-      "source": "Pwned Labs — beginner git-secrets hunting lab landing (labs.pwnedlabs.io)",
+      "source": "Pwned Labs \u2014 beginner git-secrets hunting lab landing (labs.pwnedlabs.io)",
       "auth": "public_demo"
     },
     {
       "url": "https://juice-shop.github.io/",
-      "source": "OWASP Juice Shop project site — challenge taxonomy + demo links (official GitHub Pages)",
+      "source": "OWASP Juice Shop project site \u2014 challenge taxonomy + demo links (official GitHub Pages)",
       "auth": "benchmark"
     },
     {
       "url": "https://rootxjs.github.io/blog/grpc-goat/",
-      "source": "rootxjs/grpc-goat — gRPC vulnerability lab launch post with 9-scenario oracle (Show HN 2025)",
+      "source": "rootxjs/grpc-goat \u2014 gRPC vulnerability lab launch post with 9-scenario oracle (Show HN 2025)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-production-16ec6a.up.railway.app/",
-      "source": "OpenVault Bank — deliberately vulnerable banking API Railway deploy (openvaultbank.com learn page)",
+      "source": "OpenVault Bank \u2014 deliberately vulnerable banking API Railway deploy (openvaultbank.com learn page)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://emmanuelgjr.github.io/GenAI-Security-Crosswalk/",
-      "source": "OWASP GenAI Security Crosswalk — framework mapping explorer with incident/tool recipes (GitHub Pages)",
+      "source": "OWASP GenAI Security Crosswalk \u2014 framework mapping explorer with incident/tool recipes (GitHub Pages)",
       "auth": "public_demo"
     },
     {
       "url": "https://xss.haozi.me/",
-      "source": "haozi XSS challenge — classic public reflected/stored XSS practice playground (awesome-vuln-apps)",
+      "source": "haozi XSS challenge \u2014 classic public reflected/stored XSS practice playground (awesome-vuln-apps)",
       "auth": "public_demo"
     },
     {
       "url": "https://hackme.net/",
-      "source": "Hackme community — single-user vulnerable code instances for XSS/SQLi practice (Acunetix cited)",
+      "source": "Hackme community \u2014 single-user vulnerable code instances for XSS/SQLi practice (Acunetix cited)",
       "auth": "public_demo"
     },
     {
       "url": "https://nomadu27.github.io/InsAIts-public/",
-      "source": "InsAIts — open-source multi-agent AI runtime security dashboard demo (GitHub Pages)",
+      "source": "InsAIts \u2014 open-source multi-agent AI runtime security dashboard demo (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://pwning.owasp-juice.shop/",
-      "source": "Official Pwning OWASP Juice Shop companion — live challenge tutorials linked to demo.owasp-juice.shop",
+      "source": "Official Pwning OWASP Juice Shop companion \u2014 live challenge tutorials linked to demo.owasp-juice.shop",
       "auth": "benchmark"
     },
     {
       "url": "https://juice-shop.github.io/tab_learning.html",
-      "source": "OWASP Juice Shop learning tab — challenge oracle with tutorial links to public demo instance",
+      "source": "OWASP Juice Shop learning tab \u2014 challenge oracle with tutorial links to public demo instance",
       "auth": "benchmark"
     },
     {
       "url": "https://johniwasz.github.io/rce-serialization-dotnet/JuiceShop/JuiceShop.html",
-      "source": "johniwasz RCE/serialization training — Juice Shop exercise docs with public demo oracle",
+      "source": "johniwasz RCE/serialization training \u2014 Juice Shop exercise docs with public demo oracle",
       "auth": "public_demo"
     },
     {
       "url": "https://taoq-ai.github.io/ziran/",
-      "source": "ZIRAN — AI agent security testing framework docs with vulnerable example agents (taoq-ai/ziran)",
+      "source": "ZIRAN \u2014 AI agent security testing framework docs with vulnerable example agents (taoq-ai/ziran)",
       "auth": "public_demo"
     },
     {
       "url": "https://double16.github.io/",
-      "source": "Patrick Double security engineering — public vuln lab writeups (ginandjuice.shop agent benchmarks)",
+      "source": "Patrick Double security engineering \u2014 public vuln lab writeups (ginandjuice.shop agent benchmarks)",
       "auth": "public_demo"
     },
     {
       "url": "https://povzayd.github.io/XSS-LABS/",
-      "source": "povzayd/XSS-LABS — reflected/stored/DOM XSS training labs (GitHub Pages)",
+      "source": "povzayd/XSS-LABS \u2014 reflected/stored/DOM XSS training labs (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://lucky-cyber3008.github.io/juice-shop-vapt/",
-      "source": "Juice Shop VAPT report — public challenge oracle with injection/XSS/BAC writeups (GitHub Pages)",
+      "source": "Juice Shop VAPT report \u2014 public challenge oracle with injection/XSS/BAC writeups (GitHub Pages)",
       "auth": "benchmark"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-vertical-privilege-escalation",
-      "source": "Kontra — interactive OWASP Top 10 vertical privilege escalation training module",
+      "source": "Kontra \u2014 interactive OWASP Top 10 vertical privilege escalation training module",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-user-enumeration",
-      "source": "Kontra — interactive OWASP Top 10 user enumeration training module",
+      "source": "Kontra \u2014 interactive OWASP Top 10 user enumeration training module",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-session-fixation",
-      "source": "Kontra — interactive OWASP Top 10 session fixation training module",
+      "source": "Kontra \u2014 interactive OWASP Top 10 session fixation training module",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-reflected-cross-site-scripting",
-      "source": "Kontra Application Security — browser-based reflected XSS training lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based reflected XSS training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-insecure-url-redirect",
-      "source": "Kontra Application Security — browser-based open-redirect training lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based open-redirect training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-cross-site-request-forgery",
-      "source": "Kontra Application Security — browser-based CSRF training lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 browser-based CSRF training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://application.security/free-application-security-training/owasp-top-10-leftover-debug-code",
-      "source": "Kontra Application Security — leftover debug code / information disclosure lab (OWASP Top 10 hub)",
+      "source": "Kontra Application Security \u2014 leftover debug code / information disclosure lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://www.hacksplaining.com/lessons/xss-dom/start",
-      "source": "Hacksplaining — interactive DOM-based XSS secure-coding lesson with live exploit demo",
+      "source": "Hacksplaining \u2014 interactive DOM-based XSS secure-coding lesson with live exploit demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/click-jacking/start",
+      "source": "Hacksplaining \u2014 interactive clickjacking secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/mass-assignment/start",
+      "source": "Hacksplaining \u2014 interactive mass-assignment secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/ai-prompt-injection/start",
+      "source": "Hacksplaining \u2014 interactive AI prompt-injection secure-coding lesson (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/css-injection/start",
+      "source": "Hacksplaining \u2014 interactive CSS-injection secure-coding lesson with token-exfil demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-dom-cross-site-scripting",
+      "source": "Kontra Application Security \u2014 browser-based DOM XSS training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
     }
-  ],
-  "updated_at": "2026-07-13T08:05:00.000Z"
+  ]
 }
