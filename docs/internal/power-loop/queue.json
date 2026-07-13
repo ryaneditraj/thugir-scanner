@@ -2562,7 +2562,32 @@
       "url": "https://www.hacksplaining.com/lessons/privilege-escalation/start",
       "source": "Hacksplaining \u2014 privilege-escalation / broken-access-control lesson (lessons catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/remote-code-execution/start",
+      "source": "Hacksplaining \u2014 interactive remote-code-execution secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/user-enumeration/start",
+      "source": "Hacksplaining \u2014 interactive user-enumeration / auth oracle lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/regex-injection/start",
+      "source": "Hacksplaining \u2014 interactive regex-injection / ReDoS lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/lax-security-settings/start",
+      "source": "Hacksplaining \u2014 lax-security-settings / misconfiguration lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/weak-session/start",
+      "source": "Hacksplaining \u2014 weak-session-IDs / session-management lesson (lessons catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T11:50:00.000Z"
+  "updated_at": "2026-07-13T12:50:00.000Z"
 }
