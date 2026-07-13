@@ -5514,6 +5514,18 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
     re: /Horizontal Privilege Escalation \| Kontra|owasp-top-10-horizontal-privilege-escalation/i
   },
   {
+    label: "Vertical privilege escalation lab title",
+    re: /Vertical Privilege Escalation \| Kontra|owasp-top-10-vertical-privilege-escalation/i
+  },
+  {
+    label: "Session fixation training lab title",
+    re: /Session Fixation \| Kontra|owasp-top-10-session-fixation/i
+  },
+  {
+    label: "User enumeration training lab title",
+    re: /User Enumeration \| Kontra|owasp-top-10-user-enumeration/i
+  },
+  {
     label: "Stored XSS training lab title",
     re: /Stored Cross Site Scripting \| Kontra|owasp-top-10-stored-cross-site-scripting/i
   },
@@ -10407,6 +10419,98 @@ const clientSideYogsecXssLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- povzayd XSS LABS (povzayd.github.io/XSS-LABS — reflected/stored/DOM browser labs) -
+const CLIENT_POVZAYD_XSS_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS LABS training platform welcome",
+    re: /Welcome to XSS\s*LABS[\s\S]{0,80}real.?world XSS vulnerabilities/i
+  },
+  {
+    label: "Hands-on XSS payload simulation",
+    re: /Hands.?on challenges, payload execution simulation|payload execution simulation/i
+  },
+  {
+    label: "DOM-based XSS training roadmap",
+    re: /DOM.?based XSS|CSP bypasses|JS filter evasion/i
+  },
+  {
+    label: "povzayd XSS-LABS GitHub hub",
+    re: /povzayd\.github\.io\/XSS-LABS|XSS-LABS\/LABS\/lab\d+\.html/i
+  },
+  {
+    label: "XSS Training Ground lab modules",
+    re: /XSS Training Ground|Reflected Input|DOM-based Welcome/i
+  },
+  {
+    label: "Reflected/stored XSS lab sinks",
+    re: /document\.write\(search\)|innerHTML = "Welcome, " \+ hash|div\.innerHTML = comment/i
+  }
+];
+
+const clientSidePovzaydXssLabsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_POVZAYD_XSS_LABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/povzayd|XSS\s*LABS/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "povzayd XSS LABS publishes browser-side reflected, stored, and DOM XSS training exercises on GitHub Pages"
+    }
+  };
+};
+
+// --- Juice Shop VAPT write-up hub (lucky-cyber3008.github.io/juice-shop-vapt) ---------
+const CLIENT_JUICE_SHOP_VAPT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Juice Shop VAPT report title",
+    re: /Vulnerability Assessment\s*&\s*Penetration Testing \(VAPT\)|Juice Shop VAPT Report/i
+  },
+  {
+    label: "Intentionally vulnerable Juice Shop",
+    re: /intentionally vulnerable web applications?|popular intentionally vulnerable/i
+  },
+  {
+    label: "Findings folder exploit taxonomy",
+    re: /Findings\/[\s\S]{0,60}injection\/|admin-login-sqli\.md|union-sqli\.md/i
+  },
+  {
+    label: "VAPT vulnerability categories table",
+    re: /Vulnerabilities Covered \(with Categories\)|Admin Login via SQLi|DOM XSS, Reflected XSS/i
+  },
+  {
+    label: "Burp Suite exploitation write-ups",
+    re: /Burp Suite steps|exploitation techniques|Proof-of-Concept/i
+  },
+  {
+    label: "Broken access control lab folder",
+    re: /broken-access-control\/|View-Another-User-Basket|Forged-Feedback/i
+  }
+];
+
+const clientSideJuiceShopVaptEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JUICE_SHOP_VAPT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/juice-shop-vapt|lucky-cyber3008/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Juice Shop VAPT report documents SQLi, XSS, IDOR, and sensitive-data exploitation walkthroughs with Burp Suite PoCs"
+    }
+  };
+};
+
 // --- Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game) -----
 const CLIENT_HACKER101_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -12607,6 +12711,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwningJuiceShopCompanionEvidence,
   clientSideZiranAgentSecurityEvidence,
   clientSideDotnetSerializationLabEvidence,
+  clientSidePovzaydXssLabsEvidence,
+  clientSideJuiceShopVaptEvidence,
   clientSideRogueStudioEvidence,
   clientSideOverthewireLeviathanEvidence
 };

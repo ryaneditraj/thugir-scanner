@@ -6534,5 +6534,57 @@ export const genericPatterns: Pattern[] = [
       "We host .NET serialization training with Juice Shop CSP/SQLi/mass-assignment exercises. Show how to block unsafe deserialization and mass assignment in production APIs.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-povzayd-xss-labs-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS LABS interactive training platform disclosed",
+    description:
+      "povzayd XSS LABS publishes browser-side reflected, stored, and DOM XSS exercises with payload simulation for pentester and learner practice.",
+    impactOneline:
+      "Public povzayd XSS LABS document client-side XSS simulation modules attackers use to practice filter bypasses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePovzaydXssLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd XSS LABS are intentional training — isolate lab pages from production applications.",
+      steps: [
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Encode and sanitize all user-controlled output in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "We host povzayd-style XSS training labs. Show how to isolate reflected and DOM XSS exercises from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-juice-shop-vapt-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop VAPT exploitation write-up hub disclosed",
+    description:
+      "lucky-cyber3008 juice-shop-vapt documents Juice Shop SQLi, XSS, IDOR, and sensitive-data exploitation walkthroughs with Burp Suite PoC screenshots.",
+    impactOneline:
+      "Public Juice Shop VAPT reports expose step-by-step exploit oracles attackers use to calibrate scanners against Juice Shop benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJuiceShopVaptEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop VAPT write-ups are intentional training — host demo instances in isolated lab networks only.",
+      steps: [
+        "Run Juice Shop demo instances only on dedicated lab infrastructure.",
+        "Do not mirror VAPT exploit payloads in production codebases.",
+        "Use write-up taxonomy for scanner tuning, not as production security baselines."
+      ]
+    },
+    fixPrompt:
+      "We publish Juice Shop VAPT exploitation write-ups. Show how to keep demo instances isolated from production apps.",
+    version: 1,
+    enabled: true
   }
 ];
