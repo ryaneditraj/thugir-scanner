@@ -2291,6 +2291,18 @@
       "slug": "client-side-kontra-application-security-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Vertical Privilege Escalation | Kontra + Session Fixation | Kontra + User Enumeration | Kontra EXERCISE_ID seeds; extractKontraTrainingSeeds extended; application.security hub discovers auth training modules; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-xss-redirect-csrf-debug-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Reflected XSS | Kontra EXERCISE_ID owasp-top-10-reflected-cross-site-scripting + Insecure URL Redirect + Cross Site Request Forgery + Leftover Debug Code lesson titles; extractKontraTrainingSeeds extended; reflected-xss/insecure-url-redirect/csrf/leftover-debug lessons 0→5 findings each; benchmark juice-shop.herokuapp.com 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-dom-xss-lesson",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DOM-based XSS — Secure Coding Lesson | Hacksplaining + URI fragments inject malicious JavaScript meta description; extractHacksplainingLessonSeeds /lessons/xss-dom/start; hacksplaining.com/lessons/xss-dom/start findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4188,6 +4200,16 @@
       "source": "discovery:application.security",
       "slug": "client-side-kontra-auth-training-seeds",
       "shipped_at": "2026-07-13T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-xss-redirect-csrf-debug-lessons",
+      "shipped_at": "2026-07-13T09:26:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-dom-xss-lesson",
+      "shipped_at": "2026-07-13T09:26:00.000Z"
     }
   ]
 }
