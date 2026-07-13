@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T19:06:38.684Z",
+  "updated_at": "2026-07-13T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 552,
   "discovery_findings": 3762,
-  "improvements_shipped": 398,
-  "last_run": "2026-07-13T19:06:38.684Z",
+  "improvements_shipped": 401,
+  "last_run": "2026-07-13T19:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "19:00",
     "benchmark": {
@@ -62,8 +62,8 @@
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
         "https://ctflearn.com/ (connection timeout)"
       ],
-      "focus": "Queue batch: Zero Bank WebInspect, OverTheWire Natas, Hacking-Lab, picoCTF, PromptMap LLM lab",
-      "improvements_shipped_this_run": 0,
+      "focus": "Engine improvements: OpenVault /learn API oracle, BugBountyHunter /training taxonomy, queue fixes; parallel queue batch: Zero Bank WebInspect, Natas, Hacking-Lab, picoCTF, PromptMap",
+      "improvements_shipped_this_run": 3,
       "urls_added_list": [
         "web.ctflearn.com/web7",
         "hacksplaining.com/lessons/insecure-deserialization/start",
@@ -82,18 +82,24 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "openvaultbank.com/learn: BOLA + mass assignment + excessive data exposure learn oracle (0→4 findings)",
+      "bugbountyhunter.com/training: XSS/SQLi/SSRF vulnerability taxonomy hub (2→3 findings)",
       "zero.webappsecurity.com: reflected XSS + Fortify Zero Bank WebInspect training markers (5 findings)",
       "natas0.natas.labs.overthewire.org: OverTheWire Natas wargame + Referer guard bypass evidence (4 findings)",
       "promptmap.vercel.app: OpenAI API key exposed in client bundle (4 findings)"
     ],
     "learning_gaps": [
+      "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
       "ctflearn.com: origin timeout from cloud — use web.ctflearn.com subpaths",
-      "hacking-lab.com / picoctf.org: platform landing pages — challenge instances require account/lab start",
-      "openvaultbank.com/cheatsheet + web.ctflearn.com/web7: queued but deferred behind earlier unscanned origins"
+      "web.ctflearn.com/web5: nginx 404 — removed from queue; use web2/web4/web8 challenges",
+      "hacksplaining.com/lessons/path-traversal: 404 — canonical slug is directory-traversal",
+      "hacking-lab.com / picoctf.org: platform landing pages — challenge instances require account/lab start"
     ]
   },
   "discovery_highlights": {
+    "openvaultbank.com/learn": 4,
+    "www.bugbountyhunter.com/training": 3,
     "vwad.owasp.org/app/pixi": 4,
     "blueteamlabs.online": 4,
     "reef-mcp-registry.vercel.app": 7,

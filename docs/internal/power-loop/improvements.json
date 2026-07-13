@@ -2405,6 +2405,24 @@
       "slug": "blueteamlabs-landing-markers",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Bringing Cybersecurity To Life + defenders to practice their skills in security investigations + scenario-based labs; CLIENT_BLUETEAM_LABS_RES extended; blueteamlabs.online findings 1→4 incl client-side-blueteamlabs-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com/learn",
+      "slug": "client-side-openvault-learn-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /learn bundle BOLA + Mass Assignment + Excessive Data Exposure + owasp:API1/API6 endpoint oracles; clientSideOpenvaultLearnEvidence + extractOpenvaultBankSeeds; openvaultbank.com/learn findings 0→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com/training",
+      "slug": "bugbountyhunter-training-hub-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Free educational hacking challenges based on real bug bounty findings + Train for bug bounties with custom made challenges + /vulnerability/?type=xss|sql|ssrf taxonomy; CLIENT_BUGBOUNTYHUNTER_RES extended + /training crawl seeds; bugbountyhunter.com/training findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-directory-traversal-queue-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/path-traversal/start returns 404; canonical slug is /lessons/directory-traversal/start (Directory Traversal — Secure Coding Lesson); queue.json corrected; web.ctflearn.com/web5 removed (404) — use web2 base64 comment challenge; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4397,6 +4415,21 @@
       "source": "discovery:blueteamlabs.online",
       "slug": "blueteamlabs-landing-markers",
       "shipped_at": "2026-07-13T18:05:00.000Z"
+    },
+    {
+      "source": "discovery:openvaultbank.com/learn",
+      "slug": "client-side-openvault-learn-evidence",
+      "shipped_at": "2026-07-13T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com/training",
+      "slug": "bugbountyhunter-training-hub-markers",
+      "shipped_at": "2026-07-13T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-directory-traversal-queue-fix",
+      "shipped_at": "2026-07-13T19:10:00.000Z"
     }
   ]
 }
