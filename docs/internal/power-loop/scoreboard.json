@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "updated_at": "2026-07-13T06:10:00.000Z",
-=======
-  "updated_at": "2026-07-13T06:02:51.727Z",
->>>>>>> 6e0d594 (power-scan: benchmark juice-shop 6/6 (9 findings), +5 discovery URLs [06 UTC])
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,26 +15,15 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 1047,
   "total_findings": 4573,
-=======
-  "total_sites_scanned": 1042,
-  "total_findings": 4570,
->>>>>>> 6e0d594 (power-scan: benchmark juice-shop 6/6 (9 findings), +5 discovery URLs [06 UTC])
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 492,
-<<<<<<< HEAD
   "discovery_findings": 3346,
   "improvements_shipped": 373,
   "last_run": "2026-07-13T06:10:00.000Z",
-=======
-  "discovery_findings": 3334,
-  "improvements_shipped": 370,
-  "last_run": "2026-07-13T06:02:51.727Z",
->>>>>>> 6e0d594 (power-scan: benchmark juice-shop 6/6 (9 findings), +5 discovery URLs [06 UTC])
   "last_run_summary": {
     "hour_utc": "06:00",
     "benchmark": {
@@ -46,7 +31,7 @@
       "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "No benchmark misses — juice-shop.herokuapp.com recall stable at 6/6 (9 findings)",
+      "note": "No benchmark misses \u2014 juice-shop.herokuapp.com recall stable at 6/6 (9 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -63,15 +48,15 @@
         }
       }
     },
-    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
       "findings": 15,
       "skipped_48h": [],
       "dns_failures": [
-        "https://hackme.net/ (TLS handshake failure — community vuln-code host unreachable from cloud)",
-        "https://web-production-16ec6a.up.railway.app/ (Railway app offline — use openvaultbank.com)"
+        "https://hackme.net/ (TLS handshake failure \u2014 community vuln-code host unreachable from cloud)",
+        "https://web-production-16ec6a.up.railway.app/ (Railway app offline \u2014 use openvaultbank.com)"
       ],
       "focus": "Queued tail URLs: haozi XSS challenge, InsAIts MCP monitor, GenAI Security Crosswalk",
       "urls_scanned_list": [
@@ -82,16 +67,16 @@
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "xss.haozi.me: haozi XSS challenge SPA with alert(1) pass oracle (2→3 findings)",
-      "nomadu27.github.io/InsAIts-public: multi-agent OWASP MCP Top 10 runtime monitor (2→3 findings)",
-      "emmanuelgjr.github.io/GenAI-Security-Crosswalk: NIST/OWASP GenAI framework mapper (8→9 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) \u2014 no benchmark misses",
+      "xss.haozi.me: haozi XSS challenge SPA with alert(1) pass oracle (2\u21923 findings)",
+      "nomadu27.github.io/InsAIts-public: multi-agent OWASP MCP Top 10 runtime monitor (2\u21923 findings)",
+      "emmanuelgjr.github.io/GenAI-Security-Crosswalk: NIST/OWASP GenAI framework mapper (8\u21929 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hackme.net: TLS handshake failure from cloud scanner — community host may block automated UAs",
-      "web-production-16ec6a.up.railway.app: Railway deploy offline — openvaultbank.com is live alternative",
-      "thisislegal.com / ctf.komodosec.com: minimal HTML from curl — scanner sees headers only"
+      "hackme.net: TLS handshake failure from cloud scanner \u2014 community host may block automated UAs",
+      "web-production-16ec6a.up.railway.app: Railway deploy offline \u2014 openvaultbank.com is live alternative",
+      "thisislegal.com / ctf.komodosec.com: minimal HTML from curl \u2014 scanner sees headers only"
     ]
   },
   "discovery_highlights": {
