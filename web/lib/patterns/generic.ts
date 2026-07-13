@@ -6456,5 +6456,83 @@ export const genericPatterns: Pattern[] = [
       "We host a GenAI Security Crosswalk mapping NIST and OWASP LLM controls. Show how to authenticate incident-recipe endpoints and scrub demo secrets.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-pwning-juice-shop-companion-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwning OWASP Juice Shop companion guide disclosed",
+    description:
+      "pwning.owasp-juice.shop documents official Juice Shop challenge-hunting walkthroughs spanning XSS, SQLi, IDOR, auth bypass, and insecure deserialization oracles.",
+    impactOneline:
+      "Public Pwning Juice Shop companion chapters expose step-by-step exploit oracles attackers use to calibrate scanners against Juice Shop benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwningJuiceShopCompanionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pwning Juice Shop is intentional training — host companion docs separately from production apps.",
+      steps: [
+        "Run Juice Shop demo instances only on isolated lab infrastructure.",
+        "Do not mirror companion-guide exploit payloads in production codebases.",
+        "Use challenge solutions for scanner tuning, not as production security baselines."
+      ]
+    },
+    fixPrompt:
+      "We publish Pwning OWASP Juice Shop companion walkthroughs. Show how to keep demo instances isolated from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ziran-agent-security-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "ZIRAN AI agent security testing framework disclosed",
+    description:
+      "ZIRAN docs describe knowledge-graph tool-chain analysis, multi-phase campaigns, and autonomous pentesting for AI agent security evaluation.",
+    impactOneline:
+      "Public ZIRAN documentation exposes agentic attack-surface analysis patterns applicable to MCP and multi-tool AI deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideZiranAgentSecurityEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "ZIRAN is a security-testing framework — authenticate agent endpoints and validate tool chains in production.",
+      steps: [
+        "Gate MCP and agent tool endpoints behind authentication.",
+        "Audit tool-chain compositions for privilege-escalation paths.",
+        "Run ZIRAN-style red-team exercises only in isolated agent sandboxes."
+      ]
+    },
+    fixPrompt:
+      "We document ZIRAN-style AI agent security testing with tool-chain analysis. Show how to authenticate MCP endpoints and audit dangerous tool compositions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dotnet-serialization-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: ".NET serialization training lab with Juice Shop exercises disclosed",
+    description:
+      "johniwasz rce-serialization-dotnet documents Juice Shop CSP bypass, SQL injection, password cracking, and mass-assignment pentest walkthroughs.",
+    impactOneline:
+      "Public .NET serialization lab pages teach Juice Shop exploit chains including CSP weaknesses and API mass-assignment oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDotnetSerializationLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialization labs are intentional training — never expose unsafe deserialization endpoints in production.",
+      steps: [
+        "Disable unsafe .NET deserialization gadgets in production APIs.",
+        "Validate JSON mass-assignment with explicit allowlists.",
+        "Run Juice Shop exercises only against isolated demo instances."
+      ]
+    },
+    fixPrompt:
+      "We host .NET serialization training with Juice Shop CSP/SQLi/mass-assignment exercises. Show how to block unsafe deserialization and mass assignment in production APIs.",
+    version: 1,
+    enabled: true
   }
 ];

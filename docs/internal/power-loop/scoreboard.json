@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 497,
   "discovery_findings": 3411,
-  "improvements_shipped": 373,
-  "last_run": "2026-07-13T07:22:15.000Z",
+  "improvements_shipped": 376,
+  "last_run": "2026-07-13T07:26:00.000Z",
   "last_run_summary": {
     "hour_utc": "07:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 9,
+      "primary_findings": 10,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "Pass1 degraded (7 findings, sqli gap) — wake retry recovered 6/6 (9 findings, pages_crawled=6)",
+      "note": "No benchmark misses — juice-shop.herokuapp.com recall 6/6 (10 findings; pass1 sqli gap recovered on retry)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -63,21 +63,26 @@
         "https://application.security/.../vertical-privilege-escalation (5)",
         "https://application.security/.../session-fixation (5)"
       ],
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) after sqli gap on pass1",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "pwning.owasp-juice.shop: Pwning OWASP Juice Shop companion challenge-hunting oracle (1→5 findings)",
+      "taoq-ai.github.io/ziran: ZIRAN AI agent tool-chain security testing docs (4→5 findings)",
+      "johniwasz.github.io/rce-serialization-dotnet: Juice Shop CSP/SQLi/mass-assignment lab (3→4 findings)",
       "povzayd.github.io/XSS-LABS: reflected/stored/DOM XSS lab markers (2 findings)",
-      "lucky-cyber3008.github.io/juice-shop-vapt: Juice Shop VAPT challenge oracle docs (3 findings)",
-      "application.security Kontra modules: vertical-privilege-escalation, user-enumeration, session-fixation (5 each)"
+      "lucky-cyber3008.github.io/juice-shop-vapt: Juice Shop VAPT challenge oracle docs (3 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: pass1 cold-start missed sqli category (7 findings) — retry oracle stable",
-      "results.json had merge-conflict markers blocking saveResults — resolved this run"
+      "hackme.net: TLS handshake failure from cloud scanner — community host may block automated UAs",
+      "double16.github.io: offensive-security blog — low vuln-marker density without dedicated lab slug"
     ]
   },
   "discovery_highlights": {
+    "pwning.owasp-juice.shop": 5,
+    "taoq-ai.github.io/ziran": 5,
+    "johniwasz.github.io/rce-serialization-dotnet": 4,
     "xss.haozi.me": 3,
     "nomadu27.github.io/InsAIts-public": 3,
     "emmanuelgjr.github.io/GenAI-Security-Crosswalk": 9,
