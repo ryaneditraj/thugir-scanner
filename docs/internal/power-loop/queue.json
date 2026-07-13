@@ -2512,6 +2512,32 @@
       "url": "https://application.security/free-application-security-training/owasp-top-10-dom-cross-site-scripting",
       "source": "Kontra Application Security \u2014 browser-based DOM XSS training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/session-fixation/start",
+      "source": "Hacksplaining \u2014 interactive session-fixation secure-coding lesson with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/file-upload/start",
+      "source": "Hacksplaining \u2014 interactive file-upload vulnerability secure-coding lesson (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/prototype-pollution/start",
+      "source": "Hacksplaining \u2014 interactive prototype-pollution secure-coding lesson (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/cross-origin-resource-sharing/start",
+      "source": "Hacksplaining \u2014 interactive CORS misconfiguration secure-coding lesson (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/password-mismanagement/start",
+      "source": "Hacksplaining \u2014 interactive broken-authentication / password-mismanagement lesson (web search)",
+      "auth": "public_demo"
     }
-  ]
+  ],
+  "updated_at": "2026-07-13T10:12:00.000Z"
 }
