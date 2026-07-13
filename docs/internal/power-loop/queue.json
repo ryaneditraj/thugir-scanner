@@ -2262,7 +2262,32 @@
       "url": "https://application.security/free-application-security-training/owasp-top-10-cross-site-scripting",
       "source": "Kontra Application Security — browser-based XSS training lab with live exploit demo (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pwn.guide/",
+      "source": "pwn.guide — 200+ hands-on cybersecurity tutorials (web, wireless, forensics; web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cvebench.com/",
+      "source": "CVE-Bench — AI agent web vulnerability exploitation benchmark leaderboard (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://oauth-fetch.oauthlabs.com/",
+      "source": "oauth-fetch playground — OAuth2/DPoP API security demo by oauthlabs.com (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-server-side-request-forgery",
+      "source": "Kontra Application Security — browser-based SSRF training lab with live exploit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sploitify.haxx.it/",
+      "source": "Sploitify — curated exploit database with practice lab links (awesome-web-hacking)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-12T23:08:00.000Z"
+  "updated_at": "2026-07-13T00:05:00.000Z"
 }
