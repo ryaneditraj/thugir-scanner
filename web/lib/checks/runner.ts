@@ -768,6 +768,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwningJuiceShopCompanionEvidence",
   "clientSideZiranAgentSecurityEvidence",
   "clientSideDotnetSerializationLabEvidence",
+  "clientSidePovzaydXssLabsEvidence",
+  "clientSideJuiceShopVaptEvidence",
   "clientSideRogueStudioEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -1089,6 +1091,9 @@ function extractKontraTrainingSeeds(html: string, origin: string): string[] {
     "/free-application-security-training/owasp-top-10-clickjacking",
     "/free-application-security-training/owasp-top-10-forced-browsing",
     "/free-application-security-training/owasp-top-10-horizontal-privilege-escalation",
+    "/free-application-security-training/owasp-top-10-vertical-privilege-escalation",
+    "/free-application-security-training/owasp-top-10-session-fixation",
+    "/free-application-security-training/owasp-top-10-user-enumeration",
     "/free-application-security-training/owasp-top-10-stored-cross-site-scripting",
     "/free"
   ]) {
@@ -2242,6 +2247,23 @@ function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
   for (const id of ["1", "2", "3", "4", "5", "6"]) {
     try {
       const u = new URL(`labs/lab${id}.html`, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** povzayd XSS LABS (povzayd.github.io/XSS-LABS — reflected/stored/DOM browser labs). */
+function extractPovzaydXssLabsSeeds(html: string, pageUrl: string): string[] {
+  if (!/povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["LABS/lab0.html", "LABS/lab1.html", "LABS/lab2.html"]) {
+    try {
+      const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
@@ -3828,6 +3850,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const burpBountyLabSeeds = extractBurpBountyLabSeeds(home.body, home.finalUrl);
   const wafWorkshopSeeds = extractWafWorkshopMkdocsSeeds(home.body, home.finalUrl);
   const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
+  const povzaydXssLabsSeeds = extractPovzaydXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const fvbGitbookSeeds = extractFvbGitbookSeeds(home.body, home.finalUrl);
@@ -3951,6 +3974,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...burpBountyLabSeeds,
       ...wafWorkshopSeeds,
       ...yogsecXssLabsSeeds,
+      ...povzaydXssLabsSeeds,
       ...hacker101CtfSeeds,
       ...owaspBricksSeeds,
       ...fvbGitbookSeeds,
