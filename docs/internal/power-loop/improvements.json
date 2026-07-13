@@ -2147,6 +2147,24 @@
       "slug": "client-side-pokemorty-ctf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Morty's Pokedex CTF ASCII title + nickname cookie + binary Rick/Morty challenge text; pokemorty.fly.dev findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cvebench.com",
+      "slug": "client-side-cvebench-benchmark-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CVE-Bench Leaderboard + autonomously exploit web vulnerabilities + remote code execution, SQL injection, and privilege escalation + zero-day/one-day filters; cvebench.com findings 2→3; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sploitify.haxx.it",
+      "slug": "client-side-sploitify-exploit-database-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: interactive cheat sheet + curated list of public server-side exploits + GTFOBins/LOLBAS/WADComs + RCE/SQLi/SSRF vuln_name filters; sploitify.haxx.it findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwn.guide",
+      "slug": "client-side-pwn-guide-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwn.guide + 200+ hands-on cybersecurity tutorials + web hacking/wireless tutorial markers; pwn.guide findings 6→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3919,6 +3937,21 @@
       "source": "discovery:pokemorty.fly.dev",
       "slug": "client-side-pokemorty-ctf-evidence",
       "shipped_at": "2026-07-13T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:cvebench.com",
+      "slug": "client-side-cvebench-benchmark-evidence",
+      "shipped_at": "2026-07-13T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:sploitify.haxx.it",
+      "slug": "client-side-sploitify-exploit-database-evidence",
+      "shipped_at": "2026-07-13T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwn.guide",
+      "slug": "client-side-pwn-guide-evidence",
+      "shipped_at": "2026-07-13T01:10:00.000Z"
     }
   ]
 }

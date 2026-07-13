@@ -2279,8 +2279,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://application.security/free-application-security-training/owasp-top-10-server-side-request-forgery",
-      "source": "Kontra Application Security — browser-based SSRF training lab with live exploit demo (web search)",
+      "url": "https://application.security/free-application-security-training/server-side-request-forgery-in-capital-one",
+      "source": "Kontra Application Security — Capital One SSRF interactive training lab (correct lesson path from /free/owasp-top-10 hub)",
       "auth": "public_demo"
     },
     {

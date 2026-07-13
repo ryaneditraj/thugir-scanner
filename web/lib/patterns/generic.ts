@@ -3781,6 +3781,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-cvebench-benchmark-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "CVE-Bench AI agent vulnerability benchmark disclosed",
+    description:
+      "CVE-Bench on cvebench.com evaluates AI agents on autonomously exploiting critical CVEs spanning remote code execution, SQL injection, and privilege escalation in zero-day and one-day modes.",
+    impactOneline:
+      "Public CVE-Bench leaderboards document high-stakes web exploit oracles attackers use to benchmark autonomous exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCvebenchBenchmarkEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CVE-Bench is intentional research infrastructure — isolate benchmark targets from production networks.",
+      steps: [
+        "Run CVE-Bench challenge instances only on dedicated lab infrastructure.",
+        "Do not expose production apps as CVE-Bench evaluation targets.",
+        "Track benchmark CVE categories to prioritize patching in production systems."
+      ]
+    },
+    fixPrompt:
+      "We host CVE-Bench-style AI agent exploitation benchmarks. Show how to isolate evaluation targets from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-sploitify-exploit-database-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Sploitify public exploit cheat sheet disclosed",
+    description:
+      "Sploitify on splotify.haxx.it is an interactive cheat sheet of curated public server-side exploits with RCE, SQLi, SSRF, and XSS filters inspired by GTFOBins and LOLBAS.",
+    impactOneline:
+      "Public exploit databases accelerate attacker reconnaissance when vulnerable products are found in scope.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSploitifyExploitDatabaseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sploitify is a public reference — reduce attack surface by patching known CVEs and minimizing exposed services.",
+      steps: [
+        "Inventory internet-facing services and map them to known exploit entries.",
+        "Patch or isolate software versions referenced in public exploit databases.",
+        "Monitor perimeter services for exploit attempts matching published PoCs."
+      ]
+    },
+    fixPrompt:
+      "Our perimeter exposes software versions cataloged on Sploitify. Show how to prioritize patching and service hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pwn-guide-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "pwn.guide hands-on cybersecurity tutorial hub disclosed",
+    description:
+      "pwn.guide hosts 200+ hands-on cybersecurity tutorials covering web hacking, wireless security, and forensics practice paths.",
+    impactOneline:
+      "Public offensive-security tutorial hubs document attack techniques attackers study before targeting production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnGuideEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Tutorial hubs are public references — harden production apps against techniques documented in training material.",
+      steps: [
+        "Map tutorial attack patterns to your application threat model.",
+        "Patch and monitor for vulnerabilities commonly taught in public hacking guides.",
+        "Run internal purple-team drills using public tutorial scenarios on staging only."
+      ]
+    },
+    fixPrompt:
+      "We reference pwn.guide-style offensive security tutorials internally. Show how to translate tutorial attack paths into production hardening checks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctfchallenge-evidence",
     platform: "generic",
     category: "Broken access control",
