@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T20:30:58.282Z",
+  "updated_at": "2026-07-13T21:26:09.989Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,28 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 1159,
-  "total_findings": 5142,
+  "total_sites_scanned": 1164,
+  "total_findings": 5168,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 557,
-  "discovery_findings": 3775,
-  "improvements_shipped": 404,
-  "last_run": "2026-07-13T20:29:54.128Z",
+  "discovery_urls_added": 562,
+  "discovery_findings": 3793,
+  "improvements_shipped": 401,
+  "last_run": "2026-07-13T21:26:09.989Z",
   "last_run_summary": {
-    "hour_utc": "20:00",
+    "hour_utc": "21:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "findings": 8,
       "recall": "6/6",
       "gap": [],
       "pass1_miss": [
-        "sqli",
-        "idor",
         "sensitive_data"
       ],
-      "note": "Primary Heroku cold-start 3 findings (gap sqli,idor,sensitive_data pages_crawled=1); retry 4 findings; final wake retry 8 findings 6/6 (pages_crawled=6 probes=282)",
+      "note": "Primary Heroku cold-start 5 findings (gap sensitive_data pages_crawled=1); retry 4 findings; final wake retry 8 findings 6/6 (pages_crawled=6 probes=285)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,43 +54,44 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 13,
-      "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "VulnSite Next.js OSS deploy + RedTiger SQLi wargame levels 3–6 (hub extension beyond level1–2)",
-      "improvements_shipped_this_run": 3,
+      "urls_scanned": 4,
+      "findings": 18,
+      "skipped_48h": [
+        "http://redtiger.labs.overthewire.org/level7.php",
+        "http://redtiger.labs.overthewire.org/level10.php"
+      ],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+      ],
+      "focus": "OpenVault Bank /api/v1 API oracles + Maz4l Hacks reflected XSS write-up + Zero Bank WebInspect",
+      "improvements_shipped_this_run": 0,
       "urls_added_list": [
-        "vuln-expose.vercel.app",
-        "redtiger.labs.overthewire.org/level3.php",
-        "redtiger.labs.overthewire.org/level4.php",
-        "redtiger.labs.overthewire.org/level5.php",
-        "redtiger.labs.overthewire.org/level6.php"
+        "openvaultbank.com/api/v1/users",
+        "openvaultbank.com/api/v1/admin",
+        "maz4lhacks.vercel.app/posts/reflected-xss/",
+        "redtiger.labs.overthewire.org/level7.php",
+        "redtiger.labs.overthewire.org/level10.php"
       ],
       "urls_scanned_list": [
-        "vuln-expose.vercel.app (5)",
-        "redtiger.labs.overthewire.org/level3.php (2)",
-        "redtiger.labs.overthewire.org/level4.php (2)",
-        "redtiger.labs.overthewire.org/level5.php (2)",
-        "redtiger.labs.overthewire.org/level6.php (2)"
+        "openvaultbank.com/api/v1/users (5)",
+        "openvaultbank.com/api/v1/admin (5)",
+        "maz4lhacks.vercel.app/posts/reflected-xss/ (3)",
+        "zero.webappsecurity.com (5)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku wake retries (pass1 gap sqli,idor,sensitive_data; final 8 findings)",
-      "vuln-expose.vercel.app: SQLi error disclosure + client-side SQL concat + XSS sinks + CORS (5 findings)",
-      "redtiger level3–6: RedTiger hackit SQLi markers on each level page (2 findings each)",
-      "hacksplaining ssl-stripping/xss-reflected: URL-path oracle fixes sparse CDN lesson pages (1→4)",
-      "openvaultbank.com/cheatsheet: APIsec/Burp/Postman/ZAP tooling cheatsheet evidence (4→5)",
-      "cyberdesserts.github.io/cookiejar-lab: session hijack training homepage markers (3→4)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku wake retries (pass1 gap sensitive_data; final 8 findings)",
+      "openvaultbank.com/api/v1/users: OWASP API Top 10 lab + cheatsheet markers in client bundle (5 findings)",
+      "openvaultbank.com/api/v1/admin: same API oracle surface on admin route (5 findings)",
+      "maz4lhacks.vercel.app/posts/reflected-xss/: reflected XSS write-up + innerHTML sink evidence (3 findings)",
+      "zero.webappsecurity.com: reflected XSS query param + Fortify Zero Bank WebInspect markers (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: cold-start dyno serves minimal pages (pages_crawled=1) — wake retries required for full 6/6 recall",
-      "redtiger level3–6: shallow per-level pages — hub crawl reuses level1–2 markers; level-specific SQLi forms need deeper POST probes",
-      "inj3ctlab.bugbountylabs.com: DNS NXDOMAIN — lab offline",
-      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404",
-      "acuart.phpnet.us: DNS dead — use angular.testsparker.com or php.testsparker.com",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner"
+      "juice-shop.herokuapp.com: cold-start dyno serves pages_crawled=1 on pass1 — sensitive_data missed until wake retries",
+      "redtiger level7/level10: origin-level 48h skip after level3–6 scan — level-specific POST probes deferred",
+      "openvaultbank.com/api/v1/*: SPA shell on API paths — need live /api/v1 JSON probes not just client-bundle oracles",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
@@ -328,6 +327,9 @@
     "redtiger.labs.overthewire.org/level3.php": 2,
     "redtiger.labs.overthewire.org/level4.php": 2,
     "redtiger.labs.overthewire.org/level5.php": 2,
-    "redtiger.labs.overthewire.org/level6.php": 2
+    "redtiger.labs.overthewire.org/level6.php": 2,
+    "openvaultbank.com/api/v1/users": 5,
+    "openvaultbank.com/api/v1/admin": 5,
+    "maz4lhacks.vercel.app/posts/reflected-xss": 3
   }
 }
