@@ -5469,6 +5469,124 @@ const clientSideBlueTeamLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OWASP Juice Shop project site (juice-shop.github.io) -----------------------------
+const CLIENT_JUICE_SHOP_PROJECT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP Juice Shop flagship project",
+    re: /OWASP Juice Shop|juice-shop\.github\.io/i
+  },
+  {
+    label: "Modern insecure web application tagline",
+    re: /most modern and sophisticated insecure web application/i
+  },
+  {
+    label: "Security training and CTF use cases",
+    re: /security trainings, awareness demos and CTFs|security trainings, awareness demos, and CTFs/i
+  },
+  {
+    label: "Challenge categories oracle",
+    re: /Challenge Categories|vulnerabilities found in the OWASP Juice Shop are categorized/i
+  },
+  {
+    label: "OWASP Top Ten challenge mapping",
+    re: /OWASP Top Ten|Score Board|Reflected XSS|Login Admin/i
+  }
+];
+
+const clientSideJuiceShopProjectEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JUICE_SHOP_PROJECT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OWASP Juice Shop|juice-shop\.github/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP Juice Shop project site documents challenge taxonomy spanning XSS, SQLi, IDOR, and auth bypass oracles"
+    }
+  };
+};
+
+// --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
+const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Pwned Labs cloud security lab catalog",
+    re: /Pwned Labs[\s\S]{0,60}cloud, hybrid or AI security lab|Find your cloud, hybrid or AI security lab/i
+  },
+  {
+    label: "Hands-on attacker tradecraft labs",
+    re: /Hands-on cloud and cyber security labs|Practice real attacker tradecraft/i
+  },
+  {
+    label: "Multi-cloud lab coverage",
+    re: /AWS, Azure, and GCP|cloud, hybrid and AI-enabled environments/i
+  },
+  {
+    label: "Agentic-assisted cybersecurity workflows",
+    re: /agentic-assisted cybersecurity workflows|evaluate agentic-assisted cybersecurity/i
+  }
+];
+
+const clientSidePwnedlabsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PWNEDLABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pwned Labs|pwnedlabs\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pwned Labs publishes hands-on cloud, hybrid, and AI security labs for attacker tradecraft practice"
+    }
+  };
+};
+
+// --- Pwned Labs git-secrets hunting lab (labs.pwnedlabs.io) -------------------------
+const CLIENT_PWNEDLABS_GIT_SECRETS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hunt for Secrets in Git Repos lab title",
+    re: /Hunt for Secrets in Git Repos/i
+  },
+  {
+    label: "Red and Blue git-secrets training",
+    re: /Great for Red and Blue! Find secrets and learn how to prevent committing them/i
+  },
+  {
+    label: "Leaked credentials in git repositories",
+    re: /leaked credentials in git repositories|Leaked credentials in git repositories/i
+  },
+  {
+    label: "Trufflehog and git-secrets tooling",
+    re: /git-secrets and Trufflehog|Hunting for secrets using git-secrets/i
+  }
+];
+
+const clientSidePwnedlabsGitSecretsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PWNEDLABS_GIT_SECRETS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pwned Labs|pwnedlabs\.io|git repos/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pwned Labs git-secrets lab documents Trufflehog/git-secrets hunting for leaked credentials in company repositories"
+    }
+  };
+};
+
 // --- RedTiger PHP/SQL hackit (redtiger.labs.overthewire.org) ------------------------
 const CLIENT_REDTIGER_HACKIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -12066,6 +12184,9 @@ export const RULES: Record<string, Rule> = {
   clientSideSecureflagEvidence,
   clientSideImmersiveLabsEvidence,
   clientSideBlueTeamLabsEvidence,
+  clientSideJuiceShopProjectEvidence,
+  clientSidePwnedlabsEvidence,
+  clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
