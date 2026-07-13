@@ -2219,6 +2219,24 @@
       "slug": "phpmyadmin-exposed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /phpMyAdmin/ returns Welcome to phpMyAdmin + loginform; hub crawl + phpMyAdminExposed probe; server.vulnapp.id/phpMyAdmin findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.github.io",
+      "slug": "client-side-juice-shop-project-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Juice Shop + most modern and sophisticated insecure web application + Challenge Categories table (Score Board, Reflected XSS, Login Admin); extractJuiceShopProjectSeeds crawls tab_challenges.html; juice-shop.github.io findings 0→4; benchmark juice-shop.herokuapp.com 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnedlabs.io",
+      "slug": "client-side-pwnedlabs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Hands-on cloud and cyber security labs + Practice real attacker tradecraft against AWS, Azure, and GCP; pwnedlabs.io/explore findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:labs.pwnedlabs.io",
+      "slug": "client-side-pwnedlabs-git-secrets-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Hunt for Secrets in Git Repos + git-secrets and Trufflehog + leaked credentials in git repositories; labs.pwnedlabs.io/hunt-for-secrets-in-git-repos findings 4→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4056,6 +4074,21 @@
       "source": "discovery:server.vulnapp.id",
       "slug": "phpmyadmin-exposed",
       "shipped_at": "2026-07-13T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop.github.io",
+      "slug": "client-side-juice-shop-project-evidence",
+      "shipped_at": "2026-07-13T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnedlabs.io",
+      "slug": "client-side-pwnedlabs-evidence",
+      "shipped_at": "2026-07-13T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:labs.pwnedlabs.io",
+      "slug": "client-side-pwnedlabs-git-secrets-evidence",
+      "shipped_at": "2026-07-13T05:10:00.000Z"
     }
   ]
 }

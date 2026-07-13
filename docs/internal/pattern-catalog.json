@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T04:05:06.309Z",
-  "total": 290,
-  "uniqueSlugs": 290,
+  "generatedAt": "2026-07-13T05:02:52.850Z",
+  "total": 293,
+  "uniqueSlugs": 293,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 272,
+    "generic": 275,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 224,
+    "deep": 227,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 94,
+    "Broken access control": 96,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -30,7 +30,7 @@
     "Injection": 47,
     "Cross-site scripting": 27,
     "Server-side request forgery": 3,
-    "Sensitive data exposure": 3,
+    "Sensitive data exposure": 4,
     "AI security": 19,
     "XSS": 1,
     "general": 17
@@ -128,6 +128,7 @@
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-judgement-day-arena-evidence",
+    "client-side-juice-shop-project-evidence",
     "client-side-jwt-none-evidence",
     "client-side-knoxss-test-page-evidence",
     "client-side-kontra-application-security-evidence",
@@ -175,6 +176,8 @@
     "client-side-prototype-pollution-evidence",
     "client-side-pwn-college-evidence",
     "client-side-pwn-guide-evidence",
+    "client-side-pwnedlabs-evidence",
+    "client-side-pwnedlabs-git-secrets-evidence",
     "client-side-pwnshop-evidence",
     "client-side-qamax-adversary-evidence",
     "client-side-railsgoat-evidence",
