@@ -2412,7 +2412,32 @@
       "url": "https://nomadu27.github.io/InsAIts-public/",
       "source": "InsAIts — open-source multi-agent AI runtime security dashboard demo (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwning.owasp-juice.shop/",
+      "source": "Official Pwning OWASP Juice Shop companion — live challenge tutorials linked to demo.owasp-juice.shop",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.github.io/tab_learning.html",
+      "source": "OWASP Juice Shop learning tab — challenge oracle with tutorial links to public demo instance",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://johniwasz.github.io/rce-serialization-dotnet/JuiceShop/JuiceShop.html",
+      "source": "johniwasz RCE/serialization training — Juice Shop exercise docs with public demo oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://taoq-ai.github.io/ziran/",
+      "source": "ZIRAN — AI agent security testing framework docs with vulnerable example agents (taoq-ai/ziran)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://double16.github.io/",
+      "source": "Patrick Double security engineering — public vuln lab writeups (ginandjuice.shop agent benchmarks)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T05:10:00.000Z"
+  "updated_at": "2026-07-13T06:05:00.000Z"
 }
