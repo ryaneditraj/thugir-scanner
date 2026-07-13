@@ -3859,6 +3859,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-bountybench-benchmark-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Stanford BountyBench AI agent bug bounty benchmark disclosed",
+    description:
+      "BountyBench on bountybench.github.io benchmarks AI agents on Detect, Exploit, and Patch tasks across 40 real-world bug bounties covering 9 OWASP Top 10 risk categories.",
+    impactOneline:
+      "Public BountyBench leaderboards document high-value bug bounty oracles used to evaluate autonomous offensive and defensive cyber agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBountybenchBenchmarkEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BountyBench is intentional research infrastructure — isolate benchmark targets from production networks.",
+      steps: [
+        "Run BountyBench challenge systems only on dedicated lab infrastructure.",
+        "Do not expose production apps as BountyBench evaluation targets.",
+        "Track benchmark bug bounty categories to prioritize patching in production systems."
+      ]
+    },
+    fixPrompt:
+      "We host BountyBench-style AI agent bug bounty benchmarks. Show how to isolate evaluation targets from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cahyod-vulnerable-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Cahyod Vulnerable Lab pentest training hub disclosed",
+    description:
+      "lab.cahyo.web.id catalogs 13 intentionally vulnerable subdomain applications spanning SQLi, XSS, IDOR, JWT, and RCE practice targets.",
+    impactOneline:
+      "Public Cahyod lab hubs document multi-app pentest training surfaces with linked vulnerable subdomains for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCahyodVulnerableLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cahyod labs are intentional training — isolate vulnerable subdomains from production networks.",
+      steps: [
+        "Run Cahyod-style training apps only on dedicated lab infrastructure.",
+        "Require VPN or auth before serving vulnerable subdomain instances.",
+        "Do not copy lab SQLi/XSS patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "We host Cahyod-style multi-app pentest training labs. Show how to isolate vulnerable subdomains from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctfchallenge-evidence",
     platform: "generic",
     category: "Broken access control",

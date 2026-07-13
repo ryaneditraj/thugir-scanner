@@ -1583,6 +1583,7 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
     "/api/products/search",
     "/search",
     "/search.jsp",
+    "/search.php",
     ...SQL_ASP_FALLBACK_PATHS
   ];
   const bases = [...new Set([...discovered, ...fallbacks])].slice(0, 6);
@@ -9588,6 +9589,91 @@ const clientSidePwnGuideEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Stanford BountyBench AI agent bug bounty benchmark (bountybench.github.io) -------
+const CLIENT_BOUNTYBENCH_BENCHMARK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BountyBench framework title",
+    re: /BountyBench|bountybench\.github\.io/i
+  },
+  {
+    label: "Real-world bug bounty benchmark scope",
+    re: /40 bug bounties|25 systems with complex, real-world codebases/i
+  },
+  {
+    label: "OWASP Top 10 bug bounty coverage",
+    re: /9 of the OWASP Top 10 Risks|OWASP Top 10 Risks/i
+  },
+  {
+    label: "Detect Exploit Patch agent tasks",
+    re: /Detect[\s\S]{0,40}Exploit[\s\S]{0,40}Patch|offensive\s*&\s*defensive cyber-capabilities/i
+  },
+  {
+    label: "Stanford CRFM BountyBench reference",
+    re: /github\.com\/bountybench\/bountybench|crfm\.stanford\.edu[\s\S]{0,80}BountyBench/i
+  }
+];
+
+const clientSideBountybenchBenchmarkEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BOUNTYBENCH_BENCHMARK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/BountyBench|bountybench/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BountyBench benchmarks AI agents on Detect/Exploit/Patch tasks across 40 real-world bug bounties covering OWASP Top 10 risks"
+    }
+  };
+};
+
+// --- Cahyod Vulnerable Lab pentest hub (lab.cahyo.web.id) -----------------------------
+const CLIENT_CAHYOD_VULNERABLE_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Cahyod Vulnerable Lab hub title",
+    re: /Vulnerable Lab[\s\S]{0,80}lab\.cahyo\.web\.id|Pentest training environment/i
+  },
+  {
+    label: "13 vulnerable application catalog",
+    re: /13 vulnerable applications|App List[\s\S]{0,80}Subdomain Access/i
+  },
+  {
+    label: "Subdomain vuln app routing",
+    re: /portal\.lab\.cahyo\.web\.id|juice-vuln\.cahyo\.web\.id|api-vuln\.cahyo\.web\.id/i
+  },
+  {
+    label: "Vulnerability category tags",
+    re: /vuln-tag sqli|vuln-tag xss|vuln-tag idor|vuln-tag rce/i
+  },
+  {
+    label: "Difficulty level markers",
+    re: /level-beginner|level-intermediate|Beginner|Intermediate/i
+  }
+];
+
+const clientSideCahyodVulnerableLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CAHYOD_VULNERABLE_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/lab\.cahyo\.web\.id|Vulnerable Lab|Pentest training environment/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Cahyod Vulnerable Lab hub catalogs 13 intentionally vulnerable subdomain apps with SQLi, XSS, IDOR, and RCE training targets"
+    }
+  };
+};
+
 const clientSideCtfchallengeEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CTFCHALLENGE_RES) {
@@ -11792,6 +11878,8 @@ export const RULES: Record<string, Rule> = {
   clientSideCvebenchBenchmarkEvidence,
   clientSideSploitifyExploitDatabaseEvidence,
   clientSidePwnGuideEvidence,
+  clientSideBountybenchBenchmarkEvidence,
+  clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
   clientSideExploitEducationEvidence,
   clientSideYogsecXssLabsEvidence,

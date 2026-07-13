@@ -576,6 +576,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideCvebenchBenchmarkEvidence",
   "clientSideSploitifyExploitDatabaseEvidence",
   "clientSidePwnGuideEvidence",
+  "clientSideBountybenchBenchmarkEvidence",
+  "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
   "clientSideDevSecOpsLabEvidence",
   "clientSideVulnAuthPortalEvidence",
@@ -1518,6 +1520,32 @@ function extractGruyereCodelabSeeds(html: string, origin: string): string[] {
     }
   }
   return [...out];
+}
+
+/** Cahyod Vulnerable Lab hub (lab.cahyo.web.id) — seed linked *.lab.cahyo.web.id subdomains. */
+function extractCahyodVulnerableLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/lab\.cahyo\.web\.id|Vulnerable Lab|Pentest training environment/i.test(html)) return [];
+  const out = new Set<string>();
+  const linkRe = /href\s*=\s*["'](https?:\/\/[^"']*\.lab\.cahyo\.web\.id[^"']*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      const u = new URL(m[1]);
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const hostRe = /(?:portal|wp|api-vuln|juice-vuln|ticket|library)\.lab\.cahyo\.web\.id/gi;
+  while ((m = hostRe.exec(html))) {
+    try {
+      out.add(`http://${m[0]}/`);
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out].slice(0, 6);
 }
 
 /** Pwnshop OWASP Top 10 2025 e-commerce lab (pwnshop.ctfsecurity.com). */
@@ -3606,6 +3634,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
+  const cahyodLabSeeds = extractCahyodVulnerableLabSeeds(home.body, home.finalUrl);
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
   const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
   const cyberDrillSeeds = extractCyberDrillToolSeeds(home.body, home.finalUrl);
@@ -3721,6 +3750,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...websecSeeds,
       ...sixHackSeeds,
       ...gruyereSeeds,
+      ...cahyodLabSeeds,
       ...firingRangeSeeds,
       ...tegalsecSeeds,
       ...cyberDrillSeeds,
