@@ -2387,6 +2387,24 @@
       "slug": "cookiejar-lab-demo-crawl-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: homepage href=/demo/ only; extractCookiejarLabSeeds seeds /demo from cookiejar-lab root; cyberdesserts.github.io/cookiejar-lab/ findings 0→3 incl client-side-session-hijack-evidence (doReplay/vault-token on demo); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/pixi",
+      "slug": "owasp-vwad-pixi-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Pixi - OWASP VWAD title + MEAN stack web app with deliberately insecure APIs + Part of OWASP DevSlop JSON-LD; CLIENT_OWASP_VWAD_RES extended + /app/pixi/ in extractOwaspVwadSeeds; vwad.owasp.org/app/pixi findings 0→4 incl client-side-owasp-vwad-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-csrf-xxe-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/csrf/start title Cross-Site Request Forgery — Secure Coding Lesson + meta forge HTTP requests trick users; GET /lessons/xml-external-entities/start title XML External Entities — Secure Coding Lesson + meta probe file system; CLIENT_HACKSPLAINING_RES title/meta markers; csrf/start and xml-external-entities/start findings 0→4 incl client-side-hacksplaining-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:blueteamlabs.online",
+      "slug": "blueteamlabs-landing-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Bringing Cybersecurity To Life + defenders to practice their skills in security investigations + scenario-based labs; CLIENT_BLUETEAM_LABS_RES extended; blueteamlabs.online findings 1→4 incl client-side-blueteamlabs-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4364,6 +4382,21 @@
       "source": "discovery:cyberdesserts.github.io/cookiejar-lab",
       "slug": "cookiejar-lab-demo-crawl-seeds",
       "shipped_at": "2026-07-13T17:32:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/pixi",
+      "slug": "owasp-vwad-pixi-markers",
+      "shipped_at": "2026-07-13T18:05:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-csrf-xxe-lessons",
+      "shipped_at": "2026-07-13T18:05:00.000Z"
+    },
+    {
+      "source": "discovery:blueteamlabs.online",
+      "slug": "blueteamlabs-landing-markers",
+      "shipped_at": "2026-07-13T18:05:00.000Z"
     }
   ]
 }

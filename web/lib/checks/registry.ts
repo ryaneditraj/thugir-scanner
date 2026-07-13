@@ -588,7 +588,12 @@ const reflectedXss: Rule = async (ctx) => {
       const key = `${path}?${param}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      const u = new URL(path, ctx.origin);
+      let u: URL;
+      try {
+        u = new URL(path, ctx.origin);
+      } catch {
+        continue;
+      }
       u.searchParams.set(param, canary);
       urls.push({ url: u.toString(), param, path });
       if (urls.length >= 40) break outer;
