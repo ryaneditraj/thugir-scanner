@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T12:10:00.000Z",
+  "updated_at": "2026-07-13T13:34:54.635Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,31 +15,32 @@
       ]
     }
   },
-  "total_sites_scanned": 1109,
-  "total_findings": 4895,
+  "total_sites_scanned": 1117,
+  "total_findings": 4935,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 522,
-  "discovery_findings": 3607,
+  "discovery_urls_added": 527,
+  "discovery_findings": 3637,
   "improvements_shipped": 388,
-  "last_run": "2026-07-13T12:10:00.000Z",
+  "last_run": "2026-07-13T13:34:54.635Z",
   "last_run_summary": {
-    "hour_utc": "12:00",
+    "hour_utc": "13:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 6,
-      "primary_recall": "3/6",
-      "primary_gap": ["xss", "sqli", "sensitive_data"],
+      "pass1_findings": 4,
+      "pass1_recall": "3/6",
+      "pass1_gap": ["xss", "sqli", "sensitive_data"],
+      "retry_findings": 9,
+      "retry_recall": "5/6",
+      "retry_gap": ["sqli"],
+      "final_findings": 10,
+      "final_recall": "6/6",
       "fallback_urls": [
         "https://juice-shop-staging.herokuapp.com",
         "https://juice-shop.demo.escape.tech"
       ],
-      "merged_recall": "6/6",
-      "merged_findings": 8,
-      "merged_gap": [],
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "note": "Heroku primary/staging Application Error — escape.tech fallback + mergeBenchmarkFindings across fallback_urls restores full recall",
+      "note": "Heroku cold-start pass1 4 findings pages_crawled=1; wake retries recovered to 6/6 (10 findings, pages_crawled=6 probes=294). escape.tech fallback available if Heroku Application Error.",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,21 +52,44 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "Benchmark miss fix — Heroku outage fallback to juice-shop.demo.escape.tech"
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 30,
+      "skipped_48h": "queue iterator advanced past 48h-skipped origins",
+      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"],
+      "focus": "Hacksplaining AI slop-squatting/buffer-overflow/DoS/bias/data-extraction queued; batch rescan HackAdvisor + VulnForge + TegalSec XSS labs",
+      "urls_added_list": [
+        "hacksplaining.com/lessons/slop-squatting/start",
+        "hacksplaining.com/lessons/buffer-overflows/start",
+        "hacksplaining.com/lessons/denial-of-service-attacks/start",
+        "hacksplaining.com/lessons/ai-bias-and-unreliability/start",
+        "hacksplaining.com/lessons/ai-data-extraction-attacks/start"
+      ],
+      "urls_scanned_list": [
+        "516-hackers.github.io (2)",
+        "labs.hackadvisor.io (8)",
+        "sixhackacademy.com (3)",
+        "vulnforge-academy.vercel.app (6)",
+        "webgoat.github.io/WebGoat (5)",
+        "labs.tegalsec.org/xss-labs (3)",
+        "labs.tegalsec.org/br0w (3)"
+      ]
     },
     "notable_findings": [
-      "juice-shop: Heroku 3/6 cold-start miss fixed via escape.tech fallback merge → 6/6 (8 findings)",
-      "juice-shop-doc-evidence FP guard: project/pwning companion rules no longer fire on live oracle hosts"
+      "juice-shop.herokuapp.com: 6/6 recall after Heroku wake retries (pass1 MISS 3/6 gap xss,sqli,sensitive_data)",
+      "labs.hackadvisor.io: 8 findings — reflected XSS + Resend key + CTF lab evidence",
+      "vulnforge-academy.vercel.app: 6 findings — SQLi error + OpenAI key + XSS sinks",
+      "webgoat.github.io/WebGoat: 5 findings — postMessage DOM XSS + WebGoat oracle",
+      "labs.tegalsec.org/xss-labs: 3 findings — reflected XSS evidence markers"
     ],
     "learning_gaps": [
+      "juice-shop primary Heroku: cold-start pass1 misses xss,sqli,sensitive_data (pages_crawled=1) — wake retries required for full recall",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop.herokuapp.com + staging: intermittent Heroku Application Error — use escape.tech fallback chain",
-      "pwn.guide: Cloudflare bot-wall blocks scanner UA"
-    ],
-    "improvements_shipped_this_run": 2
+      "testhtml5.vulnweb.com: DNS dead — remove from queue or use testasp.vulnweb.com",
+      "516-hackers-vuln-playground: GitHub Pages 404/partial — only misconfig markers",
+      "Hacksplaining new AI/DoS lessons queued at tail — not yet reached by queue iterator"
+    ]
   },
   "discovery_highlights": {
     "pwning.owasp-juice.shop": 5,
@@ -281,6 +305,9 @@
     "application.security/leftover-debug-code": 5,
     "hacksplaining.com/lessons/xss-dom/start": 4,
     "hacksplaining.com/lessons/session-fixation/start": 4,
-    "pentesterlab.com/exercises/web-fundamentals-cors": 4
+    "pentesterlab.com/exercises/web-fundamentals-cors": 4,
+    "sixhackacademy.com": 3,
+    "labs.tegalsec.org/xss-labs": 3,
+    "labs.tegalsec.org/br0w": 3
   }
 }
