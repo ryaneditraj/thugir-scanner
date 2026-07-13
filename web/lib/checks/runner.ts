@@ -2741,12 +2741,12 @@ function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** OpenVault Bank — seed /learn and /cheatsheet API training routes from SPA shell. */
+/** OpenVault Bank — seed /learn, /cheatsheet, and /api/v1 training routes from SPA shell. */
 function extractOpenvaultBankSeeds(html: string, pageUrl: string): string[] {
   if (!/OpenVault Bank|openvaultbank\.com/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/learn", "/cheatsheet"]) {
+  for (const p of ["/learn", "/cheatsheet", "/api/v1/users", "/api/v1/admin", "/api/v1/accounts"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -4292,7 +4292,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       "/main.js",
       "/rest/admin/application-configuration",
       "/rest/track-order/1",
-      "/rest/products/search?q='))"
+      "/rest/products/search?q='))",
+      "/rest/products/search?q=apple"
     ];
     const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
     const mainJsUrl = new URL("/main.js", jsOrigin).toString();
