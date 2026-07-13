@@ -9466,6 +9466,128 @@ const clientSidePokemortyCtfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CVE-Bench AI agent vulnerability benchmark (cvebench.com) ------------------------
+const CLIENT_CVEBENCH_BENCHMARK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CVE-Bench leaderboard title",
+    re: /CVE-Bench Leaderboard|CVE-Bench evaluates the capability of AI agents/i
+  },
+  {
+    label: "Autonomous web vulnerability exploitation benchmark",
+    re: /autonomously exploit web vulnerabilities|AI agents to autonomously exploit/i
+  },
+  {
+    label: "Critical CVE exploit categories",
+    re: /remote code execution,\s*SQL injection,\s*and privilege escalation/i
+  },
+  {
+    label: "Zero-day vs one-day evaluation modes",
+    re: /zero[\s-]?day|one[\s-]?day|variation-filter/i
+  },
+  {
+    label: "UIUC CVE-Bench dataset reference",
+    re: /uiuc-kang-lab\/cve-bench|github\.com\/uiuc-kang-lab\/cvebench/i
+  }
+];
+
+const clientSideCvebenchBenchmarkEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CVEBENCH_BENCHMARK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CVE-Bench|cvebench\.com|uiuc-kang-lab\/cve-bench/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CVE-Bench leaderboard benchmarks AI agents on autonomously exploiting critical CVEs including RCE, SQL injection, and privilege escalation"
+    }
+  };
+};
+
+// --- Sploitify exploit cheat sheet (sploitify.haxx.it) --------------------------------
+const CLIENT_SPLOITIFY_EXPLOIT_DB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Sploitify interactive cheat sheet",
+    re: /Sploitify[\s\S]{0,120}interactive cheat sheet|interactive cheat sheet[\s\S]{0,120}Sploitify/i
+  },
+  {
+    label: "Curated public server-side exploits",
+    re: /curated list of public server-side exploits|public server-side exploits \(mostly\)/i
+  },
+  {
+    label: "GTFOBins LOLBAS WADComs inspiration",
+    re: /GTFOBins|LOLBAS|WADComs/i
+  },
+  {
+    label: "Vulnerability category filters",
+    re: /vuln_name|data-title="(?:Remote Code Execution|SQL Injection|Server-Side Request Forgery)"/i
+  },
+  {
+    label: "Bug bounty OSCP CTF use cases",
+    re: /bug-bounty|OSCP|playing CTF|HTB machine/i
+  }
+];
+
+const clientSideSploitifyExploitDatabaseEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SPLOITIFY_EXPLOIT_DB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Sploitify|sploitify\.haxx\.it/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Sploitify catalogs curated server-side exploits with RCE, SQLi, SSRF, and XSS filters for bug bounty, OSCP, and CTF practice"
+    }
+  };
+};
+
+// --- pwn.guide cybersecurity tutorial hub (pwn.guide) ---------------------------------
+const CLIENT_PWN_GUIDE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "pwn.guide tutorial hub branding",
+    re: /pwn\.guide|200\+ hands-on cybersecurity tutorials/i
+  },
+  {
+    label: "Hands-on web hacking tutorials",
+    re: /hands-on[\s\S]{0,80}(?:web hacking|cybersecurity)|web hacking[\s\S]{0,80}tutorials/i
+  },
+  {
+    label: "Wireless and web security topics",
+    re: /wireless[\s\S]{0,120}web|web[\s\S]{0,120}wireless/i
+  },
+  {
+    label: "Tutorial category navigation",
+    re: /tutorial|guides?|learn[\s\S]{0,60}(?:xss|sqli|ssrf|web)/i
+  }
+];
+
+const clientSidePwnGuideEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PWN_GUIDE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/pwn\.guide|200\+ hands-on cybersecurity tutorials/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "pwn.guide publishes 200+ hands-on cybersecurity tutorials spanning web hacking, wireless, and forensics practice"
+    }
+  };
+};
+
 const clientSideCtfchallengeEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CTFCHALLENGE_RES) {
@@ -11667,6 +11789,9 @@ export const RULES: Record<string, Rule> = {
   clientSideCodeBreakingEvidence,
   clientSideSanitizeXssDemoEvidence,
   clientSidePokemortyCtfEvidence,
+  clientSideCvebenchBenchmarkEvidence,
+  clientSideSploitifyExploitDatabaseEvidence,
+  clientSidePwnGuideEvidence,
   clientSideCtfchallengeEvidence,
   clientSideExploitEducationEvidence,
   clientSideYogsecXssLabsEvidence,

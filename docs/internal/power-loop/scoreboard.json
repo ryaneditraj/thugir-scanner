@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T01:04:46.002Z",
+  "updated_at": "2026-07-13T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 996,
-  "total_findings": 4340,
+  "total_sites_scanned": 999,
+  "total_findings": 4355,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 472,
-  "discovery_findings": 3161,
-  "improvements_shipped": 354,
-  "last_run": "2026-07-13T01:04:46.002Z",
+  "discovery_findings": 3165,
+  "improvements_shipped": 357,
+  "last_run": "2026-07-13T01:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
@@ -52,45 +52,31 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 22,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 10,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      "dns_failures": [],
+      "focus": "CVE-Bench AI agent benchmark + Sploitify exploit cheat sheet + pwn.guide tutorial hub",
+      "urls_scanned_list": [
+        "https://cvebench.com/ (3)",
+        "https://sploitify.haxx.it/ (4)",
+        "https://pwn.guide/ (7)"
       ],
-      "focus": "Cahyod 13-app pentest hub + BountyBench benchmark; queue-head rescans (securebank-blog, hack-health, vulnweb, hackxor, bugbountyhunter)",
-      "urls_added_list": [
-        "https://lab.cahyo.web.id/",
-        "http://portal.lab.cahyo.web.id/",
-        "http://juice-vuln.cahyo.web.id/",
-        "http://api-vuln.cahyo.web.id/",
-        "https://bountybench.github.io/"
-      ],
-      "scanned": [
-        "https://securebank-blog.vercel.app/ (6)",
-        "https://hack-health-tutorial.vercel.app/ (4)",
-        "http://testaspnet.vulnweb.com/ (3)",
-        "https://hackxor.net/ (3)",
-        "https://www.bugbountyhunter.com/challenge?id=1 (2)",
-        "https://www.bugbountyhunter.com/playground (2)",
-        "https://www.bugbountyhunter.com/ (2)"
-      ]
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "securebank-blog.vercel.app: 6 findings — SQLi/CSRF/XSS client evidence + attack/secure mode lab",
-      "hack-health-tutorial.vercel.app: 4 findings — intentional SQLi tutorial markers",
-      "hackxor.net: 3 findings — reflected XSS via query param + insecure cookies",
-      "www.bugbountyhunter.com: 2 findings each — zseano challenge platform evidence (3 URLs)"
+      "cvebench.com: CVE-Bench AI agent exploitation leaderboard (2→3 findings)",
+      "sploitify.haxx.it: curated server-side exploit cheat sheet (3→4 findings)",
+      "pwn.guide: 200+ hands-on cybersecurity tutorials hub (6→7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "lab.cahyo.web.id + subdomains: queued at tail — not reached this pass (limit=8)",
-      "pwn.guide/cvebench/oauth-fetch/sploitify: still queued at tail — await next pass"
-    ],
-    "improvements_shipped_this_run": 0
+      "oauth-fetch.oauthlabs.com: Vercel Security Checkpoint intermittently blocks cloud scans",
+      "application.security SSRF queue URL corrected to server-side-request-forgery-in-capital-one",
+      "capture-the-flag.labs.vercel.dev: Vercel DEPLOYMENT_NOT_FOUND — remove from queue"
+    ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -110,6 +96,9 @@
     "code-breaking.fly.dev": 3,
     "sanitize-web.fly.dev": 3,
     "pokemorty.fly.dev": 3,
+    "cvebench.com": 3,
+    "sploitify.haxx.it": 4,
+    "pwn.guide": 7,
     "chimera.atlascrew.dev": 9,
     "ctb-pi.vercel.app": 6,
     "vulnex.vercel.app": 4,
