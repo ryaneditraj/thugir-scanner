@@ -2303,6 +2303,18 @@
       "slug": "hacksplaining-dom-xss-lesson",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: DOM-based XSS — Secure Coding Lesson | Hacksplaining + URI fragments inject malicious JavaScript meta description; extractHacksplainingLessonSeeds /lessons/xss-dom/start; hacksplaining.com/lessons/xss-dom/start findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-clickjacking-massassignment-css-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Clickjacking/Mass Assignment/CSS Injection — Secure Coding Lesson titles + meta descriptions (clicks stolen, HTTP request unpacking, user-generated CSS exfil); extractHacksplainingLessonSeeds extended; rule markers fire on HTTP snippets (Vercel checkpoint may block live cloud scans); benchmark juice-shop.herokuapp.com 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-dom-xss-lesson",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DOM XSS | Kontra Application Security Training + DOM Based XSS meta description at owasp-top-10-dom-cross-site-scripting; extractKontraTrainingSeeds extended; live scan 5 findings incl client-side-kontra-application-security-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4210,6 +4222,16 @@
       "source": "discovery:hacksplaining.com",
       "slug": "hacksplaining-dom-xss-lesson",
       "shipped_at": "2026-07-13T09:26:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-clickjacking-massassignment-css-lessons",
+      "shipped_at": "2026-07-13T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-dom-xss-lesson",
+      "shipped_at": "2026-07-13T10:10:00.000Z"
     }
   ]
 }
