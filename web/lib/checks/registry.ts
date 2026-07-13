@@ -2741,6 +2741,14 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
   },
   {
+    label: "CSRF lesson title",
+    re: /Cross-Site Request Forgery — Secure Coding Lesson/i
+  },
+  {
+    label: "CSRF forged-request lesson description",
+    re: /forge HTTP requests[\s\S]{0,100}trick your users into triggering unintended actions/i
+  },
+  {
     label: "SQL injection lesson step nav",
     re: /lessons\/sql-injection\/(?:checking-the-code|injection-vulnerability|injection-explained|server-error)/i
   },
@@ -2771,6 +2779,10 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   {
     label: "XML external entities lesson module",
     re: /\/lessons\/xml-external-entities|XML External Entities — Secure Coding Lesson/i
+  },
+  {
+    label: "XXE lesson title",
+    re: /XML External Entities — Secure Coding Lesson/i
   },
   {
     label: "XXE external reference lesson description",
@@ -6044,6 +6056,14 @@ const CLIENT_BLUETEAM_LABS_RES: { label: string; re: RegExp }[] = [
   {
     label: "BTLO leaderboard ranking",
     re: /global and country-specific leaderboards|Earn points by concluding investigations/i
+  },
+  {
+    label: "BTLO landing hero tagline",
+    re: /Bringing Cybersecurity To Life|With Practical Learning/i
+  },
+  {
+    label: "BTLO defender investigation practice",
+    re: /defenders to practice their skills in security investigations|Put everything you've learned into practice/i
   }
 ];
 
@@ -12758,6 +12778,14 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
   {
     label: "VWAD schema ItemList apps",
     re: /"itemListElement"[\s\S]{0,240}"name":\s*"(?:Juice Shop|DVWA|WebGoat|bWAPP)"/i
+  },
+  {
+    label: "VWAD Pixi DevSlop listing",
+    re: /vwad\.owasp\.org\/app\/pixi|"name":\s*"Pixi"/i
+  },
+  {
+    label: "Pixi MEAN stack insecure API lab",
+    re: /MEAN stack web app with deliberately insecure APIs|Part of OWASP DevSlop/i
   }
 ];
 

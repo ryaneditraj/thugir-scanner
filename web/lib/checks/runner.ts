@@ -3465,7 +3465,8 @@ function extractOwaspVwadSeeds(html: string, pageUrl: string): string[] {
     "/app/webgoat/",
     "/app/crapi/",
     "/app/bwapp/",
-    "/app/dvga/"
+    "/app/dvga/",
+    "/app/pixi/"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
