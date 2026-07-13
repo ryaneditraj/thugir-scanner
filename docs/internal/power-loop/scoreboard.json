@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T09:31:00.000Z",
+  "updated_at": "2026-07-13T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,22 +22,16 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 507,
   "discovery_findings": 3481,
-  "improvements_shipped": 381,
-  "last_run": "2026-07-13T09:31:00.000Z",
+  "improvements_shipped": 383,
+  "last_run": "2026-07-13T10:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09:00",
+    "hour_utc": "10:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 10,
+      "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "pass1_findings": 6,
-      "pass1_gap": [
-        "xss",
-        "sqli",
-        "sensitive_data"
-      ],
-      "note": "Heroku cold-start degraded pass1; wake retry recovered 6/6 at 10 findings (pages_crawled=6 probes=294)",
+      "note": "Benchmark recall stable at 6/6 (9 findings); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,41 +48,24 @@
         }
       }
     },
-    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 34,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Hacksplaining clickjacking/mass-assignment/AI-prompt/CSS-injection + Kontra DOM XSS queued; batch rescan",
-      "urls_added_list": [
-        "hacksplaining.com/lessons/click-jacking/start",
-        "hacksplaining.com/lessons/mass-assignment/start",
-        "hacksplaining.com/lessons/ai-prompt-injection/start",
-        "hacksplaining.com/lessons/css-injection/start",
-        "application.security/.../dom-cross-site-scripting"
-      ],
-      "urls_scanned_list": [
-        "weaponsforge.github.io/hacker-friendly-app (4)",
-        "playground.fabraix.com (2)",
-        "webexp05.vercel.app (6)",
-        "idor-challenge.vercel.app (3)",
-        "luisillobret2.github.io/WebGoat (3)",
-        "duck-store.escape.tech (7)",
-        "dvaib.com (4)",
-        "pentest-ground.com:4280 (5)"
-      ]
+      "focus": "Hacksplaining clickjacking/mass-assignment/CSS-injection lesson markers + Kontra DOM XSS lesson seed",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 pass1 Heroku cold-start gap, wake retry recovered",
-      "duck-store.escape.tech: OpenAI key + IDOR + unauthenticated API + OpenAPI docs (7 findings)",
-      "webexp05.vercel.app: SQLi/XSS/JWT-none/path-traversal lab markers (6 findings)",
-      "pentest-ground.com:4280: reflected XSS + phpinfo on hosted DVWA (5 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
+      "hacksplaining.com/lessons/click-jacking|mass-assignment|css-injection: lesson-specific markers + crawl seeds (Vercel checkpoint may block cloud scans)",
+      "application.security/owasp-top-10-dom-cross-site-scripting: DOM XSS | Kontra lesson markers + hub seed; live scan 5 findings"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop Heroku dyno sleep causes intermittent pass1 recall drops \u2014 retry logic essential"
+      "hacksplaining.com: Vercel Security Checkpoint intermittently blocks ThugirScanner UA from cloud — markers validated on HTTP snippets"
     ]
   },
   "discovery_highlights": {
@@ -123,6 +100,7 @@
     "application.security/free-application-security-training/owasp-top-10-command-injection": 5,
     "application.security/free-application-security-training/owasp-top-10-directory-traversal": 5,
     "application.security/free-application-security-training/owasp-top-10-clickjacking": 5,
+    "application.security/free-application-security-training/owasp-top-10-dom-cross-site-scripting": 5,
     "juice-shop.herokuapp.com": 9,
     "code-breaking.fly.dev": 3,
     "sanitize-web.fly.dev": 3,
@@ -280,6 +258,9 @@
     "hacksplaining.com/lessons/directory-traversal": 4,
     "hacksplaining.com/lessons/ssrf": 4,
     "hacksplaining.com/lessons/broken-access-control": 4,
+    "hacksplaining.com/lessons/click-jacking/start": 4,
+    "hacksplaining.com/lessons/mass-assignment/start": 4,
+    "hacksplaining.com/lessons/css-injection/start": 4,
     "www.bugbountyhunter.com": 2,
     "pentesteracademylab.appspot.com": 2,
     "hacking-lab.com/events": 3,
