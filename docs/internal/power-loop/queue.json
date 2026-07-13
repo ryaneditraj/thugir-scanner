@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-13T09:31:00.000Z",
+  "updated_at": "2026-07-13T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.hacksplaining.com/lessons/xml-bombs/start",
+      "source": "Hacksplaining — XML bomb / billion-laughs DoS lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/subdomain-squatting/start",
+      "source": "Hacksplaining — dangling subdomain takeover / squatting lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/toxic-dependencies/start",
+      "source": "Hacksplaining — supply-chain / malicious dependency lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/unencrypted-communication/start",
+      "source": "Hacksplaining — MITM / insufficient TLS encryption lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/cross-site-script-inclusion/start",
+      "source": "Hacksplaining — XSSI / sensitive data in JS files lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.hacksplaining.com/lessons/dns-poisoning/start",
       "source": "Hacksplaining \u2014 DNS cache poisoning / upstream hijack lesson (lessons catalog)",
