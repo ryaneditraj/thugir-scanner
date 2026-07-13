@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T07:21:33.832Z",
+  "updated_at": "2026-07-13T08:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1061,
-  "total_findings": 4647,
+  "total_sites_scanned": 1070,
+  "total_findings": 4693,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 497,
-  "discovery_findings": 3411,
+  "discovery_urls_added": 502,
+  "discovery_findings": 3447,
   "improvements_shipped": 376,
-  "last_run": "2026-07-13T07:26:00.000Z",
+  "last_run": "2026-07-13T08:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07:00",
+    "hour_utc": "08:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 10,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "No benchmark misses — juice-shop.herokuapp.com recall 6/6 (10 findings; pass1 sqli gap recovered on retry)",
+      "note": "No benchmark misses — juice-shop.herokuapp.com recall 6/6 (10 findings; pages_crawled=6 probes=294)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,32 +51,39 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 13,
-      "findings": 65,
+      "urls_scanned": 8,
+      "findings": 36,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Kontra auth modules + XSS-LABS + Juice Shop VAPT oracle; queue head rescan batch",
+      "focus": "Kontra reflected-XSS/CSRF/open-redirect/debug-code + Hacksplaining DOM XSS; queue batch rescan",
       "urls_scanned_list": [
-        "https://dxx33.github.io/WebVulnsGuide/ (8)",
-        "https://demo.weblock.ru/ (8)",
-        "https://povzayd.github.io/XSS-LABS/ (2)",
-        "https://application.security/.../vertical-privilege-escalation (5)",
-        "https://application.security/.../session-fixation (5)"
+        "https://riglabs-cyber-lab.vercel.app/ (4)",
+        "https://vulnlab.vercel.app/ (7)",
+        "https://juicesec.mrdinesh.workers.dev/ (6)",
+        "https://xss-attacker.vercel.app/ (4)",
+        "https://avid-vuln-editor.vercel.app/ (4)",
+        "https://dvai.vercel.app/ (4)",
+        "https://fvb.vchan.in/ (3)",
+        "https://tempehs.github.io/The_Unsecure_PWA/ (4)"
       ],
-      "improvements_shipped_this_run": 3
+      "urls_queued_not_scanned": [
+        "application.security/.../reflected-cross-site-scripting",
+        "application.security/.../insecure-url-redirect",
+        "application.security/.../cross-site-request-forgery",
+        "application.security/.../leftover-debug-code",
+        "hacksplaining.com/lessons/xss-dom/start"
+      ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "pwning.owasp-juice.shop: Pwning OWASP Juice Shop companion challenge-hunting oracle (1→5 findings)",
-      "taoq-ai.github.io/ziran: ZIRAN AI agent tool-chain security testing docs (4→5 findings)",
-      "johniwasz.github.io/rce-serialization-dotnet: Juice Shop CSP/SQLi/mass-assignment lab (3→4 findings)",
-      "povzayd.github.io/XSS-LABS: reflected/stored/DOM XSS lab markers (2 findings)",
-      "lucky-cyber3008.github.io/juice-shop-vapt: Juice Shop VAPT challenge oracle docs (3 findings)"
+      "vulnlab.vercel.app: client-side SSRF + file-upload + XXE lab markers (7 findings)",
+      "juicesec.mrdinesh.workers.dev: Juice Shop Workers variant JWT alg:none + IDOR (6 findings)",
+      "xss-attacker.vercel.app: XSS C2 collector /api/collect exfil endpoint (4 findings)",
+      "dvai.vercel.app: Damn Vulnerable AI chat dangerouslySetInnerHTML sink (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hackme.net: TLS handshake failure from cloud scanner — community host may block automated UAs",
-      "double16.github.io: offensive-security blog — low vuln-marker density without dedicated lab slug"
+      "new Kontra/Hacksplaining URLs queued at tail — will scan on next queue pass"
     ]
   },
   "discovery_highlights": {

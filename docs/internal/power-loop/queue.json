@@ -2462,7 +2462,32 @@
       "url": "https://application.security/free-application-security-training/owasp-top-10-session-fixation",
       "source": "Kontra — interactive OWASP Top 10 session fixation training module",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-reflected-cross-site-scripting",
+      "source": "Kontra Application Security — browser-based reflected XSS training lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-insecure-url-redirect",
+      "source": "Kontra Application Security — browser-based open-redirect training lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-cross-site-request-forgery",
+      "source": "Kontra Application Security — browser-based CSRF training lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-leftover-debug-code",
+      "source": "Kontra Application Security — leftover debug code / information disclosure lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/xss-dom/start",
+      "source": "Hacksplaining — interactive DOM-based XSS secure-coding lesson with live exploit demo",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T07:20:00.000Z"
+  "updated_at": "2026-07-13T08:05:00.000Z"
 }
