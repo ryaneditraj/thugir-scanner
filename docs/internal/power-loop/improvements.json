@@ -2459,6 +2459,24 @@
       "slug": "redtiger-blind-login-form-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level3.php POST name=level3login + password-only blind login form; redtigerBlindLoginFormEvidence; redtiger level3.php findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-products-search-api-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /rest/products/search?q=apple returns {\"status\":\"success\",\"data\":[{\"id\":1,\"name\":\"Apple Juice\"}]} without auth; probeJuiceShopProductsSearchApi in unauthenticatedApiRoutes; juice-shop.demo.escape.tech findings 7→8 adds vibe-unauthenticated-api-routes; heroku benchmark 6/6 maintained (6 findings incl secret-resend)"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-railway-api-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle baseURL https://web-production-16ec6a.up.railway.app/api/v1 + /api/v1/users paths; probeOpenvaultBankRailwayApi + extractOpenvaultBankSeeds /api/v1/*; Railway backend offline during validation — rule ready for live BOLA oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level-finalurl-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level7.php/level10.php minimal HTML + name=level7login POST form; clientSideRedtigerHackitEvidence + redtigerBlindLoginFormEvidence include finalUrl level\\d+\\.php in corpus; level7.php findings 3 (hackit+blind-login); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4481,6 +4499,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-blind-login-form-evidence",
       "shipped_at": "2026-07-13T21:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-products-search-api-oracle",
+      "shipped_at": "2026-07-13T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-railway-api-probe",
+      "shipped_at": "2026-07-13T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level-finalurl-oracle",
+      "shipped_at": "2026-07-13T22:20:00.000Z"
     }
   ]
 }
