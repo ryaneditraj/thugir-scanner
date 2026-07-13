@@ -2038,6 +2038,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-wizer-ctf-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Wizer developer security CTF disclosed",
+    description:
+      "Wizer hosts public chal*.vercel.app CTF challenges with SQL injection login labs, XSS sinks, and developer security training scenarios.",
+    impactOneline:
+      "Public Wizer CTF pages document deliberately vulnerable login and XSS training surfaces for developer security education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWizerCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Wizer CTF labs are intentional training — never deploy challenge vulnerability patterns to production.",
+      steps: [
+        "Run Wizer CTF challenges only on isolated training infrastructure.",
+        "Use parameterized queries and output encoding in production login flows.",
+        "Do not copy Wizer challenge SQLi/XSS patterns into production apps."
+      ]
+    },
+    fixPrompt:
+      "We host Wizer-style developer security CTF labs. Show how to isolate training deployments from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
