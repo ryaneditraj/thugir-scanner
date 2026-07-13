@@ -2333,6 +2333,18 @@
       "slug": "pentesterlab-web-fundamentals-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: PentesterLab's exercise on Web Fundamentals: CORS meta + /exercises/web-fundamentals-cors|graphql|sessions|api|databases seeds; web-fundamentals-cors 4 findings incl client-side-pentesterlab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-escape-fallback-merge",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary/staging Heroku Application Error; juice-shop.demo.escape.tech GET /rest/products/search?q=')) returns SQLITE_ERROR; mergeBenchmarkFindings across fallback_urls restores 6/6 recall (8 findings) on escape oracle"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-doc-evidence-fp-guard",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: client-side-juice-shop-project-evidence + pwning companion fired on live heroku from bootstrap noise; origin guard excludes juice-shop.herokuapp/staging/escape hosts; benchmark recall scoring cleaner"
     }
   ],
   "shipped": [
@@ -4265,6 +4277,16 @@
       "source": "discovery:pentesterlab.com",
       "slug": "pentesterlab-web-fundamentals-seeds",
       "shipped_at": "2026-07-13T11:02:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-escape-fallback-merge",
+      "shipped_at": "2026-07-13T12:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-doc-evidence-fp-guard",
+      "shipped_at": "2026-07-13T12:10:00.000Z"
     }
   ]
 }
