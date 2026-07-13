@@ -610,6 +610,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecureflagEvidence",
   "clientSideImmersiveLabsEvidence",
   "clientSideRedtigerHackitEvidence",
+  "redtigerBlindLoginFormEvidence",
+  "clientSideVulnExposeEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -2710,6 +2712,35 @@ function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** VulnSite (vuln-expose.vercel.app) — seed explicit SQLi/XSS/IDOR/CMDi lab routes from homepage. */
+function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
+  if (!/VulnSite|vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/sqli/login",
+    "/sqli/search",
+    "/sqli/blind",
+    "/xss/playground",
+    "/xss/comments",
+    "/idor/dashboard",
+    "/cmdi",
+    "/network-tools",
+    "/blog",
+    "/invoices",
+    "/employee-portal"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** OpenVault Bank — seed /learn and /cheatsheet API training routes from SPA shell. */
 function extractOpenvaultBankSeeds(html: string, pageUrl: string): string[] {
   if (!/OpenVault Bank|openvaultbank\.com/i.test(html)) return [];
@@ -3992,6 +4023,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
+  const vulnExposeSeeds = extractVulnExposeSeeds(home.body, home.finalUrl);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
   const openvaultBankSeeds = extractOpenvaultBankSeeds(home.body, home.finalUrl);
   const webhackingKrSeeds = extractWebhackingKrSeeds(home.body, home.finalUrl);
@@ -4119,6 +4151,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
       ...redTigerSeeds,
+      ...vulnExposeSeeds,
       ...bugBountyHunterSeeds,
       ...openvaultBankSeeds,
       ...webhackingKrSeeds,
@@ -4269,19 +4302,34 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       3
     );
     let mainJsDoc = await probe.get(mainJsUrl, { maxBytes: 800_000, timeoutMs: 15000 });
-    const mainJsReady =
-      !HEROKU_APP_ERROR_RE.test(mainJsDoc.body) &&
-      /bypassSecurityTrustHtml|re_[A-Za-z0-9_]{20,}/i.test(mainJsDoc.body);
-    if (!mainJsReady) {
+    bootDocs.set(mainJsUrl, mainJsDoc);
+    const trackUrl = bootstrapUrls[2]!;
+    const sqlUrl = bootstrapUrls[3]!;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const trackBody = bootDocs.get(trackUrl)?.body ?? "";
+      const sqlBody = bootDocs.get(sqlUrl)?.body ?? "";
+      const mainJsReady =
+        !HEROKU_APP_ERROR_RE.test(mainJsDoc.body) &&
+        /bypassSecurityTrustHtml|re_[A-Za-z0-9_]{20,}/i.test(mainJsDoc.body);
+      const trackReady =
+        !HEROKU_APP_ERROR_RE.test(trackBody) &&
+        /"status"\s*:\s*"success"|"orderId"/i.test(trackBody);
+      const sqlReady = /SQLITE_ERROR|syntax error|sequelize/i.test(sqlBody);
+      if (mainJsReady && trackReady && sqlReady) break;
       await new Promise((r) => setTimeout(r, 2500));
-      mainJsDoc = await probe.get(mainJsUrl, { maxBytes: 2_000_000, timeoutMs: 18000 });
-      bootDocs.set(mainJsUrl, mainJsDoc);
-      if (!/SQLITE_ERROR|syntax error/i.test(bootDocs.get(bootstrapUrls[3]!)?.body ?? "")) {
-        const sqlDoc = await probe.get(bootstrapUrls[3]!, { maxBytes: 8192, timeoutMs: 12000 });
-        bootDocs.set(bootstrapUrls[3]!, sqlDoc);
+      if (!mainJsReady) {
+        mainJsDoc = await probe.get(mainJsUrl, {
+          maxBytes: attempt >= 2 ? 2_000_000 : 800_000,
+          timeoutMs: 18000
+        });
+        bootDocs.set(mainJsUrl, mainJsDoc);
       }
-    } else {
-      bootDocs.set(mainJsUrl, mainJsDoc);
+      if (!trackReady) {
+        bootDocs.set(trackUrl, await probe.get(trackUrl, { maxBytes: 8192, timeoutMs: 12000 }));
+      }
+      if (!sqlReady) {
+        bootDocs.set(sqlUrl, await probe.get(sqlUrl, { maxBytes: 8192, timeoutMs: 12000 }));
+      }
     }
     juiceShopBootstrap = [...bootDocs.values()]
       .filter((d) => {
