@@ -407,7 +407,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T02:46:03.349Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T02:46:13.376Z",
@@ -841,7 +841,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -1023,7 +1023,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T03:07:43.260Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T03:07:53.290Z",
@@ -1540,7 +1540,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T04:18:25.501Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T04:18:35.539Z",
@@ -5941,7 +5941,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -6488,7 +6488,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T13:32:05.454Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T13:32:15.484Z",
@@ -6564,7 +6564,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -6949,7 +6949,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T15:02:23.157Z",
-      "error": "We couldn't reach juice-shop.herokuapp.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach juice-shop.herokuapp.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T15:02:45.180Z",
@@ -7144,7 +7144,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T15:05:00.489Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T15:05:10.534Z",
@@ -7402,7 +7402,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -7562,7 +7562,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T17:37:48.026Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T17:37:58.054Z",
@@ -7903,7 +7903,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -7970,7 +7970,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T18:08:26.715Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T18:08:36.743Z",
@@ -8024,7 +8024,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -8142,7 +8142,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T18:09:07.926Z",
-      "error": "We couldn't reach ctflearn.com (timed out). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach ctflearn.com (timed out). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T19:04:37.197Z",
@@ -9082,7 +9082,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T21:25:59.959Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T22:03:01.233Z",
@@ -9187,7 +9187,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9426,7 +9426,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-13T22:06:15.386Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-13T22:06:25.411Z",
@@ -9622,6 +9622,452 @@
       "probes_run": 235,
       "status": "ok",
       "scanned_at": "2026-07-13T23:30:55.995Z"
+    },
+    {
+      "run_id": "2026-07-13T23:33:14.322Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 177,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:33:14.322Z"
+    },
+    {
+      "run_id": "2026-07-13T23:43:45.122Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 241,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:43:45.122Z"
+    },
+    {
+      "run_id": "2026-07-13T23:44:28.678Z",
+      "url": "https://sam.wizer-ctf.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 281,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:44:28.678Z"
+    },
+    {
+      "run_id": "2026-07-13T23:44:31.832Z",
+      "url": "https://wizer-ctf.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 281,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:44:31.832Z"
+    },
+    {
+      "run_id": "2026-07-13T23:44:35.108Z",
+      "url": "https://securebank-blog.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-csrf-evidence",
+          "title": "Client bundle documents CSRF-vulnerable transfer flows",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-securebank-blog-evidence",
+          "title": "SecureBank attack/secure mode educational lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 263,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:44:35.108Z"
+    },
+    {
+      "run_id": "2026-07-13T23:44:37.203Z",
+      "url": "https://hack-health-tutorial.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-hack-health-lab-evidence",
+          "title": "Hack Health tutorial documents intentional SQL injection lab",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 292,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:44:37.203Z"
+    },
+    {
+      "run_id": "2026-07-13T23:44:41.430Z",
+      "url": "http://testhtml5.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-13T23:44:41.430Z",
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-13T23:44:51.470Z",
+      "url": "http://natas0.natas.labs.overthewire.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-overthewire-natas-evidence",
+          "title": "OverTheWire Natas web-security wargame disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-overthewire-natas-referer-evidence",
+          "title": "Natas HTTP Referer guard bypass disclosed",
+          "severity": "high",
+          "confidence": 0.87,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 271,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:44:51.470Z"
+    },
+    {
+      "run_id": "2026-07-13T23:45:17.108Z",
+      "url": "http://websegura.radwarelatam.com/mutillidae/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "secret-resend",
+          "title": "Resend API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-mutillidae-evidence",
+          "title": "OWASP Mutillidae vulnerable lab disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "html-comment-credential-disclosure",
+          "title": "Database or admin credentials in HTML comment",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 311,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:45:17.108Z"
+    },
+    {
+      "run_id": "2026-07-13T23:47:25.270Z",
+      "url": "https://picoctf.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-cylab-academy-evidence",
+          "title": "CyLab Security Academy / picoCTF platform disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 288,
+      "status": "ok",
+      "scanned_at": "2026-07-13T23:47:25.270Z"
     }
   ],
   "teacher_delta_runs": [
@@ -9742,7 +10188,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "503 Service Unavailable — oracle outage, 1/6 recall (misconfig only)",
+      "benchmark_status": "503 Service Unavailable \u2014 oracle outage, 1/6 recall (misconfig only)",
       "scanned_at": "2026-07-08T16:13:00.000Z"
     },
     {
@@ -9751,7 +10197,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T17:15:00.000Z"
     },
     {
@@ -9760,7 +10206,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T18:05:00.000Z"
     },
     {
@@ -9769,7 +10215,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T19:12:00.000Z"
     },
     {
@@ -9778,7 +10224,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T20:12:00.000Z"
     },
     {
@@ -9787,7 +10233,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T21:17:00.000Z"
     },
     {
@@ -9796,7 +10242,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-08T22:05:00.000Z"
     },
     {
@@ -9805,7 +10251,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-08T23:05:00.000Z"
@@ -9816,7 +10262,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "scanned_at": "2026-07-09T00:12:00.000Z"
     },
     {
@@ -9825,7 +10271,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T02:06:00.000Z"
@@ -9836,7 +10282,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T03:06:00.000Z"
@@ -9847,7 +10293,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T04:06:00.000Z"
@@ -9858,7 +10304,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T05:06:00.000Z"
@@ -9869,7 +10315,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T06:06:00.000Z"
@@ -9880,7 +10326,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T07:06:00.000Z"
@@ -9891,7 +10337,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T08:12:00.000Z"
@@ -9902,7 +10348,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T10:09:00.000Z"
@@ -9913,7 +10359,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T13:03:00.000Z"
@@ -9924,7 +10370,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T14:05:00.000Z"
@@ -9935,7 +10381,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T15:05:00.000Z"
@@ -9946,7 +10392,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T16:05:00.000Z"
@@ -9957,7 +10403,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T17:05:00.000Z"
@@ -9968,7 +10414,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T18:05:00.000Z"
@@ -9979,7 +10425,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "REGRESSION — 1 finding, 1/6 recall (misconfig only); prior 19:05 run had 8 findings 6/6",
+      "benchmark_status": "REGRESSION \u2014 1 finding, 1/6 recall (misconfig only); prior 19:05 run had 8 findings 6/6",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T20:05:00.000Z"
@@ -9990,7 +10436,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "REGRESSION — 1 finding, 1/6 recall (misconfig only); gap: xss, sqli, idor, auth_bypass, sensitive_data",
+      "benchmark_status": "REGRESSION \u2014 1 finding, 1/6 recall (misconfig only); gap: xss, sqli, idor, auth_bypass, sensitive_data",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T21:05:00.000Z"
@@ -10001,7 +10447,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (recovered from 1/6 regression)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (recovered from 1/6 regression)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T22:05:00.000Z"
@@ -10012,7 +10458,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-09T23:05:00.000Z"
@@ -10023,7 +10469,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1/6→4/6 before fallback)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1/6\u21924/6 before fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T00:05:00.000Z"
@@ -10034,7 +10480,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T03:05:00.000Z"
@@ -10045,7 +10491,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (first pass degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry recovered)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (first pass degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry recovered)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T04:12:00.000Z"
@@ -10056,7 +10502,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (first pass degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry recovered)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (first pass degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry recovered)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T07:08:00.000Z"
@@ -10067,7 +10513,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1/6 misconfig-only; retry 1/6; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1/6 misconfig-only; retry 1/6; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T08:22:00.000Z"
@@ -10078,7 +10524,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1/6 misconfig-only; retry 1/6; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1/6 misconfig-only; retry 1/6; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T09:16:00.000Z"
@@ -10089,7 +10535,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 2→1 findings 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 2\u21921 findings 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T10:25:00.000Z"
@@ -10100,7 +10546,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1→2 findings 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1\u21922 findings 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T11:20:00.000Z"
@@ -10111,7 +10557,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (first pass degraded 4/6 gap xss,sensitive_data; retry recovered without staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (first pass degraded 4/6 gap xss,sensitive_data; retry recovered without staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T12:05:00.000Z"
@@ -10122,7 +10568,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary pass 6/6, no retry needed)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary pass 6/6, no retry needed)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T13:05:00.000Z"
@@ -10133,7 +10579,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (first pass degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry recovered)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (first pass degraded 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry recovered)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T14:05:00.000Z"
@@ -10144,7 +10590,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1→4 findings 1/6 then 4/6 gap xss,sensitive_data; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1\u21924 findings 1/6 then 4/6 gap xss,sensitive_data; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T17:15:00.000Z"
@@ -10155,7 +10601,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1→5 findings 1/6 then 4/6 gap sqli,auth_bypass; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1\u21925 findings 1/6 then 4/6 gap sqli,auth_bypass; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T18:15:00.000Z"
@@ -10166,7 +10612,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 4/6 gap xss,sensitive_data then retry 4/6; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 4/6 gap xss,sensitive_data then retry 4/6; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T19:15:00.000Z"
@@ -10177,7 +10623,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1→4 findings 1/6 then 4/6 gap xss,sensitive_data; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1\u21924 findings 1/6 then 4/6 gap xss,sensitive_data; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T20:16:14.857Z"
@@ -10188,7 +10634,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry DNS error; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry DNS error; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T21:15:00.000Z"
@@ -10199,7 +10645,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 4 findings 3/6 gap sqli,idor,auth_bypass; retry 2 findings; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 4 findings 3/6 gap sqli,idor,auth_bypass; retry 2 findings; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-10T23:15:00.000Z"
@@ -10210,7 +10656,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 2 findings 2/6 gap xss,sqli,idor,sensitive_data; retry 4 findings 3/6 gap sqli,idor,auth_bypass; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 2 findings 2/6 gap xss,sqli,idor,sensitive_data; retry 4 findings 3/6 gap sqli,idor,auth_bypass; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T00:18:00.000Z"
@@ -10221,7 +10667,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 4 findings 4/6 gap xss,sensitive_data; retry 5 findings 4/6 gap sqli,auth_bypass; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 4 findings 4/6 gap xss,sensitive_data; retry 5 findings 4/6 gap sqli,auth_bypass; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T01:15:00.000Z"
@@ -10232,7 +10678,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry 1 finding unchanged; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry 1 finding unchanged; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T02:25:00.000Z"
@@ -10243,7 +10689,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T03:06:00.000Z"
@@ -10254,7 +10700,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T05:06:00.000Z"
@@ -10265,7 +10711,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry 2 findings; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry 2 findings; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T06:28:00.000Z"
@@ -10276,7 +10722,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T07:07:00.000Z"
@@ -10287,7 +10733,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T08:12:00.000Z"
@@ -10298,7 +10744,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T09:08:00.000Z"
@@ -10309,7 +10755,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T10:05:00.000Z"
@@ -10320,7 +10766,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T11:10:00.000Z"
@@ -10331,7 +10777,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 4/6 degraded; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 4/6 degraded; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T12:33:13.000Z"
@@ -10342,7 +10788,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 4/6 gap sqli,auth_bypass; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 4/6 gap sqli,auth_bypass; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T13:37:00.000Z"
@@ -10353,7 +10799,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 2/6 gap xss,sqli,idor,sensitive_data; retry 1/6; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 2/6 gap xss,sqli,idor,sensitive_data; retry 1/6; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T14:30:00.000Z"
@@ -10364,7 +10810,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T15:10:00.000Z"
@@ -10375,7 +10821,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku DNS NXDOMAIN; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku DNS NXDOMAIN; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T16:06:00.000Z"
@@ -10386,7 +10832,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (primary full pass, no retry or staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T18:06:00.000Z"
@@ -10397,7 +10843,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (pass1 2/6 gap xss,sqli,idor,sensitive_data; pass2 4/6 gap xss,sensitive_data; wake retry 6/6, no staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (pass1 2/6 gap xss,sqli,idor,sensitive_data; pass2 4/6 gap xss,sensitive_data; wake retry 6/6, no staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T19:29:00.000Z"
@@ -10408,7 +10854,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 4→2→3 findings 4/6 gap xss,sensitive_data; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 4\u21922\u21923 findings 4/6 gap xss,sensitive_data; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T20:32:14.857Z"
@@ -10419,7 +10865,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (pass1 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data; wake retry 6/6, no staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (pass1 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data; wake retry 6/6, no staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T21:18:00.000Z"
@@ -10430,7 +10876,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap, no staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap, no staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T22:06:00.000Z"
@@ -10441,7 +10887,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 2 findings 2/6 gap xss,sqli,idor,sensitive_data; retry+wake still 2/6; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 2 findings 2/6 gap xss,sqli,idor,sensitive_data; retry+wake still 2/6; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-11T23:35:00.000Z"
@@ -10452,7 +10898,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 3→2→1 findings gap xss,auth_bypass,sensitive_data pages_crawled=1; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 3\u21922\u21921 findings gap xss,auth_bypass,sensitive_data pages_crawled=1; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T00:45:00.000Z"
@@ -10463,7 +10909,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap, no staging fallback; pages_crawled=1 probes=239)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap, no staging fallback; pages_crawled=1 probes=239)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T01:10:00.000Z"
@@ -10474,7 +10920,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap, no staging fallback; pages_crawled=1 probes=259)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap, no staging fallback; pages_crawled=1 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T02:10:00.000Z"
@@ -10485,7 +10931,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (remote validation 03:04; local pass1 4/6 gap xss,sensitive_data retry 8/6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (remote validation 03:04; local pass1 4/6 gap xss,sensitive_data retry 8/6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T03:12:00.000Z"
@@ -10496,7 +10942,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall (pass1 4/6 gap xss,sensitive_data; retry merge 6/6, no staging fallback)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall (pass1 4/6 gap xss,sensitive_data; retry merge 6/6, no staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T04:09:32.000Z"
@@ -10507,7 +10953,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap, no retry or staging fallback; pages_crawled=1 probes=259)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap, no retry or staging fallback; pages_crawled=1 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T05:12:00.000Z"
@@ -10518,7 +10964,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap, no retry or staging fallback; pages_crawled=1 probes=259)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap, no retry or staging fallback; pages_crawled=1 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T06:06:00.000Z"
@@ -10529,7 +10975,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T07:05:00.000Z"
@@ -10540,7 +10986,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 2→2→1 findings 2/6 gap xss,sqli,auth_bypass,sensitive_data pages_crawled=1; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 2\u21922\u21921 findings 2/6 gap xss,sqli,auth_bypass,sensitive_data pages_crawled=1; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T08:45:00.000Z"
@@ -10551,7 +10997,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=248)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=248)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T09:10:00.000Z"
@@ -10562,7 +11008,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (local pass1 4/6 gap xss,sensitive_data; retry 8/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (local pass1 4/6 gap xss,sensitive_data; retry 8/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T10:14:00.000Z"
@@ -10573,7 +11019,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T11:07:00.000Z"
@@ -10584,7 +11030,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T12:05:00.000Z"
@@ -10595,7 +11041,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=269)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T14:05:00.000Z"
@@ -10606,7 +11052,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "degraded — primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data (pages_crawled=1); staging fallback 7 findings 6/6",
+      "benchmark_status": "degraded \u2014 primary heroku 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data (pages_crawled=1); staging fallback 7 findings 6/6",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T15:55:00.000Z"
@@ -10617,7 +11063,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (primary heroku 3 passes 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data pages_crawled=1 probes=2-29; staging fallback 6/6)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (primary heroku 3 passes 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data pages_crawled=1 probes=2-29; staging fallback 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T16:49:06.857Z"
@@ -10628,7 +11074,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall (pass1 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry 3 findings; wake retry 7 findings 6/6 on primary, no staging fallback)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall (pass1 1 finding 1/6 gap xss,sqli,idor,auth_bypass,sensitive_data; retry 3 findings; wake retry 7 findings 6/6 on primary, no staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T17:36:30.000Z"
@@ -10639,7 +11085,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=283)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=283)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T18:08:00.000Z"
@@ -10650,7 +11096,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T22:12:00.000Z"
@@ -10661,7 +11107,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-12T23:10:00.000Z"
@@ -10672,7 +11118,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=286)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=286)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T00:08:00.000Z"
@@ -10683,7 +11129,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T01:08:00.000Z"
@@ -10694,7 +11140,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall via staging fallback (primary heroku pass1 6 findings gap sqli; wake retry 2 findings; pages_crawled=1)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall via staging fallback (primary heroku pass1 6 findings gap sqli; wake retry 2 findings; pages_crawled=1)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T02:48:00.000Z"
@@ -10705,7 +11151,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=305)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T03:05:00.000Z"
@@ -10716,7 +11162,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (pass1 3 findings gap xss,sqli,sensitive_data; wake retry 6/6; pages_crawled=1 probes=285)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (pass1 3 findings gap xss,sqli,sensitive_data; wake retry 6/6; pages_crawled=1 probes=285)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T04:18:00.000Z"
@@ -10727,7 +11173,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=294)",
+      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=294)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T08:06:00.000Z"
@@ -10738,7 +11184,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku (pass1 6 findings gap xss,sqli,sensitive_data; wake retry 6/6; pages_crawled=6 probes=294)",
+      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku (pass1 6 findings gap xss,sqli,sensitive_data; wake retry 6/6; pages_crawled=6 probes=294)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T09:27:00.000Z"
@@ -10749,7 +11195,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku (pass1 4 findings gap xss,sensitive_data; wake retry 6/6; pages_crawled=6 probes=294)",
+      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku (pass1 4 findings gap xss,sensitive_data; wake retry 6/6; pages_crawled=6 probes=294)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T10:16:00.000Z"
@@ -10760,7 +11206,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 9 findings, 6/6 recall via staging fallback (primary heroku pass1 8 findings gap sqli; wake retry 2 findings; pages_crawled=6 probes=271)",
+      "benchmark_status": "ok \u2014 9 findings, 6/6 recall via staging fallback (primary heroku pass1 8 findings gap sqli; wake retry 2 findings; pages_crawled=6 probes=271)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T11:45:00.000Z"
@@ -10771,7 +11217,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 6 findings, 3/6 recall on primary heroku (pass1 6 findings gap xss,sqli,sensitive_data; wake retry 2 findings; staging fallback 3 findings sqli only; pages_crawled=6 probes=107)",
+      "benchmark_status": "ok \u2014 6 findings, 3/6 recall on primary heroku (pass1 6 findings gap xss,sqli,sensitive_data; wake retry 2 findings; staging fallback 3 findings sqli only; pages_crawled=6 probes=107)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Misses: xss, sqli, sensitive_data on cold Heroku dyno.",
       "scanned_at": "2026-07-13T12:54:00.000Z"
@@ -10782,7 +11228,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku (pass1 4 findings gap xss,sqli,sensitive_data pages_crawled=1; retry 9 findings gap sqli; final wake retry 10 findings 6/6; pages_crawled=6 probes=294)",
+      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku (pass1 4 findings gap xss,sqli,sensitive_data pages_crawled=1; retry 9 findings gap sqli; final wake retry 10 findings 6/6; pages_crawled=6 probes=294)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 3/6 before wake retries.",
       "scanned_at": "2026-07-13T13:35:00.000Z"
@@ -10793,7 +11239,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=294)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=294)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T14:05:00.000Z"
@@ -10804,9 +11250,9 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall via staging fallback (primary heroku DNS error domain not found; pages_crawled=6 probes=251)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall via staging fallback (primary heroku DNS error domain not found; pages_crawled=6 probes=251)",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. Primary oracle unreachable — staging fallback used.",
+      "notes": "No teacher tools available to diff against local scanner findings. Primary oracle unreachable \u2014 staging fallback used.",
       "scanned_at": "2026-07-13T15:06:00.000Z"
     },
     {
@@ -10815,7 +11261,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (pass1 5 findings gap sensitive_data pages_crawled=1; retry 3 findings; final wake retry 7 findings 6/6; pages_crawled=1 probes=267)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (pass1 5 findings gap sensitive_data pages_crawled=1; retry 3 findings; final wake retry 7 findings 6/6; pages_crawled=1 probes=267)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 missing sensitive_data before Heroku wake retries.",
       "scanned_at": "2026-07-13T17:31:47.839Z"
@@ -10826,7 +11272,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=270)",
+      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=270)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T18:10:00.000Z"
@@ -10837,7 +11283,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (pass1 3 findings gap sqli,idor,sensitive_data pages_crawled=1; retry 4 findings; final wake retry 8 findings 6/6; pages_crawled=6 probes=282)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (pass1 3 findings gap sqli,idor,sensitive_data pages_crawled=1; retry 4 findings; final wake retry 8 findings 6/6; pages_crawled=6 probes=282)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 3/6 before Heroku wake retries.",
       "scanned_at": "2026-07-13T20:25:00.000Z"
@@ -10848,7 +11294,7 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (pass1 5 findings gap sensitive_data pages_crawled=1; retry 4 findings; final wake retry 8 findings 6/6; pages_crawled=6 probes=285)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (pass1 5 findings gap sensitive_data pages_crawled=1; retry 4 findings; final wake retry 8 findings 6/6; pages_crawled=6 probes=285)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 missing sensitive_data before Heroku wake retries.",
       "scanned_at": "2026-07-13T21:26:00.000Z"
@@ -10859,10 +11305,21 @@
       "status": "skipped",
       "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=276)",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=276)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings",
       "scanned_at": "2026-07-13T22:07:30.000Z"
+    },
+    {
+      "run_id": "2026-07-13T23:47:39.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok \u2014 8 findings, 6/6 recall via staging fallback (primary heroku pass1 5 findings gap sqli,auth_bypass pages_crawled=1; retry 5; wake retry 6; staging 7 findings 6/6; pages_crawled=6 probes=241)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 missing sqli,auth_bypass on primary Heroku before wake retries.",
+      "scanned_at": "2026-07-13T23:47:39.000Z"
     }
   ]
 }

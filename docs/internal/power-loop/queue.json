@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-13T22:05:00.000Z",
+  "updated_at": "2026-07-13T23:47:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://sam.wizer-ctf.com/",
+      "source": "Wizer CTF challenge instances hub — prototype pollution/SSTI developer security labs (wizer-ctf.com writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wizer-ctf.com/",
+      "source": "Wizer CTF platform landing — free developer security challenge series (wizer-training.com for-developers)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/level9.php",
+      "source": "OverTheWire RedTiger level 9 — image upload / file inclusion wargame (writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=6",
+      "source": "BugBountyHunter zseano — web vulnerability challenge #6 (real bug bounty findings recreated)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=7",
+      "source": "BugBountyHunter zseano — web vulnerability challenge #7 (training platform)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chal7.vercel.app/",
       "source": "Wizer CTF #7 Login Page — SQLi + weak MD5 hash login bypass (wizer-training.com for-developers)",
