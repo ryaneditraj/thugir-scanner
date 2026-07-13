@@ -2477,6 +2477,24 @@
       "slug": "redtiger-level-finalurl-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level7.php/level10.php minimal HTML + name=level7login POST form; clientSideRedtigerHackitEvidence + redtigerBlindLoginFormEvidence include finalUrl level\\d+\\.php in corpus; level7.php findings 3 (hackit+blind-login); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chal7.vercel.app",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/login with serializeArray JSON [{\"name\":\"user\",\"value\":\"admin'--\"}] returns syntax error at position 139; probeJsonAuthSqlInjection serializeArray bodies + 5xx SQL error acceptance; chal7 oracle validated via curl; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chal8.vercel.app",
+      "slug": "client-side-wizer-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Powered by Wizer + List of Users/Groups hub + chal8.vercel.app; clientSideWizerCtfEvidence; chal8.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "client-side-vuln-expose-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VulnSite title + ENTORNO DE PENTESTING PROFESIONAL on homepage; clientSideVulnExposeEvidence now includes finalUrl in corpus; vuln-expose.vercel.app findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4514,6 +4532,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-level-finalurl-oracle",
       "shipped_at": "2026-07-13T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:chal7.vercel.app",
+      "slug": "json-serializearray-login-sqli",
+      "shipped_at": "2026-07-13T23:33:00.000Z"
+    },
+    {
+      "source": "discovery:chal8.vercel.app",
+      "slug": "client-side-wizer-ctf-evidence",
+      "shipped_at": "2026-07-13T23:33:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-finalurl-corpus-fix",
+      "shipped_at": "2026-07-13T23:33:00.000Z"
     }
   ]
 }
