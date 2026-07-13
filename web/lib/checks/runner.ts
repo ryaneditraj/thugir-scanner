@@ -1095,6 +1095,10 @@ function extractKontraTrainingSeeds(html: string, origin: string): string[] {
     "/free-application-security-training/owasp-top-10-session-fixation",
     "/free-application-security-training/owasp-top-10-user-enumeration",
     "/free-application-security-training/owasp-top-10-stored-cross-site-scripting",
+    "/free-application-security-training/owasp-top-10-reflected-cross-site-scripting",
+    "/free-application-security-training/owasp-top-10-insecure-url-redirect",
+    "/free-application-security-training/owasp-top-10-cross-site-request-forgery",
+    "/free-application-security-training/owasp-top-10-leftover-debug-code",
     "/free"
   ]) {
     try {
@@ -1948,6 +1952,8 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/sql-injection/injection-explained",
     "/lessons/xss-reflected/start",
     "/lessons/xss-stored/start",
+    "/lessons/xss-dom/start",
+    "/lessons/xss-dom/checking-the-code",
     "/lessons/csrf/start",
     "/lessons/open-redirects/start",
     "/lessons/ai-prompt-injection/start",
