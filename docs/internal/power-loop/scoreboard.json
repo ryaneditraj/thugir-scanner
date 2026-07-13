@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T05:04:52.846Z",
+  "updated_at": "2026-07-13T05:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,85 +15,67 @@
       ]
     }
   },
-  "total_sites_scanned": 1038,
-  "total_findings": 4546,
+  "total_sites_scanned": 1041,
+  "total_findings": 4561,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 492,
-  "discovery_findings": 3319,
-  "improvements_shipped": 367,
-  "last_run": "2026-07-13T05:04:52.846Z",
+  "discovery_findings": 3334,
+  "improvements_shipped": 370,
+  "last_run": "2026-07-13T05:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "05:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
+      "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "pass1_findings": 8,
-      "pass1_gap": [],
-      "pages_crawled": 1,
-      "probes_run": 289,
-      "note": "Primary Heroku 8 findings 6/6 on first pass — no cold-start retry needed",
+      "note": "No benchmark misses — juice-shop.herokuapp.com recall stable at 6/6 (9 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 41,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 15,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "OSS GitHub Pages labs (apigoat, HackLab, WebVulnsGuide); OpenVault Railway + GenAI crosswalk queued at tail",
+      "dns_failures": [
+        "http://acuart.phpnet.us/ (DNS parking page — classic Acunetix demo offline)",
+        "https://cyber-ctf-website.vercel.app/ (404 deploy offline)"
+      ],
+      "focus": "Queued tail URLs: juice-shop.github.io project oracle, Pwned Labs cloud/git-secrets labs",
       "urls_scanned_list": [
-        "https://yusufarbc.github.io/apigoat/ (3)",
-        "https://ucu-owasp-ctf.vercel.app/ (5)",
-        "https://ogtamimi.github.io/OGT-Cyber-Game/ (5)",
-        "https://koadt.github.io/oss-oopssec-store/ (6)",
-        "https://ashimkoirala.github.io/HackLab/ (6)",
-        "https://vulnshop.vercel.app/ (3)",
-        "https://dxx33.github.io/WebVulnsGuide/ (8)",
-        "https://akbarbashakm.github.io/frontend-security-examples/ (5)"
+        "https://juice-shop.github.io/ (4)",
+        "https://pwnedlabs.io/explore (5)",
+        "https://labs.pwnedlabs.io/hunt-for-secrets-in-git-repos (6)"
       ],
-      "urls_added_list": [
-        "https://web-production-16ec6a.up.railway.app/",
-        "https://emmanuelgjr.github.io/GenAI-Security-Crosswalk/",
-        "https://xss.haozi.me/",
-        "https://hackme.net/",
-        "https://nomadu27.github.io/InsAIts-public/"
-      ],
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings, first-pass — no Heroku wake retry)",
-      "dxx33.github.io/WebVulnsGuide: 8 findings — interactive OWASP guide with XSS/SQLi evidence",
-      "ashimkoirala.github.io/HackLab: 6 findings — zero-dependency browser OWASP Top 10 lab",
-      "koadt.github.io/oss-oopssec-store: 6 findings — CTF e-commerce with injectable patterns",
-      "ucu-owasp-ctf.vercel.app: 5 findings — educational CTF challenge markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
+      "juice-shop.github.io: OWASP Juice Shop challenge taxonomy oracle (0→4 findings)",
+      "pwnedlabs.io/explore: cloud/hybrid/AI security lab catalog (4→5 findings)",
+      "labs.pwnedlabs.io: git-secrets + Trufflehog hunting lab (4→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "benchmark: no misses this run — Heroku warm enough for 6/6 on pass1",
-      "New URLs at queue tail (OpenVault Railway, GenAI crosswalk, xss.haozi, hackme, InsAIts) await next pass",
-      "cyber-ctf + Pwned Labs + juice-shop.github.io still queued ahead of tail additions"
+      "acuart.phpnet.us: DNS parking — use testphp.vulnweb.com for Acunetix acuart oracle",
+      "cyber-ctf-website.vercel.app: 404 — deploy offline",
+      "rootxjs.github.io/blog/grpc-goat: covered by existing gRPC Goat rule when blog crawled"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.github.io": 4,
+    "pwnedlabs.io/explore": 5,
+    "labs.pwnedlabs.io/hunt-for-secrets-in-git-repos": 6,
     "server.vulnapp.id": 8,
     "blueteamlabs.online": 1,
     "urban-vampi-production.up.railway.app": 6,
@@ -116,7 +98,7 @@
     "application.security/free-application-security-training/owasp-top-10-command-injection": 5,
     "application.security/free-application-security-training/owasp-top-10-directory-traversal": 5,
     "application.security/free-application-security-training/owasp-top-10-clickjacking": 5,
-    "juice-shop.herokuapp.com": 8,
+    "juice-shop.herokuapp.com": 9,
     "code-breaking.fly.dev": 3,
     "sanitize-web.fly.dev": 3,
     "pokemorty.fly.dev": 3,
