@@ -554,6 +554,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideNosqlEvidence",
   "clientSideXxeEvidence",
   "clientSideApiSecurityLabEvidence",
+  "clientSideOpenvaultLearnEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
   "clientSideSsrfEvidence",
@@ -2707,12 +2708,36 @@ function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** OpenVault Bank — seed /learn and /cheatsheet API training routes from SPA shell. */
+function extractOpenvaultBankSeeds(html: string, pageUrl: string): string[] {
+  if (!/OpenVault Bank|openvaultbank\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/learn", "/cheatsheet"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** BugBountyHunter zseano — seed numbered challenges and member playground from hub. */
 function extractBugBountyHunterChallengeSeeds(html: string, pageUrl: string): string[] {
   if (!/BugBountyHunter|bugbountyhunter\.com|@zseano/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/playground", "/challenge?id=1"]) {
+  for (const p of [
+    "/playground",
+    "/challenge?id=1",
+    "/training",
+    "/vulnerability/?type=xss",
+    "/vulnerability/?type=sql",
+    "/vulnerability/?type=ssrf"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -3966,6 +3991,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
+  const openvaultBankSeeds = extractOpenvaultBankSeeds(home.body, home.finalUrl);
   const webhackingKrSeeds = extractWebhackingKrSeeds(home.body, home.finalUrl);
   const netForceSeeds = extractNetForceChallengeSeeds(home.body, home.finalUrl);
   const brutelogicXssGymSeeds = extractBrutelogicXssGymSeeds(home.body, home.finalUrl);
@@ -4092,6 +4118,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...overthewireNatasSeeds,
       ...redTigerSeeds,
       ...bugBountyHunterSeeds,
+      ...openvaultBankSeeds,
       ...webhackingKrSeeds,
       ...netForceSeeds,
       ...brutelogicXssGymSeeds,
