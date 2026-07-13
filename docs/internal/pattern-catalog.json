@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T01:11:27.869Z",
-  "total": 283,
-  "uniqueSlugs": 283,
+  "generatedAt": "2026-07-13T02:04:57.891Z",
+  "total": 285,
+  "uniqueSlugs": 285,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 265,
+    "generic": 267,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 65,
-    "deep": 218,
+    "deep": 220,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 91,
+    "Broken access control": 92,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Security misconfiguration": 21,
     "Information disclosure": 16,
     "Broken authentication": 17,
-    "Injection": 46,
+    "Injection": 47,
     "Cross-site scripting": 27,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 3,
@@ -54,6 +54,7 @@
     "client-side-authlab-evidence",
     "client-side-avid-vuln-registry-evidence",
     "client-side-berger-cyber-lab-evidence",
+    "client-side-bountybench-benchmark-evidence",
     "client-side-breaktheflask-evidence",
     "client-side-brokencrystals-evidence",
     "client-side-brutelogic-xss-gym-evidence",
@@ -65,6 +66,7 @@
     "client-side-burp-bounty-lab-evidence",
     "client-side-bwapp-evidence",
     "client-side-bwapp-injection-catalog-evidence",
+    "client-side-cahyod-vulnerable-lab-evidence",
     "client-side-chimera-vuln-lab-evidence",
     "client-side-clawguard-ai-audit-evidence",
     "client-side-code-breaking-evidence",
