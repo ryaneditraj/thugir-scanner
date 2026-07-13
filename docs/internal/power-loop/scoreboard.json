@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T08:10:00.000Z",
+  "updated_at": "2026-07-13T09:26:08.936Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1070,
-  "total_findings": 4693,
+  "total_sites_scanned": 1071,
+  "total_findings": 4702,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 502,
   "discovery_findings": 3447,
-  "improvements_shipped": 379,
-  "last_run": "2026-07-13T08:10:00.000Z",
+  "improvements_shipped": 381,
+  "last_run": "2026-07-13T09:26:08.936Z",
   "last_run_summary": {
-    "hour_utc": "08:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 10,
+      "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "No benchmark misses — juice-shop.herokuapp.com recall 6/6 (10 findings; pages_crawled=6 probes=294)",
+      "note": "No benchmark misses — juice-shop.herokuapp.com recall 6/6 (9 findings after retry; pass1 degraded 1/6)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,40 +50,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 36,
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 24,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Kontra reflected-XSS/CSRF/open-redirect/debug-code + Hacksplaining DOM XSS; queue batch rescan",
+      "focus": "Kontra reflected-XSS/CSRF/open-redirect/debug-code + Hacksplaining DOM XSS queued lessons",
       "urls_scanned_list": [
-        "https://riglabs-cyber-lab.vercel.app/ (4)",
-        "https://vulnlab.vercel.app/ (7)",
-        "https://juicesec.mrdinesh.workers.dev/ (6)",
-        "https://xss-attacker.vercel.app/ (4)",
-        "https://avid-vuln-editor.vercel.app/ (4)",
-        "https://dvai.vercel.app/ (4)",
-        "https://fvb.vchan.in/ (3)",
-        "https://tempehs.github.io/The_Unsecure_PWA/ (4)"
+        "application.security/.../reflected-cross-site-scripting (5)",
+        "application.security/.../insecure-url-redirect (5)",
+        "application.security/.../cross-site-request-forgery (5)",
+        "application.security/.../leftover-debug-code (5)",
+        "hacksplaining.com/lessons/xss-dom/start (4)"
       ],
-      "urls_queued_not_scanned": [
-        "application.security/.../reflected-cross-site-scripting",
-        "application.security/.../insecure-url-redirect",
-        "application.security/.../cross-site-request-forgery",
-        "application.security/.../leftover-debug-code",
-        "hacksplaining.com/lessons/xss-dom/start"
-      ]
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "vulnlab.vercel.app: client-side SSRF + file-upload + XXE lab markers (7 findings)",
-      "juicesec.mrdinesh.workers.dev: Juice Shop Workers variant JWT alg:none + IDOR (6 findings)",
-      "xss-attacker.vercel.app: XSS C2 collector /api/collect exfil endpoint (4 findings)",
-      "dvai.vercel.app: Damn Vulnerable AI chat dangerouslySetInnerHTML sink (4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
+      "application.security reflected XSS lesson: Kontra EXERCISE_ID + Reflected XSS | Kontra title (0→5 findings)",
+      "application.security CSRF lesson: Cross Site Request Forgery | Kontra + EXERCISE_ID (0→5 findings)",
+      "hacksplaining.com/lessons/xss-dom/start: DOM-based XSS lesson + URI fragment abuse description (0→4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "new Kontra/Hacksplaining URLs queued at tail — will scan on next queue pass"
+      "primary heroku juice-shop still degrades to 1/6 on pass1 — retry recovers 6/6"
     ]
   },
   "discovery_highlights": {
@@ -292,6 +282,11 @@
     "lucky-cyber3008.github.io/juice-shop-vapt": 3,
     "application.security/vertical-privilege-escalation": 5,
     "application.security/user-enumeration": 5,
-    "application.security/session-fixation": 5
+    "application.security/session-fixation": 5,
+    "application.security/reflected-cross-site-scripting": 5,
+    "application.security/insecure-url-redirect": 5,
+    "application.security/cross-site-request-forgery": 5,
+    "application.security/leftover-debug-code": 5,
+    "hacksplaining.com/lessons/xss-dom/start": 4
   }
 }
