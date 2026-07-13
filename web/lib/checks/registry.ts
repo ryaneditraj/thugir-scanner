@@ -1628,7 +1628,7 @@ async function probeJsonAuthSqlInjection(ctx: RuleContext): Promise<RuleResult |
         headers: { "Content-Type": "application/json" },
         maxBytes: 8192
       });
-      if (doc.status < 200 || doc.status >= 500) continue;
+      if (doc.status < 200 || doc.status >= 600) continue;
       const successMarker = JSON_SQLI_SUCCESS_MARKERS.find((re) => re.test(doc.body));
       if (successMarker) {
         const match = doc.body.match(successMarker);
