@@ -2423,6 +2423,24 @@
       "slug": "hacksplaining-directory-traversal-queue-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lessons/path-traversal/start returns 404; canonical slug is /lessons/directory-traversal/start (Directory Traversal — Secure Coding Lesson); queue.json corrected; web.ctflearn.com/web5 removed (404) — use web2 base64 comment challenge; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-lesson-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sparse CDN HTML omitted /lessons/ssl-stripping title; finalUrl in corpus matches /lessons/{slug} path oracles; ssl-stripping/start and xss-reflected/start findings 1→4 incl client-side-hacksplaining-evidence; benchmark juice-shop.herokuapp.com 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com/cheatsheet",
+      "slug": "client-side-openvault-cheatsheet-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cheatsheet bundle APIsec Bolt + Portswigger + Postman + OWASP ZAP tooling catalog; openvaultbank.com/cheatsheet findings 4→5; benchmark 6/6 maintained (8 findings)"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab",
+      "slug": "client-side-cookiejar-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage hands-on session security lab + stolen cookies bypass passwords, 2FA, and OAuth + /demo nav; cyberdesserts.github.io/cookiejar-lab/ findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [

@@ -6638,5 +6638,57 @@ export const genericPatterns: Pattern[] = [
       "We host OpenVault Bank API security training labs. Show how to isolate /learn demo instances from production APIs.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-openvault-cheatsheet-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "OpenVault Bank API security tooling cheatsheet disclosed",
+    description:
+      "OpenVault Bank /cheatsheet lists APIsec Bolt, Burp Suite, Postman, and OWASP ZAP workflows for practicing BOLA and mass-assignment attacks against the vulnerable banking API.",
+    impactOneline:
+      "Public cheatsheet pages document API pen-test tooling and attack workflows attackers reuse against production banking APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOpenvaultCheatsheetEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OpenVault Bank cheatsheet is intentional training — host demo instances in isolated lab networks only.",
+      steps: [
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure.",
+        "Do not mirror cheatsheet API attack workflows in production banking APIs.",
+        "Use cheatsheet tooling guidance for scanner tuning, not as production security baselines."
+      ]
+    },
+    fixPrompt:
+      "We host OpenVault Bank API security cheatsheet pages. Show how to isolate /cheatsheet demo instances from production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cookiejar-lab-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "CookieJar session-security training lab disclosed",
+    description:
+      "CookieJar lab homepage documents hands-on session hijack training — stolen cookies bypass passwords, 2FA, and OAuth — with an interactive /demo replay walkthrough.",
+    impactOneline:
+      "Public CookieJar lab pages teach session token theft and replay patterns reusable against production session management.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCookiejarLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CookieJar is an intentional training lab — gate demos behind auth and isolate from production.",
+      steps: [
+        "Require authentication before serving session hijack demo pages.",
+        "Set HttpOnly, Secure, and SameSite on all session cookies in production.",
+        "Run CookieJar demos only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host CookieJar session-security training labs. Show how to gate /demo behind auth and harden session cookies in production.",
+    version: 1,
+    enabled: true
   }
 ];
