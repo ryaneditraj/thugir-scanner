@@ -658,6 +658,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideRestVulnwebEvidence",
   "clientSidePwnshopEvidence",
   "clientSideVulnforgeAcademyEvidence",
+  "clientSideOopssecStoreEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
   "clientSideOpenRedirectEvidence",

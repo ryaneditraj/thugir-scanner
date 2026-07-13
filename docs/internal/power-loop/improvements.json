@@ -2369,6 +2369,24 @@
       "slug": "hacksplaining-xssi-queue-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lessons/cross-site-script-inclusion/start returns 404; catalog slug is /lessons/xssi/start (Cross-Site Script Inclusion — Secure Coding Lesson); queue.json corrected"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-reflected-xss-rce-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/xss-reflected/start title Reflected XSS — Secure Coding Lesson + meta malicious JavaScript to be bounced off your server; GET /lessons/remote-code-execution/start title Remote Code Execution — Secure Coding Lesson; CLIENT_HACKSPLAINING_RES extended; xss-reflected/start findings 0→4 incl client-side-hacksplaining-evidence; benchmark juice-shop.herokuapp.com 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "client-side-oopssec-store-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: roadmap meta 35 flags across 11 chapters from recon to remote code execution + Chapter 01–11 XSS/IDOR/SSRF catalog; extractOopssecStoreSeeds + clientSideOopssecStoreEvidence wired in DEEP_RULES; koadt.github.io/oss-oopssec-store/roadmap findings 4→5; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab",
+      "slug": "cookiejar-lab-demo-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage href=/demo/ only; extractCookiejarLabSeeds seeds /demo from cookiejar-lab root; cyberdesserts.github.io/cookiejar-lab/ findings 0→3 incl client-side-session-hijack-evidence (doReplay/vault-token on demo); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4331,6 +4349,21 @@
       "source": "discovery:hacksplaining.com",
       "slug": "hacksplaining-xssi-queue-fix",
       "shipped_at": "2026-07-13T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-reflected-xss-rce-lessons",
+      "shipped_at": "2026-07-13T17:32:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "client-side-oopssec-store-evidence",
+      "shipped_at": "2026-07-13T17:32:00.000Z"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab",
+      "slug": "cookiejar-lab-demo-crawl-seeds",
+      "shipped_at": "2026-07-13T17:32:00.000Z"
     }
   ]
 }
