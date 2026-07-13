@@ -2357,6 +2357,18 @@
       "slug": "juice-shop-cold-start-mainjs-oracle",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: pass1 Heroku cold-start gap xss,sqli,sensitive_data (pages_crawled=1); dangerousHtmlSinks now probes GET /main.js at 2MB on juice-shop hosts; bootstrap escalates main.js when bypassSecurityTrustHtml|re_ absent; juice-shop.demo.escape.tech recall 6/6 (8 findings)"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-supply-chain-protocol-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XML Bombs/Subdomain Squatting/Toxic Dependencies/Unencrypted Communication/XSSI/DNS Poisoning/SSL Stripping — Secure Coding Lesson titles + meta descriptions; extractHacksplainingLessonSeeds + clientSideHacksplainingEvidence markers extended; xml-bombs/start and xssi/start findings 0→4 incl client-side-hacksplaining-evidence; benchmark juice-shop-staging.herokuapp.com 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-xssi-queue-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/cross-site-script-inclusion/start returns 404; catalog slug is /lessons/xssi/start (Cross-Site Script Inclusion — Secure Coding Lesson); queue.json corrected"
     }
   ],
   "shipped": [
@@ -4309,6 +4321,16 @@
       "source": "benchmark:juice-shop",
       "slug": "juice-shop-cold-start-mainjs-oracle",
       "shipped_at": "2026-07-13T14:01:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-supply-chain-protocol-lessons",
+      "shipped_at": "2026-07-13T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-xssi-queue-fix",
+      "shipped_at": "2026-07-13T16:10:00.000Z"
     }
   ]
 }
