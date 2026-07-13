@@ -1509,6 +1509,7 @@ const SQL_ERROR_MARKERS = [
   /ODBC SQL Server Driver/i,
   /ADODB\.Recordset/i,
   /Syntax error.*in query expression/i,
+  /syntax error at position/i,
   /"detail"\s*:\s*"[\s\S]{0,120}syntax error/i
 ];
 const SQL_PROBE = "'))";
@@ -1582,22 +1583,45 @@ const SQL_API_SEARCH_PATHS = ["/api/products", "/api/search", "/api/items", "/ap
 const JSON_AUTH_SQL_PATHS = ["/api/portal", "/api/auth/login", "/api/login", "/api/authenticate"];
 const JSON_SQLI_BODIES = [
   JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
-  JSON.stringify({ email: "admin' OR '1'='1", password: "x" })
+  JSON.stringify({ email: "admin' OR '1'='1", password: "x" }),
+  JSON.stringify({ user: "admin' OR '1'='1", password: "x" })
 ];
+const JSON_SQLI_SERIALIZEARRAY_PAYLOADS = ["admin'--", "' OR 1=1--", "admin' OR '1'='1"];
 const JSON_SQLI_SUCCESS_MARKERS = [
   /SQL\s*Injection/i,
   /Authentication Bypass Successful/i,
   /Login Successful.*SQL Injection/i
 ];
 
+function buildSerializeArrayLoginBodies(): string[] {
+  return JSON_SQLI_SERIALIZEARRAY_PAYLOADS.map((value) =>
+    JSON.stringify([
+      { name: "user", value },
+      { name: "password", value: "x" }
+    ])
+  );
+}
+
+function usesSerializeArrayLogin(corpus: string): boolean {
+  return (
+    /serializeArray\s*\(\s*document\.forms\[0\]\s*\)/i.test(corpus) ||
+    (/api\/login/i.test(corpus) && /name\s*=\s*["']user["']/i.test(corpus)) ||
+    /chal\d+\.vercel\.app|Powered by\s*<img[^>]+wizer\.svg/i.test(corpus)
+  );
+}
+
 async function probeJsonAuthSqlInjection(ctx: RuleContext): Promise<RuleResult | null> {
   const discovered = extractApiPaths(ctx.combined, 8).filter((p) =>
     /login|auth|portal|authenticate/i.test(p)
   );
   const paths = [...new Set([...discovered, ...JSON_AUTH_SQL_PATHS])].slice(0, 6);
+  const serializeArrayBodies = usesSerializeArrayLogin(ctx.combined)
+    ? buildSerializeArrayLoginBodies()
+    : [];
+  const bodies = [...JSON_SQLI_BODIES, ...serializeArrayBodies];
   for (const path of paths) {
     const url = new URL(path, ctx.origin).toString();
-    for (const body of JSON_SQLI_BODIES) {
+    for (const body of bodies) {
       const doc = await ctx.probe.get(url, {
         method: "POST",
         body,
@@ -1605,18 +1629,33 @@ async function probeJsonAuthSqlInjection(ctx: RuleContext): Promise<RuleResult |
         maxBytes: 8192
       });
       if (doc.status < 200 || doc.status >= 500) continue;
-      const marker = JSON_SQLI_SUCCESS_MARKERS.find((re) => re.test(doc.body));
-      if (!marker) continue;
-      const match = doc.body.match(marker);
+      const successMarker = JSON_SQLI_SUCCESS_MARKERS.find((re) => re.test(doc.body));
+      if (successMarker) {
+        const match = doc.body.match(successMarker);
+        return {
+          fired: true,
+          confidence: 0.91,
+          evidence: {
+            url,
+            method: "POST",
+            marker: match?.[0]?.slice(0, 80) || "SQL injection success",
+            snippet: doc.body.slice(0, 240).trim(),
+            note: "JSON auth endpoint accepted SQLi payload — authentication bypass likely"
+          }
+        };
+      }
+      const sqlError = SQL_ERROR_MARKERS.find((re) => re.test(doc.body));
+      if (!sqlError) continue;
+      const match = doc.body.match(sqlError);
       return {
         fired: true,
-        confidence: 0.91,
+        confidence: 0.9,
         evidence: {
           url,
           method: "POST",
-          marker: match?.[0]?.slice(0, 80) || "SQL injection success",
+          sqlError: match?.[0]?.slice(0, 120) || "syntax error",
           snippet: doc.body.slice(0, 240).trim(),
-          note: "JSON auth endpoint accepted SQLi payload — authentication bypass likely"
+          note: "JSON login endpoint returns SQL syntax error on auth payload — injection likely"
         }
       };
     }
@@ -6372,19 +6411,65 @@ const CLIENT_VULN_EXPOSE_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideVulnExposeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_VULN_EXPOSE_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/VulnSite|vuln-expose|vulns-expose/i.test(ctx.combined)) return NEGATIVE;
+  if (!/VulnSite|vuln-expose|vulns-expose/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.91 : 0.88,
     evidence: {
       markers: hits.slice(0, 4),
       note: "VulnSite publishes dual-mode pentest labs (SQLi, XSS, IDOR, CMDi) with realistic corporate app facades"
+    }
+  };
+};
+
+// --- Wizer developer security CTF (chal*.vercel.app) --------------------------------
+const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Wizer CTF challenge title",
+    re: /Challenge\s*#\d+/i
+  },
+  {
+    label: "Powered by Wizer branding",
+    re: /Powered by\s*<img[^>]+(?:wizer\.svg|alt="Wizer")/i
+  },
+  {
+    label: "Wizer serializeArray login API",
+    re: /serializeArray\s*\(\s*document\.forms\[0\]\s*\)[\s\S]{0,200}?api\/login/i
+  },
+  {
+    label: "Wizer developer security training host",
+    re: /chal\d+\.vercel\.app|wizer-training\.com/i
+  },
+  {
+    label: "Wizer CTF navigation hub",
+    re: /List of Users|List of Groups|Your Profile/i
+  }
+];
+
+const clientSideWizerCtfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WIZER_CTF_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/wizer|chal\d+\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Wizer developer security CTF challenge (chal*.vercel.app) documents hands-on SQLi/XSS/login labs"
     }
   };
 };
@@ -13264,6 +13349,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRedtigerHackitEvidence,
   redtigerBlindLoginFormEvidence,
   clientSideVulnExposeEvidence,
+  clientSideWizerCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
