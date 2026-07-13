@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T09:26:08.936Z",
+  "updated_at": "2026-07-13T09:31:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,29 @@
       ]
     }
   },
-  "total_sites_scanned": 1071,
-  "total_findings": 4702,
+  "total_sites_scanned": 1079,
+  "total_findings": 4736,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 502,
-  "discovery_findings": 3447,
+  "discovery_urls_added": 507,
+  "discovery_findings": 3481,
   "improvements_shipped": 381,
-  "last_run": "2026-07-13T09:26:08.936Z",
+  "last_run": "2026-07-13T09:31:00.000Z",
   "last_run_summary": {
     "hour_utc": "09:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 9,
+      "primary_findings": 10,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "No benchmark misses — juice-shop.herokuapp.com recall 6/6 (9 findings after retry; pass1 degraded 1/6)",
+      "pass1_findings": 6,
+      "pass1_gap": [
+        "xss",
+        "sqli",
+        "sensitive_data"
+      ],
+      "note": "Heroku cold-start degraded pass1; wake retry recovered 6/6 at 10 findings (pages_crawled=6 probes=294)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,32 +54,41 @@
         }
       }
     },
-    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 5,
-      "findings": 24,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 34,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Kontra reflected-XSS/CSRF/open-redirect/debug-code + Hacksplaining DOM XSS queued lessons",
-      "urls_scanned_list": [
-        "application.security/.../reflected-cross-site-scripting (5)",
-        "application.security/.../insecure-url-redirect (5)",
-        "application.security/.../cross-site-request-forgery (5)",
-        "application.security/.../leftover-debug-code (5)",
-        "hacksplaining.com/lessons/xss-dom/start (4)"
+      "focus": "Hacksplaining clickjacking/mass-assignment/AI-prompt/CSS-injection + Kontra DOM XSS queued; batch rescan",
+      "urls_added_list": [
+        "hacksplaining.com/lessons/click-jacking/start",
+        "hacksplaining.com/lessons/mass-assignment/start",
+        "hacksplaining.com/lessons/ai-prompt-injection/start",
+        "hacksplaining.com/lessons/css-injection/start",
+        "application.security/.../dom-cross-site-scripting"
       ],
-      "improvements_shipped_this_run": 2
+      "urls_scanned_list": [
+        "weaponsforge.github.io/hacker-friendly-app (4)",
+        "playground.fabraix.com (2)",
+        "webexp05.vercel.app (6)",
+        "idor-challenge.vercel.app (3)",
+        "luisillobret2.github.io/WebGoat (3)",
+        "duck-store.escape.tech (7)",
+        "dvaib.com (4)",
+        "pentest-ground.com:4280 (5)"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "application.security reflected XSS lesson: Kontra EXERCISE_ID + Reflected XSS | Kontra title (0→5 findings)",
-      "application.security CSRF lesson: Cross Site Request Forgery | Kontra + EXERCISE_ID (0→5 findings)",
-      "hacksplaining.com/lessons/xss-dom/start: DOM-based XSS lesson + URI fragment abuse description (0→4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 pass1 Heroku cold-start gap, wake retry recovered",
+      "duck-store.escape.tech: OpenAI key + IDOR + unauthenticated API + OpenAPI docs (7 findings)",
+      "webexp05.vercel.app: SQLi/XSS/JWT-none/path-traversal lab markers (6 findings)",
+      "pentest-ground.com:4280: reflected XSS + phpinfo on hosted DVWA (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "primary heroku juice-shop still degrades to 1/6 on pass1 — retry recovers 6/6"
+      "juice-shop Heroku dyno sleep causes intermittent pass1 recall drops \u2014 retry logic essential"
     ]
   },
   "discovery_highlights": {
