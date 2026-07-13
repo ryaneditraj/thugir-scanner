@@ -1019,7 +1019,12 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/from_sqli_to_shell",
     "/exercises/from-sqli-to-shell",
     "/exercises/ssrf_01",
-    "/exercises/ssrf-01"
+    "/exercises/ssrf-01",
+    "/exercises/web-fundamentals-cors",
+    "/exercises/web-fundamentals-graphql",
+    "/exercises/web-fundamentals-sessions",
+    "/exercises/web-fundamentals-api",
+    "/exercises/web-fundamentals-databases"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1100,6 +1105,10 @@ function extractKontraTrainingSeeds(html: string, origin: string): string[] {
     "/free-application-security-training/owasp-top-10-insecure-url-redirect",
     "/free-application-security-training/owasp-top-10-cross-site-request-forgery",
     "/free-application-security-training/owasp-top-10-leftover-debug-code",
+    "/free-application-security-training/owasp-top-10-host-header-injection",
+    "/free-application-security-training/owasp-top-10-xml-entity-injection",
+    "/free-application-security-training/owasp-top-10-components-with-known-vulnerabilities",
+    "/free-application-security-training/owasp-top-10-weak-randomness",
     "/free"
   ]) {
     try {
@@ -1969,7 +1978,12 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/broken-access-control/start",
     "/lessons/xml-external-entities/start",
     "/lessons/command-execution/start",
-    "/lessons/remote-code-execution/start"
+    "/lessons/remote-code-execution/start",
+    "/lessons/session-fixation/start",
+    "/lessons/file-upload/start",
+    "/lessons/prototype-pollution/start",
+    "/lessons/cross-origin-resource-sharing/start",
+    "/lessons/password-mismanagement/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
