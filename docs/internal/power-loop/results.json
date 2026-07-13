@@ -1,64 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-12T02:07:03.190Z",
-      "url": "https://vulnerable-graphql-lab.railway.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 242,
-      "status": "ok",
-      "scanned_at": "2026-07-12T02:07:03.190Z"
-    },
-    {
-      "run_id": "2026-07-12T02:07:13.652Z",
-      "url": "https://ctfchallenge.co.uk/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctfchallenge-evidence",
-          "title": "CTFChallenge UK web application hacking platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 262,
-      "status": "ok",
-      "scanned_at": "2026-07-12T02:07:13.652Z"
-    },
-    {
       "run_id": "2026-07-12T02:07:53.157Z",
       "url": "https://intercode-benchmark.github.io/",
       "auth": "public_demo",
@@ -8726,6 +8668,66 @@
       "probes_run": 264,
       "status": "ok",
       "scanned_at": "2026-07-13T01:04:31.211Z"
+    },
+    {
+      "run_id": "2026-07-13T02:05:04.318Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 152,
+      "status": "ok",
+      "scanned_at": "2026-07-13T02:05:04.318Z"
+    },
+    {
+      "run_id": "2026-07-13T02:17:02.458Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 170,
+      "status": "ok",
+      "scanned_at": "2026-07-13T02:17:02.458Z"
     }
   ],
   "teacher_delta_runs": [
