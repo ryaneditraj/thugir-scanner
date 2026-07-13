@@ -2587,7 +2587,32 @@
       "url": "https://www.hacksplaining.com/lessons/weak-session/start",
       "source": "Hacksplaining \u2014 weak-session-IDs / session-management lesson (lessons catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/slop-squatting/start",
+      "source": "Hacksplaining \u2014 AI slop squatting / hallucinated package supply-chain lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/buffer-overflows/start",
+      "source": "Hacksplaining \u2014 buffer overflow / memory safety lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/denial-of-service-attacks/start",
+      "source": "Hacksplaining \u2014 DoS/DDoS attack simulation lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/ai-bias-and-unreliability/start",
+      "source": "Hacksplaining \u2014 AI bias, training-data poisoning, unsafe code-gen lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/ai-data-extraction-attacks/start",
+      "source": "Hacksplaining \u2014 AI model inversion / memorization / system-prompt extraction lesson (lessons catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T12:50:00.000Z"
+  "updated_at": "2026-07-13T13:31:00.000Z"
 }
