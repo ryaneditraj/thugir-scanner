@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-13T16:55:00.000Z",
+  "updated_at": "2026-07-13T21:24:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://openvaultbank.com/api/v1/users",
+      "source": "OpenVault Bank — OWASP API Top 10 banking API user enumeration/IDOR oracle (cheatsheet /api/v1 routes)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/admin",
+      "source": "OpenVault Bank — unauthenticated admin API endpoint oracle (Railway deploy docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://maz4lhacks.vercel.app/posts/reflected-xss/",
+      "source": "Maz4l Hacks — reflected XSS lab post with innerHTML sink + cookie-steal fetch demo (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/level7.php",
+      "source": "OverTheWire RedTiger level 7 — UNION-based SQLi in LIKE clause wargame (writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/level10.php",
+      "source": "OverTheWire RedTiger level 10 — insecure PHP deserialization session bypass wargame",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vuln-expose.vercel.app/",
       "source": "JuaniVeltri/vuln-expose — VulnSite Next.js SQLi/XSS interactive training platform (GitHub homepage)",
