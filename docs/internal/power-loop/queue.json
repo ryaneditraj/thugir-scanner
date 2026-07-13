@@ -2,6 +2,31 @@
   "updated_at": "2026-07-13T09:31:00.000Z",
   "discovery_urls": [
     {
+      "url": "https://www.hacksplaining.com/lessons/dns-poisoning/start",
+      "source": "Hacksplaining \u2014 DNS cache poisoning / upstream hijack lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/downgrade-attacks/start",
+      "source": "Hacksplaining \u2014 TLS downgrade / protocol-stripping lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/email-spoofing/start",
+      "source": "Hacksplaining \u2014 email spoofing / forged-from-header lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/malvertising/start",
+      "source": "Hacksplaining \u2014 malvertising / compromised ad-network lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/ssl-stripping/start",
+      "source": "Hacksplaining \u2014 SSL stripping / mixed-content downgrade lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://juice-shop.herokuapp.com/",
       "source": "OWASP official benchmark (differs from staging oracle)",
       "auth": "benchmark"
@@ -2614,5 +2639,5 @@
       "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T13:31:00.000Z"
+  "updated_at": "2026-07-13T14:05:00.000Z"
 }
