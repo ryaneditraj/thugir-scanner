@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T19:04:30.440Z",
-  "total": 303,
-  "uniqueSlugs": 303,
+  "generatedAt": "2026-07-13T20:10:56.204Z",
+  "total": 305,
+  "uniqueSlugs": 305,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 285,
+    "generic": 287,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 237,
+    "deep": 239,
     "continuous": 0
   },
   "byCategory": {
@@ -25,8 +25,8 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 22,
-    "Information disclosure": 17,
-    "Broken authentication": 18,
+    "Information disclosure": 18,
+    "Broken authentication": 19,
     "Injection": 48,
     "Cross-site scripting": 29,
     "Server-side request forgery": 3,
@@ -71,6 +71,7 @@
     "client-side-chimera-vuln-lab-evidence",
     "client-side-clawguard-ai-audit-evidence",
     "client-side-code-breaking-evidence",
+    "client-side-cookiejar-lab-evidence",
     "client-side-cryptohack-evidence",
     "client-side-cs-training-academy-evidence",
     "client-side-csrf-evidence",
@@ -153,6 +154,7 @@
     "client-side-oauth-fetch-playground-evidence",
     "client-side-oopssec-store-evidence",
     "client-side-open-redirect-evidence",
+    "client-side-openvault-cheatsheet-evidence",
     "client-side-openvault-learn-evidence",
     "client-side-overthewire-bandit-evidence",
     "client-side-overthewire-behemoth-evidence",
