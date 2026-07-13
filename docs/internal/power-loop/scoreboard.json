@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T04:18:37.362Z",
+  "updated_at": "2026-07-13T05:02:47.070Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1029,
-  "total_findings": 4497,
+  "total_sites_scanned": 1030,
+  "total_findings": 4505,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 487,
   "discovery_findings": 3278,
-  "improvements_shipped": 366,
-  "last_run": "2026-07-13T04:18:37.362Z",
+  "improvements_shipped": 367,
+  "last_run": "2026-07-13T05:02:47.070Z",
   "last_run_summary": {
     "hour_utc": "04:00",
     "benchmark": {
@@ -32,7 +32,10 @@
       "primary_recall": "6/6",
       "primary_gap": [],
       "pass1_findings": 4,
-      "pass1_gap": ["xss", "sensitive_data"],
+      "pass1_gap": [
+        "xss",
+        "sensitive_data"
+      ],
       "pages_crawled": 1,
       "probes_run": 289,
       "note": "Heroku cold-start pass1 4/6 gap xss,sensitive_data; wake retry 8 findings 6/6 on primary",
@@ -41,7 +44,14 @@
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },

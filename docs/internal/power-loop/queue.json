@@ -2387,7 +2387,32 @@
       "url": "https://rootxjs.github.io/blog/grpc-goat/",
       "source": "rootxjs/grpc-goat — gRPC vulnerability lab launch post with 9-scenario oracle (Show HN 2025)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web-production-16ec6a.up.railway.app/",
+      "source": "OpenVault Bank — deliberately vulnerable banking API Railway deploy (openvaultbank.com learn page)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://emmanuelgjr.github.io/GenAI-Security-Crosswalk/",
+      "source": "OWASP GenAI Security Crosswalk — framework mapping explorer with incident/tool recipes (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.haozi.me/",
+      "source": "haozi XSS challenge — classic public reflected/stored XSS practice playground (awesome-vuln-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackme.net/",
+      "source": "Hackme community — single-user vulnerable code instances for XSS/SQLi practice (Acunetix cited)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nomadu27.github.io/InsAIts-public/",
+      "source": "InsAIts — open-source multi-agent AI runtime security dashboard demo (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-13T04:15:00.000Z"
+  "updated_at": "2026-07-13T05:10:00.000Z"
 }
