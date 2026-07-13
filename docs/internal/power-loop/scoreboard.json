@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-13T06:10:00.000Z",
+=======
+  "updated_at": "2026-07-13T06:02:51.727Z",
+>>>>>>> 6e0d594 (power-scan: benchmark juice-shop 6/6 (9 findings), +5 discovery URLs [06 UTC])
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +19,26 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 1047,
   "total_findings": 4573,
+=======
+  "total_sites_scanned": 1042,
+  "total_findings": 4570,
+>>>>>>> 6e0d594 (power-scan: benchmark juice-shop 6/6 (9 findings), +5 discovery URLs [06 UTC])
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 492,
+<<<<<<< HEAD
   "discovery_findings": 3346,
   "improvements_shipped": 373,
   "last_run": "2026-07-13T06:10:00.000Z",
+=======
+  "discovery_findings": 3334,
+  "improvements_shipped": 370,
+  "last_run": "2026-07-13T06:02:51.727Z",
+>>>>>>> 6e0d594 (power-scan: benchmark juice-shop 6/6 (9 findings), +5 discovery URLs [06 UTC])
   "last_run_summary": {
     "hour_utc": "06:00",
     "benchmark": {
@@ -37,7 +52,14 @@
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },
