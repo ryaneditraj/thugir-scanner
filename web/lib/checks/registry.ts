@@ -2976,13 +2976,16 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideHacksplainingEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  // Include finalUrl so sparse CDN/bot-wall HTML still matches /lessons/{slug} path oracles.
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_HACKSPLAINING_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/Hacksplaining|hacksplaining\.com/i.test(ctx.combined)) return NEGATIVE;
+  if (!/Hacksplaining|hacksplaining\.com/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
@@ -8116,6 +8119,48 @@ const clientSideSessionHijackEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CookieJar session-security lab homepage (cyberdesserts.github.io/cookiejar-lab) --
+const CLIENT_COOKIEJAR_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CookieJar lab branding",
+    re: /CookieJar(?:\s+Lab)?/i
+  },
+  {
+    label: "Session security lab tagline",
+    re: /hands-on session security lab/i
+  },
+  {
+    label: "Stolen cookies bypass MFA",
+    re: /stolen cookies bypass passwords, 2FA, and OAuth/i
+  },
+  {
+    label: "Interactive demo route",
+    re: /href\s*=\s*["'][^"']*\/demo\/?["']/i
+  },
+  {
+    label: "Lab guide documentation",
+    re: /cookiejar-lab\/docs\/lab-guide|Lab Guide/i
+  }
+];
+
+const clientSideCookiejarLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_COOKIEJAR_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CookieJar|cookiejar-lab/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CookieJar lab documents session hijack training — stolen cookies bypass passwords, 2FA, and OAuth"
+    }
+  };
+};
+
 // --- SSRF endpoint probe (server fetches attacker-supplied URL) ---------------
 const SSRF_CANARY_URL = "http://example.com";
 const SSRF_CANARY_MARKERS = [/Example Domain/i, /<title>\s*Example Domain/i];
@@ -9017,6 +9062,58 @@ const clientSideOpenvaultLearnEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OpenVault Bank /learn documents OWASP API Top 10 BOLA, mass assignment, and excessive data exposure lab oracles"
+    }
+  };
+};
+
+// --- OpenVault Bank API security tooling cheatsheet (openvaultbank.com/cheatsheet) ----
+const CLIENT_OPENVAULT_CHEATSHEET_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OpenVault Bank branding",
+    re: /OpenVault Bank|OVB[\s—–-]\s*OpenVault Bank/i
+  },
+  {
+    label: "Cheatsheet route",
+    re: /\/cheatsheet|to:\s*["']\/cheatsheet["']/i
+  },
+  {
+    label: "APIsec Bolt browser extension",
+    re: /APIsec Bolt/i
+  },
+  {
+    label: "APIsec University training",
+    re: /APIsec University|apisecuniversity\.com/i
+  },
+  {
+    label: "Portswigger Burp Suite",
+    re: /portswigger\.net|Burp Suite/i
+  },
+  {
+    label: "Postman API client",
+    re: /postman\.com|Postman/i
+  },
+  {
+    label: "OWASP ZAP scanner",
+    re: /OWASP ZAP|zaproxy\.org/i
+  }
+];
+
+const clientSideOpenvaultCheatsheetEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OPENVAULT_CHEATSHEET_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/openvaultbank\.com|OpenVault Bank/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OpenVault Bank /cheatsheet documents API security tooling (APIsec, Burp, Postman, OWASP ZAP) for hands-on vulnerability practice"
     }
   };
 };
@@ -12912,8 +13009,10 @@ export const RULES: Record<string, Rule> = {
   clientSideXxeEvidence,
   clientSideApiSecurityLabEvidence,
   clientSideOpenvaultLearnEvidence,
+  clientSideOpenvaultCheatsheetEvidence,
   clientSideWebgoatEvidence,
   clientSideSessionHijackEvidence,
+  clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,
   clientSideFileUploadEvidence,
   sensitiveApiTokenLeakage,
