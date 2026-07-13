@@ -3388,6 +3388,60 @@ function extractAtlasCrewEdgeProtectionSeeds(html: string, pageUrl: string): str
   return [...out];
 }
 
+/** OopsSec Store — seed roadmap and walkthrough posts from GitHub Pages hub. */
+function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
+  if (!/OopsSec Store|oss-oopssec-store/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/roadmap", "/roadmap/", "/posts", "/topics", "/about"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/oss-oopssec-store\/(?:roadmap|posts\/[^"']+))["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** CookieJar session-security lab — seed interactive demo from homepage. */
+function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/CookieJar|cookiejar-lab/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/demo", "/demo/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*\/demo\/?)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** OWASP VWAD — seed high-signal vulnerable app detail pages from directory JSON-LD. */
 function extractOwaspVwadSeeds(html: string, pageUrl: string): string[] {
   if (!/vwad\.owasp\.org|Vulnerable Web Applications Directory/i.test(html)) return [];
@@ -3945,6 +3999,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secCodeEducationalSeeds = extractSecCodeEducationalSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const bugCollectionSeeds = extractBugCollectionSeeds(home.body, home.finalUrl);
+  const oopssecStoreSeeds = extractOopssecStoreSeeds(home.body, home.finalUrl);
+  const cookiejarLabSeeds = extractCookiejarLabSeeds(home.body, home.finalUrl);
   const hacksplainingSeeds = extractHacksplainingLessonSeeds(home.body, home.finalUrl);
   const portswiggerSeeds = extractPortswiggerAcademySeeds(home.body, home.finalUrl);
   const hackTheBoxSeeds = extractHackTheBoxSeeds(home.body, home.finalUrl);
@@ -4068,6 +4124,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secCodeEducationalSeeds,
       ...vulnerableAppSeeds,
       ...bugCollectionSeeds,
+      ...oopssecStoreSeeds,
+      ...cookiejarLabSeeds,
       ...hacksplainingSeeds,
       ...portswiggerSeeds,
       ...hackTheBoxSeeds,
