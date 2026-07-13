@@ -2749,6 +2749,46 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /If your application calls out to the OS, you need to be sure command strings are securely constructed/i
   },
   {
+    label: "Session fixation lesson module",
+    re: /\/lessons\/session-fixation|Session Fixation — Secure Coding Lesson/i
+  },
+  {
+    label: "Session fixation lesson description",
+    re: /Insecure treatment of session IDs can leave your users vulnerable to having their session hijacked/i
+  },
+  {
+    label: "File upload lesson module",
+    re: /\/lessons\/file-upload|File Upload Vulnerabilities — Secure Coding Lesson/i
+  },
+  {
+    label: "File upload lesson description",
+    re: /File uploads are an easy way for an attacker to inject malicious code into your application/i
+  },
+  {
+    label: "Prototype pollution lesson module",
+    re: /\/lessons\/prototype-pollution|Prototype Pollution — Secure Coding Lesson/i
+  },
+  {
+    label: "Prototype pollution lesson description",
+    re: /If an attacker can access and modify prototype objects in JavaScript, you are in danger/i
+  },
+  {
+    label: "CORS lesson module",
+    re: /\/lessons\/cross-origin-resource-sharing|Cross-Origin Resource Sharing — Secure Coding Lesson/i
+  },
+  {
+    label: "CORS lesson description",
+    re: /Overly permissive CORS policies can allow malicious websites to access your APIs and steal user data/i
+  },
+  {
+    label: "Password mismanagement lesson module",
+    re: /\/lessons\/password-mismanagement|Password Mismanagement — Secure Coding Lesson/i
+  },
+  {
+    label: "Password mismanagement lesson description",
+    re: /Safe treatment of passwords is essential to a secure authentication system - yet many websites get this wrong/i
+  },
+  {
     label: "Hacksplaining secure coding lesson title",
     re: /— Secure Coding Lesson \| Hacksplaining/i
   }
@@ -5273,6 +5313,14 @@ const CLIENT_PENTESTERLAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQL/XSS curriculum ticker",
     re: /SQL Injection[\s\S]{0,80}XSS|XSS[\s\S]{0,80}SQL Injection/i
+  },
+  {
+    label: "Web Fundamentals exercise series",
+    re: /Web Fundamentals:\s*(?:CORS|GraphQL|Sessions|API|Databases)/i
+  },
+  {
+    label: "PentesterLab fundamentals exercise description",
+    re: /PentesterLab(?:&#39;|'|')s exercise on Web Fundamentals/i
   }
 ];
 
@@ -5584,6 +5632,22 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
     label: "Leftover debug code training lab title",
     re: /Leftover Debug Code \| Kontra|owasp-top-10-leftover-debug-code/i
+  },
+  {
+    label: "Host header injection training lab title",
+    re: /Header Injection \| Kontra|owasp-top-10-host-header-injection/i
+  },
+  {
+    label: "XML entity injection training lab title",
+    re: /XML Injection \| Kontra|owasp-top-10-xml-entity-injection/i
+  },
+  {
+    label: "Components with known vulnerabilities lab title",
+    re: /Components with Known Vulnerabilities \| Kontra|owasp-top-10-components-with-known-vulnerabilities/i
+  },
+  {
+    label: "Weak randomness training lab title",
+    re: /Weak Randomness \| Kontra|owasp-top-10-weak-randomness/i
   },
   {
     label: "Capital One SSRF training lab title",
