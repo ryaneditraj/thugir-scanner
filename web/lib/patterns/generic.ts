@@ -3885,6 +3885,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oauth-fetch-playground-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "oauth-fetch OAuth2/DPoP API security playground disclosed",
+    description:
+      "oauth-fetch.oauthlabs.com publishes an interactive playground for OAuth2 protected-resource fetching with Bearer and DPoP token types.",
+    impactOneline:
+      "Public oauth-fetch demos expose token-provider and DPoP key-pair contracts attackers use to calibrate OAuth API security scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOauthFetchPlaygroundEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "oauth-fetch playground is intentional training — do not expose production tokens in demos.",
+      steps: [
+        "Use mock token providers in public oauth-fetch demos.",
+        "Require authentication before DPoP key-pair generation endpoints.",
+        "Never embed live OAuth client secrets in playground bundles."
+      ]
+    },
+    fixPrompt:
+      "We host an oauth-fetch OAuth2/DPoP playground. Show how to gate token providers and isolate demo credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-judgement-day-arena-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Judgement Day AI red team arena disclosed",
+    description:
+      "Judgement Day publishes an AI red-teaming competition with multi-modal jailbreak bounty scenarios for adversarial model evaluation.",
+    impactOneline:
+      "Public Judgement Day arenas document jailbreak and red-team attack surfaces used to benchmark AI safety defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJudgementDayArenaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Judgement Day is intentional red-team research — isolate arena instances from production AI systems.",
+      steps: [
+        "Run red-team arenas only on dedicated evaluation infrastructure.",
+        "Rate-limit jailbreak submission endpoints.",
+        "Do not connect production LLM APIs to public arena instances without guardrails."
+      ]
+    },
+    fixPrompt:
+      "We host a Judgement Day-style AI red team arena. Show how to isolate jailbreak evaluation from production models.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cahyod-vulnerable-lab-evidence",
     platform: "generic",
     category: "Injection",

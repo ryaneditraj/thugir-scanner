@@ -211,11 +211,13 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
         timeoutMs: 12000,
         maxBytes: 4096
       });
-      if (doc.status < 200 || doc.status >= 500 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
+      if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
       if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
         return true;
+      // Juice Shop SQLi oracle returns HTTP 500 with SQLITE_ERROR — still proves API is live.
       if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return true;
+      if (doc.status >= 500) continue;
       if (p.includes("search") && (/"products"|"data"\s*:/i.test(doc.body) || doc.status === 200))
         return true;
     } catch {
@@ -577,6 +579,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideSploitifyExploitDatabaseEvidence",
   "clientSidePwnGuideEvidence",
   "clientSideBountybenchBenchmarkEvidence",
+  "clientSideOauthFetchPlaygroundEvidence",
+  "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
   "clientSideDevSecOpsLabEvidence",
@@ -1070,6 +1074,11 @@ function extractKontraTrainingSeeds(html: string, origin: string): string[] {
     "/free-application-security-training/owasp-top-10-sql-injection",
     "/free-application-security-training/owasp-top-10-command-injection",
     "/free-application-security-training/owasp-top-10-directory-traversal",
+    "/free-application-security-training/server-side-request-forgery-in-capital-one",
+    "/free-application-security-training/owasp-top-10-clickjacking",
+    "/free-application-security-training/owasp-top-10-forced-browsing",
+    "/free-application-security-training/owasp-top-10-horizontal-privilege-escalation",
+    "/free-application-security-training/owasp-top-10-stored-cross-site-scripting",
     "/free"
   ]) {
     try {
@@ -3911,7 +3920,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
     const bootDocs = await probe.getMany(bootstrapUrls, { maxBytes: 800_000, timeoutMs: 18000 }, 3);
     juiceShopBootstrap = [...bootDocs.values()]
-      .filter((d) => d.status >= 200 && d.status < 500 && !HEROKU_APP_ERROR_RE.test(d.body))
+      .filter((d) => {
+        if (HEROKU_APP_ERROR_RE.test(d.body)) return false;
+        if (d.status >= 200 && d.status < 500) return true;
+        // SQLi oracle is intentionally HTTP 500 — keep for deep-rule markers.
+        return d.status === 500 && /SQLITE_ERROR|syntax error|sequelize/i.test(d.body);
+      })
       .map((d) => d.body)
       .join("\n");
   }

@@ -2183,6 +2183,24 @@
       "slug": "sql-error-disclosure",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET search.php?q=')) returns <!-- SQL Error: You have an error in your SQL syntax; cahyod hub subdomain crawl + /search.php fallback; portal.lab.cahyo.web.id findings 0→5 incl sql-error-disclosure + reflected-xss; benchmark maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /rest/products/search?q=')) returns SQLITE_ERROR near ) syntax error; juiceShopApiLive accepts 500 SQL oracle + sqlErrorDisclosure direct retry bypasses cold-start cache; primary heroku 8 findings 6/6 sqli category stable"
+    },
+    {
+      "source": "discovery:oauth-fetch.oauthlabs.com",
+      "slug": "client-side-oauth-fetch-playground-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Playground | oauth-fetch + DPoP token type + tokenProvider is required for protected resources in index-D7yCxEQz.js; oauth-fetch.oauthlabs.com findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:judgement-day-khaki.vercel.app",
+      "slug": "client-side-judgement-day-arena-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Judgement Day — AI Red Team Arena + AI Red-Teaming Competition + earn bounties for successful jailbreaks; judgement-day-khaki.vercel.app findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3985,6 +4003,21 @@
       "source": "discovery:portal.lab.cahyo.web.id",
       "slug": "cahyod-subdomain-crawl-search-php-sqli",
       "shipped_at": "2026-07-13T02:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-sqli-cold-start-oracle",
+      "shipped_at": "2026-07-13T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:oauth-fetch.oauthlabs.com",
+      "slug": "client-side-oauth-fetch-playground-evidence",
+      "shipped_at": "2026-07-13T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:judgement-day-khaki.vercel.app",
+      "slug": "client-side-judgement-day-arena-evidence",
+      "shipped_at": "2026-07-13T03:10:00.000Z"
     }
   ]
 }
