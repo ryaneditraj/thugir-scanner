@@ -2441,6 +2441,24 @@
       "slug": "client-side-cookiejar-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: homepage hands-on session security lab + stolen cookies bypass passwords, 2FA, and OAuth + /demo nav; cyberdesserts.github.io/cookiejar-lab/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-cold-start-oracle-retry",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: pass1 Heroku cold-start previously 3 findings gap sqli,idor,sensitive_data pages_crawled=1; idorObjectAccess retries /rest/track-order/1 + bootstrap polls track-order/SQLi/main.js until oracles ready; juice-shop.herokuapp.com pass1 now 7 findings 6/6 pages_crawled=1 probes=170"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "client-side-vuln-expose-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VulnSite title + ENTORNO DE PENTESTING PROFESIONAL + Laboratorios de Seguridad + /sqli/login /xss/playground routes; extractVulnExposeSeeds; vuln-expose.vercel.app findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-blind-login-form-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level3.php POST name=level3login + password-only blind login form; redtigerBlindLoginFormEvidence; redtiger level3.php findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4448,6 +4466,21 @@
       "source": "discovery:hacksplaining.com",
       "slug": "hacksplaining-directory-traversal-queue-fix",
       "shipped_at": "2026-07-13T19:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-cold-start-oracle-retry",
+      "shipped_at": "2026-07-13T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "client-side-vuln-expose-evidence",
+      "shipped_at": "2026-07-13T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-blind-login-form-evidence",
+      "shipped_at": "2026-07-13T21:10:00.000Z"
     }
   ]
 }
