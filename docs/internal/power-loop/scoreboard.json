@@ -1,55 +1,49 @@
 {
-  "updated_at": "2026-07-13T11:50:00.000Z",
+  "updated_at": "2026-07-13T12:53:49.188Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
-      "categories_hit": 6,
-      "gap": [],
-      "hit": [
+      "categories_hit": 3,
+      "gap": [
         "xss",
         "sqli",
+        "sensitive_data"
+      ],
+      "hit": [
         "idor",
         "auth_bypass",
-        "sensitive_data",
         "misconfig"
       ]
     }
   },
-  "total_sites_scanned": 1100,
-  "total_findings": 4841,
+  "total_sites_scanned": 1109,
+  "total_findings": 4895,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 517,
-  "discovery_findings": 3559,
+  "discovery_urls_added": 522,
+  "discovery_findings": 3607,
   "improvements_shipped": 386,
-  "last_run": "2026-07-13T11:50:00.000Z",
+  "last_run": "2026-07-13T12:53:49.188Z",
   "last_run_summary": {
-    "hour_utc": "11:00",
+    "hour_utc": "12:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 9,
-      "primary_recall": "6/6",
-      "primary_gap": [],
-      "pass1_findings": 8,
-      "pass1_gap": ["sqli"],
+      "primary_findings": 6,
+      "primary_recall": "3/6",
+      "primary_gap": ["xss", "sqli", "sensitive_data"],
+      "pass1_findings": 6,
+      "pass1_gap": ["xss", "sqli", "sensitive_data"],
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
-      "fallback_findings": 9,
-      "fallback_recall": "6/6",
-      "note": "Pass1 Heroku gap sqli (8 findings); later wake retry recovered 6/6 on primary (9 findings); staging fallback also 6/6",
+      "fallback_findings": 3,
+      "fallback_recall": "2/6",
+      "note": "Heroku cold-start regression — pass1 6 findings gap xss,sqli,sensitive_data; wake retries did not recover; staging fallback only sqli (3 findings). HIGH VALUE MISS SIGNAL.",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "categories_hit": 3,
+          "gap": ["xss", "sqli", "sensitive_data"],
+          "hit": ["idor", "auth_bypass", "misconfig"]
         }
       }
     },
@@ -57,43 +51,41 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 36,
+      "findings": 48,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Hacksplaining host-header/insecure-design/information-leakage/logging/privilege-escalation queued; batch rescan FinBot CTF + Hack Yourself First + Invicti testsparker trio + DomGoat CXSS + SSRF lab + GraphQL bookstore; Kontra/PentesterLab lesson seeds",
-      "improvements_shipped_this_run": 3,
+      "focus": "Hacksplaining RCE/user-enumeration/regex-injection/lax-security/weak-session queued; batch rescan PentesterLab + Root-Me + HackThisSite + AgentPwn + HackSec + WebGoat + CyberDefenders + AppSecMaster",
       "urls_added_list": [
-        "hacksplaining.com/lessons/host-header-poisoning/start",
-        "hacksplaining.com/lessons/insecure-design/start",
-        "hacksplaining.com/lessons/information-leakage/start",
-        "hacksplaining.com/lessons/logging-and-monitoring/start",
-        "hacksplaining.com/lessons/privilege-escalation/start"
+        "hacksplaining.com/lessons/remote-code-execution/start",
+        "hacksplaining.com/lessons/user-enumeration/start",
+        "hacksplaining.com/lessons/regex-injection/start",
+        "hacksplaining.com/lessons/lax-security-settings/start",
+        "hacksplaining.com/lessons/weak-session/start"
       ],
       "urls_scanned_list": [
-        "owasp-finbot-ctf-demo.onrender.com (1)",
-        "hack-yourself-first.azurewebsites.net (7)",
-        "php.testsparker.com (4)",
-        "aspnet.testsparker.com (5)",
-        "angular.testsparker.com (5)",
-        "domgo.at/cxss/intro (3)",
-        "ssrf-defense-platform.onrender.com (6)",
-        "api.graphqlbook.org (5)"
+        "pentesterlab.com (4)",
+        "www.root-me.org (5)",
+        "www.hackthissite.org (5)",
+        "agentpwn.com (5)",
+        "hacksec.in (5)",
+        "webgoat.org (7)",
+        "cyberdefenders.org (9)",
+        "appsecmaster.net (8)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: pass1 gap sqli (8 findings) — wake retry recovered 6/6 (9 findings); staging fallback 6/6",
-      "hack-yourself-first.azurewebsites.net: 7 findings incl reflected XSS + cleartext password API leak (critical)",
-      "angular.testsparker.com: AWS access key id in client bundle (critical) + hardcoded demo credentials",
-      "api.graphqlbook.org: GraphQL introspection enabled + permissive CORS",
-      "hacksplaining.com/lessons/session-fixation/start: client-side-hacksplaining-evidence (0→4 findings)",
-      "application.security/owasp-top-10-host-header-injection: client-side-kontra-application-security-evidence (4 findings)"
+      "juice-shop.herokuapp.com: BENCHMARK MISS 3/6 — gap xss,sqli,sensitive_data on cold Heroku (6 findings after merge)",
+      "cyberdefenders.org: 9 findings — blue-team CTF platform markers",
+      "appsecmaster.net: 8 findings — Docker-based hacking lab platform evidence",
+      "webgoat.org: 7 findings — OWASP WebGoat training app markers",
+      "pentesterlab.com: reflected XSS + exercise platform evidence (4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop primary Heroku: sqli probe misses on cold-start pass1 — sql-error-disclosure needs full dyno wake",
+      "juice-shop primary Heroku: cold-start misses xss,sqli,sensitive_data — wake retries insufficient this run; staging fallback also degraded (3 findings, sqli only)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hacksplaining.com: Vercel Security Checkpoint intermittently blocks cloud scans on some lesson pages",
-      "owasp-finbot-ctf-demo.onrender.com: shallow crawl — agentic AI exploit chains need authenticated CTF namespace",
-      "angular.testsparker.com: exposed AWS AKID is intentional demo secret — validate vs real credential leakage"
+      "www.root-me.org: Anubis bot-wall may block deeper challenge markers from cloud scanner",
+      "hacksec.in: password-protected WordPress — per-lab routes may be unreachable",
+      "Hacksplaining new lessons queued at tail — not yet reached by queue iterator"
     ]
   },
   "discovery_highlights": {
@@ -253,14 +245,8 @@
     "pentest-ground.com:9000": 4,
     "dvaib.com": 4,
     "xxe-lab.vercel.app": 4,
-    "hack-yourself-first.azurewebsites.net": 7,
-    "aspnet.testsparker.com": 5,
-    "php.testsparker.com": 4,
     "nextjs-cve-hackerone.vercel.app": 4,
-    "angular.testsparker.com": 5,
     "domgo.at/cxss/intro": 3,
-    "ssrf-defense-platform.onrender.com": 6,
-    "api.graphqlbook.org": 5,
     "www.root-me.org": 4,
     "www.hackthissite.org": 5,
     "agentpwn.com": 5,
