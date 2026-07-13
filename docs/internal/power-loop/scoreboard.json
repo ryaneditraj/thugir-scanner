@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 542,
   "discovery_findings": 3699,
-  "improvements_shipped": 390,
+  "improvements_shipped": 392,
   "last_run": "2026-07-13T16:58:45.590Z",
   "last_run_summary": {
     "hour_utc": "16:00",
@@ -83,15 +83,19 @@
       "reef-mcp-registry.vercel.app: MCP supply-chain demo + exposed API keys (7 findings)",
       "wrongsecrets.herokuapp.com: Spring actuator + postMessage DOM XSS (5 findings)",
       "bwapp.hakhub.net: phpinfo exposed + directory listing (6 findings)",
-      "vapi.apisec.ai: API Top 10 lab markers + secret-openai in bundle (4 findings)"
+      "vapi.apisec.ai: API Top 10 lab markers + secret-openai in bundle (4 findings)",
+      "hacksplaining xml-bombs/start + xssi/start: client-side-hacksplaining-evidence when Vercel checkpoint absent",
+      "queue fix: cross-site-script-inclusion 404 → /lessons/xssi/start"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: primary oracle cold-start — pass1 only 2/6 categories before staging fallback",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "hacksplaining new lessons: origin-level 48h skip defers xss-reflected/command-execution scan",
+      "hacksplaining.com: Vercel Security Checkpoint intermittently blocks scanner UA",
       "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
       "wrongsecrets: secrets in config/Docker layers may need deeper oracles than shallow crawl"
-    ]
+    ],
+    "improvements_shipped_this_run": 2
   },
   "discovery_highlights": {
     "vwad.owasp.org/app/pixi": 4,
