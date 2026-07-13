@@ -2129,6 +2129,24 @@
       "slug": "kontra-command-traversal-lessons",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Command Injection | Kontra title + owasp-top-10-command-injection EXERCISE_ID; Directory Traversal | Kontra + owasp-top-10-directory-traversal; extractKontraTrainingSeeds + CLIENT_KONTRA_APPSEC_RES extended; application.security command-injection + directory-traversal findings 0→5 each; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "client-side-code-breaking-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title Code-Breaking Puzzles + meta 完全开放的代码审计挑战赛 + RCE、SQL注入 audit goals; code-breaking.fly.dev findings 2→3; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sanitize-web.fly.dev",
+      "slug": "client-side-sanitize-xss-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Sanitize Online Demo + sneak some naughty HTML past Sanitize + config selector default/restricted/relaxed; sanitize-web.fly.dev findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pokemorty.fly.dev",
+      "slug": "client-side-pokemorty-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Morty's Pokedex CTF ASCII title + nickname cookie + binary Rick/Morty challenge text; pokemorty.fly.dev findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -3886,6 +3904,21 @@
       "source": "discovery:application.security",
       "slug": "kontra-command-traversal-lessons",
       "shipped_at": "2026-07-12T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "client-side-code-breaking-evidence",
+      "shipped_at": "2026-07-13T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:sanitize-web.fly.dev",
+      "slug": "client-side-sanitize-xss-demo-evidence",
+      "shipped_at": "2026-07-13T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:pokemorty.fly.dev",
+      "slug": "client-side-pokemorty-ctf-evidence",
+      "shipped_at": "2026-07-13T00:10:00.000Z"
     }
   ]
 }
