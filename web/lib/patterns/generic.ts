@@ -4014,6 +4014,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-juice-shop-project-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OWASP Juice Shop project challenge oracle disclosed",
+    description:
+      "juice-shop.github.io documents OWASP Juice Shop challenge categories spanning XSS, SQLi, IDOR, auth bypass, and sensitive-data oracles for CTF training.",
+    impactOneline:
+      "Public Juice Shop project pages expose challenge taxonomy attackers use as benchmark oracles for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJuiceShopProjectEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional training — run demo instances in isolated lab networks only.",
+      steps: [
+        "Host Juice Shop demo instances on dedicated lab infrastructure.",
+        "Do not deploy Juice Shop challenge patterns or default credentials in production.",
+        "Use challenge taxonomy for scanner tuning, not as production security requirements."
+      ]
+    },
+    fixPrompt:
+      "We publish OWASP Juice Shop challenge documentation. Show how to keep demo instances isolated from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pwnedlabs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwned Labs cloud security training platform disclosed",
+    description:
+      "Pwned Labs advertises hands-on cloud, hybrid, and AI security labs covering AWS, Azure, and GCP attacker tradecraft scenarios.",
+    impactOneline:
+      "Public Pwned Labs catalog documents cloud exploitation lab infrastructure for red-team skill development.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnedlabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pwned Labs is intentional training — require authentication before provisioning lab environments.",
+      steps: [
+        "Gate cloud lab instances behind registered student accounts.",
+        "Isolate lab AWS/Azure/GCP sandboxes from production cloud accounts.",
+        "Rotate lab credentials and tear down environments after sessions."
+      ]
+    },
+    fixPrompt:
+      "We use Pwned Labs-style cloud security training. Show how to gate lab sandboxes behind auth and isolate them from production cloud.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pwnedlabs-git-secrets-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Pwned Labs git-secrets hunting lab disclosed",
+    description:
+      "labs.pwnedlabs.io Hunt for Secrets in Git Repos lab documents Trufflehog and git-secrets workflows for finding leaked credentials in company repositories.",
+    impactOneline:
+      "Public git-secrets lab pages teach credential hunting patterns applicable to real GitHub/GitLab exposure incidents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnedlabsGitSecretsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Git-secrets labs are intentional training — never commit real credentials to repositories.",
+      steps: [
+        "Enable secret scanning and pre-commit hooks in all production repos.",
+        "Rotate any credentials exposed during git history audits.",
+        "Run git-secrets labs only against synthetic repositories with fake credentials."
+      ]
+    },
+    fixPrompt:
+      "We host Pwned Labs-style git-secrets hunting exercises. Show how to prevent credential leaks with pre-commit hooks and secret scanning.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cahyod-vulnerable-lab-evidence",
     platform: "generic",
     category: "Injection",
