@@ -2255,6 +2255,24 @@
       "slug": "client-side-genai-security-crosswalk-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GenAI Security Crosswalk + framework mapping + incident recipes + NIST AI RMF/OWASP LLM alignment; emmanuelgjr.github.io/GenAI-Security-Crosswalk findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwning.owasp-juice.shop",
+      "slug": "client-side-pwning-juice-shop-companion-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Pwning OWASP Juice Shop + Challenge hunting + part2/injection.html + Hacking Instructor tutorial scripts; pwning.owasp-juice.shop findings 1→5; benchmark juice-shop.herokuapp.com 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:taoq-ai.github.io",
+      "slug": "client-side-ziran-agent-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ZIRAN AI Agent Security Testing + tool chain compositions + knowledge graph analysis + taoq-ai/ziran; taoq-ai.github.io/ziran findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:johniwasz.github.io",
+      "slug": "client-side-dotnet-serialization-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: rce-serialization-dotnet + CSP Header Vulnerability + SQL Injection solution + Mass Assignment; johniwasz.github.io/rce-serialization-dotnet/JuiceShop findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4122,6 +4140,21 @@
       "source": "discovery:emmanuelgjr.github.io",
       "slug": "client-side-genai-security-crosswalk-evidence",
       "shipped_at": "2026-07-13T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwning.owasp-juice.shop",
+      "slug": "client-side-pwning-juice-shop-companion-evidence",
+      "shipped_at": "2026-07-13T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:taoq-ai.github.io",
+      "slug": "client-side-ziran-agent-security-evidence",
+      "shipped_at": "2026-07-13T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:johniwasz.github.io",
+      "slug": "client-side-dotnet-serialization-lab-evidence",
+      "shipped_at": "2026-07-13T07:10:00.000Z"
     }
   ]
 }

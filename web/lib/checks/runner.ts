@@ -765,6 +765,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHaoziXssChallengeEvidence",
   "clientSideInsAItsEvidence",
   "clientSideGenaiSecurityCrosswalkEvidence",
+  "clientSidePwningJuiceShopCompanionEvidence",
+  "clientSideZiranAgentSecurityEvidence",
+  "clientSideDotnetSerializationLabEvidence",
   "clientSideRogueStudioEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
@@ -1179,6 +1182,77 @@ function extractBlueTeamLabsSeeds(html: string, origin: string): string[] {
   for (const p of ["/login", "/register"]) {
     try {
       out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Pwning OWASP Juice Shop companion guide — Antora challenge-hunting chapters. */
+function extractPwningJuiceShopCompanionSeeds(html: string, pageUrl: string): string[] {
+  if (!/Pwning OWASP Juice Shop|pwning\.owasp-juice\.shop/i.test(html)) return [];
+  const out = new Set<string>();
+  const seeds = [
+    "https://pwning.owasp-juice.shop/companion-guide/latest/part2/injection.html",
+    "https://pwning.owasp-juice.shop/companion-guide/latest/part2/xss.html",
+    "https://pwning.owasp-juice.shop/companion-guide/latest/part2/broken-access-control.html",
+    "https://pwning.owasp-juice.shop/companion-guide/latest/appendix/solutions.html"
+  ];
+  for (const raw of seeds) {
+    try {
+      out.add(new URL(raw).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  try {
+    const origin = new URL(pageUrl).origin;
+    if (origin.includes("pwning.owasp-juice.shop")) {
+      for (const p of [
+        "/companion-guide/latest/part2/injection.html",
+        "/companion-guide/latest/part2/xss.html",
+        "/companion-guide/latest/part2/broken-access-control.html"
+      ]) {
+        try {
+          out.add(new URL(p, pageUrl).toString());
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+  return [...out];
+}
+
+/** ZIRAN AI agent security testing docs (taoq-ai.github.io/ziran). */
+function extractZiranDocSeeds(html: string, pageUrl: string): string[] {
+  if (!/ZIRAN|taoq-ai\/ziran|AI Agent Security Testing/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/getting-started/", "/architecture/", "/tool-chain-analysis/"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** johniwasz .NET serialization lab — Juice Shop exercise walkthroughs. */
+function extractDotnetSerializationLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/rce-serialization-dotnet|johniwasz\.github\.io/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "/rce-serialization-dotnet/JuiceShop/JuiceShop.html",
+    "/rce-serialization-dotnet/JuiceShop/solutions/JuiceShop-sqlinjection.html",
+    "/rce-serialization-dotnet/JuiceShop/solutions/override-csp-header.html",
+    "/rce-serialization-dotnet/JuiceShop/solutions/mass-assignment.html"
+  ]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -3819,6 +3893,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnappHubSeeds = extractVulnappHubSeeds(home.body, origin);
   const blueTeamLabsSeeds = extractBlueTeamLabsSeeds(home.body, origin);
   const juiceShopProjectSeeds = extractJuiceShopProjectSeeds(home.body, origin);
+  const pwningJuiceShopCompanionSeeds = extractPwningJuiceShopCompanionSeeds(home.body, home.finalUrl);
+  const ziranDocSeeds = extractZiranDocSeeds(home.body, home.finalUrl);
+  const dotnetSerializationLabSeeds = extractDotnetSerializationLabSeeds(home.body, home.finalUrl);
   const pwnedlabsSeeds = extractPwnedlabsLabSeeds(home.body, home.finalUrl);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
@@ -3938,6 +4015,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnappHubSeeds,
       ...blueTeamLabsSeeds,
       ...juiceShopProjectSeeds,
+      ...pwningJuiceShopCompanionSeeds,
+      ...ziranDocSeeds,
+      ...dotnetSerializationLabSeeds,
       ...pwnedlabsSeeds,
       ...mutillidaeSeeds,
       ...bwappSeeds,

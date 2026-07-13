@@ -3653,6 +3653,132 @@ const clientSideGenaiSecurityCrosswalkEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Pwning OWASP Juice Shop companion guide (pwning.owasp-juice.shop) ----------------
+const CLIENT_PWNING_JUICE_SHOP_COMPANION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Pwning OWASP Juice Shop companion title",
+    re: /Pwning OWASP Juice Shop/i
+  },
+  {
+    label: "Challenge hunting walkthrough chapters",
+    re: /Challenge hunting|Challenge solutions|Finding the Score Board/i
+  },
+  {
+    label: "Vulnerability category oracle chapters",
+    re: /Broken Access Control|Sensitive Data Exposure|Insecure Deserialization|Broken Authentication/i
+  },
+  {
+    label: "Hacking Instructor tutorial scripts",
+    re: /Hacking Instructor tutorial scripts|hacking-instructor/i
+  },
+  {
+    label: "Official companion guide domain",
+    re: /pwning\.owasp-juice\.shop|leanpub\.com\/juice-shop/i
+  }
+];
+
+const clientSidePwningJuiceShopCompanionEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PWNING_JUICE_SHOP_COMPANION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pwning OWASP Juice Shop|pwning\.owasp-juice\.shop/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pwning OWASP Juice Shop companion guide documents challenge-hunting walkthroughs spanning XSS, SQLi, IDOR, auth bypass, and deserialization oracles"
+    }
+  };
+};
+
+// --- ZIRAN AI agent security testing framework (taoq-ai.github.io/ziran) ---------------
+const CLIENT_ZIRAN_AGENT_SECURITY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ZIRAN AI agent security testing title",
+    re: /ZIRAN\s*[—-]\s*AI Agent Security Testing/i
+  },
+  {
+    label: "Tool chain composition analysis",
+    re: /tool chain compositions|Tool Chain Analysis|dangerous tool chain/i
+  },
+  {
+    label: "Knowledge graph agent analysis",
+    re: /knowledge graph analysis|Knowledge Graph/i
+  },
+  {
+    label: "Autonomous pentesting campaigns",
+    re: /autonomous pentesting|multi-phase campaigns/i
+  },
+  {
+    label: "ZIRAN repository branding",
+    re: /taoq-ai\/ziran|Agent Security Landscape/i
+  }
+];
+
+const clientSideZiranAgentSecurityEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ZIRAN_AGENT_SECURITY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/ZIRAN|taoq-ai\.github\.io\/ziran|taoq-ai\/ziran/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "ZIRAN documents AI agent security testing with knowledge-graph tool-chain analysis and autonomous pentesting campaigns"
+    }
+  };
+};
+
+// --- .NET serialization training lab with Juice Shop exercises (johniwasz.github.io) ---
+const CLIENT_DOTNET_SERIALIZATION_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "rce-serialization-dotnet training site",
+    re: /rce-serialization-dotnet|serialization vulnerabilities in \.NET/i
+  },
+  {
+    label: "Juice Shop pentest exercise hub",
+    re: /Juice Shop is an intentionally vulnerable web site|demo\.owasp-juice\.shop/i
+  },
+  {
+    label: "CSP header vulnerability exercise",
+    re: /CSP Header Vulnerability|override-csp-header/i
+  },
+  {
+    label: "SQL injection exercise walkthrough",
+    re: /SQL Injection solution|JuiceShop-sqlinjection|vulnerable to SQL injection/i
+  },
+  {
+    label: "Mass assignment training exercise",
+    re: /Mass Assignment|mass assignment vulnerability/i
+  }
+];
+
+const clientSideDotnetSerializationLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DOTNET_SERIALIZATION_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/rce-serialization-dotnet|johniwasz\.github\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "johniwasz rce-serialization-dotnet lab documents Juice Shop CSP, SQLi, and mass-assignment pentest exercises against demo.owasp-juice.shop"
+    }
+  };
+};
+
 // --- Rogue Studio autonomous security-research IDE (rougestudio.vercel.app) ----------
 const CLIENT_ROGUE_STUDIO_RES: { label: string; re: RegExp }[] = [
   {
@@ -12478,6 +12604,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHaoziXssChallengeEvidence,
   clientSideInsAItsEvidence,
   clientSideGenaiSecurityCrosswalkEvidence,
+  clientSidePwningJuiceShopCompanionEvidence,
+  clientSideZiranAgentSecurityEvidence,
+  clientSideDotnetSerializationLabEvidence,
   clientSideRogueStudioEvidence,
   clientSideOverthewireLeviathanEvidence
 };
