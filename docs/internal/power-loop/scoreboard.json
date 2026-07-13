@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T00:12:00.000Z",
+  "updated_at": "2026-07-13T01:04:46.002Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 988,
-  "total_findings": 4310,
+  "total_sites_scanned": 996,
+  "total_findings": 4340,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 467,
-  "discovery_findings": 3139,
+  "discovery_urls_added": 472,
+  "discovery_findings": 3161,
   "improvements_shipped": 354,
-  "last_run": "2026-07-13T00:12:00.000Z",
+  "last_run": "2026-07-13T01:04:46.002Z",
   "last_run_summary": {
-    "hour_utc": "00:00",
+    "hour_utc": "01:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
@@ -33,7 +33,7 @@
       "primary_gap": [],
       "pages_crawled": 1,
       "probes_run": 305,
-      "primary_note": "primary heroku 8 findings 6/6 \u2014 no category misses",
+      "primary_note": "primary heroku 8 findings 6/6 — no category misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,57 +50,47 @@
         }
       }
     },
-    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 43,
+      "urls_scanned": 7,
+      "findings": 22,
       "skipped_48h": [],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Dual pass: queue-head classics (hack-this-site, juice.shop demo, firing-range, gruyere, rest.vulnweb) + fly.dev CTF tail (code-breaking, sanitize-web, pokemorty)",
+      "focus": "Cahyod 13-app pentest hub + BountyBench benchmark; queue-head rescans (securebank-blog, hack-health, vulnweb, hackxor, bugbountyhunter)",
       "urls_added_list": [
-        "https://pwn.guide/",
-        "https://cvebench.com/",
-        "https://oauth-fetch.oauthlabs.com/",
-        "https://application.security/free-application-security-training/owasp-top-10-server-side-request-forgery",
-        "https://sploitify.haxx.it/"
+        "https://lab.cahyo.web.id/",
+        "http://portal.lab.cahyo.web.id/",
+        "http://juice-vuln.cahyo.web.id/",
+        "http://api-vuln.cahyo.web.id/",
+        "https://bountybench.github.io/"
       ],
-      "pass_a_scanned": [
-        "https://hack-this-site-eta.vercel.app/ (12)",
-        "https://demo.owasp-juice.shop/ (8)",
-        "https://juice-shop.lab.pentest-forge.com/ (1)",
-        "https://vampi.lab.pentest-forge.com/ (1)",
-        "https://public-firing-range.appspot.com/ (4)",
-        "https://google-gruyere.appspot.com/ (4)",
-        "http://rest.vulnweb.com/ (4)"
-      ],
-      "pass_b_scanned": [
-        "https://code-breaking.fly.dev/ (3)",
-        "https://sanitize-web.fly.dev/ (3)",
-        "https://pokemorty.fly.dev/ (3)"
+      "scanned": [
+        "https://securebank-blog.vercel.app/ (6)",
+        "https://hack-health-tutorial.vercel.app/ (4)",
+        "http://testaspnet.vulnweb.com/ (3)",
+        "https://hackxor.net/ (3)",
+        "https://www.bugbountyhunter.com/challenge?id=1 (2)",
+        "https://www.bugbountyhunter.com/playground (2)",
+        "https://www.bugbountyhunter.com/ (2)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) \u2014 no benchmark misses",
-      "hack-this-site-eta.vercel.app: 12 findings \u2014 GraphQL introspection + IDOR/SQLi/XSS client evidence",
-      "demo.owasp-juice.shop: 8 findings \u2014 full juice-shop oracle parity",
-      "public-firing-range.appspot.com: reflected XSS + open redirect (4 findings)",
-      "google-gruyere.appspot.com: reflected XSS + Gruyere codelab markers (4 findings)",
-      "rest.vulnweb.com: phpinfo exposed + REST API lab markers (4 findings)",
-      "code-breaking.fly.dev: source-code audit CTF with RCE/SQLi puzzle goals (3 findings)",
-      "sanitize-web.fly.dev: Ruby Sanitize HTML filter bypass demo (3 findings)",
-      "pokemorty.fly.dev: Morty's Pokedex browser CTF (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "securebank-blog.vercel.app: 6 findings — SQLi/CSRF/XSS client evidence + attack/secure mode lab",
+      "hack-health-tutorial.vercel.app: 4 findings — intentional SQLi tutorial markers",
+      "hackxor.net: 3 findings — reflected XSS via query param + insecure cookies",
+      "www.bugbountyhunter.com: 2 findings each — zseano challenge platform evidence (3 URLs)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.lab.pentest-forge.com + vampi.lab.pentest-forge.com: 1 finding each \u2014 lab instances likely offline/cold",
-      "testhtml5.vulnweb.com: DNS dead \u2014 use testasp/rest.vulnweb.com instead",
-      "capture-the-flag.labs.vercel.dev: Vercel DEPLOYMENT_NOT_FOUND \u2014 remove from queue",
-      "ai-security-labs.vercel.app: Internal Server Error \u2014 retry later"
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
+      "lab.cahyo.web.id + subdomains: queued at tail — not reached this pass (limit=8)",
+      "pwn.guide/cvebench/oauth-fetch/sploitify: still queued at tail — await next pass"
     ],
-    "improvements_shipped_this_run": 3
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
