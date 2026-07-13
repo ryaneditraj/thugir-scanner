@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T13:34:54.635Z",
+  "updated_at": "2026-07-13T14:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,80 +15,72 @@
       ]
     }
   },
-  "total_sites_scanned": 1117,
-  "total_findings": 4935,
+  "total_sites_scanned": 1124,
+  "total_findings": 4968,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 527,
-  "discovery_findings": 3637,
+  "discovery_urls_added": 532,
+  "discovery_findings": 3654,
   "improvements_shipped": 388,
-  "last_run": "2026-07-13T13:34:54.635Z",
+  "last_run": "2026-07-13T14:04:09.190Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "pass1_findings": 4,
-      "pass1_recall": "3/6",
-      "pass1_gap": ["xss", "sqli", "sensitive_data"],
-      "retry_findings": 9,
-      "retry_recall": "5/6",
-      "retry_gap": ["sqli"],
-      "final_findings": 10,
-      "final_recall": "6/6",
-      "fallback_urls": [
-        "https://juice-shop-staging.herokuapp.com",
-        "https://juice-shop.demo.escape.tech"
-      ],
-      "note": "Heroku cold-start pass1 4 findings pages_crawled=1; wake retries recovered to 6/6 (10 findings, pages_crawled=6 probes=294). escape.tech fallback available if Heroku Application Error.",
+      "findings": 8,
+      "recall": "6/6",
+      "gap": [],
+      "pages_crawled": 6,
+      "probes_run": 294,
+      "note": "Primary Heroku oracle clean on first pass — no wake retries needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 30,
-      "skipped_48h": "queue iterator advanced past 48h-skipped origins",
-      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"],
-      "focus": "Hacksplaining AI slop-squatting/buffer-overflow/DoS/bias/data-extraction queued; batch rescan HackAdvisor + VulnForge + TegalSec XSS labs",
+      "urls_scanned": 5,
+      "findings": 17,
+      "skipped_48h": "juice-shop.herokuapp.com origin skipped after benchmark",
+      "focus": "Hacksplaining transport/protocol lessons — DNS poisoning, TLS downgrade, email spoofing, malvertising, SSL stripping",
       "urls_added_list": [
-        "hacksplaining.com/lessons/slop-squatting/start",
-        "hacksplaining.com/lessons/buffer-overflows/start",
-        "hacksplaining.com/lessons/denial-of-service-attacks/start",
-        "hacksplaining.com/lessons/ai-bias-and-unreliability/start",
-        "hacksplaining.com/lessons/ai-data-extraction-attacks/start"
+        "hacksplaining.com/lessons/dns-poisoning/start",
+        "hacksplaining.com/lessons/downgrade-attacks/start",
+        "hacksplaining.com/lessons/email-spoofing/start",
+        "hacksplaining.com/lessons/malvertising/start",
+        "hacksplaining.com/lessons/ssl-stripping/start"
       ],
       "urls_scanned_list": [
-        "516-hackers.github.io (2)",
-        "labs.hackadvisor.io (8)",
-        "sixhackacademy.com (3)",
-        "vulnforge-academy.vercel.app (6)",
-        "webgoat.github.io/WebGoat (5)",
-        "labs.tegalsec.org/xss-labs (3)",
-        "labs.tegalsec.org/br0w (3)"
+        "hacksplaining.com/lessons/dns-poisoning/start (4)",
+        "hacksplaining.com/lessons/downgrade-attacks/start (4)",
+        "hacksplaining.com/lessons/email-spoofing/start (4)",
+        "hacksplaining.com/lessons/malvertising/start (4)",
+        "hacksplaining.com/lessons/ssl-stripping/start (1)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6/6 recall after Heroku wake retries (pass1 MISS 3/6 gap xss,sqli,sensitive_data)",
-      "labs.hackadvisor.io: 8 findings — reflected XSS + Resend key + CTF lab evidence",
-      "vulnforge-academy.vercel.app: 6 findings — SQLi error + OpenAI key + XSS sinks",
-      "webgoat.github.io/WebGoat: 5 findings — postMessage DOM XSS + WebGoat oracle",
-      "labs.tegalsec.org/xss-labs: 3 findings — reflected XSS evidence markers"
+      "juice-shop.herokuapp.com: 6/6 benchmark recall on first pass (8 findings, pages_crawled=6)",
+      "hacksplaining dns-poisoning/downgrade/email-spoofing/malvertising: 4 findings each — CORS + Hacksplaining lesson oracle",
+      "hacksplaining ssl-stripping: 1 finding — missing security headers only (shallow crawl)"
     ],
     "learning_gaps": [
-      "juice-shop primary Heroku: cold-start pass1 misses xss,sqli,sensitive_data (pages_crawled=1) — wake retries required for full recall",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com + staging: intermittent Heroku Application Error — use escape.tech fallback chain",
-      "testhtml5.vulnweb.com: DNS dead — remove from queue or use testasp.vulnweb.com",
-      "516-hackers-vuln-playground: GitHub Pages 404/partial — only misconfig markers",
-      "Hacksplaining new AI/DoS lessons queued at tail — not yet reached by queue iterator"
+      "hacksplaining ssl-stripping: pages_crawled=1 — lesson-specific exploit markers may need deeper crawl",
+      "juice-shop.herokuapp.com: intermittent cold-start regression still observed in prior runs — monitor pass1 gap"
     ]
   },
   "discovery_highlights": {
