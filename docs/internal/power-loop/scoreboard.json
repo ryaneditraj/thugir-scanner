@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T18:05:18.442Z",
+  "updated_at": "2026-07-13T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,31 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 1140,
-  "total_findings": 5050,
+  "total_sites_scanned": 1146,
+  "total_findings": 5091,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 542,
-  "discovery_findings": 3699,
+  "discovery_urls_added": 547,
+  "discovery_findings": 3740,
   "improvements_shipped": 395,
-  "last_run": "2026-07-13T18:05:18.442Z",
+  "last_run": "2026-07-13T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17:00",
+    "hour_utc": "18:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "fallback_url": "https://juice-shop-staging.herokuapp.com",
-      "findings": 8,
+      "findings": 7,
       "recall": "6/6",
       "gap": [],
-      "pass1_miss": {
-        "findings": 5,
-        "gap": [
-          "sensitive_data"
-        ],
-        "note": "Heroku cold-start before wake retries (parallel run pass1 gap sqli on 6-finding pass)"
-      },
-      "note": "Primary Heroku 6/6 after wake retries (7–8 findings); cold-start misses sensitive_data/sqli on shallow pass1",
+      "pass1_miss": null,
+      "note": "Primary Heroku 6/6 on first pass (7 findings; pages_crawled=1 probes=270) — no wake retries needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,48 +52,45 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 47,
+      "urls_scanned": 6,
+      "findings": 41,
       "skipped_48h": [
-        "www.hacksplaining.com (partial — xss-reflected/command-execution scanned in parallel engine run)"
+        "www.hacksplaining.com (origin scanned within 48h — new ssrf/path-traversal URLs deferred)",
+        "cyberdesserts.github.io/cookiejar-lab (origin scanned within 48h)"
       ],
       "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
+        "https://ctflearn.com/ (connection timeout)"
       ],
-      "focus": "Queue batch (vAPI/WrongSecrets/bWAPP/reef-mcp/SixHack/CVE-demo/alf.nu) + engine run (Hacksplaining XSS/RCE, OopsSec roadmap, CookieJar demo)",
-      "improvements_shipped_this_run": 3,
+      "focus": "Queue batch: OWASP VWAD Pixi, TestFire, Broken Crystals, SecureBy.Design SKF labs, Cyber Scavenger Hunt, Pentester Academy",
       "urls_added_list": [
-        "hacksplaining.com/lessons/command-execution/start",
-        "hacksplaining.com/lessons/csrf/start",
-        "hacksplaining.com/lessons/xss-reflected/start",
-        "hacksplaining.com/lessons/xml-external-entities/start",
-        "koadt.github.io/oss-oopssec-store/roadmap/"
+        "openvaultbank.com/learn",
+        "web.ctflearn.com/web2",
+        "web.ctflearn.com/web5",
+        "hacksplaining.com/lessons/ssrf/start",
+        "hacksplaining.com/lessons/path-traversal/start"
       ],
       "urls_scanned_list": [
-        "vapi.apisec.ai (4)",
-        "wrongsecrets.herokuapp.com (5)",
-        "bwapp.hakhub.net (6)",
-        "reef-mcp-registry.vercel.app (7)",
-        "platform.sixhackacademy.com (3)",
-        "cve-2025-55182-demo.vercel.app (3)",
-        "alf.nu/alert1 (3)",
-        "hacksplaining.com/lessons/xss-reflected/start (4)",
-        "koadt.github.io/oss-oopssec-store/roadmap (5)",
-        "cyberdesserts.github.io/cookiejar-lab/demo (3)"
+        "vwad.owasp.org/app/pixi (4)",
+        "demo.testfire.net (6)",
+        "brokencrystals.com (15)",
+        "secureby.design (8)",
+        "cyberscavengerhunt.com (6)",
+        "pentesteracademylab.appspot.com (2)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6/6 benchmark recall after Heroku wake retries",
-      "reef-mcp-registry.vercel.app: OpenAI + Resend + Twilio keys + MCP supply-chain demo (7 findings)",
-      "vapi.apisec.ai: OpenAI key in bundle + OWASP API Top 10 lab markers (4 findings)",
-      "wrongsecrets.herokuapp.com: Spring actuator + postMessage DOM XSS (5 findings)",
-      "hacksplaining.com/lessons/xss-reflected/start: client-side-hacksplaining-evidence (4 findings)"
+      "juice-shop.herokuapp.com: 6/6 benchmark recall on first pass (7 findings)",
+      "brokencrystals.com: exposed .env, .git, GraphQL introspection, postMessage DOM XSS (15 findings)",
+      "secureby.design: Resend key + CORS reflect-origin + SKF lab markers (8 findings)",
+      "demo.testfire.net: reflected XSS + unauthenticated admin endpoint (6 findings)",
+      "vwad.owasp.org/app/pixi: OWASP VWAD + WebGoat training markers (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop cold-start: pass1 misses sensitive_data/sqli before wake retries",
-      "hacksplaining.com: Vercel Security Checkpoint intermittently blocks scanner UA",
-      "testhtml5.vulnweb.com: DNS dead — remove or replace in queue"
+      "testhtml5.vulnweb.com: DNS dead — replace with testasp/rest.vulnweb.com",
+      "ctflearn.com: origin timeout from cloud scanner — use web.ctflearn.com subpaths",
+      "hacksplaining.com: origin-level 48h skip defers new lesson URLs after recent scans"
     ]
   },
   "discovery_highlights": {
@@ -123,7 +113,8 @@
     "dvwa.vercel.app": 4,
     "hiddeninvestigations.net": 4,
     "sasanlabs.github.io/VulnerableApp": 3,
-    "brokencrystals.com": 15,
+    "secureby.design": 8,
+    "pentesteracademylab.appspot.com": 2,
     "demo.testfire.net": 6,
     "cyberscavengerhunt.com": 6,
     "natas0.natas.labs.overthewire.org": 4,
