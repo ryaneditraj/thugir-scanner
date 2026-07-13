@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T07:26:52.663Z",
-  "total": 299,
-  "uniqueSlugs": 299,
+  "generatedAt": "2026-07-13T08:05:20.853Z",
+  "total": 301,
+  "uniqueSlugs": 301,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 281,
+    "generic": 283,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 233,
+    "deep": 235,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 97,
+    "Broken access control": 98,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -28,7 +28,7 @@
     "Information disclosure": 17,
     "Broken authentication": 18,
     "Injection": 48,
-    "Cross-site scripting": 28,
+    "Cross-site scripting": 29,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
     "AI security": 22,
@@ -133,6 +133,7 @@
     "client-side-ironwasp-evidence",
     "client-side-judgement-day-arena-evidence",
     "client-side-juice-shop-project-evidence",
+    "client-side-juice-shop-vapt-evidence",
     "client-side-jwt-none-evidence",
     "client-side-knoxss-test-page-evidence",
     "client-side-kontra-application-security-evidence",
@@ -175,6 +176,7 @@
     "client-side-peruggia-evidence",
     "client-side-pokemorty-ctf-evidence",
     "client-side-portswigger-academy-evidence",
+    "client-side-povzayd-xss-labs-evidence",
     "client-side-prompt-injection-evidence",
     "client-side-promptmap-evidence",
     "client-side-prototype-pollution-evidence",

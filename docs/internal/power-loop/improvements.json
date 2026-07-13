@@ -2273,6 +2273,24 @@
       "slug": "client-side-dotnet-serialization-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: rce-serialization-dotnet + CSP Header Vulnerability + SQL Injection solution + Mass Assignment; johniwasz.github.io/rce-serialization-dotnet/JuiceShop findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "client-side-povzayd-xss-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Welcome to XSS LABS + real-world XSS vulnerabilities + LABS/lab1.html document.write(search) + innerHTML welcome hash sink; extractPovzaydXssLabsSeeds; povzayd.github.io/XSS-LABS findings 2→3; benchmark juice-shop.herokuapp.com 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:lucky-cyber3008.github.io",
+      "slug": "client-side-juice-shop-vapt-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vulnerability Assessment & Penetration Testing (VAPT) + Admin Login via SQLi + DOM XSS, Reflected XSS + Findings/injection/ folder; lucky-cyber3008.github.io/juice-shop-vapt findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-application-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vertical Privilege Escalation | Kontra + Session Fixation | Kontra + User Enumeration | Kontra EXERCISE_ID seeds; extractKontraTrainingSeeds extended; application.security hub discovers auth training modules; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4155,6 +4173,21 @@
       "source": "discovery:johniwasz.github.io",
       "slug": "client-side-dotnet-serialization-lab-evidence",
       "shipped_at": "2026-07-13T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "client-side-povzayd-xss-labs-evidence",
+      "shipped_at": "2026-07-13T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:lucky-cyber3008.github.io",
+      "slug": "client-side-juice-shop-vapt-evidence",
+      "shipped_at": "2026-07-13T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "client-side-kontra-auth-training-seeds",
+      "shipped_at": "2026-07-13T08:10:00.000Z"
     }
   ]
 }
