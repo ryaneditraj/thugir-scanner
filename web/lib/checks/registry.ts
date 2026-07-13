@@ -2665,6 +2665,14 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /\/lessons\/xss-|Inject malicious scripts into trusted websites/i
   },
   {
+    label: "DOM-based XSS lesson module",
+    re: /\/lessons\/xss-dom|DOM-based XSS — Secure Coding Lesson/i
+  },
+  {
+    label: "DOM XSS URI fragment lesson description",
+    re: /URI fragments[\s\S]{0,100}inject malicious JavaScript/i
+  },
+  {
     label: "Stored XSS lesson module",
     re: /\/lessons\/xss-stored|Stored XSS — Secure Coding Lesson/i
   },
@@ -5528,6 +5536,22 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
     label: "Stored XSS training lab title",
     re: /Stored Cross Site Scripting \| Kontra|owasp-top-10-stored-cross-site-scripting/i
+  },
+  {
+    label: "Reflected XSS training lab title",
+    re: /Reflected XSS \| Kontra|owasp-top-10-reflected-cross-site-scripting/i
+  },
+  {
+    label: "Insecure URL redirect training lab title",
+    re: /Insecure URL Redirect \| Kontra|owasp-top-10-insecure-url-redirect/i
+  },
+  {
+    label: "Cross-site request forgery training lab title",
+    re: /Cross Site Request Forgery \| Kontra|owasp-top-10-cross-site-request-forgery/i
+  },
+  {
+    label: "Leftover debug code training lab title",
+    re: /Leftover Debug Code \| Kontra|owasp-top-10-leftover-debug-code/i
   },
   {
     label: "Capital One SSRF training lab title",
