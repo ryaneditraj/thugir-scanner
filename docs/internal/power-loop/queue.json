@@ -2537,7 +2537,32 @@
       "url": "https://www.hacksplaining.com/lessons/password-mismanagement/start",
       "source": "Hacksplaining \u2014 interactive broken-authentication / password-mismanagement lesson (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/host-header-poisoning/start",
+      "source": "Hacksplaining \u2014 interactive host-header-poisoning secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/insecure-design/start",
+      "source": "Hacksplaining \u2014 OWASP Insecure Design threat-modeling secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/information-leakage/start",
+      "source": "Hacksplaining \u2014 information-leakage / stack-fingerprinting secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/logging-and-monitoring/start",
+      "source": "Hacksplaining \u2014 logging-and-monitoring failure secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/privilege-escalation/start",
+      "source": "Hacksplaining \u2014 privilege-escalation / broken-access-control lesson (lessons catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T10:12:00.000Z"
+  "updated_at": "2026-07-13T11:50:00.000Z"
 }
