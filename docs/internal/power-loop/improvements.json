@@ -2315,6 +2315,24 @@
       "slug": "kontra-dom-xss-lesson",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: DOM XSS | Kontra Application Security Training + DOM Based XSS meta description at owasp-top-10-dom-cross-site-scripting; extractKontraTrainingSeeds extended; live scan 5 findings incl client-side-kontra-application-security-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-session-fileupload-prototype-cors-password-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Session Fixation/File Upload/Prototype Pollution/CORS/Password Mismanagement — Secure Coding Lesson titles + meta descriptions (session hijacked, malicious code upload, prototype objects, permissive CORS, password treatment); extractHacksplainingLessonSeeds extended; session-fixation/start 0→4 incl client-side-hacksplaining-evidence; benchmark juice-shop.herokuapp.com 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-host-header-xml-entity-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Header Injection | Kontra + XML Injection | Kontra lesson titles at owasp-top-10-host-header-injection and owasp-top-10-xml-entity-injection; extractKontraTrainingSeeds extended; host-header lesson 4 findings incl client-side-kontra-application-security-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "pentesterlab-web-fundamentals-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PentesterLab's exercise on Web Fundamentals: CORS meta + /exercises/web-fundamentals-cors|graphql|sessions|api|databases seeds; web-fundamentals-cors 4 findings incl client-side-pentesterlab-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4232,6 +4250,21 @@
       "source": "discovery:application.security",
       "slug": "kontra-dom-xss-lesson",
       "shipped_at": "2026-07-13T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-session-fileupload-prototype-cors-password-lessons",
+      "shipped_at": "2026-07-13T11:02:00.000Z"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-host-header-xml-entity-lessons",
+      "shipped_at": "2026-07-13T11:02:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "pentesterlab-web-fundamentals-seeds",
+      "shipped_at": "2026-07-13T11:02:00.000Z"
     }
   ]
 }
