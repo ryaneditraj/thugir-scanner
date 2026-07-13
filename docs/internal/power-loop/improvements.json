@@ -2165,6 +2165,24 @@
       "slug": "client-side-pwn-guide-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwn.guide + 200+ hands-on cybersecurity tutorials + web hacking/wireless tutorial markers; pwn.guide findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bountybench.github.io",
+      "slug": "client-side-bountybench-benchmark-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BountyBench + 40 bug bounties + 9 of the OWASP Top 10 Risks + Detect/Exploit/Patch agent tasks; bountybench.github.io findings 2→3; staging benchmark 7 findings 5/6 (primary heroku 503)"
+    },
+    {
+      "source": "discovery:lab.cahyo.web.id",
+      "slug": "client-side-cahyod-vulnerable-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vulnerable Lab + 13 vulnerable applications + portal.lab.cahyo.web.id subdomain table + vuln-tag sqli/xss/idor; lab.cahyo.web.id findings 0→4; benchmark maintained"
+    },
+    {
+      "source": "discovery:portal.lab.cahyo.web.id",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET search.php?q=')) returns <!-- SQL Error: You have an error in your SQL syntax; cahyod hub subdomain crawl + /search.php fallback; portal.lab.cahyo.web.id findings 0→5 incl sql-error-disclosure + reflected-xss; benchmark maintained"
     }
   ],
   "shipped": [
@@ -3952,6 +3970,21 @@
       "source": "discovery:pwn.guide",
       "slug": "client-side-pwn-guide-evidence",
       "shipped_at": "2026-07-13T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:bountybench.github.io",
+      "slug": "client-side-bountybench-benchmark-evidence",
+      "shipped_at": "2026-07-13T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:lab.cahyo.web.id",
+      "slug": "client-side-cahyod-vulnerable-lab-evidence",
+      "shipped_at": "2026-07-13T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:portal.lab.cahyo.web.id",
+      "slug": "cahyod-subdomain-crawl-search-php-sqli",
+      "shipped_at": "2026-07-13T02:10:00.000Z"
     }
   ]
 }
