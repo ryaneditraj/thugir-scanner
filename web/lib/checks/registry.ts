@@ -9352,6 +9352,120 @@ const CLIENT_CTFCHALLENGE_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+// --- Code-Breaking source-code audit CTF (code-breaking.fly.dev) ----------------------
+const CLIENT_CODE_BREAKING_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Code-Breaking Puzzles branding",
+    re: /Code[\s-]*Breaking(?:\s+Puzzles)?|code-breaking\.fly\.dev/i
+  },
+  {
+    label: "Open source-code audit challenge description",
+    re: /完全开放的代码审计挑战赛|open source.?code audit|Code-Breaking Puzzles/i
+  },
+  {
+    label: "RCE and SQL injection audit goals",
+    re: /RCE、SQL注入|audit.*source code.*(?:RCE|SQL)|漏洞挖掘/i
+  },
+  {
+    label: "phith0n author or puzzle keywords",
+    re: /phith0n|代码审计知识星球|PWNHUB/i
+  }
+];
+
+const clientSideCodeBreakingEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CODE_BREAKING_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Code[\s-]*Breaking|code-breaking\.fly\.dev|代码审计/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Code-Breaking publishes open source-code audit puzzles where players exploit RCE and SQL injection flaws to capture flags"
+    }
+  };
+};
+
+// --- Sanitize HTML filter bypass demo (sanitize-web.fly.dev) ------------------------
+const CLIENT_SANITIZE_XSS_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Sanitize Online Demo title",
+    re: /Sanitize Online Demo|sanitize-web\.fly\.dev/i
+  },
+  {
+    label: "HTML sanitizer bypass challenge prompt",
+    re: /sneak some naughty HTML past|naughty HTML past[\s\S]{0,80}Sanitize/i
+  },
+  {
+    label: "Sanitize config selector",
+    re: /Sanitize config:|name=["']config["'][\s\S]{0,120}(?:default|restricted|relaxed)/i
+  },
+  {
+    label: "Filtered HTML render panel",
+    re: /Filtered HTML \(rendered\)|html-raw|Sanitize 7\./i
+  }
+];
+
+const clientSideSanitizeXssDemoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SANITIZE_XSS_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Sanitize Online Demo|sanitize-web\.fly\.dev|rgrove\/sanitize/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Sanitize Online Demo invites attackers to bypass Ruby Sanitize HTML filters via posted markup and relaxed config options"
+    }
+  };
+};
+
+// --- Morty's Pokedex CTF (pokemorty.fly.dev) ----------------------------------------
+const CLIENT_POKEMORTY_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Morty's Pokedex CTF title",
+    re: /Morty'?s Pokedex CTF|pokemorty\.fly\.dev/i
+  },
+  {
+    label: "Nickname cookie challenge intro",
+    re: /nicknameInput|setCookie\(["']nickname|introduce your nickname/i
+  },
+  {
+    label: "Binary-encoded Rick and Morty challenge text",
+    re: /0100100001100101[\s\S]{0,40}Morty|dimension C-130|Council of ricks/i
+  },
+  {
+    label: "Challenge validation form",
+    re: /challenge_validation|\/pokedex|license plate of my silver prius/i
+  }
+];
+
+const clientSidePokemortyCtfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_POKEMORTY_CTF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Morty'?s Pokedex|pokemorty\.fly\.dev/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Morty's Pokedex CTF stages browser challenges with nickname cookies, captcha forms, and Rick and Morty themed validation puzzles"
+    }
+  };
+};
+
 const clientSideCtfchallengeEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CTFCHALLENGE_RES) {
@@ -11550,6 +11664,9 @@ export const RULES: Record<string, Rule> = {
   clientSideReturnTrueWargameEvidence,
   clientSideAuthlabEvidence,
   clientSideXssQuizEvidence,
+  clientSideCodeBreakingEvidence,
+  clientSideSanitizeXssDemoEvidence,
+  clientSidePokemortyCtfEvidence,
   clientSideCtfchallengeEvidence,
   clientSideExploitEducationEvidence,
   clientSideYogsecXssLabsEvidence,
