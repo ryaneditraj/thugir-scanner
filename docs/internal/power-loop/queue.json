@@ -2362,7 +2362,32 @@
       "url": "https://application.security/",
       "source": "Kontra Application Security — developer-first interactive OWASP Top 10/API/LLM training hub (Product Hunt cited)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://cyber-ctf-website.vercel.app/",
+      "source": "CyberCTF — gamified OWASP hands-on lab platform with 200+ challenges (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnedlabs.io/explore",
+      "source": "Pwned Labs — Product Hunt cloud/hybrid/AI security lab catalog (pwnedlabs.io)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.pwnedlabs.io/hunt-for-secrets-in-git-repos",
+      "source": "Pwned Labs — beginner git-secrets hunting lab landing (labs.pwnedlabs.io)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.github.io/",
+      "source": "OWASP Juice Shop project site — challenge taxonomy + demo links (official GitHub Pages)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://rootxjs.github.io/blog/grpc-goat/",
+      "source": "rootxjs/grpc-goat — gRPC vulnerability lab launch post with 9-scenario oracle (Show HN 2025)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T03:05:00.000Z"
+  "updated_at": "2026-07-13T04:15:00.000Z"
 }
