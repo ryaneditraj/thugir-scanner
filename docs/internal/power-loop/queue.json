@@ -22,8 +22,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://www.hacksplaining.com/lessons/cross-site-script-inclusion/start",
-      "source": "Hacksplaining — XSSI / sensitive data in JS files lesson (lessons catalog)",
+      "url": "https://www.hacksplaining.com/lessons/xssi/start",
+      "source": "Hacksplaining — XSSI / sensitive data in JS files lesson (lessons catalog; slug is xssi not cross-site-script-inclusion)",
       "auth": "public_demo"
     },
     {
