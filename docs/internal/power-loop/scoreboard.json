@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T16:53:00.268Z",
+  "updated_at": "2026-07-13T16:58:45.590Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,79 +15,88 @@
       ]
     }
   },
-  "total_sites_scanned": 1130,
-  "total_findings": 4995,
+  "total_sites_scanned": 1137,
+  "total_findings": 5027,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 537,
-  "discovery_findings": 3667,
+  "discovery_urls_added": 542,
+  "discovery_findings": 3699,
   "improvements_shipped": 390,
-  "last_run": "2026-07-13T16:53:00.268Z",
+  "last_run": "2026-07-13T16:58:45.590Z",
   "last_run_summary": {
-    "hour_utc": "15:00",
+    "hour_utc": "16:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "findings": 7,
       "recall": "6/6",
       "gap": [],
+      "pass1_miss": {
+        "findings": 2,
+        "gap": ["xss", "idor", "auth_bypass", "sensitive_data"],
+        "pages_crawled": 1,
+        "probes_run": 2
+      },
       "pages_crawled": 6,
-      "probes_run": 251,
-      "note": "Primary Heroku DNS failure (domain not found) — staging fallback 6/6 recall, 7 findings",
+      "probes_run": 250,
+      "note": "Primary Heroku cold/degraded (2→1 findings on wake retries) — staging fallback 6/6 recall, 7 findings",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 4,
-      "findings": 13,
-      "skipped_48h": "www.hacksplaining.com origin (14:00 run) + juice-shop.herokuapp.com — new Hacksplaining lessons queued for next window",
-      "focus": "Hacksplaining supply-chain/protocol lessons queued; scan picked next eligible queue entries",
+      "urls_scanned": 7,
+      "findings": 32,
+      "skipped_48h": [
+        "www.hacksplaining.com (xss-reflected, command-execution queued — origin scanned 14:00–15:00 UTC)",
+        "cyberdesserts.github.io/cookiejar-lab/ (demo subpath scanned earlier)",
+        "koadt.github.io/oss-oopssec-store/roadmap (store root scanned earlier)"
+      ],
+      "dns_failures": ["http://testhtml5.vulnweb.com/ (NXDOMAIN)"],
       "urls_added_list": [
-        "hacksplaining.com/lessons/xml-bombs/start",
-        "hacksplaining.com/lessons/subdomain-squatting/start",
-        "hacksplaining.com/lessons/toxic-dependencies/start",
-        "hacksplaining.com/lessons/unencrypted-communication/start",
-        "hacksplaining.com/lessons/cross-site-script-inclusion/start"
+        "hacksplaining.com/lessons/xss-reflected/start",
+        "hacksplaining.com/lessons/command-execution/start",
+        "cyberdesserts.github.io/cookiejar-lab/",
+        "vwad.owasp.org/app/pixi/",
+        "koadt.github.io/oss-oopssec-store/roadmap"
       ],
       "urls_scanned_list": [
-        "owasp-finbot-ctf.org (4)",
-        "ginandjuice.shop (3)",
-        "maestro-agentic-ai-security-demo-mon.netlify.app (3)",
-        "testhtml5.vulnweb.com (DNS error)",
-        "defendtheweb.net (3)"
+        "vwad.owasp.org/app/pixi/ (4)",
+        "vapi.apisec.ai (4)",
+        "wrongsecrets.herokuapp.com (5)",
+        "bwapp.hakhub.net (6)",
+        "reef-mcp-registry.vercel.app (7)",
+        "platform.sixhackacademy.com (3)",
+        "cve-2025-55182-demo.vercel.app (3)"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary oracle DNS failure — staging fallback 6/6 (7 findings)",
-      "ginandjuice.shop: reflected XSS via query param + insecure cookies",
-      "maestro-agentic-ai: critical stack-database-url-in-bundle in client JS",
-      "owasp-finbot-ctf.org: agentic AI CTF + OpenAPI docs exposed"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary cold-start miss",
+      "reef-mcp-registry.vercel.app: MCP supply-chain demo + exposed API keys (7 findings)",
+      "wrongsecrets.herokuapp.com: Spring actuator + postMessage DOM XSS (5 findings)",
+      "bwapp.hakhub.net: phpinfo exposed + directory listing (6 findings)",
+      "vapi.apisec.ai: API Top 10 lab markers + secret-openai in bundle (4 findings)"
     ],
     "learning_gaps": [
+      "juice-shop.herokuapp.com: primary oracle cold-start — pass1 only 2/6 categories before staging fallback",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: primary benchmark URL DNS dead — monitor Heroku oracle availability",
-      "testhtml5.vulnweb.com: DNS dead — remove or replace in queue",
-      "hacksplaining new lessons: origin-level 48h skip defers scan to next run"
+      "hacksplaining new lessons: origin-level 48h skip defers xss-reflected/command-execution scan",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
+      "wrongsecrets: secrets in config/Docker layers may need deeper oracles than shallow crawl"
     ]
   },
   "discovery_highlights": {
-    "pwning.owasp-juice.shop": 5,
+    "vwad.owasp.org/app/pixi": 4,
+    "reef-mcp-registry.vercel.app": 7,
+    "platform.sixhackacademy.com": 3,
     "taoq-ai.github.io/ziran": 5,
     "johniwasz.github.io/rce-serialization-dotnet": 4,
     "xss.haozi.me": 3,
