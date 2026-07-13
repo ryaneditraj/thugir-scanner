@@ -2849,6 +2849,94 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /machine learning model may be leaking sensitive data/i
   },
   {
+    label: "XML bomb lesson module",
+    re: /\/lessons\/xml-bombs|XML Bombs — Secure Coding Lesson/i
+  },
+  {
+    label: "XML bomb macro lesson description",
+    re: /Unsafe treatment of XML macros can make your server vulnerable/i
+  },
+  {
+    label: "Subdomain squatting lesson module",
+    re: /\/lessons\/subdomain-squatting|Subdomain Squatting — Secure Coding Lesson/i
+  },
+  {
+    label: "Subdomain squatting lesson description",
+    re: /dangling subdomains to deliver malware/i
+  },
+  {
+    label: "Toxic dependencies lesson module",
+    re: /\/lessons\/toxic-dependencies|Toxic Dependencies — Secure Coding Lesson/i
+  },
+  {
+    label: "Toxic dependencies lesson description",
+    re: /Third-party libraries could be introducing vulnerabilities or malicious code/i
+  },
+  {
+    label: "Unencrypted communication lesson module",
+    re: /\/lessons\/unencrypted-communication|Unencrypted Communication — Secure Coding Lesson/i
+  },
+  {
+    label: "MITM lesson description",
+    re: /Insufficient encryption can make you vulnerable to monster-in-the-middle attacks/i
+  },
+  {
+    label: "XSSI lesson module",
+    re: /\/lessons\/xssi|Cross-Site Script Inclusion — Secure Coding Lesson/i
+  },
+  {
+    label: "XSSI sensitive JS lesson description",
+    re: /putting sensitive data in your JavaScript files an attacker is probably stealing/i
+  },
+  {
+    label: "DNS poisoning lesson module",
+    re: /\/lessons\/dns-poisoning|DNS Poisoning — Secure Coding Lesson/i
+  },
+  {
+    label: "DNS poisoning lesson description",
+    re: /upstream DNS caches have been poisoned/i
+  },
+  {
+    label: "Downgrade attack lesson module",
+    re: /\/lessons\/downgrade-attacks|Downgrade Attacks — Secure Coding Lesson/i
+  },
+  {
+    label: "Downgrade attack TLS lesson description",
+    re: /intercept, read and manipulate HTTPS traffic if you fail to specify a modern version of TLS/i
+  },
+  {
+    label: "Email spoofing lesson module",
+    re: /\/lessons\/email-spoofing|Email Spoofing — Secure Coding Lesson/i
+  },
+  {
+    label: "Email spoofing lesson description",
+    re: /Email spoofing is the sending of email messages with a forged/i
+  },
+  {
+    label: "Malvertising lesson module",
+    re: /\/lessons\/malvertising|Malvertising — Secure Coding Lesson/i
+  },
+  {
+    label: "Malvertising lesson description",
+    re: /Embedded adverts are a common target for hackers/i
+  },
+  {
+    label: "SSL stripping lesson module",
+    re: /\/lessons\/ssl-stripping|SSL Stripping — Secure Coding Lesson/i
+  },
+  {
+    label: "SSL stripping lesson description",
+    re: /only some actions on your website require HTTPS, an attacker may be able to steal credentials/i
+  },
+  {
+    label: "Host header poisoning lesson module",
+    re: /\/lessons\/host-header-poisoning|Host Header Poisoning — Secure Coding Lesson/i
+  },
+  {
+    label: "Host header poisoning lesson description",
+    re: /dangerous to rely on the value supplied in Host header of an HTTP request/i
+  },
+  {
     label: "Hacksplaining secure coding lesson title",
     re: /— Secure Coding Lesson \| Hacksplaining/i
   }
