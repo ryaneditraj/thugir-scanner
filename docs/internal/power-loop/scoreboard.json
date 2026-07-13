@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T05:02:47.070Z",
+  "updated_at": "2026-07-13T05:04:52.846Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,30 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 1030,
-  "total_findings": 4505,
+  "total_sites_scanned": 1038,
+  "total_findings": 4546,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 487,
-  "discovery_findings": 3278,
+  "discovery_urls_added": 492,
+  "discovery_findings": 3319,
   "improvements_shipped": 367,
-  "last_run": "2026-07-13T05:02:47.070Z",
+  "last_run": "2026-07-13T05:04:52.846Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "pass1_findings": 4,
-      "pass1_gap": [
-        "xss",
-        "sensitive_data"
-      ],
+      "pass1_findings": 8,
+      "pass1_gap": [],
       "pages_crawled": 1,
       "probes_run": 289,
-      "note": "Heroku cold-start pass1 4/6 gap xss,sensitive_data; wake retry 8 findings 6/6 on primary",
+      "note": "Primary Heroku 8 findings 6/6 on first pass — no cold-start retry needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -58,49 +55,42 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 35,
+      "urls_scanned": 8,
+      "findings": 41,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
-        "https://thisislegal.com/ (empty response)",
-        "https://ctf.komodosec.com/ (empty response)"
-      ],
-      "focus": "Metasploitable2 vulnapp hub + VAmPI Railway + WebSec.fr; CyberCTF/Pwned Labs queued at tail",
+      "dns_failures": [],
+      "focus": "OSS GitHub Pages labs (apigoat, HackLab, WebVulnsGuide); OpenVault Railway + GenAI crosswalk queued at tail",
       "urls_scanned_list": [
-        "https://server.vulnapp.id/ (8)",
-        "https://blueteamlabs.online/ (BTLO evidence)",
-        "https://server.vulnapp.id/phpMyAdmin/ (phpmyadmin-exposed)",
-        "https://urban-vampi-production.up.railway.app/ (6)",
-        "https://hiddeninvestigations.net/ (4)",
-        "http://acuart.phpnet.us/ (2)",
-        "https://websec.fr/ (3)",
-        "https://vulnbank.org/ (5)",
-        "https://dvwa.vercel.app/ (4)",
-        "https://sasanlabs.github.io/VulnerableApp/ (3)"
+        "https://yusufarbc.github.io/apigoat/ (3)",
+        "https://ucu-owasp-ctf.vercel.app/ (5)",
+        "https://ogtamimi.github.io/OGT-Cyber-Game/ (5)",
+        "https://koadt.github.io/oss-oopssec-store/ (6)",
+        "https://ashimkoirala.github.io/HackLab/ (6)",
+        "https://vulnshop.vercel.app/ (3)",
+        "https://dxx33.github.io/WebVulnsGuide/ (8)",
+        "https://akbarbashakm.github.io/frontend-security-examples/ (5)"
       ],
       "urls_added_list": [
-        "https://cyber-ctf-website.vercel.app/",
-        "https://pwnedlabs.io/explore",
-        "https://labs.pwnedlabs.io/hunt-for-secrets-in-git-repos",
-        "https://juice-shop.github.io/",
-        "https://rootxjs.github.io/blog/grpc-goat/"
+        "https://web-production-16ec6a.up.railway.app/",
+        "https://emmanuelgjr.github.io/GenAI-Security-Crosswalk/",
+        "https://xss.haozi.me/",
+        "https://hackme.net/",
+        "https://nomadu27.github.io/InsAIts-public/"
       ],
-      "improvements_shipped_this_run": 3
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings after Heroku wake retry)",
-      "server.vulnapp.id: Metasploitable2 hub 8 findings — DVWA/Mutillidae/phpMyAdmin/TWiki crawl",
-      "urban-vampi-production.up.railway.app: OpenAPI debug password exposure + IDOR (6 findings)",
-      "websec.fr: SQLi challenge source evidence in client bundle (3 findings)",
-      "vulnbank.org: CORS reflect + IDOR + OpenAPI docs (5 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings, first-pass — no Heroku wake retry)",
+      "dxx33.github.io/WebVulnsGuide: 8 findings — interactive OWASP guide with XSS/SQLi evidence",
+      "ashimkoirala.github.io/HackLab: 6 findings — zero-dependency browser OWASP Top 10 lab",
+      "koadt.github.io/oss-oopssec-store: 6 findings — CTF e-commerce with injectable patterns",
+      "ucu-owasp-ctf.vercel.app: 5 findings — educational CTF challenge markers"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "thisislegal.com + ctf.komodosec.com: unreachable from cloud (empty/DNS)",
-      "hiddeninvestigations.net: react2shell Docker lab — shallow crawl misses container oracles",
-      "benchmark pass1 cold-start still degrades xss,sensitive_data before retry on Heroku",
-      "New URLs at queue tail (cyber-ctf, Pwned Labs, juice-shop.github.io, grpc-goat blog) await next pass"
+      "benchmark: no misses this run — Heroku warm enough for 6/6 on pass1",
+      "New URLs at queue tail (OpenVault Railway, GenAI crosswalk, xss.haozi, hackme, InsAIts) await next pass",
+      "cyber-ctf + Pwned Labs + juice-shop.github.io still queued ahead of tail additions"
     ]
   },
   "discovery_highlights": {
@@ -294,6 +284,7 @@
     "lab.cahyo.web.id": 4,
     "portal.lab.cahyo.web.id": 5,
     "oauth-fetch.oauthlabs.com": 5,
-    "judgement-day-khaki.vercel.app": 4
+    "judgement-day-khaki.vercel.app": 4,
+    "akbarbashakm.github.io/frontend-security-examples": 5
   }
 }
