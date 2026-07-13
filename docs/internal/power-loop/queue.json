@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-13T21:24:00.000Z",
+  "updated_at": "2026-07-13T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://chal7.vercel.app/",
+      "source": "Wizer CTF #7 Login Page — SQLi + weak MD5 hash login bypass (wizer-training.com for-developers)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal1.vercel.app/",
+      "source": "Wizer CTF challenge #1 — public developer security training lab (vercel.app chal* series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal5.vercel.app/",
+      "source": "Wizer CTF challenge #5 — public developer security training lab (vercel.app chal* series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal8.vercel.app/",
+      "source": "Wizer CTF challenge #8 — public developer security training lab (vercel.app chal* series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/level8.php",
+      "source": "OverTheWire RedTiger level 8 — UPDATE-clause SQLi admin password overwrite wargame (writeups)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://openvaultbank.com/api/v1/users",
       "source": "OpenVault Bank — OWASP API Top 10 banking API user enumeration/IDOR oracle (cheatsheet /api/v1 routes)",
