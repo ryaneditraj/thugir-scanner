@@ -87,6 +87,10 @@ export const HARDCODED_CRED_RES = [
   {
     label: "admin password in API query string",
     re: /(?:\?|&)username=admin&password=(?:123456|password|admin|passw0rd)/i
+  },
+  {
+    label: "DVWA default credential hint",
+    re: /default username is ['"]admin['"] with password ['"]password['"]/i
   }
 ];
 

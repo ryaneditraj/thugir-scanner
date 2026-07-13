@@ -639,6 +639,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideCyberScavengerHuntEvidence",
   "clientSideSkfLabEvidence",
   "clientSideGoogleGruyereCodelabEvidence",
+  "clientSideMetasploitableLabEvidence",
+  "clientSideBlueTeamLabsEvidence",
   "clientSideMutillidaeEvidence",
   "clientSideBwappEvidence",
   "clientSideBwappInjectionCatalogEvidence",
@@ -1134,6 +1136,43 @@ function extractSixHackCtfSeeds(html: string, origin: string): string[] {
   if (plat) {
     try {
       out.add(new URL("/", plat[0]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Metasploitable2 / vulnapp.id hub — DVWA, Mutillidae, phpMyAdmin, TWiki, WebDAV. */
+function extractVulnappHubSeeds(html: string, origin: string): string[] {
+  if (!/Metasploitable2|Never expose this VM to an untrusted network|msfadmin/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/mutillidae/", "/dvwa/", "/phpMyAdmin/", "/twiki/", "/dav/"]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const re = /href\s*=\s*["'](\/(?:mutillidae|dvwa|phpMyAdmin|twiki|dav)\/?)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Blue Team Labs Online — cyber range marketing and auth entry points. */
+function extractBlueTeamLabsSeeds(html: string, origin: string): string[] {
+  if (!/Blue Team Labs Online|blueteamlabs\.online|gamified platform for cyber defenders/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/login", "/register"]) {
+    try {
+      out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
@@ -3718,6 +3757,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const avidVulnEditorSeeds = extractAvidVulnEditorSeeds(home.body, home.finalUrl);
   const pwnshopSeeds = extractPwnshopDocSeeds(home.body, home.finalUrl);
   const restVulnwebSeeds = extractRestVulnwebDocSeeds(home.body, origin);
+  const vulnappHubSeeds = extractVulnappHubSeeds(home.body, origin);
+  const blueTeamLabsSeeds = extractBlueTeamLabsSeeds(home.body, origin);
   const mutillidaeSeeds = extractMutillidaeLabSeeds(home.body, origin);
   const bwappSeeds = extractBwappLabSeeds(home.body, origin);
   const zeroBankSeeds = extractZeroBankTrainingSeeds(home.body, origin);
@@ -3833,6 +3874,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...avidVulnEditorSeeds,
       ...pwnshopSeeds,
       ...restVulnwebSeeds,
+      ...vulnappHubSeeds,
+      ...blueTeamLabsSeeds,
       ...mutillidaeSeeds,
       ...bwappSeeds,
       ...zeroBankSeeds,
