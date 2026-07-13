@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T20:10:56.204Z",
-  "total": 305,
-  "uniqueSlugs": 305,
+  "generatedAt": "2026-07-13T21:05:58.364Z",
+  "total": 307,
+  "uniqueSlugs": 307,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 287,
+    "generic": 289,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 239,
+    "deep": 241,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 22,
     "Information disclosure": 18,
     "Broken authentication": 19,
-    "Injection": 48,
+    "Injection": 50,
     "Cross-site scripting": 29,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
@@ -228,6 +228,7 @@
     "client-side-vapi-api-lab-evidence",
     "client-side-vaultapp-lab-evidence",
     "client-side-vuln-auth-portal-evidence",
+    "client-side-vuln-expose-evidence",
     "client-side-vulnerable-qa-lab-evidence",
     "client-side-vulnerable-web-site-evidence",
     "client-side-vulnerableapp-evidence",
@@ -287,6 +288,7 @@
     "phpmyadmin-exposed",
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
+    "redtiger-blind-login-form-evidence",
     "reflected-xss-query-param",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",
