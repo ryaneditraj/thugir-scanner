@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T05:02:52.850Z",
-  "total": 293,
-  "uniqueSlugs": 293,
+  "generatedAt": "2026-07-13T06:06:35.531Z",
+  "total": 296,
+  "uniqueSlugs": 296,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 275,
+    "generic": 278,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 227,
+    "deep": 230,
     "continuous": 0
   },
   "byCategory": {
@@ -28,10 +28,10 @@
     "Information disclosure": 17,
     "Broken authentication": 18,
     "Injection": 47,
-    "Cross-site scripting": 27,
+    "Cross-site scripting": 28,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
-    "AI security": 19,
+    "AI security": 21,
     "XSS": 1,
     "general": 17
   },
@@ -106,6 +106,7 @@
     "client-side-frontend-xss-demo-evidence",
     "client-side-fvb-lab-evidence",
     "client-side-gandalf-evidence",
+    "client-side-genai-security-crosswalk-evidence",
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",
     "client-side-graphql-lab-evidence",
@@ -122,8 +123,10 @@
     "client-side-hackthebox-academy-evidence",
     "client-side-hackthebox-evidence",
     "client-side-hackthissite-evidence",
+    "client-side-haozi-xss-challenge-evidence",
     "client-side-idor-evidence",
     "client-side-immersive-labs-evidence",
+    "client-side-insaits-evidence",
     "client-side-intercode-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",

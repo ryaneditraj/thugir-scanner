@@ -762,6 +762,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideAttpAgentTrustEvidence",
   "clientSideBugzapPromptDefenseEvidence",
   "clientSideRedlockxPromptFirewallEvidence",
+  "clientSideHaoziXssChallengeEvidence",
+  "clientSideInsAItsEvidence",
+  "clientSideGenaiSecurityCrosswalkEvidence",
   "clientSideRogueStudioEvidence"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof

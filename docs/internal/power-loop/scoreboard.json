@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T05:10:00.000Z",
+  "updated_at": "2026-07-13T06:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1041,
-  "total_findings": 4561,
+  "total_sites_scanned": 1047,
+  "total_findings": 4573,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 492,
-  "discovery_findings": 3334,
-  "improvements_shipped": 370,
-  "last_run": "2026-07-13T05:10:00.000Z",
+  "discovery_findings": 3346,
+  "improvements_shipped": 373,
+  "last_run": "2026-07-13T06:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05:00",
+    "hour_utc": "06:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 9,
@@ -48,31 +48,34 @@
       "findings": 15,
       "skipped_48h": [],
       "dns_failures": [
-        "http://acuart.phpnet.us/ (DNS parking page — classic Acunetix demo offline)",
-        "https://cyber-ctf-website.vercel.app/ (404 deploy offline)"
+        "https://hackme.net/ (TLS handshake failure — community vuln-code host unreachable from cloud)",
+        "https://web-production-16ec6a.up.railway.app/ (Railway app offline — use openvaultbank.com)"
       ],
-      "focus": "Queued tail URLs: juice-shop.github.io project oracle, Pwned Labs cloud/git-secrets labs",
+      "focus": "Queued tail URLs: haozi XSS challenge, InsAIts MCP monitor, GenAI Security Crosswalk",
       "urls_scanned_list": [
-        "https://juice-shop.github.io/ (4)",
-        "https://pwnedlabs.io/explore (5)",
-        "https://labs.pwnedlabs.io/hunt-for-secrets-in-git-repos (6)"
+        "https://xss.haozi.me/ (3)",
+        "https://nomadu27.github.io/InsAIts-public/ (3)",
+        "https://emmanuelgjr.github.io/GenAI-Security-Crosswalk/ (9)"
       ],
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "juice-shop.github.io: OWASP Juice Shop challenge taxonomy oracle (0→4 findings)",
-      "pwnedlabs.io/explore: cloud/hybrid/AI security lab catalog (4→5 findings)",
-      "labs.pwnedlabs.io: git-secrets + Trufflehog hunting lab (4→6 findings)"
+      "xss.haozi.me: haozi XSS challenge SPA with alert(1) pass oracle (2→3 findings)",
+      "nomadu27.github.io/InsAIts-public: multi-agent OWASP MCP Top 10 runtime monitor (2→3 findings)",
+      "emmanuelgjr.github.io/GenAI-Security-Crosswalk: NIST/OWASP GenAI framework mapper (8→9 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "acuart.phpnet.us: DNS parking — use testphp.vulnweb.com for Acunetix acuart oracle",
-      "cyber-ctf-website.vercel.app: 404 — deploy offline",
-      "rootxjs.github.io/blog/grpc-goat: covered by existing gRPC Goat rule when blog crawled"
+      "hackme.net: TLS handshake failure from cloud scanner — community host may block automated UAs",
+      "web-production-16ec6a.up.railway.app: Railway deploy offline — openvaultbank.com is live alternative",
+      "thisislegal.com / ctf.komodosec.com: minimal HTML from curl — scanner sees headers only"
     ]
   },
   "discovery_highlights": {
+    "xss.haozi.me": 3,
+    "nomadu27.github.io/InsAIts-public": 3,
+    "emmanuelgjr.github.io/GenAI-Security-Crosswalk": 9,
     "juice-shop.github.io": 4,
     "pwnedlabs.io/explore": 5,
     "labs.pwnedlabs.io/hunt-for-secrets-in-git-repos": 6,
