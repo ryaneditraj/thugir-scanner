@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-13T15:05:00.000Z",
+  "updated_at": "2026-07-13T16:55:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.hacksplaining.com/lessons/xss-reflected/start",
+      "source": "Hacksplaining — Reflected XSS interactive secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/command-execution/start",
+      "source": "Hacksplaining — OS command execution / remote execution lesson (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cyberdesserts.github.io/cookiejar-lab/",
+      "source": "cyberdesserts/cookiejar-lab — session security lab homepage + demo entry (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/pixi/",
+      "source": "OWASP VWAD — DevSlop Pixi MEAN-stack intentionally insecure API catalog entry",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/roadmap",
+      "source": "kOaDT/oss-oopssec-store — 34-challenge CTF learning roadmap (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://www.hacksplaining.com/lessons/xml-bombs/start",
       "source": "Hacksplaining — XML bomb / billion-laughs DoS lesson (lessons catalog)",
