@@ -1986,6 +1986,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "redtiger-blind-login-form-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "RedTiger blind login-bypass form disclosed",
+    description:
+      "RedTiger Hackit levels 2–10 expose password-only POST login forms (levelNlogin) for blind SQL injection and authentication bypass drills.",
+    impactOneline:
+      "Public RedTiger level pages document blind SQLi login-bypass training surfaces beyond the hub catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "redtigerBlindLoginFormEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RedTiger blind-login levels are intentional training — isolate hackit VMs from production.",
+      steps: [
+        "Run RedTiger challenges only on dedicated training VMs.",
+        "Use parameterized queries for authentication in production.",
+        "Rate-limit blind login enumeration on public endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host RedTiger blind SQLi login-bypass levels. Show how to isolate training labs and fix authentication SQLi.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vuln-expose-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VulnSite pentest training platform disclosed",
+    description:
+      "VulnSite (vuln-expose.vercel.app) is a Next.js pentest platform with dual-mode corporate apps and explicit SQLi, XSS, IDOR, and command-injection laboratories.",
+    impactOneline:
+      "Public VulnSite pages document deliberately vulnerable corporate facades plus hands-on security lab routes for pentest training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnExposeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnSite is intentional training — never deploy its vulnerability patterns to production.",
+      steps: [
+        "Run VulnSite labs only on isolated infrastructure.",
+        "Gate lab routes behind authenticated training accounts.",
+        "Do not copy VulnSite SQLi/XSS/CMDi patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We host VulnSite-style dual-mode pentest labs. Show how to isolate training deployments from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

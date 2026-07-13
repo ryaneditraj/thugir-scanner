@@ -1373,7 +1373,40 @@ function extractIdorProbePaths(text: string): string[] {
   return [...paths].slice(0, 5);
 }
 
+const JUICE_SHOP_HOST_RE = /juice-shop|owasp-juice|\.juice\.shop$/i;
+const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
+
 const idorObjectAccess: Rule = async (ctx) => {
+  // Juice Shop benchmark oracle: GET /rest/track-order/1 returns orderId JSON without auth.
+  if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+    const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const r = await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
+      if (HEROKU_STUB_RE.test(r.body)) {
+        await new Promise((resolve) => setTimeout(resolve, 2500));
+        continue;
+      }
+      if (
+        r.status >= 200 &&
+        r.status < 300 &&
+        /"status"\s*:\s*"success"|"orderId"/i.test(r.body) &&
+        !IDOR_AUTH_MARKERS.test(r.body.slice(0, 500))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url: trackUrl,
+            sample: r.body.slice(0, 120).trim(),
+            note: "Juice Shop /rest/track-order/1 returns order data without auth — benchmark IDOR oracle"
+          }
+        };
+      }
+      if (r.status >= 200 && r.status < 500) break;
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+  }
+
   const discovered = extractIdorProbePaths(ctx.combined);
   const openApiPaths = await fetchOpenApiGetPathsWithDetails(ctx, 8);
   const paths = [...new Set([...discovered, ...openApiPaths, ...IDOR_FALLBACK_PATHS])].slice(0, 10);
@@ -6272,6 +6305,74 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "RedTiger's Hackit teaches PHP/MySQL SQL injection and login-bypass challenges across level1.php–level10.php"
+    }
+  };
+};
+
+// --- RedTiger blind login-bypass levels (password-only POST forms) ------------------
+const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
+  if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
+  const loginField = ctx.combined.match(/name="(level\d+login)"/i)?.[1];
+  if (!loginField) return NEGATIVE;
+  const formBlock = ctx.combined.match(
+    new RegExp(
+      `<form[^>]*method\\s*=\\s*["']post["'][^>]*>[\\s\\S]{0,600}?name="password"[\\s\\S]{0,400}?name="${loginField}"`,
+      "i"
+    )
+  );
+  if (!formBlock) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      loginField,
+      note: `RedTiger level page exposes blind SQLi login-bypass drill via POST ${loginField} + password field`
+    }
+  };
+};
+
+// --- VulnSite / vuln-expose Next.js pentest training platform -----------------------
+const CLIENT_VULN_EXPOSE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnSite platform title",
+    re: /VulnSite[\s\S]{0,60}Web Security Testing Platform/i
+  },
+  {
+    label: "Professional pentesting environment banner",
+    re: /ENTORNO DE PENTESTING PROFESIONAL|professional pentesting environment/i
+  },
+  {
+    label: "Security laboratories catalog",
+    re: /Laboratorios de Seguridad|Security laboratories/i
+  },
+  {
+    label: "Dual realistic apps plus explicit labs",
+    re: /PLATAFORMA DUAL|Aplicaciones que parecen legítimas/i
+  },
+  {
+    label: "SQLi and XSS lab route catalog",
+    re: /href="\/sqli\/(?:login|search|blind)"|href="\/xss\/(?:playground|comments)"/i
+  },
+  {
+    label: "vuln-expose deploy host",
+    re: /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i
+  }
+];
+
+const clientSideVulnExposeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULN_EXPOSE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnSite|vuln-expose|vulns-expose/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnSite publishes dual-mode pentest labs (SQLi, XSS, IDOR, CMDi) with realistic corporate app facades"
     }
   };
 };
@@ -13069,6 +13170,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
+  redtigerBlindLoginFormEvidence,
+  clientSideVulnExposeEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
