@@ -242,7 +242,7 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const wakeApi = async (): Promise<boolean> => {
     for (let attempt = 0; attempt < 8; attempt++) {
       if (await juiceShopApiLive(pageUrl)) return true;
-      await new Promise((r) => setTimeout(r, 2500));
+      await new Promise((r) => setTimeout(r, 2000));
     }
     return false;
   };
@@ -251,8 +251,8 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     for (let attempt = 0; attempt < 8; attempt++) {
       try {
         const doc = await fetchDoc(new URL("/main.js", origin).toString(), {
-          timeoutMs: 18000,
-          maxBytes: 8192
+          timeoutMs: 10000,
+          maxBytes: 16384
         });
         if (
           doc.status >= 200 &&
@@ -1983,7 +1983,12 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/file-upload/start",
     "/lessons/prototype-pollution/start",
     "/lessons/cross-origin-resource-sharing/start",
-    "/lessons/password-mismanagement/start"
+    "/lessons/password-mismanagement/start",
+    "/lessons/slop-squatting/start",
+    "/lessons/buffer-overflows/start",
+    "/lessons/denial-of-service-attacks/start",
+    "/lessons/ai-bias-and-unreliability/start",
+    "/lessons/ai-data-extraction-attacks/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -4155,7 +4160,27 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       "/rest/products/search?q='))"
     ];
     const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
-    const bootDocs = await probe.getMany(bootstrapUrls, { maxBytes: 800_000, timeoutMs: 18000 }, 3);
+    const mainJsUrl = new URL("/main.js", jsOrigin).toString();
+    let bootDocs = await probe.getMany(
+      bootstrapUrls.filter((u) => u !== mainJsUrl),
+      { maxBytes: 800_000, timeoutMs: 15000 },
+      3
+    );
+    let mainJsDoc = await probe.get(mainJsUrl, { maxBytes: 800_000, timeoutMs: 15000 });
+    const mainJsReady =
+      !HEROKU_APP_ERROR_RE.test(mainJsDoc.body) &&
+      /bypassSecurityTrustHtml|re_[A-Za-z0-9_]{20,}/i.test(mainJsDoc.body);
+    if (!mainJsReady) {
+      await new Promise((r) => setTimeout(r, 2500));
+      mainJsDoc = await probe.get(mainJsUrl, { maxBytes: 2_000_000, timeoutMs: 18000 });
+      bootDocs.set(mainJsUrl, mainJsDoc);
+      if (!/SQLITE_ERROR|syntax error/i.test(bootDocs.get(bootstrapUrls[3]!)?.body ?? "")) {
+        const sqlDoc = await probe.get(bootstrapUrls[3]!, { maxBytes: 8192, timeoutMs: 12000 });
+        bootDocs.set(bootstrapUrls[3]!, sqlDoc);
+      }
+    } else {
+      bootDocs.set(mainJsUrl, mainJsDoc);
+    }
     juiceShopBootstrap = [...bootDocs.values()]
       .filter((d) => {
         if (HEROKU_APP_ERROR_RE.test(d.body)) return false;

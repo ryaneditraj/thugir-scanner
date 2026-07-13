@@ -2345,6 +2345,18 @@
       "slug": "juice-shop-doc-evidence-fp-guard",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: client-side-juice-shop-project-evidence + pwning companion fired on live heroku from bootstrap noise; origin guard excludes juice-shop.herokuapp/staging/escape hosts; benchmark recall scoring cleaner"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-ai-dos-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Slop Squatting/Buffer Overflows/DoS/AI Bias/AI Data Extraction — Secure Coding Lesson titles + meta (hallucinate package names, buffer overflows, make it unavailable, machine learning bias, leaking sensitive data); extractHacksplainingLessonSeeds extended; lesson /start pages findings 0→4 each; benchmark juice-shop.demo.escape.tech 8 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-cold-start-mainjs-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: pass1 Heroku cold-start gap xss,sqli,sensitive_data (pages_crawled=1); dangerousHtmlSinks now probes GET /main.js at 2MB on juice-shop hosts; bootstrap escalates main.js when bypassSecurityTrustHtml|re_ absent; juice-shop.demo.escape.tech recall 6/6 (8 findings)"
     }
   ],
   "shipped": [
@@ -4287,6 +4299,16 @@
       "source": "benchmark:juice-shop",
       "slug": "juice-shop-doc-evidence-fp-guard",
       "shipped_at": "2026-07-13T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-ai-dos-lessons",
+      "shipped_at": "2026-07-13T14:01:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-cold-start-mainjs-oracle",
+      "shipped_at": "2026-07-13T14:01:00.000Z"
     }
   ]
 }

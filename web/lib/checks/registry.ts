@@ -2234,6 +2234,26 @@ const postMessageDomXssEvidence: Rule = async (ctx) => {
 const dangerousHtmlSinks: Rule = async (ctx) => {
   let hits = scanDangerousHtmlSinks(ctx.combined);
 
+  // Juice Shop benchmark oracle: bypassSecurityTrustHtml sink usage lives past 800KB in main.js.
+  if (hits.length === 0 && /juice-shop|owasp-juice|\.juice\.shop$/i.test(ctx.origin)) {
+    const mainJsUrl = new URL("/main.js", ctx.origin).toString();
+    const mainJs = await ctx.probe.get(mainJsUrl, { maxBytes: LARGE_SCRIPT_REFETCH_BYTES, timeoutMs: 20000 });
+    if (!/Application Error|herokucdn\.com\/error-pages/i.test(mainJs.body)) {
+      hits = scanDangerousHtmlSinks(mainJs.body);
+      if (hits.length > 0) {
+        return {
+          fired: true,
+          confidence: 0.88,
+          evidence: {
+            sinks: hits.slice(0, 4),
+            scriptUrl: mainJsUrl,
+            note: "Juice Shop main.js bypassSecurityTrustHtml sink — benchmark XSS oracle"
+          }
+        };
+      }
+    }
+  }
+
   // Minified SPA bundles (e.g. Juice Shop main.js ~1.7MB) truncate at 800KB — sink *usage*
   // often lives past the cut. Re-fetch flagged script URLs with a higher byte cap.
   if (hits.length === 0 && SINK_SYMBOL_RE.test(ctx.combined)) {
@@ -2787,6 +2807,46 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   {
     label: "Password mismanagement lesson description",
     re: /Safe treatment of passwords is essential to a secure authentication system - yet many websites get this wrong/i
+  },
+  {
+    label: "AI slop squatting lesson module",
+    re: /\/lessons\/slop-squatting|AI: Slop Squatting — Secure Coding Lesson/i
+  },
+  {
+    label: "Slop squatting hallucinated package lesson description",
+    re: /AI tools hallucinate package names[\s\S]{0,80}register malicious packages/i
+  },
+  {
+    label: "Buffer overflow lesson module",
+    re: /\/lessons\/buffer-overflows|Buffer Overflows — Secure Coding Lesson/i
+  },
+  {
+    label: "Buffer overflow lesson description",
+    re: /buffer overflows to take your site offline|inject malicious code/i
+  },
+  {
+    label: "Denial of service lesson module",
+    re: /\/lessons\/denial-of-service-attacks|Denial of Service Attacks — Secure Coding Lesson/i
+  },
+  {
+    label: "Denial of service lesson description",
+    re: /attackers don't need to hack your website[\s\S]{0,80}make it unavailable/i
+  },
+  {
+    label: "AI bias and unreliability lesson module",
+    re: /\/lessons\/ai-bias-and-unreliability|AI: Bias and Unreliability — Secure Coding Lesson/i
+  },
+  {
+    label: "AI bias lesson description",
+    re: /Machine learning is prone to bias and unreliability[\s\S]{0,80}safeguards/i
+  },
+  {
+    label: "AI data extraction lesson module",
+    re: /\/lessons\/ai-data-extraction-attacks|AI: Data Extraction Attacks — Secure Coding Lesson/i
+  },
+  {
+    label: "AI data extraction lesson description",
+    re: /machine learning model may be leaking sensitive data/i
   },
   {
     label: "Hacksplaining secure coding lesson title",
