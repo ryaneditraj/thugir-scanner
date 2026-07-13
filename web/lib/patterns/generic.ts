@@ -2740,6 +2740,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-store-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OopsSec Store CTF walkthrough roadmap disclosed",
+    description:
+      "OopsSec Store is an intentionally vulnerable Next.js e-commerce SPA with a 35-flag, 11-chapter CTF roadmap from recon through remote code execution.",
+    impactOneline:
+      "Public OopsSec Store walkthroughs document OWASP Top 10 and API security flaw progression for unauthenticated training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecStoreEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional training — isolate lab deployments from production.",
+      steps: [
+        "Run OopsSec Store only in isolated lab environments.",
+        "Gate walkthrough roadmaps behind authentication on private mirrors.",
+        "Do not copy OopsSec vulnerability patterns into production e-commerce code."
+      ]
+    },
+    fixPrompt:
+      "We host an OopsSec Store-style vulnerable e-commerce CTF. Show how to isolate lab instances and gate walkthrough content from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-maestro-agentic-ai-evidence",
     platform: "generic",
     category: "AI security",

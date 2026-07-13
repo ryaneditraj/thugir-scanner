@@ -2721,6 +2721,22 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /\/lessons\/xss-stored|Stored XSS — Secure Coding Lesson/i
   },
   {
+    label: "Reflected XSS lesson module",
+    re: /\/lessons\/xss-reflected|Reflected XSS — Secure Coding Lesson/i
+  },
+  {
+    label: "Reflected XSS bounced-script lesson description",
+    re: /malicious JavaScript to be bounced off your server/i
+  },
+  {
+    label: "Remote code execution lesson module",
+    re: /\/lessons\/remote-code-execution|Remote Code Execution — Secure Coding Lesson/i
+  },
+  {
+    label: "Remote code execution lesson description",
+    re: /smuggle code into your web-server process/i
+  },
+  {
     label: "CSRF lesson module",
     re: /\/lessons\/csrf|Force users to execute unwanted actions on authenticated sites/i
   },
@@ -2956,6 +2972,52 @@ const clientSideHacksplainingEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Hacksplaining publishes 45+ interactive OWASP Top 10 secure-coding lessons with exploit-then-fix XSS, SQLi, CSRF, and prompt-injection walkthroughs"
+    }
+  };
+};
+
+// --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
+const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OopsSec Store branding",
+    re: /OopsSec Store/i
+  },
+  {
+    label: "Intentionally vulnerable e-commerce SPA",
+    re: /intentionally vulnerable e-commerce application|intentionally vulnerable.*Next\.js and React/i
+  },
+  {
+    label: "35-flag CTF roadmap",
+    re: /35 flags across 11 chapters|35 flags/i
+  },
+  {
+    label: "Recon-to-RCE chapter progression",
+    re: /from recon to remote code execution|11 chapters/i
+  },
+  {
+    label: "OWASP Top 10 training scope",
+    re: /OWASP Top 10 vulnerabilities|API security flaws/i
+  },
+  {
+    label: "Roadmap chapter vulnerability catalog",
+    re: /Chapter 0[1-9][\s\S]{0,80}(?:SQL injection|IDOR|XSS|SSRF|path traversal)/i
+  }
+];
+
+const clientSideOopssecStoreEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_STORE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|oss-oopssec-store/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store roadmap documents 35 CTF flags across 11 chapters covering OWASP Top 10 flaws in a Next.js e-commerce SPA"
     }
   };
 };
@@ -12943,6 +13005,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
   clientSideHacksplainingEvidence,
+  clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
   clientSideUnsecurePwaEvidence,
