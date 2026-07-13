@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-13T15:45:24.260Z",
-  "total": 301,
-  "uniqueSlugs": 301,
+  "generatedAt": "2026-07-13T17:05:53.872Z",
+  "total": 302,
+  "uniqueSlugs": 302,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 283,
+    "generic": 284,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 235,
+    "deep": 236,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 98,
+    "Broken access control": 99,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -151,6 +151,7 @@
     "client-side-north-star-agi-ctf-evidence",
     "client-side-nosql-evidence",
     "client-side-oauth-fetch-playground-evidence",
+    "client-side-oopssec-store-evidence",
     "client-side-open-redirect-evidence",
     "client-side-overthewire-bandit-evidence",
     "client-side-overthewire-behemoth-evidence",
