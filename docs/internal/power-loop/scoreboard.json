@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T02:10:00.000Z",
+  "updated_at": "2026-07-13T02:48:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,68 +15,71 @@
       ]
     }
   },
-  "total_sites_scanned": 999,
-  "total_findings": 4355,
+  "total_sites_scanned": 1010,
+  "total_findings": 4401,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 472,
-  "discovery_findings": 3165,
+  "discovery_urls_added": 477,
+  "discovery_findings": 3190,
   "improvements_shipped": 360,
-  "last_run": "2026-07-13T02:10:00.000Z",
+  "last_run": "2026-07-13T02:48:00.000Z",
   "last_run_summary": {
     "hour_utc": "02:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "503 Service Unavailable (Heroku sleep)",
-      "staging_url": "https://juice-shop-staging.herokuapp.com",
-      "staging_findings": 7,
-      "staging_recall": "5/6",
-      "staging_gap": ["sensitive_data"],
-      "primary_note": "primary heroku 503 during run — no benchmark misses when oracle reachable; staging 7 findings operational",
+      "primary_findings": 6,
+      "primary_recall": "5/6",
+      "primary_gap": ["sqli"],
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "fallback_findings": 7,
+      "fallback_recall": "6/6",
+      "pages_crawled": 1,
+      "probes_run": 256,
+      "primary_note": "Heroku cold-start/degraded: primary pass1 6 findings gap sqli; wake retries 2 findings; staging fallback 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 12,
+      "urls_added": 5,
+      "urls_scanned": 10,
+      "findings": 37,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "Stanford BountyBench AI bug bounty benchmark + Cahyod Vulnerable Lab hub + portal SQLi/XSS",
+      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"],
+      "focus": "BountyBench + Cahyod lab hub + Judgement Day/Kontra labs queued at tail",
       "urls_scanned_list": [
         "https://bountybench.github.io/ (3)",
         "https://lab.cahyo.web.id/ (4)",
-        "http://portal.lab.cahyo.web.id/ (5)"
+        "http://portal.lab.cahyo.web.id/ (5)",
+        "https://preview-zeroday-sec.vercel.app/ (3)",
+        "https://zerohealth.aliyu.dev/ (3)",
+        "https://seclab.vercel.app/ (4)",
+        "https://nodegoat-websec.herokuapp.com/ (6)",
+        "https://dvwa.csalab.app/ (4)",
+        "https://xss-game.appspot.com/ (3)",
+        "http://xss-quiz.int21h.jp/ (2)"
       ],
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary 503 (Heroku sleep) — staging oracle 7 findings, no engine regression",
-      "bountybench.github.io: Stanford BountyBench 40 bug bounties + OWASP Top 10 coverage (2→3 findings)",
-      "lab.cahyo.web.id: 13-app pentest hub with subdomain routing (0→4 findings)",
-      "portal.lab.cahyo.web.id: sql-error-disclosure on search.php?q=')) + reflected-xss via hub crawl (0→5 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku sqli miss",
+      "portal.lab.cahyo.web.id: sql-error-disclosure + reflected-xss (5 findings)",
+      "nodegoat-websec.herokuapp.com: server-side eval + NoSQL injection evidence (6 findings)",
+      "bountybench.github.io: Stanford BountyBench AI bug bounty benchmark (3 findings)"
     ],
     "learning_gaps": [
+      "juice-shop.herokuapp.com: sqli category missed on primary Heroku cold-start (pages_crawled=1) — staging oracle required",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku dyno sleep returns 503 — use staging fallback",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
       "api-vuln.cahyo.web.id: 502 Bad Gateway from cloud",
-      "oauth-fetch.oauthlabs.com: Vercel Security Checkpoint intermittently blocks cloud scans",
-      "capture-the-flag.labs.vercel.dev: Vercel DEPLOYMENT_NOT_FOUND — remove from queue"
+      "New discovery URLs at queue tail (judgement-day, Kontra labs) await next pass"
     ]
   },
   "discovery_highlights": {
@@ -100,9 +103,6 @@
     "cvebench.com": 3,
     "sploitify.haxx.it": 4,
     "pwn.guide": 7,
-    "bountybench.github.io": 3,
-    "lab.cahyo.web.id": 4,
-    "portal.lab.cahyo.web.id": 5,
     "chimera.atlascrew.dev": 9,
     "ctb-pi.vercel.app": 6,
     "vulnex.vercel.app": 4,
@@ -266,6 +266,9 @@
     "bugzap.vercel.app": 5,
     "redlockx.vercel.app": 6,
     "server.vulnapp.id/mutillidae": 6,
-    "solyd.com.br": 2
+    "solyd.com.br": 2,
+    "bountybench.github.io": 3,
+    "lab.cahyo.web.id": 4,
+    "portal.lab.cahyo.web.id": 5
   }
 }
