@@ -2312,7 +2312,32 @@
       "url": "https://bountybench.github.io/",
       "source": "Stanford BountyBench — real-world bug bounty benchmark for AI agent eval (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://judgement-day-khaki.vercel.app/",
+      "source": "Judgement Day AI Red Team Arena — adversarial action induction/suppression scenarios (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-clickjacking",
+      "source": "Kontra Application Security — browser-based clickjacking training lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-forced-browsing",
+      "source": "Kontra Application Security — browser-based forced-browsing / auth bypass lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-horizontal-privilege-escalation",
+      "source": "Kontra Application Security — browser-based horizontal privilege escalation / IDOR lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-stored-cross-site-scripting",
+      "source": "Kontra Application Security — browser-based stored XSS training lab (OWASP Top 10 hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T01:05:00.000Z"
+  "updated_at": "2026-07-13T02:45:00.000Z"
 }
