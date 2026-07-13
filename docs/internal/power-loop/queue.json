@@ -2712,7 +2712,32 @@
       "url": "https://koadt.github.io/oss-oopssec-store/roadmap/",
       "source": "kOaDT/oss-oopssec-store \u2014 34-challenge CTF roadmap index (GitHub Pages OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://openvaultbank.com/learn",
+      "source": "OpenVault Bank \u2014 deliberately vulnerable banking API learn page with OWASP API Top 10 oracles (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web.ctflearn.com/web2/",
+      "source": "CTFLearn web challenge 2 \u2014 public SQL injection training instance (ctflearn.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web.ctflearn.com/web5/",
+      "source": "CTFLearn web challenge 5 \u2014 public XSS training instance (ctflearn.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/ssrf/start",
+      "source": "Hacksplaining \u2014 SSRF secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/path-traversal/start",
+      "source": "Hacksplaining \u2014 directory traversal secure-coding lesson /start entry (lessons catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T17:35:00.000Z"
+  "updated_at": "2026-07-13T18:06:00.000Z"
 }
