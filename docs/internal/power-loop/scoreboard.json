@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T09:31:00.000Z",
+  "updated_at": "2026-07-13T10:11:02.538Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1079,
-  "total_findings": 4736,
+  "total_sites_scanned": 1080,
+  "total_findings": 4746,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 507,
   "discovery_findings": 3481,
   "improvements_shipped": 381,
-  "last_run": "2026-07-13T09:31:00.000Z",
+  "last_run": "2026-07-13T10:11:02.538Z",
   "last_run_summary": {
     "hour_utc": "09:00",
     "benchmark": {
@@ -54,7 +54,7 @@
         }
       }
     },
-    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
@@ -81,14 +81,14 @@
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 pass1 Heroku cold-start gap, wake retry recovered",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — pass1 Heroku cold-start gap, wake retry recovered",
       "duck-store.escape.tech: OpenAI key + IDOR + unauthenticated API + OpenAPI docs (7 findings)",
       "webexp05.vercel.app: SQLi/XSS/JWT-none/path-traversal lab markers (6 findings)",
       "pentest-ground.com:4280: reflected XSS + phpinfo on hosted DVWA (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop Heroku dyno sleep causes intermittent pass1 recall drops \u2014 retry logic essential"
+      "juice-shop Heroku dyno sleep causes intermittent pass1 recall drops — retry logic essential"
     ]
   },
   "discovery_highlights": {
