@@ -408,6 +408,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "phpmyadmin-exposed",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "phpMyAdmin database admin login reachable",
+    description:
+      "A phpMyAdmin login page is publicly reachable. Database administration consoles expose schema browsing, SQL execution, and often default credentials on misconfigured hosts.",
+    impactOneline: "Anyone can reach your phpMyAdmin login — a common path to full database compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "phpMyAdminExposed" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove phpMyAdmin from public internet access and require VPN or IP allowlisting.",
+      steps: [
+        "Block /phpMyAdmin and /phpmyadmin paths at the reverse proxy for non-admin networks.",
+        "Require strong authentication and MFA before any database admin console.",
+        "Use managed database consoles instead of exposing phpMyAdmin on app hosts."
+      ]
+    },
+    fixPrompt:
+      "Production still serves phpMyAdmin on a public URL. Block admin database consoles from the internet and show me the server or WAF rule.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "verbose-error-disclosure",
     platform: "generic",
     category: "Information disclosure",
@@ -3933,6 +3958,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host a Judgement Day-style AI red team arena. Show how to isolate jailbreak evaluation from production models.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-metasploitable-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "Metasploitable2 intentionally vulnerable VM hub disclosed",
+    description:
+      "Metasploitable2 hub pages link DVWA, Mutillidae, phpMyAdmin, TWiki, and WebDAV training surfaces with msfadmin default credentials on one host.",
+    impactOneline:
+      "Public Metasploitable2 hubs aggregate multiple exploitable training apps attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMetasploitableLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Metasploitable2 is intentional training — never expose lab VMs to untrusted networks.",
+      steps: [
+        "Run Metasploitable2 only on isolated lab VLANs with no production data.",
+        "Block public internet access to phpMyAdmin and DVWA paths on shared lab hosts.",
+        "Rotate msfadmin and DVWA default credentials on any forked lab images."
+      ]
+    },
+    fixPrompt:
+      "We host a Metasploitable2-style training VM. Show how to isolate it from production networks and remove default credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-blueteamlabs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Blue Team Labs Online cyber range disclosed",
+    description:
+      "Blue Team Labs Online advertises scenario-based defender investigations covering incident response, digital forensics, security operations, and threat hunting.",
+    impactOneline:
+      "Public BTLO marketing pages document blue-team cyber range infrastructure attackers use to study defender training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBlueTeamLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BTLO is intentional training — require authentication before serving investigation lab instances.",
+      steps: [
+        "Gate cyber range investigations behind registered accounts.",
+        "Isolate BTLO-style lab VMs from corporate production networks.",
+        "Use investigation findings to improve detection playbooks without copying lab misconfigs to production."
+      ]
+    },
+    fixPrompt:
+      "We use Blue Team Labs Online-style cyber range training. Show how to gate investigation labs behind auth and isolate them from production.",
     version: 1,
     enabled: true
   },

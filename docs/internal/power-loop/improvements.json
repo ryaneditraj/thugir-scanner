@@ -2201,6 +2201,24 @@
       "slug": "client-side-judgement-day-arena-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Judgement Day — AI Red Team Arena + AI Red-Teaming Competition + earn bounties for successful jailbreaks; judgement-day-khaki.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:server.vulnapp.id",
+      "slug": "client-side-metasploitable-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Metasploitable2 - Linux banner + msfadmin/msfadmin + links to /mutillidae/ /dvwa/ /phpMyAdmin/; extractVulnappHubSeeds crawl 1→6 pages; server.vulnapp.id findings 0→8; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:blueteamlabs.online",
+      "slug": "client-side-blueteamlabs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Blue Team Labs Online - Cyber Range + gamified platform for cyber defenders + Incident Response/Digital Forensics; blueteamlabs.online rule fires 4 markers; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:server.vulnapp.id",
+      "slug": "phpmyadmin-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /phpMyAdmin/ returns Welcome to phpMyAdmin + loginform; hub crawl + phpMyAdminExposed probe; server.vulnapp.id/phpMyAdmin findings; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4018,6 +4036,26 @@
       "source": "discovery:judgement-day-khaki.vercel.app",
       "slug": "client-side-judgement-day-arena-evidence",
       "shipped_at": "2026-07-13T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:server.vulnapp.id",
+      "slug": "metasploitable-hub-crawl",
+      "shipped_at": "2026-07-13T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:server.vulnapp.id",
+      "slug": "client-side-metasploitable-lab-evidence",
+      "shipped_at": "2026-07-13T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:blueteamlabs.online",
+      "slug": "client-side-blueteamlabs-evidence",
+      "shipped_at": "2026-07-13T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:server.vulnapp.id",
+      "slug": "phpmyadmin-exposed",
+      "shipped_at": "2026-07-13T04:10:00.000Z"
     }
   ]
 }
