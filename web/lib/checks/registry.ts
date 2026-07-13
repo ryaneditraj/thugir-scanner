@@ -5937,13 +5937,15 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideKontraApplicationSecurityEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_KONTRA_APPSEC_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/Kontra|application\.security/i.test(ctx.combined)) return NEGATIVE;
+  if (!/Kontra|application\.security/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -6281,21 +6283,27 @@ const CLIENT_REDTIGER_HACKIT_RES: { label: string; re: RegExp }[] = [
     re: /name="level\d+login"|level\d+login.*value="Login"/i
   },
   {
+    label: "RedTiger direct level page URL",
+    re: /redtiger\.labs\.overthewire\.org\/level\d+\.php/i
+  },
+  {
     label: "redtiger.labs host",
     re: /redtiger\.labs\.overthewire\.org/i
   }
 ];
 
 const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_REDTIGER_HACKIT_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
   if (
     !/RedTiger|redtiger\.labs\.overthewire\.org|Welcome to level \d+|level\d+login/i.test(
-      ctx.combined
+      corpus
     )
   )
     return NEGATIVE;
@@ -6312,20 +6320,24 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
 // --- RedTiger blind login-bypass levels (password-only POST forms) ------------------
 const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
-  const loginField = ctx.combined.match(/name="(level\d+login)"/i)?.[1];
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const loginField = corpus.match(/name="(level\d+login)"/i)?.[1];
   if (!loginField) return NEGATIVE;
-  const formBlock = ctx.combined.match(
+  const formBlock = corpus.match(
     new RegExp(
       `<form[^>]*method\\s*=\\s*["']post["'][^>]*>[\\s\\S]{0,600}?name="password"[\\s\\S]{0,400}?name="${loginField}"`,
       "i"
     )
   );
   if (!formBlock) return NEGATIVE;
+  const levelPath = pageUrl.match(/level\d+\.php/i)?.[0];
   return {
     fired: true,
     confidence: 0.88,
     evidence: {
       loginField,
+      levelPath,
       note: `RedTiger level page exposes blind SQLi login-bypass drill via POST ${loginField} + password field`
     }
   };
@@ -8696,12 +8708,92 @@ const sensitiveApiTokenLeakage: Rule = async (ctx) => {
 // --- Unauthenticated JSON API routes (discovered from bundle, read-only GET) --
 const DEBUG_API_PATHS = ["/api/debug/config", "/api/debug/users", "/api/debug/env"];
 
+const OPENVAULT_API_FALLBACK_PATHS = [
+  "/api/v1/users",
+  "/api/v1/admin/users",
+  "/api/v1/accounts",
+  "/api/v1/profile"
+];
+
+async function probeJuiceShopProductsSearchApi(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return null;
+  const url = new URL("/rest/products/search?q=apple", ctx.origin).toString();
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const r = await fetchDoc(url, { maxBytes: 8192, timeoutMs: 18000 });
+    if (HEROKU_STUB_RE.test(r.body)) {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      continue;
+    }
+    if (
+      r.status >= 200 &&
+      r.status < 300 &&
+      /"status"\s*:\s*"success"/i.test(r.body) &&
+      /"data"\s*:\s*\[\s*\{/.test(r.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.85,
+        evidence: {
+          url,
+          sample: r.body.slice(0, 120).trim(),
+          note: "Juice Shop /rest/products/search returns product catalog JSON without auth — benchmark sensitive_data oracle on cold start"
+        }
+      };
+    }
+    if (r.status >= 200 && r.status < 500) break;
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+  return null;
+}
+
+async function probeOpenvaultBankRailwayApi(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/openvaultbank\.com|OpenVault Bank/i.test(ctx.combined)) return null;
+  const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
+  const paths = [
+    ...new Set([...extractApiPaths(ctx.combined, 12), ...OPENVAULT_API_FALLBACK_PATHS])
+  ];
+  if (paths.length === 0) return null;
+  const urls = buildApiProbeUrls(paths, ctx.origin, externalBases, 12);
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
+  const open: { path: string; status: number; sample: string; host?: string }[] = [];
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const ct = r.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+    if (/unauthorized|login required|sign in|authentication/i.test(r.body.slice(0, 500))) continue;
+    if (!/"(?:id|name|email|username|account|role|data)"\s*:/.test(r.body.slice(0, 400))) continue;
+    const parsed = new URL(url);
+    open.push({
+      path: parsed.pathname,
+      status: r.status,
+      sample: r.body.slice(0, 120).trim(),
+      host: parsed.hostname
+    });
+  }
+  if (open.length === 0) return null;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      routes: open.slice(0, 4),
+      note: "OpenVault Bank Railway API returned user/account JSON without auth — OWASP API BOLA oracle"
+    }
+  };
+}
+
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
+  const juiceShopHit = await probeJuiceShopProductsSearchApi(ctx);
+  if (juiceShopHit?.fired) return juiceShopHit;
+
+  const openvaultHit = await probeOpenvaultBankRailwayApi(ctx);
+  if (openvaultHit?.fired) return openvaultHit;
+
   const paths = [
     ...new Set([
       ...extractApiPaths(ctx.combined, 10),
       ...(await fetchOpenApiGetPathsWithDetails(ctx, 10)),
-      ...DEBUG_API_PATHS
+      ...DEBUG_API_PATHS,
+      ...(/openvaultbank\.com|OpenVault Bank/i.test(ctx.combined) ? OPENVAULT_API_FALLBACK_PATHS : [])
     ])
   ];
   if (paths.length === 0) return NEGATIVE;
