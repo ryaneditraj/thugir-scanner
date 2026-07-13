@@ -2287,7 +2287,32 @@
       "url": "https://sploitify.haxx.it/",
       "source": "Sploitify — curated exploit database with practice lab links (awesome-web-hacking)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://lab.cahyo.web.id/",
+      "source": "Cahyod Vulnerable Lab — 13-app pentest training hub with SQLi/XSS/API/Juice Shop (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://portal.lab.cahyo.web.id/",
+      "source": "Cahyod Vulnerable Lab — PHP/MySQL news portal with SQLi and XSS (lab.cahyo.web.id)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://juice-vuln.cahyo.web.id/",
+      "source": "Cahyod Vulnerable Lab — hosted OWASP Juice Shop instance (vuln.cahyo.web.id hub)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "http://api-vuln.cahyo.web.id/",
+      "source": "Cahyod Vulnerable Lab — Python/SQLite vulnerable REST API (intermediate)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bountybench.github.io/",
+      "source": "Stanford BountyBench — real-world bug bounty benchmark for AI agent eval (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T00:05:00.000Z"
+  "updated_at": "2026-07-13T01:05:00.000Z"
 }
