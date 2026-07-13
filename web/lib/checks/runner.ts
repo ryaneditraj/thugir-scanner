@@ -1988,7 +1988,20 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/buffer-overflows/start",
     "/lessons/denial-of-service-attacks/start",
     "/lessons/ai-bias-and-unreliability/start",
-    "/lessons/ai-data-extraction-attacks/start"
+    "/lessons/ai-data-extraction-attacks/start",
+    "/lessons/xml-bombs/start",
+    "/lessons/subdomain-squatting/start",
+    "/lessons/toxic-dependencies/start",
+    "/lessons/unencrypted-communication/start",
+    "/lessons/xssi/start",
+    "/lessons/dns-poisoning/start",
+    "/lessons/downgrade-attacks/start",
+    "/lessons/email-spoofing/start",
+    "/lessons/malvertising/start",
+    "/lessons/ssl-stripping/start",
+    "/lessons/host-header-poisoning/start",
+    "/lessons/information-leakage/start",
+    "/lessons/privilege-escalation/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
