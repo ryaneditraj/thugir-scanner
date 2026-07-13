@@ -2662,7 +2662,32 @@
       "url": "https://www.hacksplaining.com/lessons/ai-data-extraction-attacks/start",
       "source": "Hacksplaining \u2014 AI model inversion / memorization / system-prompt extraction lesson (lessons catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/command-execution/start",
+      "source": "Hacksplaining \u2014 command execution / OS injection secure-coding lesson (lessons catalog /start path)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/csrf/start",
+      "source": "Hacksplaining \u2014 CSRF secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/xss-reflected/start",
+      "source": "Hacksplaining \u2014 reflected XSS secure-coding lesson (lessons catalog /start path)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/xml-external-entities/start",
+      "source": "Hacksplaining \u2014 XXE secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/roadmap/",
+      "source": "kOaDT/oss-oopssec-store \u2014 34-challenge CTF roadmap index (GitHub Pages OSS deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-13T14:05:00.000Z"
+  "updated_at": "2026-07-13T17:35:00.000Z"
 }
