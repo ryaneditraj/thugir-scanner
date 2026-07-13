@@ -859,6 +859,42 @@ const phpinfoExposed: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const PHPMYADMIN_PATHS = ["/phpMyAdmin/", "/phpmyadmin/", "/pma/", "/phpMyAdmin/index.php"];
+
+const phpMyAdminExposed: Rule = async (ctx) => {
+  if (/Welcome to\s+<bdo[^>]*>phpMyAdmin/i.test(ctx.combined)) {
+    const m = ctx.combined.match(/Welcome to[\s\S]{0,80}phpMyAdmin/i);
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        snippet: (m?.[0] ?? "Welcome to phpMyAdmin").slice(0, 120),
+        note: "phpMyAdmin database admin login page reachable without authentication"
+      }
+    };
+  }
+  const urls = PHPMYADMIN_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 16_384 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const hasWelcome =
+      /Welcome to[\s\S]{0,120}phpMyAdmin/i.test(r.body) ||
+      /<title>\s*phpMyAdmin\s*<\/title>/i.test(r.body);
+    const hasLogin = /class="loginform"|name="login_form"/i.test(r.body);
+    if (!hasWelcome || !hasLogin) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url,
+        snippet: r.body.slice(0, 220).trim(),
+        note: "phpMyAdmin database admin login page reachable without authentication"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- directory listing / autoindex ------------------------------------------
 const directoryListing: Rule = async (ctx) => {
   const dirs = ["/uploads/", "/files/", "/images/", "/static/", "/assets/", "/backup/", "/tmp/"];
@@ -5391,6 +5427,48 @@ const clientSideImmersiveLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Blue Team Labs Online cyber range (blueteamlabs.online) --------------------------
+const CLIENT_BLUETEAM_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Blue Team Labs Online title",
+    re: /Blue Team Labs Online(?:\s*-\s*Cyber Range)?/i
+  },
+  {
+    label: "Gamified defender cyber range",
+    re: /gamified platform for cyber defenders|cyber defenders to test and showcase their skills/i
+  },
+  {
+    label: "Investigation and forensics skills",
+    re: /Incident Response|Digital Forensics|Security Operations|Threat Hunting/i
+  },
+  {
+    label: "Complete Investigations lab mode",
+    re: /Complete Investigations|scenario-based labs|conduct your investigation/i
+  },
+  {
+    label: "BTLO leaderboard ranking",
+    re: /global and country-specific leaderboards|Earn points by concluding investigations/i
+  }
+];
+
+const clientSideBlueTeamLabsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BLUETEAM_LABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Blue Team Labs|blueteamlabs\.online/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Blue Team Labs Online hosts scenario-based defender investigations covering IR, forensics, and threat hunting"
+    }
+  };
+};
+
 // --- RedTiger PHP/SQL hackit (redtiger.labs.overthewire.org) ------------------------
 const CLIENT_REDTIGER_HACKIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -6731,6 +6809,55 @@ const clientSideGoogleGruyereCodelabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Google Gruyere codelab documents XSS, SQLi, XSRF, path traversal, and remote code execution exercises"
+    }
+  };
+};
+
+// --- Metasploitable2 intentionally vulnerable VM hub (server.vulnapp.id) ---------------
+const CLIENT_METASPLOITABLE_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Metasploitable2 Linux banner",
+    re: /Metasploitable2\s*-\s*Linux/i
+  },
+  {
+    label: "Untrusted network exposure warning",
+    re: /Never expose this VM to an untrusted network/i
+  },
+  {
+    label: "msfadmin default login hint",
+    re: /Login with msfadmin\/msfadmin/i
+  },
+  {
+    label: "Mutillidae lab link",
+    re: /href\s*=\s*["']\/mutillidae\/?["']/i
+  },
+  {
+    label: "DVWA lab link",
+    re: /href\s*=\s*["']\/dvwa\/?["']/i
+  },
+  {
+    label: "phpMyAdmin admin link",
+    re: /href\s*=\s*["']\/phpMyAdmin\/?["']/i
+  },
+  {
+    label: "TWiki collaboration link",
+    re: /href\s*=\s*["']\/twiki\/?["']/i
+  }
+];
+
+const clientSideMetasploitableLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_METASPLOITABLE_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.93 : 0.9,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Metasploitable2 hub links DVWA, Mutillidae, phpMyAdmin, TWiki, and WebDAV training surfaces on one host"
     }
   };
 };
@@ -11864,6 +11991,7 @@ export const RULES: Record<string, Rule> = {
   graphqlIntrospection,
   directoryListing,
   phpinfoExposed,
+  phpMyAdminExposed,
   errorDisclosure,
   openApiDocs,
   demoModeFlags,
@@ -11937,6 +12065,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnexEvidence,
   clientSideSecureflagEvidence,
   clientSideImmersiveLabsEvidence,
+  clientSideBlueTeamLabsEvidence,
   clientSideRedtigerHackitEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
@@ -11970,6 +12099,7 @@ export const RULES: Record<string, Rule> = {
   clientSideCyberScavengerHuntEvidence,
   clientSideSkfLabEvidence,
   clientSideGoogleGruyereCodelabEvidence,
+  clientSideMetasploitableLabEvidence,
   clientSideMutillidaeEvidence,
   clientSidePeruggiaEvidence,
   clientSideBwappEvidence,
@@ -12123,6 +12253,7 @@ export const FREE_RULES = new Set([
   "graphqlIntrospection",
   "directoryListing",
   "phpinfoExposed",
+  "phpMyAdminExposed",
   "openApiDocs",
   "demoModeFlags",
   "supabaseStoragePublic",
