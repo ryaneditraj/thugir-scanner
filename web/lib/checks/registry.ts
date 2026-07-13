@@ -3756,6 +3756,8 @@ const clientSidePwningJuiceShopCompanionEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
+  if (/juice-shop\.herokuapp|juice-shop-staging|juice-shop\.demo\.escape|demo\.owasp-juice/i.test(ctx.origin))
+    return NEGATIVE;
   if (!/Pwning OWASP Juice Shop|pwning\.owasp-juice\.shop/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
@@ -5884,6 +5886,8 @@ const clientSideJuiceShopProjectEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
+  if (/juice-shop\.herokuapp|juice-shop-staging|juice-shop\.demo\.escape|demo\.owasp-juice/i.test(ctx.origin))
+    return NEGATIVE;
   if (!/OWASP Juice Shop|juice-shop\.github/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,

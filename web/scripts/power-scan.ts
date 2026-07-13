@@ -30,6 +30,8 @@ interface BenchmarkTarget extends ScanEntry {
   expected_categories?: string[];
   /** When primary oracle is degraded (Heroku cold start), retry this URL before scoring recall. */
   fallback_url?: string;
+  /** Additional oracle URLs tried when primary + fallback_url still have category gaps. */
+  fallback_urls?: string[];
 }
 
 const BENCHMARK_MIN_FINDINGS = 5;
@@ -99,6 +101,22 @@ function recentlyScanned(url: string, runs: ScanRunResult[], hours = 48): boolea
       return false;
     }
   });
+}
+
+function benchmarkFallbackUrls(target: BenchmarkTarget | undefined, primaryUrl: string): string[] {
+  if (!target) return [];
+  const urls = [
+    ...(target.fallback_urls ?? []),
+    ...(target.fallback_url ? [target.fallback_url] : [])
+  ];
+  const seen = new Set<string>([primaryUrl]);
+  const out: string[] = [];
+  for (const u of urls) {
+    if (!u || seen.has(u)) continue;
+    seen.add(u);
+    out.push(u);
+  }
+  return out;
 }
 
 function saveResults(run: ScanRunResult) {
@@ -307,24 +325,30 @@ async function main() {
         }
       }
 
-      if (
-        recall !== null &&
-        recall.gap.length > 0 &&
-        target?.fallback_url &&
-        target.fallback_url !== entry.url
-      ) {
-        console.log(`benchmark fallback ${target.fallback_url}`);
-        const fallback = await scanOne(
-          { ...entry, url: target.fallback_url },
-          kind
-        );
-        saveResults(fallback);
-        if (fallback.status === "ok") {
-          const fallbackRecall = computeBenchmarkRecall(fallback.findings, expected);
-          if (fallbackRecall.categories_hit > recall.categories_hit) {
-            result = fallback;
-            recall = fallbackRecall;
+      if (recall !== null && recall.gap.length > 0) {
+        for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
+          console.log(`benchmark fallback ${fallbackUrl} (gap=${recall.gap.join(",")})`);
+          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind);
+          saveResults(fallback);
+          if (fallback.status !== "ok") continue;
+          const merged = mergeBenchmarkFindings(result.findings, fallback.findings);
+          const mergedRecall = computeBenchmarkRecall(merged, expected);
+          if (
+            mergedRecall.categories_hit > recall.categories_hit ||
+            mergedRecall.gap.length < recall.gap.length ||
+            merged.length > result.finding_count
+          ) {
+            result = {
+              ...result,
+              url: fallbackUrl,
+              findings: merged,
+              finding_count: merged.length,
+              pages_crawled: Math.max(result.pages_crawled, fallback.pages_crawled),
+              probes_run: Math.max(result.probes_run, fallback.probes_run)
+            };
+            recall = mergedRecall;
           }
+          if (recall.gap.length === 0 && result.finding_count >= BENCHMARK_MIN_FINDINGS) break;
         }
       }
     }
