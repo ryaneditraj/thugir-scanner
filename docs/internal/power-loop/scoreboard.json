@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13T06:10:00.000Z",
+  "updated_at": "2026-07-13T07:21:33.832Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1047,
-  "total_findings": 4573,
+  "total_sites_scanned": 1061,
+  "total_findings": 4647,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 492,
-  "discovery_findings": 3346,
+  "discovery_urls_added": 497,
+  "discovery_findings": 3411,
   "improvements_shipped": 373,
-  "last_run": "2026-07-13T06:10:00.000Z",
+  "last_run": "2026-07-13T07:22:15.000Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "No benchmark misses \u2014 juice-shop.herokuapp.com recall stable at 6/6 (9 findings)",
+      "note": "Pass1 degraded (7 findings, sqli gap) — wake retry recovered 6/6 (9 findings, pages_crawled=6)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,33 @@
         }
       }
     },
-    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 15,
+      "urls_added": 5,
+      "urls_scanned": 13,
+      "findings": 65,
       "skipped_48h": [],
-      "dns_failures": [
-        "https://hackme.net/ (TLS handshake failure \u2014 community vuln-code host unreachable from cloud)",
-        "https://web-production-16ec6a.up.railway.app/ (Railway app offline \u2014 use openvaultbank.com)"
-      ],
-      "focus": "Queued tail URLs: haozi XSS challenge, InsAIts MCP monitor, GenAI Security Crosswalk",
+      "dns_failures": [],
+      "focus": "Kontra auth modules + XSS-LABS + Juice Shop VAPT oracle; queue head rescan batch",
       "urls_scanned_list": [
-        "https://xss.haozi.me/ (3)",
-        "https://nomadu27.github.io/InsAIts-public/ (3)",
-        "https://emmanuelgjr.github.io/GenAI-Security-Crosswalk/ (9)"
+        "https://dxx33.github.io/WebVulnsGuide/ (8)",
+        "https://demo.weblock.ru/ (8)",
+        "https://povzayd.github.io/XSS-LABS/ (2)",
+        "https://application.security/.../vertical-privilege-escalation (5)",
+        "https://application.security/.../session-fixation (5)"
       ],
-      "improvements_shipped_this_run": 3
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) \u2014 no benchmark misses",
-      "xss.haozi.me: haozi XSS challenge SPA with alert(1) pass oracle (2\u21923 findings)",
-      "nomadu27.github.io/InsAIts-public: multi-agent OWASP MCP Top 10 runtime monitor (2\u21923 findings)",
-      "emmanuelgjr.github.io/GenAI-Security-Crosswalk: NIST/OWASP GenAI framework mapper (8\u21929 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) after sqli gap on pass1",
+      "povzayd.github.io/XSS-LABS: reflected/stored/DOM XSS lab markers (2 findings)",
+      "lucky-cyber3008.github.io/juice-shop-vapt: Juice Shop VAPT challenge oracle docs (3 findings)",
+      "application.security Kontra modules: vertical-privilege-escalation, user-enumeration, session-fixation (5 each)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hackme.net: TLS handshake failure from cloud scanner \u2014 community host may block automated UAs",
-      "web-production-16ec6a.up.railway.app: Railway deploy offline \u2014 openvaultbank.com is live alternative",
-      "thisislegal.com / ctf.komodosec.com: minimal HTML from curl \u2014 scanner sees headers only"
+      "juice-shop.herokuapp.com: pass1 cold-start missed sqli category (7 findings) — retry oracle stable",
+      "results.json had merge-conflict markers blocking saveResults — resolved this run"
     ]
   },
   "discovery_highlights": {
@@ -277,6 +275,11 @@
     "portal.lab.cahyo.web.id": 5,
     "oauth-fetch.oauthlabs.com": 5,
     "judgement-day-khaki.vercel.app": 4,
-    "akbarbashakm.github.io/frontend-security-examples": 5
+    "akbarbashakm.github.io/frontend-security-examples": 5,
+    "povzayd.github.io/XSS-LABS": 2,
+    "lucky-cyber3008.github.io/juice-shop-vapt": 3,
+    "application.security/vertical-privilege-escalation": 5,
+    "application.security/user-enumeration": 5,
+    "application.security/session-fixation": 5
   }
 }

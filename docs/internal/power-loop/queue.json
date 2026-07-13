@@ -2437,7 +2437,32 @@
       "url": "https://double16.github.io/",
       "source": "Patrick Double security engineering — public vuln lab writeups (ginandjuice.shop agent benchmarks)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/",
+      "source": "povzayd/XSS-LABS — reflected/stored/DOM XSS training labs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://lucky-cyber3008.github.io/juice-shop-vapt/",
+      "source": "Juice Shop VAPT report — public challenge oracle with injection/XSS/BAC writeups (GitHub Pages)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-vertical-privilege-escalation",
+      "source": "Kontra — interactive OWASP Top 10 vertical privilege escalation training module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-user-enumeration",
+      "source": "Kontra — interactive OWASP Top 10 user enumeration training module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-session-fixation",
+      "source": "Kontra — interactive OWASP Top 10 session fixation training module",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T06:05:00.000Z"
+  "updated_at": "2026-07-13T07:20:00.000Z"
 }
