@@ -2337,7 +2337,32 @@
       "url": "https://application.security/free-application-security-training/owasp-top-10-stored-cross-site-scripting",
       "source": "Kontra Application Security — browser-based stored XSS training lab (OWASP Top 10 hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://thisislegal.com/",
+      "source": "ThisIsLegal — hacker wargames platform with web vulnerability challenges (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://blueteamlabs.online/",
+      "source": "Blue Team Labs Online — gamified defender cyber range with free security challenges (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf.komodosec.com/",
+      "source": "Komodo Consulting Application Security CTF — code-review vulnerability challenges (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://server.vulnapp.id/",
+      "source": "OWASP VWAD Metasploitable2 hub — public Indonesia-hosted intentionally vulnerable training VM shell",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/",
+      "source": "Kontra Application Security — developer-first interactive OWASP Top 10/API/LLM training hub (Product Hunt cited)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T02:45:00.000Z"
+  "updated_at": "2026-07-13T03:05:00.000Z"
 }
