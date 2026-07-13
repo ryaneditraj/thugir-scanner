@@ -3527,6 +3527,132 @@ const clientSideRedlockxPromptFirewallEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- haozi XSS challenge playground (xss.haozi.me) -----------------------------------
+const CLIENT_HAOZI_XSS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "xss-demo Vue challenge platform",
+    re: /xss-demo\s+v\s*[\d.]+/i
+  },
+  {
+    label: "haozi XSS challenge domain",
+    re: /xss\.haozi\.me/i
+  },
+  {
+    label: "alert(1) pass condition",
+    re: /alert\s*\(\s*1\s*\)/i
+  },
+  {
+    label: "input code XSS challenge prompt",
+    re: /input code|输入代码|输入.*代码/i
+  },
+  {
+    label: "Vue innerHTML challenge shell",
+    re: /body\.innerHTML\s*=\s*["']|x\.body\.innerHTML/i
+  }
+];
+
+const clientSideHaoziXssChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HAOZI_XSS_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/xss\.haozi\.me|xss-demo/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "haozi XSS challenge SPA documents client-side XSS levels where passing requires popping alert(1) via user-supplied code"
+    }
+  };
+};
+
+// --- InsAIts multi-agent AI runtime security monitor (nomadu27.github.io/InsAIts-public)
+const CLIENT_INSAITS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "InsAIts runtime security branding",
+    re: /InsAIts\s*[—-]\s*Runtime Security|Runtime security monitor for multi-agent AI/i
+  },
+  {
+    label: "OWASP MCP Top 10 coverage",
+    re: /OWASP MCP Top 10|MCP Top 10 coverage/i
+  },
+  {
+    label: "30 anomaly detectors catalog",
+    re: /30 anomaly detectors|30 Detectors/i
+  },
+  {
+    label: "Tool poisoning detection",
+    re: /tool poisoning|Tool Poisoning/i
+  },
+  {
+    label: "Hallucination detection module",
+    re: /hallucination detection|Hallucination/i
+  }
+];
+
+const clientSideInsAItsEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INSAITS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/InsAIts|insaits|nomadu27\.github\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "InsAIts documents multi-agent runtime security with OWASP MCP Top 10 coverage, anomaly detectors, and tool-poisoning defenses"
+    }
+  };
+};
+
+// --- OWASP GenAI Security Crosswalk explorer (emmanuelgjr.github.io) -----------------
+const CLIENT_GENAI_SECURITY_CROSSWALK_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "GenAI Security Crosswalk title",
+    re: /GenAI Security Crosswalk/i
+  },
+  {
+    label: "Framework mapping explorer",
+    re: /framework mapping|maps OWASP|crosswalk/i
+  },
+  {
+    label: "Incident and tool recipes",
+    re: /incident recipes|tool recipes|Incident Library/i
+  },
+  {
+    label: "NIST and OWASP GenAI alignment",
+    re: /NIST AI RMF|OWASP LLM|OWASP Top 10 for LLM/i
+  },
+  {
+    label: "GenAI security control explorer UI",
+    re: /GenAI Security|AI security frameworks|LLM security controls/i
+  }
+];
+
+const clientSideGenaiSecurityCrosswalkEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GENAI_SECURITY_CROSSWALK_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/GenAI Security Crosswalk|emmanuelgjr\.github\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP GenAI Security Crosswalk maps NIST/OWASP frameworks with incident recipes and LLM security control oracles"
+    }
+  };
+};
+
 // --- Rogue Studio autonomous security-research IDE (rougestudio.vercel.app) ----------
 const CLIENT_ROGUE_STUDIO_RES: { label: string; re: RegExp }[] = [
   {
@@ -12349,6 +12475,9 @@ export const RULES: Record<string, Rule> = {
   clientSideAttpAgentTrustEvidence,
   clientSideBugzapPromptDefenseEvidence,
   clientSideRedlockxPromptFirewallEvidence,
+  clientSideHaoziXssChallengeEvidence,
+  clientSideInsAItsEvidence,
+  clientSideGenaiSecurityCrosswalkEvidence,
   clientSideRogueStudioEvidence,
   clientSideOverthewireLeviathanEvidence
 };

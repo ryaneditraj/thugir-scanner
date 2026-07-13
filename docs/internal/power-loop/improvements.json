@@ -2237,6 +2237,24 @@
       "slug": "client-side-pwnedlabs-git-secrets-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Hunt for Secrets in Git Repos + git-secrets and Trufflehog + leaked credentials in git repositories; labs.pwnedlabs.io/hunt-for-secrets-in-git-repos findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.haozi.me",
+      "slug": "client-side-haozi-xss-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: xss-demo v1.0.3 + alert(1) pass condition + input code challenge + body.innerHTML in /716.js; xss.haozi.me findings 2→3; benchmark juice-shop.herokuapp.com 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nomadu27.github.io",
+      "slug": "client-side-insaits-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: InsAIts Runtime Security + OWASP MCP Top 10 + 30 anomaly detectors + tool poisoning; nomadu27.github.io/InsAIts-public findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:emmanuelgjr.github.io",
+      "slug": "client-side-genai-security-crosswalk-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GenAI Security Crosswalk + framework mapping + incident recipes + NIST AI RMF/OWASP LLM alignment; emmanuelgjr.github.io/GenAI-Security-Crosswalk findings 8→9; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4089,6 +4107,21 @@
       "source": "discovery:labs.pwnedlabs.io",
       "slug": "client-side-pwnedlabs-git-secrets-evidence",
       "shipped_at": "2026-07-13T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.haozi.me",
+      "slug": "client-side-haozi-xss-challenge-evidence",
+      "shipped_at": "2026-07-13T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:nomadu27.github.io",
+      "slug": "client-side-insaits-evidence",
+      "shipped_at": "2026-07-13T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:emmanuelgjr.github.io",
+      "slug": "client-side-genai-security-crosswalk-evidence",
+      "shipped_at": "2026-07-13T06:10:00.000Z"
     }
   ]
 }

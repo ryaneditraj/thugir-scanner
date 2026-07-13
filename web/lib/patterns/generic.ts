@@ -6378,5 +6378,83 @@ export const genericPatterns: Pattern[] = [
       "We host a Rogue Studio-style autonomous security-research IDE. Show how to air-gap uncensored agent modes from production infrastructure.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-haozi-xss-challenge-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "haozi XSS challenge playground documents client-side XSS levels",
+    description:
+      "xss.haozi.me (xss-demo) is a Vue SPA where each level requires user-supplied code to pop alert(1) via innerHTML and other DOM sinks.",
+    impactOneline:
+      "Public haozi XSS challenges teach reusable DOM XSS gadget patterns attackers replay against production SPAs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHaoziXssChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "haozi XSS is intentional training — never copy its eval/innerHTML challenge patterns into production.",
+      steps: [
+        "Keep XSS challenge SPAs on isolated lab domains, not production apps.",
+        "Replace innerHTML assignments with textContent or DOMPurify-sanitized HTML.",
+        "Disable unsafe-eval CSP exceptions outside classroom environments."
+      ]
+    },
+    fixPrompt:
+      "We host haozi-style XSS challenge levels that require alert(1). Show safe textContent alternatives and CSP hardening for Vue SPAs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-insaits-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "InsAIts multi-agent runtime security monitor disclosed",
+    description:
+      "InsAIts-public documents 30 anomaly detectors with OWASP MCP Top 10 coverage for tool poisoning, hallucination, and multi-agent AI sessions.",
+    impactOneline:
+      "Public InsAIts demos expose MCP runtime-security surfaces attackers probe for tool-poisoning and agent hijack chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideInsAItsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "InsAIts is a security monitor demo — authenticate MCP tool calls and validate agent session boundaries in production.",
+      steps: [
+        "Require authentication before exposing MCP tool registries or anomaly dashboards.",
+        "Validate tool-call arguments server-side to block poisoning payloads.",
+        "Run multi-agent security demos on isolated infrastructure, not production LLM apps."
+      ]
+    },
+    fixPrompt:
+      "We document InsAIts-style multi-agent runtime monitoring with OWASP MCP Top 10 coverage. Show how to authenticate MCP endpoints and block tool-poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-genai-security-crosswalk-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP GenAI Security Crosswalk framework mapper disclosed",
+    description:
+      "GenAI Security Crosswalk maps NIST AI RMF and OWASP LLM controls with incident recipes and tool guidance for GenAI risk management.",
+    impactOneline:
+      "Public GenAI crosswalk explorers document LLM security control gaps attackers use to prioritize prompt-injection and data-leak targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGenaiSecurityCrosswalkEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI crosswalk is educational — do not expose unauthenticated incident-recipe APIs on production domains.",
+      steps: [
+        "Gate GenAI security tooling behind authentication when self-hosting.",
+        "Apply OWASP LLM Top 10 controls before publishing framework-mapping UIs.",
+        "Remove sample API keys or incident payloads from public crosswalk demos."
+      ]
+    },
+    fixPrompt:
+      "We host a GenAI Security Crosswalk mapping NIST and OWASP LLM controls. Show how to authenticate incident-recipe endpoints and scrub demo secrets.",
+    version: 1,
+    enabled: true
   }
 ];
