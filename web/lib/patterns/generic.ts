@@ -6612,5 +6612,31 @@ export const genericPatterns: Pattern[] = [
       "We publish Juice Shop VAPT exploitation write-ups. Show how to keep demo instances isolated from production apps.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-openvault-learn-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OpenVault Bank OWASP API Top 10 learn lab disclosed",
+    description:
+      "OpenVault Bank /learn documents BOLA, mass assignment, and excessive data exposure modules with OWASP API1/API6 endpoint oracles for hands-on API security training.",
+    impactOneline:
+      "Public OpenVault Bank learn pages expose deliberate API vulnerability walkthroughs attackers use to tune scanners against banking API benchmarks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOpenvaultLearnEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OpenVault Bank learn labs are intentional training — host demo instances in isolated lab networks only.",
+      steps: [
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure.",
+        "Do not mirror learn-page API exploit oracles in production banking APIs.",
+        "Use learn modules for scanner tuning, not as production security baselines."
+      ]
+    },
+    fixPrompt:
+      "We host OpenVault Bank API security training labs. Show how to isolate /learn demo instances from production APIs.",
+    version: 1,
+    enabled: true
   }
 ];

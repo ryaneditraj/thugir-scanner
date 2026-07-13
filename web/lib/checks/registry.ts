@@ -8975,6 +8975,52 @@ const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OpenVault Bank /learn OWASP API Top 10 training oracle (openvaultbank.com) -----
+const CLIENT_OPENVAULT_LEARN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OpenVault Bank branding",
+    re: /OpenVault Bank|OVB[\s—–-]\s*OpenVault Bank/i
+  },
+  {
+    label: "API vulnerability training intro",
+    re: /learn about common API vulnerabilities in a safe, legal environment/i
+  },
+  {
+    label: "BOLA lab module",
+    re: /Broken Object-Level Authorization \(BOLA\)/i
+  },
+  {
+    label: "Mass assignment lab module",
+    re: /Mass Assignment[\s\S]{0,120}account balance|owasp:"API6"/i
+  },
+  {
+    label: "Excessive data exposure module",
+    re: /Excessive Data Exposure[\s\S]{0,120}SSN|routing numbers/i
+  },
+  {
+    label: "OWASP API1 BOLA endpoint oracle",
+    re: /owasp:"API1"[\s\S]{0,80}GET \/accounts\/\{id\}/i
+  }
+];
+
+const clientSideOpenvaultLearnEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OPENVAULT_LEARN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/openvaultbank\.com|OpenVault Bank/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OpenVault Bank /learn documents OWASP API Top 10 BOLA, mass assignment, and excessive data exposure lab oracles"
+    }
+  };
+};
+
 // --- OWASP WebGoat deliberately insecure Java training app (webgoat.org / mirrors) --
 const CLIENT_WEBGOAT_RES: { label: string; re: RegExp }[] = [
   {
@@ -9841,6 +9887,18 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
   {
     label: "XSS challenge scenario meta",
     re: /Can you find any XSS\? No HTML tags allowed/i
+  },
+  {
+    label: "Free educational hacking challenges title",
+    re: /Free educational hacking challenges based on real bug bounty findings/i
+  },
+  {
+    label: "Train for bug bounties meta",
+    re: /Train for bug bounties with custom made challenges/i
+  },
+  {
+    label: "Vulnerability type taxonomy links",
+    re: /vulnerability\/\?type=(?:xss|sql|ssrf|idor|xxe|csrf|access_control)/i
   },
   {
     label: "Bug bounty scenario recreation",
@@ -12853,6 +12911,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNosqlEvidence,
   clientSideXxeEvidence,
   clientSideApiSecurityLabEvidence,
+  clientSideOpenvaultLearnEvidence,
   clientSideWebgoatEvidence,
   clientSideSessionHijackEvidence,
   clientSideSsrfEvidence,

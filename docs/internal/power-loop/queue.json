@@ -2719,13 +2719,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://web.ctflearn.com/web2/",
-      "source": "CTFLearn web challenge 2 \u2014 public SQL injection training instance (ctflearn.com catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://web.ctflearn.com/web5/",
-      "source": "CTFLearn web challenge 5 \u2014 public XSS training instance (ctflearn.com catalog)",
+      "url": "http://web.ctflearn.com/web2/",
+      "source": "CTFLearn web challenge 2 — base64 HTML comment credential disclosure (web5 path 404; use web2)",
       "auth": "public_demo"
     },
     {
@@ -2734,8 +2729,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://www.hacksplaining.com/lessons/path-traversal/start",
-      "source": "Hacksplaining \u2014 directory traversal secure-coding lesson /start entry (lessons catalog)",
+      "url": "https://www.hacksplaining.com/lessons/directory-traversal/start",
+      "source": "Hacksplaining — directory traversal secure-coding lesson /start entry (lessons catalog; slug is directory-traversal not path-traversal)",
       "auth": "public_demo"
     },
     {
