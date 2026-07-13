@@ -2737,7 +2737,32 @@
       "url": "https://www.hacksplaining.com/lessons/path-traversal/start",
       "source": "Hacksplaining \u2014 directory traversal secure-coding lesson /start entry (lessons catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web.ctflearn.com/web7/",
+      "source": "CTFLearn Calculat3 M3 \u2014 public command-injection training instance (ctflearn.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/insecure-deserialization/start",
+      "source": "Hacksplaining \u2014 insecure deserialization secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/sql-injection/start",
+      "source": "Hacksplaining \u2014 SQL injection secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/open-redirects/start",
+      "source": "Hacksplaining \u2014 open redirect secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/cheatsheet",
+      "source": "OpenVault Bank \u2014 OWASP API Top 10 vulnerability cheatsheet with /api/v1 endpoint oracles (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T18:06:00.000Z"
+  "updated_at": "2026-07-13T19:06:00.000Z"
 }
