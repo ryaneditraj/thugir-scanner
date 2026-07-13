@@ -2661,6 +2661,30 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
     re: /\/lessons\/ai-prompt-injection|Manipulate AI systems by injecting malicious instructions/i
   },
   {
+    label: "Clickjacking lesson module",
+    re: /\/lessons\/click-jacking|Clickjacking — Secure Coding Lesson/i
+  },
+  {
+    label: "Clickjacking lesson description",
+    re: /users aren't having their clicks stolen by attackers|invisible page overlays a sensitive page/i
+  },
+  {
+    label: "Mass assignment lesson module",
+    re: /\/lessons\/mass-assignment|Mass Assignment — Secure Coding Lesson/i
+  },
+  {
+    label: "Mass assignment lesson description",
+    re: /unpacking data from the HTTP request can sometimes be too easy|unexpected fields in a request/i
+  },
+  {
+    label: "CSS injection lesson module",
+    re: /\/lessons\/css-injection|CSS Injection — Secure Coding Lesson/i
+  },
+  {
+    label: "CSS injection lesson description",
+    re: /manipulate user-generated CSS to extract sensitive data|inject CSS rules that exfiltrate/i
+  },
+  {
     label: "Cross-site scripting lesson",
     re: /\/lessons\/xss-|Inject malicious scripts into trusted websites/i
   },
@@ -5540,6 +5564,14 @@ const CLIENT_KONTRA_APPSEC_RES: { label: string; re: RegExp }[] = [
   {
     label: "Reflected XSS training lab title",
     re: /Reflected XSS \| Kontra|owasp-top-10-reflected-cross-site-scripting/i
+  },
+  {
+    label: "DOM XSS training lab title",
+    re: /DOM XSS \| Kontra|owasp-top-10-dom-cross-site-scripting/i
+  },
+  {
+    label: "DOM Based XSS lesson description",
+    re: /DOM Based XSS is an XSS attack wherein the attack payload is executed as a result of modifying the DOM/i
   },
   {
     label: "Insecure URL redirect training lab title",
