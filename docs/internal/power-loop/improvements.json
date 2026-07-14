@@ -2795,6 +2795,24 @@
       "slug": "sql-error-disclosure",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=1' returns 500 vs category=1 baseline 200 Internal Server Error; ginandjuice.shop/catalog findings 4→5 incl sql-error-disclosure; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-scanurl-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sparse bot-wall HTML drops lesson title; RuleContext.scanUrl + finalUrl in clientSideHacksplainingEvidence corpus; ssl-stripping/start findings 1→4 incl client-side-hacksplaining-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-dom-open-redirect",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /blog/post onclick location = URLSearchParams(location.search).get('back'); extractGinAndJuiceBlogPostSeeds + CLIENT_OPEN_REDIRECT_RES back-param markers; ginandjuice.shop/blog findings 4→6 incl client-side-open-redirect-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sam.wizer-ctf.com",
+      "slug": "wizer-ctf-promo-hub-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Wizer CTF Challenge title + Rules of the CTF Blitz + Don't attack backend infrastructure on sam.wizer-ctf.com promo hub; CLIENT_WIZER_CTF_RES extended; sam.wizer-ctf.com findings 3→5 incl client-side-wizer-ctf-evidence; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5027,6 +5045,21 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-category-sqli",
       "shipped_at": "2026-07-14T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-scanurl-oracle",
+      "shipped_at": "2026-07-14T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-dom-open-redirect",
+      "shipped_at": "2026-07-14T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:sam.wizer-ctf.com",
+      "slug": "wizer-ctf-promo-hub-markers",
+      "shipped_at": "2026-07-14T18:15:00.000Z"
     }
   ]
 }

@@ -25,6 +25,8 @@ import {
 
 export interface RuleContext {
   origin: string;
+  /** Original scan target URL (before redirects) — used for sparse CDN/bot-wall URL oracles. */
+  scanUrl?: string;
   home: FetchedDoc;
   scripts: FetchedDoc[];
   combined: string;
@@ -291,7 +293,8 @@ const OPEN_REDIRECT_PARAMS = [
   "redir",
   "continue",
   "callback",
-  "forward"
+  "forward",
+  "back"
 ];
 const OPEN_REDIRECT_FALLBACK_PATHS = [
   "/",
@@ -3314,9 +3317,9 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideHacksplainingEvidence: Rule = async (ctx) => {
-  const pageUrl = ctx.home.finalUrl || ctx.origin;
-  // Include finalUrl so sparse CDN/bot-wall HTML still matches /lessons/{slug} path oracles.
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  // Include finalUrl + requested scanUrl so sparse CDN/bot-wall HTML still matches /lessons/{slug} path oracles.
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_HACKSPLAINING_RES) {
     const m = corpus.match(re);
@@ -5917,6 +5920,14 @@ const CLIENT_GIN_AND_JUICE_SCANNER_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "DOM XSS and prototype pollution oracle",
     re: /Client-side prototype pollution|Cross-site scripting \(DOM-based\)/i
+  },
+  {
+    label: "Blog DOM open redirect back param",
+    re: /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/
+  },
+  {
+    label: "Blog open redirection oracle row",
+    re: /\/blog[\s\S]{0,240}Open redirection \(DOM-based\)/i
   }
 ];
 
@@ -7015,12 +7026,28 @@ const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
   {
     label: "Wizer challenge catalog JSON",
     re: /"name":\s*"#\d+:|chal\d+[\w-]*\.vercel\.app/i
+  },
+  {
+    label: "Wizer CTF Challenge promo title",
+    re: /Wizer CTF Challenge/i
+  },
+  {
+    label: "Wizer CTF Blitz rules heading",
+    re: /Rules of the CTF Blitz/i
+  },
+  {
+    label: "Wizer CTF infrastructure rule",
+    re: /Don['\u2019]t attack the backend infrastructure of the CTF/i
+  },
+  {
+    label: "Wizer CTF expired challenges note",
+    re: /solve Expired challanges[\s\S]{0,40}for fun without getting score/i
   }
 ];
 
 const clientSideWizerCtfEvidence: Rule = async (ctx) => {
-  const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WIZER_CTF_RES) {
     const m = corpus.match(re);
@@ -10631,6 +10658,14 @@ const CLIENT_OPEN_REDIRECT_RES: { label: string; re: RegExp }[] = [
   {
     label: "OAuth next param propagation",
     re: /\/auth\/oauth\/[^"']+\?next=/
+  },
+  {
+    label: "URLSearchParams back param navigation",
+    re: /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/
+  },
+  {
+    label: "location assignment from back query param",
+    re: /location\s*=\s*new URLSearchParams[\s\S]{0,120}\.get\(\s*["']back["']\s*\)/
   }
 ];
 
@@ -10641,7 +10676,12 @@ const clientSideOpenRedirectEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/\/api\/auth\/validate-redirect|nextParam|resolveRedirect/i.test(ctx.combined)) return NEGATIVE;
+  if (
+    !/\/api\/auth\/validate-redirect|nextParam|resolveRedirect|\.get\(\s*["']back["']\s*\)/i.test(
+      ctx.combined
+    )
+  )
+    return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.86,

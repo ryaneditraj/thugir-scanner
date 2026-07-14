@@ -548,7 +548,7 @@ export async function runFreeScan(targetInput: string, opts: FreeScanOptions = {
   }
   const combined = [home.body, ...scripts.map((s) => s.body)].join("\n");
   const detection = detectPlatform(home, combined);
-  const ctx: RuleContext = { origin, home, scripts, combined, probe };
+  const ctx: RuleContext = { origin, scanUrl: targetInput, home, scripts, combined, probe };
 
   // Ordering: run the basic, platform-agnostic checks FIRST, then the more targeted
   // platform-specific checks (prioritising the detected platform). The heavier, advanced
@@ -3548,6 +3548,31 @@ function extractHackingLabSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Gin & Juice Shop — seed blog post pages from /blog listing. */
+function extractGinAndJuiceBlogPostSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (!/ginandjuice\.shop/i.test(host) && !/ginandjuice\.shop|Gin & Juice Shop/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const postRe = /href\s*=\s*["'](\/blog\/post\?postId=\d+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = postRe.exec(html)) && out.size < 8) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Gin & Juice Shop — PortSwigger scanner evaluation lab with /vulnerabilities oracle. */
 function extractGinAndJuiceVulnSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -4324,6 +4349,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
   const invictiPhpSeeds = extractInvictiPhpSeeds(home.body, home.finalUrl);
   const ginAndJuiceVulnSeeds = extractGinAndJuiceVulnSeeds(home.body, home.finalUrl);
+  const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
   const vaultappSeeds = extractVaultappSeeds(home.body, home.finalUrl);
   const llmSecDevSeeds = extractLlmSecDevSeeds(home.body, home.finalUrl);
@@ -4523,6 +4549,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...avidVulnEditorSeeds,
       ...pwnshopSeeds,
       ...ginAndJuiceVulnSeeds,
+      ...ginAndJuiceBlogPostSeeds,
       ...restVulnwebSeeds,
       ...vulnappHubSeeds,
       ...blueTeamLabsSeeds,
@@ -4677,7 +4704,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     .filter(Boolean)
     .join("\n");
   const detection = detectPlatform(home, combined);
-  const ctx: RuleContext = { origin, home, scripts, combined, probe };
+  const ctx: RuleContext = { origin, scanUrl: targetInput, home, scripts, combined, probe };
 
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => (p.platform === "generic" ? 0 : detection.platform && p.platform === detection.platform ? 1 : 2);
