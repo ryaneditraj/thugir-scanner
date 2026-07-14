@@ -1936,6 +1936,29 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
     };
   }
 
+  if (/ginandjuice\.shop/i.test(ctx.origin)) {
+    const base = new URL("/catalog", ctx.origin);
+    base.searchParams.set("category", "1");
+    const inj = new URL("/catalog", ctx.origin);
+    inj.searchParams.set("category", "1'");
+    const docs = await ctx.probe.getMany([base.toString(), inj.toString()], { maxBytes: 16_384 }, 2);
+    const baseDoc = docs.get(base.toString());
+    const injDoc = docs.get(inj.toString());
+    if (baseDoc?.status === 200 && injDoc && injDoc.status >= 500) {
+      return {
+        fired: true,
+        confidence: 0.88,
+        evidence: {
+          url: inj.toString(),
+          baselineStatus: baseDoc.status,
+          injectionStatus: injDoc.status,
+          snippet: injDoc.body.slice(0, 200).trim(),
+          note: "catalog category= quote returns 500 vs 200 baseline — SQL injection likely (Gin & Juice Shop)"
+        }
+      };
+    }
+  }
+
   const aspPaths = [...new Set([...extractAspSqlProbePaths(ctx.combined), ...SQL_ASP_FALLBACK_PATHS])];
   const aspHit = await probeAspDifferentialSql(ctx, aspPaths);
   if (aspHit) return aspHit;
@@ -3235,6 +3258,46 @@ const CLIENT_HACKSPLAINING_RES: { label: string; re: RegExp }[] = [
   {
     label: "SSL stripping lesson description",
     re: /only some actions on your website require HTTPS, an attacker may be able to steal credentials/i
+  },
+  {
+    label: "Hacksplaining lesson start URL oracle",
+    re: /hacksplaining\.com\/lessons\/[a-z0-9-]+\/start/i
+  },
+  {
+    label: "Information leakage lesson module",
+    re: /\/lessons\/information-leakage|Information Leakage — Secure Coding Lesson/i
+  },
+  {
+    label: "Privilege escalation lesson module",
+    re: /\/lessons\/privilege-escalation|Privilege Escalation — Secure Coding Lesson/i
+  },
+  {
+    label: "Logging and monitoring lesson module",
+    re: /\/lessons\/logging-and-monitoring|Logging and Monitoring — Secure Coding Lesson/i
+  },
+  {
+    label: "Weak session lesson module",
+    re: /\/lessons\/weak-session|Weak Session — Secure Coding Lesson/i
+  },
+  {
+    label: "Insecure design lesson module",
+    re: /\/lessons\/insecure-design|Insecure Design — Secure Coding Lesson/i
+  },
+  {
+    label: "Lax security settings lesson module",
+    re: /\/lessons\/lax-security-settings|Lax Security Settings — Secure Coding Lesson/i
+  },
+  {
+    label: "User enumeration lesson module",
+    re: /\/lessons\/user-enumeration|User Enumeration — Secure Coding Lesson/i
+  },
+  {
+    label: "Regex injection lesson module",
+    re: /\/lessons\/regex-injection|Regex Injection — Secure Coding Lesson/i
+  },
+  {
+    label: "Insecure deserialization lesson module",
+    re: /\/lessons\/insecure-deserialization|Insecure Deserialization — Secure Coding Lesson/i
   },
   {
     label: "Host header poisoning lesson module",
@@ -5782,6 +5845,39 @@ const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
     re: /\/administrator\/Login\.aspx/i
   }
 ];
+
+const INVICTI_NSLOOKUP_CMD_CANARY = "thugirCMDprobe";
+
+async function probeInvictiNslookupCommandInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/testsparker\.com|testinvicti\.com/i.test(ctx.origin)) return null;
+  const url = new URL("/nslookup.php", ctx.origin).toString();
+  const body = new URLSearchParams({
+    param: `127.0.0.1 & echo ${INVICTI_NSLOOKUP_CMD_CANARY}`
+  }).toString();
+  const r = await ctx.probe.get(url, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16_384
+  });
+  if (r.status < 200 || r.status >= 600) return null;
+  if (!r.body.includes(INVICTI_NSLOOKUP_CMD_CANARY)) return null;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url,
+      method: "POST",
+      param: "param",
+      canary: INVICTI_NSLOOKUP_CMD_CANARY,
+      snippet: r.body.slice(0, 200).trim(),
+      note: "POST /nslookup.php param reflects shell command output — OS command injection likely (Invicti PHP practice site)"
+    }
+  };
+}
+
+const invictiNslookupCommandInjectionProbe: Rule = async (ctx) =>
+  (await probeInvictiNslookupCommandInjection(ctx)) ?? NEGATIVE;
 
 const clientSideInvictiPracticeSiteEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -14030,6 +14126,7 @@ export const RULES: Record<string, Rule> = {
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
   sqlErrorDisclosure,
+  invictiNslookupCommandInjectionProbe,
   postLoginSqlBypass,
   sstiTemplateInjection,
   clientSideXorAuthEvidence,
