@@ -3392,7 +3392,32 @@
       "url": "https://securityweb-iota.vercel.app/xss",
       "source": "DaniSam-STU/security-lab — live XSS module with vulnerable vs secure API routes (GitHub README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mnthnx64.github.io/secured-ai/",
+      "source": "mnthnx64/secured-ai — OWASP Agentic AI Security interactive lab with attack simulations (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://redtiger.labs.overthewire.org/special1.php",
+      "source": "RedTiger's Hackit — special SMS/SSRF challenge page (overthewire.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bergerzvika.github.io/Cyber-Lab/prompt-injection.html",
+      "source": "BergerZvika/Cyber-Lab — direct/indirect prompt-injection browser lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bergerzvika.github.io/Cyber-Lab/race-conditions.html",
+      "source": "BergerZvika/Cyber-Lab — race-condition TOCTOU/double-spend browser lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/challenges/",
+      "source": "dkyazzentwatwa/hack-this-site — 12+ vulnerability challenge hub with automated validation (GitHub README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T22:26:00.000Z"
+  "updated_at": "2026-07-14T23:05:00.000Z"
 }
