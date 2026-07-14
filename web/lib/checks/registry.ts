@@ -7934,6 +7934,10 @@ const CLIENT_SECTRAINER_RES: { label: string; re: RegExp }[] = [
     re: /SecTrainer/i
   },
   {
+    label: "SecTrainer meta description",
+    re: /interactive modules on OWASP Top 10, XSS, SQLi/i
+  },
+  {
     label: "Gamified OWASP Top 10 training",
     re: /gamified cyber security training|interactive modules on OWASP Top 10/i
   },
@@ -10152,6 +10156,10 @@ const CLIENT_HACKING_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "Hacking-Lab CTF platform route",
     re: /\/ctf_platform/i
+  },
+  {
+    label: "CTF Platform page title",
+    re: /CTF Platform[\s\S]{0,48}Organize Capture The Flag/i
   }
 ];
 
@@ -10248,6 +10256,22 @@ const CLIENT_CYLAB_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "CyLab think like a hacker",
     re: /think like a hacker/i
+  },
+  {
+    label: "CyLab CTF mini-competitions",
+    re: /mini-competitions throughout the year/i
+  },
+  {
+    label: "CyLab timed challenge drop",
+    re: /timed challenge drop/i
+  },
+  {
+    label: "CyLab learners first CTF tagline",
+    re: /From your first CTF to your hundredth/i
+  },
+  {
+    label: "CyLab CTF Primer link",
+    re: /primer\.cylabacademy\.org/i
   }
 ];
 
