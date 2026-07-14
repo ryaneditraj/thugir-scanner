@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T01:16:32.955Z",
-  "total": 308,
-  "uniqueSlugs": 308,
+  "generatedAt": "2026-07-14T02:14:01.426Z",
+  "total": 309,
+  "uniqueSlugs": 309,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 290,
+    "generic": 291,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 242,
+    "deep": 243,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 5,
     "Misconfiguration": 1,
     "Information exposure": 1,
-    "Security misconfiguration": 22,
+    "Security misconfiguration": 23,
     "Information disclosure": 18,
     "Broken authentication": 19,
     "Injection": 51,
@@ -234,6 +234,7 @@
     "client-side-vulnerableapp-evidence",
     "client-side-vulnex-evidence",
     "client-side-vulnforge-academy-evidence",
+    "client-side-vulnforge-evidence",
     "client-side-vulnlab-academy-evidence",
     "client-side-vulnweb-lab-evidence",
     "client-side-w3challs-evidence",
