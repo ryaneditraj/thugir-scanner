@@ -2982,7 +2982,32 @@
       "url": "https://ethantroy.dev/labs/damn-vulnerable-trust-center/",
       "source": "ethanolivertroy/DamnVulnerableTrustCenter \u2014 cloud security CTF trust-center lab landing (archived Mar 2026, Docker runnable)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yikes-security.vercel.app/",
+      "source": "Yikes \u2014 vibe-coded app security scanner demo with intentional NEXT_PUBLIC/RLS/SQLi/XSS oracle markers (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rsc-auditor.vercel.app/",
+      "source": "RSC Security Auditor \u2014 client-side React2Shell/CVE-2025-66478 package.json audit demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://raw.githack.com/Prakhar-Sethi/vulnlab/main/vulnlab.html",
+      "source": "Prakhar-Sethi/vulnlab \u2014 interactive XSS/CSRF security education dashboard with live demo links (GitHub Pages/githack)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://jwtlens.netlify.app/",
+      "source": "JWTLens \u2014 JWT security scanner landing with PortSwigger/Juice Shop lab references (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentainer.io/",
+      "source": "Show HN Agentainer Lab \u2014 open-source stateful AI agent deploy playground (oso95/Agentainer-lab)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T04:08:00.000Z"
+  "updated_at": "2026-07-14T05:08:00.000Z"
 }
