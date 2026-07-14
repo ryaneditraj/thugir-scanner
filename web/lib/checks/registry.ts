@@ -10148,6 +10148,10 @@ const CLIENT_HACKING_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "University cyber labs path",
     re: /cyber_security_labs_for_universities/i
+  },
+  {
+    label: "Hacking-Lab CTF platform route",
+    re: /\/ctf_platform/i
   }
 ];
 
@@ -10232,6 +10236,18 @@ const CLIENT_CYLAB_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "AI security learning topics",
     re: /AI security and blockchain integrity/i
+  },
+  {
+    label: "CyLab learn-by-doing tagline",
+    re: /Cybersecurity, learned by doing/i
+  },
+  {
+    label: "CyLab challenge volume stat",
+    re: /11M[\s\S]{0,24}Challenges solved/i
+  },
+  {
+    label: "CyLab think like a hacker",
+    re: /think like a hacker/i
   }
 ];
 

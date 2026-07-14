@@ -3114,7 +3114,7 @@ function extractCtflearnWebeightSeeds(html: string, pageUrl: string): string[] {
   if (!/CTFlearn|ctflearn\.com|web\.ctflearn\.com/i.test(html)) return [];
   const out = new Set<string>();
   try {
-    out.add("http://web.ctflearn.com/web8/");
+    out.add("https://web.ctflearn.com/web8/");
   } catch {
     /* ignore */
   }
@@ -3136,7 +3136,7 @@ function extractCtflearnWebChallengeSeeds(html: string, pageUrl: string): string
   const out = new Set<string>();
   for (const path of ["/web1/", "/web2/", "/web3/", "/web6/", "/web7/"]) {
     try {
-      out.add(new URL(path, "http://web.ctflearn.com").toString());
+      out.add(new URL(path, "https://web.ctflearn.com").toString());
     } catch {
       /* ignore */
     }
@@ -3514,6 +3514,25 @@ function extractLlmSecDevSeeds(html: string, pageUrl: string): string[] {
   const linkRe = /href\s*=\s*["'](\/(?:october|labs)[^"'#?]*)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** picoCTF migration landing — seed CyLab Security Academy hub for deeper crawl. */
+function extractPicoctfCylabSeeds(html: string, pageUrl: string): string[] {
+  if (!/picoCTF|picoctf\.org|CyLab Security Academy|cylabacademy\.org/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const url of ["https://cylabacademy.org/", "https://cylabacademy.org/about.html"]) {
+    out.add(url);
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/cylabacademy\.org[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 6) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
     } catch {
@@ -4116,8 +4135,17 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "vulnerabilities.txt",
     "vulnerability-inventory",
     "endpoints-catalog",
+    "/web1/",
+    "/web2/",
+    "/web3/",
+    "/web4/",
+    "/web6/",
+    "/web7/",
+    "/web8/",
     "/cybersecurity/",
     "cybersecurity/",
+    "ctf_platform",
+    "events/",
     "cookiejar-lab/demo",
     "lab-guide",
     "security-notes",
@@ -4324,6 +4352,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
   const wizerCtfSeeds = extractWizerCtfSeeds(home.body, home.finalUrl);
   const vulnExposeSeeds = extractVulnExposeSeeds(home.body, home.finalUrl);
+  const picoctfCylabSeeds = extractPicoctfCylabSeeds(home.body, home.finalUrl);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
   const openvaultBankSeeds = extractOpenvaultBankSeeds(home.body, home.finalUrl);
   const webhackingKrSeeds = extractWebhackingKrSeeds(home.body, home.finalUrl);
@@ -4422,10 +4451,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /sixhackacademy\.com/i.test(home.finalUrl)
       ? ["https://platform.sixhackacademy.com/"]
       : [];
+  const hackingLabPrioritySeeds =
+    /Hacking-Lab|hacking-lab\.com/i.test(home.body) || /hacking-lab\.com/i.test(home.finalUrl)
+      ? ["https://hacking-lab.com/ctf_platform/", "https://hacking-lab.com/events/"]
+      : [];
+  const cylabAcademyPrioritySeeds =
+    /picoCTF|picoctf\.org|CyLab Security Academy|cylabacademy\.org/i.test(home.body) ||
+    /picoctf\.org|cylabacademy\.org/i.test(home.finalUrl)
+      ? ["https://cylabacademy.org/", "https://cylabacademy.org/about.html"]
+      : [];
   const ctflearnWebPrioritySeeds =
     /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)
       ? ["/web1/", "/web2/", "/web3/", "/web4/", "/web6/", "/web7/", "/web8/"].map((p) =>
-          new URL(p, "http://web.ctflearn.com").toString()
+          new URL(p, "https://web.ctflearn.com").toString()
         )
       : [];
   const povzaydLabPrioritySeeds =
@@ -4458,6 +4496,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
+      ...cylabAcademyPrioritySeeds,
+      ...hackingLabPrioritySeeds,
       ...sixHackPlatformPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,
@@ -4505,6 +4545,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...wizerCtfSeeds,
       ...vulnExposeSeeds,
       ...bugBountyHunterSeeds,
+      ...picoctfCylabSeeds,
       ...openvaultBankSeeds,
       ...webhackingKrSeeds,
       ...netForceSeeds,
