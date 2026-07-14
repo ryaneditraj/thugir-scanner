@@ -17,7 +17,7 @@ import {
 
 import { FREE_RULES, RULES, type RuleContext } from "./registry";
 import { ProbeCache } from "./probe-cache";
-import { fetchScriptsBatched, fetchPagesBatched } from "./fetch-scripts";
+import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
 export interface FreeScanOptions {
   maxScripts?: number;
@@ -495,7 +495,16 @@ export async function runFreeScan(targetInput: string, opts: FreeScanOptions = {
   // Pull a capped set of same-origin scripts for secret scanning.
   const probe = new ProbeCache();
   const scriptUrls = extractScriptUrls(home.body, home.finalUrl, opts.maxScripts ?? 12);
-  const scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
+  let scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
+  const githackSiblings = expandGithackModuleImports(scripts, home.finalUrl, 6);
+  if (githackSiblings.length > 0) {
+    const fetched = new Set(scriptUrls);
+    const extra = githackSiblings.filter((u) => !fetched.has(u));
+    if (extra.length > 0) {
+      const siblings = await fetchScriptsBatched(extra, { probe, maxBytes: 800_000, concurrency: 4 });
+      scripts = [...scripts, ...siblings];
+    }
+  }
   const combined = [home.body, ...scripts.map((s) => s.body)].join("\n");
   const detection = detectPlatform(home, combined);
   const ctx: RuleContext = { origin, home, scripts, combined, probe };
@@ -677,6 +686,9 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopEvidence",
   "clientSideVulnforgeAcademyEvidence",
   "clientSideVulnforgeEvidence",
+  "clientSideVulnshopEvidence",
+  "clientSideJwtlensEvidence",
+  "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
@@ -2150,7 +2162,18 @@ function extractHackTheBoxAcademySeeds(html: string, pageUrl: string): string[] 
 
 /** OWASP VulnerableApp docs (sasanlabs.github.io/VulnerableApp) — Jekyll scanner-eval platform. */
 function extractVulnerableAppDocSeeds(html: string, pageUrl: string): string[] {
-  if (!/VulnerableApp|SasanLabs\/VulnerableApp|Vulnerable App/i.test(html)) return [];
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  const onVulnerableAppHost =
+    /(?:^|\.)sasanlabs\.github\.io$/i.test(host) ||
+    /(?:^|\.)vulnerableapp\.com$/i.test(host) ||
+    /vulnerableapp/i.test(host);
+  if (
+    !onVulnerableAppHost &&
+    !/SasanLabs\/VulnerableApp|href\s*=\s*["']\/VulnerableApp\//i.test(html)
+  ) {
+    return [];
+  }
+  if (!/VulnerableApp|SasanLabs\/VulnerableApp/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   const re =
@@ -3531,12 +3554,24 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** CookieJar session-security lab — seed interactive demo from homepage. */
+/** CookieJar session-security lab — seed interactive demo and lab-guide docs from homepage. */
 function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
   if (!/CookieJar|cookiejar-lab/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/demo", "/demo/"]) {
+  for (const p of [
+    "/demo",
+    "/demo/",
+    "/demo/index.html",
+    "/cookiejar-lab/docs/lab-guide",
+    "/cookiejar-lab/docs/lab-guide.html",
+    "/cookiejar-lab/docs/security-notes",
+    "/cookiejar-lab/docs/security-notes.html",
+    "/cookiejar-lab/cookiejar-lab/docs/lab-guide",
+    "/cookiejar-lab/cookiejar-lab/docs/lab-guide.html",
+    "/cookiejar-lab/cookiejar-lab/docs/security-notes",
+    "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -3545,7 +3580,8 @@ function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["']([^"']*\/demo\/?)["']/gi;
+  const linkRe =
+    /href\s*=\s*["']([^"']*(?:\/demo\/?|cookiejar-lab(?:\/cookiejar-lab)?\/docs\/(?:lab-guide|security-notes)(?:\.html)?))["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
@@ -3887,6 +3923,10 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "endpoints-catalog",
     "/cybersecurity/",
     "cybersecurity/",
+    "cookiejar-lab/demo",
+    "lab-guide",
+    "security-notes",
+    "cookiejar-lab/docs",
     "sqlInjection",
     "source.php",
     "/vulnerabilities/",
@@ -4195,9 +4235,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /CTF Challenge Hub|Web Security Training Challenges|class="challenge-link"/i.test(home.body)
       ? Array.from({ length: 5 }, (_, i) => new URL(`/c${i + 1}/`, home.finalUrl).toString())
       : [];
+  const cookiejarLabPrioritySeeds =
+    /CookieJar|cookiejar-lab/i.test(home.body) || /cookiejar-lab/i.test(home.finalUrl)
+      ? [
+          "/cookiejar-lab/demo/",
+          "/cookiejar-lab/cookiejar-lab/docs/lab-guide.html",
+          "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
+        ].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,
@@ -4362,11 +4411,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       }
     }
   }
-  const scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
+  let scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
     probe,
     maxBytes: 800_000,
     concurrency: 4
   });
+  const githackSiblings = expandGithackModuleImports(scripts, home.finalUrl, 8);
+  if (githackSiblings.length > 0) {
+    const fetched = new Set([...scriptUrls]);
+    const extra = githackSiblings.filter((u) => !fetched.has(u)).slice(0, Math.max(0, scriptCap - scripts.length));
+    if (extra.length > 0) {
+      const siblings = await fetchScriptsBatched(extra, { probe, maxBytes: 800_000, concurrency: 4 });
+      scripts = [...scripts, ...siblings];
+    }
+  }
 
   // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
   const juiceShopOrigin = home.finalUrl || target.toString();

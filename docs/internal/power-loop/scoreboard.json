@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 1226,
-  "total_findings": 5493,
+  "total_sites_scanned": 1263,
+  "total_findings": 5663,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 597,
-  "discovery_findings": 4049,
-  "improvements_shipped": 419,
+  "discovery_urls_added": 617,
+  "discovery_findings": 4180,
+  "improvements_shipped": 425,
   "last_run": "2026-07-14T09:29:38.936Z",
   "last_run_summary": {
     "hour_utc": "09:00",
@@ -31,14 +31,25 @@
       "findings": 7,
       "recall": "6/6",
       "gap": [],
-      "pass1_gap": ["sqli", "idor", "auth_bypass"],
+      "pass1_gap": [
+        "sqli",
+        "idor",
+        "auth_bypass"
+      ],
       "note": "Cold-start pass1 4 findings 3/6; wake retry merged to 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },

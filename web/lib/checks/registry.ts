@@ -2233,11 +2233,11 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Jekyll Rouge highlighted getElementById innerHTML sink",
-    re: /getElementById[\s\S]{0,260}innerHTML[\s\S]{0,40}=\s*[\s\S]{0,60}\bq\b/i
+    re: /getElementById[\s\S]{0,260}innerHTML[\s\S]{0,96}=\s*[\s\S]{0,96}\bq\b/i
   },
   {
     label: "Jekyll Rouge URLSearchParams location.search innerHTML sink",
-    re: /URLSearchParams[\s\S]{0,500}location[\s\S]{0,120}search[\s\S]{0,500}innerHTML[\s\S]{0,40}=/i
+    re: /URLSearchParams[\s\S]{0,500}location[\s\S]{0,120}search[\s\S]{0,500}innerHTML[\s\S]{0,96}=/i
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -2554,6 +2554,14 @@ const CLIENT_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "Jekyll Rouge write-up URLSearchParams innerHTML reflected XSS lab",
     re: /URLSearchParams[\s\S]{0,600}innerHTML[\s\S]{0,60}=\s*[\s\S]{0,40}\bq\b/i
+  },
+  {
+    label: "Stored XSS lab rendered without sanitisation",
+    re: /rendered without sanitisation[\s\S]{0,500}(?:XSS|innerHTML|raw HTML|injected scripts)/i
+  },
+  {
+    label: "Stored persistent XSS training marker",
+    re: /Stored \(Persistent\) XSS vulnerability/i
   }
 ];
 
@@ -7316,19 +7324,25 @@ const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
     re: /Upskill and benchmark SOC teams|hands-on blue team training/i
   },
   {
+    label: "CyberDefenders labs catalog path",
+    re: /cyberdefenders\.org\/labs|Blue Team Labs Online/i
+  },
+  {
     label: "DFIR keywords",
     re: /DFIR|soc analyst.*blue team/i
   }
 ];
 
 const clientSideCyberDefendersEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CYBERDEFENDERS_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/CyberDefenders|cyberdefenders\.org/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CyberDefenders|cyberdefenders\.org/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -7982,6 +7996,14 @@ const CLIENT_BWAPP_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "bWAPP deliberately insecure disclaimer",
     re: /deliberately insecure web application|security-testing and educational purposes only/i
+  },
+  {
+    label: "VWAD bWAPP listing title",
+    re: /bWAPP\s*[-—–]\s*OWASP VWAD|bWAPP[\s\S]{0,80}buggy web app/i
+  },
+  {
+    label: "VWAD bWAPP 100 bugs OWASP Top 10",
+    re: /Over 100 web bugs[\s\S]{0,120}OWASP Top 10|covers all major known web vulnerabilities including OWASP Top 10/i
   }
 ];
 
@@ -8259,6 +8281,19 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
       }
     };
   }
+  const syntheticPortal =
+    /<!--[\s\S]{0,1600}?(?:apim-subscription-key\s*:\s*[a-z0-9]{16,}|dev_admin\s*:\s*[^\s<]+@[^\s<]+\s*\/\s*\S+|db_conn\s*:[\s\S]{0,200}?Password\s*=\s*[^;\s<]+)[\s\S]{0,800}?-->/i;
+  const portal = ctx.combined.match(syntheticPortal);
+  if (portal) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        sample: portal[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+        note: "HTML comment discloses API keys, admin credentials, or database connection strings in page source"
+      }
+    };
+  }
   return NEGATIVE;
 };
 
@@ -8404,6 +8439,10 @@ const CLIENT_COOKIEJAR_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "Interactive demo route",
     re: /href\s*=\s*["'][^"']*\/demo\/?["']/i
+  },
+  {
+    label: "Lab guide session replay walkthrough",
+    re: /authentication protects the login, but not the session/i
   },
   {
     label: "Lab guide documentation",
@@ -9315,7 +9354,11 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "crAPI intentionally vulnerable API lab",
-    re: /completely ridiculous API\s*\(crAPI\)/i
+    re: /completely ridiculous API\s*\(crAPI\)|crAPI\s*\(Completely Ridiculous API\)/i
+  },
+  {
+    label: "VWAD crAPI OWASP API Top 10 listing",
+    re: /intentionally vulnerable API[\s\S]{0,120}OWASP Top 10 for APIs|OWASP Top 10 for APIs[\s\S]{0,80}practicing API security/i
   },
   {
     label: "crAPI meta keywords BOLA + BFLA + OWASP API Top 10",
@@ -9854,6 +9897,132 @@ const clientSideVulnforgeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnShop pentest practice SPA (vulnshop.vercel.app) ----------------------------
+const CLIENT_VULNSHOP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnShop pentest practice title",
+    re: /VulnShop\s*[—–-]\s*Pentest Practice/i
+  },
+  {
+    label: "VulnShop Railway backend host",
+    re: /vulnshop-production\.up\.railway\.app/i
+  },
+  {
+    label: "VulnShop unauthenticated debug config route",
+    re: /\/api\/debug\/config[\s\S]{0,120}No auth required|require zero authentication/i
+  },
+  {
+    label: "VulnShop debug users plaintext passwords",
+    re: /\/api\/debug\/users[\s\S]{0,120}(?:No auth required|plaintext passwords)/i
+  },
+  {
+    label: "VulnShop OWASP misconfig lab marker",
+    re: /\[A05\]\s*Misconfig[\s\S]{0,120}\/api\/debug\//i
+  }
+];
+
+const clientSideVulnshopEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNSHOP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnShop|vulnshop-production/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnShop documents unauthenticated /api/debug/config and /api/debug/users routes exposing secrets when the Railway backend is reachable"
+    }
+  };
+};
+
+// --- JWTLens Burp Suite JWT security scanner landing (jwtlens.netlify.app) -----------
+const CLIENT_JWTLENS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JWTLens brand",
+    re: /JWTLens/i
+  },
+  {
+    label: "JWT security scanner for Burp",
+    re: /JWT Security Scanner for Burp Suite|JWT security scanner for Burp/i
+  },
+  {
+    label: "62 automated JWT checks",
+    re: /62 automated (?:JWT )?checks|62 security checks/i
+  },
+  {
+    label: "Algorithm confusion / JWT Forge",
+    re: /algorithm confusion|JWT Forge|KID injection|JWKS injection/i
+  },
+  {
+    label: "Weak secret brute force",
+    re: /weak secret brute force|JWT algorithm none/i
+  }
+];
+
+const clientSideJwtlensEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JWTLENS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/JWTLens|jwtlens\.netlify\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "JWTLens publishes a Burp Suite JWT scanner with 62 checks covering algorithm confusion, KID injection, and weak secrets"
+    }
+  };
+};
+
+// --- CyberShield Lab OWASP Top 10 education platform (cybersheild-lab.vercel.app) --
+const CLIENT_CYBERSHEILD_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CyberShield Lab brand",
+    re: /CyberShield Lab/i
+  },
+  {
+    label: "OWASP Top 10 coverage",
+    re: /OWASP Top 10/i
+  },
+  {
+    label: "SQL injection authentication bypass module",
+    re: /SQL Injection[\s\S]{0,80}Authentication Bypass|SQL Injection Lab/i
+  },
+  {
+    label: "XSS demo vulnerable module",
+    re: /Cross-Site Scripting \(XSS\)[\s\S]{0,80}Vulnerable|XSS Demo/i
+  },
+  {
+    label: "Ethical hacking education platform",
+    re: /Ethical Hacking|cybersecurity education platform/i
+  }
+];
+
+const clientSideCybersheildLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBERSHEILD_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CyberShield|cybersheild-lab/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CyberShield Lab documents OWASP Top 10 SQLi and XSS modules with attack-and-fix side-by-side demos"
+    }
+  };
+};
+
 // --- TegalSec browser hacking labs (labs.tegalsec.org/br0w, xss-labs) ---------------
 const CLIENT_TEGALSEC_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -10256,7 +10425,7 @@ const CLIENT_SECURITY_WRITEUP_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Vulnerable innerHTML sink in write-up code sample",
-    re: /getElementById[\s\S]{0,120}innerHTML/i
+    re: /getElementById[\s\S]{0,300}innerHTML/i
   },
   {
     label: "Bundled xss-lab.html demo artifact",
@@ -13375,6 +13544,14 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
     re: /vwad\.owasp\.org\/app\/pixi|"name":\s*"Pixi"/i
   },
   {
+    label: "VWAD bWAPP listing",
+    re: /vwad\.owasp\.org\/app\/bwapp|"name":\s*"bWAPP"/i
+  },
+  {
+    label: "VWAD crAPI listing",
+    re: /vwad\.owasp\.org\/app\/crapi|"name":\s*"crAPI"/i
+  },
+  {
     label: "Pixi MEAN stack insecure API lab",
     re: /MEAN stack web app with deliberately insecure APIs|Part of OWASP DevSlop/i
   }
@@ -13553,6 +13730,9 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopEvidence,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
+  clientSideVulnshopEvidence,
+  clientSideJwtlensEvidence,
+  clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
   clientSideXvwaEvidence,
   clientSideOpenRedirectEvidence,
