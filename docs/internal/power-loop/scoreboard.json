@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T02:30:00.000Z",
+  "updated_at": "2026-07-14T03:07:50.924Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,36 +15,44 @@
       ]
     }
   },
-  "total_sites_scanned": 1208,
-  "total_findings": 5403,
+  "total_sites_scanned": 1209,
+  "total_findings": 5410,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 587,
+  "discovery_urls_added": 592,
   "discovery_findings": 3973,
-  "improvements_shipped": 419,
-  "last_run": "2026-07-14T02:30:00.000Z",
+  "improvements_shipped": 416,
+  "last_run": "2026-07-14T03:07:50.924Z",
   "last_run_summary": {
-    "hour_utc": "02:00",
+    "hour_utc": "03:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 8,
+      "findings": 7,
       "recall": "6/6",
       "gap": [],
-      "pass1_gap": ["sensitive_data"],
-      "note": "pass1 5 findings gap sensitive_data; wake retry 8 findings 6/6 — no benchmark misses",
+      "pass1_gap": [],
+      "note": "7 findings 6/6 recall on primary heroku (pages_crawled=1 probes=232) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "BugBountyHunter challenge #9-12 title oracles + VulnForge attack-surface scanner evidence",
+      "urls_added": 5,
+      "focus": "Wizer chal16-18 + CTFv daily challenges + Emergency Bucket CTF (ebucket.dev)",
       "improvements_shipped_this_run": 3,
       "validated_targets": {
         "vulnforge.vercel.app": "2→4 findings (+client-side-vulnforge-evidence, +vibe-hardcoded-demo-credentials)",
