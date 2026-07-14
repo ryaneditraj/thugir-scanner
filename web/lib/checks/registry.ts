@@ -9777,6 +9777,49 @@ const clientSideVulnforgeAcademyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnForge attack-surface scanner SPA (vulnforge.vercel.app) --------------------
+const CLIENT_VULNFORGE_EXPLORER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnForge attack surface explorer title",
+    re: /VulnForge\s*[–-]\s*AI-Guided Web Attack Surface Explorer/i
+  },
+  {
+    label: "VulnForge backend API host",
+    re: /vulnforge-backend\.onrender\.com/i
+  },
+  {
+    label: "Surface inventory dashboard",
+    re: /Surface Inventory|discovered attack surfaces/i
+  },
+  {
+    label: "VulnForge API key header wiring",
+    re: /x-vulnforge-api-key/i
+  },
+  {
+    label: "VulnForge auth token storage",
+    re: /vulnforge_token|vulnforge_user/i
+  }
+];
+
+const clientSideVulnforgeEvidence: Rule = async (ctx) => {
+  if (/VulnForge Academy|20 deliberately vulnerable levels/i.test(ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNFORGE_EXPLORER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnForge|vulnforge-backend/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnForge publishes an AI-guided attack-surface scanner SPA with hardwired backend API and client-side auth token storage"
+    }
+  };
+};
+
 // --- TegalSec browser hacking labs (labs.tegalsec.org/br0w, xss-labs) ---------------
 const CLIENT_TEGALSEC_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -10334,6 +10377,22 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
   {
     label: "BugBountyHunter CORS whitelist bypass challenge title",
     re: /Checking if a whitelisted string is found is a bad approach/i
+  },
+  {
+    label: "BugBountyHunter admin panel challenge title",
+    re: /What(?:'|&#39;)s behind this admin panel/i
+  },
+  {
+    label: "BugBountyHunter HackerPhotos challenge title",
+    re: /Check out these HackerPhotos/i
+  },
+  {
+    label: "BugBountyHunter bounty generator challenge title",
+    re: /I(?:'|&#39;)ve won a bounty/i
+  },
+  {
+    label: "BugBountyHunter SSO token theft challenge title",
+    re: /Can you steal the SSO token/i
   },
   {
     label: "BugBountyHunter challenges disabled notice",
@@ -13458,6 +13517,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRestVulnwebEvidence,
   clientSidePwnshopEvidence,
   clientSideVulnforgeAcademyEvidence,
+  clientSideVulnforgeEvidence,
   clientSideTegalsecLabEvidence,
   clientSideXvwaEvidence,
   clientSideOpenRedirectEvidence,

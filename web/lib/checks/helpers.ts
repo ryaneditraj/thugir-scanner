@@ -91,6 +91,10 @@ export const HARDCODED_CRED_RES = [
   {
     label: "DVWA default credential hint",
     re: /default username is ['"]admin['"] with password ['"]password['"]/i
+  },
+  {
+    label: "VulnForge hardcoded API key placeholder",
+    re: /x-vulnforge-api-key[\s\S]{0,120}change_me_for_prod|change_me_for_prod[\s\S]{0,120}x-vulnforge-api-key/i
   }
 ];
 

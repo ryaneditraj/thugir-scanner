@@ -3416,6 +3416,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnforge-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnForge attack-surface scanner SPA disclosed",
+    description:
+      "VulnForge is an AI-guided web attack-surface explorer SPA that wires a public backend API, client-side auth tokens, and a hardcoded x-vulnforge-api-key header in its JavaScript bundle.",
+    impactOneline:
+      "Public VulnForge scanner bundles expose backend hosts, API key placeholders, and client-side session storage patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnforgeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge scanner instances are training/demo software — rotate API keys and isolate backends from production.",
+      steps: [
+        "Move x-vulnforge-api-key to server-side proxy routes only.",
+        "Rotate change_me_for_prod and any leaked backend credentials.",
+        "Do not ship scanner auth tokens in localStorage on production domains."
+      ]
+    },
+    fixPrompt:
+      "We deploy a VulnForge-style attack-surface scanner SPA. Show how to proxy backend API calls server-side and remove hardcoded API keys from the client bundle.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-tegalsec-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
