@@ -3267,7 +3267,32 @@
       "url": "https://www.hacksplaining.com/lessons/cross-site-scripting/start",
       "source": "Hacksplaining — stored/reflected XSS secure-coding lesson canonical /start entry (lessons catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/cart",
+      "source": "PortSwigger Gin & Juice Shop — cart business-logic / DOM manipulation oracle (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/about",
+      "source": "PortSwigger Gin & Juice Shop — about page scanner-evaluation oracle (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=3",
+      "source": "PortSwigger Gin & Juice Shop — client-side prototype pollution / DOM XSS blog post oracle (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/login",
+      "source": "ctfsec/pwnshop — admin panel login / privilege-escalation oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/checkout",
+      "source": "ctfsec/pwnshop — checkout wallet/payment business-logic oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T17:05:00.000Z"
+  "updated_at": "2026-07-14T18:05:00.000Z"
 }
