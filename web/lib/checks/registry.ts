@@ -2487,6 +2487,13 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideSqlEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (
+    /bugbountyhunter\.com\/challenge\?id=/i.test(pageUrl) &&
+    /We have disabled our free challenges/i.test(ctx.combined)
+  ) {
+    return NEGATIVE;
+  }
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_SQL_RES) {
     const m = ctx.combined.match(re);
@@ -6437,6 +6444,10 @@ const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
     re: /Challenge\s*#\d+/i
   },
   {
+    label: "Wizer CTF hub landing title",
+    re: /Wizer CTF Challenge|Can you spot the vulnerability\?\s*Wizer CTF/i
+  },
+  {
     label: "Powered by Wizer branding",
     re: /Powered by\s*<img[^>]+(?:wizer\.svg|alt="Wizer")/i
   },
@@ -6445,12 +6456,28 @@ const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
     re: /serializeArray\s*\(\s*document\.forms\[0\]\s*\)[\s\S]{0,200}?api\/login/i
   },
   {
+    label: "Wizer CTF doLogin API form",
+    re: /action="\/api\/doLogin"/i
+  },
+  {
     label: "Wizer developer security training host",
-    re: /chal\d+\.vercel\.app|wizer-training\.com/i
+    re: /chal\d+[\w-]*\.vercel\.app|wizer-training\.com|sam\.wizer-ctf\.com|wizer-ctf\.com/i
   },
   {
     label: "Wizer CTF navigation hub",
     re: /List of Users|List of Groups|Your Profile/i
+  },
+  {
+    label: "Wizer guest play entry",
+    re: /Play\s+As\s+Guest|pos=last/i
+  },
+  {
+    label: "Wizer CTF rules vuln identification",
+    re: /identify the vulns and deliver the payload|Leave the backend alone/i
+  },
+  {
+    label: "Wizer challenge catalog JSON",
+    re: /"name":\s*"#\d+:|chal\d+[\w-]*\.vercel\.app/i
   }
 ];
 
@@ -6463,13 +6490,14 @@ const clientSideWizerCtfEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/wizer|chal\d+\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  if (!/wizer|chal\d+[\w-]*\.vercel\.app|sam\.wizer-ctf|wizer-ctf\.com/i.test(corpus))
+    return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Wizer developer security CTF challenge (chal*.vercel.app) documents hands-on SQLi/XSS/login labs"
+      note: "Wizer developer security CTF hub or chal*.vercel.app challenge documents hands-on SQLi/XSS/login labs"
     }
   };
 };
@@ -10278,6 +10306,18 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
   {
     label: "Bug bounty scenario recreation",
     re: /re-created bug bounty scenario|BugBountyHunter Members Demo/i
+  },
+  {
+    label: "BugBountyHunter XSS filter challenge title",
+    re: /strict URL filter should prevent XSS/i
+  },
+  {
+    label: "BugBountyHunter open redirect challenge title",
+    re: /may only redirect to \*\.bugbountyhunter\.com/i
+  },
+  {
+    label: "BugBountyHunter challenges disabled notice",
+    re: /We have disabled our free challenges whilst we work on our new platform/i
   }
 ];
 

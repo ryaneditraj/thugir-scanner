@@ -2495,6 +2495,24 @@
       "slug": "client-side-vuln-expose-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: VulnSite title + ENTORNO DE PENTESTING PROFESIONAL on homepage; clientSideVulnExposeEvidence now includes finalUrl in corpus; vuln-expose.vercel.app findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wizer-ctf.com",
+      "slug": "wizer-ctf-hub-markers-and-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Wizer CTF Challenge title + /api/doLogin + Play As Guest on wizer-ctf.com; extractWizerCtfSeeds seeds /?pos=last; wizer-ctf.com findings 2→3, sam.wizer-ctf.com 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-title-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=6 title strict URL filter should prevent XSS; challenge?id=7 may only redirect to *.bugbountyhunter.com; CLIENT_BUGBOUNTYHUNTER_RES title markers; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-disabled-challenge-sql-fp-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: disabled-challenge banner + crawled /vulnerability taxonomy triggered client-side-sql-evidence FP; guard on bugbountyhunter.com/challenge?id= pages; challenge #6/#7 findings 3→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4547,6 +4565,21 @@
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-finalurl-corpus-fix",
       "shipped_at": "2026-07-13T23:33:00.000Z"
+    },
+    {
+      "source": "discovery:wizer-ctf.com",
+      "slug": "wizer-ctf-hub-markers-and-seeds",
+      "shipped_at": "2026-07-14T00:54:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-title-oracles",
+      "shipped_at": "2026-07-14T00:54:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-disabled-challenge-sql-fp-fix",
+      "shipped_at": "2026-07-14T00:54:00.000Z"
     }
   ]
 }

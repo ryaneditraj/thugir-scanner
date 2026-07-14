@@ -2713,6 +2713,33 @@ function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** Wizer CTF hub (wizer-ctf.com / sam.wizer-ctf.com) — seed guest play catalog and linked chal*.vercel.app instances. */
+function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
+  if (!/Wizer CTF|wizer-ctf\.com|sam\.wizer-ctf\.com|wizer-training\.com/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/?pos=last", "/login", "/signup"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const decoded = html.replace(/&#34;/g, '"').replace(/&quot;/g, '"');
+  const chalRe = /https?:\/\/chal[\w-]+\.vercel\.app[^"'\s]*/gi;
+  let m: RegExpExecArray | null;
+  while ((m = chalRe.exec(decoded))) {
+    try {
+      out.add(new URL(m[0]).origin + "/");
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** VulnSite (vuln-expose.vercel.app) — seed explicit SQLi/XSS/IDOR/CMDi lab routes from homepage. */
 function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnSite|vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(html)) return [];
@@ -4024,6 +4051,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const cryptohackSeeds = extractCryptohackChallengeSeeds(home.body, home.finalUrl);
   const overthewireNatasSeeds = extractOverTheWireNatasSeeds(home.body, home.finalUrl);
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
+  const wizerCtfSeeds = extractWizerCtfSeeds(home.body, home.finalUrl);
   const vulnExposeSeeds = extractVulnExposeSeeds(home.body, home.finalUrl);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
   const openvaultBankSeeds = extractOpenvaultBankSeeds(home.body, home.finalUrl);
@@ -4152,6 +4180,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...cryptohackSeeds,
       ...overthewireNatasSeeds,
       ...redTigerSeeds,
+      ...wizerCtfSeeds,
       ...vulnExposeSeeds,
       ...bugBountyHunterSeeds,
       ...openvaultBankSeeds,
