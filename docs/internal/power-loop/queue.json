@@ -3156,7 +3156,32 @@
       "url": "https://appsecmaster.net/labs",
       "source": "AppSec Master — hands-on web security labs hub (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-graphql-application-dvga/",
+      "source": "OWASP VWAD — hosted Damn Vulnerable GraphQL Application (DVGA) training instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/",
+      "source": "Pentest Ground — public DVGA GraphQL security lab (port 5013)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://allsafe.vercel.app/",
+      "source": "t0thkr1s/allsafe — intentionally vulnerable web app with multiple OWASP flaws (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://graphql.security/",
+      "source": "GraphQL security training hub — live vulnerability demos and lab resources (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-demo.vercel.app/",
+      "source": "Interactive LLM prompt-injection attack/defense demo (Vercel OSS deploy, web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T12:15:00.000Z"
+  "updated_at": "2026-07-14T13:10:00.000Z"
 }
