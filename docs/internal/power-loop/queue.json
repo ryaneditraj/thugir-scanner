@@ -2982,7 +2982,32 @@
       "url": "https://ethantroy.dev/labs/damn-vulnerable-trust-center/",
       "source": "ethanolivertroy/DamnVulnerableTrustCenter \u2014 cloud security CTF trust-center lab landing (archived Mar 2026, Docker runnable)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://redforgex.vercel.app/",
+      "source": "pritpatel2412/RedForge \u2014 autonomous red-team orchestration platform with real HTTP probing (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://capture-the-flag.vercel.app/",
+      "source": "vercel-labs/capture-the-flag \u2014 AI CTF arena alt public deploy (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cybersheild-lab.vercel.app/",
+      "source": "CyberShield Lab \u2014 intentionally vulnerable SQLi/XSS/password training modules (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webexp05.vercel.app/c1/",
+      "source": "Jaideep02/shiny-computing-machine \u2014 Hack the Basics CTF #1 cookie manipulation (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webexp05.vercel.app/c2/",
+      "source": "Jaideep02/shiny-computing-machine \u2014 Hack the Basics CTF #2 SQL injection (GitHub README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T04:08:00.000Z"
+  "updated_at": "2026-07-14T09:26:00.000Z"
 }
