@@ -85,21 +85,25 @@ function loadJson<T>(path: string, fallback: T): T {
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 
+/** Canonical discovery URL — pathname + search so challenge?id=9 ≠ challenge?id=10 on same host. */
+function discoveryScanKey(raw: string): string | null {
+  try {
+    const u = new URL(raw);
+    return `${u.origin}${u.pathname.replace(/\/$/, "") || "/"}${u.search}`;
+  } catch {
+    return null;
+  }
+}
+
 function recentlyScanned(url: string, runs: ScanRunResult[], hours = 48): boolean {
   const cutoff = Date.now() - hours * 60 * 60 * 1000;
-  let origin: string;
-  try {
-    origin = new URL(url).origin;
-  } catch {
-    return false;
-  }
+  const key = discoveryScanKey(url);
+  if (!key) return false;
   return runs.some((r) => {
     if (r.status !== "ok") return false;
-    try {
-      return new URL(r.url).origin === origin && new Date(r.scanned_at).getTime() > cutoff;
-    } catch {
-      return false;
-    }
+    const runKey = discoveryScanKey(r.url);
+    if (!runKey || runKey !== key) return false;
+    return new Date(r.scanned_at).getTime() > cutoff;
   });
 }
 
