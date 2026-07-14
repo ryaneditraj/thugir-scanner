@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T21:11:29.883Z",
+  "updated_at": "2026-07-14T22:39:36.188Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 379,
-  "total_findings": 1521,
+  "total_sites_scanned": 388,
+  "total_findings": 1582,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 96,
-  "discovery_findings": 878,
+  "discovery_urls_added": 101,
+  "discovery_findings": 932,
   "improvements_shipped": 458,
-  "last_run": "2026-07-14T21:11:29.884Z",
+  "last_run": "2026-07-14T22:39:36.188Z",
   "last_run_summary": {
-    "hour_utc": "21:00",
+    "hour_utc": "22:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 259,
-      "note": "No benchmark misses — recall stable at 6/6",
+      "note": "Heroku cold-start pass1 gap sqli (2→6 findings); wake retry merged 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,30 +54,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 30,
-      "new_url_findings": 18,
-      "focus": "AI prompt-injection labs + CSRF/XSS/IDOR Vercel demos; CyLab/SecTrainer backlog; vuln-expose + redtiger",
+      "findings": 54,
+      "new_url_findings": 40,
+      "focus": "gitagent-securebot OWASP scanner demo + VWAD grpc-goat + hack-this-site API/OWASP module pages; Wizer chal backlog",
       "urls_added_list": [
-        "https://ai-prompt-lab.vercel.app/",
-        "https://prompt-injection-playground.vercel.app/",
-        "https://ai-security-demo.vercel.app/",
-        "https://csrf-xss-demo.vercel.app/",
-        "https://idor-website.vercel.app/"
+        "https://gitagent-securebot-app.vercel.app/",
+        "https://vwad.owasp.org/app/grpc-goat/",
+        "https://hack-this-site-eta.vercel.app/api-labs/",
+        "https://hack-this-site-eta.vercel.app/owasp/a03.html",
+        "https://hack-this-site-eta.vercel.app/owasp/a01.html"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "security-trainer.vercel.app: SecTrainer /modules + /ctf crawl — 16 findings",
-      "cylabacademy.org: hub pages + primer seeds — 4 findings",
-      "ai-prompt-lab.vercel.app: 4 findings — LLM prompt-injection training",
-      "csrf-xss-demo.vercel.app: 4 findings — live CSRF/XSS React demo",
-      "vuln-expose.vercel.app: 6 findings — SQLi/XSS training platform"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — pass1 cold-start gap sqli before wake retry",
+      "hack-this-site-eta.vercel.app/api-labs: 12 findings — REST/GraphQL/SOAP mock API training surface",
+      "hack-this-site-eta.vercel.app/owasp/a01.html: 12 findings — broken access control category labs",
+      "hack-this-site-eta.vercel.app/owasp/a03.html: 11 findings — injection category labs",
+      "vwad.owasp.org/app/grpc-goat: 3 findings — gRPC Goat VWAD directory oracle",
+      "gitagent-securebot-app.vercel.app: 2 findings — SecureBot OWASP demo scanner landing"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "learn.cylabacademy.org: Cloudflare challenge blocks cloud scanner UA",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com",
-      "exploiteats / web-vuln-by-example: no public deploy — Docker/local only"
+      "juice-shop.herokuapp.com: Heroku cold-start pass1 only misconfig+xss (pages_crawled=1) before wake retry",
+      "gitagent-securebot-app.vercel.app: shallow misconfig-only hits — bundled VulnBot target needs deeper crawl",
+      "voice-goat / AI-PT-Lab: no public deploy — Docker/local only",
+      "owasp.securityshepherd.eu: DNS unreachable from cloud"
     ]
   },
   "discovery_highlights": {
@@ -264,6 +265,11 @@
     "cylabacademy.org": 4,
     "security-trainer.vercel.app": 16,
     "vuln-expose.vercel.app": 6,
-    "redtiger.labs.overthewire.org": 3
+    "redtiger.labs.overthewire.org": 3,
+    "gitagent-securebot-app.vercel.app": 2,
+    "vwad.owasp.org/app/grpc-goat": 3,
+    "hack-this-site-eta.vercel.app/api-labs": 12,
+    "hack-this-site-eta.vercel.app/owasp/a03.html": 11,
+    "hack-this-site-eta.vercel.app/owasp/a01.html": 12
   }
 }
