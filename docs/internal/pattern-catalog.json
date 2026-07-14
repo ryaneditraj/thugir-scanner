@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T09:29:22.076Z",
-  "total": 314,
-  "uniqueSlugs": 314,
+  "generatedAt": "2026-07-14T10:06:36.938Z",
+  "total": 315,
+  "uniqueSlugs": 315,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 296,
+    "generic": 297,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 248,
+    "deep": 249,
     "continuous": 0
   },
   "byCategory": {
@@ -29,11 +29,11 @@
     "Broken authentication": 20,
     "Injection": 52,
     "Cross-site scripting": 29,
+    "general": 18,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
     "AI security": 22,
-    "XSS": 1,
-    "general": 17
+    "XSS": 1
   },
   "slugs": [
     "bolt-demo-mode-shipped",
@@ -75,6 +75,7 @@
     "client-side-cryptohack-evidence",
     "client-side-cs-training-academy-evidence",
     "client-side-csrf-evidence",
+    "client-side-ctf-challenge-hub-evidence",
     "client-side-ctf-defi-evidence",
     "client-side-ctf-platform-evidence",
     "client-side-ctf-research-team-evidence",
