@@ -3543,7 +3543,11 @@ function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
     "/cookiejar-lab/docs/lab-guide",
     "/cookiejar-lab/docs/lab-guide.html",
     "/cookiejar-lab/docs/security-notes",
-    "/cookiejar-lab/docs/security-notes.html"
+    "/cookiejar-lab/docs/security-notes.html",
+    "/cookiejar-lab/cookiejar-lab/docs/lab-guide",
+    "/cookiejar-lab/cookiejar-lab/docs/lab-guide.html",
+    "/cookiejar-lab/cookiejar-lab/docs/security-notes",
+    "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -3554,7 +3558,7 @@ function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
     }
   }
   const linkRe =
-    /href\s*=\s*["']([^"']*(?:\/demo\/?|cookiejar-lab\/docs\/(?:lab-guide|security-notes)(?:\.html)?))["']/gi;
+    /href\s*=\s*["']([^"']*(?:\/demo\/?|cookiejar-lab(?:\/cookiejar-lab)?\/docs\/(?:lab-guide|security-notes)(?:\.html)?))["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
@@ -3896,6 +3900,10 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "endpoints-catalog",
     "/cybersecurity/",
     "cybersecurity/",
+    "cookiejar-lab/demo",
+    "lab-guide",
+    "security-notes",
+    "cookiejar-lab/docs",
     "sqlInjection",
     "source.php",
     "/vulnerabilities/",
@@ -4204,9 +4212,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /CTF Challenge Hub|Web Security Training Challenges|class="challenge-link"/i.test(home.body)
       ? Array.from({ length: 5 }, (_, i) => new URL(`/c${i + 1}/`, home.finalUrl).toString())
       : [];
+  const cookiejarLabPrioritySeeds =
+    /CookieJar|cookiejar-lab/i.test(home.body) || /cookiejar-lab/i.test(home.finalUrl)
+      ? [
+          "/cookiejar-lab/demo/",
+          "/cookiejar-lab/cookiejar-lab/docs/lab-guide.html",
+          "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
+        ].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,

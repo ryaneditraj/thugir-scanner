@@ -8406,6 +8406,10 @@ const CLIENT_COOKIEJAR_LAB_RES: { label: string; re: RegExp }[] = [
     re: /href\s*=\s*["'][^"']*\/demo\/?["']/i
   },
   {
+    label: "Lab guide session replay walkthrough",
+    re: /authentication protects the login, but not the session/i
+  },
+  {
     label: "Lab guide documentation",
     re: /cookiejar-lab\/docs\/lab-guide|Lab Guide/i
   }
