@@ -2012,6 +2012,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "redtiger-classic-login-sql-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "RedTiger classic SQLi login form disclosed",
+    description:
+      "RedTiger Hackit level1–2 expose username+password POST login forms with disclosed users table names for classic SQL injection drills.",
+    impactOneline:
+      "Public RedTiger level pages document classic SQLi login training surfaces with Tablename: levelN_users hints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "redtigerClassicLoginSqlEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RedTiger classic-login levels are intentional training — isolate hackit VMs from production.",
+      steps: [
+        "Run RedTiger challenges only on dedicated training VMs.",
+        "Use parameterized queries for authentication in production.",
+        "Disable verbose table-name hints on public login pages."
+      ]
+    },
+    fixPrompt:
+      "We host RedTiger classic SQLi login levels. Show how to isolate training labs and fix authentication SQLi.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vuln-expose-evidence",
     platform: "generic",
     category: "Injection",

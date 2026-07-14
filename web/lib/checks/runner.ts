@@ -163,9 +163,20 @@ async function applyWargameBasicAuth(
   }
   const needsAuth = doc.status === 401 || /\.natas\.labs\.overthewire\.org$/i.test(host);
   const knownCreds = knownLabBasicAuth(host);
-  if (!needsAuth && knownCreds && /Pentester Academy Lab|form-signin/i.test(doc.body)) {
-    const authed = await probe.get(url, { maxBytes, headers: basicAuthHeader(knownCreds) });
-    if (authed.status >= 200 && authed.status < 400 && authed.body.length > doc.body.length) return authed;
+  if (!needsAuth && knownCreds) {
+    const shouldAuth =
+      /pentesteracademylab\.appspot\.com$/i.test(host) ||
+      /Pentester Academy Lab|form-signin/i.test(doc.body);
+    if (shouldAuth) {
+      const authed = await probe.get(url, { maxBytes, headers: basicAuthHeader(knownCreds) });
+      if (
+        authed.status >= 200 &&
+        authed.status < 400 &&
+        (authed.body.length > doc.body.length || /Challenge\s+[1-4]/i.test(authed.body))
+      ) {
+        return authed;
+      }
+    }
   }
   if (!needsAuth) return doc;
   let creds =
@@ -610,6 +621,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecureflagEvidence",
   "clientSideImmersiveLabsEvidence",
   "clientSideRedtigerHackitEvidence",
+  "redtigerClassicLoginSqlEvidence",
   "redtigerBlindLoginFormEvidence",
   "clientSideVulnExposeEvidence",
   "clientSideWizerCtfEvidence",
@@ -2311,7 +2323,10 @@ function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
 
 /** povzayd XSS LABS (povzayd.github.io/XSS-LABS — reflected/stored/DOM browser labs). */
 function extractPovzaydXssLabsSeeds(html: string, pageUrl: string): string[] {
-  if (!/povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(html)) return [];
+  const onHub =
+    /povzayd\.github\.io\/XSS-LABS/i.test(pageUrl) ||
+    /povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(html);
+  if (!onHub) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   // GitHub Pages is case-sensitive — lab pages live under /LABS/ not /labs/.
@@ -3877,6 +3892,11 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "/vulnerabilities/",
     "level1",
     "level0",
+    "/c1/",
+    "/c2/",
+    "/c3/",
+    "/c4/",
+    "/c5/",
     "postmessage",
     "rag-vuln",
     "chat-vuln",
@@ -4154,8 +4174,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
   const xvwaSeeds = extractXvwaVulnSeeds(home.body, origin);
   const wizerChalPrioritySeeds =
-    /wizer|sam\.wizer-ctf|wizer-ctf\.com/i.test(home.body)
-      ? Array.from({ length: 8 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
+    /wizer|sam\.wizer-ctf|wizer-ctf\.com/i.test(home.body) ||
+    /wizer-ctf\.com|sam\.wizer-ctf\.com|chal\d+[\w-]*\.vercel\.app/i.test(home.finalUrl)
+      ? Array.from({ length: 15 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
       : [];
   const ctflearnWebPrioritySeeds =
     /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)
@@ -4164,14 +4185,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         )
       : [];
   const povzaydLabPrioritySeeds =
+    /povzayd\.github\.io\/XSS-LABS/i.test(home.finalUrl) ||
     /povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(home.body)
       ? ["LABS/lab1.html", "LABS/lab2.html", "LABS/lab3.html"].map((p) =>
           new URL(p, home.finalUrl).toString()
         )
       : [];
+  const ctfHubPrioritySeeds =
+    /CTF Challenge Hub|Web Security Training Challenges|class="challenge-link"/i.test(home.body)
+      ? Array.from({ length: 5 }, (_, i) => new URL(`/c${i + 1}/`, home.finalUrl).toString())
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...ctfHubPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,
       ...povzaydLabPrioritySeeds,
