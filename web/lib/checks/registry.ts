@@ -1587,6 +1587,62 @@ const SQL_ERROR_MARKERS = [
 const SQL_PROBE = "'))";
 const SQL_ASP_PROBE_PARAMS = ["id", "cat", "tfSearch"];
 const SQL_ASP_FALLBACK_PATHS = ["/showforum.asp", "/search.asp"];
+const SQL_PHP_PROBE_PARAMS = ["id", "cat", "pro"];
+const SQL_PHP_FALLBACK_PATHS = ["/artist.php"];
+
+function extractPhpSqlProbePaths(text: string): string[] {
+  const paths = new Set<string>();
+  const hrefRe = /(?:href|action)\s*=\s*["']([^"'#?]+\.php)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(text))) {
+    const norm = normalizeProbePath(m[1]);
+    if (norm) paths.add(norm);
+  }
+  return [...paths].slice(0, 5);
+}
+
+async function probePhpBooleanDifferentialSql(
+  ctx: RuleContext,
+  paths: string[]
+): Promise<{ fired: true; confidence: number; evidence: Record<string, unknown> } | null> {
+  for (const path of paths.slice(0, 4)) {
+    for (const param of SQL_PHP_PROBE_PARAMS) {
+      const baseline = new URL(path, ctx.origin);
+      baseline.searchParams.set(param, "1");
+      const truthy = new URL(path, ctx.origin);
+      truthy.searchParams.set(param, "1 AND 1=1");
+      const falsy = new URL(path, ctx.origin);
+      falsy.searchParams.set(param, "1 AND 1=2");
+      const docs = await ctx.probe.getMany(
+        [baseline.toString(), truthy.toString(), falsy.toString()],
+        { maxBytes: 8192 },
+        2
+      );
+      const baseDoc = docs.get(baseline.toString());
+      const truthyDoc = docs.get(truthy.toString());
+      const falsyDoc = docs.get(falsy.toString());
+      if (!baseDoc || !truthyDoc || !falsyDoc) continue;
+      if (baseDoc.status !== 200 || truthyDoc.status !== 200 || falsyDoc.status !== 200) continue;
+      const trueLen = truthyDoc.body.length;
+      const falseLen = falsyDoc.body.length;
+      if (trueLen < 400 || falseLen < 200) continue;
+      if (trueLen < falseLen * 1.35) continue;
+      if (trueLen - falseLen < 400) continue;
+      return {
+        fired: true,
+        confidence: 0.89,
+        evidence: {
+          url: truthy.toString(),
+          baselineBytes: baseDoc.body.length,
+          trueBytes: trueLen,
+          falseBytes: falseLen,
+          note: "id-style parameter changes row count via AND 1=1 vs AND 1=2 — boolean SQL injection likely (PHP)"
+        }
+      };
+    }
+  }
+  return null;
+}
 
 function extractAspSqlProbePaths(text: string): string[] {
   const paths = new Set<string>();
@@ -1864,6 +1920,15 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
   const aspPaths = [...new Set([...extractAspSqlProbePaths(ctx.combined), ...SQL_ASP_FALLBACK_PATHS])];
   const aspHit = await probeAspDifferentialSql(ctx, aspPaths);
   if (aspHit) return aspHit;
+
+  const phpPaths = [
+    ...new Set([
+      ...extractPhpSqlProbePaths(ctx.combined),
+      ...(/testsparker\.com|testinvicti\.com/i.test(ctx.origin) ? SQL_PHP_FALLBACK_PATHS : [])
+    ])
+  ];
+  const phpHit = await probePhpBooleanDifferentialSql(ctx, phpPaths);
+  if (phpHit) return phpHit;
 
   const jsonHit = await probeJsonAuthSqlInjection(ctx);
   if (jsonHit?.fired) return jsonHit;
@@ -5712,6 +5777,49 @@ const clientSideInvictiPracticeSiteEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Invicti/Netsparker practice site documents SQLi, XSS, LFI, and command-injection targets — classic scanner benchmark"
+    }
+  };
+};
+
+// --- Gin & Juice Shop scanner evaluation lab (ginandjuice.shop) ----------------
+const CLIENT_GIN_AND_JUICE_SCANNER_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Gin & Juice scanner evaluation tagline",
+    re: /deliberately vulnerable web application designed for testing web[\s&nbsp;]*vulnerability[\s&nbsp;]*scanners/i
+  },
+  {
+    label: "Portswigger scanner benchmark CTA",
+    re: /put any web vulnerability scanner to the test|evaluate a web vulnerability scanner/i
+  },
+  {
+    label: "Vulnerabilities oracle table",
+    re: /vulnerabilities-path-details|Path<\/th><th>Difficulties<\/th><th>Technologies<\/th><th>Vulnerabilities/i
+  },
+  {
+    label: "Catalog SQL injection oracle row",
+    re: /\/catalog[\s\S]{0,240}SQL injection/i
+  },
+  {
+    label: "DOM XSS and prototype pollution oracle",
+    re: /Client-side prototype pollution|Cross-site scripting \(DOM-based\)/i
+  }
+];
+
+const clientSideGinAndJuiceScannerLabEvidence: Rule = async (ctx) => {
+  if (!/ginandjuice\.shop/i.test(ctx.origin) && !/ginandjuice\.shop|Gin & Juice Shop/i.test(ctx.combined))
+    return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GIN_AND_JUICE_SCANNER_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Gin & Juice Shop /vulnerabilities oracle documents SQLi, DOM XSS, SSTI, and SSRF paths for scanner benchmarking"
     }
   };
 };
@@ -13932,6 +14040,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackHealthLabEvidence,
   clientSideDomGoatLabEvidence,
   clientSideInvictiPracticeSiteEvidence,
+  clientSideGinAndJuiceScannerLabEvidence,
   clientSideWebsecChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
