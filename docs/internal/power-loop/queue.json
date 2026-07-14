@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://gitagent-securebot-app.vercel.app/",
+      "source": "Youranalyst-coder/gitagent-securebot — OWASP Top 10 demo scanner with bundled VulnBot target (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/grpc-goat/",
+      "source": "OWASP VWAD — rootxjs/grpc-goat gRPC vulnerability lab directory entry (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api-labs/",
+      "source": "dkyazzentwatwa/hack-this-site — REST/GraphQL/SOAP API security labs module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a03.html",
+      "source": "dkyazzentwatwa/hack-this-site — A03 injection category hands-on lab page (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a01.html",
+      "source": "dkyazzentwatwa/hack-this-site — A01 broken access control category lab page (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://ai-prompt-lab.vercel.app/",
       "source": "AI prompt injection security training lab — interactive LLM attack demos (web search)",
       "auth": "public_demo"
@@ -3369,5 +3394,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T21:10:00.000Z"
+  "updated_at": "2026-07-14T22:26:00.000Z"
 }
