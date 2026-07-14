@@ -2222,6 +2222,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "getElementById innerHTML assignment with user message variable",
     re: /getElementById\([^)]+\)\.innerHTML\s*=\s*(?:msg|html|content|val)\b/
+  },
+  {
+    label: "document.write on search/query form input",
+    re: /document\.write\s*\(\s*(?:search|query|input|val)\b/
+  },
+  {
+    label: "Stored comment div.innerHTML assignment",
+    re: /div\.innerHTML\s*=\s*comment\b/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -10314,6 +10322,18 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
   {
     label: "BugBountyHunter open redirect challenge title",
     re: /may only redirect to \*\.bugbountyhunter\.com/i
+  },
+  {
+    label: "BugBountyHunter harmless page XSS challenge title",
+    re: /Can you find any XSS on this .harmless. page/i
+  },
+  {
+    label: "BugBountyHunter sensitive information challenge title",
+    re: /Can you obtain the sensitive information somehow/i
+  },
+  {
+    label: "BugBountyHunter CORS whitelist bypass challenge title",
+    re: /Checking if a whitelisted string is found is a bad approach/i
   },
   {
     label: "BugBountyHunter challenges disabled notice",

@@ -2313,11 +2313,21 @@ function extractPovzaydXssLabsSeeds(html: string, pageUrl: string): string[] {
   if (!/povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["LABS/lab0.html", "LABS/lab1.html", "LABS/lab2.html"]) {
+  // GitHub Pages is case-sensitive — lab pages live under /LABS/ not /labs/.
+  for (let i = 0; i <= 5; i++) {
     try {
-      const u = new URL(p, pageUrl);
+      const u = new URL(`LABS/lab${i}.html`, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*\/LABS\/lab\d+\.html)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -2736,6 +2746,10 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
     } catch {
       /* ignore */
     }
+  }
+  // sam.wizer-ctf.com promo hub omits chal*.vercel.app links — seed known public instances.
+  for (let i = 1; i <= 8; i++) {
+    out.add(`https://chal${i}.vercel.app/`);
   }
   return [...out];
 }
@@ -4138,9 +4152,21 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   );
   const dvwaSeeds = extractDvwaVulnSourceSeeds(home.body, origin);
   const xvwaSeeds = extractXvwaVulnSeeds(home.body, origin);
+  const wizerChalPrioritySeeds =
+    /wizer|sam\.wizer-ctf|wizer-ctf\.com/i.test(home.body)
+      ? Array.from({ length: 8 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
+      : [];
+  const povzaydLabPrioritySeeds =
+    /povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(home.body)
+      ? ["LABS/lab1.html", "LABS/lab2.html", "LABS/lab3.html"].map((p) =>
+          new URL(p, home.finalUrl).toString()
+        )
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...wizerChalPrioritySeeds,
+      ...povzaydLabPrioritySeeds,
       ...archonHostFallbackSeeds,
       ...labHubSeeds,
       ...docusaurusLabSeeds,
