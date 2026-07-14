@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T19:00:00.000Z",
+  "updated_at": "2026-07-14T20:13:59.353Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 362,
-  "total_findings": 1436,
+  "total_sites_scanned": 370,
+  "total_findings": 1484,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 86,
-  "discovery_findings": 806,
+  "discovery_urls_added": 91,
+  "discovery_findings": 848,
   "improvements_shipped": 452,
-  "last_run": "2026-07-14T19:00:00.000Z",
+  "last_run": "2026-07-14T20:13:59.353Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 1,
-      "probes_run": 224,
+      "probes_run": 173,
       "note": "No benchmark misses — recall stable at 6/6 (6 findings on cold pass)",
       "benchmark_recall": {
         "juice-shop": {
@@ -52,20 +52,33 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "HackSec password portal; CTF hub subpath URL oracle; SixHack CTF FAQ + platform crawl seeds",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 42,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — removed from active queue)"
+      ],
+      "skipped_48h": [
+        "https://chal10.vercel.app/",
+        "https://chal11.vercel.app/",
+        "https://vwad.owasp.org/app/webgoat/",
+        "https://koadt.github.io/oss-oopssec-store/roadmap/"
+      ],
+      "focus": "VWAD directory entries (juice-shop/DVWA/wrongsecrets) + SecLab XSS path; backlog VWAD/SKF/crAPI2 labs"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "hacksec.in: WordPress password-protected ethical hacking portal evidence (5→6 findings)",
-      "shiny-computing-machine.vercel.app/c1/: CTF hub path oracle restores client-side-ctf-challenge-hub-evidence under Vercel checkpoint",
-      "sixhackacademy.com/ctf/: FAQ JSON-LD + /ctf/ crawl seeds extend SixHack CTF lab discovery"
+      "crapi2.apisec.ai: critical exposed .env + SSRF endpoint-fetch (6 findings)",
+      "skillaudit.vercel.app: unprotected webhook + OpenAPI docs exposed (8 findings)",
+      "secresearchlab.web.app: SQLi + XXE + SSRF client-bundle oracles (7 findings)",
+      "secureby.design: SKF lab markers + postMessage DOM XSS (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
-      "516-hackers.github.io: GitHub Pages deploy offline",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "vwad.owasp.org/app/pwnshop/: VWAD directory slug 404 — use pwnshop.ctfsecurity.com direct deploy",
+      "chal12/chal13.vercel.app: Wizer CTF instances retired (404) — chal14–17 still live",
+      "frontend-xss-demo.vercel.app: deploy offline — github.io mirror reachable"
     ]
   },
   "discovery_highlights": {
@@ -166,11 +179,17 @@
     "api-goat.vercel.app": 2,
     "ctf-maker-monorepo.vercel.app": 2,
     "crapi2.apisec.ai": 6,
+    "secureby.design": 7,
+    "cyberscavengerhunt.com": 6,
+    "pentesteracademylab.appspot.com": 2,
+    "hackable.so": 6,
+    "secresearchlab.web.app": 7,
+    "skillaudit.vercel.app": 8,
     "agentpwn.com": 5,
     "labs.hackadvisor.io": 7,
     "sixhackacademy.com": 3,
-    "secresearchlab.web.app": 5,
-    "skillaudit.vercel.app": 6,
+    "secresearchlab.web.app": 7,
+    "skillaudit.vercel.app": 8,
     "prompt-injection-lab.vercel.app": 3,
     "ai-prompt-lab.vercel.app": 4,
     "securebank-lab.vercel.app": 1,
@@ -179,7 +198,6 @@
     "crapi.lab.pentest-forge.com": 1,
     "vampi.lab.pentest-forge.com": 1,
     "dvga.lab.pentest-forge.com": 1,
-    "hackable.so": 3,
     "cors-lab.vercel.app": 5,
     "justinsteven.github.io/gartnerpeerinsightsxssdemo": 1,
     "prompt-injection-demo.vercel.app": 2,
