@@ -2982,7 +2982,32 @@
       "url": "https://ethantroy.dev/labs/damn-vulnerable-trust-center/",
       "source": "ethanolivertroy/DamnVulnerableTrustCenter \u2014 cloud security CTF trust-center lab landing (archived Mar 2026, Docker runnable)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wire.botsters.dev/",
+      "source": "SEKSBot/botsters \u2014 Show HN agent-security forum with injection-scanned API (wire.botsters.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/login",
+      "source": "PortSwigger Gin & Juice Shop \u2014 scanner benchmark auth entry (carlos/hunter2 oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/vulnerabilities",
+      "source": "PortSwigger Gin & Juice Shop \u2014 published vuln path oracle for scanner benchmarking",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog",
+      "source": "PortSwigger Gin & Juice Shop \u2014 SQLi/XSS catalog paths (Burp sample report benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pathfinding.cloud/",
+      "source": "pathfinding.cloud \u2014 AWS IAM privilege-escalation lab library + self-hosted scenarios (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T04:08:00.000Z"
+  "updated_at": "2026-07-14T15:06:00.000Z"
 }
