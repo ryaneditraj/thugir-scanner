@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T05:20:00.000Z",
+  "updated_at": "2026-07-14T06:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 597,
   "discovery_findings": 4049,
-  "improvements_shipped": 425,
-  "last_run": "2026-07-14T05:20:00.000Z",
+  "improvements_shipped": 428,
+  "last_run": "2026-07-14T06:00:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05:00",
+    "hour_utc": "06:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "findings": 8,
@@ -50,29 +50,32 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Discovery queue per-URL dedup; CookieJar lab-guide crawl; Jekyll Rouge innerHTML sink windows",
+      "focus": "VulnShop bundle debug-route evidence; VWAD crAPI/bWAPP JSON-LD listing markers",
       "improvements_shipped_this_run": 3,
       "validated_targets": {
-        "www.bugbountyhunter.com/challenge?id=9": "0→2 findings (+client-side-bugbountyhunter-evidence; unblocked from origin-only 48h skip)",
-        "cyberdesserts.github.io/cookiejar-lab": "crawl now includes /cookiejar-lab/cookiejar-lab/docs/lab-guide.html alongside demo/ (4 findings maintained)",
-        "maz4lhacks.vercel.app/posts/reflected-xss": "Rouge innerHTML regex validated on full page HTTP evidence; live scan intermittent on Vercel checkpoint"
+        "vulnshop.vercel.app": "3→4 findings (+client-side-vulnshop-evidence from /api/debug/config No auth required bundle markers)",
+        "vwad.owasp.org/app/crapi": "3→4 findings (+client-side-api-security-lab-evidence from crAPI OWASP Top 10 for APIs JSON-LD)",
+        "vwad.owasp.org/app/bwapp": "3→4 findings (+client-side-bwapp-evidence from 100 web bugs + OWASP Top 10 VWAD listing)"
       }
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "bugbountyhunter.com/challenge?id=9: admin-panel title oracle now scannable (was skipped by origin dedup)",
-      "cookiejar-lab: lab-guide session-replay docs now in crawl alongside interactive demo",
-      "maz4lhacks reflected-xss: Rouge-highlighted getElementById→innerHTML=q pattern widened for syntax spans"
+      "vulnshop.vercel.app: bundle documents zero-auth /api/debug/config even when Railway backend is down",
+      "vwad.owasp.org/app/crapi: crAPI VWAD JSON-LD now triggers API security lab evidence",
+      "vwad.owasp.org/app/bwapp: bWAPP VWAD listing now triggers bWAPP training catalog evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "maz4lhacks.vercel.app: Vercel Security Checkpoint may serve truncated page to scanner UA",
-      "bugbountyhunter.com challenges 10–12: disabled notice — title oracles only until platform relaunches",
-      "chal9–chal18: Vercel checkpoint may block chal*.vercel.app bundles intermittently from cloud scans"
+      "vulnshop-production.up.railway.app: backend returns 404 Application not found — live API probes unavailable",
+      "acuart.phpnet.us: DNS dead — classic Acunetix demo unreachable",
+      "vwad.owasp.org/app/dvga: 404 page — DVGA listing removed from VWAD directory"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
+    "vulnshop.vercel.app": 4,
+    "vwad.owasp.org/app/crapi": 4,
+    "vwad.owasp.org/app/bwapp": 4,
     "www.bugbountyhunter.com/challenge?id=9": 2,
     "cyberdesserts.github.io/cookiejar-lab": 4,
     "maz4lhacks.vercel.app/posts/reflected-xss": 5,

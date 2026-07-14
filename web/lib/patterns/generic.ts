@@ -3468,6 +3468,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnshop-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop pentest practice lab disclosed",
+    description:
+      "VulnShop is an intentionally vulnerable e-commerce SPA that documents unauthenticated /api/debug/config and /api/debug/users routes on a public Railway backend, exposing secret keys and plaintext passwords.",
+    impactOneline:
+      "Public VulnShop bundles wire a production Railway API with zero-auth debug endpoints documented in the client UI.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnshopEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnShop is intentional training software — isolate lab backends and remove debug routes from any production deploy.",
+      steps: [
+        "Remove or gate /api/debug/* routes behind admin authentication.",
+        "Rotate secret_key and demo passwords if the Railway backend was publicly reachable.",
+        "Do not copy VulnShop debug-route patterns into production APIs."
+      ]
+    },
+    fixPrompt:
+      "We host a VulnShop-style pentest practice SPA. Show how to remove unauthenticated /api/debug routes and proxy sensitive config server-side.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-tegalsec-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
