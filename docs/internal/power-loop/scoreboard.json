@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T04:15:00.000Z",
+  "updated_at": "2026-07-14T15:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1217,
-  "total_findings": 5442,
-  "critical_findings": 39,
+  "total_sites_scanned": 1226,
+  "total_findings": 5494,
+  "critical_findings": 40,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 592,
-  "discovery_findings": 4005,
-  "improvements_shipped": 422,
-  "last_run": "2026-07-14T04:15:00.000Z",
+  "discovery_urls_added": 597,
+  "discovery_findings": 4049,
+  "improvements_shipped": 419,
+  "last_run": "2026-07-14T15:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "15:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "findings": 8,
       "recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings, pages_crawled=6 probes=259)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,41 +50,52 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Wizer chal9–15 priority crawl; RedTiger level1 classic SQL login; Pentester Academy Lab proactive basic auth",
-      "improvements_shipped_this_run": 3,
-      "validated_targets": {
-        "chal10.vercel.app": "2→4 findings (+dangerous-html-sinks, secret-resend via chal1 crawl)",
-        "redtiger.labs.overthewire.org/level1.php": "3→4 findings (+redtiger-classic-login-sql-evidence)",
-        "pentesteracademylab.appspot.com": "client-side-pentester-academy-lab-evidence maintained with proactive student:password auth"
-      }
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 44,
+      "new_urls": [
+        "https://wire.botsters.dev/",
+        "https://ginandjuice.shop/login",
+        "https://ginandjuice.shop/vulnerabilities",
+        "https://ginandjuice.shop/catalog",
+        "https://pathfinding.cloud/"
+      ],
+      "deferred_new_urls": "new URLs queued at tail behind 360+ eligible backlog",
+      "scanned_backlog": [
+        "koadt.github.io/oss-oopssec-store (5-6 findings)",
+        "ashimkoirala.github.io/HackLab (6 findings)",
+        "vulnshop.vercel.app (3 findings)",
+        "dxx33.github.io/WebVulnsGuide (8 findings, +server-side-eval-evidence critical)",
+        "akbarbashakm.github.io/frontend-security-examples (5 findings)",
+        "gauravkhurana.com/SQLInjection (6 findings)"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings)",
-      "chal10.vercel.app: wizerChalPrioritySeeds chal1–15 + finalUrl oracle restores bundle XSS/secret findings",
-      "redtiger level1.php: classic user+password SQLi login form now distinct from blind levelNlogin drills",
-      "pentesteracademylab.appspot.com: always-on student:password unlocks Challenge 1–4 hub markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "dxx33.github.io/WebVulnsGuide: 8 findings incl critical server-side-eval-evidence",
+      "ashimkoirala.github.io/HackLab: 6 findings incl client-side-sql-evidence + dangerous-html-sinks",
+      "koadt.github.io/oss-oopssec-store: 5-6 findings across roadmap + store paths"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "webexp05.vercel.app / shiny-computing-machine: Vercel Security Checkpoint blocks ThugirScanner UA (403)",
-      "chal10–chal15: Vercel checkpoint may block chal*.vercel.app bundles intermittently from cloud scans",
-      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404 — deploy offline"
+      "vulnshop.vercel.app: thin surface (3 findings, pages_crawled=1) — demo panels may need deeper crawl",
+      "bugbountytraining.com/fastfoodhackings: 404 — zseano playground offline",
+      "enclav.up.railway.app: 404 — Railway deploy offline",
+      "pathfinding.cloud: AWS IAM privesc labs are self-hosted scenarios — shallow landing scan expected"
     ]
   },
   "discovery_highlights": {
+    "dxx33.github.io/WebVulnsGuide": 8,
+    "ashimkoirala.github.io/HackLab": 6,
+    "koadt.github.io/oss-oopssec-store": 6,
+    "gauravkhurana.com/SQLInjection": 6,
+    "akbarbashakm.github.io/frontend-security-examples": 5,
+    "juice-shop.herokuapp.com": 8,
     "chal10.vercel.app": 4,
-    "chal11.vercel.app": 4,
     "chal14.vercel.app": 6,
     "chal15.vercel.app": 7,
-    "maz4lhacks.vercel.app/posts/reflected-xss": 5,
-    "juice-shop.herokuapp.com": 8,
     "redtiger.labs.overthewire.org/level1.php": 4,
     "pentesteracademylab.appspot.com": 2,
-    "sam.wizer-ctf.com": 6,
-    "vulnforge.vercel.app": 4,
-    "povzayd.github.io/XSS-LABS": 5,
-    "www.bugbountyhunter.com/challenge?id=8": 2,
-    "web.ctflearn.com/web4": 4,
     "chimera.atlascrew.dev": 9,
     "hack-yourself-first.azurewebsites.net": 7,
     "demo.testfire.net": 6,
