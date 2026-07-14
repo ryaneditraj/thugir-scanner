@@ -1613,16 +1613,35 @@ async function probePhpBooleanDifferentialSql(
       truthy.searchParams.set(param, "1 AND 1=1");
       const falsy = new URL(path, ctx.origin);
       falsy.searchParams.set(param, "1 AND 1=2");
+      const tautology = new URL(path, ctx.origin);
+      tautology.searchParams.set(param, "1 OR 1=1");
       const docs = await ctx.probe.getMany(
-        [baseline.toString(), truthy.toString(), falsy.toString()],
-        { maxBytes: 8192 },
+        [baseline.toString(), truthy.toString(), falsy.toString(), tautology.toString()],
+        { maxBytes: 32_768 },
         2
       );
       const baseDoc = docs.get(baseline.toString());
       const truthyDoc = docs.get(truthy.toString());
       const falsyDoc = docs.get(falsy.toString());
-      if (!baseDoc || !truthyDoc || !falsyDoc) continue;
+      const tautologyDoc = docs.get(tautology.toString());
+      if (!baseDoc || !truthyDoc || !falsyDoc || !tautologyDoc) continue;
       if (baseDoc.status !== 200 || truthyDoc.status !== 200 || falsyDoc.status !== 200) continue;
+      if (tautologyDoc.status === 200) {
+        const baseLen = baseDoc.body.length;
+        const orLen = tautologyDoc.body.length;
+        if (orLen > baseLen * 2.5 && orLen - baseLen > 2000) {
+          return {
+            fired: true,
+            confidence: 0.9,
+            evidence: {
+              url: tautology.toString(),
+              baselineBytes: baseLen,
+              tautologyBytes: orLen,
+              note: "OR 1=1 tautology returns far more rows than baseline — SQL injection likely (PHP)"
+            }
+          };
+        }
+      }
       const trueLen = truthyDoc.body.length;
       const falseLen = falsyDoc.body.length;
       if (trueLen < 400 || falseLen < 200) continue;

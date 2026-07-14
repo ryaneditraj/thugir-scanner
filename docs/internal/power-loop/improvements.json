@@ -2765,6 +2765,18 @@
       "slug": "allsafe-queue-android-only-reject",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: allsafe.vercel.app serves unrelated marketing site; t0thkr1s/allsafe is Android APK-only — queue entry disabled"
+    },
+    {
+      "source": "discovery:php.testsparker.com",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /artist.php?id=1 OR 1=1 returns 26639 bytes vs id=1 baseline 2916; probePhpBooleanDifferentialSql OR tautology; php.testsparker.com findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "client-side-gin-and-juice-scanner-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities oracle table lists SQL injection + DOM XSS paths + deliberately vulnerable web application designed for testing web vulnerability scanners; ginAndJuicePrioritySeeds; ginandjuice.shop findings 3→4; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4972,6 +4984,16 @@
       "source": "discovery:aspnet.testsparker.com",
       "slug": "sitemap-listed-sensitive-file-exposed",
       "shipped_at": "2026-07-14T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:php.testsparker.com",
+      "slug": "php-artist-tautology-sqli-probe",
+      "shipped_at": "2026-07-14T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "client-side-gin-and-juice-scanner-lab-evidence",
+      "shipped_at": "2026-07-14T16:10:00.000Z"
     }
   ]
 }
