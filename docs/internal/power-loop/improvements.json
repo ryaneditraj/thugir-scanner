@@ -2849,6 +2849,24 @@
       "slug": "hacking-lab-ctf-platform-priority-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CTF Platform – Organize Capture The Flag + /ctf_platform route on hacking-lab.com; hackingLabPrioritySeeds prepends /ctf_platform/ + /events/; hacking-lab.com findings 3 maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cylabacademy.org",
+      "slug": "cylab-hub-pages-primer-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mini-competitions throughout the year + timed challenge drop on /competitors.html + primer.cylabacademy.org CTF Primer link; cylabAcademyPrioritySeeds + extractPicoctfCylabSeeds expand to learners/competitors/educators/primer; cylabacademy.org findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-ctf-platform-title-marker",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>CTF Platform – Organize Capture The Flag events with Hacking-Lab</title> on /ctf_platform/; CLIENT_HACKING_LAB_RES CTF Platform title marker; hacking-lab.com/ctf_platform/ client-side-hacking-lab-evidence maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:security-trainer.vercel.app",
+      "slug": "sectrainer-hyphen-url-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecTrainer meta + lesson-content OWASP Top 10/sql-injection/xss-basics on security-trainer.vercel.app; extractSectrainerSpaSeeds matches security-trainer hyphen URL + sectrainerPrioritySeeds prepends /modules + /ctf; security-trainer.vercel.app findings 0→16 incl client-side-sectrainer-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5126,6 +5144,21 @@
       "source": "discovery:hacking-lab.com",
       "slug": "hacking-lab-ctf-platform-priority-crawl",
       "shipped_at": "2026-07-14T20:26:00.000Z"
+    },
+    {
+      "source": "discovery:cylabacademy.org",
+      "slug": "cylab-hub-pages-primer-crawl",
+      "shipped_at": "2026-07-14T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-ctf-platform-title-marker",
+      "shipped_at": "2026-07-14T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:security-trainer.vercel.app",
+      "slug": "sectrainer-hyphen-url-priority-seeds",
+      "shipped_at": "2026-07-14T21:10:00.000Z"
     }
   ]
 }
