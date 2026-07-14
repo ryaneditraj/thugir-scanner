@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T07:30:00.000Z",
+  "updated_at": "2026-07-14T08:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1246,
-  "total_findings": 5571,
-  "critical_findings": 39,
+  "total_sites_scanned": 1255,
+  "total_findings": 5619,
+  "critical_findings": 40,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 607,
-  "discovery_findings": 4096,
-  "improvements_shipped": 431,
-  "last_run": "2026-07-14T07:30:00.000Z",
+  "discovery_urls_added": 612,
+  "discovery_findings": 4136,
+  "improvements_shipped": 425,
+  "last_run": "2026-07-14T08:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07:00",
+    "hour_utc": "08:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 7,
+      "findings": 8,
       "recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings on validation)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings; pages_crawled=6 probes=259)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,44 +50,46 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "Queued CyberShield Lab, InsecureShield githack portal, JWTLens JWT scanner landing",
-      "improvements_shipped_this_run": 3,
-      "validated_targets": {
-        "cybersheild-lab.vercel.app": "4 findings (OWASP Top 10 lab + SQLi/XSS modules)",
-        "raw.githack.com/secretsifter/insecureshield-demo": "3 findings (HTML comment API keys + db_conn)",
-        "jwtlens.netlify.app": "2 findings (JWT scanner oracles; VulnerableApp crawl FP fixed)"
-      }
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 40,
+      "focus": "Backlog labs: Hacksplaining XSSI, Vulnerable Bank weblock.ru, XSS victim bank, DevSecOps lab, OWASP Top 10 labs, RigLabs, VulnLab",
+      "deferred_new_urls": [
+        "https://lazyweb.vercel.app/",
+        "https://vwad.owasp.org/app/crapi/",
+        "https://vwad.owasp.org/app/bwapp/",
+        "https://vwad.owasp.org/app/oopssec-store/",
+        "https://vwad.owasp.org/app/vampi/"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 — no benchmark misses",
-      "cybersheild-lab.vercel.app: CyberShield OWASP Top 10 SQLi/XSS lab evidence (3→4 findings)",
-      "insecureshield-demo githack: HTML comment discloses apim-subscription-key + dev_admin + db_conn (2→3)",
-      "jwtlens.netlify.app: JWTLens 62-check Burp JWT scanner markers (1→2); VulnerableApp seed host-scope fix"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 — no benchmark misses (8 findings)",
+      "demo.weblock.ru: Vulnerable Bank 8 findings — IDOR, XSS sinks, prompt-injection oracle, OpenAPI exposed",
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: 6 findings — OpenAI key in bundle + IDOR/API lab oracles",
+      "vulnlab.vercel.app: 7 findings — SQLi/SSRF/XXE/file-upload client oracles (lovable platform)",
+      "www.hacksplaining.com/lessons/xssi/start: 3 findings — first XSSI lesson scan"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "prompt-injection-lab.vercel.app: URL hijacked to unrelated portfolio — remove from queue",
-      "react-xss-appsec-demo githack: main.jsx 403 — needs raw sibling JSX fetch",
-      "cybersheild-lab: server-side SQLi/XSS exploitation requires Flask backend (offline demo data)"
+      "zero-health/sqli-lab/xss-lab/ssrf-lab/ctf-maker-monorepo: queued behind 463+ URL backlog",
+      "lazyweb + VWAD crapi/bwapp/oopssec-store/vampi: added this run, deferred behind backlog"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
-    "cybersheild-lab.vercel.app": 4,
-    "jwtlens.netlify.app": 2,
-    "raw.githack.com/secretsifter/insecureshield-demo": 3,
+    "demo.weblock.ru": 8,
+    "vulnlab.vercel.app": 7,
+    "everdan0075.github.io/DevSecOps-Hacking-Lab": 6,
+    "dev-lucasoliveira.github.io/frontend-xss-demo": 4,
+    "swarnadip-kar.github.io/xss-victim": 4,
+    "mehdiaitsaid.github.io/owasp-top-10-labs": 4,
+    "riglabs-cyber-lab.vercel.app": 4,
+    "www.hacksplaining.com/lessons/xssi/start": 3,
     "vwad.owasp.org/app/webgoat": 5,
-    "redtiger.labs.overthewire.org/level10.php": 3,
-    "www.hacksplaining.com/lessons/xss-reflected/start": 4,
-    "cyberdesserts.github.io/cookiejar-lab": 4,
     "vwad.owasp.org/app/crapi": 4,
     "vwad.owasp.org/app/bwapp": 4,
-    "vulnshop.vercel.app": 4,
+    "cybersheild-lab.vercel.app": 4,
     "hack-yourself-first.azurewebsites.net": 7,
-    "demo.testfire.net": 6,
-    "pentesterlab.com": 5,
-    "www.hackthissite.org": 5
+    "demo.testfire.net": 6
   }
 }
