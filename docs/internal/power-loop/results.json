@@ -10567,6 +10567,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only misconfig+xss before Heroku wake retry.",
       "scanned_at": "2026-07-14T22:10:00.000Z"
+    },
+    {
+      "run_id": "2026-07-14T23:05:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall via staging fallback (primary heroku DNS NXDOMAIN domain not found; pages_crawled=6 probes=240)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Primary oracle juice-shop.herokuapp.com unreachable — staging fallback used.",
+      "scanned_at": "2026-07-14T23:05:00.000Z"
     }
   ]
 }
