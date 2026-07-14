@@ -2531,6 +2531,24 @@
       "slug": "bugbountyhunter-challenge-8-15-16-title-oracles",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=8 harmless page XSS title; #15 sensitive information title; #16 CORS whitelist bypass title; findings 3→2 (SQL FP removed); benchmark 6/6"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-9-12-title-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=9 title What's behind this admin panel; #10 HackerPhotos; #11 I've won a bounty generator; #12 Can you steal the SSO token; CLIENT_BUGBOUNTYHUNTER_RES title markers; challenge pages 2 findings each incl client-side-bugbountyhunter-evidence; benchmark juice-shop 8 findings 6/6"
+    },
+    {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "client-side-vulnforge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title VulnForge – AI-Guided Web Attack Surface Explorer + vulnforge-backend.onrender.com + Surface Inventory + x-vulnforge-api-key in index-wBrvbwRF.js; vulnforge.vercel.app findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "vulnforge-hardcoded-api-key",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bh=\"change_me_for_prod\" wired to x-vulnforge-api-key header 141 bytes apart in bundle; HARDCODED_CRED_RES proximity match; vulnforge.vercel.app gains vibe-hardcoded-demo-credentials; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4598,6 +4616,21 @@
       "source": "discovery:bugbountyhunter.com",
       "slug": "bugbountyhunter-disabled-challenge-sql-fp-fix",
       "shipped_at": "2026-07-14T00:54:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-9-12-title-oracles",
+      "shipped_at": "2026-07-14T02:00:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "client-side-vulnforge-evidence",
+      "shipped_at": "2026-07-14T02:00:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "vulnforge-hardcoded-api-key",
+      "shipped_at": "2026-07-14T02:00:00.000Z"
     }
   ]
 }
