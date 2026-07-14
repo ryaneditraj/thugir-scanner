@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-14T00:44:00.000Z",
+  "updated_at": "2026-07-14T01:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnforge.vercel.app/",
+      "source": "webspoilt/vulnforge-academy — 20-level OWASP Top 10 CTF lab (Vercel homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=9",
+      "source": "BugBountyHunter zseano — open-redirect / URL manipulation challenge #9",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=10",
+      "source": "BugBountyHunter zseano — XSS / HTML injection challenge #10",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=11",
+      "source": "BugBountyHunter zseano — CSRF / state-change challenge #11",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=12",
+      "source": "BugBountyHunter zseano — IDOR / access-control challenge #12",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.bugbountyhunter.com/challenge?id=8",
       "source": "BugBountyHunter zseano — static-page XSS challenge #8 (harmless page with vulnerable JS)",
