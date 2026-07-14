@@ -2932,7 +2932,32 @@
       "url": "https://openvaultbank.com/cheatsheet",
       "source": "OpenVault Bank \u2014 OWASP API Top 10 vulnerability cheatsheet with /api/v1 endpoint oracles (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://chal16.vercel.app/",
+      "source": "Wizer CTF #16 \u2014 public developer security training lab (vercel.app chal* series, live probe)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal17.vercel.app/",
+      "source": "Wizer CTF #17 \u2014 public developer security training lab (vercel.app chal* series, live probe)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal18.vercel.app/",
+      "source": "Wizer CTF #18 \u2014 public developer security training lab (vercel.app chal* series, live probe)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctfv.vercel.app/",
+      "source": "CTFv Daily Challenges \u2014 public web security CTF platform with rotating challenges (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf.ebucket.dev/",
+      "source": "EmergencyBucket/pail \u2014 public CTF challenge platform on Railway (GitHub homepage)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-13T20:26:00.000Z"
+  "updated_at": "2026-07-14T03:08:00.000Z"
 }
