@@ -5128,12 +5128,22 @@ const CLIENT_CTF_CHALLENGE_HUB_RES: { label: string; re: RegExp }[] = [
   {
     label: "Path traversal training challenge label",
     re: /Path Traversal|directory traversal/i
+  },
+  {
+    label: "CTF hub child challenge path oracle",
+    re: /(?:webexp05|shiny-computing-machine)\.vercel\.app\/c\d+\//i
+  },
+  {
+    label: "CTF hub numbered challenge route",
+    re: /\/c\d+\/(?:\?|$)/i
   }
 ];
 
 const clientSideCtfChallengeHubEvidence: Rule = async (ctx) => {
-  const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${
+    ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""
+  }`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CTF_CHALLENGE_HUB_RES) {
     const m = corpus.match(re);
@@ -6016,6 +6026,14 @@ const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
     label: "SixHack CTF Labs nav link",
     re: /href\s*=\s*["']\/ctf-labs\/?["']/i
+  },
+  {
+    label: "SixHack free CTF Labs FAQ",
+    re: /Los CTF Labs de SixHack Academy son gratuitos/i
+  },
+  {
+    label: "SixHack OWASP techniques curriculum blurb",
+    re: /SQL injection, XSS, IDOR, SSRF, path traversal, file upload[\s\S]{0,80}OWASP Top 10/i
   }
 ];
 
@@ -10065,6 +10083,46 @@ const clientSideWebgoatEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HackSec.in password-protected ethical hacking training portal ----------------
+const CLIENT_HACKSEC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hacksec.in site title",
+    re: /<title>\s*hacksec\.in\s*<\/title>|hacksec\.in/i
+  },
+  {
+    label: "WordPress password-protected login shell",
+    re: /login-password-protected|password-protected-login/i
+  },
+  {
+    label: "Password protected authentication form",
+    re: /password-protected=login|name="password_protected_pwd"/i
+  },
+  {
+    label: "Password protected redirect target",
+    re: /redirect_to=https%3A%2F%2Fhacksec\.in/i
+  }
+];
+
+const clientSideHacksecEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSEC_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/hacksec\.in|password-protected/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "hacksec.in is a password-protected WordPress portal gating ethical hacking lab content"
+    }
+  };
+};
+
 // --- Hacking-Lab AG cyber security training platform (hacking-lab.com) ------------
 const CLIENT_HACKING_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -10094,9 +10152,11 @@ const CLIENT_HACKING_LAB_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideHackingLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_HACKING_LAB_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
@@ -14262,6 +14322,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
   clientSideHackingLabEvidence,
+  clientSideHacksecEvidence,
   clientSideSolydTrainingEvidence,
   clientSideCylabAcademyEvidence,
   clientSideVulnerableappEvidence,
