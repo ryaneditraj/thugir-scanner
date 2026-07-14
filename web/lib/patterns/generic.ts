@@ -792,6 +792,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ctf-challenge-hub-evidence",
+    platform: "generic",
+    category: "general",
+    severityDefault: "medium",
+    title: "Static CTF challenge hub with linked web security labs",
+    description:
+      "A static CTF challenge hub indexes hands-on web security labs (SQL injection, XSS, JWT, path traversal) across /c1/–/cN/ child routes — common on Hack the Basics and webexp05-style training deploys.",
+    impactOneline:
+      "Public CTF hub pages document deliberately vulnerable challenge routes for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfChallengeHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF training hubs are intentional — isolate lab instances from production and gate with auth when needed.",
+      steps: [
+        "Run challenge hubs only on isolated training infrastructure.",
+        "Do not reuse challenge vulnerability patterns in production apps.",
+        "Add auth if challenges should not be publicly enumerable."
+      ]
+    },
+    fixPrompt:
+      "Our site hosts a public CTF Challenge Hub linking /c1/–/c5/ SQLi and XSS labs. Explain how to isolate training hubs from production and add optional auth gating.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-owasp-educational-lab-evidence",
     platform: "generic",
     category: "Injection",

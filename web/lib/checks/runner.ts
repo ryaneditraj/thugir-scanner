@@ -238,6 +238,37 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
   return false;
 }
 
+/** Benchmark oracle paths — admin, IDOR track-order, and SQLi/search must all respond before deep rules run. */
+async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> {
+  const checks = await Promise.all(
+    JUICE_SHOP_API_HEALTH_PATHS.map(async (p) => {
+      try {
+        const doc = await fetchDoc(new URL(p, pageUrl).toString(), {
+          timeoutMs: 10000,
+          maxBytes: 4096
+        });
+        if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) return null;
+        if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return "admin";
+        if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
+          return "idor";
+        if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return "sqli";
+        if (
+          p.includes("warmup") &&
+          doc.status >= 200 &&
+          doc.status < 300 &&
+          /"status"\s*:\s*"success"|"data"\s*:\s*\[/i.test(doc.body)
+        )
+          return "sqli";
+        return null;
+      } catch {
+        return null;
+      }
+    })
+  );
+  const ready = new Set(checks.filter(Boolean));
+  return ready.has("admin") && ready.has("idor") && ready.has("sqli");
+}
+
 /** Pre-fetch Juice Shop REST + bundle paths into probe cache after dyno wake-up. */
 async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Promise<void> {
   const origin = new URL(pageUrl).origin;
@@ -252,7 +283,9 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
 
   const wakeApi = async (): Promise<boolean> => {
     for (let attempt = 0; attempt < 8; attempt++) {
-      if (await juiceShopApiLive(pageUrl)) return true;
+      if (await juiceShopBenchmarkOracleReady(pageUrl)) return true;
+      // Degraded dyno may never reach full oracle — fall back to any live API after a few tries.
+      if (attempt >= 3 && (await juiceShopApiLive(pageUrl))) return true;
       await new Promise((r) => setTimeout(r, 2000));
     }
     return false;
@@ -595,6 +628,7 @@ const DEEP_RULES = new Set<string>([
   "owaspCtfLinkedLabProbe",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
+  "clientSideCtfChallengeHubEvidence",
   "clientSideCodeBreakingEvidence",
   "clientSideSanitizeXssDemoEvidence",
   "clientSidePokemortyCtfEvidence",

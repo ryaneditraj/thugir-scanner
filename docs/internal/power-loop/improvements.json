@@ -2675,6 +2675,24 @@
       "slug": "wizer-ctf-chal16-direct-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: chal16.vercel.app returns client-side-wizer-ctf-evidence + dangerous-html-sinks when reachable (5 findings); hub priority seeds ensure sam.wizer-ctf.com discovers chal16 during crawl; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-blind-login-page-scope",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level3.php POST name=level3login password-only form; redtigerBlindLoginFormEvidence scoped to ctx.home.body (not combined sibling levels); level1.php drops false-positive blind-login, level3.php findings 2→3; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:shiny-computing-machine.vercel.app",
+      "slug": "client-side-ctf-challenge-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF Challenge Hub + Web Security Training Challenges + Challenge 2 SQL Slammer href=/c2/; clientSideCtfChallengeHubEvidence; shiny-computing-machine.vercel.app findings 6→7; webexp05.vercel.app gains hub slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-benchmark-oracle-prime",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primeJuiceShopApiProbes wakeApi waits for admin+track-order+SQLi/search oracles (juiceShopBenchmarkOracleReady) with juiceShopApiLive fallback; juice-shop.herokuapp.com benchmark 6 findings 6/6 recall after wake retry"
     }
   ],
   "shipped": [
@@ -4817,6 +4835,21 @@
       "source": "discovery:chal16.vercel.app",
       "slug": "wizer-ctf-chal16-direct-oracle",
       "shipped_at": "2026-07-14T09:45:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-blind-login-page-scope",
+      "shipped_at": "2026-07-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:shiny-computing-machine.vercel.app",
+      "slug": "client-side-ctf-challenge-hub-evidence",
+      "shipped_at": "2026-07-14T11:30:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-benchmark-oracle-prime",
+      "shipped_at": "2026-07-14T11:30:00.000Z"
     }
   ]
 }
