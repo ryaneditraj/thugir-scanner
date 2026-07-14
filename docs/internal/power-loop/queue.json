@@ -3057,7 +3057,32 @@
       "url": "https://ctf-maker-monorepo.vercel.app/",
       "source": "CTF maker monorepo \u2014 educational vulnerability challenge platform (Vercel OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://lazyweb.vercel.app/",
+      "source": "RamadhanAmizudin/lazyweb \u2014 server-side vuln demo app with difficulty ratings (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/crapi/",
+      "source": "OWASP VWAD hosted crAPI \u2014 OWASP API Top 10 training instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/bwapp/",
+      "source": "OWASP VWAD hosted bWAPP \u2014 buggy web application training instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/oopssec-store/",
+      "source": "OWASP VWAD hosted OopsSec Store \u2014 Next.js OWASP Top 10 CTF e-commerce lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/vampi/",
+      "source": "OWASP VWAD hosted VAmPI \u2014 vulnerable REST API OWASP API Top 10 lab",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T07:08:00.000Z"
+  "updated_at": "2026-07-14T08:08:00.000Z"
 }
