@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T14:05:43.266Z",
+  "updated_at": "2026-07-14T14:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 1302,
-  "total_findings": 5849,
-  "critical_findings": 39,
+  "total_sites_scanned": 1310,
+  "total_findings": 5886,
+  "critical_findings": 40,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 637,
-  "discovery_findings": 4315,
+  "discovery_urls_added": 642,
+  "discovery_findings": 4352,
   "improvements_shipped": 436,
-  "last_run": "2026-07-14T14:05:43.266Z",
+  "last_run": "2026-07-14T14:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 8,
+      "findings": 7,
       "recall": "6/6",
       "gap": [],
       "pass1_gap": [],
-      "pass1_findings": 8,
-      "note": "Pass1 8 findings 6/6 recall — staggered oracle wake avoids sqli miss on Heroku cold start",
+      "pass1_findings": 7,
+      "pages_crawled": 1,
+      "probes_run": 233,
+      "note": "Pass1 7 findings 6/6 recall single-pass — no Heroku wake retry needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,43 +56,44 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 35,
+      "findings": 37,
       "new_queue_urls": [
-        "https://vwad.owasp.org/app/damn-vulnerable-graphql-application-dvga/",
-        "https://pentest-ground.com:5013/",
-        "https://allsafe.vercel.app/",
-        "https://graphql.security/",
-        "https://prompt-injection-demo.vercel.app/"
+        "https://wire.botsters.dev/",
+        "https://vwad.owasp.org/app/security-shepherd/",
+        "https://portswigger-labs.net/",
+        "https://ginandjuice.shop/login",
+        "https://pathfinding.cloud/"
       ],
-      "deferred_new_urls": "5 new URLs queued at tail — backlog drain prioritized testsparker, domgo cxss, ssrf-defense-platform, graphqlbook, pentesterlab, root-me",
-      "focus": "Juice Shop pass1 reliability + DVGA SpectaQL endpoint disclosure + DomGoat exercise hub crawl"
+      "deferred_new_urls": "10 URLs queued at tail — backlog drain prioritized testsparker, domgo cxss, ssrf-defense-platform, graphqlbook, pentesterlab, root-me; DVGA/allsafe/graphql.security/prompt-injection-demo still pending",
+      "focus": "Netsparker practice sites + DomGoat CXSS + SSRF lab + GraphQL introspection + Root-Me challenge markers"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: pass1 benchmark 8 findings 6/6 (no wake retry) after staggered oracle wake",
-      "lab.blackhatgraphql.com:9001: 2→3 findings — localhost:5013/graphql disclosed in SpectaQL docs",
-      "domgo.at/cxss/example: exercise 1-9 routes seeded from hub nav",
-      "ssrf-defense-platform.onrender.com: 6 findings — SSRF training lab markers",
-      "api.graphqlbook.org: 5 findings — GraphQL security training API evidence"
+      "juice-shop.herokuapp.com: benchmark 7 findings 6/6 recall single-pass (pages_crawled=1 probes=233)",
+      "aspnet.testsparker.com: 5 findings — reflected XSS via query param confirmed",
+      "angular.testsparker.com: 5 findings — critical AWS key + hardcoded demo credentials in bundle",
+      "ssrf-defense-platform.onrender.com: 6 findings — SSRF training lab client-side evidence",
+      "api.graphqlbook.org: 5 findings — GraphQL introspection enabled",
+      "www.root-me.org: 5 findings — challenge platform markers despite Anubis bot-wall"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "lab.blackhatgraphql.com:5013/graphql backend unreachable from cloud — introspection still blocked",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
-      "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud scanner UA"
+      "vwad DVGA / pentest-ground:5013 / allsafe / graphql.security / prompt-injection-demo still in queue backlog",
+      "wire.botsters.dev / security-shepherd / portswigger-labs / ginandjuice/login / pathfinding.cloud deferred behind backlog",
+      "www.root-me.org: Anubis bot-wall may limit deeper challenge reachability from cloud scanner UA"
     ],
-    "improvements_shipped_this_run": 3
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "ssrf-defense-platform.onrender.com": 6,
     "api.graphqlbook.org": 5,
     "aspnet.testsparker.com": 5,
     "angular.testsparker.com": 5,
+    "www.root-me.org": 5,
     "php.testsparker.com": 4,
     "pentesterlab.com": 4,
     "domgo.at/cxss/intro": 3,
     "domgo.at": 3,
-    "www.root-me.org": 3,
-    "juice-shop.herokuapp.com": 8,
+    "juice-shop.herokuapp.com": 7,
     "hack-yourself-first.azurewebsites.net": 7,
     "owasp-juice.shop": 6,
     "lab.blackhatgraphql.com:9001": 3,
