@@ -3081,7 +3081,32 @@
       "url": "https://webexp05.vercel.app/c2/",
       "source": "Jaideep02/shiny-computing-machine — Hack the Basics CTF #2 SQL injection (GitHub README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cyberdesserts.github.io/cookiejar-lab/cookiejar-lab/",
+      "source": "cyberdesserts/cookiejar-lab — interactive no-setup cookie hijacking walkthrough (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webexp05.vercel.app/c3/",
+      "source": "Jaideep02/shiny-computing-machine — Hack the Basics CTF #3 XSS (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/nodegoat/",
+      "source": "OWASP VWAD hosted NodeGoat — Node.js OWASP Top 10 training instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/mutillidae/",
+      "source": "OWASP VWAD hosted Mutillidae II — 40+ vulnerability training app",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/400",
+      "source": "Google Public Firing Range — reflected XSS parameter/body benchmark endpoint",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T09:30:00.000Z"
+  "updated_at": "2026-07-14T10:25:00.000Z"
 }
