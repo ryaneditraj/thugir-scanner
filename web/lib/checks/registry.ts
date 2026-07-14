@@ -6955,6 +6955,25 @@ const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- RedTiger special1.php SMS exfiltration challenge --------------------------------
+const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
+  if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  if (!/special1\.php/i.test(corpus)) return NEGATIVE;
+  const smsChallenge = /send me an SMS|mobile number/i.test(corpus);
+  const solutionForm = /name="solution"[\s\S]{0,250}name="name"/i.test(corpus);
+  if (!smsChallenge || !solutionForm) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      levelPath: "special1.php",
+      note: "RedTiger special1.php documents SMS exfiltration challenge with solution POST form — non-SQL web hacking drill"
+    }
+  };
+};
+
 // --- VulnSite / vuln-expose Next.js pentest training platform -----------------------
 const CLIENT_VULN_EXPOSE_RES: { label: string; re: RegExp }[] = [
   {
@@ -13400,6 +13419,18 @@ const CLIENT_OWASP_GENAI_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "GenAI lab onboarding form",
     re: /action\s*=\s*["']\/onboard["'][\s\S]{0,200}goals/i
+  },
+  {
+    label: "LLM lesson OWASP ID header",
+    re: /LLM0\d:\s*Prompt Injection|LLM0\d:\s*Sensitive Information/i
+  },
+  {
+    label: "GenAI lesson interactive demo player",
+    re: /demo-player__system-prompt|System Prompt \(hidden from user\)/i
+  },
+  {
+    label: "Direct prompt injection lesson content",
+    re: /Direct Prompt Injection|ignore all previous instructions/i
   }
 ];
 
@@ -14318,6 +14349,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRedtigerHackitEvidence,
   redtigerClassicLoginSqlEvidence,
   redtigerBlindLoginFormEvidence,
+  redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
   clientSideWizerCtfEvidence,
   clientSideRingzer0CtfEvidence,

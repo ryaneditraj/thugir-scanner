@@ -2217,6 +2217,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "redtiger-special-challenge-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "RedTiger special SMS exfiltration challenge disclosed",
+    description:
+      "RedTiger Hackit special1.php documents a non-SQL SMS exfiltration challenge with solution POST form — a web hacking drill beyond SQL injection levels.",
+    impactOneline:
+      "Public RedTiger special challenge pages document alternate web exploitation training surfaces outside the SQLi level catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "redtigerSpecialChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RedTiger special challenges are intentional training — isolate hackit VMs from production.",
+      steps: [
+        "Run RedTiger challenges only on dedicated training VMs.",
+        "Do not expose SMS gateway or phone-number lookup endpoints without auth in production.",
+        "Rate-limit unauthenticated hackit enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host RedTiger-style special web hacking challenges. Show how to isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vuln-expose-evidence",
     platform: "generic",
     category: "Injection",
