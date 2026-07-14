@@ -2957,7 +2957,32 @@
       "url": "https://ctf.ebucket.dev/",
       "source": "EmergencyBucket/pail \u2014 public CTF challenge platform on Railway (GitHub homepage)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/",
+      "source": "erev0s/VAmPI \u2014 OWASP API Top 10 vulnerable REST API public Railway deploy (Medium/APIsec walkthroughs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webexp05.vercel.app/c4/",
+      "source": "Jaideep02/shiny-computing-machine \u2014 Hack the Basics CTF #4 API security challenge (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webexp05.vercel.app/c5/",
+      "source": "Jaideep02/shiny-computing-machine \u2014 Hack the Basics CTF #5 directory traversal challenge (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://enclav.up.railway.app/",
+      "source": "Oseodion/enclav \u2014 agentic infrastructure security demo with intentional vulns in enclav-demo (GitHub README live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ethantroy.dev/labs/damn-vulnerable-trust-center/",
+      "source": "ethanolivertroy/DamnVulnerableTrustCenter \u2014 cloud security CTF trust-center lab landing (archived Mar 2026, Docker runnable)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T03:08:00.000Z"
+  "updated_at": "2026-07-14T04:08:00.000Z"
 }
