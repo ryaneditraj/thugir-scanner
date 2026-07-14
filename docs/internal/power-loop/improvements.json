@@ -2885,6 +2885,24 @@
       "slug": "redtiger-hub-level1-priority-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: redTigerPrioritySeeds prepends hub + level1.php on redtiger.labs scans; level1.php direct scan gains redtiger-classic-login-sql-evidence (2→3); level3 crawl includes level1.php; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:gitagent-securebot-app.vercel.app",
+      "slug": "client-side-gitagent-securebot-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GitAgent SecureBot title + OWASP Top 10 repo scanner + SQL Injection (CWE-89) + scan_file, find_secrets tools; extractGitagentSecurebotSeeds crawls /scan?demo=1; gitagent-securebot-app.vercel.app findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/grpc-goat",
+      "slug": "grpc-goat-vwad-jsonld-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vwad JSON-LD gRPC Goat - OWASP VWAD + Vulnerable by Design + codeRepository rootxjs/grpc-goat; extractGrpcGoatDocSeeds cross-origin seeds rootxjs.github.io/docs/grpc_goat_docs/labs; vwad grpc-goat findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-heroku-api-bundle-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: warmupJuiceShopHome now requires main.js reference AND juiceShopApiLive before crawl; single-pass deep scan 6 findings 6/6 categories on cold dyno; power-scan --benchmarks 7 findings 6/6"
     }
   ],
   "shipped": [

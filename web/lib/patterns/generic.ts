@@ -5779,6 +5779,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-gitagent-securebot-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "GitAgent SecureBot autonomous repo scanner disclosed",
+    description:
+      "GitAgent SecureBot advertises an OWASP Top 10 repo scanner with CWE-tagged findings, custom scan_file/find_secrets tools, and a bundled vulnerable Node.js demo target.",
+    impactOneline:
+      "Public AI security scanners document autonomous agent pipelines and demo vulnerable codebases attackers can probe.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGitagentSecurebotEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBot demo scanners are intentional — isolate bundled vulnerable repos from production networks.",
+      steps: [
+        "Never expose demo vulnerable Node.js targets on public URLs without auth.",
+        "Gate autonomous scanner agents behind authenticated workspaces.",
+        "Rotate any API keys used by scanner/fix agent pipelines."
+      ]
+    },
+    fixPrompt:
+      "We host a GitAgent SecureBot-style autonomous repo scanner with bundled vulnerable demo code. Show how to isolate demo targets and gate agent tool access.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-secresearchlab-evidence",
     platform: "generic",
     category: "Broken access control",

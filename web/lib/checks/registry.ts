@@ -4690,6 +4690,53 @@ const clientSideBreakTheFlaskEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- GitAgent SecureBot AI security scanner (gitagent-securebot-app.vercel.app) ------
+const CLIENT_GITAGENT_SECUREBOT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "GitAgent SecureBot scanner title",
+    re: /GitAgent SecureBot[\s\S]{0,60}AI Security Scanner|SecureBot finds them\. And fixes them/i
+  },
+  {
+    label: "OWASP Top 10 autonomous repo scanner",
+    re: /scans repositories for OWASP Top 10 vulnerabilities, hardcoded secrets, and known CVEs/i
+  },
+  {
+    label: "CWE vulnerability catalog chips",
+    re: /SQL Injection \(CWE-89\)|Command Injection \(CWE-78\)|Hardcoded Secrets \(CWE-798\)/i
+  },
+  {
+    label: "GitAgent scanner custom tools",
+    re: /scan_file, find_secrets, check_deps, generate_fix/i
+  },
+  {
+    label: "Multi-agent Scanner and Fixer pipeline",
+    re: /Two specialized GitAgent agents[\s\S]{0,80}Scanner and Fixer|Multi-Agent Pipeline/i
+  },
+  {
+    label: "Bundled vulnerable Node.js demo target",
+    re: /Demo \(vulnerable Node\.js code\)|Scan with SecureBot/i
+  }
+];
+
+const clientSideGitagentSecurebotEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GITAGENT_SECUREBOT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/GitAgent SecureBot|gitagent-securebot|open-gitagent\/gitagent/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "GitAgent SecureBot advertises an autonomous OWASP Top 10 repo scanner with bundled vulnerable Node.js demo and CWE-tagged fixer agents"
+    }
+  };
+};
+
 // --- gRPC Goat vulnerability practice lab docs (rootxjs.github.io)
 const CLIENT_GRPC_GOAT_RES: { label: string; re: RegExp }[] = [
   {
@@ -4699,6 +4746,10 @@ const CLIENT_GRPC_GOAT_RES: { label: string; re: RegExp }[] = [
   {
     label: "gRPC Goat GitHub repository",
     re: /github\.com\/rootxjs\/grpc-goat|rootxjs\/grpc-goat\.git/i
+  },
+  {
+    label: "OWASP VWAD gRPC Goat listing",
+    re: /gRPC Goat - OWASP VWAD|Vulnerable by Design lab for learning and practicing gRPC security/i
   },
   {
     label: "Nine vulnerable gRPC services",
@@ -14469,6 +14520,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
+  clientSideGitagentSecurebotEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   clientSideVapiEvidence,

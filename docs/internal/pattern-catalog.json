@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T22:05:11.097Z",
-  "total": 323,
-  "uniqueSlugs": 323,
+  "generatedAt": "2026-07-14T23:12:27.165Z",
+  "total": 324,
+  "uniqueSlugs": 324,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 305,
+    "generic": 306,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 255,
+    "deep": 256,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "general": 18,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
-    "AI security": 22,
+    "AI security": 23,
     "XSS": 1
   },
   "slugs": [
@@ -113,6 +113,7 @@
     "client-side-gandalf-evidence",
     "client-side-genai-security-crosswalk-evidence",
     "client-side-gin-and-juice-scanner-lab-evidence",
+    "client-side-gitagent-securebot-evidence",
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",
     "client-side-graphql-lab-evidence",
