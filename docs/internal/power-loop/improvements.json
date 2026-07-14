@@ -2585,6 +2585,24 @@
       "slug": "pentesteracademylab-proactive-basic-auth",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: student:password unlocks Challenge 1–4 hub HTML; applyWargameBasicAuth always retries pentesteracademylab.appspot.com; client-side-pentester-academy-lab-evidence maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "discovery-queue-per-url-dedup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: recentlyScanned compared origin-only so challenge?id=8 blocked challenge?id=9–12 for 48h; discoveryScanKey now uses pathname+search; www.bugbountyhunter.com/challenge?id=9 findings 0→2 (+client-side-bugbountyhunter-evidence); benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab",
+      "slug": "cookiejar-lab-guide-priority-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-guide lives at /cookiejar-lab/cookiejar-lab/docs/lab-guide.html; cookiejarLabPrioritySeeds + LAB_KEYWORD_ORDER ranks demo+lab-guide above VulnerableApp blog links; crawl now includes lab-guide.html alongside demo/; findings maintained 4 with session-hijack+cookiejar slugs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:maz4lhacks.vercel.app",
+      "slug": "jekyll-rouge-innerhtml-window-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Rouge spans widen gap between innerHTML and = (getElementById…innerHTML</span> <span>=</span> <span>q</span>); DANGEROUS_SINK_RES window 40→96 and write-up getElementById window 120→300; regex matches full 61KB page offline; live scan intermittent on Vercel checkpoint; benchmark juice-shop 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4682,6 +4700,21 @@
       "source": "discovery:pentesteracademylab.appspot.com",
       "slug": "pentesteracademylab-proactive-basic-auth",
       "shipped_at": "2026-07-14T04:15:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "discovery-queue-per-url-dedup",
+      "shipped_at": "2026-07-14T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:cyberdesserts.github.io/cookiejar-lab",
+      "slug": "cookiejar-lab-guide-priority-crawl",
+      "shipped_at": "2026-07-14T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:maz4lhacks.vercel.app",
+      "slug": "jekyll-rouge-innerhtml-window-fix",
+      "shipped_at": "2026-07-14T05:20:00.000Z"
     }
   ]
 }
