@@ -3181,7 +3181,32 @@
       "url": "https://prompt-injection-demo.vercel.app/",
       "source": "Interactive LLM prompt-injection attack/defense demo (Vercel OSS deploy, web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wire.botsters.dev/",
+      "source": "SEKSBot/botsters — AI agent injection-safe forum with prompt-injection training surface (Show HN adjacent)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/security-shepherd/",
+      "source": "OWASP VWAD — hosted Security Shepherd web/mobile security training platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger-labs.net/",
+      "source": "PortSwigger Web Security Academy — public labs mirror for XSS/SQLi/auth training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/login",
+      "source": "PortSwigger Gin & Juice Shop — login/auth surface for broken-auth lab coverage",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pathfinding.cloud/",
+      "source": "Pathfinding Labs — 100+ intentionally vulnerable AWS environments for detection testing (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T13:10:00.000Z"
+  "updated_at": "2026-07-14T14:10:00.000Z"
 }
