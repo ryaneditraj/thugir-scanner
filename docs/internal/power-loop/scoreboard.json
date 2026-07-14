@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T03:11:32.864Z",
+  "updated_at": "2026-07-14T03:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,16 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 592,
   "discovery_findings": 4005,
-  "improvements_shipped": 416,
-  "last_run": "2026-07-14T03:11:32.864Z",
+  "improvements_shipped": 419,
+  "last_run": "2026-07-14T03:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "03:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 7,
+      "findings": 8,
       "recall": "6/6",
       "gap": [],
-      "pass1_gap": [],
-      "note": "7 findings 6/6 recall on primary heroku (pages_crawled=1 probes=232) — no benchmark misses",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,50 +50,30 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 32,
-      "deferred_new_urls": [
-        "https://chal16.vercel.app/",
-        "https://chal17.vercel.app/",
-        "https://chal18.vercel.app/",
-        "https://ctfv.vercel.app/",
-        "https://ctf.ebucket.dev/"
-      ],
-      "focus": "Wizer chal16-18 + CTFv daily challenges + Emergency Bucket CTF (ebucket.dev); queue drained 8 backlog targets",
+      "focus": "Jekyll Rouge write-up DOM XSS sinks; BugBountyHunter challenge SQL FP fix; CTFlearn web challenge priority crawl",
       "improvements_shipped_this_run": 3,
       "validated_targets": {
-        "vulnforge.vercel.app": "2→4 findings (+client-side-vulnforge-evidence, +vibe-hardcoded-demo-credentials)",
-        "www.bugbountyhunter.com/challenge?id=9": "2 findings (admin panel title oracle + client-side-bugbountyhunter-evidence)",
-        "www.bugbountyhunter.com/challenge?id=10": "2 findings (HackerPhotos title oracle)",
-        "www.bugbountyhunter.com/challenge?id=11": "2 findings (bounty generator title oracle)",
-        "www.bugbountyhunter.com/challenge?id=12": "2 findings (SSO token theft title oracle)"
+        "maz4lhacks.vercel.app/posts/reflected-xss": "3→5 findings (+dangerous-html-sinks, +client-side-xss-evidence)",
+        "www.bugbountyhunter.com/challenge?id=8": "3→2 findings (SQL taxonomy FP removed)",
+        "www.bugbountyhunter.com/challenge?id=15": "3→2 findings (SQL taxonomy FP removed)",
+        "web.ctflearn.com/web4": "4 findings maintained with priority seeds"
       }
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings, pages_crawled=1)",
-      "urban-vampi-production.up.railway.app: critical openapi-debug-password-exposure + IDOR (6 findings)",
-      "ctb-pi.vercel.app: 6 findings incl. North Star AGI CTF + sitemap sensitive paths",
-      "vulnbank.org: IDOR sequential IDs + CORS reflect-origin (5 findings)",
-      "websec.fr: client-side SQL evidence + challenge oracle (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings)",
+      "maz4lhacks reflected-xss write-up: Rouge-highlighted getElementById/innerHTML lab code now detected",
+      "bugbountyhunter challenge pages: SQL taxonomy crawl no longer false-positives on disabled challenges",
+      "ctflearn hub: web1–web8 instances prepended to crawl when CTFlearn markers present"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hiddeninvestigations.net: react2shell lab is Docker-only (landing crawl only, 4 findings)",
-      "acuart.phpnet.us: shallow crawl — classic PHP vuln markers need deeper route probes",
-      "vuln-portal.vercel.app: auth terminal oracle only (2 findings) — challenge routes behind login",
-      "chal16-18 + ctf.ebucket.dev: queued but behind 340+ unscanned backlog URLs"
+      "ctflearn.com: main hub may timeout from cloud — web.ctflearn.com subdomains reachable",
+      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
+      "labs.tegalsec.org/xss-labs/LABS/: lab HTML paths intermittently 404"
     ]
   },
   "discovery_highlights": {
-    "urban-vampi-production.up.railway.app": 6,
-    "ctb-pi.vercel.app": 6,
-    "cybersec-demo.vercel.app": 4,
-    "hiddeninvestigations.net": 4,
-    "vulnbank.org": 5,
-    "websec.fr": 3,
-    "vuln-portal.vercel.app": 2,
-    "acuart.phpnet.us": 2,
+    "maz4lhacks.vercel.app/posts/reflected-xss": 5,
     "chal15.vercel.app": 7,
     "chal14.vercel.app": 6,
     "shiny-computing-machine.vercel.app": 6,

@@ -4157,6 +4157,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /wizer|sam\.wizer-ctf|wizer-ctf\.com/i.test(home.body)
       ? Array.from({ length: 8 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
       : [];
+  const ctflearnWebPrioritySeeds =
+    /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)
+      ? ["/web1/", "/web2/", "/web3/", "/web4/", "/web6/", "/web7/", "/web8/"].map((p) =>
+          new URL(p, "http://web.ctflearn.com").toString()
+        )
+      : [];
   const povzaydLabPrioritySeeds =
     /povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(home.body)
       ? ["LABS/lab1.html", "LABS/lab2.html", "LABS/lab3.html"].map((p) =>
@@ -4166,6 +4172,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,
       ...povzaydLabPrioritySeeds,
       ...archonHostFallbackSeeds,
