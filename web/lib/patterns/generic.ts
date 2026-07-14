@@ -560,6 +560,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "command-injection-form-probe",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OS command injection via form POST parameter",
+    description:
+      "A POST form endpoint passes user input to a shell command and echoes command output in the response — positive proof of OS command injection.",
+    impactOneline: "Attackers can execute arbitrary OS commands via the vulnerable form parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "invictiNslookupCommandInjectionProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands; use safe APIs and strict allow-lists.",
+      steps: [
+        "Replace shell invocation with purpose-built libraries (DNS resolver APIs, not nslookup).",
+        "If subprocess use is unavoidable, use argument arrays and strict input validation.",
+        "Remove practice command-injection forms from any internet-reachable host."
+      ]
+    },
+    fixPrompt:
+      "My nslookup-style form passes user input to a shell command and echoes output. Replace shell invocation with a safe DNS API, validate input with an allow-list, and show the fixed handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "post-login-sql-bypass",
     platform: "generic",
     category: "Injection",

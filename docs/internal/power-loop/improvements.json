@@ -2777,6 +2777,24 @@
       "slug": "client-side-gin-and-juice-scanner-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities oracle table lists SQL injection + DOM XSS paths + deliberately vulnerable web application designed for testing web vulnerability scanners; ginAndJuicePrioritySeeds; ginandjuice.shop findings 3→4; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-lesson-bot-wall-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint sparse HTML; hacksplaining.com/lessons/{slug}/start URL oracle + lesson markers for information-leakage/logging-and-monitoring/weak-session/etc; host-header-poisoning/start findings 1→2, logging-and-monitoring/start 1→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:php.testsparker.com",
+      "slug": "command-injection-form-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /nslookup.php param=127.0.0.1 & echo thugirCMDprobe reflects canary in HTML; invictiNslookupCommandInjectionProbe + extractInvictiPhpSeeds; php.testsparker.com findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "sql-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=1' returns 500 vs category=1 baseline 200 Internal Server Error; ginandjuice.shop/catalog findings 4→5 incl sql-error-disclosure; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4994,6 +5012,21 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "client-side-gin-and-juice-scanner-lab-evidence",
       "shipped_at": "2026-07-14T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-lesson-bot-wall-oracle",
+      "shipped_at": "2026-07-14T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:php.testsparker.com",
+      "slug": "command-injection-form-probe",
+      "shipped_at": "2026-07-14T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli",
+      "shipped_at": "2026-07-14T17:15:00.000Z"
     }
   ]
 }

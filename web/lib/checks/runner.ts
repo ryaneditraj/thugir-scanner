@@ -604,6 +604,7 @@ const DEEP_RULES = new Set<string>([
   "idorProbe",
   "unauthenticatedApiRoutes",
   "sqlErrorDisclosure",
+  "invictiNslookupCommandInjectionProbe",
   "postLoginSqlBypass",
   "sstiTemplateInjection",
   "clientSideXorAuthEvidence",
@@ -2130,7 +2131,14 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/ssl-stripping/start",
     "/lessons/host-header-poisoning/start",
     "/lessons/information-leakage/start",
-    "/lessons/privilege-escalation/start"
+    "/lessons/privilege-escalation/start",
+    "/lessons/logging-and-monitoring/start",
+    "/lessons/weak-session/start",
+    "/lessons/insecure-design/start",
+    "/lessons/lax-security-settings/start",
+    "/lessons/user-enumeration/start",
+    "/lessons/regex-injection/start",
+    "/lessons/insecure-deserialization/start"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -2154,6 +2162,34 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     try {
       const base = pageUrl.replace(/\/[^/]*$/, "");
       out.add(new URL(m[1], `${base}/`).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Invicti PHP practice site — seed nslookup command-injection and SQLi lab pages. */
+function extractInvictiPhpSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (
+    !/testsparker\.com|testinvicti\.com/i.test(host) &&
+    !/Invicti Test Web Site|artist\.php|nslookup\.php|process\.php\?file=/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/nslookup.php", "/hello.php", "/artist.php", "/phpinfo.php", "/products.php"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
     } catch {
       /* ignore */
     }
@@ -4286,6 +4322,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
+  const invictiPhpSeeds = extractInvictiPhpSeeds(home.body, home.finalUrl);
   const ginAndJuiceVulnSeeds = extractGinAndJuiceVulnSeeds(home.body, home.finalUrl);
   const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
   const vaultappSeeds = extractVaultappSeeds(home.body, home.finalUrl);
@@ -4458,6 +4495,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspGenaiLabSeeds,
       ...ctfDefiSeeds,
       ...invictiAspnetSeeds,
+      ...invictiPhpSeeds,
       ...dvgaLiveSeeds,
       ...vaultappSeeds,
       ...llmSecDevSeeds,
