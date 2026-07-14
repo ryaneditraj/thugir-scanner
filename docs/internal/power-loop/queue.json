@@ -3292,7 +3292,32 @@
       "url": "https://pwnshop.ctfsecurity.com/checkout",
       "source": "ctfsec/pwnshop — checkout wallet/payment business-logic oracle (GitHub README Key URLs)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/register",
+      "source": "r007sec/pwnshop — user registration / account-enumeration oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile",
+      "source": "r007sec/pwnshop — wallet top-up / payment-card funding oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/reset",
+      "source": "r007sec/pwnshop — lab reset tool / debug surface oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/login",
+      "source": "r007sec/pwnshop — user login / session-management oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/pwnshop/",
+      "source": "OWASP VWAD — pwnshop e-commerce lab directory entry (HN/GitHub r007sec/pwnshop)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T18:05:00.000Z"
+  "updated_at": "2026-07-14T19:05:00.000Z"
 }
