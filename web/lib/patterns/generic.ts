@@ -3465,6 +3465,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksec-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackSec password-protected ethical hacking portal disclosed",
+    description:
+      "hacksec.in gates content behind a WordPress password-protected login — a common pattern for private security training lab hubs.",
+    impactOneline:
+      "Password-protected training portals still disclose lab infrastructure metadata and may leak challenge routes once credentials circulate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksecEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use authenticated user accounts instead of shared site passwords; keep lab VMs off public indexes.",
+      steps: [
+        "Replace site-wide password gates with per-user authentication.",
+        "Block crawlers from indexing lab paths via robots.txt and auth.",
+        "Run vulnerable labs on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host hacksec.in behind a WordPress password-protected gate for ethical hacking labs. Show how to replace shared passwords with per-user auth and isolate lab VMs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-solyd-training-evidence",
     platform: "generic",
     category: "Broken access control",

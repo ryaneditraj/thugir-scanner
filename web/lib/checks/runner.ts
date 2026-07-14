@@ -726,6 +726,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackableSoLabEvidence",
   "clientSideVulnwebLabEvidence",
   "clientSideHackingLabEvidence",
+  "clientSideHacksecEvidence",
   "clientSideSolydTrainingEvidence",
   "clientSideCylabAcademyEvidence",
   "clientSideVulnerableappEvidence",
@@ -1239,7 +1240,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
 function extractSixHackCtfSeeds(html: string, origin: string): string[] {
   if (!/sixhackacademy|CTF Labs de SixHack|platform\.sixhackacademy\.com/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/ctf-labs/", "/ctf-labs"]) {
+  for (const p of ["/ctf-labs/", "/ctf-labs", "/ctf/"]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {
@@ -4416,6 +4417,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /wizer-ctf\.com|sam\.wizer-ctf\.com|chal\d+[\w-]*\.vercel\.app/i.test(home.finalUrl)
       ? Array.from({ length: 17 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
       : [];
+  const sixHackPlatformPrioritySeeds =
+    /sixhackacademy|CTF Labs de SixHack|platform\.sixhackacademy\.com/i.test(home.body) ||
+    /sixhackacademy\.com/i.test(home.finalUrl)
+      ? ["https://platform.sixhackacademy.com/"]
+      : [];
   const ctflearnWebPrioritySeeds =
     /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)
       ? ["/web1/", "/web2/", "/web3/", "/web4/", "/web6/", "/web7/", "/web8/"].map((p) =>
@@ -4452,6 +4458,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
+      ...sixHackPlatformPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,
       ...povzaydLabPrioritySeeds,
