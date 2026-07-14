@@ -2813,6 +2813,24 @@
       "slug": "wizer-ctf-promo-hub-markers",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Wizer CTF Challenge title + Rules of the CTF Blitz + Don't attack backend infrastructure on sam.wizer-ctf.com promo hub; CLIENT_WIZER_CTF_RES extended; sam.wizer-ctf.com findings 3→5 incl client-side-wizer-ctf-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksec.in",
+      "slug": "client-side-hacksec-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login-password-protected WordPress shell + password_protected_pwd form on hacksec.in; clientSideHacksecEvidence; hacksec.in findings 5→6 incl client-side-hacksec-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:shiny-computing-machine.vercel.app",
+      "slug": "ctf-challenge-subpath-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint sparse HTML on /c1/; scanUrl + shiny-computing-machine.vercel.app/c\\d+/ path oracles in clientSideCtfChallengeHubEvidence; shiny-computing-machine.vercel.app/c1/ gains client-side-ctf-challenge-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sixhackacademy.com",
+      "slug": "sixhack-ctf-faq-and-platform-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Los CTF Labs de SixHack Academy son gratuitos FAQ JSON-LD + /ctf/ explainer meta; extractSixHackCtfSeeds adds /ctf/ + sixHackPlatformPrioritySeeds prepends platform.sixhackacademy.com; sixhackacademy.com/ctf/ validates client-side-sixhack-ctf-lab-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5060,6 +5078,21 @@
       "source": "discovery:sam.wizer-ctf.com",
       "slug": "wizer-ctf-promo-hub-markers",
       "shipped_at": "2026-07-14T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:hacksec.in",
+      "slug": "client-side-hacksec-evidence",
+      "shipped_at": "2026-07-14T19:00:00.000Z"
+    },
+    {
+      "source": "discovery:shiny-computing-machine.vercel.app",
+      "slug": "ctf-challenge-subpath-url-oracle",
+      "shipped_at": "2026-07-14T19:00:00.000Z"
+    },
+    {
+      "source": "discovery:sixhackacademy.com",
+      "slug": "sixhack-ctf-faq-and-platform-seeds",
+      "shipped_at": "2026-07-14T19:00:00.000Z"
     }
   ]
 }
