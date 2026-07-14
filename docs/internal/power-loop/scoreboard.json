@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-14T20:13:59.353Z",
-=======
   "updated_at": "2026-07-14T20:26:00.000Z",
->>>>>>> 5152290 (engine: CTFlearn HTTPS web seeds, CyLab hub crawl, Hacking-Lab CTF priority)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,7 +15,6 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 370,
   "total_findings": 1484,
   "critical_findings": 24,
@@ -27,19 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 91,
   "discovery_findings": 848,
-  "improvements_shipped": 452,
-  "last_run": "2026-07-14T20:13:59.353Z",
-=======
-  "total_sites_scanned": 364,
-  "total_findings": 1448,
-  "critical_findings": 24,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 86,
-  "discovery_findings": 806,
   "improvements_shipped": 455,
   "last_run": "2026-07-14T20:26:00.000Z",
->>>>>>> 5152290 (engine: CTFlearn HTTPS web seeds, CyLab hub crawl, Hacking-Lab CTF priority)
   "last_run_summary": {
     "hour_utc": "20:00",
     "benchmark": {
@@ -48,13 +32,8 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 1,
-<<<<<<< HEAD
-      "probes_run": 173,
-      "note": "No benchmark misses — recall stable at 6/6 (6 findings on cold pass)",
-=======
       "probes_run": 224,
       "note": "No benchmark misses — recall stable at 6/6 (6 findings)",
->>>>>>> 5152290 (engine: CTFlearn HTTPS web seeds, CyLab hub crawl, Hacking-Lab CTF priority)
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -73,35 +52,6 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-<<<<<<< HEAD
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 42,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — removed from active queue)"
-      ],
-      "skipped_48h": [
-        "https://chal10.vercel.app/",
-        "https://chal11.vercel.app/",
-        "https://vwad.owasp.org/app/webgoat/",
-        "https://koadt.github.io/oss-oopssec-store/roadmap/"
-      ],
-      "focus": "VWAD directory entries (juice-shop/DVWA/wrongsecrets) + SecLab XSS path; backlog VWAD/SKF/crAPI2 labs"
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "crapi2.apisec.ai: critical exposed .env + SSRF endpoint-fetch (6 findings)",
-      "skillaudit.vercel.app: unprotected webhook + OpenAPI docs exposed (8 findings)",
-      "secresearchlab.web.app: SQLi + XXE + SSRF client-bundle oracles (7 findings)",
-      "secureby.design: SKF lab markers + postMessage DOM XSS (7 findings)"
-    ],
-    "learning_gaps": [
-      "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "vwad.owasp.org/app/pwnshop/: VWAD directory slug 404 — use pwnshop.ctfsecurity.com direct deploy",
-      "chal12/chal13.vercel.app: Wizer CTF instances retired (404) — chal14–17 still live",
-      "frontend-xss-demo.vercel.app: deploy offline — github.io mirror reachable"
-=======
       "focus": "CTFlearn HTTPS web challenge crawl; CyLab Academy hub markers + picoctf seeds; Hacking-Lab CTF platform priority",
       "improvements_shipped_this_run": 3
     },
@@ -115,8 +65,8 @@
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "acuart.phpnet.us: classic Acunetix demo returns 404 — site offline",
       "vulnerableapp.com: connection timeout from cloud scans",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
       "owasp-finbot-ctf-demo.onrender.com: service suspended by owner"
->>>>>>> 5152290 (engine: CTFlearn HTTPS web seeds, CyLab hub crawl, Hacking-Lab CTF priority)
     ]
   },
   "discovery_highlights": {
@@ -226,8 +176,6 @@
     "agentpwn.com": 5,
     "labs.hackadvisor.io": 7,
     "sixhackacademy.com": 3,
-    "secresearchlab.web.app": 7,
-    "skillaudit.vercel.app": 8,
     "prompt-injection-lab.vercel.app": 3,
     "ai-prompt-lab.vercel.app": 4,
     "securebank-lab.vercel.app": 1,
