@@ -2230,6 +2230,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "Stored comment div.innerHTML assignment",
     re: /div\.innerHTML\s*=\s*comment\b/
+  },
+  {
+    label: "Jekyll Rouge highlighted getElementById innerHTML sink",
+    re: /getElementById[\s\S]{0,260}innerHTML[\s\S]{0,40}=\s*[\s\S]{0,60}\bq\b/i
+  },
+  {
+    label: "Jekyll Rouge URLSearchParams location.search innerHTML sink",
+    re: /URLSearchParams[\s\S]{0,500}location[\s\S]{0,120}search[\s\S]{0,500}innerHTML[\s\S]{0,40}=/i
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -2496,10 +2504,9 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
 
 const clientSideSqlEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (
-    /bugbountyhunter\.com\/challenge\?id=/i.test(pageUrl) &&
-    /We have disabled our free challenges/i.test(ctx.combined)
-  ) {
+  // Challenge scans crawl /vulnerability/?type=sql taxonomy pages — educational SQL
+  // samples there are not live injection in the challenge app.
+  if (/bugbountyhunter\.com\/challenge\?id=/i.test(pageUrl)) {
     return NEGATIVE;
   }
   const hits: { label: string; sample: string }[] = [];
@@ -2543,6 +2550,10 @@ const CLIENT_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "CTF stored XSS comment section lab",
     re: /doesn't sanitize user input[\s\S]{0,250}(?:inject malicious JavaScript|admin_flag cookie)/i
+  },
+  {
+    label: "Jekyll Rouge write-up URLSearchParams innerHTML reflected XSS lab",
+    re: /URLSearchParams[\s\S]{0,600}innerHTML[\s\S]{0,60}=\s*[\s\S]{0,40}\bq\b/i
   }
 ];
 

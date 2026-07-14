@@ -2549,6 +2549,24 @@
       "slug": "vulnforge-hardcoded-api-key",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bh=\"change_me_for_prod\" wired to x-vulnforge-api-key header 141 bytes apart in bundle; HARDCODED_CRED_RES proximity match; vulnforge.vercel.app gains vibe-hardcoded-demo-credentials; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:maz4lhacks.vercel.app",
+      "slug": "jekyll-rouge-highlighted-dom-xss-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Rouge-highlighted write-up code URLSearchParams(location.search).get('q') → getElementById('output').innerHTML = q in /posts/reflected-xss/; DANGEROUS_SINK_RES + CLIENT_XSS_RES span-tolerant patterns; maz4lhacks.vercel.app/posts/reflected-xss findings 3→5; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-sql-fp-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=8 crawl pulls /vulnerability/?type=sql educational SELECT samples; clientSideSqlEvidence now skips all /challenge?id= pages; challenge #8/#15 findings 3→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctflearn.com",
+      "slug": "ctflearn-web-challenge-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ctflearn.com hub omits web.ctflearn.com/web1–web8 in capped crawl; ctflearnWebPrioritySeeds prepends http://web.ctflearn.com/web{1,2,3,4,6,7,8}/ when CTFlearn markers detected; web.ctflearn.com/web4 maintained 4 findings; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
