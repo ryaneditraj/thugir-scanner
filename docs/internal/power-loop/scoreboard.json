@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T11:32:20.185Z",
+  "updated_at": "2026-07-14T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,83 +15,46 @@
       ]
     }
   },
-  "total_sites_scanned": 1281,
-  "total_findings": 5745,
+  "total_sites_scanned": 1282,
+  "total_findings": 5753,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 627,
   "discovery_findings": 4249,
-  "improvements_shipped": 434,
-  "last_run": "2026-07-14T11:32:20.185Z",
+  "improvements_shipped": 437,
+  "last_run": "2026-07-14T12:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11:00",
+    "hour_utc": "12:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 6,
+      "findings": 8,
       "recall": "6/6",
       "gap": [],
-      "pass1_gap": [
-        "xss",
-        "sqli",
-        "idor",
-        "auth_bypass",
-        "sensitive_data"
-      ],
-      "note": "Cold-start pass1 1 finding 1/6 (misconfig only); Heroku wake retry 6 findings 6/6",
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      }
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings)"
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 36,
-      "new_queue_urls": [
-        "https://public-firing-range.appspot.com/reflected/parameter/title",
-        "https://seclab.vercel.app/sqli",
-        "https://seclab.vercel.app/idor",
-        "https://seclab.vercel.app/csrf",
-        "https://eivindarvesen.github.io/intro-ctf-startpage/"
-      ],
-      "deferred_new_urls": "5 new URLs queued at tail — backlog drain prioritized webexp05, IDOR challenge, WebGoat, duck-store, DVAI, pentest-ground, CTF",
-      "focus": "Backlog queue drain — Hack the Basics hub, IDOR challenge, WebGoat docs, Escape duck-store, DVAI, pentest-ground RCE, vercel-labs CTF"
+      "focus": "Bouvet Intro CTF hub evidence; Resend/webpack FP fix; Firing Range reflected context crawl seeds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) after Heroku wake retry",
-      "duck-store.escape.tech: 7 findings — OpenAI key exposed + unauthenticated API routes",
-      "pentest-ground.com:9000: 4 findings — server-side eval() RCE evidence",
-      "webexp05.vercel.app: 6 findings — SQLi + API security lab markers",
-      "pentest-ground.com:4280: 5 findings — insecure cookies + tech stack disclosure"
+      "eivindarvesen.github.io/intro-ctf-startpage: Bouvet CTFD hub evidence (2→3 findings)",
+      "seclab.vercel.app/sqli: secret-resend webpack FP removed (4→3 findings)",
+      "public-firing-range.appspot.com: reflected title/head/attribute seeds added (4 findings maintained)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop pass1 cold-start: only misconfig hit before wake retry (xss,sqli,idor,auth_bypass,sensitive_data missed)",
-      "new discovery URLs deferred behind 470+ backlog entries"
+      "seclab.vercel.app queue URLs are marketing site — real SecLab is securityweb-iota.vercel.app",
+      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline"
     ]
   },
   "discovery_highlights": {
+    "eivindarvesen.github.io/intro-ctf-startpage": 3,
+    "public-firing-range.appspot.com": 4,
+    "juice-shop.herokuapp.com": 8,
     "webexp05.vercel.app": 6,
-    "duck-store.escape.tech": 7,
-    "pentest-ground.com:4280": 5,
-    "pentest-ground.com:9000": 4,
-    "capture-the-flag-official-website.vercel.app": 4,
-    "dvaib.com": 4,
-    "idor-challenge.vercel.app": 3,
-    "luisillobret2.github.io/WebGoat": 3,
-    "juice-shop.herokuapp.com": 6
+    "duck-store.escape.tech": 7
   }
 }

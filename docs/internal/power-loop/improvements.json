@@ -2693,6 +2693,24 @@
       "slug": "juice-shop-benchmark-oracle-prime",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primeJuiceShopApiProbes wakeApi waits for admin+track-order+SQLi/search oracles (juiceShopBenchmarkOracleReady) with juiceShopApiLive fallback; juice-shop.herokuapp.com benchmark 6 findings 6/6 recall after wake retry"
+    },
+    {
+      "source": "discovery:eivindarvesen.github.io/intro-ctf-startpage",
+      "slug": "client-side-bouvet-intro-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Bouvet Intro to CTF Homepage + bouvet-ctfd.herokuapp.com scoreboard + ctf-X.herokuapp.com instances + OWASP Top 10; clientSideBouvetIntroCtfEvidence + extractBouvetIntroCtfSeeds; intro-ctf-startpage findings 2→3; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "secret-resend-webpack-fp-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: re__WEBPACK_IMPORTED_MODULE_0__ in Angular main.js false-matched secret-resend; scanSecret filters WEBPACK/MODULE tokens; seclab.vercel.app/sqli findings 4→3 (FP removed); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-context-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/title?q=canary echoes in <title>; extractFiringRangeCrawlSeeds now seeds title/head/attribute_unquoted + href harvest; public-firing-range findings 4 maintained; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4847,9 +4865,19 @@
       "shipped_at": "2026-07-14T11:30:00.000Z"
     },
     {
-      "source": "benchmark:juice-shop",
-      "slug": "juice-shop-benchmark-oracle-prime",
-      "shipped_at": "2026-07-14T11:30:00.000Z"
+      "source": "discovery:eivindarvesen.github.io/intro-ctf-startpage",
+      "slug": "client-side-bouvet-intro-ctf-evidence",
+      "shipped_at": "2026-07-14T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "secret-resend-webpack-fp-fix",
+      "shipped_at": "2026-07-14T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-context-seeds",
+      "shipped_at": "2026-07-14T12:15:00.000Z"
     }
   ]
 }
