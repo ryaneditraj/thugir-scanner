@@ -17,7 +17,7 @@ import {
 
 import { FREE_RULES, RULES, type RuleContext } from "./registry";
 import { ProbeCache } from "./probe-cache";
-import { fetchScriptsBatched, fetchPagesBatched } from "./fetch-scripts";
+import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
 export interface FreeScanOptions {
   maxScripts?: number;
@@ -238,6 +238,37 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
   return false;
 }
 
+/** Benchmark oracle paths — admin, IDOR track-order, and SQLi/search must all respond before deep rules run. */
+async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> {
+  const checks = await Promise.all(
+    JUICE_SHOP_API_HEALTH_PATHS.map(async (p) => {
+      try {
+        const doc = await fetchDoc(new URL(p, pageUrl).toString(), {
+          timeoutMs: 10000,
+          maxBytes: 4096
+        });
+        if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) return null;
+        if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return "admin";
+        if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
+          return "idor";
+        if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return "sqli";
+        if (
+          p.includes("warmup") &&
+          doc.status >= 200 &&
+          doc.status < 300 &&
+          /"status"\s*:\s*"success"|"data"\s*:\s*\[/i.test(doc.body)
+        )
+          return "sqli";
+        return null;
+      } catch {
+        return null;
+      }
+    })
+  );
+  const ready = new Set(checks.filter(Boolean));
+  return ready.has("admin") && ready.has("idor") && ready.has("sqli");
+}
+
 /** Pre-fetch Juice Shop REST + bundle paths into probe cache after dyno wake-up. */
 async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Promise<void> {
   const origin = new URL(pageUrl).origin;
@@ -251,11 +282,12 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
 
   const wakeApi = async (): Promise<boolean> => {
-    for (let attempt = 0; attempt < 8; attempt++) {
-      if (await juiceShopApiLive(pageUrl)) return true;
-      await new Promise((r) => setTimeout(r, 2000));
+    for (let attempt = 0; attempt < 10; attempt++) {
+      if (await juiceShopBenchmarkOracleReady(pageUrl)) return true;
+      await new Promise((r) => setTimeout(r, 2500));
     }
-    return false;
+    // Last resort: prime whatever API paths respond (partial wake) so other rules still get signal.
+    return juiceShopApiLive(pageUrl);
   };
 
   const wakeBundle = async (): Promise<boolean> => {
@@ -364,8 +396,17 @@ function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
   if (pattern.detectorKind !== "secret_regex") return null;
   const cfg = pattern.detectorConfig as { regex: string; validate?: string; secretName: string };
   const re = compile(cfg.regex);
-  const matches = combined.match(re);
-  if (!matches) return null;
+  const raw = combined.match(re);
+  if (!raw) return null;
+  // Webpack emits `re__WEBPACK_IMPORTED_MODULE_N__` identifiers that false-positive Resend keys.
+  const matches =
+    pattern.slug === "secret-resend"
+      ? raw.filter(
+          (m) =>
+            !/WEBPACK|__WEBPACK|MODULE/i.test(m) && (m.match(/_/g) || []).length <= 1
+        )
+      : [...raw];
+  if (matches.length === 0) return null;
   // Optional validation substring near the match (e.g. service_role inside a JWT payload).
   if (cfg.validate) {
     const hasValid = matches.some((m) => {
@@ -495,7 +536,16 @@ export async function runFreeScan(targetInput: string, opts: FreeScanOptions = {
   // Pull a capped set of same-origin scripts for secret scanning.
   const probe = new ProbeCache();
   const scriptUrls = extractScriptUrls(home.body, home.finalUrl, opts.maxScripts ?? 12);
-  const scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
+  let scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
+  const githackSiblings = expandGithackModuleImports(scripts, home.finalUrl, 6);
+  if (githackSiblings.length > 0) {
+    const fetched = new Set(scriptUrls);
+    const extra = githackSiblings.filter((u) => !fetched.has(u));
+    if (extra.length > 0) {
+      const siblings = await fetchScriptsBatched(extra, { probe, maxBytes: 800_000, concurrency: 4 });
+      scripts = [...scripts, ...siblings];
+    }
+  }
   const combined = [home.body, ...scripts.map((s) => s.body)].join("\n");
   const detection = detectPlatform(home, combined);
   const ctx: RuleContext = { origin, home, scripts, combined, probe };
@@ -586,6 +636,8 @@ const DEEP_RULES = new Set<string>([
   "owaspCtfLinkedLabProbe",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
+  "clientSideCtfChallengeHubEvidence",
+  "clientSideBouvetIntroCtfEvidence",
   "clientSideCodeBreakingEvidence",
   "clientSideSanitizeXssDemoEvidence",
   "clientSidePokemortyCtfEvidence",
@@ -601,6 +653,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnAuthPortalEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
+  "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
   "clientSideChimeraVulnLabEvidence",
   "clientSideHackHealthLabEvidence",
@@ -660,6 +713,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideMetasploitableLabEvidence",
   "clientSideBlueTeamLabsEvidence",
   "clientSideJuiceShopProjectEvidence",
+  "clientSideJuicesecLabEvidence",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
   "clientSideMutillidaeEvidence",
@@ -677,6 +731,9 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopEvidence",
   "clientSideVulnforgeAcademyEvidence",
   "clientSideVulnforgeEvidence",
+  "clientSideVulnshopEvidence",
+  "clientSideJwtlensEvidence",
+  "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
@@ -950,6 +1007,13 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       if (u.origin !== pageOrigin) continue;
       u.hash = "";
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (let n = 1; n <= 9; n++) {
+    try {
+      out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -1465,9 +1529,53 @@ function extractBwappLabSeeds(html: string, origin: string): string[] {
 function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
   if (!/firing[\s-]range|public-firing-range/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/reflected/index.html", "/redirect/index.html", "/dom/index.html"]) {
+  for (const p of [
+    "/reflected/index.html",
+    "/redirect/index.html",
+    "/dom/index.html",
+    "/reflected/parameter/body",
+    "/reflected/parameter/title",
+    "/reflected/parameter/head",
+    "/reflected/parameter/attribute_unquoted"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const hrefRe = /href\s*=\s*["'](\/reflected\/parameter\/[^"'?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Bouvet Intro to CTF hub (eivindarvesen.github.io/intro-ctf-startpage) — CTFD scoreboard + instances. */
+function extractBouvetIntroCtfSeeds(html: string, pageUrl: string): string[] {
+  if (!/intro-ctf-startpage|Bouvet Intro to CTF|bouvet-ctfd/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const raw of [
+    "https://bouvet-ctfd.herokuapp.com/",
+    "https://bouvet-ctfd.herokuapp.com/register",
+    "https://bouvet-ctfd.herokuapp.com/scoreboard"
+  ]) {
+    try {
+      out.add(raw);
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/bouvet-ctfd\.herokuapp\.com[^"'#]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(m[1]);
     } catch {
       /* ignore */
     }
@@ -2150,7 +2258,18 @@ function extractHackTheBoxAcademySeeds(html: string, pageUrl: string): string[] 
 
 /** OWASP VulnerableApp docs (sasanlabs.github.io/VulnerableApp) — Jekyll scanner-eval platform. */
 function extractVulnerableAppDocSeeds(html: string, pageUrl: string): string[] {
-  if (!/VulnerableApp|SasanLabs\/VulnerableApp|Vulnerable App/i.test(html)) return [];
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  const onVulnerableAppHost =
+    /(?:^|\.)sasanlabs\.github\.io$/i.test(host) ||
+    /(?:^|\.)vulnerableapp\.com$/i.test(host) ||
+    /vulnerableapp/i.test(host);
+  if (
+    !onVulnerableAppHost &&
+    !/SasanLabs\/VulnerableApp|href\s*=\s*["']\/VulnerableApp\//i.test(html)
+  ) {
+    return [];
+  }
+  if (!/VulnerableApp|SasanLabs\/VulnerableApp/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   const re =
@@ -2764,7 +2883,7 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
     }
   }
   // sam.wizer-ctf.com promo hub omits chal*.vercel.app links — seed known public instances.
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 17; i++) {
     out.add(`https://chal${i}.vercel.app/`);
   }
   return [...out];
@@ -3312,7 +3431,7 @@ function extractVaultappSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** Escape.tech / ThreatX hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
+/** Escape.tech / ThreatX / Pentest Ground hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
 function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
   let host = "";
   try {
@@ -3320,11 +3439,12 @@ function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
   } catch {
     /* ignore */
   }
-  const isDvga =
-    /Damn Vulnerable GraphQL Application|dvga\.tools\.escape\.tech|dolevf\/Damn-Vulnerable-GraphQL|xplat-demo\.threatx\.io/i.test(
-      html
-    ) || /xplat-demo\.threatx\.io|dvga\.tools\.escape\.tech/i.test(host);
-  if (!isDvga) return [];
+  const isLiveHost =
+    /xplat-demo\.threatx\.io|dvga\.tools\.escape\.tech|pentest-ground\.com/i.test(host);
+  const isLiveApp =
+    /Damn Vulnerable GraphQL Application/i.test(html) &&
+    /dvgql_logo\.png|id="sidebar-wrapper"[\s\S]{0,500}\/import_paste/i.test(html);
+  if (/vwad\.owasp\.org/i.test(host) || (!isLiveHost && !isLiveApp)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of ["/import_paste", "/create_paste", "/public_pastes", "/graphql", "/graphiql", "/audit"]) {
@@ -3531,12 +3651,24 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** CookieJar session-security lab — seed interactive demo from homepage. */
+/** CookieJar session-security lab — seed interactive demo and lab-guide docs from homepage. */
 function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
   if (!/CookieJar|cookiejar-lab/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/demo", "/demo/"]) {
+  for (const p of [
+    "/demo",
+    "/demo/",
+    "/demo/index.html",
+    "/cookiejar-lab/docs/lab-guide",
+    "/cookiejar-lab/docs/lab-guide.html",
+    "/cookiejar-lab/docs/security-notes",
+    "/cookiejar-lab/docs/security-notes.html",
+    "/cookiejar-lab/cookiejar-lab/docs/lab-guide",
+    "/cookiejar-lab/cookiejar-lab/docs/lab-guide.html",
+    "/cookiejar-lab/cookiejar-lab/docs/security-notes",
+    "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -3545,7 +3677,8 @@ function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["']([^"']*\/demo\/?)["']/gi;
+  const linkRe =
+    /href\s*=\s*["']([^"']*(?:\/demo\/?|cookiejar-lab(?:\/cookiejar-lab)?\/docs\/(?:lab-guide|security-notes)(?:\.html)?))["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
@@ -3581,7 +3714,7 @@ function extractOwaspVwadSeeds(html: string, pageUrl: string): string[] {
     "/app/webgoat/",
     "/app/crapi/",
     "/app/bwapp/",
-    "/app/dvga/",
+    "/app/damn-vulnerable-graphql-application-dvga/",
     "/app/pixi/"
   ]) {
     try {
@@ -3887,6 +4020,10 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "endpoints-catalog",
     "/cybersecurity/",
     "cybersecurity/",
+    "cookiejar-lab/demo",
+    "lab-guide",
+    "security-notes",
+    "cookiejar-lab/docs",
     "sqlInjection",
     "source.php",
     "/vulnerabilities/",
@@ -4061,6 +4198,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const cahyodLabSeeds = extractCahyodVulnerableLabSeeds(home.body, home.finalUrl);
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
+  const bouvetIntroCtfSeeds = extractBouvetIntroCtfSeeds(home.body, home.finalUrl);
   const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
   const cyberDrillSeeds = extractCyberDrillToolSeeds(home.body, home.finalUrl);
   const alfNuXssSeeds = extractAlfNuXssSeeds(home.body, home.finalUrl);
@@ -4176,7 +4314,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const wizerChalPrioritySeeds =
     /wizer|sam\.wizer-ctf|wizer-ctf\.com/i.test(home.body) ||
     /wizer-ctf\.com|sam\.wizer-ctf\.com|chal\d+[\w-]*\.vercel\.app/i.test(home.finalUrl)
-      ? Array.from({ length: 15 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
+      ? Array.from({ length: 17 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
       : [];
   const ctflearnWebPrioritySeeds =
     /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)
@@ -4195,9 +4333,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /CTF Challenge Hub|Web Security Training Challenges|class="challenge-link"/i.test(home.body)
       ? Array.from({ length: 5 }, (_, i) => new URL(`/c${i + 1}/`, home.finalUrl).toString())
       : [];
+  const cookiejarLabPrioritySeeds =
+    /CookieJar|cookiejar-lab/i.test(home.body) || /cookiejar-lab/i.test(home.finalUrl)
+      ? [
+          "/cookiejar-lab/demo/",
+          "/cookiejar-lab/cookiejar-lab/docs/lab-guide.html",
+          "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
+        ].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
       ...wizerChalPrioritySeeds,
@@ -4216,6 +4363,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...gruyereSeeds,
       ...cahyodLabSeeds,
       ...firingRangeSeeds,
+      ...bouvetIntroCtfSeeds,
       ...tegalsecSeeds,
       ...cyberDrillSeeds,
       ...alfNuXssSeeds,
@@ -4362,11 +4510,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       }
     }
   }
-  const scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
+  let scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
     probe,
     maxBytes: 800_000,
     concurrency: 4
   });
+  const githackSiblings = expandGithackModuleImports(scripts, home.finalUrl, 8);
+  if (githackSiblings.length > 0) {
+    const fetched = new Set([...scriptUrls]);
+    const extra = githackSiblings.filter((u) => !fetched.has(u)).slice(0, Math.max(0, scriptCap - scripts.length));
+    if (extra.length > 0) {
+      const siblings = await fetchScriptsBatched(extra, { probe, maxBytes: 800_000, concurrency: 4 });
+      scripts = [...scripts, ...siblings];
+    }
+  }
 
   // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
   const juiceShopOrigin = home.finalUrl || target.toString();

@@ -358,6 +358,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "graphql-endpoint-disclosed-in-docs",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "GraphQL server URL disclosed in API documentation",
+    description:
+      "SpectaQL or Swagger-style API docs embed the GraphQL server URL (often localhost:PORT/graphql), exposing the full schema, queries, and mutations to anyone who can read the docs page.",
+    impactOneline: "GraphQL schema and mutation catalog are readable from public API docs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlEndpointDisclosedInDocs" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove internal GraphQL URLs from public docs and gate API reference behind auth.",
+      steps: [
+        "Do not publish SpectaQL/Swagger docs with localhost or internal GraphQL URLs on public hosts.",
+        "Require authentication for API reference pages in production.",
+        "Disable GraphQL playground and introspection on any reachable GraphQL endpoint."
+      ]
+    },
+    fixPrompt:
+      "Our SpectaQL docs expose a GraphQL server URL and full schema on a public page. Show how to redact internal endpoints from docs and lock down the live GraphQL API.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "directory-listing-enabled",
     platform: "generic",
     category: "Information disclosure",
@@ -792,6 +817,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ctf-challenge-hub-evidence",
+    platform: "generic",
+    category: "general",
+    severityDefault: "medium",
+    title: "Static CTF challenge hub with linked web security labs",
+    description:
+      "A static CTF challenge hub indexes hands-on web security labs (SQL injection, XSS, JWT, path traversal) across /c1/–/cN/ child routes — common on Hack the Basics and webexp05-style training deploys.",
+    impactOneline:
+      "Public CTF hub pages document deliberately vulnerable challenge routes for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfChallengeHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF training hubs are intentional — isolate lab instances from production and gate with auth when needed.",
+      steps: [
+        "Run challenge hubs only on isolated training infrastructure.",
+        "Do not reuse challenge vulnerability patterns in production apps.",
+        "Add auth if challenges should not be publicly enumerable."
+      ]
+    },
+    fixPrompt:
+      "Our site hosts a public CTF Challenge Hub linking /c1/–/c5/ SQLi and XSS labs. Explain how to isolate training hubs from production and add optional auth gating.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-bouvet-intro-ctf-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Bouvet Intro to CTF training hub disclosed",
+    description:
+      "Bouvet Intro to CTF startpages document per-team vulnerable application instances, CTFD scoreboard registration, and OWASP Top 10 challenge workflows for hands-on CTF training.",
+    impactOneline:
+      "Public CTF onboarding hubs expose intentionally vulnerable instance URLs and flag-submission workflows for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBouvetIntroCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF training hubs are intentional — isolate challenge instances from production networks.",
+      steps: [
+        "Run per-team CTF instances on dedicated Heroku dynos or VMs with no production data.",
+        "Require CTFD registration before exposing challenge instance URLs.",
+        "Do not reuse CTF vulnerability patterns in production applications."
+      ]
+    },
+    fixPrompt:
+      "We host a Bouvet Intro to CTF startpage linking bouvet-ctfd.herokuapp.com and per-team ctf-X.herokuapp.com instances. Show how to isolate CTF infrastructure from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-owasp-educational-lab-evidence",
     platform: "generic",
     category: "Injection",
@@ -892,6 +969,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our host serves public DVGA SpectaQL API reference with importPaste mutations. Show how to remove or auth-gate lab documentation and harden GraphQL introspection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-graphql-security-hub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "GraphQL security assessment hub disclosed",
+    description:
+      "Client bundle or HTML documents a GraphQL security testing hub (graphql.security) that assesses introspection, authorization, complexity limits, and injection risks.",
+    impactOneline:
+      "Public GraphQL security scanner hubs advertise assessment workflows useful for attacker reconnaissance.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGraphqlSecurityHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GraphQL security hubs are intentional training tools — isolate from production APIs.",
+      steps: [
+        "Run GraphQL security assessments only against authorized staging targets.",
+        "Do not expose production GraphQL endpoints to public scanner hubs.",
+        "Disable introspection and enforce auth on production GraphQL APIs."
+      ]
+    },
+    fixPrompt:
+      "Our site documents a GraphQL security assessment hub (graphql.security). Explain how to scope security testing to authorized targets and harden production GraphQL introspection and authorization.",
     version: 1,
     enabled: true
   },
@@ -3468,6 +3571,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnshop-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop pentest practice lab disclosed",
+    description:
+      "VulnShop is an intentionally vulnerable e-commerce SPA that documents unauthenticated /api/debug/config and /api/debug/users routes on a public Railway backend, exposing secret keys and plaintext passwords.",
+    impactOneline:
+      "Public VulnShop bundles wire a production Railway API with zero-auth debug endpoints documented in the client UI.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnshopEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnShop is intentional training software — isolate lab backends and remove debug routes from any production deploy.",
+      steps: [
+        "Remove or gate /api/debug/* routes behind admin authentication.",
+        "Rotate secret_key and demo passwords if the Railway backend was publicly reachable.",
+        "Do not copy VulnShop debug-route patterns into production APIs."
+      ]
+    },
+    fixPrompt:
+      "We host a VulnShop-style pentest practice SPA. Show how to remove unauthenticated /api/debug routes and proxy sensitive config server-side.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-jwtlens-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "JWTLens JWT security scanner disclosed",
+    description:
+      "JWTLens is an open-source Burp Suite extension with 62 automated JWT checks covering algorithm confusion, KID injection, weak secrets, and JWT Forge exploitation.",
+    impactOneline:
+      "Public JWT scanner landing pages document attack techniques attackers reuse against production JSON Web Token implementations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJwtlensEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JWT scanner docs are educational — enforce strict JWT validation in production APIs.",
+      steps: [
+        "Reject alg:none and unexpected signing algorithms server-side.",
+        "Validate JWT kid headers against an allow-list; never fetch JWKS from attacker-controlled URLs.",
+        "Rotate JWT secrets if weak secrets were ever used in production."
+      ]
+    },
+    fixPrompt:
+      "We reference JWTLens-style JWT testing in our security docs. Show how to harden JWT validation against algorithm confusion and KID injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cybersheild-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CyberShield Lab OWASP Top 10 training platform disclosed",
+    description:
+      "CyberShield Lab is an interactive cybersecurity education platform with live SQL injection, XSS, and password-analysis modules covering OWASP Top 10 attack-and-fix demos.",
+    impactOneline:
+      "Public CyberShield Lab instances expose intentionally vulnerable SQLi and XSS training modules for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCybersheildLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CyberShield Lab is intentional training — isolate demo instances from production networks.",
+      steps: [
+        "Run CyberShield Lab only on dedicated training infrastructure.",
+        "Do not copy SQLi/XSS demo patterns into production authentication or comment systems.",
+        "Rate-limit unauthenticated access to vulnerable demo modules."
+      ]
+    },
+    fixPrompt:
+      "We host a CyberShield Lab-style OWASP Top 10 education platform. Show how to isolate SQLi and XSS demo modules from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-tegalsec-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4192,6 +4373,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We publish OWASP Juice Shop challenge documentation. Show how to keep demo instances isolated from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-juicesec-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "JuiceSec OWASP vulnerability lab disclosed",
+    description:
+      "JuiceSec is a Cloudflare Workers OWASP lab with inline checkSQLi, checkJWT, and checkSSRF challenge modules plus DOM XSS sinks in the challenge catalog UI.",
+    impactOneline:
+      "Public JuiceSec deployments document deliberately vulnerable SQLi, JWT, SSRF, and XSS training surfaces for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJuicesecLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JuiceSec is intentional training software — isolate Workers lab deployments from production.",
+      steps: [
+        "Run JuiceSec only on dedicated lab Workers subdomains.",
+        "Do not copy checkSQLi/checkJWT/checkSSRF lab patterns into production auth flows.",
+        "Treat JuiceSec challenge modules as scanner oracles, not production design patterns."
+      ]
+    },
+    fixPrompt:
+      "We host JuiceSec-style OWASP vulnerability labs on Cloudflare Workers. Show how to isolate lab deployments from production apps.",
     version: 1,
     enabled: true
   },
