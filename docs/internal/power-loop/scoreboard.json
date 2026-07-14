@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T09:25:53.160Z",
+  "updated_at": "2026-07-14T09:29:38.936Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,68 +15,65 @@
       ]
     }
   },
-  "total_sites_scanned": 1218,
-  "total_findings": 5449,
+  "total_sites_scanned": 1226,
+  "total_findings": 5493,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 592,
-  "discovery_findings": 4005,
+  "discovery_urls_added": 597,
+  "discovery_findings": 4049,
   "improvements_shipped": 419,
-  "last_run": "2026-07-14T09:25:53.160Z",
+  "last_run": "2026-07-14T09:29:38.936Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 8,
+      "findings": 7,
       "recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
+      "pass1_gap": ["sqli", "idor", "auth_bypass"],
+      "note": "Cold-start pass1 4 findings 3/6; wake retry merged to 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "Wizer chal9–15 priority crawl; RedTiger level1 classic SQL login; Pentester Academy Lab proactive basic auth",
-      "improvements_shipped_this_run": 3,
-      "validated_targets": {
-        "chal10.vercel.app": "2→4 findings (+dangerous-html-sinks, secret-resend via chal1 crawl)",
-        "redtiger.labs.overthewire.org/level1.php": "3→4 findings (+redtiger-classic-login-sql-evidence)",
-        "pentesteracademylab.appspot.com": "client-side-pentester-academy-lab-evidence maintained with proactive student:password auth"
-      }
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 44,
+      "focus": "VWAD/oopssec backlog priority; +5 new URLs queued (redforgex, capture-the-flag.vercel, cybersheild-lab, webexp05 c1/c2)",
+      "new_urls_queued": [
+        "https://redforgex.vercel.app/",
+        "https://capture-the-flag.vercel.app/",
+        "https://cybersheild-lab.vercel.app/",
+        "https://webexp05.vercel.app/c1/",
+        "https://webexp05.vercel.app/c2/"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings)",
-      "chal10.vercel.app: wizerChalPrioritySeeds chal1–15 + finalUrl oracle restores bundle XSS/secret findings",
-      "redtiger level1.php: classic user+password SQLi login form now distinct from blind levelNlogin drills",
-      "pentesteracademylab.appspot.com: always-on student:password unlocks Challenge 1–4 hub markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
+      "koadt.github.io/oss-oopssec-store: 6 findings OWASP Top 10 e-commerce CTF markers",
+      "dxx33.github.io/WebVulnsGuide: 8 findings interactive vuln guide evidence",
+      "gauravkhurana.com/SQLInjection: 6 findings WASM SQLite login-bypass demo"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "webexp05.vercel.app / shiny-computing-machine: Vercel Security Checkpoint blocks ThugirScanner UA (403)",
-      "chal10–chal15: Vercel checkpoint may block chal*.vercel.app bundles intermittently from cloud scans",
-      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404 — deploy offline"
+      "juice-shop pass1 cold-start: sqli,idor,auth_bypass missed before wake retry (pages_crawled=6→1)",
+      "new discovery URLs deferred behind 360+ queue backlog"
     ]
   },
   "discovery_highlights": {
-    "chal10.vercel.app": 4,
-    "chal11.vercel.app": 4,
-    "chal14.vercel.app": 6,
-    "chal15.vercel.app": 7,
-    "maz4lhacks.vercel.app/posts/reflected-xss": 5,
+    "koadt.github.io/oss-oopssec-store": 6,
+    "dxx33.github.io/WebVulnsGuide": 8,
+    "gauravkhurana.com/SQLInjection": 6,
+    "ashimkoirala.github.io/HackLab": 6,
+    "akbarbashakm.github.io/frontend-security-examples": 5,
     "juice-shop.herokuapp.com": 8,
     "redtiger.labs.overthewire.org/level1.php": 4,
     "pentesteracademylab.appspot.com": 2,
