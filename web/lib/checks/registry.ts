@@ -2233,11 +2233,11 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Jekyll Rouge highlighted getElementById innerHTML sink",
-    re: /getElementById[\s\S]{0,260}innerHTML[\s\S]{0,40}=\s*[\s\S]{0,60}\bq\b/i
+    re: /getElementById[\s\S]{0,260}innerHTML[\s\S]{0,96}=\s*[\s\S]{0,96}\bq\b/i
   },
   {
     label: "Jekyll Rouge URLSearchParams location.search innerHTML sink",
-    re: /URLSearchParams[\s\S]{0,500}location[\s\S]{0,120}search[\s\S]{0,500}innerHTML[\s\S]{0,40}=/i
+    re: /URLSearchParams[\s\S]{0,500}location[\s\S]{0,120}search[\s\S]{0,500}innerHTML[\s\S]{0,96}=/i
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -10256,7 +10256,7 @@ const CLIENT_SECURITY_WRITEUP_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Vulnerable innerHTML sink in write-up code sample",
-    re: /getElementById[\s\S]{0,120}innerHTML/i
+    re: /getElementById[\s\S]{0,300}innerHTML/i
   },
   {
     label: "Bundled xss-lab.html demo artifact",

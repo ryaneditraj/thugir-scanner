@@ -3531,12 +3531,20 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** CookieJar session-security lab — seed interactive demo from homepage. */
+/** CookieJar session-security lab — seed interactive demo and lab-guide docs from homepage. */
 function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
   if (!/CookieJar|cookiejar-lab/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/demo", "/demo/"]) {
+  for (const p of [
+    "/demo",
+    "/demo/",
+    "/demo/index.html",
+    "/cookiejar-lab/docs/lab-guide",
+    "/cookiejar-lab/docs/lab-guide.html",
+    "/cookiejar-lab/docs/security-notes",
+    "/cookiejar-lab/docs/security-notes.html"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -3545,7 +3553,8 @@ function extractCookiejarLabSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["']([^"']*\/demo\/?)["']/gi;
+  const linkRe =
+    /href\s*=\s*["']([^"']*(?:\/demo\/?|cookiejar-lab\/docs\/(?:lab-guide|security-notes)(?:\.html)?))["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
