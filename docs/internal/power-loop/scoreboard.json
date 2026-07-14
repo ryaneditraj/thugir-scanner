@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T18:06:00.000Z",
+  "updated_at": "2026-07-14T18:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 86,
   "discovery_findings": 803,
-  "improvements_shipped": 125,
-  "last_run": "2026-07-14T18:06:00.000Z",
+  "improvements_shipped": 449,
+  "last_run": "2026-07-14T18:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "18:00",
     "benchmark": {
@@ -31,7 +31,9 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages_crawled=6 probes=254)",
+      "pages_crawled": 6,
+      "probes_run": 254,
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings on wake retry)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,28 +52,19 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 33,
-      "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Queue backlog: vAPI, WrongSecrets, bWAPP, Gin&Juice root, MAESTRO AI demo, reef MCP, Hacking-Lab. New URLs deferred at queue tail (ginandjuice cart/about/blog post, pwnshop admin/checkout).",
-      "improvements_shipped_this_run": 0
+      "focus": "Hacksplaining scanUrl oracle; Gin & Juice blog DOM open redirect; Wizer CTF promo hub markers",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: critical stack-database-url-in-bundle",
-      "wrongsecrets.herokuapp.com: spring-boot-actuator-exposed + postMessage DOM XSS (5 findings)",
-      "bwapp.hakhub.net: phpinfo-exposed high + directory-listing (7 findings)",
-      "ginandjuice.shop: reflected-xss-query-param + sql-error-disclosure (5 findings)",
-      "reef-mcp-registry.vercel.app: secret-openai + MCP supply-chain evidence (6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "hacksplaining.com/lessons/ssl-stripping/start: scanUrl oracle restores client-side-hacksplaining-evidence under sparse HTML (1→4 findings)",
+      "ginandjuice.shop/blog: blog post crawl + back-param DOM redirect evidence (4→6 findings)",
+      "sam.wizer-ctf.com: promo hub Wizer CTF Challenge markers + chal instance crawl (3→5 findings)"
     ],
     "learning_gaps": [
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "hacking-lab.com: training platform markers only — challenge instances require account",
-      "New ginandjuice/pwnshop path oracles queued at tail — deferred behind backlog"
+      "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "hacksplaining.com: Vercel Security Checkpoint intermittently blocks lesson HTML — scanUrl + finalUrl oracles mitigate",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
@@ -87,7 +80,7 @@
     "juice-shop-staging.herokuapp.com": 7,
     "demo.owasp-juice.shop": 7,
     "vapi.apisec.ai": 4,
-    "ginandjuice.shop": 5,
+    "ginandjuice.shop": 6,
     "bwapp.hakhub.net": 7,
     "public-firing-range.appspot.com": 3,
     "google-gruyere.appspot.com": 2,
@@ -236,7 +229,8 @@
     "www.root-me.org": 4,
     "www.hackthissite.org": 5,
     "domgo.at": 3,
-    "php.testsparker.com": 5,
+    "php.testsparker.com": 6,
+    "aspnet.testsparker.com": 6,
     "hacksec.in": 5,
     "webgoat.org": 5,
     "cyberdefenders.org": 8,
@@ -247,6 +241,8 @@
     "owasp-finbot-ctf.org": 3,
     "maestro-agentic-ai-security-demo-mon.netlify.app": 3,
     "reef-mcp-registry.vercel.app": 6,
-    "hacking-lab.com": 3
+    "hacking-lab.com": 3,
+    "www.hacksplaining.com": 4,
+    "sam.wizer-ctf.com": 5
   }
 }
