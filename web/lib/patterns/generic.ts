@@ -1750,6 +1750,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-gin-and-juice-scanner-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop scanner evaluation lab documents vulnerability oracle",
+    description:
+      "PortSwigger Gin & Juice Shop /vulnerabilities page lists deliberate SQLi, DOM XSS, SSTI, and SSRF flaws for web vulnerability scanner benchmarking.",
+    impactOneline:
+      "Public scanner benchmark oracles expose attack paths attackers use to tune automated exploitation against real targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGinAndJuiceScannerLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict scanner evaluation labs to isolated environments; do not mirror oracle pages on production apps.",
+      steps: [
+        "Host Gin & Juice Shop and similar scanner labs on VPN-only or local Docker instances.",
+        "Remove /vulnerabilities oracle tables from any production-facing hostname.",
+        "Use synthetic scanner benchmarks instead of internet-exposed vulnerable apps."
+      ]
+    },
+    fixPrompt:
+      "Our Gin & Juice Shop clone exposes a /vulnerabilities oracle listing SQLi and DOM XSS paths. Show how to isolate the scanner lab from production traffic.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sensitive-api-password-leakage",
     platform: "generic",
     category: "Sensitive data exposure",

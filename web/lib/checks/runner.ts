@@ -659,6 +659,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackHealthLabEvidence",
   "clientSideDomGoatLabEvidence",
   "clientSideInvictiPracticeSiteEvidence",
+  "clientSideGinAndJuiceScannerLabEvidence",
   "clientSideWebsecChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
@@ -3511,6 +3512,41 @@ function extractHackingLabSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Gin & Juice Shop — PortSwigger scanner evaluation lab with /vulnerabilities oracle. */
+function extractGinAndJuiceVulnSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (
+    !/ginandjuice\.shop/i.test(host) &&
+    !/Gin & Juice Shop|ginandjuice\.shop|vulnerability scanner to the test/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/vulnerabilities", "/catalog", "/blog"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (/href\s*=\s*["']\/vulnerabilities["']/i.test(html)) {
+    try {
+      out.add(new URL("/vulnerabilities", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti ASP.NET practice site — seed guestbook XSS lab page. */
 function extractInvictiAspnetSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -4250,6 +4286,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const owaspGenaiLabSeeds = extractOwaspGenaiLabSeeds(home.body, home.finalUrl);
   const ctfDefiSeeds = extractCtfDefiSeeds(home.body, home.finalUrl);
   const invictiAspnetSeeds = extractInvictiAspnetSeeds(home.body, home.finalUrl);
+  const ginAndJuiceVulnSeeds = extractGinAndJuiceVulnSeeds(home.body, home.finalUrl);
   const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
   const vaultappSeeds = extractVaultappSeeds(home.body, home.finalUrl);
   const llmSecDevSeeds = extractLlmSecDevSeeds(home.body, home.finalUrl);
@@ -4441,6 +4478,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...frontendXssDemoSeeds,
       ...avidVulnEditorSeeds,
       ...pwnshopSeeds,
+      ...ginAndJuiceVulnSeeds,
       ...restVulnwebSeeds,
       ...vulnappHubSeeds,
       ...blueTeamLabsSeeds,
