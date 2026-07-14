@@ -3527,10 +3527,17 @@ function extractLlmSecDevSeeds(html: string, pageUrl: string): string[] {
 function extractPicoctfCylabSeeds(html: string, pageUrl: string): string[] {
   if (!/picoCTF|picoctf\.org|CyLab Security Academy|cylabacademy\.org/i.test(html)) return [];
   const out = new Set<string>();
-  for (const url of ["https://cylabacademy.org/", "https://cylabacademy.org/about.html"]) {
+  for (const url of [
+    "https://cylabacademy.org/",
+    "https://cylabacademy.org/about.html",
+    "https://cylabacademy.org/learners.html",
+    "https://cylabacademy.org/competitors.html",
+    "https://cylabacademy.org/educators.html",
+    "https://primer.cylabacademy.org/"
+  ]) {
     out.add(url);
   }
-  const linkRe = /href\s*=\s*["'](https?:\/\/cylabacademy\.org[^"'#?]*)["']/gi;
+  const linkRe = /href\s*=\s*["'](https?:\/\/(?:cylabacademy|primer\.cylabacademy)\.org[^"'#?]*)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html)) && out.size < 6) {
     try {
@@ -3953,7 +3960,7 @@ function extractRestVulnwebDocSeeds(html: string, origin: string): string[] {
 /** SecTrainer — seed module + CTF SPA routes from nav catalog. */
 function extractSectrainerSpaSeeds(html: string, jsBodies: string[], origin: string): string[] {
   const corpus = [html, ...jsBodies].join("\n");
-  if (!/SecTrainer|securitytrainer\.vercel\.app/i.test(corpus)) return [];
+  if (!/SecTrainer|security-?trainer\.vercel\.app/i.test(corpus)) return [];
   const out = new Set<string>();
   for (const path of ["/modules", "/modules/sql-injection", "/modules/xss-basics", "/ctf", "/paths"]) {
     try {
@@ -4458,7 +4465,21 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const cylabAcademyPrioritySeeds =
     /picoCTF|picoctf\.org|CyLab Security Academy|cylabacademy\.org/i.test(home.body) ||
     /picoctf\.org|cylabacademy\.org/i.test(home.finalUrl)
-      ? ["https://cylabacademy.org/", "https://cylabacademy.org/about.html"]
+      ? [
+          "https://cylabacademy.org/",
+          "https://cylabacademy.org/about.html",
+          "https://cylabacademy.org/learners.html",
+          "https://cylabacademy.org/competitors.html",
+          "https://cylabacademy.org/educators.html",
+          "https://primer.cylabacademy.org/"
+        ]
+      : [];
+  const sectrainerPrioritySeeds =
+    /SecTrainer|security-?trainer\.vercel\.app|gamified cyber security training/i.test(home.body) ||
+    /security-?trainer\.vercel\.app/i.test(home.finalUrl)
+      ? ["/modules", "/modules/sql-injection", "/modules/xss-basics", "/ctf", "/paths"].map((p) =>
+          new URL(p, crawlOrigin).toString()
+        )
       : [];
   const ctflearnWebPrioritySeeds =
     /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)
@@ -4497,6 +4518,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
       ...cylabAcademyPrioritySeeds,
+      ...sectrainerPrioritySeeds,
       ...hackingLabPrioritySeeds,
       ...sixHackPlatformPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
