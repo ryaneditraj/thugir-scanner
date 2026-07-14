@@ -6382,6 +6382,29 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- RedTiger classic SQLi login (username + password POST on level1/2) ----------------
+const redtigerClassicLoginSqlEvidence: Rule = async (ctx) => {
+  if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const pageCorpus = `${ctx.home.body}\n${pageUrl}`;
+  if (/name="level\d+login"/i.test(pageCorpus)) return NEGATIVE;
+  const table = pageCorpus.match(/Tablename:\s*(level\d+_users)/i)?.[1];
+  const formBlock = pageCorpus.match(
+    /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,700}?name="user"[\s\S]{0,400}?name="password"/i
+  );
+  if (!table || !formBlock) return NEGATIVE;
+  const levelPath = pageUrl.match(/level\d+\.php/i)?.[0];
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      table,
+      levelPath,
+      note: `RedTiger ${levelPath ?? "level"} exposes classic SQL injection login drill via POST user+password (${table})`
+    }
+  };
+};
+
 // --- RedTiger blind login-bypass levels (password-only POST forms) ------------------
 const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
@@ -13477,6 +13500,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
+  redtigerClassicLoginSqlEvidence,
   redtigerBlindLoginFormEvidence,
   clientSideVulnExposeEvidence,
   clientSideWizerCtfEvidence,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T03:11:29.787Z",
-  "total": 309,
-  "uniqueSlugs": 309,
+  "generatedAt": "2026-07-14T04:11:16.657Z",
+  "total": 310,
+  "uniqueSlugs": 310,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 291,
+    "generic": 292,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 243,
+    "deep": 244,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Security misconfiguration": 23,
     "Information disclosure": 18,
     "Broken authentication": 19,
-    "Injection": 51,
+    "Injection": 52,
     "Cross-site scripting": 29,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
@@ -291,6 +291,7 @@
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
     "redtiger-blind-login-form-evidence",
+    "redtiger-classic-login-sql-evidence",
     "reflected-xss-query-param",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",

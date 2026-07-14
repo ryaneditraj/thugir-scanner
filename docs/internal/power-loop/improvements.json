@@ -2567,6 +2567,24 @@
       "slug": "ctflearn-web-challenge-priority-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ctflearn.com hub omits web.ctflearn.com/web1–web8 in capped crawl; ctflearnWebPrioritySeeds prepends http://web.ctflearn.com/web{1,2,3,4,6,7,8}/ when CTFlearn markers detected; web.ctflearn.com/web4 maintained 4 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wizer-ctf.com",
+      "slug": "wizer-ctf-chal9-15-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chal10.vercel.app Messages App DOM XSS bundle behind Vercel checkpoint intermittently; wizerChalPrioritySeeds extended chal1–8→chal1–15 + finalUrl oracle; chal10.vercel.app findings 2→4 (+dangerous-html-sinks, secret-resend); benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-classic-login-sql-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level1.php POST name=user+password + Tablename: level1_users; redtigerClassicLoginSqlEvidence scoped to page corpus; level1.php findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesteracademylab.appspot.com",
+      "slug": "pentesteracademylab-proactive-basic-auth",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: student:password unlocks Challenge 1–4 hub HTML; applyWargameBasicAuth always retries pentesteracademylab.appspot.com; client-side-pentester-academy-lab-evidence maintained; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4649,6 +4667,21 @@
       "source": "discovery:vulnforge.vercel.app",
       "slug": "vulnforge-hardcoded-api-key",
       "shipped_at": "2026-07-14T02:00:00.000Z"
+    },
+    {
+      "source": "discovery:wizer-ctf.com",
+      "slug": "wizer-ctf-chal9-15-priority-seeds",
+      "shipped_at": "2026-07-14T04:15:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-classic-login-sql-evidence",
+      "shipped_at": "2026-07-14T04:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesteracademylab.appspot.com",
+      "slug": "pentesteracademylab-proactive-basic-auth",
+      "shipped_at": "2026-07-14T04:15:00.000Z"
     }
   ]
 }
