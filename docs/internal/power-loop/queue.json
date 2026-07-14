@@ -3317,7 +3317,32 @@
       "url": "https://vwad.owasp.org/app/pwnshop/",
       "source": "OWASP VWAD — pwnshop e-commerce lab directory entry (HN/GitHub r007sec/pwnshop)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/owasp-juice-shop/",
+      "source": "OWASP VWAD — Juice Shop directory entry with live demo links (vwad.owasp.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-web-application-dvwa/",
+      "source": "OWASP VWAD — DVWA directory entry with hosted lab pointers (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.github.io/juice-shop/",
+      "source": "OWASP Juice Shop official GitHub Pages project site — challenge/oracle markers (juice-shop.github.io)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/wrongsecrets/",
+      "source": "OWASP VWAD — WrongSecrets secrets-management CTF directory entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/xss",
+      "source": "DaniSam-STU/security-lab — live XSS module with vulnerable vs secure API routes (GitHub README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T19:05:00.000Z"
+  "updated_at": "2026-07-14T20:10:00.000Z"
 }
