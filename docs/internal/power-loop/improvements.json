@@ -2831,6 +2831,24 @@
       "slug": "sixhack-ctf-faq-and-platform-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Los CTF Labs de SixHack Academy son gratuitos FAQ JSON-LD + /ctf/ explainer meta; extractSixHackCtfSeeds adds /ctf/ + sixHackPlatformPrioritySeeds prepends platform.sixhackacademy.com; sixhackacademy.com/ctf/ validates client-side-sixhack-ctf-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctflearn.com",
+      "slug": "ctflearn-https-web-challenge-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: web.ctflearn.com/web4 SELECT * FROM webfour.webfour where name = '$input'; ctflearnWebPrioritySeeds now use https://web.ctflearn.com + /web{N}/ crawl priority; ctflearn.com findings 3→10 (web1–web6 challenge slugs); benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:cylabacademy.org",
+      "slug": "cylab-academy-hub-markers-and-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Cybersecurity, learned by doing + 11M+ Challenges solved + think like a hacker on cylabacademy.org; extractPicoctfCylabSeeds + cylabAcademyPrioritySeeds; cylabacademy.org findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-ctf-platform-priority-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF Platform – Organize Capture The Flag + /ctf_platform route on hacking-lab.com; hackingLabPrioritySeeds prepends /ctf_platform/ + /events/; hacking-lab.com findings 3 maintained; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5093,6 +5111,21 @@
       "source": "discovery:sixhackacademy.com",
       "slug": "sixhack-ctf-faq-and-platform-seeds",
       "shipped_at": "2026-07-14T19:00:00.000Z"
+    },
+    {
+      "source": "discovery:ctflearn.com",
+      "slug": "ctflearn-https-web-challenge-seeds",
+      "shipped_at": "2026-07-14T20:26:00.000Z"
+    },
+    {
+      "source": "discovery:cylabacademy.org",
+      "slug": "cylab-academy-hub-markers-and-seeds",
+      "shipped_at": "2026-07-14T20:26:00.000Z"
+    },
+    {
+      "source": "discovery:hacking-lab.com",
+      "slug": "hacking-lab-ctf-platform-priority-crawl",
+      "shipped_at": "2026-07-14T20:26:00.000Z"
     }
   ]
 }
