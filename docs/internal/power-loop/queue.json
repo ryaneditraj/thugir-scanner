@@ -3242,7 +3242,32 @@
       "url": "https://ginandjuice.shop/catalog/product/stock",
       "source": "PortSwigger Gin & Juice Shop — XXE stock check endpoint (vulnerability disclosure page oracle)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 publicly accessible debug endpoint oracle (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit-log JSON feed (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — LLM prompt-injection / agentic attack entry point (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/order/details",
+      "source": "PortSwigger Gin & Juice Shop — orderId IDOR oracle (Patrick Double agent benchmark report)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/cross-site-scripting/start",
+      "source": "Hacksplaining — stored/reflected XSS secure-coding lesson canonical /start entry (lessons catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T16:06:00.000Z"
+  "updated_at": "2026-07-14T17:05:00.000Z"
 }
