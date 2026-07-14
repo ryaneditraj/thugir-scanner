@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-14T01:08:00.000Z",
+  "updated_at": "2026-07-14T02:22:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://chal10.vercel.app/",
+      "source": "Wizer CTF #10 Messages App — stored DOM XSS developer security lab (wizer-ctf.com writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal11.vercel.app/",
+      "source": "Wizer CTF #11 — public developer secure-coding challenge (wizer-ctf.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal14.vercel.app/",
+      "source": "Wizer CTF #14 — public developer security training lab (vercel.app chal* series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chal15.vercel.app/",
+      "source": "Wizer CTF #15 — public developer security training lab (vercel.app chal* series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shiny-computing-machine.vercel.app/",
+      "source": "Jaideep02/shiny-computing-machine — Hack the Basics live cybersecurity show CTF hub (GitHub)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnforge.vercel.app/",
       "source": "webspoilt/vulnforge-academy — 20-level OWASP Top 10 CTF lab (Vercel homepage)",
