@@ -4378,9 +4378,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
         ].map((p) => new URL(p, home.finalUrl).toString())
       : [];
+  const ginAndJuicePrioritySeeds =
+    /ginandjuice\.shop|Gin & Juice Shop|vulnerability scanner to the test/i.test(home.body) ||
+    /ginandjuice\.shop/i.test(home.finalUrl)
+      ? ["/vulnerabilities", "/catalog", "/blog"].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
       ...ctflearnWebPrioritySeeds,
