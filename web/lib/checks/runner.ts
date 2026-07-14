@@ -678,6 +678,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnforgeAcademyEvidence",
   "clientSideVulnforgeEvidence",
   "clientSideVulnshopEvidence",
+  "clientSideJwtlensEvidence",
+  "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
@@ -2151,7 +2153,18 @@ function extractHackTheBoxAcademySeeds(html: string, pageUrl: string): string[] 
 
 /** OWASP VulnerableApp docs (sasanlabs.github.io/VulnerableApp) — Jekyll scanner-eval platform. */
 function extractVulnerableAppDocSeeds(html: string, pageUrl: string): string[] {
-  if (!/VulnerableApp|SasanLabs\/VulnerableApp|Vulnerable App/i.test(html)) return [];
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  const onVulnerableAppHost =
+    /(?:^|\.)sasanlabs\.github\.io$/i.test(host) ||
+    /(?:^|\.)vulnerableapp\.com$/i.test(host) ||
+    /vulnerableapp/i.test(host);
+  if (
+    !onVulnerableAppHost &&
+    !/SasanLabs\/VulnerableApp|href\s*=\s*["']\/VulnerableApp\//i.test(html)
+  ) {
+    return [];
+  }
+  if (!/VulnerableApp|SasanLabs\/VulnerableApp/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   const re =
