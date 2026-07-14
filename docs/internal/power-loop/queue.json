@@ -3007,7 +3007,32 @@
       "url": "https://agentainer.io/",
       "source": "Show HN Agentainer Lab \u2014 open-source stateful AI agent deploy playground (oso95/Agentainer-lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://cybersheild-lab.vercel.app/",
+      "source": "Prits3/Cybersheild-lab \u2014 OWASP Top 10 live attack demos with secure fixes + CVSS report (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-lab.vercel.app/",
+      "source": "prompt-injection-lab \u2014 interactive LLM prompt-injection attack/defense training demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://raw.githack.com/secretsifter/insecureshield-demo/main/public/index.html",
+      "source": "secretsifter/insecureshield-demo \u2014 synthetic secret-leak claims portal for scanner evaluation (githack OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://raw.githack.com/NatFreelance/react-xss-appsec-demo/main/index.html",
+      "source": "NatFreelance/react-xss-appsec-demo \u2014 DOM XSS via dangerouslySetInnerHTML with DOMPurify fix (githack)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cyberdefenders.org/labs",
+      "source": "CyberDefenders Blue Team Labs \u2014 public hands-on defensive security lab catalog (distinct from root homepage)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T05:08:00.000Z"
+  "updated_at": "2026-07-14T06:08:00.000Z"
 }
