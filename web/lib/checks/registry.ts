@@ -5379,6 +5379,44 @@ const clientSideGraphqlLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- graphql.security and similar GraphQL security assessment hubs ----------------
+const CLIENT_GRAPHQL_SECURITY_HUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "graphql.security domain",
+    re: /graphql\.security/i
+  },
+  {
+    label: "GraphQL security assessment tagline",
+    re: /assess the security of your GraphQL|Is your GraphQL application secure/i
+  },
+  {
+    label: "GraphQL introspection testing keywords",
+    re: /graphql introspection|graphql authorization|graphql complexity/i
+  },
+  {
+    label: "GraphQL security testing product title",
+    re: /GraphQL Security/i
+  }
+];
+
+const clientSideGraphqlSecurityHubEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_GRAPHQL_SECURITY_HUB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 80) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/graphql\.security|assess the security of your GraphQL/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "GraphQL security assessment hub documents introspection, authorization, and complexity testing workflows"
+    }
+  };
+};
+
 // --- Next.js React Server Components CVE lab pages (HackerOne / react2shell demos) -
 const CLIENT_RSC_CVE_RES: { label: string; re: RegExp }[] = [
   {
@@ -13697,6 +13735,10 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
     re: /"itemListElement"[\s\S]{0,240}"name":\s*"(?:Juice Shop|DVWA|WebGoat|bWAPP)"/i
   },
   {
+    label: "VWAD DVGA listing",
+    re: /vwad\.owasp\.org\/app\/damn-vulnerable-graphql|name":\s*"Damn Vulnerable GraphQL Application/i
+  },
+  {
     label: "VWAD Pixi DevSlop listing",
     re: /vwad\.owasp\.org\/app\/pixi|"name":\s*"Pixi"/i
   },
@@ -13814,6 +13856,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnAuthPortalEvidence,
   clientSidePathTraversalEvidence,
   clientSideGraphqlLabEvidence,
+  clientSideGraphqlSecurityHubEvidence,
   clientSideReactRscCveEvidence,
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,
