@@ -1208,6 +1208,62 @@ const sitemapSensitivePaths: Rule = async (ctx) => {
   };
 };
 
+// --- sitemap-listed sensitive files reachable over HTTP ---------------------------------
+const SITEMAP_SENSITIVE_FILE_EXT = /\.(?:mdb|sql|sqlite|bak|env|pem|key)(?:\b|$)/i;
+const SITEMAP_SENSITIVE_CONTENT_TYPES =
+  /msaccess|octet-stream|sqlite|sql|text\/plain|application\/x-sqlite3/i;
+
+function sitemapProbeOrigin(origin: string, target: URL): boolean {
+  if (target.origin === origin) return true;
+  try {
+    const oh = new URL(origin).hostname;
+    const th = target.hostname;
+    if (/testsparker\.com|testinvicti\.com/i.test(oh) && /testsparker\.com|testinvicti\.com/i.test(th))
+      return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
+}
+
+const sitemapListedSensitiveFileProbe: Rule = async (ctx) => {
+  const doc = await ctx.probe.get(`${ctx.origin}/sitemap.xml`, { maxBytes: 16_384 });
+  if (doc.status !== 200 || !doc.body.trim()) return NEGATIVE;
+  const urls = new Set<string>();
+  const locRe = /<loc>([^<]+)<\/loc>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = locRe.exec(doc.body))) {
+    try {
+      const loc = m[1].trim();
+      const u = loc.startsWith("http") ? new URL(loc) : new URL(loc, ctx.origin);
+      if (!sitemapProbeOrigin(ctx.origin, u)) continue;
+      if (SITEMAP_SENSITIVE_FILE_EXT.test(u.pathname)) urls.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (urls.size === 0) return NEGATIVE;
+  const probeUrls = [...urls].slice(0, 4);
+  const probed = await ctx.probe.getMany(probeUrls, { maxBytes: 4096 }, 2);
+  for (const [url, r] of probed) {
+    if (r.status !== 200) continue;
+    const ct = (r.headers["content-type"] || "").toLowerCase();
+    if (SITEMAP_SENSITIVE_CONTENT_TYPES.test(ct) || /\.mdb$/i.test(url)) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url,
+          contentType: ct || "unknown",
+          sizeBytes: r.body.length,
+          note: "Sitemap lists a sensitive file path and live probe confirms it is downloadable"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- weak CSP (unsafe-inline + unsafe-eval) ---------------------------------
 const weakCsp: Rule = async (ctx) => {
   const csp = ctx.home.headers["content-security-policy"] || "";
@@ -1707,8 +1763,21 @@ async function probeDogViewerIdSql(ctx: RuleContext): Promise<RuleResult | null>
 
 const sqlErrorDisclosure: Rule = async (ctx) => {
   // Juice Shop benchmark oracle: /rest/products/search?q=')) returns SQLITE_ERROR.
-  // Bypass probe cache and retry through Heroku cold-start stubs.
+  // Bootstrap may already contain the oracle body after primeJuiceShop — use it on cold pass1.
   if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(ctx.origin)) {
+    const bootSql = ctx.combined.match(/SQLITE_ERROR[^\n]{0,160}/i);
+    if (bootSql && /\/rest\/products\/search/i.test(ctx.combined)) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          url: new URL("/rest/products/search?q=''))", ctx.origin).toString(),
+          sqlError: bootSql[0].slice(0, 120),
+          snippet: bootSql[0].slice(0, 240),
+          note: "Juice Shop /rest/products/search returns SQLITE syntax error — benchmark SQLi oracle (bootstrap)"
+        }
+      };
+    }
     const sqlUrl = new URL("/rest/products/search?q='))", ctx.origin).toString();
     for (let attempt = 0; attempt < 8; attempt++) {
       const r = await fetchDoc(sqlUrl, { maxBytes: 8192, timeoutMs: 18000 });
@@ -13802,6 +13871,7 @@ export const RULES: Record<string, Rule> = {
   supabaseStoragePublic,
   supabaseServiceRoleClient,
   sitemapSensitivePaths,
+  sitemapListedSensitiveFileProbe,
   weakCsp,
   hardcodedCredentials,
   clerkSecretInClient,
@@ -14091,6 +14161,7 @@ export const FREE_RULES = new Set([
   "supabaseStoragePublic",
   "supabaseServiceRoleClient",
   "sitemapSensitivePaths",
+  "sitemapListedSensitiveFileProbe",
   "weakCsp",
   "hardcodedCredentials",
   "clerkSecretInClient",

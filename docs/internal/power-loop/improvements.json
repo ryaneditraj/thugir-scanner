@@ -2747,6 +2747,24 @@
       "slug": "client-side-graphql-security-hub-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta keywords graphql introspection + assess the security of your GraphQL + graphql.security domain in Nuxt bundle; clientSideGraphqlSecurityHubEvidence; graphql.security findings 2→2 (+hub slug, secret-resend FP removed); benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-sqli-bootstrap-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: sqlErrorDisclosure uses primeJuiceShop bootstrap SQLITE_ERROR in combined when live fetch still on Heroku stub; bootstrap retry loop 5→8; juice-shop.herokuapp.com pass1 7 findings 6/6 recall (no wake retry)"
+    },
+    {
+      "source": "discovery:aspnet.testsparker.com",
+      "slug": "sitemap-listed-sensitive-file-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sitemap.xml lists http://aspnet.testinvicti.com/statics/data.mdb; GET returns 200 application/x-msaccess; aspnet.testsparker.com findings 5→6"
+    },
+    {
+      "source": "discovery:allsafe.vercel.app",
+      "slug": "allsafe-queue-android-only-reject",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: allsafe.vercel.app serves unrelated marketing site; t0thkr1s/allsafe is Android APK-only — queue entry disabled"
     }
   ],
   "shipped": [
@@ -4944,6 +4962,16 @@
       "source": "discovery:graphql.security",
       "slug": "client-side-graphql-security-hub-evidence",
       "shipped_at": "2026-07-14T14:17:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-sqli-bootstrap-fallback",
+      "shipped_at": "2026-07-14T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:aspnet.testsparker.com",
+      "slug": "sitemap-listed-sensitive-file-exposed",
+      "shipped_at": "2026-07-14T15:10:00.000Z"
     }
   ]
 }

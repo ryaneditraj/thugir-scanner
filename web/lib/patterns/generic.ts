@@ -75,6 +75,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sitemap-listed-sensitive-file-exposed",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Sitemap-listed sensitive file downloadable",
+    description:
+      "sitemap.xml advertises a database backup or credential file path and a live HTTP probe confirms the file is served without authentication.",
+    impactOneline: "A sensitive file listed in your sitemap is publicly downloadable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sitemapListedSensitiveFileProbe" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove sensitive files from the web root and exclude them from sitemap generation.",
+      steps: [
+        "Delete or move database backups and credential files outside the public web root.",
+        "Exclude *.mdb, *.sql, and backup paths from sitemap.xml generation.",
+        "Rotate credentials if any exposed backup contained secrets."
+      ]
+    },
+    fixPrompt:
+      "My sitemap.xml lists paths like *.mdb or *.sql and those files are reachable over HTTP. Remove them from the deploy artifact, block direct access, and exclude them from sitemap generation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-git-dir",
     platform: "generic",
     category: "Source exposure",
