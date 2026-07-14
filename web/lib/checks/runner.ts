@@ -380,9 +380,11 @@ async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise
   if (!isJuiceShopHost(targetUrl) && !isJuiceShopHost(home.finalUrl)) return home;
   let best = home;
   for (let attempt = 0; attempt < 4; attempt++) {
+    const origin = best.finalUrl || targetUrl;
     const pageReady =
       !HEROKU_APP_ERROR_RE.test(best.body) &&
-      (/main\.js/i.test(best.body) || (await juiceShopApiLive(best.finalUrl || targetUrl)));
+      /main\.js/i.test(best.body) &&
+      (await juiceShopApiLive(origin));
     if (pageReady) break;
     await new Promise((r) => setTimeout(r, 3500));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
@@ -837,6 +839,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
+  "clientSideGitagentSecurebotEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
   "clientSideVapiEvidence",
@@ -3215,6 +3218,23 @@ function extractWechallChallengeSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** GitAgent SecureBot demo scanner (gitagent-securebot-app.vercel.app) — seed demo scan route. */
+function extractGitagentSecurebotSeeds(html: string, pageUrl: string): string[] {
+  if (!/GitAgent SecureBot|gitagent-securebot|open-gitagent\/gitagent/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/scan?demo=1", "/scan"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** SkillAudit MCP skill scanner (skillaudit.vercel.app) — seed docs/rules for agent-security markers. */
 function extractSkillauditDocSeeds(html: string, pageUrl: string): string[] {
   if (!/SkillAudit|skillaudit\.vercel\.app/i.test(html)) return [];
@@ -3310,18 +3330,33 @@ function extractGrpcGoatDocSeeds(html: string, pageUrl: string): string[] {
   if (!/gRPC Goat|grpc_goat_docs|rootxjs\/grpc-goat/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of [
-    "/docs/grpc_goat_docs/getting-started/",
-    "/docs/grpc_goat_docs/labs/",
-    "/docs/grpc_goat_docs/walkthrough/",
-    "/docs/grpc_goat_docs/grpc-basics/"
-  ]) {
+  const docBases = new Set<string>();
+  docBases.add(pageOrigin);
+  const helpMatch = html.match(
+    /softwareHelp["']\s*:\s*["'](https?:\/\/[^"']+grpc[_-]?goat[^"']*)["']/i
+  );
+  if (helpMatch?.[1]) {
     try {
-      const u = new URL(p, pageUrl);
-      if (u.origin !== pageOrigin) continue;
-      out.add(u.toString());
+      docBases.add(new URL(helpMatch[1]).origin);
     } catch {
       /* ignore */
+    }
+  }
+  if (/rootxjs\.github\.io|github\.com\/rootxjs\/grpc-goat/i.test(html)) {
+    docBases.add("https://rootxjs.github.io");
+  }
+  for (const base of docBases) {
+    for (const p of [
+      "/docs/grpc_goat_docs/getting-started/",
+      "/docs/grpc_goat_docs/labs/",
+      "/docs/grpc_goat_docs/walkthrough/",
+      "/docs/grpc_goat_docs/grpc-basics/"
+    ]) {
+      try {
+        out.add(new URL(p, base).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   return [...out];
@@ -4440,6 +4475,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const webSecurityLabZhSeeds = extractWebSecurityLabZhSeeds(home.body, home.finalUrl);
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
+  const gitagentSecurebotSeeds = extractGitagentSecurebotSeeds(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -4651,6 +4687,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...webSecurityLabZhSeeds,
       ...secResearchLabSeeds,
       ...skillauditSeeds,
+      ...gitagentSecurebotSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
       ...bergerCyberLabSeeds,
