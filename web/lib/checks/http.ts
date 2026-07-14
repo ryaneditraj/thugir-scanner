@@ -171,15 +171,53 @@ export async function fetchDoc(
   }
 }
 
+/** raw.githack.com deploy base: https://raw.githack.com/{owner}/{repo}/{branch}/ */
+export function githackDeployBase(pageUrl: string): string | null {
+  try {
+    const u = new URL(pageUrl);
+    if (!u.hostname.endsWith("githack.com")) return null;
+    const parts = u.pathname.split("/").filter(Boolean);
+    if (parts.length < 3) return null;
+    return `https://${u.hostname}/${parts[0]}/${parts[1]}/${parts[2]}/`;
+  } catch {
+    return null;
+  }
+}
+
+/** Map raw.githack.com asset URL to raw.githubusercontent.com sibling (Cloudflare blocks .jsx on githack). */
+export function toRawGithubusercontentUrl(url: string): string | null {
+  const m = url.match(/^https:\/\/raw\.githack\.com\/(.+)$/);
+  return m ? `https://raw.githubusercontent.com/${m[1]}` : null;
+}
+
+/** Resolve script/asset paths — githack absolute /src/ paths must stay under owner/repo/branch. */
+export function resolvePageAssetUrl(raw: string, pageUrl: string): string | null {
+  const githackBase = githackDeployBase(pageUrl);
+  if (githackBase) {
+    try {
+      const rel = raw.startsWith("/") ? raw.slice(1) : raw;
+      return new URL(rel, githackBase).toString();
+    } catch {
+      /* fall through */
+    }
+  }
+  try {
+    return new URL(raw, pageUrl).toString();
+  } catch {
+    return null;
+  }
+}
+
 // Extract same-origin script URLs referenced by an HTML document.
 // Resolve relative src against the page URL (not bare origin) so subpath deploys work.
 export function extractScriptUrls(html: string, pageUrl: string, limit = 12): string[] {
   const urls = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   const add = (raw: string) => {
+    const abs = resolvePageAssetUrl(raw, pageUrl);
+    if (!abs) return;
     try {
-      const abs = new URL(raw, pageUrl);
-      if (abs.origin === pageOrigin) urls.add(abs.toString());
+      if (new URL(abs).origin === pageOrigin) urls.add(abs);
     } catch {
       /* ignore malformed */
     }

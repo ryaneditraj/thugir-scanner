@@ -17,7 +17,7 @@ import {
 
 import { FREE_RULES, RULES, type RuleContext } from "./registry";
 import { ProbeCache } from "./probe-cache";
-import { fetchScriptsBatched, fetchPagesBatched } from "./fetch-scripts";
+import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
 export interface FreeScanOptions {
   maxScripts?: number;
@@ -495,7 +495,16 @@ export async function runFreeScan(targetInput: string, opts: FreeScanOptions = {
   // Pull a capped set of same-origin scripts for secret scanning.
   const probe = new ProbeCache();
   const scriptUrls = extractScriptUrls(home.body, home.finalUrl, opts.maxScripts ?? 12);
-  const scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
+  let scripts = await fetchScriptsBatched(scriptUrls, { probe, maxBytes: 800_000, concurrency: 4 });
+  const githackSiblings = expandGithackModuleImports(scripts, home.finalUrl, 6);
+  if (githackSiblings.length > 0) {
+    const fetched = new Set(scriptUrls);
+    const extra = githackSiblings.filter((u) => !fetched.has(u));
+    if (extra.length > 0) {
+      const siblings = await fetchScriptsBatched(extra, { probe, maxBytes: 800_000, concurrency: 4 });
+      scripts = [...scripts, ...siblings];
+    }
+  }
   const combined = [home.body, ...scripts.map((s) => s.body)].join("\n");
   const detection = detectPlatform(home, combined);
   const ctx: RuleContext = { origin, home, scripts, combined, probe };
@@ -4402,11 +4411,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       }
     }
   }
-  const scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
+  let scripts = await fetchScriptsBatched([...scriptUrls].slice(0, scriptCap), {
     probe,
     maxBytes: 800_000,
     concurrency: 4
   });
+  const githackSiblings = expandGithackModuleImports(scripts, home.finalUrl, 8);
+  if (githackSiblings.length > 0) {
+    const fetched = new Set([...scriptUrls]);
+    const extra = githackSiblings.filter((u) => !fetched.has(u)).slice(0, Math.max(0, scriptCap - scripts.length));
+    if (extra.length > 0) {
+      const siblings = await fetchScriptsBatched(extra, { probe, maxBytes: 800_000, concurrency: 4 });
+      scripts = [...scripts, ...siblings];
+    }
+  }
 
   // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
   const juiceShopOrigin = home.finalUrl || target.toString();
