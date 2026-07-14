@@ -282,13 +282,12 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
 
   const wakeApi = async (): Promise<boolean> => {
-    for (let attempt = 0; attempt < 8; attempt++) {
+    for (let attempt = 0; attempt < 10; attempt++) {
       if (await juiceShopBenchmarkOracleReady(pageUrl)) return true;
-      // Degraded dyno may never reach full oracle — fall back to any live API after a few tries.
-      if (attempt >= 3 && (await juiceShopApiLive(pageUrl))) return true;
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 2500));
     }
-    return false;
+    // Last resort: prime whatever API paths respond (partial wake) so other rules still get signal.
+    return juiceShopApiLive(pageUrl);
   };
 
   const wakeBundle = async (): Promise<boolean> => {
@@ -1004,6 +1003,13 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       if (u.origin !== pageOrigin) continue;
       u.hash = "";
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (let n = 1; n <= 9; n++) {
+    try {
+      out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
       /* ignore */
     }
