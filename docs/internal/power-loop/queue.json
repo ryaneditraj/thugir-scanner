@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://ai-prompt-lab.vercel.app/",
+      "source": "AI prompt injection security training lab — interactive LLM attack demos (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-playground.vercel.app/",
+      "source": "Interactive prompt injection playground — OWASP LLM Top 10 demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-demo.vercel.app/",
+      "source": "AI security vulnerability demo platform — agentic attack surface (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://csrf-xss-demo.vercel.app/",
+      "source": "CSRF and XSS interactive React training demo (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://idor-website.vercel.app/",
+      "source": "SecureBank IDOR employee portal — broken access control lab (web search)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://chal10.vercel.app/",
       "source": "Wizer CTF #10 Messages App — stored DOM XSS developer security lab (wizer-ctf.com writeup)",
       "auth": "public_demo"
@@ -3344,5 +3369,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T20:10:00.000Z"
+  "updated_at": "2026-07-14T21:10:00.000Z"
 }
