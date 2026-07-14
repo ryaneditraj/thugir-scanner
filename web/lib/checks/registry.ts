@@ -2554,6 +2554,14 @@ const CLIENT_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "Jekyll Rouge write-up URLSearchParams innerHTML reflected XSS lab",
     re: /URLSearchParams[\s\S]{0,600}innerHTML[\s\S]{0,60}=\s*[\s\S]{0,40}\bq\b/i
+  },
+  {
+    label: "Stored XSS lab rendered without sanitisation",
+    re: /rendered without sanitisation[\s\S]{0,500}(?:XSS|innerHTML|raw HTML|injected scripts)/i
+  },
+  {
+    label: "Stored persistent XSS training marker",
+    re: /Stored \(Persistent\) XSS vulnerability/i
   }
 ];
 
@@ -8267,6 +8275,19 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
       }
     };
   }
+  const syntheticPortal =
+    /<!--[\s\S]{0,1600}?(?:apim-subscription-key\s*:\s*[a-z0-9]{16,}|dev_admin\s*:\s*[^\s<]+@[^\s<]+\s*\/\s*\S+|db_conn\s*:[\s\S]{0,200}?Password\s*=\s*[^;\s<]+)[\s\S]{0,800}?-->/i;
+  const portal = ctx.combined.match(syntheticPortal);
+  if (portal) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        sample: portal[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+        note: "HTML comment discloses API keys, admin credentials, or database connection strings in page source"
+      }
+    };
+  }
   return NEGATIVE;
 };
 
@@ -9908,6 +9929,90 @@ const clientSideVulnshopEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "VulnShop documents unauthenticated /api/debug/config and /api/debug/users routes exposing secrets when the Railway backend is reachable"
+    }
+  };
+};
+
+// --- JWTLens Burp Suite JWT security scanner landing (jwtlens.netlify.app) -----------
+const CLIENT_JWTLENS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JWTLens brand",
+    re: /JWTLens/i
+  },
+  {
+    label: "JWT security scanner for Burp",
+    re: /JWT Security Scanner for Burp Suite|JWT security scanner for Burp/i
+  },
+  {
+    label: "62 automated JWT checks",
+    re: /62 automated (?:JWT )?checks|62 security checks/i
+  },
+  {
+    label: "Algorithm confusion / JWT Forge",
+    re: /algorithm confusion|JWT Forge|KID injection|JWKS injection/i
+  },
+  {
+    label: "Weak secret brute force",
+    re: /weak secret brute force|JWT algorithm none/i
+  }
+];
+
+const clientSideJwtlensEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JWTLENS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/JWTLens|jwtlens\.netlify\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "JWTLens publishes a Burp Suite JWT scanner with 62 checks covering algorithm confusion, KID injection, and weak secrets"
+    }
+  };
+};
+
+// --- CyberShield Lab OWASP Top 10 education platform (cybersheild-lab.vercel.app) --
+const CLIENT_CYBERSHEILD_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CyberShield Lab brand",
+    re: /CyberShield Lab/i
+  },
+  {
+    label: "OWASP Top 10 coverage",
+    re: /OWASP Top 10/i
+  },
+  {
+    label: "SQL injection authentication bypass module",
+    re: /SQL Injection[\s\S]{0,80}Authentication Bypass|SQL Injection Lab/i
+  },
+  {
+    label: "XSS demo vulnerable module",
+    re: /Cross-Site Scripting \(XSS\)[\s\S]{0,80}Vulnerable|XSS Demo/i
+  },
+  {
+    label: "Ethical hacking education platform",
+    re: /Ethical Hacking|cybersecurity education platform/i
+  }
+];
+
+const clientSideCybersheildLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBERSHEILD_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CyberShield|cybersheild-lab/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CyberShield Lab documents OWASP Top 10 SQLi and XSS modules with attack-and-fix side-by-side demos"
     }
   };
 };
@@ -13620,6 +13725,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
+  clientSideJwtlensEvidence,
+  clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
   clientSideXvwaEvidence,
   clientSideOpenRedirectEvidence,

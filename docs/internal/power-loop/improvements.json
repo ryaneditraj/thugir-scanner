@@ -2621,6 +2621,24 @@
       "slug": "vwad-bwapp-listing-markers",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bWAPP - OWASP VWAD + Over 100 web bugs + covers all major known web vulnerabilities including OWASP Top 10; CLIENT_BWAPP_LAB_RES extended; vwad.owasp.org/app/bwapp/ findings 3→4 (+client-side-bwapp-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:jwtlens.netlify.app",
+      "slug": "client-side-jwtlens-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWTLens JWT Security Scanner for Burp Suite + 62 automated checks + algorithm confusion/KID injection; extractVulnerableAppDocSeeds scoped to VulnerableApp hosts (fixes jwtlens crawl pollution to /VulnerableApp/*); jwtlens.netlify.app findings 1→2; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secretsifter/insecureshield-demo",
+      "slug": "html-comment-synthetic-portal-secrets",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HTML comment apim-subscription-key + dev_admin admin@acme-portal.com / InsecureShield@2024 + db_conn Password=Pr0d$ql2024! on raw.githack.com/secretsifter/insecureshield-demo; htmlCommentCredentialDisclosure syntheticPortal regex; findings 2→3 (+html-comment-credential-disclosure); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cybersheild-lab.vercel.app",
+      "slug": "client-side-cybersheild-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CyberShield Lab + OWASP Top 10 + SQL Injection Authentication Bypass + XSS Demo modules; CLIENT_XSS_RES stored sanitisation markers; cybersheild-lab.vercel.app findings 3→4 (+client-side-cybersheild-lab-evidence, client-side-xss-evidence); benchmark 6/6 maintained"
     }
   ],
   "shipped": [

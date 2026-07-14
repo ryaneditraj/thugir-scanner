@@ -3494,6 +3494,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-jwtlens-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "JWTLens JWT security scanner disclosed",
+    description:
+      "JWTLens is an open-source Burp Suite extension with 62 automated JWT checks covering algorithm confusion, KID injection, weak secrets, and JWT Forge exploitation.",
+    impactOneline:
+      "Public JWT scanner landing pages document attack techniques attackers reuse against production JSON Web Token implementations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJwtlensEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JWT scanner docs are educational — enforce strict JWT validation in production APIs.",
+      steps: [
+        "Reject alg:none and unexpected signing algorithms server-side.",
+        "Validate JWT kid headers against an allow-list; never fetch JWKS from attacker-controlled URLs.",
+        "Rotate JWT secrets if weak secrets were ever used in production."
+      ]
+    },
+    fixPrompt:
+      "We reference JWTLens-style JWT testing in our security docs. Show how to harden JWT validation against algorithm confusion and KID injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cybersheild-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CyberShield Lab OWASP Top 10 training platform disclosed",
+    description:
+      "CyberShield Lab is an interactive cybersecurity education platform with live SQL injection, XSS, and password-analysis modules covering OWASP Top 10 attack-and-fix demos.",
+    impactOneline:
+      "Public CyberShield Lab instances expose intentionally vulnerable SQLi and XSS training modules for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCybersheildLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CyberShield Lab is intentional training — isolate demo instances from production networks.",
+      steps: [
+        "Run CyberShield Lab only on dedicated training infrastructure.",
+        "Do not copy SQLi/XSS demo patterns into production authentication or comment systems.",
+        "Rate-limit unauthenticated access to vulnerable demo modules."
+      ]
+    },
+    fixPrompt:
+      "We host a CyberShield Lab-style OWASP Top 10 education platform. Show how to isolate SQLi and XSS demo modules from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-tegalsec-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
