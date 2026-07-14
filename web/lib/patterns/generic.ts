@@ -358,6 +358,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "graphql-endpoint-disclosed-in-docs",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "GraphQL server URL disclosed in API documentation",
+    description:
+      "SpectaQL or Swagger-style API docs embed the GraphQL server URL (often localhost:PORT/graphql), exposing the full schema, queries, and mutations to anyone who can read the docs page.",
+    impactOneline: "GraphQL schema and mutation catalog are readable from public API docs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlEndpointDisclosedInDocs" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove internal GraphQL URLs from public docs and gate API reference behind auth.",
+      steps: [
+        "Do not publish SpectaQL/Swagger docs with localhost or internal GraphQL URLs on public hosts.",
+        "Require authentication for API reference pages in production.",
+        "Disable GraphQL playground and introspection on any reachable GraphQL endpoint."
+      ]
+    },
+    fixPrompt:
+      "Our SpectaQL docs expose a GraphQL server URL and full schema on a public page. Show how to redact internal endpoints from docs and lock down the live GraphQL API.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "directory-listing-enabled",
     platform: "generic",
     category: "Information disclosure",

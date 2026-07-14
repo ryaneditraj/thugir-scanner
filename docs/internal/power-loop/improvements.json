@@ -2711,6 +2711,24 @@
       "slug": "firing-range-reflected-context-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/title?q=canary echoes in <title>; extractFiringRangeCrawlSeeds now seeds title/head/attribute_unquoted + href harvest; public-firing-range findings 4 maintained; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-oracle-staggered-wake",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primeJuiceShopApiProbes waits 10x for admin+idor+sqli oracles (removed attempt>=3 partial wake); sqlErrorDisclosure/idorObjectAccess 8 retries @3s; juice-shop.herokuapp.com pass1 8 findings 6/6 recall (no wake retry)"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-exercise-1-9-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example hub links exercises 1-9 with msgboard.innerHTML sinks; extractDomGoatCxssSeeds seeds example/1-9; domgo.at/cxss/example pages_crawled 6 incl example/1-9 routes; findings 3 maintained"
+    },
+    {
+      "source": "discovery:lab.blackhatgraphql.com:9001",
+      "slug": "graphql-endpoint-disclosed-in-docs",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SpectaQL docs embed localhost:5013/graphql; graphqlEndpointDisclosedInDocs rule; lab.blackhatgraphql.com:9001 findings 2→3 (+graphql-endpoint-disclosed-in-docs); benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4878,6 +4896,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-context-seeds",
       "shipped_at": "2026-07-14T12:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-oracle-staggered-wake",
+      "shipped_at": "2026-07-14T13:30:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-exercise-1-9-seeds",
+      "shipped_at": "2026-07-14T13:30:00.000Z"
+    },
+    {
+      "source": "discovery:lab.blackhatgraphql.com:9001",
+      "slug": "graphql-endpoint-disclosed-in-docs",
+      "shipped_at": "2026-07-14T13:30:00.000Z"
     }
   ]
 }

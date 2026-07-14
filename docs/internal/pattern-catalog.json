@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T12:14:04.926Z",
-  "total": 316,
-  "uniqueSlugs": 316,
+  "generatedAt": "2026-07-14T13:28:00.900Z",
+  "total": 317,
+  "uniqueSlugs": 317,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,12 +9,12 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 298,
+    "generic": 299,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 66,
+    "free": 67,
     "deep": 250,
     "continuous": 0
   },
@@ -25,7 +25,7 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 23,
-    "Information disclosure": 19,
+    "Information disclosure": 20,
     "Broken authentication": 20,
     "Injection": 52,
     "Cross-site scripting": 29,
@@ -277,6 +277,7 @@
     "exposed-source-maps",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
+    "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",
     "hidden-prompt-injection",
     "html-comment-credential-disclosure",

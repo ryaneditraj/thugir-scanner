@@ -828,6 +828,22 @@ const graphqlIntrospection: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+/** SpectaQL/DVGA docs embed localhost:PORT/graphql — positive proof even when backend port is unreachable. */
+const graphqlEndpointDisclosedInDocs: Rule = async (ctx) => {
+  if (!/spectaql|Damn Vulnerable GraphQL Application/i.test(ctx.combined)) return NEGATIVE;
+  const m = ctx.combined.match(/(?:localhost|127\.0\.0\.1):(\d+)\/graphql/i);
+  if (!m) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      endpoint: m[0],
+      port: m[1],
+      note: "SpectaQL API reference documents a GraphQL server URL — schema and mutations exposed in docs even when the backend listens on another host/port"
+    }
+  };
+};
+
 // --- phpinfo() page exposed in production -----------------------------------
 // PHP apps sometimes ship phpinfo.php for debugging. The page dumps extensions,
 // paths, env vars and sometimes secrets — positive proof when the title/body match.
@@ -1380,10 +1396,10 @@ const idorObjectAccess: Rule = async (ctx) => {
   // Juice Shop benchmark oracle: GET /rest/track-order/1 returns orderId JSON without auth.
   if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
     const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
-    for (let attempt = 0; attempt < 5; attempt++) {
+    for (let attempt = 0; attempt < 8; attempt++) {
       const r = await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
       if (HEROKU_STUB_RE.test(r.body)) {
-        await new Promise((resolve) => setTimeout(resolve, 2500));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         continue;
       }
       if (
@@ -1694,11 +1710,11 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
   // Bypass probe cache and retry through Heroku cold-start stubs.
   if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(ctx.origin)) {
     const sqlUrl = new URL("/rest/products/search?q='))", ctx.origin).toString();
-    for (let attempt = 0; attempt < 4; attempt++) {
+    for (let attempt = 0; attempt < 8; attempt++) {
       const r = await fetchDoc(sqlUrl, { maxBytes: 8192, timeoutMs: 18000 });
       if (r.status === 401 || r.status === 403) break;
       if (/Application Error|herokucdn\.com\/error-pages/i.test(r.body)) {
-        await new Promise((resolve) => setTimeout(resolve, 2500));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         continue;
       }
       const marker = SQL_ERROR_MARKERS.find((re) => re.test(r.body));
@@ -13734,6 +13750,7 @@ export const RULES: Record<string, Rule> = {
   techDisclosure,
   inlineStateSecrets,
   graphqlIntrospection,
+  graphqlEndpointDisclosedInDocs,
   directoryListing,
   phpinfoExposed,
   phpMyAdminExposed,
@@ -14022,6 +14039,7 @@ export const FREE_RULES = new Set([
   // read-only, positive-proof additions — safe to confirm on the free pass
   "inlineStateSecrets",
   "graphqlIntrospection",
+  "graphqlEndpointDisclosedInDocs",
   "directoryListing",
   "phpinfoExposed",
   "phpMyAdminExposed",

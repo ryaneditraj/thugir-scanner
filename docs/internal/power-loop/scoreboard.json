@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T13:12:00.000Z",
+  "updated_at": "2026-07-14T13:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 1299,
-  "total_findings": 5826,
+  "total_sites_scanned": 1300,
+  "total_findings": 5834,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 637,
   "discovery_findings": 4315,
-  "improvements_shipped": 433,
-  "last_run": "2026-07-14T13:12:00.000Z",
+  "improvements_shipped": 436,
+  "last_run": "2026-07-14T13:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "13:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 7,
+      "findings": 8,
       "recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 235,
-      "note": "Single-pass 7 findings 6/6 recall — no Heroku wake retry needed",
+      "pass1_gap": [],
+      "pass1_findings": 8,
+      "note": "Pass1 8 findings 6/6 recall — staggered oracle wake avoids sqli miss on Heroku cold start",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -63,21 +63,22 @@
         "https://prompt-injection-demo.vercel.app/"
       ],
       "deferred_new_urls": "5 new URLs queued at tail — backlog drain prioritized testsparker, domgo cxss, ssrf-defense-platform, graphqlbook, pentesterlab, root-me",
-      "focus": "Backlog queue drain — Netsparker test apps, DOM clobbering lab, SSRF defense platform, GraphQL book API, PentesterLab, Root-Me"
+      "focus": "Juice Shop pass1 reliability + DVGA SpectaQL endpoint disclosure + DomGoat exercise hub crawl"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) single-pass — no category gaps",
+      "juice-shop.herokuapp.com: pass1 benchmark 8 findings 6/6 (no wake retry) after staggered oracle wake",
+      "lab.blackhatgraphql.com:9001: 2→3 findings — localhost:5013/graphql disclosed in SpectaQL docs",
+      "domgo.at/cxss/example: exercise 1-9 routes seeded from hub nav",
       "ssrf-defense-platform.onrender.com: 6 findings — SSRF training lab markers",
-      "api.graphqlbook.org: 5 findings — GraphQL security training API evidence",
-      "aspnet.testsparker.com: 5 findings — Netsparker ASP.NET vuln demo",
-      "angular.testsparker.com: 5 findings — Netsparker Angular vuln demo"
+      "api.graphqlbook.org: 5 findings — GraphQL security training API evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop pass1 pages_crawled=1 — shallow crawl despite 6/6 recall; wake retry may still help probe depth",
-      "new discovery URLs (VWAD DVGA, allsafe, graphql.security) deferred behind 480+ backlog entries",
+      "lab.blackhatgraphql.com:5013/graphql backend unreachable from cloud — introspection still blocked",
+      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
       "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud scanner UA"
-    ]
+    ],
+    "improvements_shipped_this_run": 3
   },
   "discovery_highlights": {
     "ssrf-defense-platform.onrender.com": 6,
@@ -87,9 +88,17 @@
     "php.testsparker.com": 4,
     "pentesterlab.com": 4,
     "domgo.at/cxss/intro": 3,
+    "domgo.at": 3,
     "www.root-me.org": 3,
-    "juice-shop.herokuapp.com": 7,
+    "juice-shop.herokuapp.com": 8,
     "hack-yourself-first.azurewebsites.net": 7,
-    "owasp-juice.shop": 6
+    "owasp-juice.shop": 6,
+    "lab.blackhatgraphql.com:9001": 3,
+    "xxe-lab.vercel.app": 4,
+    "nextjs-cve-hackerone.vercel.app": 4,
+    "cyberdesserts.github.io/cookiejar-lab/demo": 4,
+    "web-pentest-playground.onrender.com": 3,
+    "public-firing-range.appspot.com": 4,
+    "eivindarvesen.github.io/intro-ctf-startpage": 3
   }
 }
