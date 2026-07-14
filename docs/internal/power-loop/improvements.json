@@ -2867,6 +2867,24 @@
       "slug": "sectrainer-hyphen-url-priority-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SecTrainer meta + lesson-content OWASP Top 10/sql-injection/xss-basics on security-trainer.vercel.app; extractSectrainerSpaSeeds matches security-trainer hyphen URL + sectrainerPrioritySeeds prepends /modules + /ctf; security-trainer.vercel.app findings 0→16 incl client-side-sectrainer-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-lab-session-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard name=thugir sets session cookie; applyOwaspGenaiLabSession unlocks /dashboard lesson-grid; extractOwaspGenaiLabSeeds parses /lesson/prompt-injection hrefs; owaspbased-lessons.vercel.app pages_crawled 1→6; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-special-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: special1.php send me an SMS + name=solution POST form; redtigerSpecialChallengeEvidence; special1.php findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-hub-level1-priority-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: redTigerPrioritySeeds prepends hub + level1.php on redtiger.labs scans; level1.php direct scan gains redtiger-classic-login-sql-evidence (2→3); level3 crawl includes level1.php; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
