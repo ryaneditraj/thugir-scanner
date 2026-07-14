@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T15:10:00.000Z",
+  "updated_at": "2026-07-14T16:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 1319,
-  "total_findings": 5938,
+  "total_sites_scanned": 1327,
+  "total_findings": 5969,
   "critical_findings": 40,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 644,
-  "discovery_findings": 4396,
+  "discovery_urls_added": 649,
+  "discovery_findings": 4420,
   "improvements_shipped": 441,
-  "last_run": "2026-07-14T15:10:00.000Z",
+  "last_run": "2026-07-14T16:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15:00",
+    "hour_utc": "16:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "findings": 7,
       "recall": "6/6",
       "gap": [],
-      "pass1_gap": [],
-      "pass1_findings": 7,
-      "note": "Pass1 7 findings 6/6 recall — sqlErrorDisclosure bootstrap fallback eliminates cold-start sqli miss",
+      "pages_crawled": 6,
+      "probes_run": 259,
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings, single pass)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,29 +52,34 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 9,
-      "findings": 50,
-      "focus": "sqli bootstrap fallback; sitemap-listed data.mdb live probe; allsafe queue disabled",
-      "probed_urls": [
-        "http://aspnet.testsparker.com/",
-        "https://ginandjuice.shop/vulnerabilities",
-        "https://ginandjuice.shop/catalog"
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 24,
+      "skipped_48h": [],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "focus": "Hacksplaining lesson backlog + FinBot CTF; queued 5 Gin & Juice Shop path oracles for next run",
+      "queued_new": [
+        "https://ginandjuice.shop/blog",
+        "https://ginandjuice.shop/catalog/subscribe",
+        "https://ginandjuice.shop/catalog/filter",
+        "https://ginandjuice.shop/my-account",
+        "https://ginandjuice.shop/catalog/product/stock"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: pass1 7 findings 6/6 recall (no wake retry) after sqli bootstrap fallback",
-      "aspnet.testsparker.com: sitemap-listed-sensitive-file-exposed on testinvicti.com/statics/data.mdb (5→6 findings)",
-      "dxx33.github.io/WebVulnsGuide: 8 findings incl critical server-side-eval-evidence",
-      "allsafe.vercel.app: queue entry disabled — Android APK lab has no public web deploy"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "owasp-finbot-ctf.org: client-side-prompt-injection-evidence + OpenAPI docs (4 findings)",
+      "sixhackacademy.com: OWASP Top 10 CTF platform markers (3 findings)",
+      "hacksplaining.com lessons: consistent misconfig/CORS/XSS evidence (4 findings each on 4 lessons)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "lab.blackhatgraphql.com:5013/graphql backend unreachable from cloud",
-      "www.root-me.org: Anubis bot-wall may limit deeper challenge reachability from cloud scanner UA",
-      "bugbountytraining.com/fastfoodhackings: 404 offline"
-    ],
-    "improvements_shipped_this_run": 2
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "ginandjuice.shop path oracles (blog/subscribe/filter/stock) deferred to next queue batch",
+      "wire.botsters.dev / security-shepherd / pathfinding.cloud still in queue tail"
+    ]
   },
   "discovery_highlights": {
     "pentest-ground.com:5013": 7,
@@ -91,6 +96,9 @@
     "dxx33.github.io/WebVulnsGuide": 8,
     "ashimkoirala.github.io/HackLab": 6,
     "public-firing-range.appspot.com": 4,
-    "prompt-injection-demo.vercel.app": 3
+    "prompt-injection-demo.vercel.app": 3,
+    "owasp-finbot-ctf.org": 4,
+    "sixhackacademy.com": 3,
+    "www.hacksplaining.com": 4
   }
 }
