@@ -2603,6 +2603,24 @@
       "slug": "jekyll-rouge-innerhtml-window-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Rouge spans widen gap between innerHTML and = (getElementById…innerHTML</span> <span>=</span> <span>q</span>); DANGEROUS_SINK_RES window 40→96 and write-up getElementById window 120→300; regex matches full 61KB page offline; live scan intermittent on Vercel checkpoint; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "client-side-vulnshop-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle /api/debug/config — No auth required! Exposes secret key & passwords + vulnshop-production.up.railway.app; clientSideVulnshopEvidence; vulnshop.vercel.app findings 3→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/crapi",
+      "slug": "vwad-crapi-api-security-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crAPI (Completely Ridiculous API) + OWASP Top 10 for APIs JSON-LD on vwad.owasp.org/app/crapi/; CLIENT_API_SECURITY_RES extended; findings 3→4 (+client-side-api-security-lab-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/bwapp",
+      "slug": "vwad-bwapp-listing-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bWAPP - OWASP VWAD + Over 100 web bugs + covers all major known web vulnerabilities including OWASP Top 10; CLIENT_BWAPP_LAB_RES extended; vwad.owasp.org/app/bwapp/ findings 3→4 (+client-side-bwapp-evidence); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4715,6 +4733,21 @@
       "source": "discovery:maz4lhacks.vercel.app",
       "slug": "jekyll-rouge-innerhtml-window-fix",
       "shipped_at": "2026-07-14T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "client-side-vulnshop-evidence",
+      "shipped_at": "2026-07-14T06:00:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/crapi",
+      "slug": "vwad-crapi-api-security-markers",
+      "shipped_at": "2026-07-14T06:00:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/bwapp",
+      "slug": "vwad-bwapp-listing-markers",
+      "shipped_at": "2026-07-14T06:00:00.000Z"
     }
   ]
 }

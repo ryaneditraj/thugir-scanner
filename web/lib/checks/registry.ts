@@ -7982,6 +7982,14 @@ const CLIENT_BWAPP_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "bWAPP deliberately insecure disclaimer",
     re: /deliberately insecure web application|security-testing and educational purposes only/i
+  },
+  {
+    label: "VWAD bWAPP listing title",
+    re: /bWAPP\s*[-—–]\s*OWASP VWAD|bWAPP[\s\S]{0,80}buggy web app/i
+  },
+  {
+    label: "VWAD bWAPP 100 bugs OWASP Top 10",
+    re: /Over 100 web bugs[\s\S]{0,120}OWASP Top 10|covers all major known web vulnerabilities including OWASP Top 10/i
   }
 ];
 
@@ -9319,7 +9327,11 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "crAPI intentionally vulnerable API lab",
-    re: /completely ridiculous API\s*\(crAPI\)/i
+    re: /completely ridiculous API\s*\(crAPI\)|crAPI\s*\(Completely Ridiculous API\)/i
+  },
+  {
+    label: "VWAD crAPI OWASP API Top 10 listing",
+    re: /intentionally vulnerable API[\s\S]{0,120}OWASP Top 10 for APIs|OWASP Top 10 for APIs[\s\S]{0,80}practicing API security/i
   },
   {
     label: "crAPI meta keywords BOLA + BFLA + OWASP API Top 10",
@@ -9854,6 +9866,48 @@ const clientSideVulnforgeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "VulnForge publishes an AI-guided attack-surface scanner SPA with hardwired backend API and client-side auth token storage"
+    }
+  };
+};
+
+// --- VulnShop pentest practice SPA (vulnshop.vercel.app) ----------------------------
+const CLIENT_VULNSHOP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnShop pentest practice title",
+    re: /VulnShop\s*[—–-]\s*Pentest Practice/i
+  },
+  {
+    label: "VulnShop Railway backend host",
+    re: /vulnshop-production\.up\.railway\.app/i
+  },
+  {
+    label: "VulnShop unauthenticated debug config route",
+    re: /\/api\/debug\/config[\s\S]{0,120}No auth required|require zero authentication/i
+  },
+  {
+    label: "VulnShop debug users plaintext passwords",
+    re: /\/api\/debug\/users[\s\S]{0,120}(?:No auth required|plaintext passwords)/i
+  },
+  {
+    label: "VulnShop OWASP misconfig lab marker",
+    re: /\[A05\]\s*Misconfig[\s\S]{0,120}\/api\/debug\//i
+  }
+];
+
+const clientSideVulnshopEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNSHOP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnShop|vulnshop-production/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnShop documents unauthenticated /api/debug/config and /api/debug/users routes exposing secrets when the Railway backend is reachable"
     }
   };
 };
@@ -13379,6 +13433,14 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
     re: /vwad\.owasp\.org\/app\/pixi|"name":\s*"Pixi"/i
   },
   {
+    label: "VWAD bWAPP listing",
+    re: /vwad\.owasp\.org\/app\/bwapp|"name":\s*"bWAPP"/i
+  },
+  {
+    label: "VWAD crAPI listing",
+    re: /vwad\.owasp\.org\/app\/crapi|"name":\s*"crAPI"/i
+  },
+  {
     label: "Pixi MEAN stack insecure API lab",
     re: /MEAN stack web app with deliberately insecure APIs|Part of OWASP DevSlop/i
   }
@@ -13557,6 +13619,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopEvidence,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
+  clientSideVulnshopEvidence,
   clientSideTegalsecLabEvidence,
   clientSideXvwaEvidence,
   clientSideOpenRedirectEvidence,
