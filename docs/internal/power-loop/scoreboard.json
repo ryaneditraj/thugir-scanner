@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 380,
-  "total_findings": 1527,
+  "total_sites_scanned": 388,
+  "total_findings": 1582,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 96,
-  "discovery_findings": 884,
+  "discovery_urls_added": 101,
+  "discovery_findings": 932,
   "improvements_shipped": 461,
   "last_run": "2026-07-14T22:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "22:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 179,
-      "note": "No benchmark misses — Heroku cold-start pass1 gap sqli,idor,sensitive_data; wake retry merged to 6 findings 6/6",
+      "probes_run": 259,
+      "note": "No benchmark misses — Heroku cold-start wake retry merged 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,16 +59,17 @@
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — wake retry merged after cold-start gap",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
       "owaspbased-lessons.vercel.app: session bootstrap crawls /dashboard + /lesson/prompt-injection (pages 1→6)",
       "redtiger.labs special1.php: redtiger-special-challenge-evidence (2→3 findings)",
       "redtiger level1.php: redtiger-classic-login-sql-evidence on direct scan (2→3 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "learn.cylabacademy.org: Cloudflare challenge blocks cloud scanner UA",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com",
-      "exploiteats / web-vuln-by-example: no public deploy — Docker/local only"
+      "juice-shop.herokuapp.com: Heroku cold-start pass1 only misconfig+xss (pages_crawled=1) before wake retry",
+      "gitagent-securebot-app.vercel.app: shallow misconfig-only hits — bundled VulnBot target needs deeper crawl",
+      "voice-goat / AI-PT-Lab: no public deploy — Docker/local only",
+      "owasp.securityshepherd.eu: DNS unreachable from cloud"
     ]
   },
   "discovery_highlights": {
@@ -255,6 +256,11 @@
     "cylabacademy.org": 4,
     "security-trainer.vercel.app": 16,
     "vuln-expose.vercel.app": 6,
-    "redtiger.labs.overthewire.org": 3
+    "redtiger.labs.overthewire.org": 3,
+    "gitagent-securebot-app.vercel.app": 2,
+    "vwad.owasp.org/app/grpc-goat": 3,
+    "hack-this-site-eta.vercel.app/api-labs": 12,
+    "hack-this-site-eta.vercel.app/owasp/a03.html": 11,
+    "hack-this-site-eta.vercel.app/owasp/a01.html": 12
   }
 }
