@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-13T23:47:00.000Z",
+  "updated_at": "2026-07-14T00:44:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=8",
+      "source": "BugBountyHunter zseano — static-page XSS challenge #8 (harmless page with vulnerable JS)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=15",
+      "source": "BugBountyHunter zseano — misc/application-logic sensitive-info challenge #15",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=16",
+      "source": "BugBountyHunter zseano — CORS whitelist-bypass challenge #16",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/roadmap/",
+      "source": "kOaDT/oss-oopssec-store — 34-chapter CTF roadmap with live vulnerability oracle docs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/webgoat/",
+      "source": "OWASP VWAD — hosted WebGoat training instance (vwad.owasp.org directory)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sam.wizer-ctf.com/",
       "source": "Wizer CTF challenge instances hub — prototype pollution/SSTI developer security labs (wizer-ctf.com writeups)",
