@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T09:29:38.936Z",
+  "updated_at": "2026-07-14T09:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,18 +16,19 @@
     }
   },
   "total_sites_scanned": 1263,
-  "total_findings": 5663,
+  "total_findings": 5664,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 617,
-  "discovery_findings": 4180,
-  "improvements_shipped": 425,
-  "last_run": "2026-07-14T09:29:38.936Z",
+  "discovery_findings": 4181,
+  "improvements_shipped": 431,
+  "last_run": "2026-07-14T09:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "09:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "findings": 7,
       "recall": "6/6",
       "gap": [],
@@ -36,7 +37,7 @@
         "idor",
         "auth_bypass"
       ],
-      "note": "Cold-start pass1 4 findings 3/6; wake retry merged to 7 findings 6/6",
+      "note": "Cold-start pass1 4 findings 3/6; wake retry merged to 7 findings 6/6; discovery-only engine changes",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,48 +56,39 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 44,
-      "focus": "VWAD/oopssec backlog priority; +5 new URLs queued (redforgex, capture-the-flag.vercel, cybersheild-lab, webexp05 c1/c2)",
-      "new_urls_queued": [
-        "https://redforgex.vercel.app/",
-        "https://capture-the-flag.vercel.app/",
-        "https://cybersheild-lab.vercel.app/",
-        "https://webexp05.vercel.app/c1/",
-        "https://webexp05.vercel.app/c2/"
-      ]
+      "urls_scanned": 3,
+      "findings": 18,
+      "focus": "Wizer chal16-17 hub seeds; JuiceSec OWASP lab evidence; sam.wizer-ctf hub re-validation",
+      "improvements_shipped_this_run": 3,
+      "validated_targets": {
+        "juicesec.mrdinesh.workers.dev": "7 findings (+client-side-juicesec-lab-evidence; was 6)",
+        "sam.wizer-ctf.com": "6 findings (client-side-wizer-ctf-evidence + chal16 crawl seeds)",
+        "chal16.vercel.app": "5 findings (wizer CTF evidence when reachable)"
+      }
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
-      "koadt.github.io/oss-oopssec-store: 6 findings OWASP Top 10 e-commerce CTF markers",
-      "dxx33.github.io/WebVulnsGuide: 8 findings interactive vuln guide evidence",
-      "gauravkhurana.com/SQLInjection: 6 findings WASM SQLite login-bypass demo"
+      "juicesec.mrdinesh.workers.dev: JuiceSec — OWASP Vulnerability Lab + checkSQLi/checkJWT/checkSSRF modules (6→7)",
+      "sam.wizer-ctf.com: wizerChalPrioritySeeds extended to chal17 for hub crawl",
+      "chal16.vercel.app: Wizer CTF #16 prototype-pollution lab reachable with 5 findings"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop pass1 cold-start: sqli,idor,auth_bypass missed before wake retry (pages_crawled=6→1)",
-      "new discovery URLs deferred behind 360+ queue backlog"
+      "chal17.vercel.app: Vercel Security Checkpoint intermittently blocks cloud scans",
+      "juice-shop pass1 cold-start: sqli,idor,auth_bypass missed before wake retry"
     ]
   },
   "discovery_highlights": {
+    "juicesec.mrdinesh.workers.dev": 7,
     "koadt.github.io/oss-oopssec-store": 6,
     "dxx33.github.io/WebVulnsGuide": 8,
     "gauravkhurana.com/SQLInjection": 6,
-    "ashimkoirala.github.io/HackLab": 6,
-    "akbarbashakm.github.io/frontend-security-examples": 5,
     "juice-shop.herokuapp.com": 8,
-    "redtiger.labs.overthewire.org/level1.php": 4,
-    "pentesteracademylab.appspot.com": 2,
     "sam.wizer-ctf.com": 6,
+    "chal16.vercel.app": 5,
+    "redtiger.labs.overthewire.org/level1.php": 4,
     "vulnforge.vercel.app": 4,
-    "povzayd.github.io/XSS-LABS": 5,
-    "www.bugbountyhunter.com/challenge?id=8": 2,
-    "web.ctflearn.com/web4": 4,
-    "chimera.atlascrew.dev": 9,
     "hack-yourself-first.azurewebsites.net": 7,
-    "demo.testfire.net": 6,
-    "pentesterlab.com": 5,
-    "www.hackthissite.org": 5
+    "demo.testfire.net": 6
   }
 }

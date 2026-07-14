@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T08:07:19.856Z",
-  "total": 313,
-  "uniqueSlugs": 313,
+  "generatedAt": "2026-07-14T09:29:22.076Z",
+  "total": 314,
+  "uniqueSlugs": 314,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 295,
+    "generic": 296,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 66,
-    "deep": 247,
+    "deep": 248,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 102,
+    "Broken access control": 103,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -136,6 +136,7 @@
     "client-side-judgement-day-arena-evidence",
     "client-side-juice-shop-project-evidence",
     "client-side-juice-shop-vapt-evidence",
+    "client-side-juicesec-lab-evidence",
     "client-side-jwt-none-evidence",
     "client-side-jwtlens-evidence",
     "client-side-knoxss-test-page-evidence",

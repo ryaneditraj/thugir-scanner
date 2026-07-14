@@ -6245,6 +6245,50 @@ const clientSideJuiceShopProjectEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- JuiceSec OWASP vulnerability lab (juicesec.mrdinesh.workers.dev) -----------------
+const CLIENT_JUICESEC_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JuiceSec OWASP lab title",
+    re: /JuiceSec\s*[—–-]\s*OWASP Vulnerability Lab/i
+  },
+  {
+    label: "JuiceSec challenge catalog UI",
+    re: /challenge-item|JUICESEC/i
+  },
+  {
+    label: "JuiceSec SQLi lab checker",
+    re: /checkSQLi\s*\(|u\.includes\s*\(\s*["']' OR '1'='1["']\)/i
+  },
+  {
+    label: "JuiceSec JWT alg:none lab checker",
+    re: /checkJWT\s*\(|header\.alg\s*===?\s*["']none["']/i
+  },
+  {
+    label: "JuiceSec SSRF link-preview lab",
+    re: /checkSSRF\s*\(|Cloud metadata endpoint reached|server fetches it for you/i
+  }
+];
+
+const clientSideJuicesecLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JUICESEC_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/JuiceSec|juicesec/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "JuiceSec documents inline OWASP labs for SQLi, JWT alg:none, SSRF link-preview, and DOM XSS on Cloudflare Workers"
+    }
+  };
+};
+
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
 const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -13674,6 +13718,7 @@ export const RULES: Record<string, Rule> = {
   clientSideImmersiveLabsEvidence,
   clientSideBlueTeamLabsEvidence,
   clientSideJuiceShopProjectEvidence,
+  clientSideJuicesecLabEvidence,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,

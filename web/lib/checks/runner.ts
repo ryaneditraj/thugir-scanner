@@ -669,6 +669,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideMetasploitableLabEvidence",
   "clientSideBlueTeamLabsEvidence",
   "clientSideJuiceShopProjectEvidence",
+  "clientSideJuicesecLabEvidence",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
   "clientSideMutillidaeEvidence",
@@ -2787,7 +2788,7 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
     }
   }
   // sam.wizer-ctf.com promo hub omits chal*.vercel.app links — seed known public instances.
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 17; i++) {
     out.add(`https://chal${i}.vercel.app/`);
   }
   return [...out];
@@ -4216,7 +4217,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const wizerChalPrioritySeeds =
     /wizer|sam\.wizer-ctf|wizer-ctf\.com/i.test(home.body) ||
     /wizer-ctf\.com|sam\.wizer-ctf\.com|chal\d+[\w-]*\.vercel\.app/i.test(home.finalUrl)
-      ? Array.from({ length: 15 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
+      ? Array.from({ length: 17 }, (_, i) => `https://chal${i + 1}.vercel.app/`)
       : [];
   const ctflearnWebPrioritySeeds =
     /CTFlearn|ctflearn\.com/i.test(home.body) || /ctflearn\.com/i.test(home.finalUrl)

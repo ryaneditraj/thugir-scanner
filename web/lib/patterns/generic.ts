@@ -4274,6 +4274,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-juicesec-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "JuiceSec OWASP vulnerability lab disclosed",
+    description:
+      "JuiceSec is a Cloudflare Workers OWASP lab with inline checkSQLi, checkJWT, and checkSSRF challenge modules plus DOM XSS sinks in the challenge catalog UI.",
+    impactOneline:
+      "Public JuiceSec deployments document deliberately vulnerable SQLi, JWT, SSRF, and XSS training surfaces for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJuicesecLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JuiceSec is intentional training software — isolate Workers lab deployments from production.",
+      steps: [
+        "Run JuiceSec only on dedicated lab Workers subdomains.",
+        "Do not copy checkSQLi/checkJWT/checkSSRF lab patterns into production auth flows.",
+        "Treat JuiceSec challenge modules as scanner oracles, not production design patterns."
+      ]
+    },
+    fixPrompt:
+      "We host JuiceSec-style OWASP vulnerability labs on Cloudflare Workers. Show how to isolate lab deployments from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnedlabs-evidence",
     platform: "generic",
     category: "Broken access control",
