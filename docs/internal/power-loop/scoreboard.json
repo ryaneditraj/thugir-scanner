@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-14T06:08:06.472Z",
+  "updated_at": "2026-07-14T07:16:00.832Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1237,
-  "total_findings": 5540,
+  "total_sites_scanned": 1246,
+  "total_findings": 5571,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 602,
-  "discovery_findings": 4071,
-  "improvements_shipped": 428,
-  "last_run": "2026-07-14T06:08:06.472Z",
+  "discovery_urls_added": 607,
+  "discovery_findings": 4096,
+  "improvements_shipped": 425,
+  "last_run": "2026-07-14T07:16:00.832Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "findings": 8,
+      "findings": 6,
       "recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings, pages_crawled=6 probes=259)",
+      "note": "No benchmark misses — recall stable at 6/6 (6 findings, pages_crawled=6 probes=90)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,49 +52,43 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 22,
+      "findings": 25,
       "queued_behind_backlog": [
-        "cybersheild-lab.vercel.app",
-        "prompt-injection-lab.vercel.app",
-        "secretsifter/insecureshield-demo (githack)",
-        "NatFreelance/react-xss-appsec-demo (githack)",
-        "cyberdefenders.org/labs"
+        "zero-health.vercel.app",
+        "sqli-lab.vercel.app",
+        "xss-lab.vercel.app",
+        "ssrf-lab.vercel.app",
+        "ctf-maker-monorepo.vercel.app"
       ],
-      "focus": "BugBountyHunter per-challenge rescans; OWASP VWAD WebGoat; RedTiger SQLi levels 7–9; parallel VWAD crAPI/bWAPP markers",
-      "improvements_shipped_this_run": 3,
-      "validated_targets": {
-        "vwad.owasp.org/app/webgoat": "5 findings (WebGoat + VWAD oracles + postMessage DOM XSS)",
-        "redtiger.labs.overthewire.org/level7-9": "3 findings each (blind SQLi login-bypass form oracles)",
-        "www.bugbountyhunter.com/challenge?id=9-12": "2 findings each (platform title oracles; challenges disabled)",
-        "vulnshop.vercel.app": "bundle documents zero-auth /api/debug/config markers",
-        "vwad.owasp.org/app/crapi": "crAPI OWASP API Top 10 JSON-LD lab evidence",
-        "vwad.owasp.org/app/bwapp": "bWAPP 100-bugs VWAD listing evidence"
-      }
+      "focus": "RedTiger L10 blind SQLi; Hacksplaining secure-coding lessons (XSS/command/XML/subdomain); CyberDesserts CookieJar session-replay demo",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
-      "vwad.owasp.org/app/webgoat: OWASP WebGoat + VWAD oracles + postMessage DOM XSS (5 findings)",
-      "redtiger.labs.overthewire.org level7–9: blind SQLi login-bypass form evidence (3 findings each)",
-      "bugbountyhunter.com challenge?id=9–12: platform title oracles (2 findings each; challenges disabled)",
-      "vulnshop.vercel.app: bundle documents zero-auth /api/debug/config even when Railway backend is down",
-      "vwad.owasp.org/app/crapi: crAPI VWAD JSON-LD now triggers API security lab evidence",
-      "vwad.owasp.org/app/bwapp: bWAPP VWAD listing now triggers training catalog evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "redtiger.labs.overthewire.org/level10.php: blind SQLi login-bypass form oracles (3 findings)",
+      "hacksplaining.com lessons (xss-reflected, command-execution, xml-bombs, subdomain-squatting): interactive lesson oracles (4 findings each)",
+      "cyberdesserts.github.io/cookiejar-lab: session cookie theft / replay training demo (4 findings)",
+      "hacksplaining.com lessons (toxic-dependencies, unencrypted-communication): lesson title oracles (1 finding each)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "bugbountyhunter.com challenges 9–12: disabled notice — title oracles only until platform relaunches",
-      "cybersheild-lab + prompt-injection-lab + insecureshield githack: queued behind 450+ URL backlog",
-      "redtiger levels: shallow crawl hits form oracles; blind SQLi exploitation needs authenticated session",
-      "vulnshop-production.up.railway.app: backend returns 404 — live API probes unavailable",
-      "acuart.phpnet.us: DNS dead — classic Acunetix demo unreachable"
+      "zero-health + sqli/xss/ssrf-lab + ctf-maker-monorepo: queued behind 450+ URL backlog",
+      "redtiger level10: shallow crawl hits form oracles; blind SQLi exploitation needs authenticated session",
+      "hacksplaining lessons: client-side interactive demos — limited server-side probe surface"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 8,
     "vwad.owasp.org/app/webgoat": 5,
+    "redtiger.labs.overthewire.org/level10.php": 3,
     "redtiger.labs.overthewire.org/level9.php": 3,
     "redtiger.labs.overthewire.org/level8.php": 3,
     "redtiger.labs.overthewire.org/level7.php": 3,
+    "www.hacksplaining.com/lessons/xss-reflected/start": 4,
+    "www.hacksplaining.com/lessons/command-execution/start": 4,
+    "cyberdesserts.github.io/cookiejar-lab": 4,
+    "www.hacksplaining.com/lessons/xml-bombs/start": 4,
+    "www.hacksplaining.com/lessons/subdomain-squatting/start": 4,
     "www.bugbountyhunter.com/challenge?id=9": 2,
     "www.bugbountyhunter.com/challenge?id=10": 2,
     "www.bugbountyhunter.com/challenge?id=11": 2,
@@ -102,9 +96,6 @@
     "vulnshop.vercel.app": 4,
     "vwad.owasp.org/app/crapi": 4,
     "vwad.owasp.org/app/bwapp": 4,
-    "chal10.vercel.app": 4,
-    "chal14.vercel.app": 6,
-    "chal15.vercel.app": 7,
     "koadt.github.io/oss-oopssec-store": 6,
     "hack-yourself-first.azurewebsites.net": 7,
     "demo.testfire.net": 6,

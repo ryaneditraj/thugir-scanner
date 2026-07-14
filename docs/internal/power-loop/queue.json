@@ -3032,7 +3032,32 @@
       "url": "https://cyberdefenders.org/labs",
       "source": "CyberDefenders Blue Team Labs \u2014 public hands-on defensive security lab catalog (distinct from root homepage)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/",
+      "source": "aligorithm/Zero-Health \u2014 deliberately vulnerable healthcare portal with OWASP Web/API/LLM flaws (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://sqli-lab.vercel.app/",
+      "source": "SQLi interactive training lab \u2014 hands-on injection practice demo (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-lab.vercel.app/",
+      "source": "XSS interactive training lab \u2014 reflected/stored XSS practice demo (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf-lab.vercel.app/",
+      "source": "SSRF interactive training lab \u2014 server-side request forgery practice demo (Vercel)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf-maker-monorepo.vercel.app/",
+      "source": "CTF maker monorepo \u2014 educational vulnerability challenge platform (Vercel OSS deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T06:08:00.000Z"
+  "updated_at": "2026-07-14T07:08:00.000Z"
 }
