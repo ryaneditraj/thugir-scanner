@@ -3131,7 +3131,32 @@
       "url": "https://eivindarvesen.github.io/intro-ctf-startpage/",
       "source": "Bouvet Intro to CTF — Juice Shop training hub with challenge tiers (GitHub Pages)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level1/frame",
+      "source": "Google XSS Game — level 1 reflected XSS frame (public benchmark)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
+      "source": "r007sec/pwnshop — interactive OWASP Top 10 2025 vulnerability index (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/head",
+      "source": "Google Public Firing Range — reflected XSS head parameter benchmark",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://domgo.at/cxss/example",
+      "source": "Mario Heiderich domgo.at — CXSS example lab (complements cxss/intro)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/labs",
+      "source": "AppSec Master — hands-on web security labs hub (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-14T11:30:00.000Z"
+  "updated_at": "2026-07-14T12:15:00.000Z"
 }
