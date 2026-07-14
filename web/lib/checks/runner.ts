@@ -196,6 +196,50 @@ async function applyWargameBasicAuth(
   return doc;
 }
 
+/** OWASP GenAI Security Lab — POST /onboard to obtain session cookie for dashboard + lesson pages. */
+async function ensureOwaspGenaiLabSession(
+  origin: string,
+  probe: ProbeCache,
+  sessionRef: { cookie?: string },
+  maxBytes = 600_000
+): Promise<string | undefined> {
+  if (sessionRef.cookie) return sessionRef.cookie;
+  const onboardUrl = `${origin}/onboard`;
+  const body = "name=thugir&goals=prompt-injection&goals=system-prompt-leakage";
+  const onboardRes = await probe.get(onboardUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    redirect: "manual",
+    maxBytes
+  });
+  const cookie = onboardRes.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0];
+  if (cookie) sessionRef.cookie = cookie;
+  return cookie;
+}
+
+async function applyOwaspGenaiLabSession(
+  url: string,
+  doc: FetchedDoc,
+  probe: ProbeCache,
+  sessionRef: { cookie?: string },
+  maxBytes = 600_000
+): Promise<FetchedDoc> {
+  let host: string;
+  try {
+    host = new URL(url).hostname;
+  } catch {
+    return doc;
+  }
+  if (!/owaspbased-lessons\.vercel\.app/i.test(host)) return doc;
+  if (/lesson-card|LLM0\d:|demo-player__system-prompt/i.test(doc.body)) return doc;
+  const cookie = await ensureOwaspGenaiLabSession(new URL(url).origin, probe, sessionRef, maxBytes);
+  if (!cookie) return doc;
+  const authed = await probe.get(url, { maxBytes, headers: { Cookie: cookie } });
+  if (authed.status >= 200 && authed.status < 400 && authed.body.length >= doc.body.length) return authed;
+  return doc;
+}
+
 const HEROKU_APP_ERROR_RE = /Application Error|herokucdn\.com\/error-pages/i;
 
 function isJuiceShopHost(url: string): boolean {
@@ -678,6 +722,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideRedtigerHackitEvidence",
   "redtigerClassicLoginSqlEvidence",
   "redtigerBlindLoginFormEvidence",
+  "redtigerSpecialChallengeEvidence",
   "clientSideVulnExposeEvidence",
   "clientSideWizerCtfEvidence",
   "clientSideRingzer0CtfEvidence",
@@ -3415,14 +3460,25 @@ function extractBergerCyberLabSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** OWASP GenAI Security Lab — seed onboarding and lesson hub. */
+/** OWASP GenAI Security Lab — seed dashboard and /lesson/* pages from onboarding or lesson grid. */
 function extractOwaspGenaiLabSeeds(html: string, pageUrl: string): string[] {
   if (!/GenAI Security Lab|OWASP Top 10 for LLM applications/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/onboard", "/lessons", "/dashboard"]) {
+  for (const p of ["/dashboard"]) {
     try {
       const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const lessonRe = /href\s*=\s*["'](\/lesson\/[^"'#?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = lessonRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
@@ -4304,6 +4360,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
   }
   home = await applyWargameBasicAuth(home.finalUrl || target.toString(), home, probe, home.body);
+  const owaspGenaiSessionRef: { cookie?: string } = {};
+  home = await applyOwaspGenaiLabSession(
+    home.finalUrl || target.toString(),
+    home,
+    probe,
+    owaspGenaiSessionRef
+  );
   const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
   const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
     probe,
@@ -4511,9 +4574,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /ginandjuice\.shop/i.test(home.finalUrl)
       ? ["/vulnerabilities", "/catalog", "/blog"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
+  const redTigerPrioritySeeds = /redtiger\.labs\.overthewire\.org/i.test(home.finalUrl)
+    ? ["http://redtiger.labs.overthewire.org/", "http://redtiger.labs.overthewire.org/level1.php"]
+    : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...redTigerPrioritySeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
@@ -4653,7 +4720,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const extraPageUrls = pageUrls.slice(1);
   const extraPagesRaw = await fetchPagesBatched(extraPageUrls, { probe, maxBytes: 600_000, concurrency: 3 });
   const extraPages = await Promise.all(
-    extraPageUrls.map((u, i) => applyWargameBasicAuth(u, extraPagesRaw[i]!, probe, home.body))
+    extraPageUrls.map(async (u, i) =>
+      applyOwaspGenaiLabSession(
+        u,
+        await applyWargameBasicAuth(u, extraPagesRaw[i]!, probe, home.body),
+        probe,
+        owaspGenaiSessionRef
+      )
+    )
   );
   let pages: FetchedDoc[] = [home, ...extraPages];
 
@@ -4666,13 +4740,27 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   if (childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
     const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
     const childPages = await Promise.all(
-      childSeeds.map((u, i) => applyWargameBasicAuth(u, childPagesRaw[i]!, probe, home.body))
+      childSeeds.map(async (u, i) =>
+        applyOwaspGenaiLabSession(
+          u,
+          await applyWargameBasicAuth(u, childPagesRaw[i]!, probe, home.body),
+          probe,
+          owaspGenaiSessionRef
+        )
+      )
     );
     pages = [...pages.slice(0, DEEP_MAX_PAGES - childPages.length), ...childPages];
   } else if (childSeeds.length > 0) {
     const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
     const childPages = await Promise.all(
-      childSeeds.map((u, i) => applyWargameBasicAuth(u, childPagesRaw[i]!, probe, home.body))
+      childSeeds.map(async (u, i) =>
+        applyOwaspGenaiLabSession(
+          u,
+          await applyWargameBasicAuth(u, childPagesRaw[i]!, probe, home.body),
+          probe,
+          owaspGenaiSessionRef
+        )
+      )
     );
     pages = [...pages, ...childPages].slice(0, DEEP_MAX_PAGES);
   }
