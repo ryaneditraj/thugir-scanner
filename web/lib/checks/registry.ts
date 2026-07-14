@@ -7324,19 +7324,25 @@ const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
     re: /Upskill and benchmark SOC teams|hands-on blue team training/i
   },
   {
+    label: "CyberDefenders labs catalog path",
+    re: /cyberdefenders\.org\/labs|Blue Team Labs Online/i
+  },
+  {
     label: "DFIR keywords",
     re: /DFIR|soc analyst.*blue team/i
   }
 ];
 
 const clientSideCyberDefendersEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CYBERDEFENDERS_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/CyberDefenders|cyberdefenders\.org/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CyberDefenders|cyberdefenders\.org/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,

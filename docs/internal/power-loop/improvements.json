@@ -2639,6 +2639,24 @@
       "slug": "client-side-cybersheild-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CyberShield Lab + OWASP Top 10 + SQL Injection Authentication Bypass + XSS Demo modules; CLIENT_XSS_RES stored sanitisation markers; cybersheild-lab.vercel.app findings 3→4 (+client-side-cybersheild-lab-evidence, client-side-xss-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:NatFreelance/react-xss-appsec-demo",
+      "slug": "githack-raw-github-source-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: index.html script /src/main.jsx returns 403 on raw.githack.com; githackDeployBase resolves paths under owner/repo/branch + toRawGithubusercontentUrl fallback + expandGithackModuleImports fetches App.jsx/XssDemo.jsx; dangerouslySetInnerHTML + DOMPurify.sanitize markers; react-xss-appsec-demo findings 2→3 (+client-side-react-dom-xss-lab-evidence); benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-toxic-unencrypted-lessons",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: toxic-dependencies/start title Toxic Dependencies — Secure Coding Lesson + meta Third-party libraries could be introducing vulnerabilities; unencrypted-communication/start MITM lesson markers; prior results.json 1-finding scans were stale; re-scan 1→4 incl client-side-hacksplaining-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "cyberdefenders-labs-path-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs catalog path + Blue Team Labs Online marker; clientSideCyberDefendersEvidence now includes finalUrl in corpus; cyberdefenders.org/labs findings validated 11 incl client-side-cyberdefenders-evidence + client-side-blueteamlabs-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
