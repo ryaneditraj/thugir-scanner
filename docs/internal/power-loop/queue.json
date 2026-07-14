@@ -3169,8 +3169,9 @@
     },
     {
       "url": "https://allsafe.vercel.app/",
-      "source": "t0thkr1s/allsafe — intentionally vulnerable web app with multiple OWASP flaws (Vercel deploy)",
-      "auth": "oss_deploy"
+      "source": "t0thkr1s/allsafe — Android APK lab only (allsafe.vercel.app is unrelated marketing site; no public web deploy)",
+      "auth": "oss_deploy",
+      "enabled": false
     },
     {
       "url": "https://graphql.security/",

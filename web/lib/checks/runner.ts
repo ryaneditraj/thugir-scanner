@@ -4554,7 +4554,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     bootDocs.set(mainJsUrl, mainJsDoc);
     const trackUrl = bootstrapUrls[2]!;
     const sqlUrl = bootstrapUrls[3]!;
-    for (let attempt = 0; attempt < 5; attempt++) {
+    for (let attempt = 0; attempt < 8; attempt++) {
       const trackBody = bootDocs.get(trackUrl)?.body ?? "";
       const sqlBody = bootDocs.get(sqlUrl)?.body ?? "";
       const mainJsReady =
