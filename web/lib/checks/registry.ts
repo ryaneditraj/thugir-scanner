@@ -4868,6 +4868,54 @@ const clientSideCtfPlatformEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Static CTF challenge hub index (webexp05 / shiny-computing-machine style /cN/ links) -
+const CLIENT_CTF_CHALLENGE_HUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTF Challenge Hub landing title",
+    re: /CTF Challenge Hub/i
+  },
+  {
+    label: "Web security training challenges subtitle",
+    re: /Web Security Training Challenges/i
+  },
+  {
+    label: "Numbered challenge link cards",
+    re: /class="challenge-link"|href="\/c\d+\/"/i
+  },
+  {
+    label: "SQL injection training challenge label",
+    re: /Challenge\s+\d+\s*-\s*[^<]{0,80}SQL Injection|Web Security\s*\/\s*SQL Injection/i
+  },
+  {
+    label: "XSS training challenge label",
+    re: /Challenge\s+\d+\s*-\s*[^<]{0,80}XSS|Web Security\s*\/\s*XSS/i
+  },
+  {
+    label: "Path traversal training challenge label",
+    re: /Path Traversal|directory traversal/i
+  }
+];
+
+const clientSideCtfChallengeHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTF_CHALLENGE_HUB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CTF Challenge Hub|challenge-link|\/c\d+\//i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Static CTF challenge hub indexes hands-on web security labs (SQLi, XSS, JWT, path traversal) across /c1/–/cN/ routes"
+    }
+  };
+};
+
 // --- OWASP Top 10 CTF hub evidence (UCU CTF and similar challenge portals) ---
 const CLIENT_OWASP_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -6461,7 +6509,8 @@ const redtigerClassicLoginSqlEvidence: Rule = async (ctx) => {
 const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  // Scope to the current page — combined includes sibling level*.php crawls and causes false positives.
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
   const loginField = corpus.match(/name="(level\d+login)"/i)?.[1];
   if (!loginField) return NEGATIVE;
   const formBlock = corpus.match(
@@ -13693,6 +13742,7 @@ export const RULES: Record<string, Rule> = {
   owaspCtfLinkedLabProbe,
   clientSideSecurityGameEvidence,
   clientSideCtfPlatformEvidence,
+  clientSideCtfChallengeHubEvidence,
   clientSideXssC2CollectorEvidence,
   clientSideDevSecOpsLabEvidence,
   clientSideVulnAuthPortalEvidence,
