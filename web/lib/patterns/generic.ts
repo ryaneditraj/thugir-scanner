@@ -973,6 +973,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-graphql-security-hub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "GraphQL security assessment hub disclosed",
+    description:
+      "Client bundle or HTML documents a GraphQL security testing hub (graphql.security) that assesses introspection, authorization, complexity limits, and injection risks.",
+    impactOneline:
+      "Public GraphQL security scanner hubs advertise assessment workflows useful for attacker reconnaissance.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGraphqlSecurityHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GraphQL security hubs are intentional training tools — isolate from production APIs.",
+      steps: [
+        "Run GraphQL security assessments only against authorized staging targets.",
+        "Do not expose production GraphQL endpoints to public scanner hubs.",
+        "Disable introspection and enforce auth on production GraphQL APIs."
+      ]
+    },
+    fixPrompt:
+      "Our site documents a GraphQL security assessment hub (graphql.security). Explain how to scope security testing to authorized targets and harden production GraphQL introspection and authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-react-rsc-cve-evidence",
     platform: "generic",
     category: "Injection",

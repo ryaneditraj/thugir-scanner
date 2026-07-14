@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-14T13:28:00.900Z",
-  "total": 317,
-  "uniqueSlugs": 317,
+  "generatedAt": "2026-07-14T14:06:42.368Z",
+  "total": 318,
+  "uniqueSlugs": 318,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 299,
+    "generic": 300,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 67,
-    "deep": 250,
+    "deep": 251,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 1,
     "Information exposure": 1,
     "Security misconfiguration": 23,
-    "Information disclosure": 20,
+    "Information disclosure": 21,
     "Broken authentication": 20,
     "Injection": 52,
     "Cross-site scripting": 29,
@@ -115,6 +115,7 @@
     "client-side-google-gruyere-codelab-evidence",
     "client-side-google-xss-game-evidence",
     "client-side-graphql-lab-evidence",
+    "client-side-graphql-security-hub-evidence",
     "client-side-grpc-goat-lab-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",

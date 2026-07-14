@@ -401,7 +401,10 @@ function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
   // Webpack emits `re__WEBPACK_IMPORTED_MODULE_N__` identifiers that false-positive Resend keys.
   const matches =
     pattern.slug === "secret-resend"
-      ? raw.filter((m) => !/WEBPACK|__WEBPACK|MODULE/i.test(m))
+      ? raw.filter(
+          (m) =>
+            !/WEBPACK|__WEBPACK|MODULE/i.test(m) && (m.match(/_/g) || []).length <= 1
+        )
       : [...raw];
   if (matches.length === 0) return null;
   // Optional validation substring near the match (e.g. service_role inside a JWT payload).
@@ -650,6 +653,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnAuthPortalEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
+  "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
   "clientSideChimeraVulnLabEvidence",
   "clientSideHackHealthLabEvidence",
@@ -3427,7 +3431,7 @@ function extractVaultappSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** Escape.tech / ThreatX hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
+/** Escape.tech / ThreatX / Pentest Ground hosted DVGA — seed live GraphQL lab routes from sidebar HTML. */
 function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
   let host = "";
   try {
@@ -3435,11 +3439,12 @@ function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
   } catch {
     /* ignore */
   }
-  const isDvga =
-    /Damn Vulnerable GraphQL Application|dvga\.tools\.escape\.tech|dolevf\/Damn-Vulnerable-GraphQL|xplat-demo\.threatx\.io/i.test(
-      html
-    ) || /xplat-demo\.threatx\.io|dvga\.tools\.escape\.tech/i.test(host);
-  if (!isDvga) return [];
+  const isLiveHost =
+    /xplat-demo\.threatx\.io|dvga\.tools\.escape\.tech|pentest-ground\.com/i.test(host);
+  const isLiveApp =
+    /Damn Vulnerable GraphQL Application/i.test(html) &&
+    /dvgql_logo\.png|id="sidebar-wrapper"[\s\S]{0,500}\/import_paste/i.test(html);
+  if (/vwad\.owasp\.org/i.test(host) || (!isLiveHost && !isLiveApp)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of ["/import_paste", "/create_paste", "/public_pastes", "/graphql", "/graphiql", "/audit"]) {
@@ -3709,7 +3714,7 @@ function extractOwaspVwadSeeds(html: string, pageUrl: string): string[] {
     "/app/webgoat/",
     "/app/crapi/",
     "/app/bwapp/",
-    "/app/dvga/",
+    "/app/damn-vulnerable-graphql-application-dvga/",
     "/app/pixi/"
   ]) {
     try {

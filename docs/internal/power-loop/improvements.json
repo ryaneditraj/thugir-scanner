@@ -2729,6 +2729,24 @@
       "slug": "graphql-endpoint-disclosed-in-docs",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SpectaQL docs embed localhost:5013/graphql; graphqlEndpointDisclosedInDocs rule; lab.blackhatgraphql.com:9001 findings 2→3 (+graphql-endpoint-disclosed-in-docs); benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:graphql.security",
+      "slug": "secret-resend-snake-case-fp-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Chart.js identifiers re_get_double_tap_distance false-matched secret-resend; scanSecret filters matches with >1 underscore; graphql.security findings 2→2 (secret-resend FP removed, client-side-graphql-security-hub-evidence added); benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/damn-vulnerable-graphql-application-dvga",
+      "slug": "dvga-live-seed-vwad-catalog-guard",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD DVGA catalog JSON-LD triggered extractDvgaLiveSeeds on vwad.owasp.org/import_paste (404); guard requires live DVGA sidebar/dvgql_logo or pentest-ground/dvga.tools host; vwad DVGA page no longer seeds bogus /graphql paths on vwad.owasp.org; extractOwaspVwadSeeds path fixed to /app/damn-vulnerable-graphql-application-dvga/; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:graphql.security",
+      "slug": "client-side-graphql-security-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta keywords graphql introspection + assess the security of your GraphQL + graphql.security domain in Nuxt bundle; clientSideGraphqlSecurityHubEvidence; graphql.security findings 2→2 (+hub slug, secret-resend FP removed); benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4911,6 +4929,21 @@
       "source": "discovery:lab.blackhatgraphql.com:9001",
       "slug": "graphql-endpoint-disclosed-in-docs",
       "shipped_at": "2026-07-14T13:30:00.000Z"
+    },
+    {
+      "source": "discovery:graphql.security",
+      "slug": "secret-resend-snake-case-fp-fix",
+      "shipped_at": "2026-07-14T14:17:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/damn-vulnerable-graphql-application-dvga",
+      "slug": "dvga-live-seed-vwad-catalog-guard",
+      "shipped_at": "2026-07-14T14:17:00.000Z"
+    },
+    {
+      "source": "discovery:graphql.security",
+      "slug": "client-side-graphql-security-hub-evidence",
+      "shipped_at": "2026-07-14T14:17:00.000Z"
     }
   ]
 }
