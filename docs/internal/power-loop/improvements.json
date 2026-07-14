@@ -2657,6 +2657,24 @@
       "slug": "cyberdefenders-labs-path-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /labs catalog path + Blue Team Labs Online marker; clientSideCyberDefendersEvidence now includes finalUrl in corpus; cyberdefenders.org/labs findings validated 11 incl client-side-cyberdefenders-evidence + client-side-blueteamlabs-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wizer-ctf.com",
+      "slug": "wizer-ctf-chal16-17-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue adds chal16/chal17 prototype-pollution/SSTI labs; wizerChalPrioritySeeds extended chal1–15→chal1–17 + extractWizerCtfSeeds 8→17; sam.wizer-ctf.com hub crawl now seeds chal16.vercel.app; sam.wizer-ctf.com findings 3→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-juicesec-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title JuiceSec — OWASP Vulnerability Lab + checkSQLi()/checkJWT()/checkSSRF() inline challenge modules; clientSideJuicesecLabEvidence; juicesec.mrdinesh.workers.dev findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chal16.vercel.app",
+      "slug": "wizer-ctf-chal16-direct-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chal16.vercel.app returns client-side-wizer-ctf-evidence + dangerous-html-sinks when reachable (5 findings); hub priority seeds ensure sam.wizer-ctf.com discovers chal16 during crawl; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -4784,6 +4802,21 @@
       "source": "discovery:vwad.owasp.org/app/bwapp",
       "slug": "vwad-bwapp-listing-markers",
       "shipped_at": "2026-07-14T06:00:00.000Z"
+    },
+    {
+      "source": "discovery:wizer-ctf.com",
+      "slug": "wizer-ctf-chal16-17-priority-seeds",
+      "shipped_at": "2026-07-14T09:45:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-juicesec-lab-evidence",
+      "shipped_at": "2026-07-14T09:45:00.000Z"
+    },
+    {
+      "source": "discovery:chal16.vercel.app",
+      "slug": "wizer-ctf-chal16-direct-oracle",
+      "shipped_at": "2026-07-14T09:45:00.000Z"
     }
   ]
 }
