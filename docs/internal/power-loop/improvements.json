@@ -2513,6 +2513,24 @@
       "slug": "bugbountyhunter-disabled-challenge-sql-fp-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: disabled-challenge banner + crawled /vulnerability taxonomy triggered client-side-sql-evidence FP; guard on bugbountyhunter.com/challenge?id= pages; challenge #6/#7 findings 3→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sam.wizer-ctf.com",
+      "slug": "wizer-ctf-chal-instance-priority-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sam.wizer-ctf.com promo hub omits chal*.vercel.app links; wizerChalPrioritySeeds prepends chal1–8 origins; sam.wizer-ctf.com findings 4→6 (+dangerous-html-sinks, secret-resend from chal1); benchmark juice-shop 7 findings 6/6"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "povzayd-labs-case-sensitive-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GitHub Pages serves labs at /LABS/lab1.html not /labs/; povzaydLabPrioritySeeds + document.write(search) sink regex; povzayd.github.io/XSS-LABS findings 2→5 (+dangerous-html-sinks, client-side-xss-evidence); benchmark 6/6"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-8-15-16-title-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=8 harmless page XSS title; #15 sensitive information title; #16 CORS whitelist bypass title; findings 3→2 (SQL FP removed); benchmark 6/6"
     }
   ],
   "shipped": [
