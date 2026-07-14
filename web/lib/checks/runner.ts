@@ -397,8 +397,14 @@ function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
   if (pattern.detectorKind !== "secret_regex") return null;
   const cfg = pattern.detectorConfig as { regex: string; validate?: string; secretName: string };
   const re = compile(cfg.regex);
-  const matches = combined.match(re);
-  if (!matches) return null;
+  const raw = combined.match(re);
+  if (!raw) return null;
+  // Webpack emits `re__WEBPACK_IMPORTED_MODULE_N__` identifiers that false-positive Resend keys.
+  const matches =
+    pattern.slug === "secret-resend"
+      ? raw.filter((m) => !/WEBPACK|__WEBPACK|MODULE/i.test(m))
+      : [...raw];
+  if (matches.length === 0) return null;
   // Optional validation substring near the match (e.g. service_role inside a JWT payload).
   if (cfg.validate) {
     const hasValid = matches.some((m) => {
@@ -629,6 +635,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
   "clientSideCtfChallengeHubEvidence",
+  "clientSideBouvetIntroCtfEvidence",
   "clientSideCodeBreakingEvidence",
   "clientSideSanitizeXssDemoEvidence",
   "clientSidePokemortyCtfEvidence",
@@ -1512,9 +1519,53 @@ function extractBwappLabSeeds(html: string, origin: string): string[] {
 function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
   if (!/firing[\s-]range|public-firing-range/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/reflected/index.html", "/redirect/index.html", "/dom/index.html"]) {
+  for (const p of [
+    "/reflected/index.html",
+    "/redirect/index.html",
+    "/dom/index.html",
+    "/reflected/parameter/body",
+    "/reflected/parameter/title",
+    "/reflected/parameter/head",
+    "/reflected/parameter/attribute_unquoted"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const hrefRe = /href\s*=\s*["'](\/reflected\/parameter\/[^"'?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Bouvet Intro to CTF hub (eivindarvesen.github.io/intro-ctf-startpage) — CTFD scoreboard + instances. */
+function extractBouvetIntroCtfSeeds(html: string, pageUrl: string): string[] {
+  if (!/intro-ctf-startpage|Bouvet Intro to CTF|bouvet-ctfd/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const raw of [
+    "https://bouvet-ctfd.herokuapp.com/",
+    "https://bouvet-ctfd.herokuapp.com/register",
+    "https://bouvet-ctfd.herokuapp.com/scoreboard"
+  ]) {
+    try {
+      out.add(raw);
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](https?:\/\/bouvet-ctfd\.herokuapp\.com[^"'#]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(m[1]);
     } catch {
       /* ignore */
     }
@@ -4136,6 +4187,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
   const cahyodLabSeeds = extractCahyodVulnerableLabSeeds(home.body, home.finalUrl);
   const firingRangeSeeds = extractFiringRangeCrawlSeeds(home.body, origin);
+  const bouvetIntroCtfSeeds = extractBouvetIntroCtfSeeds(home.body, home.finalUrl);
   const tegalsecSeeds = extractTegalsecLabSeeds(home.body, home.finalUrl);
   const cyberDrillSeeds = extractCyberDrillToolSeeds(home.body, home.finalUrl);
   const alfNuXssSeeds = extractAlfNuXssSeeds(home.body, home.finalUrl);
@@ -4300,6 +4352,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...gruyereSeeds,
       ...cahyodLabSeeds,
       ...firingRangeSeeds,
+      ...bouvetIntroCtfSeeds,
       ...tegalsecSeeds,
       ...cyberDrillSeeds,
       ...alfNuXssSeeds,

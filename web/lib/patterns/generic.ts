@@ -818,6 +818,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-bouvet-intro-ctf-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Bouvet Intro to CTF training hub disclosed",
+    description:
+      "Bouvet Intro to CTF startpages document per-team vulnerable application instances, CTFD scoreboard registration, and OWASP Top 10 challenge workflows for hands-on CTF training.",
+    impactOneline:
+      "Public CTF onboarding hubs expose intentionally vulnerable instance URLs and flag-submission workflows for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBouvetIntroCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF training hubs are intentional — isolate challenge instances from production networks.",
+      steps: [
+        "Run per-team CTF instances on dedicated Heroku dynos or VMs with no production data.",
+        "Require CTFD registration before exposing challenge instance URLs.",
+        "Do not reuse CTF vulnerability patterns in production applications."
+      ]
+    },
+    fixPrompt:
+      "We host a Bouvet Intro to CTF startpage linking bouvet-ctfd.herokuapp.com and per-team ctf-X.herokuapp.com instances. Show how to isolate CTF infrastructure from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-owasp-educational-lab-evidence",
     platform: "generic",
     category: "Injection",

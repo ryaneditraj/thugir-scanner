@@ -4916,6 +4916,54 @@ const clientSideCtfChallengeHubEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Bouvet Intro to CTF training hub (eivindarvesen.github.io/intro-ctf-startpage) ---
+const CLIENT_BOUVET_INTRO_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Bouvet Intro to CTF homepage",
+    re: /intro-ctf-startpage|Bouvet Intro to CTF Homepage/i
+  },
+  {
+    label: "CTF welcome introduction",
+    re: /Welcome an Introduction to Capture The Flag \(CTF\)/i
+  },
+  {
+    label: "Bouvet CTFD scoreboard platform",
+    re: /bouvet-ctfd\.herokuapp\.com/i
+  },
+  {
+    label: "Per-team CTF application instances",
+    re: /ctf-X\.herokuapp\.com|Application Instance:.*ctf-/i
+  },
+  {
+    label: "OWASP Top 10 training reference",
+    re: /OWASP Top 10/i
+  },
+  {
+    label: "CTF flag submission workflow",
+    re: /Challenges.*screen to enter your flags|search for the challenge name on the challenges screen/i
+  }
+];
+
+const clientSideBouvetIntroCtfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BOUVET_INTRO_CTF_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/intro-ctf-startpage|bouvet-ctfd/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Bouvet Intro to CTF hub documents per-team vulnerable application instances, CTFD scoreboard registration, and OWASP Top 10 challenge workflow"
+    }
+  };
+};
+
 // --- OWASP Top 10 CTF hub evidence (UCU CTF and similar challenge portals) ---
 const CLIENT_OWASP_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -13743,6 +13791,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSecurityGameEvidence,
   clientSideCtfPlatformEvidence,
   clientSideCtfChallengeHubEvidence,
+  clientSideBouvetIntroCtfEvidence,
   clientSideXssC2CollectorEvidence,
   clientSideDevSecOpsLabEvidence,
   clientSideVulnAuthPortalEvidence,
