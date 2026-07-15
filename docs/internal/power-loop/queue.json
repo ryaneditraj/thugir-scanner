@@ -3692,7 +3692,32 @@
       "url": "https://www.hackthissite.org/missions/application/1/",
       "source": "Hack This Site — application security mission 1 entry point (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/sinks",
+      "source": "Mario Heiderich domgo.at — DomGoat XSS sinks catalog (eval/innerHTML/location sinks)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/10",
+      "source": "Mario Heiderich domgo.at — DomGoat level 10 window.name+user→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/2/",
+      "source": "Hack This Site — application security mission 2 web challenge entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/3/",
+      "source": "Hack This Site — realistic mission 3 web challenge entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://application.security/free-application-security-training/owasp-top-10-server-side-template-injection",
+      "source": "Kontra Application Security — free interactive SSTI training lab (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T13:05:00.000Z"
+  "updated_at": "2026-07-15T14:10:00.000Z"
 }
