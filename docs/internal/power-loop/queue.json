@@ -3767,7 +3767,32 @@
       "url": "https://dxx33.github.io/WebVulnsGuide/CSRF.html",
       "source": "dxx33/WebVulnsGuide — live CSRF vulnerable form demo page (GitHub Pages OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/SQLi.html",
+      "source": "dxx33/WebVulnsGuide — interactive SQL injection login-bypass lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/SSTI.html",
+      "source": "dxx33/WebVulnsGuide — server-side template injection demo (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/OS-injection.html",
+      "source": "dxx33/WebVulnsGuide — OS command injection training page (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/prototype.html",
+      "source": "dxx33/WebVulnsGuide — JavaScript prototype pollution lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/1/",
+      "source": "Hack This Site — realistic mission 1 band-rating business-logic challenge (GitHub writeups)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T16:05:00.000Z"
+  "updated_at": "2026-07-15T17:05:00.000Z"
 }
