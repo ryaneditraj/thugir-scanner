@@ -6006,6 +6006,64 @@ const domgoReferrerDomXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (example/1,7-9) --
+const domgoHashDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hashSource = /location\.hash/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  const referrerVuln = /let\s+rfr\s*=\s*document\.referrer/i.test(corpus);
+  if (!hashSource || !sink || referrerVuln) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise assigns location.hash to msgboard.innerHTML — hash-fragment DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat postMessage → msgboard.innerHTML DOM XSS exercises (example/5) -------
+const domgoPostMessageDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const messageSource = /(?:window\.)?onmessage|addEventListener\(\s*["']message["']/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!messageSource || !sink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise assigns postMessage event data to msgboard.innerHTML — cross-window DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat localStorage → msgboard.innerHTML DOM XSS exercises (example/6) --------
+const domgoLocalStorageDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const storageSource = /localStorage\.getItem/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!storageSource || !sink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise reads localStorage payload into msgboard.innerHTML — client-storage DOM XSS lab"
+    }
+  };
+};
+
 // --- Ben Stafford XSS Demo (xss.benstafford.dev) ------------------------------------
 const CLIENT_BENSTAFFORD_XSS_DEMO_RES: { label: string; re: RegExp }[] = [
   {
@@ -15127,6 +15185,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackHealthLabEvidence,
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
+  domgoHashDomXssEvidence,
+  domgoPostMessageDomXssEvidence,
+  domgoLocalStorageDomXssEvidence,
   clientSideBenstaffordXssDemoEvidence,
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
