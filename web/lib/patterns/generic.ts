@@ -5025,6 +5025,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-a06-components-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab A06 vulnerable components lab disclosed",
+    description:
+      "VulnLab Academy A06 module ships outdated jQuery 1.12.4 and Angular 1.6.9 vendor scripts for component-detection training.",
+    impactOneline:
+      "Public A06 labs advertise end-of-life JavaScript libraries attackers fingerprint for known CVE chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA06ComponentsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Track dependency versions and patch outdated client libraries.",
+      steps: [
+        "Remove unused jQuery/Angular 1.x vendor bundles from production pages.",
+        "Enable Dependabot or SCA to alert on EOL component versions.",
+        "Host component-detection labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our A06 lab loads jQuery 1.12.4 and Angular 1.6.9. Show how to inventory and upgrade outdated components.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-a07-auth-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnLab A07 authentication failures lab disclosed",
+    description:
+      "VulnLab Academy A07 module documents brute-force login testing and password-reset flows with predictable tokens.",
+    impactOneline:
+      "Public A07 auth labs advertise weak credential and session-management patterns for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA07AuthEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce rate limits, MFA, and cryptographically random password-reset tokens.",
+      steps: [
+        "Throttle login attempts and lock accounts after repeated failures.",
+        "Generate single-use reset tokens with sufficient entropy and short TTL.",
+        "Require step-up authentication before sensitive account recovery actions."
+      ]
+    },
+    fixPrompt:
+      "Our A07 auth lab exposes brute-force and predictable reset-token flows. Show secure alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-a08-integrity-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab A08 software integrity lab disclosed",
+    description:
+      "VulnLab Academy A08 module stores serialized pickle payloads in localStorage and exposes unsigned /api/update manifests.",
+    impactOneline:
+      "Public A08 integrity labs document unsafe deserialization and unsigned update channels.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA08IntegrityEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted blobs; sign and verify all update manifests.",
+      steps: [
+        "Reject client-side deserialization of attacker-controlled pickle/JSON blobs.",
+        "Sign software updates with Ed25519 or RSA and verify before applying.",
+        "Use Subresource Integrity hashes on all third-party script tags."
+      ]
+    },
+    fixPrompt:
+      "Our A08 integrity lab stores pickle blobs in localStorage and serves unsigned updates. Show safe patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-a09-logging-evidence",
     platform: "generic",
     category: "Information disclosure",
