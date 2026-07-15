@@ -34,7 +34,7 @@ Scanners find CVEs.  Thugir finds what vibe-coding ships by default.
 | **2. Evidence gate** | No finding without captured proof; free tier never receives gated fields | Marketing scanners invent "issues" |
 | **3. Fix prompts** | Every pattern ships a paste-back prompt for Cursor/Claude/Copilot | Reports without action |
 | **4. Tiered blur** | Free proves value; Deep unlocks structural checks; Continuous monitors | All-or-nothing pricing |
-| **5. Engine reuse** | Deep Scan rides `thugir-node` max-power (probes, BOLA, sqlmap) without forking the research platform | Startups rebuild engines |
+| **5. Engine reuse** | Deep Scan embeds TCSF max-power + `TcsfRuntime` + Strike probes + evidence verdicts from `thugirlabs.com`/`thugir-node` | Startups rebuild engines |
 | **6. Operator trust** | Admin audit log, ownership attestation, SSRF blocks, Razorpay signature verify | Weak ops = enterprise no |
 
 **Moat test:** If a competitor clones our UI in a weekend, do they still lack our pattern library + evidence discipline + fix prompts? If yes, moat holds.
@@ -59,6 +59,8 @@ Scanners find CVEs.  Thugir finds what vibe-coding ships by default.
 - [x] Evidence gate + serializeFindings blur
 - [x] Free min-confidence threshold
 - [x] Deep worker uses TCSF max-power
+- [x] Deep worker prefers portable `TcsfRuntime` + evidence verdicts (thugirlabs.com)
+- [x] Engine sync script (`scripts/sync-engine.sh`) from thugirlabs.com `thugir-node`
 - [x] Continuous: `monitors` table + `/api/monitors` API (scheduler worker still TODO)
 - [x] Continuous: cron/QStash tick to enqueue due monitors + delta email
 - [ ] Public badge / verify page quality pass

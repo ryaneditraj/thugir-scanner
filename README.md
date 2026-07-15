@@ -96,21 +96,19 @@ Every table, RLS policy, and the `findings_visible` gating view is defined in
 
 ## Deep Scan engine
 
-The Deep Scan `worker/` imports the private **`thugir-node`** framework. It resolves the engine in
-this order (`worker/runner.py`):
+The Deep Scan `worker/` embeds **TCSF** from private **`thugir-node`** (lives in
+[thugirlabs.com](https://github.com/ryaneditraj/thugirlabs.com)). Resolution order
+(`worker/runner.py`):
 
-1. `THUGIR_ENGINE_ROOT` env var (used in production/containers), then
-2. a git submodule at `engine/` (the split-repo layout), then
-3. a sibling `thugir-node/` checkout (monorepo layout).
-
-To run Deep Scans from this standalone repo, either add `thugir-node` as a submodule at `engine/`:
+1. `THUGIR_ENGINE_ROOT` (production/containers), then
+2. `./engine` after `./scripts/sync-engine.sh`, then
+3. `~/THUGIR LABS/thugir-node` (local Labs checkout).
 
 ```bash
-git submodule add <thugir-node-repo-url> engine
+./scripts/sync-engine.sh          # sparse-checkout thugir-node → ./engine
 ```
 
-or point `THUGIR_ENGINE_ROOT` at a local checkout. The **free tier does not need the engine.** See
-[worker/README.md](worker/README.md).
+The **free tier does not need the engine.** See [worker/README.md](worker/README.md).
 
 ## Deployment
 
