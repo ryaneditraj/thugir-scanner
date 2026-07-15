@@ -7547,6 +7547,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "domgo-ajax-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat AJAX response DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages fetch JSON via XHR and assign response payloads to msgboard.innerHTML — deliberate AJAX-driven DOM XSS labs.",
+    impactOneline:
+      "AJAX-to-innerHTML flows enable DOM XSS when server responses include attacker-controlled strings rendered unsafely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoAjaxDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render AJAX/JSON response fields into innerHTML; use textContent or strict sanitization.",
+      steps: [
+        "Use textContent instead of innerHTML for XHR/fetch response data.",
+        "Validate and encode JSON fields before DOM insertion.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise writes XHR JSON response payloads into msgboard.innerHTML. Show safe textContent alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-websocket-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat WebSocket message DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages assign WebSocket onmessage payloads to msgboard.innerHTML — deliberate real-time DOM XSS labs.",
+    impactOneline:
+      "WebSocket-to-innerHTML flows enable DOM XSS when message payloads are rendered without validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoWebsocketDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate WebSocket message payloads and never render them into innerHTML without sanitization.",
+      steps: [
+        "Authenticate and validate WebSocket message schema before processing.",
+        "Use textContent instead of innerHTML for WebSocket payloads.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise writes WebSocket message payloads into msgboard.innerHTML. Show safe rendering and message validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-query-param-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat URL query-parameter DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages parse location.href query strings and window.name into msgboard.innerHTML — deliberate URL-parameter DOM XSS labs.",
+    impactOneline:
+      "Query-parameter-to-innerHTML flows enable DOM XSS when URL parameters are rendered without encoding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoQueryParamDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render location.href query parameters into innerHTML; use textContent or strict encoding.",
+      steps: [
+        "Use textContent instead of innerHTML for URL-derived strings.",
+        "Validate query parameter names and values against an allowlist.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise parses location.href query parameters into msgboard.innerHTML. Show safe encoding alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-realistic-mission-evidence",
     platform: "generic",
     category: "Broken access control",

@@ -6032,7 +6032,9 @@ const domgoPostMessageDomXssEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
   const corpus = ctx.home.body;
-  const messageSource = /(?:window\.)?onmessage|addEventListener\(\s*["']message["']/i.test(corpus);
+  const messageSource =
+    /(?:window\.)?onmessage|addEventListener\(\s*["']message["']/i.test(corpus) &&
+    !/(?:new\s+WebSocket|ws\.onmessage)/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   if (!messageSource || !sink) return NEGATIVE;
   return {
@@ -6060,6 +6062,68 @@ const domgoLocalStorageDomXssEvidence: Rule = async (ctx) => {
     evidence: {
       page: pageUrl,
       note: "DomGoat exercise reads localStorage payload into msgboard.innerHTML — client-storage DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat XHR/AJAX response → msgboard.innerHTML DOM XSS exercises (example/3) --
+const domgoAjaxDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const ajaxSource =
+    /(?:XMLHttpRequest|xhr\.(?:open|send|responseText)|fetch\s*\()/i.test(corpus) &&
+    /JSON\.parse\s*\(\s*(?:responseBody|responseText)/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!ajaxSource || !sink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise assigns AJAX/XHR JSON response payload to msgboard.innerHTML — server-fetched DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat WebSocket onmessage → msgboard.innerHTML DOM XSS exercises (example/4) -
+const domgoWebsocketDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const wsSource = /(?:new\s+WebSocket|ws\.onmessage|WebSocket\s*\()/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!wsSource || !sink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise assigns WebSocket message payload to msgboard.innerHTML — real-time DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat location.href query param → msgboard.innerHTML DOM XSS (example/10) ----
+const domgoQueryParamDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const querySource =
+    /location\.href\.split\s*\(\s*["']\?["']\s*\)/i.test(corpus) ||
+    (/location\.href/i.test(corpus) && /window\.name/i.test(corpus));
+  const hashOnly = /let\s+hash\s*=\s*location\.hash/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!querySource || !sink || hashOnly) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise parses location.href query parameters into msgboard.innerHTML — URL query DOM XSS lab"
     }
   };
 };
@@ -15188,6 +15252,9 @@ export const RULES: Record<string, Rule> = {
   domgoHashDomXssEvidence,
   domgoPostMessageDomXssEvidence,
   domgoLocalStorageDomXssEvidence,
+  domgoAjaxDomXssEvidence,
+  domgoWebsocketDomXssEvidence,
+  domgoQueryParamDomXssEvidence,
   clientSideBenstaffordXssDemoEvidence,
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
