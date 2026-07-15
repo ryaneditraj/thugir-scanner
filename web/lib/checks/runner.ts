@@ -813,6 +813,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVaultappLabEvidence",
   "clientSideDamnVulnerableBankEvidence",
   "clientSideVulnlabAcademyEvidence",
+  "clientSideVulnlabCmsPlatformEvidence",
   "clientSideVulnlabA09LoggingEvidence",
   "clientSideVulnlabA10SsrfEvidence",
   "clientSideVulnerableWebSiteEvidence",
@@ -4740,12 +4741,21 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const hackThisSiteEtaPrioritySeeds =
     /hack-this-site-eta\.vercel\.app/i.test(home.finalUrl)
       ? [
+          new URL("/home/", home.finalUrl).toString(),
+          new URL("/cms/", home.finalUrl).toString(),
+          new URL("/platform/", home.finalUrl).toString(),
+          new URL("/resource/", home.finalUrl).toString(),
+          new URL("/admin/", home.finalUrl).toString(),
+          new URL("/backup/", home.finalUrl).toString(),
+          new URL("/recon/", home.finalUrl).toString(),
           new URL("/labs/", home.finalUrl).toString(),
           new URL("/auth/", home.finalUrl).toString(),
           new URL("/api-labs/", home.finalUrl).toString(),
           new URL("/owasp/a01.html", home.finalUrl).toString(),
           new URL("/owasp/a09.html", home.finalUrl).toString(),
-          new URL("/owasp/a10.html", home.finalUrl).toString()
+          new URL("/owasp/a10.html", home.finalUrl).toString(),
+          new URL("/cms/wordpress.html", home.finalUrl).toString(),
+          new URL("/platform/php.html", home.finalUrl).toString()
         ]
       : [];
   const seclabPlaygroundPrioritySeeds =

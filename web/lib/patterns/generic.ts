@@ -4869,6 +4869,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-cms-platform-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VulnLab CMS and platform pentest lab hub disclosed",
+    description:
+      "VulnLab Academy publishes CMS testing targets (WordPress generator, wp-json, xmlrpc) and platform-specific lab cards (ASP.NET, PHP, Node, Java, Ruby) for hands-on reconnaissance practice.",
+    impactOneline:
+      "Public CMS/platform lab hubs expose version fingerprints and probe targets that aid attacker recon on misconfigured stacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabCmsPlatformEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CMS/platform lab hubs are training surfaces — isolate from production and remove version leaks.",
+      steps: [
+        "Deploy CMS and platform labs on dedicated training infrastructure only.",
+        "Remove generator meta tags and version banners from lab pages when not needed.",
+        "Gate lab hubs behind authentication even for training environments."
+      ]
+    },
+    fixPrompt:
+      "We host VulnLab-style CMS and platform pentest lab hubs. Show how to isolate WordPress/Drupal/Joomla and stack-specific labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-a09-logging-evidence",
     platform: "generic",
     category: "Information disclosure",

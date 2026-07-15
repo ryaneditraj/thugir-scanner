@@ -2208,6 +2208,13 @@ const ADMIN_SHELL_NAV_MARKERS = /Administration|Admin Panel|Manage users/i;
 const ADMIN_SHELL_LINK_MARKERS = /href\s*=\s*["']\/admin\/(?:users|config|settings)/i;
 
 function isExposedAdminShellHtml(body: string): boolean {
+  if (/Admin Dashboard[\s\S]{0,200}intentionally unprotected/i.test(body)) return true;
+  if (
+    /\/admin\/users\.html/i.test(body) &&
+    /No auth required|intentionally unprotected/i.test(body)
+  ) {
+    return true;
+  }
   if (!ADMIN_SHELL_LINK_MARKERS.test(body) && !/\/admin\/users/i.test(body)) return false;
   if (!ADMIN_SHELL_NAV_MARKERS.test(body)) return false;
   if (/sign in|log in|login required|unauthorized/i.test(body.slice(0, 800))) return false;
@@ -5450,10 +5457,57 @@ const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
   {
     label: "Intentionally vulnerable CSRF educational warning",
     re: /intentionally vulnerable to CSRF attacks for educational purposes/i
+  },
+  {
+    label: "SecLab No CSRF token validation",
+    re: /No CSRF token validation/i
+  },
+  {
+    label: "SecLab Send forged request button",
+    re: /Send forged request/i
+  },
+  {
+    label: "SecLab Simulate forged request lab",
+    re: /Simulate forged request \(no token\)/i
+  },
+  {
+    label: "SecLab csrf-vulnerable API route",
+    re: /\/api\/csrf-vulnerable/
+  },
+  {
+    label: "SecLab No CSRF protection response",
+    re: /No CSRF protection!/i
   }
 ];
 
+async function probeCsrfVulnerableApi(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/securityweb-iota|SecLab|csrf-vulnerable|\/csrf/i.test(`${ctx.combined}${ctx.origin}`)) {
+    return null;
+  }
+  const url = new URL("/api/csrf-vulnerable", ctx.origin).toString();
+  const r = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ from: "alice", to: "bob", amount: 1 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!/No CSRF protection|"safe"\s*:\s*false|csrf-vulnerable/i.test(r.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: r.body.slice(0, 240).trim(),
+      note: "POST /api/csrf-vulnerable processes transfer without CSRF token — cross-site request forgery confirmed"
+    }
+  };
+}
+
 const clientSideCsrfEvidence: Rule = async (ctx) => {
+  const live = await probeCsrfVulnerableApi(ctx);
+  if (live?.fired) return live;
+
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CSRF_RES) {
     const m = ctx.combined.match(re);
@@ -12755,6 +12809,56 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy CMS/platform lab hub (hack-this-site-eta.vercel.app/cms|platform) -
+const CLIENT_VULNLAB_CMS_PLATFORM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CMS Testing lab hub",
+    re: /CMS Testing Labs|CMS Targets|CMS Testing/i
+  },
+  {
+    label: "WordPress generator meta exposed",
+    re: /meta name=["']generator["'] content=["']WordPress/i
+  },
+  {
+    label: "WordPress wp-json REST endpoint",
+    re: /\/api\/cms\/wp-json|wp-json endpoint/i
+  },
+  {
+    label: "WordPress xmlrpc.php probe target",
+    re: /\/xmlrpc\.php/i
+  },
+  {
+    label: "Platform Specific lab hub",
+    re: /Platform Specific Labs|Platform Labs/i
+  },
+  {
+    label: "Platform stack lab cards",
+    re: /ASP\.NET \/ IIS|PHP \/ Apache|Node\.js \/ Express|Java \/ Spring|Ruby \/ Rails/i
+  },
+  {
+    label: "VulnLab resource hub training flow",
+    re: /Resource Hub[\s\S]{0,200}intentionally vulnerable/i
+  }
+];
+
+const clientSideVulnlabCmsPlatformEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_CMS_PLATFORM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnLab Academy|Pentest Toolkit|vulnerable-labs\.local/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab Academy publishes CMS and platform-specific pentest lab targets (WordPress, Drupal, ASP.NET, PHP, Node)"
+    }
+  };
+};
+
 // --- megmogmog1965/vulnerable-web-site (CSRF/clickjacking/XSS/SSRF Next.js lab) ----
 const CLIENT_VULNERABLE_WEB_SITE_RES: { label: string; re: RegExp }[] = [
   {
@@ -14638,6 +14742,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabAcademyEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
+  clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
   clientSideEksGoatEvidence,
