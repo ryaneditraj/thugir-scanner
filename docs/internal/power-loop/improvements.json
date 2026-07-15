@@ -2957,6 +2957,24 @@
       "slug": "vwad-webgoat-owasp-project-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: VWAD JSON-LD softwareHelp https://owasp.org/www-project-webgoat/ + WebGoat - OWASP VWAD title; extractWebgoatDocSeeds + vwadWebgoatPrioritySeeds cross-origin crawl; vwad.owasp.org/app/webgoat findings 5→6 incl client-side-webgoat-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a09-logging-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: A09-001 Sensitive Data in Errors + Error: DB password = \"passw0rd!\" + /api/log log injection form; hack-this-site-eta.vercel.app/owasp/a09.html findings 11→12 incl client-side-vulnlab-a09-logging-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a10-ssrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: A10-001 SSRF Scanner + fetch('/api/fetch?url=') + 169.254.169.254/latest/meta-data default; GET /api/fetch returns SSRF Simulation JSON; hack-this-site-eta.vercel.app/owasp/a10.html gains client-side-vulnlab-a10-ssrf-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:securityweb-iota.vercel.app",
+      "slug": "seclab-playground-priority-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SecLab hub links /xss /sqli /csrf /idor; seclabPlaygroundPrioritySeeds prepends lab routes when Vercel checkpoint drops homepage lab cards; securityweb-iota.vercel.app/idor gains client-side-idor-evidence on module crawl; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5294,6 +5312,21 @@
       "source": "discovery:vwad.owasp.org/app/webgoat",
       "slug": "vwad-webgoat-owasp-project-seed",
       "shipped_at": "2026-07-15T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a09-logging-evidence",
+      "shipped_at": "2026-07-15T03:20:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a10-ssrf-evidence",
+      "shipped_at": "2026-07-15T03:20:00.000Z"
+    },
+    {
+      "source": "discovery:securityweb-iota.vercel.app",
+      "slug": "seclab-playground-priority-lab-seeds",
+      "shipped_at": "2026-07-15T03:20:00.000Z"
     }
   ]
 }

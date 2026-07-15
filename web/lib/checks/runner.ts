@@ -813,6 +813,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVaultappLabEvidence",
   "clientSideDamnVulnerableBankEvidence",
   "clientSideVulnlabAcademyEvidence",
+  "clientSideVulnlabA09LoggingEvidence",
+  "clientSideVulnlabA10SsrfEvidence",
   "clientSideVulnerableWebSiteEvidence",
   "clientSideNivaraSecurityEvidence",
   "clientSideEksGoatEvidence",
@@ -4741,8 +4743,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/labs/", home.finalUrl).toString(),
           new URL("/auth/", home.finalUrl).toString(),
           new URL("/api-labs/", home.finalUrl).toString(),
-          new URL("/owasp/a01.html", home.finalUrl).toString()
+          new URL("/owasp/a01.html", home.finalUrl).toString(),
+          new URL("/owasp/a09.html", home.finalUrl).toString(),
+          new URL("/owasp/a10.html", home.finalUrl).toString()
         ]
+      : [];
+  const seclabPlaygroundPrioritySeeds =
+    /securityweb-iota\.vercel\.app/i.test(home.finalUrl)
+      ? ["/xss", "/sqli", "/csrf", "/idor"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
   const vwadWrongsecretsPrioritySeeds =
     /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
@@ -4752,6 +4760,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
       ...hackThisSiteEtaPrioritySeeds,
+      ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
       ...vwadWebgoatPrioritySeeds,
