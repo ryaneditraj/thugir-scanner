@@ -1,421 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-14T19:05:07.340Z",
-      "url": "http://demo.testfire.net/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.86,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 273,
-      "status": "ok",
-      "scanned_at": "2026-07-14T19:05:07.340Z"
-    },
-    {
-      "run_id": "2026-07-14T19:05:14.055Z",
-      "url": "https://brokencrystals.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 15,
-      "findings": [
-        {
-          "slug": "exposed-env-file",
-          "title": "Environment file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "exposed-config-backup",
-          "title": "Config or backup file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "exposed-git-dir",
-          "title": "Exposed .git directory",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-xxe-evidence",
-          "title": "Client bundle documents XXE via external entity expansion",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-brokencrystals-evidence",
-          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "firebase-config-exposed",
-          "title": "Firebase web config present in bundle",
-          "severity": "info",
-          "confidence": 0.9,
-          "category": "Information exposure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 303,
-      "status": "ok",
-      "scanned_at": "2026-07-14T19:05:14.055Z"
-    },
-    {
-      "run_id": "2026-07-14T19:05:16.219Z",
-      "url": "http://testhtml5.vulnweb.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-14T19:05:16.219Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-14T19:05:26.271Z",
-      "url": "https://platform.sixhackacademy.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-sixhack-ctf-lab-evidence",
-          "title": "SixHack Academy CTF Labs document OWASP web flaws",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 4,
-      "probes_run": 277,
-      "status": "ok",
-      "scanned_at": "2026-07-14T19:05:26.271Z"
-    },
-    {
-      "run_id": "2026-07-14T19:06:16.033Z",
-      "url": "https://cve-2025-55182-demo.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 277,
-      "status": "ok",
-      "scanned_at": "2026-07-14T19:06:16.033Z"
-    },
-    {
-      "run_id": "2026-07-14T19:06:20.766Z",
-      "url": "https://www.hackthissite.org/missions/basic/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-hackthissite-evidence",
-          "title": "HackThisSite mission challenges publicly indexed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 320,
-      "status": "ok",
-      "scanned_at": "2026-07-14T19:06:20.766Z"
-    },
-    {
-      "run_id": "2026-07-14T19:07:09.428Z",
-      "url": "https://vulnweb.netlify.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": "lovable",
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vulnweb-lab-evidence",
-          "title": "VulnWeb educational vulnerability lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 271,
-      "status": "ok",
-      "scanned_at": "2026-07-14T19:07:09.428Z"
-    },
-    {
-      "run_id": "2026-07-14T20:01:44.751Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 173,
-      "status": "ok",
-      "scanned_at": "2026-07-14T20:01:44.751Z"
-    },
-    {
       "run_id": "2026-07-14T20:12:20.226Z",
       "url": "http://testhtml5.vulnweb.com/",
       "auth": "public_demo",
@@ -9676,6 +9261,441 @@
       "probes_run": 194,
       "status": "ok",
       "scanned_at": "2026-07-15T21:01:15.985Z"
+    },
+    {
+      "run_id": "2026-07-15T21:09:28.748Z",
+      "url": "https://vwad.owasp.org/app/pixi/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-webgoat-evidence",
+          "title": "OWASP WebGoat deliberately insecure training app disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 278,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:09:28.748Z"
+    },
+    {
+      "run_id": "2026-07-15T21:09:34.079Z",
+      "url": "https://hacksec.in/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-hacksec-evidence",
+          "title": "HackSec password-protected ethical hacking portal disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 263,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:09:34.079Z"
+    },
+    {
+      "run_id": "2026-07-15T21:11:27.881Z",
+      "url": "https://webgoat.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "secret-twilio",
+          "title": "Twilio account SID + auth exposed in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-juice-shop-project-evidence",
+          "title": "OWASP Juice Shop project challenge oracle disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-webgoat-evidence",
+          "title": "OWASP WebGoat deliberately insecure training app disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 288,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:11:27.881Z"
+    },
+    {
+      "run_id": "2026-07-15T21:11:35.478Z",
+      "url": "https://cyberdefenders.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "secret-openai",
+          "title": "OpenAI API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-cyberdefenders-evidence",
+          "title": "CyberDefenders blue team cyber range platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 322,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:11:35.478Z"
+    },
+    {
+      "run_id": "2026-07-15T21:12:43.589Z",
+      "url": "https://appsecmaster.net/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-react-rsc-cve-evidence",
+          "title": "Next.js RSC CVE lab page disclosed",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-appsec-master-evidence",
+          "title": "AppSecMaster web hacking lab platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-appsec-master-lab-hub-evidence",
+          "title": "AppSecMaster XSS/SQLi category lab hub disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:12:43.589Z"
+    },
+    {
+      "run_id": "2026-07-15T21:13:16.717Z",
+      "url": "https://516-hackers.github.io/516-hackers-vuln-playground/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 265,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:13:16.717Z"
+    },
+    {
+      "run_id": "2026-07-15T21:13:18.586Z",
+      "url": "https://labs.hackadvisor.io/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-hackadvisor-lab-evidence",
+          "title": "HackAdvisor real-world bug report CTF labs disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 306,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:13:18.586Z"
+    },
+    {
+      "run_id": "2026-07-15T21:13:54.998Z",
+      "url": "https://sixhackacademy.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-sixhack-ctf-lab-evidence",
+          "title": "SixHack Academy CTF Labs document OWASP web flaws",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 285,
+      "status": "ok",
+      "scanned_at": "2026-07-15T21:13:54.998Z"
     }
   ],
   "teacher_delta_runs": [
