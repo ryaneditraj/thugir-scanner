@@ -3011,6 +3011,24 @@
       "slug": "client-side-vulnlab-cms-platform-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /platform/aspnet.html ViewState Analyzer + /backup/web.config.bak + hackThisSiteEtaPrioritySeeds aspnet/node/java/python subpages; platform/aspnet.html findings 7→13 incl client-side-vulnlab-cms-platform-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "client-side-vuln-expose-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /sqli/users LABORATORIO DE ENUMERACIÓN DE USUARIOS + Parameter Injection; /xss/profile PROFILE XSS LABORATORY; /xss/comments STORED XSS LABORATORY + Comentario (Vulnerable a XSS); extractVulnExposeSeeds adds /sqli/users + /xss/profile; module URLs findings 0→8 each; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-lab.vercel.app",
+      "slug": "client-side-web-security-lab-zh-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /learn/xss 跨站脚本（XSS）与防御思路 + 教育演示：字符串与 HTML 解析 + 解析为 HTML（仅作演示; chapter markers extend CLIENT_WEB_SECURITY_LAB_ZH_RES; web-security-lab.vercel.app/learn/xss findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "vuln-portal-auth-subpath-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login HTML href=/auth/register + REQUEST ACCESS role selection; extractVulnPortalAuthSeeds seeds /auth/register; vuln-portal pages_crawled 1→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5393,6 +5411,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-platform-subpage-crawl-markers",
       "shipped_at": "2026-07-15T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-profile-comments-modules",
+      "shipped_at": "2026-07-15T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-lab.vercel.app",
+      "slug": "web-security-lab-chapter-interactive-demo",
+      "shipped_at": "2026-07-15T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "vuln-portal-auth-subpath-crawl",
+      "shipped_at": "2026-07-15T06:15:00.000Z"
     }
   ]
 }
