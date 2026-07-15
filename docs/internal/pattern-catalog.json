@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T00:12:40.095Z",
-  "total": 324,
-  "uniqueSlugs": 324,
+  "generatedAt": "2026-07-15T01:12:57.126Z",
+  "total": 325,
+  "uniqueSlugs": 325,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 306,
+    "generic": 307,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 256,
+    "deep": 257,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "general": 18,
     "Server-side request forgery": 3,
     "Sensitive data exposure": 4,
-    "AI security": 23,
+    "AI security": 24,
     "XSS": 1
   },
   "slugs": [
@@ -217,6 +217,7 @@
     "client-side-secresearchlab-evidence",
     "client-side-sectrainer-evidence",
     "client-side-securebank-blog-evidence",
+    "client-side-secured-ai-lab-evidence",
     "client-side-secureflag-evidence",
     "client-side-security-game-evidence",
     "client-side-security-shepherd-evidence",
