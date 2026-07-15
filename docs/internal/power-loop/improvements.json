@@ -3083,6 +3083,24 @@
       "slug": "client-side-hackthissite-realistic-mission-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/ Login Required + realistic nav category + HTS training ground tagline; www.hackthissite.org/missions/realistic/ findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-hash-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/1 let hash = location.hash → getElementById('msgboard').innerHTML; domgo.at/cxss/example/1 findings 3→4; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-postmessage-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/5 window.onmessage evt.data.payload → msgboard.innerHTML; domgo.at/cxss/example/5 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-localstorage-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/6 localStorage.getItem('payload') → msgboard.innerHTML; domgo.at/cxss/example/6 findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5525,6 +5543,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "client-side-hackthissite-realistic-mission-evidence",
       "shipped_at": "2026-07-15T09:50:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-hash-dom-xss-evidence",
+      "shipped_at": "2026-07-15T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-postmessage-dom-xss-evidence",
+      "shipped_at": "2026-07-15T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-localstorage-dom-xss-evidence",
+      "shipped_at": "2026-07-15T11:30:00.000Z"
     }
   ]
 }
