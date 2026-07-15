@@ -3642,7 +3642,32 @@
       "url": "https://www.hackthissite.org/missions/realistic/",
       "source": "Hack This Site — realistic web security mission series landing (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/",
+      "source": "Hack This Site — application security mission series landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/1/",
+      "source": "Hack This Site — realistic mission 1 web challenge entry point (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.benstafford.dev/attack1.html",
+      "source": "benstafford XSS Demo — reflected XSS via attack1.html query params + cookie exfiltration (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/4",
+      "source": "Mario Heiderich domgo.at — DomGoat level 4 postMessage→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/5",
+      "source": "Mario Heiderich domgo.at — DomGoat level 5 window.onmessage DOM XSS",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T08:10:00.000Z"
+  "updated_at": "2026-07-15T12:35:00.000Z"
 }
