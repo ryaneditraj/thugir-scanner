@@ -5779,6 +5779,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-secured-ai-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "SecuredAI Lab OWASP agentic security playground disclosed",
+    description:
+      "SecuredAI Lab publishes interactive OWASP ASI modules covering agent goal hijacking, tool misuse, and privilege abuse with vulnerable/secure agent toggles.",
+    impactOneline:
+      "Public agentic AI security labs document ASI attack chains attackers use to probe LLM agent guardrails.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecuredAiLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Agentic security labs are intentional — isolate ASI demos from production agent deployments.",
+      steps: [
+        "Never expose production agent system prompts in client-visible playgrounds.",
+        "Gate agent tool access with least-privilege policies and human-in-the-loop approval.",
+        "Log and rate-limit goal-hijack and prompt-injection probes on public agent endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host a SecuredAI Lab-style OWASP ASI agent security playground. Show how to isolate agent demos and block goal-hijack attacks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gitagent-securebot-evidence",
     platform: "generic",
     category: "AI security",

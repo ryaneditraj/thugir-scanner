@@ -839,6 +839,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
+  "clientSideSecuredAiLabEvidence",
   "clientSideGitagentSecurebotEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
@@ -2656,13 +2657,20 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
   if (!/VulnLab Academy|Pentest Toolkit|deliberately vulnerable pentest/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
+  for (const n of ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"]) {
+    try {
+      out.add(new URL(`/owasp/a${n}.html`, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   for (const p of [
     "/home/",
     "/owasp/",
-    "/owasp/a01.html",
     "/labs/xss-reflected.html",
     "/labs/sqli-error.html",
     "/labs/idor.html",
+    "/labs/secret-scanner.html",
     "/admin/"
   ]) {
     try {
@@ -3212,6 +3220,47 @@ function extractWechallChallengeSeeds(html: string, pageUrl: string): string[] {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** SecuredAI Lab (mnthnx64.github.io/secured-ai) — OWASP ASI agentic security playground. */
+function extractSecuredAiSeeds(html: string, pageUrl: string): string[] {
+  if (!/SecuredAI Lab|Secured.*AI.*Lab|mnthnx64\/secured-ai/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["app.js", "modules.js"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VWAD WrongSecrets listing notes link Heroku demo — seed live instance for challenge crawl. */
+function extractVwadWrongsecretsLiveSeed(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org\/app\/wrongsecrets|OWASP WrongSecrets|wrongsecrets\.herokuapp/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const herokuNote = html.match(/Heroku demo:\s*(wrongsecrets\.herokuapp\.com)/i);
+  if (herokuNote?.[1]) {
+    try {
+      out.add(new URL(`https://${herokuNote[1]}/`).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const urlMatch = html.match(/https?:\/\/wrongsecrets\.herokuapp\.com\/?/i);
+  if (urlMatch?.[0]) {
+    try {
+      out.add(new URL(urlMatch[0]).toString());
     } catch {
       /* ignore */
     }
@@ -4485,6 +4534,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
   const gitagentSecurebotSeeds = extractGitagentSecurebotSeeds(home.body, home.finalUrl);
+  const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
+  const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -4630,9 +4681,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/"
         ]
       : [];
+  const vwadWrongsecretsPrioritySeeds =
+    /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
+      ? ["https://wrongsecrets.herokuapp.com/"]
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...vwadWrongsecretsPrioritySeeds,
+      ...vwadWrongsecretsLiveSeeds,
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
       ...ginAndJuicePrioritySeeds,
@@ -4706,6 +4763,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secResearchLabSeeds,
       ...skillauditSeeds,
       ...gitagentSecurebotSeeds,
+      ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
       ...bergerCyberLabSeeds,

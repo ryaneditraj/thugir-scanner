@@ -2921,6 +2921,24 @@
       "slug": "vulnlab-owasp-a01-hub-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractVulnLabAcademySeeds adds /owasp/a01.html for A01 broken-access-control lab crawl; hack-this-site-eta.vercel.app/owasp/a01.html direct scan reaches client-side-vulnlab-academy-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mnthnx64.github.io/secured-ai",
+      "slug": "client-side-secured-ai-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: modules.js ASI01 Agent Goal Hijacking + OWASP Top 10 for Agentic Applications 2025 + BLOCKED: Goal hijack attempt detected; extractSecuredAiSeeds crawls app.js/modules.js; mnthnx64.github.io/secured-ai findings 3→4 incl client-side-secured-ai-lab-evidence; benchmark juice-shop-staging 7 findings 6/6 categories maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-owasp-a02-a10-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: A02 page window.__SECRET_KEY__ + /labs/secret-scanner.html link; extractVulnLabAcademySeeds now seeds /owasp/a01–a10.html + secret-scanner lab; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/wrongsecrets",
+      "slug": "vwad-wrongsecrets-heroku-live-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD notes Heroku demo: wrongsecrets.herokuapp.com; extractVwadWrongsecretsLiveSeed + vwadWrongsecretsPrioritySeeds cross-origin crawl; vwad.owasp.org/app/wrongsecrets findings 3→5 incl client-side-wrongsecrets-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5228,6 +5246,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-owasp-a01-hub-seed",
       "shipped_at": "2026-07-15T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:mnthnx64.github.io/secured-ai",
+      "slug": "client-side-secured-ai-lab-evidence",
+      "shipped_at": "2026-07-15T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-owasp-a02-a10-hub-seeds",
+      "shipped_at": "2026-07-15T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/wrongsecrets",
+      "slug": "vwad-wrongsecrets-heroku-live-seed",
+      "shipped_at": "2026-07-15T01:15:00.000Z"
     }
   ]
 }

@@ -4690,6 +4690,53 @@ const clientSideBreakTheFlaskEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- SecuredAI Lab agentic security playground (mnthnx64.github.io/secured-ai) --------
+const CLIENT_SECURED_AI_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SecuredAI Lab title",
+    re: /SecuredAI Lab|Agent Security Playground/i
+  },
+  {
+    label: "OWASP Agentic Top 10 badge",
+    re: /OWASP Top 10 for Agentic Applications 2025/i
+  },
+  {
+    label: "ASI01 Agent Goal Hijacking module",
+    re: /ASI01[\s\S]{0,60}Agent Goal Hijack/i
+  },
+  {
+    label: "Goal hijack attack detection",
+    re: /BLOCKED: Goal hijack attempt detected|agent goal hijacking/i
+  },
+  {
+    label: "Interactive agent attack demos",
+    re: /Attack Demonstrations|Start Experimenting/i
+  },
+  {
+    label: "Vulnerable vs secure agent toggle",
+    re: /agentType:\s*['"]both['"]|vulnerable.*secure.*agent/i
+  }
+];
+
+const clientSideSecuredAiLabEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SECURED_AI_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/SecuredAI Lab|mnthnx64\/secured-ai|OWASP Top 10 for Agentic/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SecuredAI Lab documents OWASP ASI agent goal hijacking, tool misuse, and privilege abuse with interactive attack demos"
+    }
+  };
+};
+
 // --- GitAgent SecureBot AI security scanner (gitagent-securebot-app.vercel.app) ------
 const CLIENT_GITAGENT_SECUREBOT_RES: { label: string; re: RegExp }[] = [
   {
@@ -14273,6 +14320,10 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
     re: /vwad\.owasp\.org\/app\/crapi|"name":\s*"crAPI"/i
   },
   {
+    label: "VWAD WrongSecrets listing",
+    re: /vwad\.owasp\.org\/app\/wrongsecrets|"name":\s*"WrongSecrets"/i
+  },
+  {
     label: "Pixi MEAN stack insecure API lab",
     re: /MEAN stack web app with deliberately insecure APIs|Part of OWASP DevSlop/i
   }
@@ -14528,6 +14579,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
+  clientSideSecuredAiLabEvidence,
   clientSideGitagentSecurebotEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
