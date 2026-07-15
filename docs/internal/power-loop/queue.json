@@ -3517,7 +3517,32 @@
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level1.php",
       "source": "webspoilt/vulnforge-academy — Level 1 UNION-based SQLi challenge (GitHub repo structure)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/login",
+      "source": "JuaniVeltri/vuln-expose — SQLi authentication-bypass lab module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/search",
+      "source": "JuaniVeltri/vuln-expose — SQLi data-extraction search lab module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/playground",
+      "source": "JuaniVeltri/vuln-expose — interactive XSS playground with stored/reflected/DOM vectors (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/comments",
+      "source": "JuaniVeltri/vuln-expose — stored XSS persistent comments lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level2.php",
+      "source": "webspoilt/vulnforge-academy — Level 2 SQLi challenge (GitHub repo structure)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T03:35:00.000Z"
+  "updated_at": "2026-07-15T04:10:00.000Z"
 }

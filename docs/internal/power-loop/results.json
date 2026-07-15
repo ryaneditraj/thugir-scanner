@@ -9521,7 +9521,7 @@
       "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
-      "run_id": "2026-07-15T04:04:54.770Z",
+      "run_id": "2026-07-15T04:02:40.814Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -9574,9 +9574,9 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 1,
-      "probes_run": 235,
+      "probes_run": 233,
       "status": "ok",
-      "scanned_at": "2026-07-15T04:04:54.770Z"
+      "scanned_at": "2026-07-15T04:02:40.814Z"
     }
   ],
   "teacher_delta_runs": [
@@ -11071,6 +11071,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap auth_bypass,sensitive_data before Heroku wake retry.",
       "scanned_at": "2026-07-15T03:32:00.000Z"
+    },
+    {
+      "run_id": "2026-07-15T04:10:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=233)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings",
+      "scanned_at": "2026-07-15T04:10:00.000Z"
     }
   ]
 }
