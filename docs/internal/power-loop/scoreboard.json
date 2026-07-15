@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T20:02:31.500Z",
+  "updated_at": "2026-07-15T20:08:04.847Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 550,
-  "total_findings": 2383,
+  "total_sites_scanned": 558,
+  "total_findings": 2418,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 186,
-  "discovery_findings": 1574,
+  "discovery_urls_added": 191,
+  "discovery_findings": 1609,
   "improvements_shipped": 509,
-  "last_run": "2026-07-15T20:02:31.500Z",
+  "last_run": "2026-07-15T20:08:04.847Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary juice-shop.herokuapp.com DNS/cold-start unreliable — staging fallback 7 findings 6/6 recall; primary wake retry also 6/6 (5 findings)",
+      "note": "Primary heroku 6 findings 6/6 recall on first pass (no retry needed); shallow crawl pages_crawled=1 probes=235",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,36 +52,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 39,
-      "focus": "HTS realistic missions 1-3, playlevel arcade hub, VWAD Security Shepherd/Mutillidae/NodeGoat listings",
-      "improvements_shipped_this_run": 5,
+      "findings": 35,
+      "focus": "Hacksplaining OWASP lessons, vAPI/PentesterLab/Root-Me/HTS hubs, agentpwn AI prompt-injection lab",
       "new_urls": [
-        "https://prompt-injection.onrender.com/",
-        "https://www.hackthissite.org/missions/basic/2/",
-        "https://www.hackthissite.org/missions/basic/3/",
-        "https://www.hackthissite.org/missions/basic/4/",
-        "https://bergerzvika.github.io/Cyber-Lab/indirect-prompt-injection-example.html"
+        "https://auth-security-project.onrender.com/",
+        "https://www.hackthissite.org/missions/basic/5/",
+        "https://www.hackthissite.org/playlevel/2/",
+        "https://www.hackthissite.org/missions/basic/6/",
+        "https://demo.owasp-juice.shop/"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "www.hackthissite.org/missions/realistic/1: Uncle Arnold vote.php SQLi oracle (3→5 findings)",
-      "www.hackthissite.org/missions/realistic/2: American Nazi Party update.php bulletin (3→4 findings)",
-      "www.hackthissite.org/missions/realistic/3: H4XX0R3D defacement challenge (3→4 findings)",
-      "www.hackthissite.org/playlevel/1: login-gated arcade wargame hub (5→6 findings)",
-      "vwad.owasp.org/app/security-shepherd: Security Shepherd lab listing (3→5 findings)",
-      "vwad.owasp.org/app/mutillidae: Mutillidae lab listing (3→5 findings)",
-      "vwad.owasp.org/app/nodegoat: NodeGoat lab listing (3→5 findings)",
-      "php.testsparker.com: 6 findings incl SQLi/XSS scanner-benchmark markers",
-      "ssrf-defense-platform.onrender.com: 6 findings SSRF lab evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "www.hacksplaining.com/lessons/*: Hacksplaining OWASP lesson markers (3 URLs × 4 findings)",
+      "vapi.apisec.ai: secret-openai + API Top 10 lab evidence (4 findings)",
+      "pentesterlab.com: reflected XSS + Web for Pentester markers (4 findings)",
+      "www.root-me.org: Twilio secret + challenge platform evidence (5 findings)",
+      "www.hackthissite.org: mission hub XSS + insecure cookies (5 findings)",
+      "agentpwn.com: hidden-prompt-injection + dangerous HTML sinks (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: primary oracle DNS NXDOMAIN or Heroku 503 cold-start — rely on staging fallback",
-      "Kontra SSTI lesson URL returns 404 — rejected until Kontra publishes server-side-template-injection module",
-      "HTS mission instance content behind login — hub evidence only for playlevel arcade category",
-      "Queue tail backlog: prompt-injection.onrender.com, HTS basic/2-4, Cyber-Lab indirect injection await head drain",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner"
+      "juice-shop.herokuapp.com: shallow crawl pages_crawled=1 — secret-resend slug absent; sensitive_data via vibe-unauthenticated-api-routes",
+      "Queue tail backlog: prompt-injection.onrender.com, HTS basic/2-4, Cyber-Lab indirect injection, new auth-security/basic/5-6/demo.owasp-juice await head drain",
+      "www.root-me.org: Anubis bot-wall may block deeper challenge crawls from cloud",
+      "HTS mission instance content behind login — hub evidence only for playlevel/basic missions"
     ]
   },
   "discovery_highlights": {
