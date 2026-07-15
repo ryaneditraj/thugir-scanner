@@ -3197,6 +3197,18 @@
       "slug": "client-side-hts-realistic-mission-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/4 Fischer's Animal Products products.php?category= + /missions/realistic/5 Compu-global-Hyper-Mega-Net frameset; realistic/4 findings 4→5, realistic/5 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-login-gated-mission-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/basic/1 /forensic /javascript /programming return Login Required + category nav; findings 5→6 each; benchmark juice-shop 6/6 maintained (no benchmark misses)"
+    },
+    {
+      "source": "discovery:kontra.dev",
+      "slug": "kontra-ssti-lesson-seed",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: application.security/free-application-security-training/owasp-top-10-server-side-template-injection returns HTTP 404 — lesson URL absent from Kontra marketing catalog; no port possible"
     }
   ],
   "shipped": [
@@ -5734,6 +5746,11 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "client-side-hts-realistic-mission-lab-evidence",
       "shipped_at": "2026-07-15T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-login-gated-mission-hub-evidence",
+      "shipped_at": "2026-07-15T17:15:00.000Z"
     }
   ]
 }
