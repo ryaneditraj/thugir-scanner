@@ -3215,6 +3215,36 @@
       "slug": "kontra-ssti-lesson-seed",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: application.security/free-application-security-training/owasp-top-10-server-side-template-injection returns HTTP 404 — lesson URL absent from Kontra marketing catalog; no port possible"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-realistic-mission-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: realistic/1 Uncle Arnold vote.php+PHPSESSID, realistic/2 AMERICAN NAZI PARTY update.php, realistic/3 H4XX0R3D defacement; realistic/1 findings 3→5, realistic/2 findings 3→4, realistic/3 findings 3→4; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-playlevel-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/1/ Login Required + playlevel arcade wargame nav + HTS training ground tagline; playlevel/1 findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-security-shepherd-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD meta Web and mobile application security training + lessons followed by challenges; vwad.owasp.org/app/security-shepherd findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-mutillidae-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD meta OWASP Mutillidae II deliberately vulnerable + web hacking environment for labs; vwad.owasp.org/app/mutillidae findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-nodegoat-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD meta NodeGoat OWASP Top 10 Node.js risks + Includes a tutorial page; vwad.owasp.org/app/nodegoat findings 3→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
