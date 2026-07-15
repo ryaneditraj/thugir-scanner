@@ -3268,6 +3268,31 @@ function extractVwadWrongsecretsLiveSeed(html: string, pageUrl: string): string[
   return [...out];
 }
 
+/** VulnForge attack-surface SPA (vulnforge.vercel.app) — seed login routes + main JS bundle. */
+function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
+  if (!/VulnForge|vulnforge-backend|AI-Guided Web Attack Surface Explorer/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/login", "/register", "/dashboard", "/benchmarks", "/surface"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const scriptMatch = html.match(/src=["'](\/assets\/index-[^"']+\.js)["']/i);
+  if (scriptMatch?.[1]) {
+    try {
+      out.add(new URL(scriptMatch[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** GitAgent SecureBot demo scanner (gitagent-securebot-app.vercel.app) — seed demo scan route. */
 function extractGitagentSecurebotSeeds(html: string, pageUrl: string): string[] {
   if (!/GitAgent SecureBot|gitagent-securebot|open-gitagent\/gitagent/i.test(html)) return [];
@@ -3421,9 +3446,30 @@ function extractGrpcGoatDocSeeds(html: string, pageUrl: string): string[] {
 }
 
 function extractWebgoatDocSeeds(html: string, pageUrl: string): string[] {
-  if (!/WebGoat|webgoat\.org|webgoat\.github\.io/i.test(html)) return [];
+  if (!/WebGoat|webgoat\.org|webgoat\.github\.io|vwad\.owasp\.org\/app\/webgoat/i.test(html))
+    return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
+  const helpMatch = html.match(
+    /softwareHelp["']\s*:\s*["'](https?:\/\/[^"']+webgoat[^"']*)["']/i
+  );
+  if (helpMatch?.[1]) {
+    try {
+      out.add(new URL(helpMatch[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const repoMatch = html.match(
+    /codeRepository["']\s*:\s*["'](https?:\/\/github\.com\/[^"']*WebGoat[^"']*)["']/i
+  );
+  if (repoMatch?.[1]) {
+    try {
+      out.add(new URL(repoMatch[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   if (/luisillobret2\.github\.io\/WebGoat|deliberately insecure Web Application/i.test(html)) {
     for (const p of ["/WebGoat/", "/WebGoat/README.html"]) {
       try {
@@ -4534,6 +4580,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
   const gitagentSecurebotSeeds = extractGitagentSecurebotSeeds(home.body, home.finalUrl);
+  const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
@@ -4681,6 +4728,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/"
         ]
       : [];
+  const vwadWebgoatPrioritySeeds =
+    /vwad\.owasp\.org\/app\/webgoat/i.test(home.finalUrl)
+      ? [
+          "https://owasp.org/www-project-webgoat/",
+          "https://github.com/WebGoat/WebGoat"
+        ]
+      : [];
+  const hackThisSiteEtaPrioritySeeds =
+    /hack-this-site-eta\.vercel\.app/i.test(home.finalUrl)
+      ? [
+          new URL("/labs/", home.finalUrl).toString(),
+          new URL("/auth/", home.finalUrl).toString(),
+          new URL("/api-labs/", home.finalUrl).toString(),
+          new URL("/owasp/a01.html", home.finalUrl).toString()
+        ]
+      : [];
   const vwadWrongsecretsPrioritySeeds =
     /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
       ? ["https://wrongsecrets.herokuapp.com/"]
@@ -4688,8 +4751,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...hackThisSiteEtaPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
+      ...vwadWebgoatPrioritySeeds,
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
       ...ginAndJuicePrioritySeeds,
@@ -4763,6 +4828,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secResearchLabSeeds,
       ...skillauditSeeds,
       ...gitagentSecurebotSeeds,
+      ...vulnforgeSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
