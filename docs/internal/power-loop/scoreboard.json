@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T02:13:41.118Z",
+  "updated_at": "2026-07-15T02:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 420,
-  "total_findings": 1781,
+  "total_sites_scanned": 427,
+  "total_findings": 1817,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 121,
-  "discovery_findings": 1098,
-  "improvements_shipped": 464,
-  "last_run": "2026-07-15T02:13:41.118Z",
+  "discovery_findings": 1134,
+  "improvements_shipped": 467,
+  "last_run": "2026-07-15T02:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 166,
-      "note": "No benchmark misses — recall stable at 6/6 (6 findings; single-pass, no wake retry needed)",
+      "pages_crawled": 6,
+      "probes_run": 259,
+      "note": "No benchmark misses \u2014 recall stable at 6/6 (7 findings; parallel runs 02:02 single-pass 6/6 and 02:12 full crawl 7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,31 +52,34 @@
         }
       }
     },
-    "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 36,
-      "skipped_48h": 0,
+      "urls_added": 8,
+      "urls_scanned": 13,
+      "findings": 70,
+      "skipped_48h": 4,
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (NXDOMAIN)"
       ],
-      "focus": "hack-this-site A09/A10 + securityweb-iota module deep-links queued; backlog Wizer CTF + CTFlearn + OverTheWire natas0 scanned",
-      "improvements_shipped_this_run": 0
+      "focus": "Parallel runs: hack-this-site checkpoint bypass + vulnforge/vwad seeds; Wizer CTF + CTFlearn + OverTheWire natas0 backlog; A09/A10 + securityweb-iota modules queued",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) \u2014 no benchmark misses",
+      "hack-this-site-eta.vercel.app/: root landing 1\u219211 findings when priority lab seeds bypass Vercel checkpoint",
+      "vulnforge.vercel.app: SPA login/bundle crawl 2\u21924 incl hardcoded x-vulnforge-api-key",
+      "vwad.owasp.org/app/webgoat: OWASP project doc seed 5\u21926 incl client-side-webgoat-evidence",
       "ctflearn.com: 10 findings incl Web1-Web6 challenge markers + html-comment-credential-disclosure",
       "securebank-blog.vercel.app: 6 findings incl client-side-sql-evidence + client-side-csrf-evidence",
-      "sam.wizer-ctf.com + wizer-ctf.com: 5+4 findings — Wizer developer security CTF markers",
-      "hack-health-tutorial.vercel.app: 4 findings — OWASP Top 10 tutorial SQLi lab evidence",
-      "natas0.natas.labs.overthewire.org: 4 findings — OverTheWire web-security challenge entry"
+      "sam.wizer-ctf.com + wizer-ctf.com: 5+4 findings \u2014 Wizer developer security CTF markers",
+      "natas0.natas.labs.overthewire.org: 4 findings \u2014 OverTheWire web-security challenge entry"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp/rest.vulnweb.com",
+      "testhtml5.vulnweb.com: DNS NXDOMAIN \u2014 use testasp/rest.vulnweb.com",
       "hack-this-site-eta A09/A10 + securityweb-iota sqli/csrf/idor modules: queued but not yet scanned (queue backlog)",
-      "hacking-lab.com/events: 3 findings — event listing only, challenge instances require lab enrollment"
+      "hacking-lab.com/events: 3 findings \u2014 event listing only, challenge instances require lab enrollment",
+      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404 \u2014 deploy offline"
     ]
   },
   "discovery_highlights": {
@@ -281,6 +285,8 @@
     "hack-this-site-eta.vercel.app/owasp/a07.html": 11,
     "hack-this-site-eta.vercel.app/owasp/a08.html": 11,
     "hack-this-site-eta.vercel.app/labs": 11,
-    "hack-this-site-eta.vercel.app/auth": 10
+    "hack-this-site-eta.vercel.app/auth": 10,
+    "vulnforge.vercel.app": 4,
+    "vwad.owasp.org/app/webgoat": 6
   }
 }

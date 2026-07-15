@@ -2939,6 +2939,24 @@
       "slug": "vwad-wrongsecrets-heroku-live-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: VWAD notes Heroku demo: wrongsecrets.herokuapp.com; extractVwadWrongsecretsLiveSeed + vwadWrongsecretsPrioritySeeds cross-origin crawl; vwad.owasp.org/app/wrongsecrets findings 3→5 incl client-side-wrongsecrets-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "hack-this-site-eta-priority-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint sparse root HTML drops VulnLab markers; hackThisSiteEtaPrioritySeeds prepends /labs/ /auth/ /api-labs/ /owasp/a01.html; hack-this-site-eta.vercel.app/ findings 1→11 incl client-side-vulnlab-academy-evidence; benchmark juice-shop.herokuapp.com 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "vulnforge-spa-login-bundle-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: index-wBrvbwRF.js has x-vulnforge-api-key change_me_for_prod + vulnforge_token localStorage; extractVulnforgeSeeds crawls /login + /assets/index-*.js; vulnforge.vercel.app findings 2→4 incl client-side-vulnforge-evidence + vibe-hardcoded-demo-credentials; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/webgoat",
+      "slug": "vwad-webgoat-owasp-project-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD JSON-LD softwareHelp https://owasp.org/www-project-webgoat/ + WebGoat - OWASP VWAD title; extractWebgoatDocSeeds + vwadWebgoatPrioritySeeds cross-origin crawl; vwad.owasp.org/app/webgoat findings 5→6 incl client-side-webgoat-evidence; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5261,6 +5279,21 @@
       "source": "discovery:vwad.owasp.org/app/wrongsecrets",
       "slug": "vwad-wrongsecrets-heroku-live-seed",
       "shipped_at": "2026-07-15T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "hack-this-site-eta-priority-lab-seeds",
+      "shipped_at": "2026-07-15T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge.vercel.app",
+      "slug": "vulnforge-spa-login-bundle-seeds",
+      "shipped_at": "2026-07-15T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/webgoat",
+      "slug": "vwad-webgoat-owasp-project-seed",
+      "shipped_at": "2026-07-15T02:15:00.000Z"
     }
   ]
 }
