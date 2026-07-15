@@ -3155,6 +3155,24 @@
       "slug": "client-side-vulnlab-a08-integrity-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a08.html A08-001 user_profile_pickle localStorage + A08-003 Unsigned update manifest /api/update; hack-this-site-eta.vercel.app/owasp/a08.html findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a01-access-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a01.html A01-001 IDOR Scanner + A01-002 /admin/console|/admin/users + A01-003 /api/files?path= path traversal; hack-this-site-eta.vercel.app/owasp/a01.html findings 12→14; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a02-crypto-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a02.html A02-002 window.__SECRET_KEY__ + A02-003 MD5/base64 weak crypto samples; hack-this-site-eta.vercel.app/owasp/a02.html findings 0→15 (new module slug); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a03-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a03.html A03-006 Reflected XSS + A03-001 SQLi Error + A03-005 /api/ping command injection; hack-this-site-eta.vercel.app/owasp/a03.html findings 11→14; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5657,6 +5675,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "client-side-vulnlab-a08-integrity-evidence",
       "shipped_at": "2026-07-15T14:35:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a01-access-evidence",
+      "shipped_at": "2026-07-15T15:35:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a02-crypto-evidence",
+      "shipped_at": "2026-07-15T15:35:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a03-injection-evidence",
+      "shipped_at": "2026-07-15T15:35:00.000Z"
     }
   ]
 }

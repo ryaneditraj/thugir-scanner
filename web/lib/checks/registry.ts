@@ -13524,6 +13524,143 @@ function vulnlabOwaspModuleCorpus(ctx: RuleContext): string {
   return `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
 }
 
+// --- VulnLab Academy A01 broken access control (hack-this-site-eta.vercel.app/owasp/a01.html) -
+const CLIENT_VULNLAB_A01_ACCESS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A01 broken access control module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a01/i
+  },
+  {
+    label: "A01 module path oracle",
+    re: /\/owasp\/a01\.html/i
+  },
+  {
+    label: "A01 broken access control module",
+    re: /A01[\s-]+Broken Access Control|A01[\s-]+Access Control/i
+  },
+  {
+    label: "A01 IDOR scanner lab",
+    re: /A01-001 IDOR Scanner|Try changing the id parameter to access another user/i
+  },
+  {
+    label: "A01 privilege escalation probe",
+    re: /A01-002 Privilege Escalation Probe|Admin endpoints are exposed without auth/i
+  },
+  {
+    label: "A01 path traversal tester",
+    re: /A01-003 Path Traversal Tester|\/api\/files\?path=/i
+  }
+];
+
+const clientSideVulnlabA01AccessEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A01_ACCESS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A01 lab documents IDOR order probing, unauthenticated admin endpoints, and /api/files path traversal"
+    }
+  };
+};
+
+// --- VulnLab Academy A02 cryptographic failures (hack-this-site-eta.vercel.app/owasp/a02.html) -
+const CLIENT_VULNLAB_A02_CRYPTO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A02 cryptographic failures module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a02/i
+  },
+  {
+    label: "A02 module path oracle",
+    re: /\/owasp\/a02\.html/i
+  },
+  {
+    label: "A02 cryptographic failures module",
+    re: /A02[\s-]+Cryptographic Failures|A02[\s-]+Crypto Failures/i
+  },
+  {
+    label: "A02 secret scanner lab",
+    re: /A02-002 Secret Scanner|window\.__SECRET_KEY__|Secrets in HTML, JS, comments/i
+  },
+  {
+    label: "A02 weak crypto detector",
+    re: /A02-003 Weak Crypto Detector|MD5:\s*5f4dcc3b5aa765d61d8327deb882cf99|Base64:\s*cGFzc3dvcmQxMjM=/i
+  }
+];
+
+const clientSideVulnlabA02CryptoEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A02_CRYPTO_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A02 lab documents client-side secret leakage and weak MD5/base64 crypto samples"
+    }
+  };
+};
+
+// --- VulnLab Academy A03 injection (hack-this-site-eta.vercel.app/owasp/a03.html) ------
+const CLIENT_VULNLAB_A03_INJECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A03 injection module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a03/i
+  },
+  {
+    label: "A03 module path oracle",
+    re: /\/owasp\/a03\.html/i
+  },
+  {
+    label: "A03 injection module",
+    re: /A03[\s-]+Injection/i
+  },
+  {
+    label: "A03 reflected XSS lab",
+    re: /A03-006 Reflected XSS|URL input reflected into DOM sinks/i
+  },
+  {
+    label: "A03 SQL injection error lab",
+    re: /A03-001 SQL Injection \(Error\)|Simulated SQL errors based on payload/i
+  },
+  {
+    label: "A03 command injection lab",
+    re: /A03-005 Command Injection|\/api\/ping\?host=/i
+  }
+];
+
+const clientSideVulnlabA03InjectionEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A03_INJECTION_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A03 lab documents reflected XSS, SQL error injection, and /api/ping command injection"
+    }
+  };
+};
+
 // --- VulnLab Academy A06 vulnerable components (hack-this-site-eta.vercel.app/owasp/a06.html) -
 const CLIENT_VULNLAB_A06_COMPONENTS_RES: { label: string; re: RegExp }[] = [
   {
@@ -15621,6 +15758,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVaultappLabEvidence,
   clientSideDamnVulnerableBankEvidence,
   clientSideVulnlabAcademyEvidence,
+  clientSideVulnlabA01AccessEvidence,
+  clientSideVulnlabA02CryptoEvidence,
+  clientSideVulnlabA03InjectionEvidence,
   clientSideVulnlabA06ComponentsEvidence,
   clientSideVulnlabA07AuthEvidence,
   clientSideVulnlabA08IntegrityEvidence,
