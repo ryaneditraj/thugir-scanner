@@ -706,6 +706,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideChimeraVulnLabEvidence",
   "clientSideHackHealthLabEvidence",
   "clientSideDomGoatLabEvidence",
+  "domgoReferrerDomXssEvidence",
+  "clientSideBenstaffordXssDemoEvidence",
+  "clientSideHackThisSiteRealisticMissionEvidence",
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
   "clientSideWebsecChallengeEvidence",
@@ -1071,16 +1074,43 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 9; n++) {
+  for (let n = 1; n <= 10; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
       /* ignore */
     }
   }
-  for (const path of ["/cxss/sinks", "/cxss/example/1", "/cxss/example/2"]) {
+  for (const path of ["/cxss/sinks", "/cxss/example/1", "/cxss/example/2", "/cxss/example/3"]) {
     try {
       out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Ben Stafford XSS Demo (xss.benstafford.dev) — attack1.html query-param DOM XSS labs. */
+const BENSTAFFORD_ATTACK_PAGE_RE = /href\s*=\s*["'](attack\d+\.html[^"']*)["']/gi;
+
+function extractBenstaffordXssAttackSeeds(html: string, pageUrl: string): string[] {
+  if (!/xss\.benstafford\.dev|XSS Demo|attack1\.html\?username=/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = BENSTAFFORD_ATTACK_PAGE_RE.exec(html))) {
+    try {
+      const u = new URL(m[1].split("?")[0], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const p of ["/attack1.html"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -4634,6 +4664,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
   const jekyllBlogPostSeeds = extractJekyllBlogPostSeeds(home.body, home.finalUrl);
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
+  const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
@@ -4906,6 +4937,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...jekyllSecurityDocSeeds,
       ...jekyllBlogPostSeeds,
       ...domGoatCxssSeeds,
+      ...benstaffordXssSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
       ...websecSeeds,

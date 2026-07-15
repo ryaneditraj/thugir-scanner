@@ -5987,6 +5987,67 @@ const clientSideDomGoatLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DomGoat document.referrer → msgboard.innerHTML DOM XSS exercises ------------
+const domgoReferrerDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const referrer = /document\.referrer/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!referrer || !sink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise assigns document.referrer to msgboard.innerHTML — referrer-driven DOM XSS lab"
+    }
+  };
+};
+
+// --- Ben Stafford XSS Demo (xss.benstafford.dev) ------------------------------------
+const CLIENT_BENSTAFFORD_XSS_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Demo educational site title",
+    re: /XSS Demo/i
+  },
+  {
+    label: "attack1.html query-parameter XSS walkthrough",
+    re: /attack1\.html\?username=/i
+  },
+  {
+    label: "Session cookie exfiltration education",
+    re: /document\.cookie|session tokens/i
+  },
+  {
+    label: "innerHTML username sink in attack1.js",
+    re: /innerHTML\s*=\s*["']Hello,\s*["']\s*\+\s*params\.get\(["']username["']\)/i
+  },
+  {
+    label: "xss.benstafford.dev attack lab host",
+    re: /xss\.benstafford\.dev/i
+  }
+];
+
+const clientSideBenstaffordXssDemoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BENSTAFFORD_XSS_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/xss\.benstafford\.dev|attack1\.html/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Ben Stafford XSS Demo documents query-parameter DOM XSS via innerHTML and document.cookie session theft on attack1.html"
+    }
+  };
+};
+
 // --- Invicti/Netsparker practice vulnerable sites (testsparker.com) ------------
 const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
   {
@@ -8283,6 +8344,49 @@ const clientSideHackThisSiteEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "HackThisSite.org publishes Basic/Realistic/Application mission challenges for ethical hacking practice"
+    }
+  };
+};
+
+// --- HackThisSite realistic mission hub (login-gated wargame category) ------------
+const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/missions\/realistic\/?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Realistic mission hub URL",
+      re: /\/missions\/realistic\/?/i
+    },
+    {
+      label: "HackThisSite realistic nav category",
+      re: /href\s*=\s*["']\/missions\/realistic\//i
+    },
+    {
+      label: "Login required for mission access",
+      re: /Login Required|You must be logged in to use this page/i
+    },
+    {
+      label: "HTS ethical hacking training ground",
+      re: /HackThisSite\.org is a free, safe and legal training ground/i
+    },
+    {
+      label: "Realistic wargame mission keywords",
+      re: /hacking challenges[\s\S]{0,120}wargame/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackThisSite Realistic mission hub is login-gated — documents advanced wargame challenges behind authenticated access"
     }
   };
 };
@@ -15022,6 +15126,8 @@ export const RULES: Record<string, Rule> = {
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,
   clientSideDomGoatLabEvidence,
+  domgoReferrerDomXssEvidence,
+  clientSideBenstaffordXssDemoEvidence,
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
   clientSideWebsecChallengeEvidence,
@@ -15071,6 +15177,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
+  clientSideHackThisSiteRealisticMissionEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,
