@@ -7415,5 +7415,83 @@ export const genericPatterns: Pattern[] = [
       "We host CookieJar session-security training labs. Show how to gate /demo behind auth and harden session cookies in production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-benstafford-xss-demo-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Ben Stafford XSS Demo documents query-parameter DOM XSS",
+    description:
+      "xss.benstafford.dev publishes attack1.html labs where URLSearchParams username flows into innerHTML, plus document.cookie session exfiltration walkthroughs.",
+    impactOneline:
+      "Public XSS Demo pages teach query-parameter DOM XSS and session theft patterns reusable against production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBenstaffordXssDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign URL parameters to innerHTML; use textContent and HttpOnly session cookies.",
+      steps: [
+        "Replace innerHTML with textContent when rendering user-controlled strings.",
+        "Set HttpOnly and Secure flags on all session cookies.",
+        "Host XSS training demos on isolated lab subdomains, not production apps."
+      ]
+    },
+    fixPrompt:
+      "Our attack1.html demo assigns query username to innerHTML. Show safe textContent rendering and HttpOnly cookie hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-referrer-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat referrer-driven DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages assign document.referrer query parameters to msgboard.innerHTML — a deliberate referrer-based DOM XSS lab.",
+    impactOneline:
+      "Referrer-to-innerHTML flows enable DOM XSS when attackers control the Referer header on victim navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoReferrerDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render document.referrer into innerHTML; sanitize or ignore referrer data in DOM sinks.",
+      steps: [
+        "Use textContent instead of innerHTML for referrer-derived strings.",
+        "Validate referrer URLs against an allowlist before display.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise writes document.referrer into msgboard.innerHTML. Show safe alternatives and referrer validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackthissite-realistic-mission-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackThisSite Realistic mission hub login-gated",
+    description:
+      "HackThisSite /missions/realistic/ hub documents advanced wargame challenges behind authenticated access with Login Required gate.",
+    impactOneline:
+      "Realistic mission category signals advanced SQLi, XSS, and auth bypass labs requiring HTS account access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackThisSiteRealisticMissionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Wargame realistic missions are intentional — isolate challenge VMs from production networks.",
+      steps: [
+        "Require authentication before serving realistic mission challenge instances.",
+        "Never copy realistic mission vulnerability patterns into production code.",
+        "Rate-limit unauthenticated probing of mission hub endpoints."
+      ]
+    },
+    fixPrompt:
+      "We mirror HackThisSite Realistic mission hubs. Show how to auth-gate advanced wargame challenges on private deployments.",
+    version: 1,
+    enabled: true
   }
 ];

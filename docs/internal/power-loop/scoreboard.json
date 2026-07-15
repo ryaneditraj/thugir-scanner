@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T08:16:00.000Z",
+  "updated_at": "2026-07-15T09:50:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,24 +16,22 @@
     }
   },
   "total_sites_scanned": 486,
-  "total_findings": 2078,
+  "total_findings": 2084,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 151,
-  "discovery_findings": 1321,
-  "improvements_shipped": 485,
-  "last_run": "2026-07-15T08:16:00.000Z",
+  "discovery_findings": 1327,
+  "improvements_shipped": 488,
+  "last_run": "2026-07-15T09:50:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08:00",
+    "hour_utc": "09:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 166,
-      "note": "No benchmark misses — 6/6 single pass (6 findings cold); parallel warm pass 7 findings pages_crawled=6",
+      "note": "No benchmark misses — power-scan retry merged cold-start pass (pass1 gap sqli findings=5) to 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,32 +50,24 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 28,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 6,
       "skipped_48h": 0,
-      "focus": "Queue backlog: bugbountyhunter ch12, OWASP VWAD WebGoat, RedTiger 7-10, Hacksplaining; parallel engine: IST Edu LFI + AppSecMaster lab hubs",
-      "improvements_shipped_this_run": 3,
-      "new_urls": [
-        "xss.benstafford.dev",
-        "xss.page/playground",
-        "domgo.at/cxss/example/2",
-        "domgo.at/cxss/example/3",
-        "www.hackthissite.org/missions/realistic"
-      ]
+      "focus": "Queued discovery backlog: Ben Stafford XSS Demo, DomGoat referrer DOM XSS, HTS Realistic mission hub",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 cold / 7 warm findings)",
-      "vwad.owasp.org/app/webgoat: 6 findings incl Twilio secret + postMessage DOM XSS",
-      "ist-edu-bd.vercel.app/login: LFI /api/notices?file= + portal evidence (7 findings)",
-      "appsecmaster.net/labs/cross-site-scripting-xss: lab hub Course schema (8 findings)",
-      "redtiger.labs.overthewire.org levels 7-10: 3 findings each — SQLi/hackit markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings after wake retry)",
+      "xss.benstafford.dev: attack1.html innerHTML username sink + cookie exfil lab (2→4 findings)",
+      "domgo.at/cxss/example/2: document.referrer → msgboard.innerHTML DOM XSS (3→4 findings)",
+      "www.hackthissite.org/missions/realistic/: login-gated realistic mission hub evidence (5→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop cold pass pages_crawled=1 — recall stable but shallow crawl",
-      "www.bugbountyhunter.com: free challenges disabled while platform rebuilds",
-      "new discovery URLs (benstafford XSS, xss.page, domgo 2/3, HTS realistic): queued at tail"
+      "xss.page/playground: Cloudflare managed challenge blocks scanner UA — queued, not scannable from cloud",
+      "www.hackthissite.org/missions/realistic/: individual challenge instances require HTS login",
+      "juice-shop cold pass can miss sqli until Heroku wake retry merges findings"
     ]
   },
   "discovery_highlights": {
@@ -243,14 +233,15 @@
     "api.graphqlbook.org": 5,
     "pentesterlab.com": 4,
     "www.root-me.org": 4,
-    "www.hackthissite.org": 5,
-    "domgo.at": 3,
+    "www.hackthissite.org": 6,
+    "domgo.at": 4,
+    "xss.benstafford.dev": 4,
     "php.testsparker.com": 6,
     "aspnet.testsparker.com": 6,
     "hacksec.in": 6,
     "webgoat.org": 5,
     "cyberdefenders.org": 8,
-    "appsecmaster.net": 7,
+    "appsecmaster.net": 8,
     "hack-yourself-first.azurewebsites.net": 7,
     "angular.testsparker.com": 5,
     "516-hackers.github.io": 2,
@@ -311,6 +302,8 @@
     "www.hacksplaining.com/lessons/xss-reflected/start": 4,
     "www.hacksplaining.com/lessons/command-execution/start": 4,
     "www.bugbountyhunter.com/challenge?id=12": 2,
-    "appsecmaster.net/labs/cross-site-scripting-xss": 8
+    "appsecmaster.net/labs/cross-site-scripting-xss": 8,
+    "www.hackthissite.org/missions/realistic": 6,
+    "domgo.at/cxss/example/2": 4
   }
 }

@@ -3065,6 +3065,24 @@
       "slug": "client-side-appsec-master-lab-hub-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Course schema Cross-Site Scripting (XSS) Labs + Practice Reflected, Stored, and DOM-based XSS on /labs/cross-site-scripting-xss; extractAppsecMasterLabSeeds crawls /labs/sql-injection; appsecmaster.net/labs/cross-site-scripting-xss gains client-side-appsec-master-lab-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.benstafford.dev",
+      "slug": "client-side-benstafford-xss-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: attack1.html?username= + attack1.js innerHTML=params.get('username') + document.cookie exfiltration walkthrough; extractBenstaffordXssAttackSeeds crawls attack1.html; xss.benstafford.dev findings 2→4; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-referrer-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/2 document.referrer → getElementById('msgboard').innerHTML sink; domgo.at/cxss/example/2 findings 3→4; extractDomGoatCxssSeeds now seeds example/1-10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hackthissite-realistic-mission-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/ Login Required + realistic nav category + HTS training ground tagline; www.hackthissite.org/missions/realistic/ findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5492,6 +5510,21 @@
       "source": "discovery:appsecmaster.net",
       "slug": "client-side-appsec-master-lab-hub-evidence",
       "shipped_at": "2026-07-15T08:15:00.000Z"
+    },
+    {
+      "source": "discovery:xss.benstafford.dev",
+      "slug": "client-side-benstafford-xss-demo-evidence",
+      "shipped_at": "2026-07-15T09:50:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-referrer-dom-xss-evidence",
+      "shipped_at": "2026-07-15T09:50:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hackthissite-realistic-mission-evidence",
+      "shipped_at": "2026-07-15T09:50:00.000Z"
     }
   ]
 }
