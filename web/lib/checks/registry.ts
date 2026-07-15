@@ -4753,7 +4753,15 @@ const CLIENT_GRPC_GOAT_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Nine vulnerable gRPC services",
-    re: /9 vulnerable services|Start all 9 vulnerable services/i
+    re: /9 vulnerable services|Start all 9 vulnerable services|9 labs covering common gRPC security/i
+  },
+  {
+    label: "gRPC Goat launch blog post",
+    re: /intentionally vulnerable gRPC Security Lab|Launching gRPC Goat/i
+  },
+  {
+    label: "gRPC Goat blog lab catalog",
+    re: /gRPC Reflection Enabled|project includes 9 labs covering common gRPC security vulnerabilities/i
   },
   {
     label: "gRPC reflection enabled lab",
