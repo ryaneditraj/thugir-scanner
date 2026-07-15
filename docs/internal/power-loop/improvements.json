@@ -3299,6 +3299,24 @@
       "slug": "client-side-webvulnsguide-ssti-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SSTI Fun House + Server-Side Template Injection + Requirements for SSTI Exploitation on /SSTI.html; clientSideWebVulnsGuideSstiLabEvidence + extractWebVulnsGuideLabSeeds /SSTI.html; dxx33.github.io/WebVulnsGuide/SSTI.html findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-basic-7-10-playlevel-3-stego-1",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/basic/7 returns Login Required + HTS training ground + client-side-hts-login-gated-mission-hub-evidence; extractHackThisSiteMissionSeeds seeds basic/7-10, playlevel/3, stego/1; basic/7 findings 0→6; benchmark juice-shop.herokuapp.com 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-cors-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CORS Misconfiguration Lab + CORS misconfiguration vulnerability + testVulnerableEndpoint on /CORS.html; clientSideWebVulnsGuideCorsLabEvidence + extractWebVulnsGuideLabSeeds /CORS.html; dxx33.github.io/WebVulnsGuide/CORS.html findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-eval-filter-bypass-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Eval Filter Bypass Playground + bypasses input filters to execute arbitrary code + eval() with filtered input on /EvalByPass.html; clientSideEvalFilterBypassLabEvidence; dxx33.github.io/WebVulnsGuide/EvalByPass.html findings 0→5 incl server-side-eval-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5876,6 +5894,21 @@
       "source": "discovery:dxx33.github.io/WebVulnsGuide",
       "slug": "client-side-webvulnsguide-ssti-lab-evidence",
       "shipped_at": "2026-07-15T22:30:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-basic-7-10-playlevel-3-stego-1",
+      "shipped_at": "2026-07-15T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-cors-lab-evidence",
+      "shipped_at": "2026-07-15T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-eval-filter-bypass-lab-evidence",
+      "shipped_at": "2026-07-15T23:10:00.000Z"
     }
   ]
 }
