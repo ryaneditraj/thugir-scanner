@@ -5447,6 +5447,14 @@ const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
     re: /Attack 3: CSRF — The Invisible Request/i
   },
   {
+    label: "Web Security Lab CSRF sync-token chapter",
+    re: /跨站请求伪造（CSRF）与同步器令牌|教育演示：请求是否携带「同步器令牌」/
+  },
+  {
+    label: "Web Security Lab CSRF demo token output",
+    re: /csrfToken=demo/
+  },
+  {
     label: "Educational CSRF fake page transfer demo",
     re: /Fake page posts a transfer[\s\S]{0,120}Server accepts it/i
   },
@@ -7186,70 +7194,152 @@ const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- VulnSite module pages (/sqli/login, /xss/playground) ---------------------------
-const CLIENT_VULN_EXPOSE_MODULE_RES: { label: string; re: RegExp }[] = [
+// --- VulnSite module pages (/sqli/login, /xss/playground, /cmdi, /idor, /network-tools) -
+const VULN_EXPOSE_MODULE_SPECS: {
+  pathRe: RegExp;
+  markers: { label: string; re: RegExp }[];
+  note: string;
+}[] = [
   {
-    label: "SQL auth bypass lab banner",
-    re: /LABORATORIO DE BYPASS DE AUTENTICACI[ÓO]N|SQL Injection - Authentication Bypass/i
+    pathRe: /\/sqli\/(?:login|search|users)(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "SQL auth bypass lab banner",
+        re: /LABORATORIO DE BYPASS DE AUTENTICACI[ÓO]N|SQL Injection - Authentication Bypass/i
+      },
+      {
+        label: "SQL user enumeration lab banner",
+        re: /LABORATORIO DE ENUMERACI[ÓO]N DE USUARIOS|SQL Injection - User Enumeration/i
+      },
+      {
+        label: "SQL data extraction lab banner",
+        re: /LABORATORIO DE EXTRACCI[ÓO]N DE DATOS|SQL Injection - Data Extraction/i
+      },
+      {
+        label: "Inline UNION SELECT extraction payloads",
+        re: /UNION SELECT username,password FROM users|admin'\s*UNION SELECT|' UNION SELECT id, username, password/i
+      }
+    ],
+    note: "VulnSite SQLi module documents authentication-bypass or data-extraction lab with inline UNION payloads"
   },
   {
-    label: "SQL user enumeration lab banner",
-    re: /LABORATORIO DE ENUMERACI[ÓO]N DE USUARIOS|SQL Injection - User Enumeration/i
+    pathRe: /\/sqli\/blind(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "Blind SQLi advanced lab banner",
+        re: /Blind SQL Injection - Nivel Avanzado|LABORATORIO DE BLIND SQL INJECTION/i
+      },
+      {
+        label: "Boolean/time-based blind techniques",
+        re: /time-based and boolean-based|Boolean-Based|Time-Based/i
+      },
+      {
+        label: "Blind SQLi character extraction demo",
+        re: /boolean-based blind SQL injection|character por character/i
+      }
+    ],
+    note: "VulnSite /sqli/blind module documents boolean/time-based blind SQL injection extraction lab"
   },
   {
-    label: "SQL data extraction lab banner",
-    re: /LABORATORIO DE EXTRACCI[ÓO]N DE DATOS|SQL Injection - Data Extraction/i
+    pathRe: /\/xss\//i,
+    markers: [
+      {
+        label: "XSS exploitation lab banner",
+        re: /ENTORNO DE EXPLOTACI[ÓO]N XSS|Laboratorio XSS Interactivo/i
+      },
+      {
+        label: "Profile XSS lab banner",
+        re: /PROFILE XSS LABORATORY|XSS - Profile Injection/i
+      },
+      {
+        label: "Stored XSS comments lab banner",
+        re: /STORED XSS LABORATORY|XSS - Persistent Comments|Comentario \(Vulnerable a XSS\)/i
+      },
+      {
+        label: "dangerouslySetInnerHTML XSS mode toggle",
+        re: /Vulnerable \(dangerouslySetInnerHTML\)|dangerouslySetInnerHTML[\s\S]{0,80}innerHTML/i
+      },
+      {
+        label: "Stored/reflected/DOM XSS lab types",
+        re: /Stored XSS \(persistente|Reflected XSS|DOM-based XSS|XSS Reflejado/i
+      }
+    ],
+    note: "VulnSite XSS module documents reflected/stored/DOM XSS lab with dangerouslySetInnerHTML sinks"
   },
   {
-    label: "Inline UNION SELECT extraction payloads",
-    re: /UNION SELECT username,password FROM users|admin'\s*UNION SELECT|' UNION SELECT id, username, password/i
+    pathRe: /\/cmdi(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "CMDi advanced lab banner",
+        re: /Command Injection - Laboratorio Avanzado|LABORATORIO DE COMMAND INJECTION/i
+      },
+      {
+        label: "Command injection payload grid",
+        re: /Payloads de Command Injection|reverse shell|127\.0\.0\.1.*wget/i
+      },
+      {
+        label: "Hostname command injection input",
+        re: /Hostname or IP Address \(Command Injection Point\)/i
+      }
+    ],
+    note: "VulnSite /cmdi module documents OS command injection lab with reverse-shell payload examples"
   },
   {
-    label: "XSS exploitation lab banner",
-    re: /ENTORNO DE EXPLOTACI[ÓO]N XSS|Laboratorio XSS Interactivo/i
+    pathRe: /\/idor\//i,
+    markers: [
+      {
+        label: "IDOR privilege escalation lab",
+        re: /IDOR &(?:amp;)? Privilege Escalation Lab/i
+      },
+      {
+        label: "User profile IDOR demo",
+        re: /User Profile Access \(IDOR\)|Document Access \(IDOR\)/i
+      },
+      {
+        label: "Quick IDOR test panel",
+        re: /Quick IDOR Tests/i
+      }
+    ],
+    note: "VulnSite /idor module documents broken object-level authorization and privilege escalation lab"
   },
   {
-    label: "Profile XSS lab banner",
-    re: /PROFILE XSS LABORATORY|XSS - Profile Injection/i
-  },
-  {
-    label: "Stored XSS comments lab banner",
-    re: /STORED XSS LABORATORY|XSS - Persistent Comments|Comentario \(Vulnerable a XSS\)/i
-  },
-  {
-    label: "dangerouslySetInnerHTML XSS mode toggle",
-    re: /Vulnerable \(dangerouslySetInnerHTML\)|dangerouslySetInnerHTML[\s\S]{0,80}innerHTML/i
-  },
-  {
-    label: "Stored/reflected/DOM XSS lab types",
-    re: /Stored XSS \(persistente|Reflected XSS|DOM-based XSS|XSS Reflejado/i
+    pathRe: /\/network-tools(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "Ping connectivity tool lab",
+        re: /Herramienta de Ping|Verifica la conectividad hacia un host/i
+      },
+      {
+        label: "ICMP echo ping education",
+        re: /ICMP Echo Request|Ejecutar Ping|Acerca de la Herramienta de Ping/i
+      }
+    ],
+    note: "VulnSite /network-tools module documents server-side ping/fetch connectivity lab (SSRF-prone)"
   }
 ];
 
 const clientSideVulnExposeLabModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hostCorpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/VulnSite|vuln-expose|vulns-expose/i.test(hostCorpus)) return NEGATIVE;
+
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test(pageUrl));
+  if (!spec) return NEGATIVE;
+
+  const pageCorpus = `${ctx.home.body}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
-  for (const { label, re } of CLIENT_VULN_EXPOSE_MODULE_RES) {
-    const m = corpus.match(re);
+  for (const { label, re } of spec.markers) {
+    const m = pageCorpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/VulnSite|vuln-expose|vulns-expose/i.test(corpus)) return NEGATIVE;
-  if (
-    !/\/sqli\/|\/xss\/|SQL Injection - (?:Authentication Bypass|User Enumeration|Data Extraction)|XSS - (?:Profile Injection|Persistent Comments)|XSS Laboratory/i.test(
-      corpus
-    )
-  ) {
-    return NEGATIVE;
-  }
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.92 : 0.89,
     evidence: {
       markers: hits.slice(0, 4),
-      module: pageUrl.match(/\/(sqli|xss)\/[^/?#]+/)?.[0],
-      note: "VulnSite module page documents hands-on SQL auth-bypass or XSS exploitation lab with inline payloads"
+      module: pageUrl.match(/\/(?:sqli|xss|idor|cmdi|network-tools)(?:\/[^/?#]*)?/)?.[0],
+      note: spec.note
     }
   };
 };
@@ -8169,6 +8259,14 @@ const CLIENT_WEB_SECURITY_LAB_ZH_RES: { label: string; re: RegExp }[] = [
   {
     label: "Unsafe HTML parse demo warning",
     re: /解析为 HTML（仅作演示|生产环境应对用户输入做转义\/CSP/i
+  },
+  {
+    label: "CSP chapter interactive demo heading",
+    re: /内容安全策略（CSP）|教育演示：CSP 与内联脚本/
+  },
+  {
+    label: "CSP iframe isolated inline-script demo",
+    re: /iframe 隔离文档[\s\S]{0,120}内联脚本|策略禁止内联脚本/i
   }
 ];
 
@@ -9531,6 +9629,14 @@ const CLIENT_SSRF_RES: { label: string; re: RegExp }[] = [
   {
     label: "Cloud metadata SSRF lab success marker",
     re: /Cloud metadata endpoint reached|iam\/security-credentials/i
+  },
+  {
+    label: "VulnSite ping connectivity SSRF lab",
+    re: /Herramienta de Ping[\s\S]{0,200}Verifica la conectividad hacia un host/i
+  },
+  {
+    label: "ICMP echo ping tool education lab",
+    re: /ICMP Echo Request|Ejecutar Ping/i
   }
 ];
 
@@ -10211,6 +10317,50 @@ const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "client bundle documents OWASP API Security Top 10 vulnerability categories (BOLA/BFLA) — broken authorization likely on API routes"
+    }
+  };
+};
+
+// --- TheCyberpunker InsecureShip API security training lab ----------------------------
+const CLIENT_CYBERPUNKER_INSECURESHIP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "InsecureShip deliberately vulnerable API",
+    re: /InsecureShip is a deliberately vulnerable REST API/i
+  },
+  {
+    label: "OWASP API Security Top 10 2023 coverage",
+    re: /InsecureShip[\s\S]{0,80}OWASP API Security Top 10 \(2023\)|OWASP API Security Top 10 \(2023\) Coverage/i
+  },
+  {
+    label: "TheCyberpunker insecureship lab route",
+    re: /thecyberpunker\.com\/labs\/insecureship/i
+  },
+  {
+    label: "InsecureShip GitHub repository",
+    re: /github\.com\/TheCyberpunker\/InsecureShip/i
+  },
+  {
+    label: "Shipping API training purpose",
+    re: /shipping and package delivery management platform[\s\S]{0,160}educational purposes/i
+  }
+];
+
+const clientSideCyberpunkerInsecureshipEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBERPUNKER_INSECURESHIP_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/InsecureShip|thecyberpunker\.com/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "TheCyberpunker InsecureShip documents deliberately vulnerable Node.js shipping API with OWASP API Top 10 (2023) training coverage"
     }
   };
 };
@@ -14675,6 +14825,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNosqlEvidence,
   clientSideXxeEvidence,
   clientSideApiSecurityLabEvidence,
+  clientSideCyberpunkerInsecureshipEvidence,
   clientSideOpenvaultLearnEvidence,
   clientSideOpenvaultCheatsheetEvidence,
   clientSideWebgoatEvidence,

@@ -662,6 +662,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideNosqlEvidence",
   "clientSideXxeEvidence",
   "clientSideApiSecurityLabEvidence",
+  "clientSideCyberpunkerInsecureshipEvidence",
   "clientSideOpenvaultLearnEvidence",
   "clientSideOpenvaultCheatsheetEvidence",
   "clientSideCookiejarLabEvidence",
@@ -3575,6 +3576,36 @@ function extractWebSecurityLabZhSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** TheCyberpunker — seed /labs/insecureship and related API security lab writeups. */
+function extractCyberpunkerLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/TheCyberpunker|thecyberpunker\.com|InsecureShip/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/labs/insecureship/",
+    "/labs/",
+    "/learn/insecureship-walkthrough-writeup/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/labs\/[^"'#?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Microsoft Sherpa MCP Security Summit workshop — seed camp routes. */
 function extractMcpSherpaWorkshopSeeds(html: string, pageUrl: string): string[] {
   if (!/MCP Security Summit Workshop|azure-samples\.github\.io\/sherpa/i.test(html)) return [];
@@ -4610,6 +4641,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const webgoatSeeds = extractWebgoatDocSeeds(home.body, home.finalUrl);
   const seclabPlaygroundSeeds = extractSecLabPlaygroundSeeds(home.body, home.finalUrl);
   const webSecurityLabZhSeeds = extractWebSecurityLabZhSeeds(home.body, home.finalUrl);
+  const cyberpunkerLabSeeds = extractCyberpunkerLabSeeds(home.body, home.finalUrl);
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
   const gitagentSecurebotSeeds = extractGitagentSecurebotSeeds(home.body, home.finalUrl);
@@ -4879,6 +4911,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...webgoatSeeds,
       ...seclabPlaygroundSeeds,
       ...webSecurityLabZhSeeds,
+      ...cyberpunkerLabSeeds,
       ...secResearchLabSeeds,
       ...skillauditSeeds,
       ...gitagentSecurebotSeeds,
