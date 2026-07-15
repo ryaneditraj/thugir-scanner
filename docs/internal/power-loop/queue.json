@@ -3792,7 +3792,32 @@
       "url": "https://www.hackthissite.org/playlevel/1/",
       "source": "Hack This Site — realistic mission 1 band-rating business-logic challenge (GitHub writeups)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection.onrender.com/",
+      "source": "kajojify ChatGPT prompt-injection PoC — hidden clipboard injection demo (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/2/",
+      "source": "Hack This Site — Basic mission 2 HTTP-header password oracle (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/3/",
+      "source": "Hack This Site — Basic mission 3 image-metadata steganography challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/4/",
+      "source": "Hack This Site — Basic mission 4 simple password-guessing web challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bergerzvika.github.io/Cyber-Lab/indirect-prompt-injection-example.html",
+      "source": "BergerZvika/Cyber-Lab — indirect prompt-injection hidden-instruction browser lab (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-15T17:05:00.000Z"
+  "updated_at": "2026-07-15T19:05:00.000Z"
 }
