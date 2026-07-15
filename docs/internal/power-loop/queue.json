@@ -3842,7 +3842,32 @@
       "url": "https://demo.owasp-juice.shop/",
       "source": "OWASP Juice Shop — official public demo instance (owasp-juice.shop)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/7/",
+      "source": "Hack This Site — Basic mission 7 UNIX cal command injection challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/8/",
+      "source": "Hack This Site — Basic mission 8 SSI injection challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/9/",
+      "source": "Hack This Site — Basic mission 9 SSI path traversal challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/10/",
+      "source": "Hack This Site — Basic mission 10 cookie authorization bypass challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/3/",
+      "source": "Hack This Site — playlevel arcade mission 3 business-logic challenge",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T20:05:00.000Z"
+  "updated_at": "2026-07-15T21:10:00.000Z"
 }
