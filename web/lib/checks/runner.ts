@@ -1325,9 +1325,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/basic/1/",
     "/missions/realistic/",
     "/missions/application/",
+    "/missions/application/1/",
+    "/missions/application/2/",
     "/missions/javascript/",
     "/missions/programming/",
-    "/missions/forensic/"
+    "/missions/forensic/",
+    "/missions/playit/extbasic/0/",
+    "/missions/playit/stego/0/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());

@@ -7995,9 +7995,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "HackThisSite login-gated mission category hub disclosed",
     description:
-      "HTS Basic, Forensic, Javascript, or Programming mission hubs return Login Required — documenting challenge categories behind authenticated wargame access.",
+      "HTS Basic, Application, Forensic, Javascript, Programming, Extended Basic, or Steganography mission hubs return Login Required — documenting challenge categories behind authenticated wargame access.",
     impactOneline:
-      "Public mission hub gates confirm HTS hosts HTML-comment, forensic disk-image, JS exploit, and programming challenges requiring accounts.",
+      "Public mission hub gates confirm HTS hosts HTML-comment, application exploit, forensic disk-image, JS exploit, programming, extbasic, and stego challenges requiring accounts.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "clientSideHtsLoginGatedMissionHubEvidence" },
     tierRequired: "deep",
