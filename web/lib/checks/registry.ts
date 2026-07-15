@@ -2701,6 +2701,18 @@ const CLIENT_SQL_RES: { label: string; re: RegExp }[] = [
   {
     label: "CTFlearn Web4 SQLi lab discloses injectable query",
     re: /SELECT \* FROM webfour\.webfour where name = '\$input'/i
+  },
+  {
+    label: "WebVulnsGuide SQL Injection Playground title",
+    re: /SQL Injection Playground[\s\S]{0,400}Interactive SQL Injection Simulator/i
+  },
+  {
+    label: "WebVulnsGuide SQLi unsafe string concatenation example",
+    re: /UNSAFE\s*-\s*Direct string concatenation\s*\(VULNERABLE\)/i
+  },
+  {
+    label: "WebVulnsGuide SQLi lab path",
+    re: /WebVulnsGuide\/SQLi\.html|dxx33\.github\.io\/WebVulnsGuide\/SQLi/i
   }
 ];
 
@@ -5489,6 +5501,22 @@ const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
   {
     label: "SecLab No CSRF protection response",
     re: /No CSRF protection!/i
+  },
+  {
+    label: "WebVulnsGuide CSRF Vulnerability Lab title",
+    re: /CSRF Vulnerability Lab[\s\S]{0,200}Cross-Site Request Forgery/i
+  },
+  {
+    label: "WebVulnsGuide No CSRF tokens requirement",
+    re: /No CSRF tokens[\s\S]{0,120}anti-CSRF tokens/i
+  },
+  {
+    label: "WebVulnsGuide Launch CSRF Attack demo",
+    re: /Launch CSRF Attack|testVulnerableForm\(\)/i
+  },
+  {
+    label: "WebVulnsGuide CSRF lab path",
+    re: /WebVulnsGuide\/CSRF\.html|dxx33\.github\.io\/WebVulnsGuide\/CSRF/i
   }
 ];
 
@@ -8887,6 +8915,45 @@ const clientSideOsCommandInjectionLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Educational OS command injection lab documents system()/exec() misuse and unfiltered shell metacharacters"
+    }
+  };
+};
+
+// --- Educational SSTI lab pages (WebVulnsGuide Fun House, etc.) -------------------------
+const CLIENT_WEBVULNS_GUIDE_SSTI_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSTI Fun House title",
+    re: /SSTI Fun House|Welcome to the SSTI Fun House/i
+  },
+  {
+    label: "Server-Side Template Injection definition",
+    re: /Server-Side Template Injection|SSTI stands for/i
+  },
+  {
+    label: "SSTI exploitation requirements",
+    re: /Requirements for SSTI Exploitation|inject template code that gets executed on the server/i
+  },
+  {
+    label: "WebVulnsGuide SSTI lab path",
+    re: /WebVulnsGuide\/SSTI\.html|dxx33\.github\.io\/WebVulnsGuide\/SSTI/i
+  }
+];
+
+const clientSideWebVulnsGuideSstiLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBVULNS_GUIDE_SSTI_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational SSTI lab documents template injection requirements and engine-evaluation oracles"
     }
   };
 };
@@ -16199,6 +16266,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHtsPlaylevelHubEvidence,
   clientSideAuthSecurityProjectEvidence,
   clientSideOsCommandInjectionLabEvidence,
+  clientSideWebVulnsGuideSstiLabEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,

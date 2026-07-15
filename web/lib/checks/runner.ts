@@ -701,6 +701,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnAuthPortalEvidence",
   "clientSideAuthSecurityProjectEvidence",
   "clientSideOsCommandInjectionLabEvidence",
+  "clientSideWebVulnsGuideSstiLabEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
@@ -1381,7 +1382,8 @@ function extractWebVulnsGuideLabSeeds(html: string, pageUrl: string): string[] {
     "/CSRF.html",
     "/SSRF.html",
     "/XSS.html",
-    "/SQLi.html"
+    "/SQLi.html",
+    "/SSTI.html"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
