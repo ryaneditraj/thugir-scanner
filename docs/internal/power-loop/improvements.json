@@ -3263,6 +3263,24 @@
       "slug": "berger-cyber-lab-indirect-injection-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractBergerCyberLabSeeds now seeds indirect-prompt-injection-example.html alongside integer-overflow/race/prompt-injection modules; bergerzvika.github.io/Cyber-Lab hub crawl reaches indirect injection demo; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:auth-security-project.onrender.com",
+      "slug": "client-side-auth-security-project-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vulnerable Auth + Sistema Vulnerable + SQL Injection/XSS/IDOR catalog + admin' OR '1'='1 login hint; clientSideAuthSecurityProjectEvidence + DEEP_RULES wiring; auth-security-project.onrender.com findings 0→3; benchmark juice-shop.herokuapp.com 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-os-command-injection-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: COMMAND INJECTION DOJO + OS Command Injection + system()/exec() markers on /OS-injection.html; extractWebVulnsGuideLabSeeds seeds OS-injection/prototype/CSRF labs; dxx33.github.io/WebVulnsGuide/OS-injection.html findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-basic-5-6-playlevel-2",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds now seeds /missions/basic/2-6 and /playlevel/2; /missions/basic/5 returns Login Required + client-side-hts-login-gated-mission-hub-evidence; findings 0→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5810,6 +5828,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-login-gated-application-extbasic-stego-hubs",
       "shipped_at": "2026-07-15T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:auth-security-project.onrender.com",
+      "slug": "client-side-auth-security-project-evidence",
+      "shipped_at": "2026-07-15T21:30:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-os-command-injection-lab-evidence",
+      "shipped_at": "2026-07-15T21:30:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-basic-5-6-playlevel-2",
+      "shipped_at": "2026-07-15T21:30:00.000Z"
     }
   ]
 }
