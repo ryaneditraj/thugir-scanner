@@ -5103,6 +5103,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-a01-access-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab A01 broken access control lab disclosed",
+    description:
+      "VulnLab Academy A01 module documents IDOR order probing, unauthenticated admin endpoints, and /api/files path traversal.",
+    impactOneline:
+      "Public A01 access-control labs advertise IDOR, privilege escalation, and path traversal training targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA01AccessEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on every object reference and validate file paths server-side.",
+      steps: [
+        "Bind object IDs to the authenticated user session before returning data.",
+        "Require admin roles on /admin/* routes and deny by default.",
+        "Reject path traversal sequences in file-serving endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our A01 access-control lab exposes IDOR and unauthenticated admin routes. Show secure authorization patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-a02-crypto-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VulnLab A02 cryptographic failures lab disclosed",
+    description:
+      "VulnLab Academy A02 module documents client-side secret leakage via window.__SECRET_KEY__ and weak MD5/base64 crypto samples.",
+    impactOneline:
+      "Public A02 crypto labs advertise hardcoded secrets and deprecated hash algorithms for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA02CryptoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed secrets in client bundles; use modern password hashing.",
+      steps: [
+        "Store API keys server-side and proxy requests through authenticated backends.",
+        "Replace MD5/SHA1 with Argon2id or bcrypt for password storage.",
+        "Remove sample hashes and base64-encoded credentials from public HTML."
+      ]
+    },
+    fixPrompt:
+      "Our A02 crypto lab exposes window.__SECRET_KEY__ and MD5 samples. Show secure secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-a03-injection-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab A03 injection lab disclosed",
+    description:
+      "VulnLab Academy A03 module documents reflected XSS, SQL error injection, and /api/ping command injection labs.",
+    impactOneline:
+      "Public A03 injection labs advertise XSS, SQLi, and OS command injection training endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA03InjectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries, output encoding, and shell argument allowlists.",
+      steps: [
+        "Escape user input before rendering into HTML DOM sinks.",
+        "Use prepared statements instead of string-concatenated SQL.",
+        "Never pass unsanitized input to shell commands or ping utilities."
+      ]
+    },
+    fixPrompt:
+      "Our A03 injection lab has reflected XSS and /api/ping command injection. Show input validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-a09-logging-evidence",
     platform: "generic",
     category: "Information disclosure",

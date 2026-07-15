@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 171,
   "discovery_findings": 1473,
-  "improvements_shipped": 500,
+  "improvements_shipped": 503,
   "last_run": "2026-07-15T15:07:34.945Z",
   "last_run_summary": {
     "hour_utc": "15:00",
@@ -61,7 +61,8 @@
       "duck-store.escape.tech: secret-openai + idor-sequential-ids + vibe-openapi-docs-exposed (7 findings)",
       "pentest-ground.com:9000: server-side-eval-evidence critical + OpenAPI exposed (4 findings)",
       "webexp05.vercel.app: SQLi + XSS + JWT alg:none + path-traversal client evidence (7 findings)",
-      "pentest-ground.com:4280: phpinfo-exposed + reflected-xss-query-param (5 findings)"
+      "pentest-ground.com:4280: phpinfo-exposed + reflected-xss-query-param (5 findings)",
+      "hack-this-site-eta.vercel.app/owasp/a01-a03: VulnLab module evidence rules shipped (parallel engine run)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
