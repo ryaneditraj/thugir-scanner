@@ -8632,6 +8632,62 @@ const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HackThisSite login-gated mission hubs (basic / forensic / javascript / programming) --
+const HTS_LOGIN_GATED_MISSION_NOTES: Record<string, string> = {
+  basic:
+    "HTS Basic mission hub is login-gated — documents HTML-comment password oracle and introductory web challenges behind authenticated access",
+  forensic:
+    "HTS Forensic mission hub is login-gated — documents disk-image and steganography CTF missions behind authenticated access",
+  javascript:
+    "HTS Javascript mission hub is login-gated — documents client-side script exploitation challenges behind authenticated access",
+  programming:
+    "HTS Programming mission hub is login-gated — documents algorithmic exploit programming challenges behind authenticated access"
+};
+
+const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const catMatch = pageUrl.match(
+    /hackthissite\.org\/missions\/(basic|forensic|javascript|programming)(?:\/\d+)?\/?/i
+  );
+  if (!catMatch) return NEGATIVE;
+  const category = catMatch[1].toLowerCase();
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  if (!/Login Required|You must be logged in to use this page/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: `${category} mission hub URL`,
+      re: new RegExp(`/missions/${category}(?:/\\d+)?/?`, "i")
+    },
+    {
+      label: "Login required for mission access",
+      re: /Login Required|You must be logged in to use this page/i
+    },
+    {
+      label: "HTS ethical hacking training ground",
+      re: /HackThisSite\.org is a free, safe and legal training ground/i
+    },
+    {
+      label: "Mission challenge nav category",
+      re: new RegExp(`href\\s*=\\s*["']/missions/${category}/`, "i")
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      category,
+      markers: hits.slice(0, 4),
+      note: HTS_LOGIN_GATED_MISSION_NOTES[category] ?? `HTS ${category} mission hub is login-gated`
+    }
+  };
+};
+
 // --- HackThisSite Realistic mission instance labs (Fischer / frameset challenges) -----
 const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -15822,6 +15878,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
   clientSideHackThisSiteRealisticMissionEvidence,
+  clientSideHtsLoginGatedMissionHubEvidence,
   clientSideHtsRealisticMissionLabEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,

@@ -718,6 +718,7 @@ const DEEP_RULES = new Set<string>([
   "domgoSinksCatalogDomXssEvidence",
   "clientSideBenstaffordXssDemoEvidence",
   "clientSideHackThisSiteRealisticMissionEvidence",
+  "clientSideHtsLoginGatedMissionHubEvidence",
   "clientSideHtsRealisticMissionLabEvidence",
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
@@ -1321,9 +1322,12 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
   const out = new Set<string>();
   for (const p of [
     "/missions/basic/",
+    "/missions/basic/1/",
     "/missions/realistic/",
     "/missions/application/",
-    "/missions/javascript/"
+    "/missions/javascript/",
+    "/missions/programming/",
+    "/missions/forensic/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
