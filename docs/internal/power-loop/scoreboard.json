@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T06:08:38.368Z",
+  "updated_at": "2026-07-15T07:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 460,
-  "total_findings": 1967,
+  "total_sites_scanned": 469,
+  "total_findings": 2009,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 141,
-  "discovery_findings": 1258,
-  "improvements_shipped": 476,
-  "last_run": "2026-07-15T06:08:38.368Z",
+  "discovery_urls_added": 146,
+  "discovery_findings": 1293,
+  "improvements_shipped": 479,
+  "last_run": "2026-07-15T07:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 259,
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, single pass)",
+      "note": "Pass1 gap sqli,sensitive_data (5 findings); wake retry merged to 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,30 +53,31 @@
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 27,
+      "urls_scanned": 8,
+      "findings": 35,
       "skipped_48h": 0,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)",
-        "http://websegura.radwarelatam.com/mutillidae/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Backlog module coverage: vuln-expose users/profile/comments, web-security-lab learn chapters, vuln-portal auth routes",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue backlog: bugbountyhunter ch9-11, oss-oopssec-store roadmap, HackLab, VulnShop",
+      "new_urls": [
+        "appsecmaster.net/labs/cross-site-scripting-xss",
+        "appsecmaster.net/labs/sql-injection",
+        "domgo.at/cxss/example/1",
+        "domgo.at/cxss/example/7",
+        "ist-edu-bd.vercel.app/login"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no gap",
-      "vuln-expose.vercel.app/sqli/users: LABORATORIO DE ENUMERACIÓN DE USUARIOS + Parameter Injection payloads (0→8)",
-      "vuln-expose.vercel.app/xss/profile: PROFILE XSS LABORATORY + reflected search sink (0→8)",
-      "vuln-expose.vercel.app/xss/comments: STORED XSS LABORATORY + vulnerable comment form (0→8)",
-      "web-security-lab.vercel.app/learn/xss: 跨站脚本 chapter + interactive HTML parse demo (0→4)",
-      "vuln-portal.vercel.app: extractVulnPortalAuthSeeds crawls /auth/register from login shell"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
+      "koadt.github.io/oss-oopssec-store: 7 findings — CTF e-commerce roadmap + API surface",
+      "ashimkoirala.github.io/HackLab: 6 findings — browser OWASP Top 10 sandbox",
+      "vulnshop.vercel.app: 4 findings — OWASP e-commerce demo panels",
+      "bugbountyhunter.com/challenge?id=9-11: 2 findings each — challenge platform markers"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com + websegura.radwarelatam.com/mutillidae: DNS NXDOMAIN — dead queue entries",
-      "thecyberpunker.com/labs/insecureship + xss.progphp.com + seclab/xss + appsecmaster modules: queued at tail — backlog",
-      "vulnforge-academy level paths: Vercel 403 Forbidden — PHP backend not reachable from cloud scans",
-      "acuart.phpnet.us: DNS dead — Acunetix test site unreachable from cloud"
+      "juice-shop pass1 cold-start: sqli,sensitive_data gap before wake retry (pages_crawled=6 probes=184)",
+      "thecyberpunker insecureship + progphp + seclab/xss + appsecmaster sqli/idor: still in queue tail backlog",
+      "xss.progphp.com: parking page from cloud — may be DNS/parking not live XSS challenges",
+      "new discovery URLs (appsecmaster XSS/SQLi hubs, domgo levels, ist-edu-bd login): queued at tail"
     ]
   },
   "discovery_highlights": {

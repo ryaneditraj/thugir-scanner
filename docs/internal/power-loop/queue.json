@@ -3592,7 +3592,32 @@
       "url": "https://appsecmaster.net/labs/idor",
       "source": "AppSecMaster — hands-on IDOR lab module (platform /labs hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/labs/cross-site-scripting-xss",
+      "source": "AppSecMaster — reflected/stored/DOM XSS lab hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/labs/sql-injection",
+      "source": "AppSecMaster — union/blind/NoSQL injection lab hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/1",
+      "source": "Mario Heiderich domgo.at — DomGoat level 1 location.hash→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/7",
+      "source": "Mario Heiderich domgo.at — DomGoat level 7 window.name+hash DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/login",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi/auth login surface (Vercel deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-15T06:10:00.000Z"
+  "updated_at": "2026-07-15T07:26:00.000Z"
 }
