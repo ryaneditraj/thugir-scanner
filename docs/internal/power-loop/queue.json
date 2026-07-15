@@ -3817,7 +3817,32 @@
       "url": "https://bergerzvika.github.io/Cyber-Lab/indirect-prompt-injection-example.html",
       "source": "BergerZvika/Cyber-Lab — indirect prompt-injection hidden-instruction browser lab (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://auth-security-project.onrender.com/",
+      "source": "darkroot192-sudo/auth-security-project — OWASP Top 10 auth demo (SQLi, XSS, IDOR) on Render",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/5/",
+      "source": "Hack This Site — Basic mission 5 cookie/session manipulation challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/2/",
+      "source": "Hack This Site — playlevel arcade mission 2 business-logic challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/6/",
+      "source": "Hack This Site — Basic mission 6 JavaScript obfuscation password oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/",
+      "source": "OWASP Juice Shop — official public demo instance (owasp-juice.shop)",
+      "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-15T19:05:00.000Z"
+  "updated_at": "2026-07-15T20:05:00.000Z"
 }
