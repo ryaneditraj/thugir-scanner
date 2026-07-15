@@ -3617,7 +3617,32 @@
       "url": "https://ist-edu-bd.vercel.app/login",
       "source": "zahidoverflow/damn-vulnerable-web-university — SQLi/auth login surface (Vercel deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xss.benstafford.dev/",
+      "source": "benstafford XSS Demo — reflected XSS via query params + cookie exfiltration lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.page/playground",
+      "source": "Wh1t3Fox/xss.page — interactive XSS payload tester with filter/context simulation",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/2",
+      "source": "Mario Heiderich domgo.at — DomGoat level 2 document.referrer→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/3",
+      "source": "Mario Heiderich domgo.at — DomGoat level 3 Ajax JSON→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/",
+      "source": "Hack This Site — realistic web security mission series landing (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T07:26:00.000Z"
+  "updated_at": "2026-07-15T08:10:00.000Z"
 }
