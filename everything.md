@@ -140,7 +140,6 @@ thugir-scanner/
 │   ├── migrations/             0001–0006 SQL migrations
 │   └── seed/patterns.sql       133 pattern seed data
 ├── docs/
-│   ├── HACKATHON_GUIDE.md      Quick demo guide
 │   ├── internal/               Architecture, runbooks, skills library
 │   └── external/               Public SEO surface spec
 ├── everything.md               This file
@@ -731,7 +730,6 @@ npm run agent-check     # Agent engine availability
 | Document | Path | Purpose |
 |----------|------|---------|
 | **Everything (this file)** | `everything.md` | Complete A–Z reference |
-| **Hackathon guide** | `docs/HACKATHON_GUIDE.md` | Quick demo guide |
 | **README** | `README.md` | Project overview |
 | **Architecture** | `docs/internal/architecture.md` | System design |
 | **Dev setup** | `docs/internal/dev-setup.md` | Local development |
@@ -773,7 +771,6 @@ Tech stack:  Next.js 14, TypeScript, Python, Supabase, Razorpay
 AI:          OpenRouter (analyst + deep probe + agent engine)
 Demo:        DEV_MODE=1 → npm run dev → localhost:3000
 Docs:        everything.md (this file)
-Hackathon:   docs/HACKATHON_GUIDE.md
 ```
 
 ---

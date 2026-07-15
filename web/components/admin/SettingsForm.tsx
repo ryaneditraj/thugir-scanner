@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AI_PROVIDERS, HACKCLUB_MODELS, PROVIDER_ENDPOINTS, type AiProvider, type PlatformSettingsMasked, type TierName } from "@/lib/settings/schema";
+import { AI_PROVIDERS, PROVIDER_ENDPOINTS, type AiProvider, type PlatformSettingsMasked, type TierName } from "@/lib/settings/schema";
 
 const TIERS: TierName[] = ["free", "deep", "continuous"];
 
@@ -138,7 +138,7 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
       <section className="aset-group">
         <h2>AI models &amp; keys</h2>
         <p className="aset-note">
-          Each tier can use a different provider, model, and API key. Hack Club AI is the default for hackathon demos.
+          Each tier can use a different provider, model, and API key.
           Change the <b>Model</b> field per tier — saved settings apply immediately to scans. Leave a key blank to keep the stored one or use the env fallback.
         </p>
         <Toggle label="AI analyst layer enabled (master switch)" checked={s.ai.analystEnabled} onChange={(v) => setS((x) => ({ ...x, ai: { ...x.ai, analystEnabled: v } }))} />
@@ -167,7 +167,7 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
                   <span>Provider</span>
                   <select value={cfg.provider} onChange={(e) => setTierProvider(t, e.target.value as AiProvider)}>
                     {AI_PROVIDERS.map((p) => (
-                      <option key={p} value={p}>{p === "hackclub" ? "Hack Club AI" : p}</option>
+                      <option key={p} value={p}>{p}</option>
                     ))}
                   </select>
                 </label>
@@ -181,17 +181,9 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
                     value={cfg.model}
                     onChange={(e) => patchTier(t, { model: e.target.value })}
                     placeholder={PROVIDER_ENDPOINTS[cfg.provider].defaultModel}
-                    list={cfg.provider === "hackclub" ? `hackclub-models-${t}` : undefined}
                     spellCheck={false}
                     autoCapitalize="off"
                   />
-                  {cfg.provider === "hackclub" && (
-                    <datalist id={`hackclub-models-${t}`}>
-                      {HACKCLUB_MODELS.map((m) => (
-                        <option key={m} value={m} />
-                      ))}
-                    </datalist>
-                  )}
                 </label>
                 <label className="fld">
                   <span>API key {cfg.apiKeySet ? <em className="keyset">set · ••••{cfg.apiKeyLast4}</em> : <em className="keyunset">not set</em>}</span>
