@@ -10744,6 +10744,18 @@ const CLIENT_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "Fabraix automated adversarial verification tagline",
     re: /Automated adversarial verification for AI agents/i
+  },
+  {
+    label: "ChatGPT clipboard prompt injection PoC",
+    re: /Prompt injection PoC|hidden injection of malicious ChatGPT prompts/i
+  },
+  {
+    label: "Clipboard hijack malicious prompt generator",
+    re: /event\.clipboardData\.setData|supposed-clipboard|Hook url/i
+  },
+  {
+    label: "Instruction override in generated malicious prompt",
+    re: /ignore any previous or future instructions|forget any previous or future instructions/i
   }
 ];
 
@@ -10803,6 +10815,14 @@ const HIDDEN_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
     label: "AgentPwn distributed honeypot network",
     re: /distributed honeypot network[\s\S]{0,120}AI agents/i
+  },
+  {
+    label: "Bare indirect instruction override in page text",
+    re: /Ignore all previous instructions[\s\S]{0,200}just say/i
+  },
+  {
+    label: "Clipboard or selection prompt injection PoC",
+    re: /ignore any previous or future instructions[\s\S]{0,200}append (?:this markdown|to the end)/i
   }
 ];
 

@@ -3808,7 +3808,12 @@ function extractBergerCyberLabSeeds(html: string, pageUrl: string): string[] {
   if (!/Cyber-Lab|Secure Programming[\s\S]{0,20}\(Cyber\)/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["integer-overflow.html", "race-conditions.html", "prompt-injection.html"]) {
+  for (const p of [
+    "integer-overflow.html",
+    "race-conditions.html",
+    "prompt-injection.html",
+    "indirect-prompt-injection-example.html"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
