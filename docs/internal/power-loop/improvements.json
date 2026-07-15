@@ -2903,6 +2903,24 @@
       "slug": "juice-shop-heroku-api-bundle-warmup",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: warmupJuiceShopHome now requires main.js reference AND juiceShopApiLive before crawl; single-pass deep scan 6 findings 6/6 categories on cold dyno; power-scan --benchmarks 7 findings 6/6"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/grpc-goat",
+      "slug": "grpc-goat-cross-origin-doc-blog-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD JSON-LD softwareHelp https://rootxjs.github.io/blog/grpc-goat/ + codeRepository rootxjs/grpc-goat; extractGrpcGoatDocSeeds seeds blog URL and rootxjs.github.io/docs only (skips vwad.owasp.org/docs 404); grpcGoatPrioritySeeds prepends blog+labs; vwad.owasp.org/app/grpc-goat findings 3→6 incl client-side-grpc-goat-lab-evidence; benchmark juice-shop 6 findings 6/6"
+    },
+    {
+      "source": "discovery:rootxjs.github.io/blog/grpc-goat",
+      "slug": "grpc-goat-launch-blog-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: blog post 9 labs covering common gRPC security vulnerabilities + gRPC Reflection Enabled + Launching gRPC Goat; CLIENT_GRPC_GOAT_RES extended; rootxjs.github.io/blog/grpc-goat findings 5 incl client-side-grpc-goat-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-owasp-a01-hub-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractVulnLabAcademySeeds adds /owasp/a01.html for A01 broken-access-control lab crawl; hack-this-site-eta.vercel.app/owasp/a01.html direct scan reaches client-side-vulnlab-academy-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5195,6 +5213,21 @@
       "source": "discovery:security-trainer.vercel.app",
       "slug": "sectrainer-hyphen-url-priority-seeds",
       "shipped_at": "2026-07-14T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/grpc-goat",
+      "slug": "grpc-goat-cross-origin-doc-blog-seed",
+      "shipped_at": "2026-07-15T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:rootxjs.github.io/blog/grpc-goat",
+      "slug": "grpc-goat-launch-blog-markers",
+      "shipped_at": "2026-07-15T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-owasp-a01-hub-seed",
+      "shipped_at": "2026-07-15T00:15:00.000Z"
     }
   ]
 }

@@ -1027,7 +1027,7 @@ const JEKYLL_BLOG_POST_RE =
   /href\s*=\s*["'](\/posts\/[^"'#?]+)["']/gi;
 
 function extractJekyllBlogPostSeeds(html: string, pageUrl: string): string[] {
-  if (!/Jekyll|simple-jekyll-search|site-header|jekyll/i.test(html)) return [];
+  if (!/Jekyll|simple-jekyll-search|site-header|jekyll|maz4lhacks\.vercel\.app/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   let m: RegExpExecArray | null;
@@ -2659,6 +2659,7 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
   for (const p of [
     "/home/",
     "/owasp/",
+    "/owasp/a01.html",
     "/labs/xss-reflected.html",
     "/labs/sqli-error.html",
     "/labs/idor.html",
@@ -3329,14 +3330,13 @@ function extractBreakTheFlaskWriteupSeeds(html: string, pageUrl: string): string
 function extractGrpcGoatDocSeeds(html: string, pageUrl: string): string[] {
   if (!/gRPC Goat|grpc_goat_docs|rootxjs\/grpc-goat/i.test(html)) return [];
   const out = new Set<string>();
-  const pageOrigin = new URL(pageUrl).origin;
   const docBases = new Set<string>();
-  docBases.add(pageOrigin);
   const helpMatch = html.match(
     /softwareHelp["']\s*:\s*["'](https?:\/\/[^"']+grpc[_-]?goat[^"']*)["']/i
   );
   if (helpMatch?.[1]) {
     try {
+      out.add(new URL(helpMatch[1]).toString());
       docBases.add(new URL(helpMatch[1]).origin);
     } catch {
       /* ignore */
@@ -3344,6 +3344,15 @@ function extractGrpcGoatDocSeeds(html: string, pageUrl: string): string[] {
   }
   if (/rootxjs\.github\.io|github\.com\/rootxjs\/grpc-goat/i.test(html)) {
     docBases.add("https://rootxjs.github.io");
+  }
+  // VWAD listing pages reference docs on rootxjs.github.io — not vwad.owasp.org/docs (404).
+  try {
+    const pageHost = new URL(pageUrl).hostname;
+    if (!/vwad\.owasp\.org$/i.test(pageHost)) {
+      docBases.add(new URL(pageUrl).origin);
+    }
+  } catch {
+    /* ignore */
   }
   for (const base of docBases) {
     for (const p of [
@@ -4613,9 +4622,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const redTigerPrioritySeeds = /redtiger\.labs\.overthewire\.org/i.test(home.finalUrl)
     ? ["http://redtiger.labs.overthewire.org/", "http://redtiger.labs.overthewire.org/level1.php"]
     : [];
+  const grpcGoatPrioritySeeds =
+    /vwad\.owasp\.org\/app\/grpc-goat|rootxjs\.github\.io\/blog\/grpc-goat/i.test(home.finalUrl)
+      ? [
+          "https://rootxjs.github.io/blog/grpc-goat/",
+          "https://rootxjs.github.io/docs/grpc_goat_docs/labs/",
+          "https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/"
+        ]
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,

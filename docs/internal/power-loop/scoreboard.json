@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T00:12:00.000Z",
+  "updated_at": "2026-07-15T00:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,18 +22,20 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 111,
   "discovery_findings": 1003,
-  "improvements_shipped": 458,
-  "last_run": "2026-07-15T00:12:00.000Z",
+  "improvements_shipped": 461,
+  "last_run": "2026-07-15T00:16:00.000Z",
   "last_run_summary": {
     "hour_utc": "00:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 259,
-      "note": "No benchmark misses — primary heroku oracle stable 6/6 (7 findings)",
+      "note": "No benchmark misses — primary heroku oracle stable 6/6 (6 findings validated post-engine-evolve)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,11 +61,14 @@
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (NXDOMAIN)"
       ],
-      "focus": "Cyber-Lab integer overflow + hack-this-site OWASP A02/A04/A05/recon modules; queue backlog chal8 + firing-range XSS",
-      "improvements_shipped_this_run": 0
+      "focus": "gRPC Goat VWAD cross-origin doc/blog seeds + VulnLab A01 hub crawl + launch blog markers",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "vwad.owasp.org/app/grpc-goat: cross-origin rootxjs docs+blog seeds (3→6 findings, client-side-grpc-goat-lab-evidence)",
+      "rootxjs.github.io/blog/grpc-goat: launch post 9-lab oracle (5 findings incl grpc-goat lab evidence)",
+      "hack-this-site-eta.vercel.app: /owasp/a01.html seeded from VulnLab hub for BAC lab crawl",
       "hack-this-site-eta.vercel.app: 12 findings incl graphql-introspection + client-side-vulnlab-academy-evidence",
       "chal8.vercel.app: 4 findings — wizer CTF + dangerous-html-sinks",
       "demo.owasp-juice.shop: 6 findings — sqli + idor + auth_bypass oracles",
@@ -73,7 +78,8 @@
       "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp/rest.vulnweb.com",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop.lab.pentest-forge.com / vampi.lab.pentest-forge.com: shallow misconfig-only — hosted lab instances need deeper crawl",
-      "capture-the-flag.labs.vercel.dev: landing-only (1 finding) — challenge routes need queue deep-links"
+      "capture-the-flag.labs.vercel.dev: landing-only (1 finding) — challenge routes need queue deep-links",
+      "hack-this-site-eta / maz4lhacks: Vercel Security Checkpoint may block cloud scanner on subpaths"
     ]
   },
   "discovery_highlights": {
@@ -267,7 +273,7 @@
     "vuln-expose.vercel.app": 6,
     "redtiger.labs.overthewire.org": 3,
     "gitagent-securebot-app.vercel.app": 3,
-    "vwad.owasp.org/app/grpc-goat": 4,
+    "vwad.owasp.org/app/grpc-goat": 6,
     "hack-this-site-eta.vercel.app/api-labs": 12,
     "hack-this-site-eta.vercel.app/owasp/a03.html": 11,
     "hack-this-site-eta.vercel.app/owasp/a01.html": 12
