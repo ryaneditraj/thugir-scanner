@@ -10181,6 +10181,10 @@ const CLIENT_WEBGOAT_RES: { label: string; re: RegExp }[] = [
     re: /OWASP WebGoat|www-project-webgoat/i
   },
   {
+    label: "OWASP VWAD WebGoat listing",
+    re: /WebGoat - OWASP VWAD|de facto interactive teaching environment for web application security/i
+  },
+  {
     label: "WebGoat GitHub repository",
     re: /github\.com\/WebGoat\/WebGoat|WebGoat\/WebGoat/i
   },
@@ -10614,6 +10618,10 @@ const CLIENT_VULNFORGE_EXPLORER_RES: { label: string; re: RegExp }[] = [
   {
     label: "VulnForge auth token storage",
     re: /vulnforge_token|vulnforge_user/i
+  },
+  {
+    label: "VulnForge offensive platform dashboard",
+    re: /Offensive Platform|Surface Inventory|discovered attack surfaces/i
   }
 ];
 
