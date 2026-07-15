@@ -265,7 +265,7 @@
     "maz4lhacks.vercel.app/posts/reflected-xss": 5,
     "redtiger.labs.overthewire.org/level5.php": 3,
     "redtiger.labs.overthewire.org/level6.php": 3,
-    "vuln-expose.vercel.app": 6,
+    "vuln-expose.vercel.app": 8,
     "redtiger.labs.overthewire.org": 3,
     "gitagent-securebot-app.vercel.app": 3,
     "vwad.owasp.org/app/grpc-goat": 6,
