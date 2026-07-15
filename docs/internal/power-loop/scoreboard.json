@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T08:09:57.289Z",
+  "updated_at": "2026-07-15T08:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 146,
   "discovery_findings": 1293,
-  "improvements_shipped": 482,
-  "last_run": "2026-07-15T08:09:57.290Z",
+  "improvements_shipped": 485,
+  "last_run": "2026-07-15T08:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07:00",
+    "hour_utc": "08:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 259,
-      "note": "Pass1 gap sqli,sensitive_data (5 findings); wake retry merged to 6/6 (7 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings warm / 6 cold pass)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,33 +52,24 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 35,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": 0,
-      "focus": "Queue backlog + engine improvements: bugbountyhunter ch9-11, oss-oopssec-store, HackLab, VulnShop; vuln-expose cmdi/idor/network-tools path modules",
+      "focus": "IST Edu vuln portal LFI probe + AppSecMaster lab hub evidence from queued discovery URLs",
       "improvements_shipped_this_run": 3,
-      "new_urls": [
-        "appsecmaster.net/labs/cross-site-scripting-xss",
-        "appsecmaster.net/labs/sql-injection",
-        "domgo.at/cxss/example/1",
-        "domgo.at/cxss/example/7",
-        "ist-edu-bd.vercel.app/login"
-      ]
+      "new_urls": []
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
-      "koadt.github.io/oss-oopssec-store: 7 findings — CTF e-commerce roadmap + API surface",
-      "ashimkoirala.github.io/HackLab: 6 findings — browser OWASP Top 10 sandbox",
-      "vuln-expose.vercel.app/network-tools: Herramienta de Ping SSRF lab markers (8→9 findings)",
-      "thecyberpunker.com/labs/insecureship: dedicated InsecureShip API security lab slug (5→6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings warm / 6 cold pass)",
+      "ist-edu-bd.vercel.app/login: intentionally vulnerable university portal + LFI /api/notices?file= (5→7 findings)",
+      "appsecmaster.net/labs/cross-site-scripting-xss: XSS/SQLi lab hub Course schema + crawl seeds (8 findings, new lab-hub slug)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop pass1 cold-start: sqli,sensitive_data gap before wake retry (pages_crawled=6 probes=184)",
-      "xss.progphp.com: domain parked — remove from queue",
-      "thecyberpunker.com/labs/insecureship: live API is Docker-only — blog writeup only from cloud scans",
-      "new discovery URLs (appsecmaster XSS/SQLi hubs, domgo levels, ist-edu-bd login): queued at tail"
+      "www.bugbountyhunter.com: free challenges disabled while platform rebuilds",
+      "acuart.phpnet.us: DNS dead — classic Acunetix test site offline",
+      "gitagent-securebot-app.vercel.app: /scan?demo=1 CSR-only — bundle markers on homepage only"
     ]
   },
   "discovery_highlights": {
@@ -108,7 +99,7 @@
     "aigoat.app": 2,
     "vulnforge-academy.vercel.app": 5,
     "vaultapp-omega.vercel.app": 4,
-    "ist-edu-bd.vercel.app": 5,
+    "ist-edu-bd.vercel.app": 7,
     "pwnshop.ctfsecurity.com": 7,
     "idor-website.vercel.app": 3,
     "vulnerable-web-site.vercel.app": 2,

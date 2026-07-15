@@ -745,6 +745,9 @@ const DEEP_RULES = new Set<string>([
   "phpStrcmpArrayBypass",
   "clientSideWechallEvidence",
   "clientSideAppsecMasterEvidence",
+  "clientSideAppsecMasterLabHubEvidence",
+  "clientSideIstEduVulnPortalEvidence",
+  "noticesFileLfiProbe",
   "clientSideHackTheBoxEvidence",
   "clientSideHackTheBoxAcademyEvidence",
   "clientSideHackThisSiteEvidence",
@@ -3326,6 +3329,48 @@ function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** AppSecMaster (appsecmaster.net) — seed XSS/SQLi category lab hub pages. */
+function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
+  if (!/AppSecMaster|appsecmaster\.net/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "/labs/cross-site-scripting-xss",
+    "/labs/sql-injection",
+    "/en/challenges?category=Client-Side",
+    "/en/challenges?category=Injection"
+  ]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** IST Edu vulnerable university portal (ist-edu-bd.vercel.app) — seed auth/search lab routes. */
+function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
+  if (
+    !/ist-edu-bd|Institute of Science and Technology|intentionally vulnerable application for security testing/i.test(
+      html
+    )
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/portal", "/search", "/dashboard", "/notices", "/login"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** GitAgent SecureBot demo scanner (gitagent-securebot-app.vercel.app) — seed demo scan route. */
 function extractGitagentSecurebotSeeds(html: string, pageUrl: string): string[] {
   if (!/GitAgent SecureBot|gitagent-securebot|open-gitagent\/gitagent/i.test(html)) return [];
@@ -4645,6 +4690,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
   const gitagentSecurebotSeeds = extractGitagentSecurebotSeeds(home.body, home.finalUrl);
+  const appsecMasterLabSeeds = extractAppsecMasterLabSeeds(home.body, origin);
+  const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
@@ -4915,6 +4962,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secResearchLabSeeds,
       ...skillauditSeeds,
       ...gitagentSecurebotSeeds,
+      ...appsecMasterLabSeeds,
+      ...istEduVulnPortalSeeds,
       ...vulnforgeSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
