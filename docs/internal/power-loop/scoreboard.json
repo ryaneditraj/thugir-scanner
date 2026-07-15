@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T12:35:00.000Z",
+  "updated_at": "2026-07-15T13:04:03.565Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 495,
-  "total_findings": 2126,
+  "total_sites_scanned": 504,
+  "total_findings": 2177,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 156,
-  "discovery_findings": 1362,
+  "discovery_urls_added": 161,
+  "discovery_findings": 1406,
   "improvements_shipped": 494,
-  "last_run": "2026-07-15T12:35:00.000Z",
+  "last_run": "2026-07-15T13:04:03.565Z",
   "last_run_summary": {
-    "hour_utc": "12:00",
+    "hour_utc": "13:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — pass1 cold-start gap resolved on Heroku wake retry (7 findings, 6/6 recall)",
+      "note": "No benchmark misses — full recall on warm Heroku dyno (7 findings, pages_crawled=6 probes=254)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,20 +52,21 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 35,
-      "skipped_48h": "queue head backlog (cyberdesserts cookiejar-lab, hacksplaining xml-bombs/subdomain-squatting/toxic-deps/unencrypted-comm/xssi, WebVulnsGuide, frontend-security-examples)",
-      "focus": "DomGoat /cxss exercises 3, 4, 10 — AJAX, WebSocket, and query-param DOM XSS sources",
-      "improvements_shipped_this_run": 3
+      "findings": 44,
+      "skipped_48h": "queue head backlog (12:00 batch still within 48h window for cookiejar-lab, hacksplaining, WebVulnsGuide, frontend-security-examples)",
+      "focus": "DomGoat levels 6/8/9 + HackThisSite realistic/2 and application/1 queued; this batch scanned earlier queue entries (gauravkhurana SQLi, demo.weblock, DevSecOps lab, vulnlab)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
-      "domgo.at/cxss/example/3: XHR JSON response → msgboard.innerHTML AJAX DOM XSS lab (3→4 findings)",
-      "domgo.at/cxss/example/4: WebSocket onmessage → msgboard.innerHTML real-time DOM XSS lab (3→4 findings)",
-      "domgo.at/cxss/example/10: location.href query params + window.name → innerHTML URL DOM XSS lab (3→4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "demo.weblock.ru: 8 findings — IDOR, AI prompt-injection evidence, OpenAPI docs exposed",
+      "vulnlab.vercel.app: 7 findings — SQLi, SSRF, unsafe file upload, XXE lab evidence",
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: 7 findings — OpenAI key exposed + IDOR/API lab markers",
+      "gauravkhurana.com/SQLInjection: 6 findings — WASM SQLite login-bypass demo with SQL concat evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku cold-start splits categories across passes — wake retry required",
+      "new discovery URLs (domgo 6/8/9, HTS realistic/2, application/1) appended to queue tail — await queue rotation",
       "xss.page: Cloudflare 403 blocks scanner UA on root and tools paths"
     ]
   },
@@ -126,7 +127,7 @@
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 3,
-    "demo.weblock.ru": 7,
+    "demo.weblock.ru": 8,
     "gauravkhurana.com/SQLInjection": 6,
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
@@ -212,7 +213,7 @@
     "websec.fr": 3,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
-    "everdan0075.github.io/DevSecOps-Hacking-Lab": 4,
+    "everdan0075.github.io/DevSecOps-Hacking-Lab": 7,
     "riglabs-cyber-lab.vercel.app": 4,
     "vulnlab.vercel.app": 7,
     "avid-vuln-editor.vercel.app": 3,
