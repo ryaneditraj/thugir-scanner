@@ -3867,7 +3867,32 @@
       "url": "https://www.hackthissite.org/playlevel/3/",
       "source": "Hack This Site — playlevel arcade mission 3 business-logic challenge",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ashkiani.github.io/sql-injection-playground/",
+      "source": "Siavash Ashkiani — interactive SQL injection playground with dynamic query display (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/EvalByPass.html",
+      "source": "dxx33/WebVulnsGuide — eval filter bypass / code injection training lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/CORS.html",
+      "source": "dxx33/WebVulnsGuide — CORS misconfiguration lab with reflective-origin API demos (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://v0-comprehensive-security-training.vercel.app/modules/web-app-pentesting",
+      "source": "v0 comprehensive security training — OWASP web pentesting module with XSS/SQLi lesson paths (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/playit/stego/1/",
+      "source": "Hack This Site — steganography arcade mission 1 image-metadata challenge (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T21:10:00.000Z"
+  "updated_at": "2026-07-15T22:16:00.000Z"
 }
