@@ -3717,7 +3717,32 @@
       "url": "https://application.security/free-application-security-training/owasp-top-10-server-side-template-injection",
       "source": "Kontra Application Security — free interactive SSTI training lab (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/wackopicko/",
+      "source": "OWASP VWAD — adamdoupe/WackoPicko scanner-benchmark PHP lab directory entry (Show HN / awesome-vulnerable)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/bodgeit-store/",
+      "source": "OWASP VWAD — psiinon/bodgeit beginner pen-test lab directory entry (awesome-vulnerable)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/4/",
+      "source": "Hack This Site — realistic mission 4 web challenge entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/5/",
+      "source": "Hack This Site — realistic mission 5 web challenge entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cridzy2.github.io/",
+      "source": "cridzy2/JumpBox-Vulnerable-Webserver — OWASP Top 10 + AD trust-boundary lab landing (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-15T14:10:00.000Z"
+  "updated_at": "2026-07-15T15:05:00.000Z"
 }
