@@ -3417,7 +3417,32 @@
       "url": "https://hack-this-site-eta.vercel.app/challenges/",
       "source": "dkyazzentwatwa/hack-this-site — 12+ vulnerability challenge hub with automated validation (GitHub README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bergerzvika.github.io/Cyber-Lab/integer-overflow.html",
+      "source": "BergerZvika/Cyber-Lab — integer overflow / arithmetic wraparound browser lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a02.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A02 Broken Authentication module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a04.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A04 Insecure Design module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a05.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A05 Security Misconfiguration module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/recon/",
+      "source": "dkyazzentwatwa/hack-this-site — passive/active recon suite with live endpoints (Vercel deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-14T23:05:00.000Z"
+  "updated_at": "2026-07-15T00:05:00.000Z"
 }
