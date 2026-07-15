@@ -699,6 +699,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideXssC2CollectorEvidence",
   "clientSideDevSecOpsLabEvidence",
   "clientSideVulnAuthPortalEvidence",
+  "clientSideAuthSecurityProjectEvidence",
+  "clientSideOsCommandInjectionLabEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
@@ -1336,7 +1338,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/",
     "/missions/playit/extbasic/0/",
     "/missions/playit/stego/0/",
-    "/playlevel/1/"
+    "/playlevel/1/",
+    "/playlevel/2/",
+    "/missions/basic/2/",
+    "/missions/basic/3/",
+    "/missions/basic/4/",
+    "/missions/basic/5/",
+    "/missions/basic/6/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1355,6 +1363,28 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
   while ((m = HACKTHISITE_MISSION_RE.exec(html))) {
     try {
       out.add(new URL(m[1], origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** dxx33/WebVulnsGuide — standalone HTML labs for OS injection, prototype pollution, CSRF, eval bypass. */
+function extractWebVulnsGuideLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/WebVulnsGuide|dxx33\.github\.io\/WebVulnsGuide/i.test(`${html}\n${pageUrl}`)) return [];
+  const out = new Set<string>();
+  for (const p of [
+    "/OS-injection.html",
+    "/prototype.html",
+    "/EvalByPass.html",
+    "/CSRF.html",
+    "/SSRF.html",
+    "/XSS.html",
+    "/SQLi.html"
+  ]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -4880,6 +4910,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secureflagOwaspSeeds = extractSecureflagOwaspSeeds(home.body, origin);
   const kontraTrainingSeeds = extractKontraTrainingSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
+  const webVulnsGuideSeeds = extractWebVulnsGuideLabSeeds(home.body, home.finalUrl);
   const htsRealisticMissionSeeds = extractHtsRealisticMissionSeeds(home.body, home.finalUrl);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
   const sectrainerSeeds = extractSectrainerSpaSeeds(
@@ -5159,6 +5190,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secureflagOwaspSeeds,
       ...kontraTrainingSeeds,
       ...hackThisSiteSeeds,
+      ...webVulnsGuideSeeds,
       ...htsRealisticMissionSeeds,
       ...wrongSecretsSeeds,
       ...sectrainerSeeds,

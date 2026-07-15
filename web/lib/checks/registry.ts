@@ -8800,6 +8800,97 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- darkroot192 auth-security-project OWASP Top 10 auth demo (Render) ----------------
+const CLIENT_AUTH_SECURITY_PROJECT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Vulnerable Auth branding",
+    re: /Vulnerable Auth|Sistema Vulnerable/i
+  },
+  {
+    label: "Intentionally insecure pentest demo",
+    re: /intencionalmente insegura para demostraci[oó]n de pentesting|INSEGURO/i
+  },
+  {
+    label: "SQL injection training marker",
+    re: /SQL Injection|Intenta SQL Injection:\s*<code>admin' OR '1'='1/i
+  },
+  {
+    label: "XSS and IDOR catalog",
+    re: /Cross-Site Scripting \(XSS\)[\s\S]{0,120}Insecure Direct Object Reference \(IDOR\)/i
+  },
+  {
+    label: "Plaintext password storage warning",
+    re: /Contraseñas en texto plano|contraseñas se guardan en texto plano/i
+  },
+  {
+    label: "Pentesting credential hint",
+    re: /Pista de pentesting|Usuario de prueba:\s*<code>admin<\/code>/i
+  }
+];
+
+const clientSideAuthSecurityProjectEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AUTH_SECURITY_PROJECT_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/auth-security-project|Vulnerable Auth|Sistema Vulnerable/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "auth-security-project documents SQLi, XSS, IDOR, and plaintext-password flaws on an intentionally insecure auth demo"
+    }
+  };
+};
+
+// --- Educational OS command injection lab pages (WebVulnsGuide dojo, etc.) ------------
+const CLIENT_OS_COMMAND_INJECTION_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Command injection dojo title",
+    re: /COMMAND INJECTION DOJO|OS Command Injection Dojo/i
+  },
+  {
+    label: "OS command injection definition",
+    re: /What is OS Command Injection\?|execute arbitrary operating system commands/i
+  },
+  {
+    label: "Dangerous exec/system functions",
+    re: /dangerous functions like\s*<code>system\(\)<\/code>[\s\S]{0,40}<code>exec\(\)<\/code>/i
+  },
+  {
+    label: "Command separator filtering gap",
+    re: /No proper filtering of command separators|command separators/i
+  },
+  {
+    label: "WebVulnsGuide OS injection lab path",
+    re: /WebVulnsGuide\/OS-injection\.html|dxx33\.github\.io\/WebVulnsGuide\/OS-injection/i
+  }
+];
+
+const clientSideOsCommandInjectionLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OS_COMMAND_INJECTION_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational OS command injection lab documents system()/exec() misuse and unfiltered shell metacharacters"
+    }
+  };
+};
+
 // --- CyberDefenders blue team / DFIR cyber range platform --------------------------------
 const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
   {
@@ -16106,6 +16197,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHtsLoginGatedMissionHubEvidence,
   clientSideHtsRealisticMissionLabEvidence,
   clientSideHtsPlaylevelHubEvidence,
+  clientSideAuthSecurityProjectEvidence,
+  clientSideOsCommandInjectionLabEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,

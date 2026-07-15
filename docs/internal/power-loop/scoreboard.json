@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T21:14:43.259Z",
+  "updated_at": "2026-07-15T21:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 567,
-  "total_findings": 2469,
-  "critical_findings": 24,
+  "total_sites_scanned": 566,
+  "total_findings": 2464,
+  "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 196,
-  "discovery_findings": 1654,
-  "improvements_shipped": 509,
-  "last_run": "2026-07-15T21:14:43.259Z",
+  "discovery_urls_added": 191,
+  "discovery_findings": 1655,
+  "improvements_shipped": 515,
+  "last_run": "2026-07-15T21:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "21:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall on pass1 (pages_crawled=1 probes=194)",
+      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall on pass1 (21:05 UTC validation)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,37 +50,29 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 0,
       "urls_scanned": 8,
-      "findings": 45,
-      "focus": "HTS basic/7-10 command injection + SSI + cookie bypass missions; playlevel/3 arcade lab",
-      "improvements_shipped_this_run": 0,
-      "new_urls": [
-        "https://www.hackthissite.org/missions/basic/7/",
-        "https://www.hackthissite.org/missions/basic/8/",
-        "https://www.hackthissite.org/missions/basic/9/",
-        "https://www.hackthissite.org/missions/basic/10/",
-        "https://www.hackthissite.org/playlevel/3/"
-      ]
+      "findings": 46,
+      "focus": "auth-security-project OWASP auth demo; WebVulnsGuide OS-injection dojo; HTS basic/5-6 + playlevel/2 seed backlog",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses; shallow crawl pages_crawled=1",
-      "cyberdefenders.org: 8 findings — blue-team training platform markers",
-      "appsecmaster.net: 8 findings — hands-on lab catalog evidence",
-      "webgoat.org: 7 findings — OWASP WebGoat training hub",
-      "516-hackers.github.io/516-hackers-vuln-playground: 2 findings — GitHub Pages deploy offline/partial"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "auth-security-project.onrender.com: Vulnerable Auth SQLi/XSS/IDOR lab + post-login-sql-bypass (0→3 findings)",
+      "dxx33.github.io/WebVulnsGuide/OS-injection.html: COMMAND INJECTION DOJO evidence (0→4 findings)",
+      "www.hackthissite.org/missions/basic/5: login-gated hub evidence via expanded mission seeds (0→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: shallow crawl pages_crawled=1 — secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes)",
-      "HTS basic/7-10 + playlevel/3 appended to queue tail — await head backlog drain before scan",
-      "516-hackers-vuln-playground: GitHub Pages 404/partial — deploy offline",
-      "labs.hackadvisor.io: isolated challenge instances require lab start"
+      "Kontra SSTI lesson URL returns 404 — rejected until Kontra publishes server-side-template-injection module",
+      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
+      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
+      "juice-shop.herokuapp.com: cold-start pass1 can degrade to 3/6 before Heroku wake retries"
     ]
   },
   "discovery_highlights": {
     "brokencrystals.com": 13,
-    "demo.testfire.net": 3,
+    "demo.testfire.net": 6,
     "zero.webappsecurity.com": 5,
     "rest.vulnweb.com": 3,
     "testasp.vulnweb.com": 4,
@@ -240,7 +232,7 @@
     "ssrf-defense-platform.onrender.com": 6,
     "api.graphqlbook.org": 5,
     "pentesterlab.com": 4,
-    "www.root-me.org": 4,
+    "www.root-me.org": 5,
     "www.hackthissite.org": 6,
     "domgo.at": 4,
     "domgo.at/cxss/example/1": 4,
@@ -250,7 +242,7 @@
     "php.testsparker.com": 6,
     "aspnet.testsparker.com": 6,
     "hacksec.in": 6,
-    "webgoat.org": 7,
+    "webgoat.org": 6,
     "cyberdefenders.org": 8,
     "appsecmaster.net": 8,
     "hack-yourself-first.azurewebsites.net": 7,
@@ -336,6 +328,9 @@
     "www.hackthissite.org/playlevel/1": 6,
     "vwad.owasp.org/app/security-shepherd": 5,
     "vwad.owasp.org/app/mutillidae": 5,
-    "vwad.owasp.org/app/nodegoat": 5
+    "vwad.owasp.org/app/nodegoat": 5,
+    "auth-security-project.onrender.com": 3,
+    "dxx33.github.io/WebVulnsGuide/OS-injection.html": 4,
+    "www.hackthissite.org/missions/basic/5": 6
   }
 }

@@ -1153,6 +1153,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-auth-security-project-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "auth-security-project OWASP auth demo disclosed",
+    description:
+      "darkroot192 auth-security-project on Render documents SQL injection, XSS, IDOR, and plaintext-password flaws on an intentionally insecure Spanish-language auth training app.",
+    impactOneline:
+      "Public auth-security-project demos expose login SQLi hints and broken access-control patterns attackers replay on production auth flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAuthSecurityProjectEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "auth-security-project is intentional training — isolate Render demos from production identity systems.",
+      steps: [
+        "Run auth-security-project only on ephemeral lab infrastructure.",
+        "Never store passwords in plaintext or echo SQLi bypass hints on production login pages.",
+        "Enforce object-level authorization on profile and admin routes."
+      ]
+    },
+    fixPrompt:
+      "We host an auth-security-project-style OWASP Top 10 auth demo with SQLi and IDOR. Show how to isolate it and fix login and access-control flaws.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-os-command-injection-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Educational OS command injection lab disclosed",
+    description:
+      "WebVulnsGuide OS-injection dojo and similar training pages document system()/exec() misuse, command-separator gaps, and arbitrary OS command execution patterns.",
+    impactOneline:
+      "Public command-injection dojos teach shell metacharacter bypasses attackers replay on apps that pass user input to system commands.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOsCommandInjectionLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Command-injection dojos are intentional training — never pipe user input to shell commands in production.",
+      steps: [
+        "Avoid system(), exec(), and shell=True with any user-controlled input.",
+        "Use parameterized APIs instead of shell invocation for network diagnostics.",
+        "Host OS-injection labs only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror WebVulnsGuide-style OS command injection training pages. Show how to fix shell invocation and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-csrf-evidence",
     platform: "generic",
     category: "Broken access control",
