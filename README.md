@@ -54,32 +54,7 @@ added **as data, not code**. Inventory the catalog with `node web/scripts/patter
 - **Razorpay** keys (test is fine) — optional in dev
 - (Deep Scan only) access to the **`thugir-node`** engine
 
-## Quick start (hackathon — works out of the box)
-
-```bash
-cd web
-npm install
-npm run hackathon          # copies config/hackathon.env → .env.local and starts dev server
-```
-
-Open **http://localhost:3000**. No Supabase, Razorpay, or manual env editing required.
-
-| Page | What to show |
-|------|----------------|
-| `/` | Live scan `petstore.swagger.io` |
-| `/verify/demo` | Trust badge |
-| `/admin/settings` | Change AI model (`qwen/qwen3-32b` default) |
-
-Or step by step:
-
-```bash
-cd web
-npm install
-npm run setup              # one-time: writes .env.local from config/hackathon.env
-npm run dev
-```
-
-## Quick start (web, free tier — custom env)
+## Quick start (web)
 
 ```bash
 cd web
@@ -159,7 +134,6 @@ or point `THUGIR_ENGINE_ROOT` at a local checkout. The **free tier does not need
 | Doc | Purpose |
 |---|---|
 | **[everything.md](everything.md)** | **Complete A–Z reference for everything implemented** |
-| **[docs/HACKATHON_GUIDE.md](docs/HACKATHON_GUIDE.md)** | Quick hackathon demo guide |
 | [docs/internal/dev-setup.md](docs/internal/dev-setup.md) | Local development from scratch |
 | [docs/internal/environment-variables.md](docs/internal/environment-variables.md) | Every environment variable |
 | [docs/internal/architecture.md](docs/internal/architecture.md) | System architecture & data flow |

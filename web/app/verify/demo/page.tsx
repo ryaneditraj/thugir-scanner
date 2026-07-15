@@ -4,7 +4,7 @@ import { VerifyBadgeCard } from "@/components/VerifyBadgeCard";
 
 export const metadata: Metadata = {
   title: "Verified scan badge (demo)",
-  description: "Public verification badge for a Thugir security scan — demo for hackathon presentations."
+  description: "Public verification badge for a Thugir security scan — demo badge."
 };
 
 // Static demo badge — works without Supabase. Use this on stage when judges need a

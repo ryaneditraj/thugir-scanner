@@ -72,12 +72,18 @@ export default async function AdminOverview() {
     ],
     [
       "AI analyst",
-      envStatus("HACK_CLUB_AI_API_KEY") === "ok" || envStatus("OPENROUTER_API_KEY") === "ok" ? "ok" : "warn",
-      process.env.HACK_CLUB_AI_API_KEY
-        ? "Hack Club AI ready"
-        : process.env.OPENROUTER_API_KEY
-          ? "OpenRouter ready"
-          : "Optional — set HACK_CLUB_AI_API_KEY or save a key in Settings"
+      envStatus("OPENROUTER_API_KEY") === "ok" ||
+      envStatus("OPENAI_API_KEY") === "ok" ||
+      envStatus("ANTHROPIC_API_KEY") === "ok"
+        ? "ok"
+        : "warn",
+      process.env.OPENROUTER_API_KEY
+        ? "OpenRouter ready"
+        : process.env.OPENAI_API_KEY
+          ? "OpenAI ready"
+          : process.env.ANTHROPIC_API_KEY
+            ? "Anthropic ready"
+            : "Optional — set an API key in env or Settings"
     ],
     [
       "Agent engine",
