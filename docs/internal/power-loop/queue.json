@@ -3567,7 +3567,32 @@
       "url": "https://web-security-lab.vercel.app/learn/cookies-samesite",
       "source": "Web Security Lab — Cookie SameSite/HttpOnly/Secure lab chapter (Vercel deploy)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://thecyberpunker.com/labs/insecureship/",
+      "source": "TheCyberpunker/InsecureShip — OWASP API Top 10 deliberately vulnerable shipping API lab landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://xss.progphp.com/",
+      "source": "ProgPHP XSS challenge platform — public reflected XSS training challenges (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/xss",
+      "source": "DaniSam-STU/security-lab — live XSS module with vulnerable vs secure API routes (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://appsecmaster.net/labs/sqli",
+      "source": "AppSecMaster — hands-on SQL injection lab module (platform /labs hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/labs/idor",
+      "source": "AppSecMaster — hands-on IDOR lab module (platform /labs hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T05:10:00.000Z"
+  "updated_at": "2026-07-15T06:10:00.000Z"
 }
