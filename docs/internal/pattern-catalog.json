@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T12:35:04.767Z",
-  "total": 342,
-  "uniqueSlugs": 342,
+  "generatedAt": "2026-07-15T13:13:53.005Z",
+  "total": 345,
+  "uniqueSlugs": 345,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 324,
+    "generic": 327,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 274,
+    "deep": 277,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 23,
     "Broken authentication": 20,
     "Injection": 55,
-    "Cross-site scripting": 38,
+    "Cross-site scripting": 41,
     "general": 18,
     "Server-side request forgery": 4,
     "Sensitive data exposure": 4,
@@ -270,6 +270,7 @@
     "client-side-xor-auth-evidence",
     "client-side-xss-c2-collector-evidence",
     "client-side-xss-evidence",
+    "client-side-xss-page-evidence",
     "client-side-xss-quiz-evidence",
     "client-side-xss-victim-bank-evidence",
     "client-side-xvwa-evidence",
@@ -288,11 +289,13 @@
     "dom-eval-xss",
     "domgo-ajax-dom-xss-evidence",
     "domgo-hash-dom-xss-evidence",
+    "domgo-hash-sanitization-bypass-dom-xss-evidence",
     "domgo-localstorage-dom-xss-evidence",
     "domgo-postmessage-dom-xss-evidence",
     "domgo-query-param-dom-xss-evidence",
     "domgo-referrer-dom-xss-evidence",
     "domgo-websocket-dom-xss-evidence",
+    "domgo-window-name-dom-xss-evidence",
     "exposed-config-backup",
     "exposed-env-file",
     "exposed-git-dir",

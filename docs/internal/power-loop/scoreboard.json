@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T13:04:03.565Z",
+  "updated_at": "2026-07-15T13:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 161,
   "discovery_findings": 1406,
-  "improvements_shipped": 494,
-  "last_run": "2026-07-15T13:04:03.565Z",
+  "improvements_shipped": 497,
+  "last_run": "2026-07-15T13:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "13:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — full recall on warm Heroku dyno (7 findings, pages_crawled=6 probes=254)",
+      "note": "No benchmark misses — juice-shop 7 findings, 6/6 recall maintained",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,21 +53,20 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 44,
-      "skipped_48h": "queue head backlog (12:00 batch still within 48h window for cookiejar-lab, hacksplaining, WebVulnsGuide, frontend-security-examples)",
-      "focus": "DomGoat levels 6/8/9 + HackThisSite realistic/2 and application/1 queued; this batch scanned earlier queue entries (gauravkhurana SQLi, demo.weblock, DevSecOps lab, vulnlab)",
-      "improvements_shipped_this_run": 0
+      "focus": "DomGoat exercises 7-9 specialized DOM XSS slugs + XSS.page playground evidence",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "demo.weblock.ru: 8 findings — IDOR, AI prompt-injection evidence, OpenAPI docs exposed",
-      "vulnlab.vercel.app: 7 findings — SQLi, SSRF, unsafe file upload, XXE lab evidence",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: 7 findings — OpenAI key exposed + IDOR/API lab markers",
-      "gauravkhurana.com/SQLInjection: 6 findings — WASM SQLite login-bypass demo with SQL concat evidence"
+      "domgo.at/cxss/example/7: unescape+weak replace() before innerHTML — domgo-hash-sanitization-bypass-dom-xss-evidence",
+      "domgo.at/cxss/example/8: hash= parsing + weak replace() — domgo-hash-sanitization-bypass-dom-xss-evidence",
+      "domgo.at/cxss/example/9: window.name + location.hash concat — domgo-window-name-dom-xss-evidence",
+      "xss.page/playground: XSS Payload Tester + filter/context simulation — findings 5→6"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "new discovery URLs (domgo 6/8/9, HTS realistic/2, application/1) appended to queue tail — await queue rotation",
-      "xss.page: Cloudflare 403 blocks scanner UA on root and tools paths"
+      "xss.page: Cloudflare 403 may block scanner UA on root paths",
+      "www.root-me.org: Anubis bot-wall blocks scanner UA"
     ]
   },
   "discovery_highlights": {
@@ -310,6 +309,10 @@
     "domgo.at/cxss/example/2": 4,
     "domgo.at/cxss/example/3": 4,
     "domgo.at/cxss/example/4": 4,
-    "domgo.at/cxss/example/10": 4
+    "domgo.at/cxss/example/10": 4,
+    "domgo.at/cxss/example/7": 4,
+    "domgo.at/cxss/example/8": 4,
+    "domgo.at/cxss/example/9": 4,
+    "xss.page/playground": 6
   }
 }
