@@ -5098,6 +5098,10 @@ const CLIENT_VULN_AUTH_PORTAL_RES: { label: string; re: RegExp }[] = [
   {
     label: "bcrypt password strength demo on login",
     re: /bcrypt[\s\S]{0,60}zxcvbn/i
+  },
+  {
+    label: "Self-registration role selection lab",
+    re: /REQUEST ACCESS|CREATE ANALYST \/ VIEWER ACCOUNT|Admin is a pre-configured account/i
   }
 ];
 
@@ -7189,12 +7193,28 @@ const CLIENT_VULN_EXPOSE_MODULE_RES: { label: string; re: RegExp }[] = [
     re: /LABORATORIO DE BYPASS DE AUTENTICACI[ÓO]N|SQL Injection - Authentication Bypass/i
   },
   {
+    label: "SQL user enumeration lab banner",
+    re: /LABORATORIO DE ENUMERACI[ÓO]N DE USUARIOS|SQL Injection - User Enumeration/i
+  },
+  {
+    label: "SQL data extraction lab banner",
+    re: /LABORATORIO DE EXTRACCI[ÓO]N DE DATOS|SQL Injection - Data Extraction/i
+  },
+  {
     label: "Inline UNION SELECT extraction payloads",
-    re: /UNION SELECT username,password FROM users|admin'\s*UNION SELECT/i
+    re: /UNION SELECT username,password FROM users|admin'\s*UNION SELECT|' UNION SELECT id, username, password/i
   },
   {
     label: "XSS exploitation lab banner",
     re: /ENTORNO DE EXPLOTACI[ÓO]N XSS|Laboratorio XSS Interactivo/i
+  },
+  {
+    label: "Profile XSS lab banner",
+    re: /PROFILE XSS LABORATORY|XSS - Profile Injection/i
+  },
+  {
+    label: "Stored XSS comments lab banner",
+    re: /STORED XSS LABORATORY|XSS - Persistent Comments|Comentario \(Vulnerable a XSS\)/i
   },
   {
     label: "dangerouslySetInnerHTML XSS mode toggle",
@@ -7202,7 +7222,7 @@ const CLIENT_VULN_EXPOSE_MODULE_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Stored/reflected/DOM XSS lab types",
-    re: /Stored XSS \(persistente|Reflected XSS|DOM-based XSS/i
+    re: /Stored XSS \(persistente|Reflected XSS|DOM-based XSS|XSS Reflejado/i
   }
 ];
 
@@ -7216,7 +7236,13 @@ const clientSideVulnExposeLabModuleEvidence: Rule = async (ctx) => {
   }
   if (hits.length < 2) return NEGATIVE;
   if (!/VulnSite|vuln-expose|vulns-expose/i.test(corpus)) return NEGATIVE;
-  if (!/\/sqli\/|\/xss\/|SQL Injection Authentication Bypass|XSS Laboratory/i.test(corpus)) return NEGATIVE;
+  if (
+    !/\/sqli\/|\/xss\/|SQL Injection - (?:Authentication Bypass|User Enumeration|Data Extraction)|XSS - (?:Profile Injection|Persistent Comments)|XSS Laboratory/i.test(
+      corpus
+    )
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.92 : 0.89,
@@ -8126,11 +8152,23 @@ const CLIENT_WEB_SECURITY_LAB_ZH_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Educational lab disclaimer",
-    re: /教育用途|仅供教育用途/
+    re: /教育用途|仅供教育用途|仅供个人学习与教育演示/
   },
   {
     label: "Same-origin XSS CSRF curriculum",
     re: /同源与跨域|XSS|CSRF|CSP/
+  },
+  {
+    label: "XSS chapter interactive demo heading",
+    re: /跨站脚本（XSS）与防御思路|教育演示：字符串与 HTML 解析/
+  },
+  {
+    label: "CSRF chapter sync-token demo heading",
+    re: /跨站请求伪造（CSRF）与同步器令牌|教育演示：请求是否携带「同步器令牌」/
+  },
+  {
+    label: "Unsafe HTML parse demo warning",
+    re: /解析为 HTML（仅作演示|生产环境应对用户输入做转义\/CSP/i
   }
 ];
 
@@ -8142,12 +8180,17 @@ const clientSideWebSecurityLabZhEvidence: Rule = async (ctx) => {
   }
   if (hits.length < 2) return NEGATIVE;
   if (!/Web 安全实验室|web-security-lab\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const isChapter = /\/learn\/(?:xss|csrf|cookies-samesite|csp|same-origin)/i.test(pageUrl);
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    confidence: hits.length >= 4 || isChapter ? 0.9 : hits.length >= 3 ? 0.89 : 0.86,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Chinese Web Security Lab documents browser-side XSS, CSRF, CSP, and same-origin educational experiments"
+      chapter: isChapter ? pageUrl.match(/\/learn\/[^/?#]+/)?.[0] : undefined,
+      note: isChapter
+        ? "Web Security Lab chapter documents interactive XSS/CSRF educational demo with controlled unsafe HTML parsing"
+        : "Chinese Web Security Lab documents browser-side XSS, CSRF, CSP, and same-origin educational experiments"
     }
   };
 };

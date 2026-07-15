@@ -2996,8 +2996,10 @@ function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
   for (const p of [
     "/sqli/login",
     "/sqli/search",
+    "/sqli/users",
     "/sqli/blind",
     "/xss/playground",
+    "/xss/profile",
     "/xss/comments",
     "/idor/dashboard",
     "/cmdi",
@@ -3010,6 +3012,32 @@ function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VulnPortal — seed /auth/register from login shell links. */
+function extractVulnPortalAuthSeeds(html: string, pageUrl: string): string[] {
+  if (!/VULN\s*PORTAL|VulnPortal|SECURE ACCESS TERMINAL/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/auth/register", "/auth/login", "/dashboard"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/auth\/[^"'#?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -4565,6 +4593,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
   const wizerCtfSeeds = extractWizerCtfSeeds(home.body, home.finalUrl);
   const vulnExposeSeeds = extractVulnExposeSeeds(home.body, home.finalUrl);
+  const vulnPortalAuthSeeds = extractVulnPortalAuthSeeds(home.body, home.finalUrl);
   const picoctfCylabSeeds = extractPicoctfCylabSeeds(home.body, home.finalUrl);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
   const openvaultBankSeeds = extractOpenvaultBankSeeds(home.body, home.finalUrl);
@@ -4833,6 +4862,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...redTigerSeeds,
       ...wizerCtfSeeds,
       ...vulnExposeSeeds,
+      ...vulnPortalAuthSeeds,
       ...bugBountyHunterSeeds,
       ...picoctfCylabSeeds,
       ...openvaultBankSeeds,
