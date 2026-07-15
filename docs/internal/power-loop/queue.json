@@ -3442,7 +3442,32 @@
       "url": "https://hack-this-site-eta.vercel.app/recon/",
       "source": "dkyazzentwatwa/hack-this-site — passive/active recon suite with live endpoints (Vercel deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a06.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A06 Vulnerable Components module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a07.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A07 Identification & Auth Failures module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a08.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A08 Software & Data Integrity module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/",
+      "source": "dkyazzentwatwa/hack-this-site — hands-on vulnerability labs hub with automated validation (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/auth/",
+      "source": "dkyazzentwatwa/hack-this-site — login/session/JWT authentication labs (Vercel deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-15T00:05:00.000Z"
+  "updated_at": "2026-07-15T01:50:00.000Z"
 }
