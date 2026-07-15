@@ -3742,7 +3742,32 @@
       "url": "https://cridzy2.github.io/",
       "source": "cridzy2/JumpBox-Vulnerable-Webserver — OWASP Top 10 + AD trust-boundary lab landing (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/1/",
+      "source": "Hack This Site — Basic mission 1 HTML-comment password oracle (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/",
+      "source": "Hack This Site — forensic challenge series landing (disk-image CTF missions)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/",
+      "source": "Hack This Site — JavaScript exploitation challenge series landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/",
+      "source": "Hack This Site — programming/security challenge series landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/CSRF.html",
+      "source": "dxx33/WebVulnsGuide — live CSRF vulnerable form demo page (GitHub Pages OSS deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-15T15:05:00.000Z"
+  "updated_at": "2026-07-15T16:05:00.000Z"
 }
