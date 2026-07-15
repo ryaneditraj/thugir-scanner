@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T02:11:13.276Z",
+  "updated_at": "2026-07-15T02:13:41.118Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,27 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 413,
-  "total_findings": 1745,
+  "total_sites_scanned": 420,
+  "total_findings": 1781,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 116,
-  "discovery_findings": 1062,
+  "discovery_urls_added": 121,
+  "discovery_findings": 1098,
   "improvements_shipped": 464,
-  "last_run": "2026-07-15T02:11:13.276Z",
+  "last_run": "2026-07-15T02:13:41.118Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 1,
-      "probes_run": 259,
-      "note": "Cold-start pass1 gap xss,sqli,idor,auth_bypass,sensitive_data (1 finding pages_crawled=1 probes=18); wake retry merged 6/6",
+      "probes_run": 166,
+      "note": "No benchmark misses — recall stable at 6/6 (6 findings; single-pass, no wake retry needed)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,32 +55,27 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 59,
-      "skipped_48h": 3,
+      "findings": 36,
+      "skipped_48h": 0,
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (NXDOMAIN)"
       ],
-      "focus": "hack-this-site OWASP A06-A08 + labs/auth deep-links to complete Top 10 module coverage",
-      "improvements_shipped_this_run": 3
+      "focus": "hack-this-site A09/A10 + securityweb-iota module deep-links queued; backlog Wizer CTF + CTFlearn + OverTheWire natas0 scanned",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — cold-start pass1 miss signal before wake retry",
-      "hack-this-site-eta.vercel.app/labs/: 11 findings incl graphql-introspection + client-side-sql-evidence + client-side-idor-evidence",
-      "hack-this-site-eta.vercel.app/auth/: 10 findings — JWT/session lab markers + client-side-xss-evidence",
-      "hack-this-site-eta.vercel.app/owasp/a06.html: 11 findings — vulnerable-components module crawl",
-      "hack-this-site-eta.vercel.app/owasp/a07.html: 11 findings — auth-failures module crawl",
-      "hack-this-site-eta.vercel.app/owasp/a08.html: 11 findings — integrity-failures module crawl",
-      "chal8.vercel.app: 4 findings — wizer CTF backlog rescan",
-      "mnthnx64.github.io/secured-ai: ASI01 goal hijack module markers (queue seed from parallel run)",
-      "vwad.owasp.org/app/wrongsecrets: Heroku demo seed drives wrongsecrets.herokuapp.com crawl"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "ctflearn.com: 10 findings incl Web1-Web6 challenge markers + html-comment-credential-disclosure",
+      "securebank-blog.vercel.app: 6 findings incl client-side-sql-evidence + client-side-csrf-evidence",
+      "sam.wizer-ctf.com + wizer-ctf.com: 5+4 findings — Wizer developer security CTF markers",
+      "hack-health-tutorial.vercel.app: 4 findings — OWASP Top 10 tutorial SQLi lab evidence",
+      "natas0.natas.labs.overthewire.org: 4 findings — OverTheWire web-security challenge entry"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start splits categories across passes — pass1 often misconfig-only (pages_crawled=1)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp/rest.vulnweb.com",
-      "hack-this-site-eta.vercel.app root: 1 finding — Vercel Security Checkpoint may block cloud scanner on landing",
-      "capture-the-flag.labs.vercel.dev: deployment offline (DEPLOYMENT_NOT_FOUND)",
-      "juice-shop.lab.pentest-forge.com / vampi.lab.pentest-forge.com: 502 Bad Gateway"
+      "hack-this-site-eta A09/A10 + securityweb-iota sqli/csrf/idor modules: queued but not yet scanned (queue backlog)",
+      "hacking-lab.com/events: 3 findings — event listing only, challenge instances require lab enrollment"
     ]
   },
   "discovery_highlights": {
@@ -217,7 +211,7 @@
     "defendtheweb.net": 2,
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 7,
-    "securebank-blog.vercel.app": 2,
+    "securebank-blog.vercel.app": 6,
     "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 2,
     "chimera.atlascrew.dev": 10,
@@ -264,7 +258,9 @@
     "hacking-lab.com": 3,
     "www.hacksplaining.com": 4,
     "sam.wizer-ctf.com": 5,
+    "wizer-ctf.com": 4,
     "ctflearn.com": 10,
+    "natas0.natas.labs.overthewire.org": 4,
     "cylabacademy.org": 4,
     "security-trainer.vercel.app": 16,
     "openvaultbank.com/api/v1/users": 5,
