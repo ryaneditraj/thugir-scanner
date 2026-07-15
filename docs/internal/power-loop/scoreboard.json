@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T21:30:00.000Z",
+  "updated_at": "2026-07-15T22:18:04.379Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 566,
-  "total_findings": 2464,
+  "total_sites_scanned": 575,
+  "total_findings": 2523,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 191,
-  "discovery_findings": 1655,
-  "improvements_shipped": 515,
-  "last_run": "2026-07-15T21:30:00.000Z",
+  "discovery_urls_added": 196,
+  "discovery_findings": 1708,
+  "improvements_shipped": 512,
+  "last_run": "2026-07-15T22:18:04.379Z",
   "last_run_summary": {
-    "hour_utc": "21:00",
+    "hour_utc": "22:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall on pass1 (21:05 UTC validation)",
+      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall on pass1 (pages_crawled=1 probes=57)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,24 @@
     },
     "teacher_delta": "skipped — no nuclei/engine (no engine/, THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 46,
-      "focus": "auth-security-project OWASP auth demo; WebVulnsGuide OS-injection dojo; HTS basic/5-6 + playlevel/2 seed backlog",
-      "improvements_shipped_this_run": 3
+      "findings": 53,
+      "focus": "Queue head rescan (demo.testfire, brokencrystals, ginandjuice); +5 new URLs (ashkiani SQLi playground, WebVulnsGuide EvalByPass/CORS, v0 pentest module, HTS stego/1)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "auth-security-project.onrender.com: Vulnerable Auth SQLi/XSS/IDOR lab + post-login-sql-bypass (0→3 findings)",
-      "dxx33.github.io/WebVulnsGuide/OS-injection.html: COMMAND INJECTION DOJO evidence (0→4 findings)",
-      "www.hackthissite.org/missions/basic/5: login-gated hub evidence via expanded mission seeds (0→6 findings)"
+      "brokencrystals.com: 15 findings incl exposed-env-file, exposed-git-dir, graphql-introspection (queue head rescan)",
+      "reef-mcp-registry.vercel.app: secret-openai + secret-twilio + MCP supply-chain evidence (6 findings)",
+      "ginandjuice.shop: sql-error-disclosure + reflected-xss-query-param (6 findings)",
+      "bwapp.hakhub.net: phpinfo-exposed + directory-listing-enabled (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "Kontra SSTI lesson URL returns 404 — rejected until Kontra publishes server-side-template-injection module",
-      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner",
-      "juice-shop.herokuapp.com: cold-start pass1 can degrade to 3/6 before Heroku wake retries"
+      "juice-shop.herokuapp.com: shallow crawl pages_crawled=1 despite 6/6 recall; secret-resend slug absent",
+      "Queue head backlog still draining — new tail URLs (ashkiani, EvalByPass, CORS, v0 module, HTS stego/1) not yet scanned",
+      "youbrokeprod.com: incident-response trainer offline (migration)"
     ]
   },
   "discovery_highlights": {
