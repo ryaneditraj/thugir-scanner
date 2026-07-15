@@ -3667,7 +3667,32 @@
       "url": "https://domgo.at/cxss/example/5",
       "source": "Mario Heiderich domgo.at — DomGoat level 5 window.onmessage DOM XSS",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/6",
+      "source": "Mario Heiderich domgo.at — DomGoat level 6 localStorage→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/8",
+      "source": "Mario Heiderich domgo.at — DomGoat level 8 location.hash→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/9",
+      "source": "Mario Heiderich domgo.at — DomGoat level 9 hash+window.name→innerHTML DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/2/",
+      "source": "Hack This Site — realistic mission 2 web challenge entry point (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/1/",
+      "source": "Hack This Site — application security mission 1 entry point (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T12:35:00.000Z"
+  "updated_at": "2026-07-15T13:05:00.000Z"
 }
