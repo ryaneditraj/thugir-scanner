@@ -2975,6 +2975,24 @@
       "slug": "seclab-playground-priority-lab-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SecLab hub links /xss /sqli /csrf /idor; seclabPlaygroundPrioritySeeds prepends lab routes when Vercel checkpoint drops homepage lab cards; securityweb-iota.vercel.app/idor gains client-side-idor-evidence on module crawl; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:securityweb-iota.vercel.app",
+      "slug": "client-side-csrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csrf bundle No CSRF token validation + Send forged request + POST /api/csrf-vulnerable returns No CSRF protection!; securityweb-iota.vercel.app/csrf gains client-side-csrf-evidence (7→8 slugs); benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "hack-this-site-eta-hub-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hackThisSiteEtaPrioritySeeds prepends /home /cms /platform /resource /admin /backup /recon; hack-this-site-eta.vercel.app/home/ findings 0→13 incl client-side-vulnlab-academy-evidence + unauthenticated-admin-endpoint; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-cms-platform-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cms/wordpress.html meta generator WordPress 5.2.1 + /api/cms/wp-json + /xmlrpc.php + Platform Labs ASP.NET/PHP/Node cards; hack-this-site-eta.vercel.app/cms/wordpress.html gains client-side-vulnlab-cms-platform-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5327,6 +5345,21 @@
       "source": "discovery:securityweb-iota.vercel.app",
       "slug": "seclab-playground-priority-lab-seeds",
       "shipped_at": "2026-07-15T03:20:00.000Z"
+    },
+    {
+      "source": "discovery:securityweb-iota.vercel.app",
+      "slug": "seclab-csrf-markers-live-probe",
+      "shipped_at": "2026-07-15T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "hack-this-site-eta-hub-crawl-seeds",
+      "shipped_at": "2026-07-15T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-cms-platform-evidence",
+      "shipped_at": "2026-07-15T04:10:00.000Z"
     }
   ]
 }
