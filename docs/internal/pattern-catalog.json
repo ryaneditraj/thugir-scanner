@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T18:09:21.787Z",
-  "total": 356,
-  "uniqueSlugs": 356,
+  "generatedAt": "2026-07-15T19:05:41.360Z",
+  "total": 360,
+  "uniqueSlugs": 360,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 338,
+    "generic": 342,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 288,
+    "deep": 292,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 112,
+    "Broken access control": 114,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -27,7 +27,7 @@
     "Information disclosure": 25,
     "Security misconfiguration": 25,
     "Broken authentication": 21,
-    "Injection": 57,
+    "Injection": 59,
     "Cross-site scripting": 42,
     "general": 18,
     "Server-side request forgery": 4,
@@ -138,6 +138,7 @@
     "client-side-hackthissite-realistic-mission-evidence",
     "client-side-haozi-xss-challenge-evidence",
     "client-side-hts-login-gated-mission-hub-evidence",
+    "client-side-hts-playlevel-hub-evidence",
     "client-side-hts-realistic-mission-lab-evidence",
     "client-side-idor-evidence",
     "client-side-immersive-labs-evidence",
@@ -266,6 +267,9 @@
     "client-side-vulnshop-evidence",
     "client-side-vulnweb-lab-evidence",
     "client-side-vwad-bodgeit-evidence",
+    "client-side-vwad-mutillidae-evidence",
+    "client-side-vwad-nodegoat-evidence",
+    "client-side-vwad-security-shepherd-evidence",
     "client-side-vwad-wackopicko-evidence",
     "client-side-w3challs-evidence",
     "client-side-waf-workshop-evidence",
