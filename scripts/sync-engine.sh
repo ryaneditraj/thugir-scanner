@@ -32,6 +32,8 @@ rm -rf "$ENGINE"
 mkdir -p "$ENGINE"
 # Copy contents so ENGINE_ROOT is the node root (imports: tcsf, nexus, modules).
 cp -a "$TMP/repo/thugir-node/." "$ENGINE/"
+# Keep placeholder for git when engine/ is otherwise ignored.
+echo '# Synced locally — do not commit. Re-run ./scripts/sync-engine.sh to refresh.' > "$ENGINE/.gitkeep"
 
 # Record provenance for operators.
 {
