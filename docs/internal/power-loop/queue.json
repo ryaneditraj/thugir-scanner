@@ -3892,7 +3892,32 @@
       "url": "https://www.hackthissite.org/missions/playit/stego/1/",
       "source": "Hack This Site — steganography arcade mission 1 image-metadata challenge (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/xxe.html",
+      "source": "dxx33/WebVulnsGuide — XML external entity injection training lab (GitHub Pages OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/SSRF-2.html",
+      "source": "dxx33/WebVulnsGuide — server-side request forgery training lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/ActiveDirectory.html",
+      "source": "dxx33/WebVulnsGuide — Active Directory attack vectors training page (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dxx33.github.io/WebVulnsGuide/codeReview.html",
+      "source": "dxx33/WebVulnsGuide — secure source code review walkthrough lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://csp-jade.vercel.app/",
+      "source": "CSP Jade — interactive Content-Security-Policy header bypass exercises (Vercel public demo)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T22:16:00.000Z"
+  "updated_at": "2026-07-15T23:10:00.000Z"
 }
