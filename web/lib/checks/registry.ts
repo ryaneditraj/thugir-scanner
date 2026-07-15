@@ -13519,6 +13519,152 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+function vulnlabOwaspModuleCorpus(ctx: RuleContext): string {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  return `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+}
+
+// --- VulnLab Academy A06 vulnerable components (hack-this-site-eta.vercel.app/owasp/a06.html) -
+const CLIENT_VULNLAB_A06_COMPONENTS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A06 vulnerable components module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a06/i
+  },
+  {
+    label: "A06 module path oracle",
+    re: /\/owasp\/a06\.html/i
+  },
+  {
+    label: "A06 vulnerable components module",
+    re: /A06[\s-]+Vulnerable Components|A06[\s-]+Components/i
+  },
+  {
+    label: "A06 library detector lab",
+    re: /A06-001 Library Detector|Outdated jQuery and Angular are loaded for detection/i
+  },
+  {
+    label: "Outdated jQuery 1.12.4 vendor script",
+    re: /jquery-1\.12\.4|jQuery 1\.12\.4/i
+  },
+  {
+    label: "Outdated Angular 1.6.9 vendor script",
+    re: /angular-1\.6\.9|Angular 1\.6\.9/i
+  }
+];
+
+const clientSideVulnlabA06ComponentsEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A06_COMPONENTS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A06 lab loads outdated jQuery 1.12.4 and Angular 1.6.9 vendor scripts for component detection training"
+    }
+  };
+};
+
+// --- VulnLab Academy A07 auth failures (hack-this-site-eta.vercel.app/owasp/a07.html) ----
+const CLIENT_VULNLAB_A07_AUTH_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A07 authentication failures module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a07/i
+  },
+  {
+    label: "A07 module path oracle",
+    re: /\/owasp\/a07\.html/i
+  },
+  {
+    label: "A07 authentication failures module",
+    re: /A07[\s-]+Auth Failures|A07[\s-]+Authentication/i
+  },
+  {
+    label: "A07 brute force tester lab",
+    re: /A07-002 Brute Force Tester|Brute Force Tester/i
+  },
+  {
+    label: "A07 predictable password reset token",
+    re: /A07-005 Password Reset Audit|Password reset via predictable token/i
+  },
+  {
+    label: "A07 weak credential audit lab",
+    re: /A07-001 Weak Password Policy|A07-003 Session Fixation/i
+  }
+];
+
+const clientSideVulnlabA07AuthEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A07_AUTH_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A07 lab documents brute-force login testing and predictable password-reset tokens"
+    }
+  };
+};
+
+// --- VulnLab Academy A08 integrity failures (hack-this-site-eta.vercel.app/owasp/a08.html) -
+const CLIENT_VULNLAB_A08_INTEGRITY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A08 software integrity module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a08/i
+  },
+  {
+    label: "A08 module path oracle",
+    re: /\/owasp\/a08\.html/i
+  },
+  {
+    label: "A08 software integrity module",
+    re: /A08[\s-]+Integrity Failures|A08[\s-]+Integrity/i
+  },
+  {
+    label: "A08 deserialization probe lab",
+    re: /A08-001 Deserialization Probe|user_profile_pickle|Serialized payloads stored in localStorage/i
+  },
+  {
+    label: "A08 unsigned update manifest",
+    re: /A08-003 Update Mechanism Audit|Unsigned update manifest|\/api\/update/i
+  },
+  {
+    label: "A08 subresource integrity lab",
+    re: /A08-002 Subresource Integrity/i
+  }
+];
+
+const clientSideVulnlabA08IntegrityEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A08_INTEGRITY_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A08 lab stores serialized pickle payloads in localStorage and exposes unsigned /api/update manifests"
+    }
+  };
+};
+
 // --- VulnLab Academy CMS/platform lab hub (hack-this-site-eta.vercel.app/cms|platform) -
 const CLIENT_VULNLAB_CMS_PLATFORM_RES: { label: string; re: RegExp }[] = [
   {
@@ -15475,6 +15621,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVaultappLabEvidence,
   clientSideDamnVulnerableBankEvidence,
   clientSideVulnlabAcademyEvidence,
+  clientSideVulnlabA06ComponentsEvidence,
+  clientSideVulnlabA07AuthEvidence,
+  clientSideVulnlabA08IntegrityEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
   clientSideVulnlabCmsPlatformEvidence,
