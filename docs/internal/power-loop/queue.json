@@ -3492,7 +3492,32 @@
       "url": "https://securityweb-iota.vercel.app/idor",
       "source": "DaniSam-STU/security-lab — live IDOR module with object-level access bypass (GitHub README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/home/",
+      "source": "dkyazzentwatwa/hack-this-site — main testing hub + Tier 1 hands-on labs (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/",
+      "source": "dkyazzentwatwa/hack-this-site — WordPress/Drupal/Joomla CMS vulnerability targets (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/",
+      "source": "dkyazzentwatwa/hack-this-site — platform-specific vulnerability cues (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/resource/",
+      "source": "dkyazzentwatwa/hack-this-site — education resource hub and OWASP learning path (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level1.php",
+      "source": "webspoilt/vulnforge-academy — Level 1 UNION-based SQLi challenge (GitHub repo structure)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T02:10:00.000Z"
+  "updated_at": "2026-07-15T03:35:00.000Z"
 }
