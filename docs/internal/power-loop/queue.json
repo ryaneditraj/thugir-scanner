@@ -3467,7 +3467,32 @@
       "url": "https://hack-this-site-eta.vercel.app/recon/",
       "source": "dkyazzentwatwa/hack-this-site — passive/active recon suite with live endpoints (Vercel deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a09.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A09 Security Logging & Monitoring Failures module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/a10.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP A10 SSRF module (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/sqli",
+      "source": "DaniSam-STU/security-lab — live SQL injection module with vulnerable vs secure API routes (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/csrf",
+      "source": "DaniSam-STU/security-lab — live CSRF module with bank-transfer demo (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/idor",
+      "source": "DaniSam-STU/security-lab — live IDOR module with object-level access bypass (GitHub README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-15T01:50:00.000Z"
+  "updated_at": "2026-07-15T02:10:00.000Z"
 }
