@@ -726,6 +726,7 @@ const DEEP_RULES = new Set<string>([
   "redtigerBlindLoginFormEvidence",
   "redtigerSpecialChallengeEvidence",
   "clientSideVulnExposeEvidence",
+  "clientSideVulnExposeLabModuleEvidence",
   "clientSideWizerCtfEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",

@@ -57,22 +57,21 @@
       "findings": 33,
       "skipped_48h": 0,
       "focus": "Queue backlog: CTF-B Pi, VulnPortal, Urban VAmPI Railway, react2shell lab, Acunetix acuart, WebSec.fr, vuln-bank, DVWA Vercel; +5 new module URLs queued (vuln-expose users/profile, web-security-lab learn chapters)",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no gap on single pass",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no gap",
+      "vuln-expose.vercel.app/sqli/login: client-side-vuln-expose-lab-module-evidence + vibe-hardcoded-demo-credentials (6→8)",
+      "vuln-expose.vercel.app/xss/playground: dangerouslySetInnerHTML XSS lab module evidence (6→8)",
+      "hack-this-site-eta.vercel.app/platform/aspnet.html: ViewState + web.config markers + platform subpage seeds (7→13)",
       "urban-vampi-production.up.railway.app: 6 findings incl critical openapi-debug-password-exposure + IDOR",
-      "ctb-pi.vercel.app: 6 findings — North Star AGI CTF + dangerous HTML sinks",
-      "vulnbank.org: 6 findings — banking/API vuln lab markers",
-      "dvwa.vercel.app: 4 findings — classic SQLi/XSS training deploy",
-      "hiddeninvestigations.net: 4 findings — react2shell CVE lab landing (Docker-only exploit chain)",
-      "websec.fr: 3 findings — French web security challenge platform"
+      "ctb-pi.vercel.app: 6 findings — North Star AGI CTF + dangerous HTML sinks"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hiddeninvestigations.net: react2shell RCE lab requires local Docker — shallow crawl misses CVE-2025-55182 oracle",
-      "vulnforge-academy level3.php: Vercel 403 Forbidden — PHP backend paths blocked from cloud",
+      "vulnforge-academy level1.php + level2.php: Vercel 403 Forbidden — PHP backend not reachable from cloud scans",
       "vuln-expose users/profile + web-security-lab learn chapters: queued at tail — backlog",
+      "hiddeninvestigations.net: react2shell RCE lab requires local Docker — shallow crawl misses CVE-2025-55182 oracle",
       "testhtml5.vulnweb.com: DNS NXDOMAIN — use testasp/rest.vulnweb.com"
     ]
   },
@@ -286,6 +285,9 @@
     "vwad.owasp.org/app/webgoat": 6,
     "securityweb-iota.vercel.app/csrf": 8,
     "hack-this-site-eta.vercel.app/home": 13,
-    "hack-this-site-eta.vercel.app/cms/wordpress.html": 13
+    "hack-this-site-eta.vercel.app/cms/wordpress.html": 13,
+    "vuln-expose.vercel.app/sqli/login": 8,
+    "vuln-expose.vercel.app/xss/playground": 8,
+    "hack-this-site-eta.vercel.app/platform/aspnet.html": 13
   }
 }

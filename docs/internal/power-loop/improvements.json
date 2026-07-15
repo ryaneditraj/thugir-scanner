@@ -2993,6 +2993,24 @@
       "slug": "client-side-vulnlab-cms-platform-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cms/wordpress.html meta generator WordPress 5.2.1 + /api/cms/wp-json + /xmlrpc.php + Platform Labs ASP.NET/PHP/Node cards; hack-this-site-eta.vercel.app/cms/wordpress.html gains client-side-vulnlab-cms-platform-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "client-side-vuln-expose-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /sqli/login LABORATORIO DE BYPASS + UNION SELECT username,password; /xss/playground ENTORNO DE EXPLOTACIÓN XSS + dangerouslySetInnerHTML mode; vuln-expose module URLs findings 6→8; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vibe-hardcoded-demo-credentials",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /sqli/login inline HTML font-mono admin / admin123 test users; HARDCODED_CRED_RES lab-displayed pattern; vuln-expose/sqli/login gains vibe-hardcoded-demo-credentials; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-cms-platform-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /platform/aspnet.html ViewState Analyzer + /backup/web.config.bak + hackThisSiteEtaPrioritySeeds aspnet/node/java/python subpages; platform/aspnet.html findings 7→13 incl client-side-vulnlab-cms-platform-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5360,6 +5378,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "client-side-vulnlab-cms-platform-evidence",
       "shipped_at": "2026-07-15T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "client-side-vuln-expose-lab-module-evidence",
+      "shipped_at": "2026-07-15T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "lab-displayed-admin-credentials",
+      "shipped_at": "2026-07-15T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-subpage-crawl-markers",
+      "shipped_at": "2026-07-15T05:15:00.000Z"
     }
   ]
 }

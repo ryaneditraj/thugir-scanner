@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T04:04:51.001Z",
-  "total": 328,
-  "uniqueSlugs": 328,
+  "generatedAt": "2026-07-15T05:20:05.780Z",
+  "total": 329,
+  "uniqueSlugs": 329,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 310,
+    "generic": 311,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 260,
+    "deep": 261,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 25,
     "Security misconfiguration": 23,
     "Broken authentication": 20,
-    "Injection": 53,
+    "Injection": 54,
     "Cross-site scripting": 29,
     "general": 18,
     "Server-side request forgery": 4,
@@ -239,6 +239,7 @@
     "client-side-vaultapp-lab-evidence",
     "client-side-vuln-auth-portal-evidence",
     "client-side-vuln-expose-evidence",
+    "client-side-vuln-expose-lab-module-evidence",
     "client-side-vulnerable-qa-lab-evidence",
     "client-side-vulnerable-web-site-evidence",
     "client-side-vulnerableapp-evidence",
