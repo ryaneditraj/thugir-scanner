@@ -37,9 +37,10 @@ services/thugir-agent/.thugir-config/
 services/thugir-agent/**/__pycache__/
 
 
-# ---- engine submodule build artifacts (if vendored at engine/) ----
-engine/**/__pycache__/
-engine/**/*.pyc
+# ---- TCSF engine (scripts/sync-engine.sh → ./engine) ----
+# Ignore synced tree; keep the placeholder tracked.
+engine/*
+!engine/.gitkeep
 
 # ---- OS / editor ----
 .DS_Store
