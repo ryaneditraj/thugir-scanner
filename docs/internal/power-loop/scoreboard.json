@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T15:07:34.945Z",
+  "updated_at": "2026-07-15T16:07:56.289Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 522,
-  "total_findings": 2257,
+  "total_sites_scanned": 531,
+  "total_findings": 2295,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 171,
-  "discovery_findings": 1473,
+  "discovery_urls_added": 176,
+  "discovery_findings": 1504,
   "improvements_shipped": 503,
-  "last_run": "2026-07-15T15:07:34.945Z",
+  "last_run": "2026-07-15T16:07:56.289Z",
   "last_run_summary": {
-    "hour_utc": "15:00",
+    "hour_utc": "16:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -52,21 +52,22 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 37,
-      "focus": "Queue head drain: webexp05, idor-challenge, WebGoat mirror, Duck Store, DVAI Bank, Pentest-Ground DVWA+API, CTF hub",
+      "findings": 31,
+      "skipped_48h": "Queue head (hack-this-site-eta modules, gitagent, vwad grpc-goat) still within 48h window",
+      "focus": "48h-rescan batch: owasp-juice.shop, xxe-lab, nextjs-cve-hackerone, web-pentest-playground, cookiejar-lab, DVGA blackhatgraphql, finbot-ctf-demo, hack-yourself-first",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "duck-store.escape.tech: secret-openai + idor-sequential-ids + vibe-openapi-docs-exposed (7 findings)",
-      "pentest-ground.com:9000: server-side-eval-evidence critical + OpenAPI exposed (4 findings)",
-      "webexp05.vercel.app: SQLi + XSS + JWT alg:none + path-traversal client evidence (7 findings)",
-      "pentest-ground.com:4280: phpinfo-exposed + reflected-xss-query-param (5 findings)",
-      "hack-this-site-eta.vercel.app/owasp/a01-a03: VulnLab module evidence rules shipped (parallel engine run)"
+      "hack-yourself-first.azurewebsites.net: 7 findings — robots-sensitive-paths + insecure-cookies + client-side lab evidence",
+      "nextjs-cve-hackerone.vercel.app: client-side-react-rsc-cve-evidence critical",
+      "xxe-lab.vercel.app: client-side-xxe-evidence + dangerous-html-sinks (4 findings)",
+      "owasp-juice.shop: client-side-juice-shop-project-evidence + pwning companion oracle (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "Queue tail backlog not reached: vwad wackopicko/bodgeit, HTS realistic/4-5, Kontra SSTI, domgo sinks/10",
+      "Queue tail backlog not reached: HTS basic/1+forensic/js/prog (new), vwad wackopicko/bodgeit, HTS realistic/4-5, Kontra SSTI, domgo sinks/10",
+      "owasp-finbot-ctf-demo.onrender.com: shallow crawl (pages_crawled=1 probes=3) — agentic chains need auth namespace",
       "secret-resend slug absent on juice-shop — sensitive_data mapped via vibe-unauthenticated-api-routes only"
     ]
   },
