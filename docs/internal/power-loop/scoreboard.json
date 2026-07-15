@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 469,
-  "total_findings": 2009,
+  "total_sites_scanned": 477,
+  "total_findings": 2044,
   "critical_findings": 24,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 146,
   "discovery_findings": 1293,
-  "improvements_shipped": 479,
+  "improvements_shipped": 482,
   "last_run": "2026-07-15T07:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "07:00",
@@ -56,7 +56,8 @@
       "urls_scanned": 8,
       "findings": 35,
       "skipped_48h": 0,
-      "focus": "Queue backlog: bugbountyhunter ch9-11, oss-oopssec-store roadmap, HackLab, VulnShop",
+      "focus": "Queue backlog + engine improvements: bugbountyhunter ch9-11, oss-oopssec-store, HackLab, VulnShop; vuln-expose cmdi/idor/network-tools path modules",
+      "improvements_shipped_this_run": 3,
       "new_urls": [
         "appsecmaster.net/labs/cross-site-scripting-xss",
         "appsecmaster.net/labs/sql-injection",
@@ -69,14 +70,14 @@
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
       "koadt.github.io/oss-oopssec-store: 7 findings — CTF e-commerce roadmap + API surface",
       "ashimkoirala.github.io/HackLab: 6 findings — browser OWASP Top 10 sandbox",
-      "vulnshop.vercel.app: 4 findings — OWASP e-commerce demo panels",
-      "bugbountyhunter.com/challenge?id=9-11: 2 findings each — challenge platform markers"
+      "vuln-expose.vercel.app/network-tools: Herramienta de Ping SSRF lab markers (8→9 findings)",
+      "thecyberpunker.com/labs/insecureship: dedicated InsecureShip API security lab slug (5→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop pass1 cold-start: sqli,sensitive_data gap before wake retry (pages_crawled=6 probes=184)",
-      "thecyberpunker insecureship + progphp + seclab/xss + appsecmaster sqli/idor: still in queue tail backlog",
-      "xss.progphp.com: parking page from cloud — may be DNS/parking not live XSS challenges",
+      "xss.progphp.com: domain parked — remove from queue",
+      "thecyberpunker.com/labs/insecureship: live API is Docker-only — blog writeup only from cloud scans",
       "new discovery URLs (appsecmaster XSS/SQLi hubs, domgo levels, ist-edu-bd login): queued at tail"
     ]
   },
@@ -127,13 +128,13 @@
     "playground.fabraix.com": 2,
     "dvwa.vercel.app": 6,
     "vulnshop.vercel.app": 4,
-    "ashimkoirala.github.io/HackLab": 5,
+    "ashimkoirala.github.io/HackLab": 6,
     "vulnweb.netlify.app": 3,
     "web-pentest-playground.onrender.com": 3,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "tempehs.github.io/The_Unsecure_PWA": 3,
     "yusufarbc.github.io/apigoat": 3,
-    "koadt.github.io/oss-oopssec-store": 2,
+    "koadt.github.io/oss-oopssec-store": 7,
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 3,
@@ -300,6 +301,9 @@
     "vuln-expose.vercel.app/sqli/users": 8,
     "vuln-expose.vercel.app/xss/profile": 8,
     "vuln-expose.vercel.app/xss/comments": 8,
-    "web-security-lab.vercel.app/learn/xss": 4
+    "web-security-lab.vercel.app/learn/xss": 4,
+    "vuln-expose.vercel.app/network-tools": 9,
+    "thecyberpunker.com/labs/insecureship": 6,
+    "web-security-lab.vercel.app/learn/csrf": 5
   }
 }
