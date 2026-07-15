@@ -1205,6 +1205,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-webvulnsguide-ssti-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Educational SSTI lab disclosed",
+    description:
+      "WebVulnsGuide SSTI Fun House and similar training pages document server-side template injection requirements, engine evaluation oracles, and unsafe template embedding patterns.",
+    impactOneline:
+      "Public SSTI dojos teach template-engine evaluation tricks attackers replay on apps that embed user input in server templates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebVulnsGuideSstiLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SSTI dojos are intentional training — never embed raw user input in server-side templates in production.",
+      steps: [
+        "Use logic-less templates or strict auto-escaping for all user-controlled values.",
+        "Sandbox template engines and disable dangerous helpers (eval, import, attr).",
+        "Host SSTI labs only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror WebVulnsGuide-style SSTI training pages. Show how to fix template embedding and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-csrf-evidence",
     platform: "generic",
     category: "Broken access control",

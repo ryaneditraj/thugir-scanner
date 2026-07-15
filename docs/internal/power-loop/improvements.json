@@ -3281,6 +3281,24 @@
       "slug": "hts-mission-seed-basic-5-6-playlevel-2",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds now seeds /missions/basic/2-6 and /playlevel/2; /missions/basic/5 returns Login Required + client-side-hts-login-gated-mission-hub-evidence; findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "webvulnsguide-sqli-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SQL Injection Playground + UNSAFE - Direct string concatenation (VULNERABLE) + WebVulnsGuide/SQLi.html path oracle; CLIENT_SQL_RES extended; dxx33.github.io/WebVulnsGuide/SQLi.html findings 0→3 incl client-side-sql-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "webvulnsguide-csrf-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CSRF Vulnerability Lab + No CSRF tokens + Launch CSRF Attack on /CSRF.html; CLIENT_CSRF_RES extended; dxx33.github.io/WebVulnsGuide/CSRF.html findings 0→5 incl client-side-csrf-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-ssti-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SSTI Fun House + Server-Side Template Injection + Requirements for SSTI Exploitation on /SSTI.html; clientSideWebVulnsGuideSstiLabEvidence + extractWebVulnsGuideLabSeeds /SSTI.html; dxx33.github.io/WebVulnsGuide/SSTI.html findings 0→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5843,6 +5861,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-basic-5-6-playlevel-2",
       "shipped_at": "2026-07-15T21:30:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "webvulnsguide-sqli-lab-markers",
+      "shipped_at": "2026-07-15T22:30:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "webvulnsguide-csrf-lab-markers",
+      "shipped_at": "2026-07-15T22:30:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-ssti-lab-evidence",
+      "shipped_at": "2026-07-15T22:30:00.000Z"
     }
   ]
 }
