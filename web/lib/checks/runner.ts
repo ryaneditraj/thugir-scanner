@@ -715,8 +715,10 @@ const DEEP_RULES = new Set<string>([
   "domgoAjaxDomXssEvidence",
   "domgoWebsocketDomXssEvidence",
   "domgoQueryParamDomXssEvidence",
+  "domgoSinksCatalogDomXssEvidence",
   "clientSideBenstaffordXssDemoEvidence",
   "clientSideHackThisSiteRealisticMissionEvidence",
+  "clientSideHtsRealisticMissionLabEvidence",
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
   "clientSideWebsecChallengeEvidence",
@@ -862,6 +864,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideAtlasCrewEdgeProtectionEvidence",
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
+  "clientSideVwadWackopickoEvidence",
+  "clientSideVwadBodgeitEvidence",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -1096,7 +1100,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (const path of ["/cxss/sinks", "/cxss/example/1", "/cxss/example/2", "/cxss/example/3"]) {
+  for (const path of ["/cxss/sinks", "/cxss/example/10", "/cxss/example/1", "/cxss/example/2", "/cxss/example/3"]) {
     try {
       out.add(new URL(path, pageUrl).toString());
     } catch {
@@ -1327,12 +1331,49 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
+  for (const n of [1, 2, 3, 4, 5]) {
+    try {
+      out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   let m: RegExpExecArray | null;
   while ((m = HACKTHISITE_MISSION_RE.exec(html))) {
     try {
       out.add(new URL(m[1], origin).toString());
     } catch {
       /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** HTS Realistic mission instances — Fischer products.php and frameset child pages. */
+function extractHtsRealisticMissionSeeds(html: string, pageUrl: string): string[] {
+  if (!/hackthissite\.org\/missions\/realistic/i.test(pageUrl)) return [];
+  const out = new Set<string>();
+  if (/Fischer(?:'|&#x27;)s Animal Products|products\.php/i.test(html)) {
+    for (const cat of [1, 2]) {
+      try {
+        out.add(new URL(`products.php?category=${cat}`, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+    try {
+      out.add(new URL("addemail.php", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (/Compu-global-Hyper-Mega-Net|frameset/i.test(html)) {
+    for (const frame of ["top.htm", "menu.htm", "main.htm"]) {
+      try {
+        out.add(new URL(frame, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   return [...out];
@@ -4804,6 +4845,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secureflagOwaspSeeds = extractSecureflagOwaspSeeds(home.body, origin);
   const kontraTrainingSeeds = extractKontraTrainingSeeds(home.body, origin);
   const hackThisSiteSeeds = extractHackThisSiteMissionSeeds(home.body, origin);
+  const htsRealisticMissionSeeds = extractHtsRealisticMissionSeeds(home.body, home.finalUrl);
   const wrongSecretsSeeds = extractWrongSecretsChallengeSeeds(home.body, origin);
   const sectrainerSeeds = extractSectrainerSpaSeeds(
     home.body,
@@ -4932,6 +4974,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
       ? ["https://wrongsecrets.herokuapp.com/"]
       : [];
+  const vwadScannerBenchPrioritySeeds =
+    /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store)/i.test(home.finalUrl)
+      ? [
+          "https://vwad.owasp.org/app/wackopicko/",
+          "https://vwad.owasp.org/app/bodgeit-store/"
+        ]
+      : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
@@ -4940,6 +4989,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
       ...vwadWebgoatPrioritySeeds,
+      ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
       ...ginAndJuicePrioritySeeds,
@@ -5074,6 +5124,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secureflagOwaspSeeds,
       ...kontraTrainingSeeds,
       ...hackThisSiteSeeds,
+      ...htsRealisticMissionSeeds,
       ...wrongSecretsSeeds,
       ...sectrainerSeeds,
       ...dvwaSeeds,

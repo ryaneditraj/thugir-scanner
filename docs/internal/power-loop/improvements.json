@@ -3173,6 +3173,30 @@
       "slug": "client-side-vulnlab-a03-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a03.html A03-006 Reflected XSS + A03-001 SQLi Error + A03-005 /api/ping command injection; hack-this-site-eta.vercel.app/owasp/a03.html findings 11→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-sinks-catalog-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/sinks execPayload + eval() + HTMLElement.innerHTML + document.write/writeln sink catalog; domgo.at/cxss/sinks findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-wackopicko-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WackoPicko VWAD meta Why Johnny Can't Pentest + Contains known vulns: XSS, SQLi, directory traversal; vwad.owasp.org/app/wackopicko findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-bodgeit-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BodgeIt Store VWAD meta Includes XSS, SQL injection, CSRF + scoring page for challenges; vwad.owasp.org/app/bodgeit-store findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-realistic-mission-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/4 Fischer's Animal Products products.php?category= + /missions/realistic/5 Compu-global-Hyper-Mega-Net frameset; realistic/4 findings 4→5, realistic/5 findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5690,6 +5714,26 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "client-side-vulnlab-a03-injection-evidence",
       "shipped_at": "2026-07-15T15:35:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-sinks-catalog-dom-xss-evidence",
+      "shipped_at": "2026-07-15T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-wackopicko-evidence",
+      "shipped_at": "2026-07-15T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-bodgeit-evidence",
+      "shipped_at": "2026-07-15T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-realistic-mission-lab-evidence",
+      "shipped_at": "2026-07-15T16:15:00.000Z"
     }
   ]
 }
