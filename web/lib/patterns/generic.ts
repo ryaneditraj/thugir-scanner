@@ -2269,6 +2269,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vuln-expose-lab-module-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite SQL/XSS lab module with inline exploit payloads",
+    description:
+      "VulnSite module pages (/sqli/login, /xss/playground) publish authentication-bypass SQL payloads, UNION SELECT examples, and dangerouslySetInnerHTML XSS lab modes with stored/reflected/DOM vectors.",
+    impactOneline:
+      "Public VulnSite lab modules document live exploit techniques and test credentials that accelerate attacker training on real vulnerability classes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnExposeLabModuleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnSite lab modules are intentional training — never copy inline exploit patterns to production.",
+      steps: [
+        "Run VulnSite SQLi/XSS modules only on isolated training infrastructure.",
+        "Remove displayed test credentials from any non-training deployment.",
+        "Use parameterized queries and output encoding in production auth and comment flows."
+      ]
+    },
+    fixPrompt:
+      "We host VulnSite SQL auth-bypass and XSS playground modules. Show how to isolate lab payloads from production login and comment rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-wizer-ctf-evidence",
     platform: "generic",
     category: "Injection",
