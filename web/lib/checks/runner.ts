@@ -720,6 +720,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackThisSiteRealisticMissionEvidence",
   "clientSideHtsLoginGatedMissionHubEvidence",
   "clientSideHtsRealisticMissionLabEvidence",
+  "clientSideHtsPlaylevelHubEvidence",
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
   "clientSideWebsecChallengeEvidence",
@@ -867,6 +868,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideOwaspVwadEvidence",
   "clientSideVwadWackopickoEvidence",
   "clientSideVwadBodgeitEvidence",
+  "clientSideVwadSecurityShepherdEvidence",
+  "clientSideVwadMutillidaeEvidence",
+  "clientSideVwadNodegoatEvidence",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -1331,7 +1335,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/programming/",
     "/missions/forensic/",
     "/missions/playit/extbasic/0/",
-    "/missions/playit/stego/0/"
+    "/missions/playit/stego/0/",
+    "/playlevel/1/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1357,10 +1362,24 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
   return [...out];
 }
 
-/** HTS Realistic mission instances — Fischer products.php and frameset child pages. */
+/** HTS Realistic mission instances — vote SQLi, defacement, Fischer products.php, frameset child pages. */
 function extractHtsRealisticMissionSeeds(html: string, pageUrl: string): string[] {
   if (!/hackthissite\.org\/missions\/realistic/i.test(pageUrl)) return [];
   const out = new Set<string>();
+  if (/uncle arnold|action\s*=\s*["']v\.php/i.test(html)) {
+    try {
+      out.add(new URL("v.php", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (/AMERICAN NAZI PARTY|update\.php/i.test(html)) {
+    try {
+      out.add(new URL("update.php", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   if (/Fischer(?:'|&#x27;)s Animal Products|products\.php/i.test(html)) {
     for (const cat of [1, 2]) {
       try {
@@ -4236,7 +4255,10 @@ function extractOwaspVwadSeeds(html: string, pageUrl: string): string[] {
     "/app/crapi/",
     "/app/bwapp/",
     "/app/damn-vulnerable-graphql-application-dvga/",
-    "/app/pixi/"
+    "/app/pixi/",
+    "/app/security-shepherd/",
+    "/app/mutillidae/",
+    "/app/nodegoat/"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());

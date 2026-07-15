@@ -8719,26 +8719,83 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- HackThisSite Realistic mission instance labs (Fischer / frameset challenges) -----
+// --- HackThisSite Realistic mission instance labs (vote SQLi / defacement / frameset) -----
 const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/hackthissite\.org\/missions\/realistic\/\d+/i.test(pageUrl)) return NEGATIVE;
   const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const uncleArnold =
+    /uncle arnold/i.test(corpus) &&
+    /action\s*=\s*["']v\.php/i.test(corpus) &&
+    /name\s*=\s*["']vote/i.test(corpus);
+  const naziParty =
+    /AMERICAN NAZI PARTY/i.test(corpus) &&
+    /update\.php/i.test(corpus);
+  const defacement =
+    /THIS PAGE HAS BEEN H4XX0R3D|H4XX0R3D/i.test(corpus) &&
+    /(?:Insane Krypt Skiddies|h4x0r3d)/i.test(corpus);
   const fischer =
     /Fischer(?:'|&#x27;)s Animal Products/i.test(corpus) &&
     /products\.php\?category=/i.test(corpus);
   const framesLab =
     /Compu-global-Hyper-Mega-Net/i.test(corpus) &&
     /(?:frameset|top\.htm|menu\.htm|main\.htm)/i.test(corpus);
-  if (!fischer && !framesLab) return NEGATIVE;
+  if (!uncleArnold && !naziParty && !defacement && !fischer && !framesLab) return NEGATIVE;
+  const note = uncleArnold
+    ? "HTS Realistic mission 1 exposes Uncle Arnold band-review vote.php GET parameter SQLi oracle"
+    : naziParty
+      ? "HTS Realistic mission 2 exposes American Nazi Party bulletin board with update.php posting endpoint"
+      : defacement
+        ? "HTS Realistic mission 3 exposes defaced political page (Insane Krypt Skiddies h4x0r3d challenge)"
+        : fischer
+          ? "HTS Realistic mission exposes Fischer's Animal Products products.php category SQLi lab + addemail.php mailing list"
+          : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,
     evidence: {
       page: pageUrl,
-      note: fischer
-        ? "HTS Realistic mission exposes Fischer's Animal Products products.php category SQLi lab + addemail.php mailing list"
-        : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)"
+      note
+    }
+  };
+};
+
+// --- HackThisSite playlevel arcade wargame hub (login-gated) ---------------------------
+const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/hackthissite\.org\/playlevel(?:\/\d+)?\/?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  if (!/Login Required|You must be logged in to use this page/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "playlevel arcade hub URL",
+      re: /\/playlevel(?:\/\d+)?\/?/i
+    },
+    {
+      label: "Login required for arcade access",
+      re: /Login Required|You must be logged in to use this page/i
+    },
+    {
+      label: "HTS ethical hacking training ground",
+      re: /HackThisSite\.org is a free, safe and legal training ground/i
+    },
+    {
+      label: "Arcade wargame challenge nav",
+      re: /href\s*=\s*["']\/playlevel\/|wargame|arcade/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HTS playlevel arcade hub is login-gated — documents browser-based wargame challenge levels behind authenticated access"
     }
   };
 };
@@ -15739,6 +15796,123 @@ const clientSideVwadBodgeitEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD Security Shepherd training platform listing -----------------------------------
+const clientSideVwadSecurityShepherdEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/security-shepherd/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Security Shepherd VWAD listing",
+      re: /Security Shepherd[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Web and mobile security training",
+      re: /Web and mobile application security training platform/i
+    },
+    {
+      label: "Lessons followed by challenges",
+      re: /security risk concepts in lessons followed by challenges/i
+    },
+    {
+      label: "Security awareness mission",
+      re: /foster and improve security awareness/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Security Shepherd VWAD listing documents staged XSS, injection, and access-control challenge lessons"
+    }
+  };
+};
+
+// --- VWAD Mutillidae web hacking lab listing --------------------------------------------
+const clientSideVwadMutillidaeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/mutillidae/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Mutillidae VWAD listing",
+      re: /Mutillidae[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Deliberately vulnerable web app",
+      re: /deliberately vulnerable web application/i
+    },
+    {
+      label: "Web-security training target",
+      re: /target for web-security training/i
+    },
+    {
+      label: "Web hacking environment",
+      re: /web hacking environment for labs/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Mutillidae VWAD listing documents OWASP Top 10 SQLi, XSS, and command-injection labs for web-security training"
+    }
+  };
+};
+
+// --- VWAD NodeGoat Node.js OWASP Top 10 lab listing -----------------------------------
+const clientSideVwadNodegoatEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/nodegoat/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "NodeGoat VWAD listing",
+      re: /NodeGoat[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Node.js OWASP Top 10 training",
+      re: /OWASP Top 10 security risks apply to web applications developed using Node\.js/i
+    },
+    {
+      label: "Tutorial page included",
+      re: /Includes a tutorial page/i
+    },
+    {
+      label: "Insecure Node.js app environment",
+      re: /learn how OWASP Top 10|insecure.*Node/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "NodeGoat VWAD listing documents Node.js OWASP Top 10 injection and access-control training labs"
+    }
+  };
+};
+
 const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OWASP_VWAD_RES) {
@@ -15911,6 +16085,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackThisSiteRealisticMissionEvidence,
   clientSideHtsLoginGatedMissionHubEvidence,
   clientSideHtsRealisticMissionLabEvidence,
+  clientSideHtsPlaylevelHubEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,
@@ -16017,6 +16192,9 @@ export const RULES: Record<string, Rule> = {
   clientSideOwaspVwadEvidence,
   clientSideVwadWackopickoEvidence,
   clientSideVwadBodgeitEvidence,
+  clientSideVwadSecurityShepherdEvidence,
+  clientSideVwadMutillidaeEvidence,
+  clientSideVwadNodegoatEvidence,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,

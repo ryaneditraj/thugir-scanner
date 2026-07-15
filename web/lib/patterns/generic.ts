@@ -7969,7 +7969,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "HackThisSite Realistic mission instance lab disclosed",
     description:
-      "HTS Realistic mission pages expose Fischer's Animal Products products.php SQLi labs or Compu-global-Hyper-Mega-Net frameset challenges.",
+      "HTS Realistic mission pages expose Uncle Arnold vote.php SQLi, defacement challenges, Fischer products.php SQLi labs, or Compu-global-Hyper-Mega-Net frameset challenges.",
     impactOneline:
       "Public realistic mission instances expose SQLi and legacy web challenge surfaces without authentication.",
     detectorKind: "rule_ref",
@@ -8011,6 +8011,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror HackThisSite login-gated mission hubs. Show how to auth-gate challenge content on private wargame deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hts-playlevel-hub-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackThisSite playlevel arcade wargame hub disclosed",
+    description:
+      "HTS playlevel arcade hubs return Login Required — documenting browser-based wargame challenge levels behind authenticated access.",
+    impactOneline:
+      "Public playlevel hub gates confirm HTS hosts arcade-style wargame challenges requiring accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHtsPlaylevelHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate arcade wargame instances; hub listing alone is low risk but signals training attack surface.",
+      steps: [
+        "Require HTS login before serving playlevel challenge content.",
+        "Never copy arcade wargame vulnerability patterns into production code.",
+        "Rate-limit unauthenticated probing of playlevel hub endpoints."
+      ]
+    },
+    fixPrompt:
+      "We mirror HackThisSite playlevel arcade hubs. Show how to auth-gate wargame challenge content on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-security-shepherd-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP Security Shepherd VWAD lab listing disclosed",
+    description:
+      "OWASP VWAD Security Shepherd listing documents staged web and mobile application security lessons followed by challenge modules.",
+    impactOneline:
+      "Public VWAD Security Shepherd catalog exposes XSS, injection, and access-control training lab metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadSecurityShepherdEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Security Shepherd is intentional training — isolate lab instances from production networks.",
+      steps: [
+        "Require authentication before serving challenge modules on private deployments.",
+        "Do not expose Security Shepherd admin or lesson routes to the public internet without access controls.",
+        "Run Shepherd labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Security Shepherd instance is listed in OWASP VWAD. Show how to isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-mutillidae-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP Mutillidae VWAD lab listing disclosed",
+    description:
+      "OWASP VWAD Mutillidae listing documents deliberately vulnerable web hacking environment for SQLi, XSS, and command-injection training.",
+    impactOneline:
+      "Public VWAD Mutillidae catalog exposes OWASP Top 10 web-security training lab metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadMutillidaeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy Mutillidae only on isolated lab VMs.",
+        "Require authentication when exposing training apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Mutillidae instance is listed in OWASP VWAD. Show how to isolate web hacking labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-nodegoat-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP NodeGoat VWAD lab listing disclosed",
+    description:
+      "OWASP VWAD NodeGoat listing documents Node.js OWASP Top 10 training environment with tutorial pages for injection and access-control labs.",
+    impactOneline:
+      "Public VWAD NodeGoat catalog exposes insecure Node.js application training lab metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadNodegoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy NodeGoat only on isolated lab infrastructure.",
+        "Require authentication when exposing Node.js training apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat instance is listed in OWASP VWAD. Show how to isolate Node.js training labs from production.",
     version: 1,
     enabled: true
   }
