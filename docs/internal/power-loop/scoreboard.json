@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-15T12:33:41.385Z",
+  "updated_at": "2026-07-15T12:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei and thugir-node unavailable (no engine/, THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 156,
   "discovery_findings": 1362,
-  "improvements_shipped": 491,
-  "last_run": "2026-07-15T12:33:41.385Z",
+  "improvements_shipped": 494,
+  "last_run": "2026-07-15T12:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "12:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 cold-start gap sqli,auth_bypass,sensitive_data (3 findings, pages_crawled=1); Heroku wake retry merged to 7 findings / 6/6 recall",
+      "note": "No benchmark misses — pass1 cold-start gap resolved on Heroku wake retry (7 findings, 6/6 recall)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,21 +54,19 @@
       "urls_scanned": 8,
       "findings": 35,
       "skipped_48h": "queue head backlog (cyberdesserts cookiejar-lab, hacksplaining xml-bombs/subdomain-squatting/toxic-deps/unencrypted-comm/xssi, WebVulnsGuide, frontend-security-examples)",
-      "focus": "HTS application/realistic missions, benstafford attack1.html, DomGoat levels 4–5 queued for next pass",
-      "improvements_shipped_this_run": 0
+      "focus": "DomGoat /cxss exercises 3, 4, 10 — AJAX, WebSocket, and query-param DOM XSS sources",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry — pass1 gap sqli,auth_bypass,sensitive_data",
-      "dxx33.github.io/WebVulnsGuide: 8 findings — interactive OWASP vulnerability guide",
-      "akbarbashakm.github.io/frontend-security-examples: 5 findings — 8-module XSS/CSRF/CSP/auth lab",
-      "cyberdesserts.github.io/cookiejar-lab: 4 findings — CSRF/session cookie security demo",
-      "www.hacksplaining.com/lessons/xml-bombs: 4 findings — XXE/XML bomb training lesson"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry",
+      "domgo.at/cxss/example/3: XHR JSON response → msgboard.innerHTML AJAX DOM XSS lab (3→4 findings)",
+      "domgo.at/cxss/example/4: WebSocket onmessage → msgboard.innerHTML real-time DOM XSS lab (3→4 findings)",
+      "domgo.at/cxss/example/10: location.href query params + window.name → innerHTML URL DOM XSS lab (3→4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku 503 cold-start splits categories across passes — wake retry required (~28 min scan budget)",
-      "xss.page: Cloudflare 403 blocks scanner UA on root and tools paths",
-      "new queue tail (HTS application, benstafford attack1, domgo 4/5) not reached — 48h skip consumed queue head budget"
+      "juice-shop.herokuapp.com: Heroku cold-start splits categories across passes — wake retry required",
+      "xss.page: Cloudflare 403 blocks scanner UA on root and tools paths"
     ]
   },
   "discovery_highlights": {
@@ -308,6 +306,9 @@
     "www.bugbountyhunter.com/challenge?id=12": 2,
     "appsecmaster.net/labs/cross-site-scripting-xss": 8,
     "www.hackthissite.org/missions/realistic": 6,
-    "domgo.at/cxss/example/2": 4
+    "domgo.at/cxss/example/2": 4,
+    "domgo.at/cxss/example/3": 4,
+    "domgo.at/cxss/example/4": 4,
+    "domgo.at/cxss/example/10": 4
   }
 }

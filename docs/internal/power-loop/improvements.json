@@ -3101,6 +3101,24 @@
       "slug": "domgo-localstorage-dom-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/6 localStorage.getItem('payload') → msgboard.innerHTML; domgo.at/cxss/example/6 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-ajax-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/3 xhr.responseText JSON.parse → msgboard.innerHTML; domgo.at/cxss/example/3 findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-websocket-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/4 ws.onmessage → msgboard.innerHTML; domgo.at/cxss/example/4 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-query-param-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/10 location.href.split('?') + window.name → msgboard.innerHTML; domgo.at/cxss/example/10 findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5558,6 +5576,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-localstorage-dom-xss-evidence",
       "shipped_at": "2026-07-15T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-ajax-dom-xss-evidence",
+      "shipped_at": "2026-07-15T12:35:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-websocket-dom-xss-evidence",
+      "shipped_at": "2026-07-15T12:35:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-query-param-dom-xss-evidence",
+      "shipped_at": "2026-07-15T12:35:00.000Z"
     }
   ]
 }
