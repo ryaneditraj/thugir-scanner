@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T06:04:04.499Z",
-  "total": 329,
-  "uniqueSlugs": 329,
+  "generatedAt": "2026-07-15T07:28:13.782Z",
+  "total": 330,
+  "uniqueSlugs": 330,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 311,
+    "generic": 312,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 261,
+    "deep": 262,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 105,
+    "Broken access control": 106,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 1,
@@ -94,6 +94,7 @@
     "client-side-cyber-scavenger-hunt-evidence",
     "client-side-cyberdefenders-evidence",
     "client-side-cyberdrill-evidence",
+    "client-side-cyberpunker-insecureship-evidence",
     "client-side-cybersheild-lab-evidence",
     "client-side-cylab-academy-evidence",
     "client-side-damn-vulnerable-bank-evidence",

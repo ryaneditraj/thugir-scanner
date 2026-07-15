@@ -3029,6 +3029,24 @@
       "slug": "vuln-portal-auth-subpath-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: login HTML href=/auth/register + REQUEST ACCESS role selection; extractVulnPortalAuthSeeds seeds /auth/register; vuln-portal pages_crawled 1→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-idor-blind-network-modules",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cmdi LABORATORIO DE COMMAND INJECTION + /idor/dashboard IDOR & Privilege Escalation Lab + /sqli/blind boolean/time-based banners; path-aware clientSideVulnExposeLabModuleEvidence uses home.finalUrl; cmdi title now module-specific; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-network-tools-ssrf-ping-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /network-tools Herramienta de Ping + ICMP Echo Request; CLIENT_SSRF_RES ping-lab markers; vuln-expose.vercel.app/network-tools findings 8→9"
+    },
+    {
+      "source": "discovery:thecyberpunker.com",
+      "slug": "cyberpunker-insecureship-api-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: InsecureShip deliberately vulnerable REST API + github.com/TheCyberpunker/InsecureShip + OWASP API Top 10 (2023) Coverage; extractCyberpunkerLabSeeds; thecyberpunker.com/labs/insecureship findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5426,6 +5444,21 @@
       "source": "discovery:vuln-portal.vercel.app",
       "slug": "vuln-portal-auth-subpath-crawl",
       "shipped_at": "2026-07-15T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-idor-blind-network-modules",
+      "shipped_at": "2026-07-15T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-network-tools-ssrf-ping-lab",
+      "shipped_at": "2026-07-15T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:thecyberpunker.com",
+      "slug": "cyberpunker-insecureship-api-lab-evidence",
+      "shipped_at": "2026-07-15T07:15:00.000Z"
     }
   ]
 }
