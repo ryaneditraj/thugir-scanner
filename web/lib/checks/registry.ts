@@ -6006,7 +6006,7 @@ const domgoReferrerDomXssEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (example/1,7-9) --
+// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (example/1) --------
 const domgoHashDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -6015,13 +6015,58 @@ const domgoHashDomXssEvidence: Rule = async (ctx) => {
   const hashSource = /location\.hash/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   const referrerVuln = /let\s+rfr\s*=\s*document\.referrer/i.test(corpus);
-  if (!hashSource || !sink || referrerVuln) return NEGATIVE;
+  const sanitizationBypass =
+    /unescape\s*\(\s*hash\.substr/i.test(corpus) && /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+  const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
+  if (!hashSource || !sink || referrerVuln || sanitizationBypass || windowNameCombo) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.88,
     evidence: {
       page: pageUrl,
       note: "DomGoat exercise assigns location.hash to msgboard.innerHTML — hash-fragment DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat hash + weak sanitization → innerHTML DOM XSS exercises (example/7-8) ---
+const domgoHashSanitizationBypassDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const weakSanitize =
+    /unescape\s*\(\s*hash\.substr/i.test(corpus) &&
+    /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  const windowNameCombo = /window\.name/i.test(corpus);
+  if (!weakSanitize || !sink || windowNameCombo) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise unescapes location.hash then applies weak replace() before msgboard.innerHTML — sanitization-bypass DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat window.name + hash → innerHTML DOM XSS exercises (example/9) -----------
+const domgoWindowNameDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const windowNameSource =
+    /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!windowNameSource || !sink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise concatenates location.hash and window.name into msgboard.innerHTML — multi-source DOM XSS lab"
     }
   };
 };
@@ -7768,6 +7813,56 @@ const clientSideBrutelogicXssGymEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Brute Logic XSS Gym exposes 30+ DOM XSS cases with innerHTML and eval sinks for PoC training"
+    }
+  };
+};
+
+// --- XSS.page interactive payload playground (xss.page/playground) ------------------
+const CLIENT_XSS_PAGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Playground title",
+    re: /XSS Playground[\s\S]{0,60}Interactive tools for learning and testing XSS/i
+  },
+  {
+    label: "XSS Payload Tester section",
+    re: /XSS Payload Tester/i
+  },
+  {
+    label: "Filter and context simulation",
+    re: /Filter Type|Injection Context|HTML Context|JavaScript Context/i
+  },
+  {
+    label: "Payload cheat sheet link",
+    re: /payload cheat sheet|View Payload Cheat Sheet/i
+  },
+  {
+    label: "Ethical testing disclaimer",
+    re: /educational and authorized testing purposes only|Ethical Use Guidelines/i
+  }
+];
+
+const clientSideXssPageEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    /* ignore */
+  }
+  if (!/xss\.page$/i.test(host)) return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XSS_PAGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "XSS.page playground exposes filter/context XSS payload tester with educational cheat sheet — deliberate XSS training surface"
     }
   };
 };
@@ -15250,6 +15345,8 @@ export const RULES: Record<string, Rule> = {
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,
+  domgoHashSanitizationBypassDomXssEvidence,
+  domgoWindowNameDomXssEvidence,
   domgoPostMessageDomXssEvidence,
   domgoLocalStorageDomXssEvidence,
   domgoAjaxDomXssEvidence,
@@ -15289,6 +15386,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBrutelogicXssGymEvidence,
   clientSideBrutelogicXssTestPageEvidence,
   clientSideKnoxssTestPageEvidence,
+  clientSideXssPageEvidence,
   clientSideCtflearnWebfourEvidence,
   clientSideCtflearnWebeightEvidence,
   clientSideCtflearnWeboneEvidence,

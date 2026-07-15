@@ -7625,6 +7625,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "domgo-hash-sanitization-bypass-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat hash sanitization-bypass DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages unescape location.hash then apply weak replace() filters before msgboard.innerHTML — deliberate sanitization-bypass DOM XSS labs.",
+    impactOneline:
+      "Weak hash sanitization before innerHTML still enables DOM XSS when filters miss attack vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoHashSanitizationBypassDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never rely on partial replace() sanitization before innerHTML; use textContent or a strict HTML sanitizer.",
+      steps: [
+        "Use textContent instead of innerHTML for hash-derived strings.",
+        "Apply allowlist encoding rather than blacklist replace() filters.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise unescapes location.hash with weak replace() then writes to msgboard.innerHTML. Show safe encoding alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-window-name-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat window.name + hash DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages concatenate location.hash and window.name into msgboard.innerHTML — deliberate multi-source DOM XSS labs.",
+    impactOneline:
+      "Combining window.name and hash fragments into innerHTML enables DOM XSS via cross-page name poisoning.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoWindowNameDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render window.name or hash fragments into innerHTML; treat both as untrusted attacker input.",
+      steps: [
+        "Use textContent instead of innerHTML for window.name and hash-derived strings.",
+        "Clear window.name on navigation and avoid reading it for DOM rendering.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise concatenates location.hash and window.name into msgboard.innerHTML. Show safe rendering alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-xss-page-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "XSS.page interactive payload playground disclosed",
+    description:
+      "XSS.page playground exposes filter/context XSS payload tester, cheat sheet, and ethical-use guidelines for authorized security training.",
+    impactOneline:
+      "Public XSS playgrounds document filter-bypass techniques attackers reuse against production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXssPageEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host XSS training playgrounds on isolated domains, not production infrastructure.",
+      steps: [
+        "Restrict playground access to authenticated lab users.",
+        "Do not mirror production filter logic on public training pages.",
+        "Add robots noindex and separate from customer-facing apps."
+      ]
+    },
+    fixPrompt:
+      "Our site hosts an XSS.page-style payload playground. Show how to isolate it from production and restrict access.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-realistic-mission-evidence",
     platform: "generic",
     category: "Broken access control",

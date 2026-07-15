@@ -3119,6 +3119,24 @@
       "slug": "domgo-query-param-dom-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/10 location.href.split('?') + window.name → msgboard.innerHTML; domgo.at/cxss/example/10 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-hash-sanitization-bypass-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/7-8 unescape(hash.substr(1)) + .replace(/</g) weak filter before msgboard.innerHTML; domgo.at/cxss/example/7 findings 4→4 (domgo-hash → domgo-hash-sanitization-bypass slug); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-window-name-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/9 window.name.replace + location.hash → href msgboard.innerHTML; domgo.at/cxss/example/9 findings 4→4 (domgo-hash → domgo-window-name slug); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.page",
+      "slug": "client-side-xss-page-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS Playground + Payload Tester + Filter Type/Injection Context + payload cheat sheet at xss.page/playground; xss.page/playground findings 5→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5591,6 +5609,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-query-param-dom-xss-evidence",
       "shipped_at": "2026-07-15T12:35:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-hash-sanitization-bypass-dom-xss-evidence",
+      "shipped_at": "2026-07-15T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-window-name-dom-xss-evidence",
+      "shipped_at": "2026-07-15T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:xss.page",
+      "slug": "client-side-xss-page-evidence",
+      "shipped_at": "2026-07-15T13:15:00.000Z"
     }
   ]
 }
