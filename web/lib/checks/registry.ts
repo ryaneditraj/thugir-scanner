@@ -12679,6 +12679,82 @@ const clientSideVulnlabAcademyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy A09 logging failures (hack-this-site-eta.vercel.app/owasp/a09.html) -
+const CLIENT_VULNLAB_A09_LOGGING_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A09 sensitive data in verbose errors",
+    re: /A09-001 Sensitive Data in Errors|Verbose error messages include stack traces and secrets/i
+  },
+  {
+    label: "DB password in error disclosure",
+    re: /Error:\s*DB password\s*=\s*["']passw0rd!["']/i
+  },
+  {
+    label: "A09 log injection lab",
+    re: /A09-002 Log Injection|Log line injection via newline/i
+  },
+  {
+    label: "VulnLab log API endpoint",
+    re: /\/api\/log[\s\S]{0,200}Log Injection|fetch\s*\(\s*['"]\/api\/log/i
+  }
+];
+
+const clientSideVulnlabA09LoggingEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A09_LOGGING_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|A09[\s-]+Logging|hack-this-site-eta\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A09 lab documents sensitive data in verbose errors and log injection via /api/log"
+    }
+  };
+};
+
+// --- VulnLab Academy A10 SSRF (hack-this-site-eta.vercel.app/owasp/a10.html) ---------
+const CLIENT_VULNLAB_A10_SSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A10 SSRF scanner lab title",
+    re: /A10-001 SSRF Scanner|A10[\s-]+SSRF/i
+  },
+  {
+    label: "URL fetcher accepts arbitrary URLs",
+    re: /URL fetcher endpoint accepts arbitrary URLs|fetch\s*\(\s*['"]\/api\/fetch\?url=/i
+  },
+  {
+    label: "Cloud metadata SSRF probe default",
+    re: /169\.254\.169\.254\/latest\/meta-data/i
+  },
+  {
+    label: "SSRF simulation audit response",
+    re: /SSRF Simulation|requestedUrl[\s\S]{0,80}Simulated fetch/i
+  }
+];
+
+const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A10_SSRF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|A10[\s-]+SSRF|hack-this-site-eta\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A10 lab exposes an unvalidated /api/fetch URL fetcher with cloud metadata probe defaults"
+    }
+  };
+};
+
 // --- megmogmog1965/vulnerable-web-site (CSRF/clickjacking/XSS/SSRF Next.js lab) ----
 const CLIENT_VULNERABLE_WEB_SITE_RES: { label: string; re: RegExp }[] = [
   {
@@ -14560,6 +14636,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVaultappLabEvidence,
   clientSideDamnVulnerableBankEvidence,
   clientSideVulnlabAcademyEvidence,
+  clientSideVulnlabA09LoggingEvidence,
+  clientSideVulnlabA10SsrfEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
   clientSideEksGoatEvidence,

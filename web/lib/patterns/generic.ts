@@ -4869,6 +4869,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-a09-logging-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnLab A09 logging failures lab disclosed",
+    description:
+      "VulnLab Academy A09 module documents sensitive credentials in verbose error messages and newline log injection via an unauthenticated /api/log endpoint.",
+    impactOneline:
+      "Public A09 logging labs expose password leakage in errors and forgeable audit log lines for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA09LoggingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return stack traces or secrets in production errors; sanitize log input.",
+      steps: [
+        "Return generic error messages to clients and log details server-side only.",
+        "Strip newlines and control characters from values written to audit logs.",
+        "Require authentication before exposing verbose diagnostic endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our A09 logging lab leaks DB passwords in errors. Show how to redact secrets and prevent log injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-a10-ssrf-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnLab A10 SSRF scanner lab disclosed",
+    description:
+      "VulnLab Academy A10 module ships a URL fetcher at /api/fetch?url= with default cloud metadata probe targets for SSRF training.",
+    impactOneline:
+      "Public A10 SSRF labs advertise unvalidated server-side fetch endpoints reachable without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA10SsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal IPs, metadata endpoints, and private networks.",
+      steps: [
+        "Allowlist outbound fetch destinations instead of accepting arbitrary URLs.",
+        "Deny RFC1918, link-local, and cloud metadata IP ranges at the egress layer.",
+        "Require authentication before exposing URL preview or fetch utilities."
+      ]
+    },
+    fixPrompt:
+      "Our A10 SSRF lab accepts arbitrary URLs at /api/fetch. Show how to block metadata and internal targets.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnerable-web-site-evidence",
     platform: "generic",
     category: "Broken access control",
