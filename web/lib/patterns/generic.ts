@@ -2273,9 +2273,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Injection",
     severityDefault: "high",
-    title: "VulnSite SQL/XSS lab module with inline exploit payloads",
+    title: "VulnSite hands-on lab module with inline exploit payloads",
     description:
-      "VulnSite module pages (/sqli/login, /xss/playground) publish authentication-bypass SQL payloads, UNION SELECT examples, and dangerouslySetInnerHTML XSS lab modes with stored/reflected/DOM vectors.",
+      "VulnSite module pages (/sqli/login, /sqli/blind, /xss/profile, /cmdi, /idor/dashboard, /network-tools) publish SQL auth-bypass, blind SQLi, XSS, command injection, IDOR, and ping/SSRF lab banners with inline payloads.",
     impactOneline:
       "Public VulnSite lab modules document live exploit techniques and test credentials that accelerate attacker training on real vulnerability classes.",
     detectorKind: "rule_ref",
@@ -2291,6 +2291,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host VulnSite SQL auth-bypass and XSS playground modules. Show how to isolate lab payloads from production login and comment rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cyberpunker-insecureship-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "TheCyberpunker InsecureShip API security lab disclosed",
+    description:
+      "TheCyberpunker InsecureShip is a deliberately vulnerable Node.js shipping REST API documenting OWASP API Security Top 10 (2023) training coverage.",
+    impactOneline:
+      "Public InsecureShip lab writeups expose BOLA/BFLA/API misconfiguration training routes attackers use to tune API security scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCyberpunkerInsecureshipEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "InsecureShip is intentional API security training — never deploy its vulnerability patterns to production.",
+      steps: [
+        "Run InsecureShip only on isolated lab infrastructure.",
+        "Gate API training instances behind authenticated lab accounts.",
+        "Do not copy InsecureShip authorization bypass patterns into production APIs."
+      ]
+    },
+    fixPrompt:
+      "We host TheCyberpunker InsecureShip API security training. Show how to isolate deliberately vulnerable API labs from production services.",
     version: 1,
     enabled: true
   },
