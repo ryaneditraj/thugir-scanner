@@ -7469,6 +7469,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "domgo-hash-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat hash-fragment DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages assign location.hash fragments to msgboard.innerHTML — deliberate hash-based DOM XSS labs.",
+    impactOneline:
+      "Hash-to-innerHTML flows enable DOM XSS when attackers craft malicious URL fragments victims open.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoHashDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render location.hash into innerHTML; use textContent or strict sanitization.",
+      steps: [
+        "Use textContent instead of innerHTML for hash-derived strings.",
+        "Validate and encode hash fragments before DOM insertion.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise writes location.hash into msgboard.innerHTML. Show safe textContent alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-postmessage-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat postMessage DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages assign postMessage event data to msgboard.innerHTML — deliberate cross-window DOM XSS labs.",
+    impactOneline:
+      "postMessage-to-innerHTML flows enable DOM XSS when pages accept untrusted message payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoPostMessageDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate postMessage origin and never render evt.data into innerHTML without sanitization.",
+      steps: [
+        "Check event.origin against an allowlist before processing postMessage data.",
+        "Use textContent instead of innerHTML for message payloads.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise writes postMessage evt.data into msgboard.innerHTML. Show origin validation and safe rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-localstorage-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat localStorage DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages read localStorage payloads into msgboard.innerHTML — deliberate client-storage DOM XSS labs.",
+    impactOneline:
+      "localStorage-to-innerHTML flows enable stored DOM XSS when poisoned values are rendered unsafely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoLocalStorageDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render localStorage values into innerHTML; treat stored client data as untrusted input.",
+      steps: [
+        "Use textContent instead of innerHTML for localStorage-derived strings.",
+        "Sanitize stored payloads before DOM insertion.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise reads localStorage into msgboard.innerHTML. Show safe rendering and input validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthissite-realistic-mission-evidence",
     platform: "generic",
     category: "Broken access control",
