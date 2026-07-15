@@ -8632,7 +8632,7 @@ const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- HackThisSite login-gated mission hubs (basic / forensic / javascript / programming) --
+// --- HackThisSite login-gated mission hubs (basic / application / playit extbasic+stego) --
 const HTS_LOGIN_GATED_MISSION_NOTES: Record<string, string> = {
   basic:
     "HTS Basic mission hub is login-gated — documents HTML-comment password oracle and introductory web challenges behind authenticated access",
@@ -8641,23 +8641,54 @@ const HTS_LOGIN_GATED_MISSION_NOTES: Record<string, string> = {
   javascript:
     "HTS Javascript mission hub is login-gated — documents client-side script exploitation challenges behind authenticated access",
   programming:
-    "HTS Programming mission hub is login-gated — documents algorithmic exploit programming challenges behind authenticated access"
+    "HTS Programming mission hub is login-gated — documents algorithmic exploit programming challenges behind authenticated access",
+  application:
+    "HTS Application mission hub is login-gated — documents web application exploitation challenges behind authenticated access",
+  extbasic:
+    "HTS Extended Basic mission hub is login-gated — documents advanced HTML-level wargame challenges behind authenticated access",
+  stego:
+    "HTS Steganography mission hub is login-gated — documents image steganography CTF missions behind authenticated access"
 };
+
+type HtsLoginGatedHub =
+  | { kind: "standard"; category: string }
+  | { kind: "playit"; category: "extbasic" | "stego"; playSegment: string };
+
+function parseHtsLoginGatedHub(pageUrl: string): HtsLoginGatedHub | null {
+  const standard = pageUrl.match(
+    /hackthissite\.org\/missions\/(basic|forensic|javascript|programming|application)(?:\/\d+)?\/?/i
+  );
+  if (standard) return { kind: "standard", category: standard[1].toLowerCase() };
+
+  const extbasic = pageUrl.match(/hackthissite\.org\/missions\/playit\/extbasic(?:\/\d+)?\/?/i);
+  if (extbasic) return { kind: "playit", category: "extbasic", playSegment: "playit/extbasic" };
+
+  const stego = pageUrl.match(/hackthissite\.org\/missions\/playit\/stego(?:\/\d+)?\/?/i);
+  if (stego) return { kind: "playit", category: "stego", playSegment: "playit/stego" };
+
+  return null;
+}
 
 const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const catMatch = pageUrl.match(
-    /hackthissite\.org\/missions\/(basic|forensic|javascript|programming)(?:\/\d+)?\/?/i
-  );
-  if (!catMatch) return NEGATIVE;
-  const category = catMatch[1].toLowerCase();
+  const hub = parseHtsLoginGatedHub(pageUrl);
+  if (!hub) return NEGATIVE;
+  const category = hub.category;
   const corpus = `${ctx.home.body}\n${pageUrl}`;
   if (!/Login Required|You must be logged in to use this page/i.test(corpus)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
+  const pathRe =
+    hub.kind === "standard"
+      ? new RegExp(`/missions/${category}(?:/\\d+)?/?`, "i")
+      : new RegExp(`/missions/${hub.playSegment}(?:/\\d+)?/?`, "i");
+  const navRe =
+    hub.kind === "standard"
+      ? new RegExp(`href\\s*=\\s*["']/missions/${category}/`, "i")
+      : new RegExp(`href\\s*=\\s*["']/missions/${hub.playSegment}/`, "i");
   const checks: { label: string; re: RegExp }[] = [
     {
       label: `${category} mission hub URL`,
-      re: new RegExp(`/missions/${category}(?:/\\d+)?/?`, "i")
+      re: pathRe
     },
     {
       label: "Login required for mission access",
@@ -8669,7 +8700,7 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
     },
     {
       label: "Mission challenge nav category",
-      re: new RegExp(`href\\s*=\\s*["']/missions/${category}/`, "i")
+      re: navRe
     }
   ];
   for (const { label, re } of checks) {

@@ -3205,6 +3205,12 @@
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/basic/1 /forensic /javascript /programming return Login Required + category nav; findings 5→6 each; benchmark juice-shop 6/6 maintained (no benchmark misses)"
     },
     {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-login-gated-mission-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/ + /missions/playit/extbasic/0/ + /missions/playit/stego/0/ return Login Required + HTS training ground tagline; application/extbasic/stego hubs findings 5→6 each; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:kontra.dev",
       "slug": "kontra-ssti-lesson-seed",
       "status": "rejected",
@@ -5751,6 +5757,11 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "client-side-hts-login-gated-mission-hub-evidence",
       "shipped_at": "2026-07-15T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-login-gated-application-extbasic-stego-hubs",
+      "shipped_at": "2026-07-15T18:15:00.000Z"
     }
   ]
 }
