@@ -8053,6 +8053,115 @@ const clientSideAppsecMasterEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- AppSecMaster category lab hubs (/labs/cross-site-scripting-xss, sql-injection) --
+const CLIENT_APPSECMASTER_LAB_HUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Labs Course schema title",
+    re: /"name"\s*:\s*"Cross-Site Scripting \(XSS\) Labs"/i
+  },
+  {
+    label: "SQL Injection Labs Course schema title",
+    re: /"name"\s*:\s*"SQL Injection Labs(?:\s*&\s*Practice)?"/i
+  },
+  {
+    label: "Practice Reflected Stored DOM XSS lab copy",
+    re: /Practice Reflected, Stored, and DOM-based XSS/i
+  },
+  {
+    label: "SQLi union-based to blind time-based lab copy",
+    re: /union-based attacks to blind time-based exploitation|blind time-based injection with automated exploitation/i
+  },
+  {
+    label: "Start category lab CTA button",
+    re: /Start (?:SQL Injection|XSS) Labs/i
+  },
+  {
+    label: "AppSecMaster lab category URL path",
+    re: /\/labs\/(?:cross-site-scripting-xss|sql-injection)/i
+  },
+  {
+    label: "XSS FAQ schema impact question",
+    re: /What is the impact of XSS\?/i
+  },
+  {
+    label: "SQLi FAQ still relevant question",
+    re: /Is SQL Injection still relevant in 2026\?/i
+  }
+];
+
+const clientSideAppsecMasterLabHubEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_APPSECMASTER_LAB_HUB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/AppSecMaster|appsecmaster\.net/i.test(ctx.combined)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const isLabHub = /\/labs\/(?:cross-site-scripting-xss|sql-injection)/i.test(pageUrl);
+  return {
+    fired: true,
+    confidence: hits.length >= 3 || isLabHub ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      labHub: isLabHub ? pageUrl.match(/\/labs\/[^/?#]+/)?.[0] : undefined,
+      note: isLabHub
+        ? "AppSecMaster category lab hub documents deployed XSS or SQLi practice challenges with source code access"
+        : "AppSecMaster marketing pages link to XSS/SQLi lab hubs with Course schema and challenge CTAs"
+    }
+  };
+};
+
+// --- IST Edu intentionally vulnerable university portal (ist-edu-bd.vercel.app) -------
+const CLIENT_IST_EDU_VULN_PORTAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "IST intentionally vulnerable disclaimer",
+    re: /intentionally vulnerable application for security testing/i
+  },
+  {
+    label: "IST SQLi portal API auth bypass markers",
+    re: /\/api\/portal[\s\S]{0,200}(?:Authentication Bypass Successful|SQL Injection Detected)/i
+  },
+  {
+    label: "IST LFI notices file parameter route",
+    re: /\/api\/notices\?file=/i
+  },
+  {
+    label: "IST CRLF newsletter cookie injection samples",
+    re: /CRLF[\s\S]{0,80}Cookie Injection|Set-Cookie:admin=true/i
+  },
+  {
+    label: "IST XSS search lab payload catalog",
+    re: /img src=x onerror=alert|Stored XSS!|Database Error.*SQL injection attempt/i
+  },
+  {
+    label: "IST Institute branding",
+    re: /Institute of Science and Technology|ist\.edu\.bd/i
+  },
+  {
+    label: "IST admin dashboard SQLi warning panel",
+    re: /admin panel via SQL Injection vulnerability/i
+  }
+];
+
+const clientSideIstEduVulnPortalEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_IST_EDU_VULN_PORTAL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/ist-edu-bd|Institute of Science and Technology/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "IST Edu portal documents SQLi login bypass, LFI notices reader, CRLF newsletter, and XSS search labs"
+    }
+  };
+};
+
 // --- Hack The Box CTF / cyber readiness platform (hackthebox.com) ---------------------
 const CLIENT_HACKTHEBOX_RES: { label: string; re: RegExp }[] = [
   {
@@ -9729,6 +9838,47 @@ const sensitiveApiPasswordLeakage: Rule = async (ctx) => {
       note: "JSON API returned user records with cleartext password fields without authentication"
     }
   };
+};
+
+// --- LFI via ?file= notices reader (ist-edu-bd and similar labs) ------------------
+const NOTICES_FILE_LFI_PATHS = ["/api/notices", "/notices", "/api/files", "/api/read"];
+const NOTICES_FILE_LFI_PAYLOADS = [
+  "../../../etc/passwd",
+  "....//....//....//etc/passwd",
+  "..%2f..%2f..%2fetc%2fpasswd"
+];
+const NOTICES_FILE_LFI_MARKERS = [/root:x:0:0:root:/i, /daemon:x:1:1:daemon:/i, /nobody:x:65534:65534:/i];
+
+const noticesFileLfiProbe: Rule = async (ctx) => {
+  const discovered = extractApiPaths(ctx.combined, 8).filter((p) => /notices|files|read|download/i.test(p));
+  const paths = [...new Set([...discovered, ...NOTICES_FILE_LFI_PATHS])].slice(0, 5);
+  const corpusHints =
+    /\/api\/notices\?file=|ist-edu-bd|intentionally vulnerable application for security testing/i.test(
+      ctx.combined
+    );
+  if (!corpusHints && discovered.length === 0) return NEGATIVE;
+  for (const path of paths) {
+    for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
+      const url = new URL(path, ctx.origin);
+      url.searchParams.set("file", payload);
+      const doc = await ctx.probe.get(url.toString(), { maxBytes: 4096 });
+      if (doc.status < 200 || doc.status >= 400) continue;
+      const marker = NOTICES_FILE_LFI_MARKERS.find((re) => re.test(doc.body));
+      if (!marker) continue;
+      const match = doc.body.match(marker);
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          url: url.toString(),
+          marker: match?.[0]?.slice(0, 80) || "passwd contents",
+          snippet: doc.body.slice(0, 200).trim(),
+          note: "file parameter accepted path traversal — local file inclusion likely"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 };
 
 // --- Troy Hunt "Hack Yourself First" intentionally vulnerable training app -------
@@ -14915,6 +15065,9 @@ export const RULES: Record<string, Rule> = {
   phpStrcmpArrayBypass,
   clientSideWechallEvidence,
   clientSideAppsecMasterEvidence,
+  clientSideAppsecMasterLabHubEvidence,
+  clientSideIstEduVulnPortalEvidence,
+  noticesFileLfiProbe,
   clientSideHackTheBoxEvidence,
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,

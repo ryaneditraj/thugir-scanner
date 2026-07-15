@@ -2763,6 +2763,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-appsec-master-lab-hub-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "AppSecMaster XSS/SQLi category lab hub disclosed",
+    description:
+      "AppSecMaster /labs/cross-site-scripting-xss and /labs/sql-injection hubs publish Course schema, FAQ copy, and Start Labs CTAs for deployed injection challenges.",
+    impactOneline:
+      "Public AppSecMaster lab category pages document injectable challenge infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAppsecMasterLabHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster lab hubs are intentional training — gate challenge instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning injectable lab containers.",
+        "Isolate Docker lab instances from production networks.",
+        "Use lab hub findings to tune DAST coverage without copying vulnerable patterns."
+      ]
+    },
+    fixPrompt:
+      "We link to AppSecMaster XSS/SQLi lab hubs for team training. Show how to isolate lab containers and gate challenge spawns behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ist-edu-vuln-portal-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu intentionally vulnerable university portal disclosed",
+    description:
+      "ist-edu-bd.vercel.app documents SQLi login bypass on /api/portal, LFI on /api/notices?file=, CRLF newsletter injection, and XSS search labs.",
+    impactOneline:
+      "Public IST Edu portal exposes multi-vector vulnerability training routes reachable without local setup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIstEduVulnPortalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is an intentional training portal — gate lab routes behind authentication.",
+      steps: [
+        "Require login before exposing /portal and /search lab modules.",
+        "Never deploy similar SQLi/LFI/CRLF patterns to production university portals.",
+        "Isolate training instances from student production data."
+      ]
+    },
+    fixPrompt:
+      "We host an IST Edu-style vulnerable university portal for security workshops. Show how to isolate lab routes and block unauthenticated access to injectable APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "notices-file-lfi-probe",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Local file inclusion via file query parameter",
+    description:
+      "A notices or file-reader API accepts a file= parameter with path traversal sequences and returns /etc/passwd or similar system file contents.",
+    impactOneline:
+      "LFI via unsanitized file parameters enables reading sensitive server files and often leads to RCE.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "noticesFileLfiProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input directly to filesystem reads; use allowlisted filenames.",
+      steps: [
+        "Reject path traversal sequences (../, ..\\) in file parameters.",
+        "Use an allowlist of permitted notice filenames instead of arbitrary paths.",
+        "Run file-serving APIs with minimal filesystem permissions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/notices?file= endpoint returns /etc/passwd when given ../../../etc/passwd. Block path traversal and allowlist permitted filenames.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthebox-evidence",
     platform: "generic",
     category: "Broken access control",
