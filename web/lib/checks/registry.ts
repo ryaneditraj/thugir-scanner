@@ -8958,6 +8958,84 @@ const clientSideWebVulnsGuideSstiLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Educational CORS misconfiguration lab pages (WebVulnsGuide, etc.) --------------------
+const CLIENT_WEBVULNS_GUIDE_CORS_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CORS Misconfiguration Lab title",
+    re: /CORS Misconfiguration Lab/i
+  },
+  {
+    label: "CORS misconfiguration vulnerability definition",
+    re: /CORS misconfiguration vulnerability[\s\S]{0,200}Same-Origin Policy/i
+  },
+  {
+    label: "Vulnerable API endpoint demo button",
+    re: /vulnerable API endpoint[\s\S]{0,200}testVulnerableEndpoint/i
+  },
+  {
+    label: "WebVulnsGuide CORS lab path",
+    re: /WebVulnsGuide\/CORS\.html|dxx33\.github\.io\/WebVulnsGuide\/CORS/i
+  }
+];
+
+const clientSideWebVulnsGuideCorsLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBVULNS_GUIDE_CORS_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational CORS lab documents reflective-origin API misconfigurations that bypass Same-Origin Policy"
+    }
+  };
+};
+
+// --- Educational eval filter bypass lab pages (WebVulnsGuide, etc.) -----------------------
+const CLIENT_EVAL_FILTER_BYPASS_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Eval Filter Bypass Playground title",
+    re: /Eval Filter Bypass Playground/i
+  },
+  {
+    label: "Eval filter bypass vulnerability definition",
+    re: /Eval Filter Bypass is a vulnerability where an attacker bypasses input filters to execute arbitrary code/i
+  },
+  {
+    label: "eval() with filtered input example",
+    re: /eval\s*\(\s*\)\s*with filtered input|eval\("echo \$filtered/i
+  },
+  {
+    label: "WebVulnsGuide EvalByPass lab path",
+    re: /WebVulnsGuide\/EvalByPass\.html|dxx33\.github\.io\/WebVulnsGuide\/EvalByPass/i
+  }
+];
+
+const clientSideEvalFilterBypassLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_EVAL_FILTER_BYPASS_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational eval filter bypass lab documents eval()/Function() misuse and filter-evasion code execution patterns"
+    }
+  };
+};
+
 // --- CyberDefenders blue team / DFIR cyber range platform --------------------------------
 const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
   {
@@ -16266,6 +16344,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHtsPlaylevelHubEvidence,
   clientSideAuthSecurityProjectEvidence,
   clientSideOsCommandInjectionLabEvidence,
+  clientSideWebVulnsGuideCorsLabEvidence,
+  clientSideEvalFilterBypassLabEvidence,
   clientSideWebVulnsGuideSstiLabEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
