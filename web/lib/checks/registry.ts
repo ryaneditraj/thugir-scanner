@@ -6151,6 +6151,30 @@ const domgoWebsocketDomXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DomGoat /cxss/sinks interactive XSS sink catalog (eval/innerHTML/document.write) --
+const domgoSinksCatalogDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/sinks/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const catalog =
+    /Client XSS Sinks|Sinks that execute payload/i.test(corpus) &&
+    /execPayload/i.test(corpus);
+  const evalSink = /\beval\s*\(/i.test(corpus) && /js_eval/i.test(corpus);
+  const htmlSinks =
+    /HTMLElement\.innerHTML\s*=/i.test(corpus) &&
+    (/document\.write\s*\(/i.test(corpus) || /document\.writeln\s*\(/i.test(corpus));
+  if (!catalog || (!evalSink && !htmlSinks)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat /cxss/sinks catalogs eval(), innerHTML, document.write/writeln XSS sink demos — interactive DOM XSS training surface"
+    }
+  };
+};
+
 // --- DomGoat location.href query param → msgboard.innerHTML DOM XSS (example/10) ----
 const domgoQueryParamDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
@@ -8604,6 +8628,30 @@ const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "HackThisSite Realistic mission hub is login-gated — documents advanced wargame challenges behind authenticated access"
+    }
+  };
+};
+
+// --- HackThisSite Realistic mission instance labs (Fischer / frameset challenges) -----
+const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/hackthissite\.org\/missions\/realistic\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const fischer =
+    /Fischer(?:'|&#x27;)s Animal Products/i.test(corpus) &&
+    /products\.php\?category=/i.test(corpus);
+  const framesLab =
+    /Compu-global-Hyper-Mega-Net/i.test(corpus) &&
+    /(?:frameset|top\.htm|menu\.htm|main\.htm)/i.test(corpus);
+  if (!fischer && !framesLab) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      page: pageUrl,
+      note: fischer
+        ? "HTS Realistic mission exposes Fischer's Animal Products products.php category SQLi lab + addemail.php mailing list"
+        : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)"
     }
   };
 };
@@ -15513,10 +15561,96 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
     re: /vwad\.owasp\.org\/app\/wrongsecrets|"name":\s*"WrongSecrets"/i
   },
   {
+    label: "VWAD WackoPicko listing",
+    re: /vwad\.owasp\.org\/app\/wackopicko|"name":\s*"WackoPicko"/i
+  },
+  {
+    label: "VWAD BodgeIt Store listing",
+    re: /vwad\.owasp\.org\/app\/bodgeit-store|"name":\s*"BodgeIt Store"/i
+  },
+  {
     label: "Pixi MEAN stack insecure API lab",
     re: /MEAN stack web app with deliberately insecure APIs|Part of OWASP DevSlop/i
   }
 ];
+
+// --- VWAD WackoPicko scanner benchmark app listing ------------------------------------
+const clientSideVwadWackopickoEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/wackopicko/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "WackoPicko VWAD listing",
+      re: /WackoPicko[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Why Johnny Can't Pentest reference",
+      re: /Why Johnny Can(?:'t|&#x27;t) Pentest/i
+    },
+    {
+      label: "Scanner benchmark vuln catalog",
+      re: /Contains known vulns:\s*XSS,\s*SQLi,\s*directory traversal/i
+    },
+    {
+      label: "Command injection training surface",
+      re: /command injection|logic flaws|session issues/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WackoPicko VWAD listing documents XSS, SQLi, directory traversal, and command injection labs used in scanner benchmark research"
+    }
+  };
+};
+
+// --- VWAD BodgeIt Store beginner pen-test lab listing ---------------------------------
+const clientSideVwadBodgeitEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/bodgeit-store/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "BodgeIt Store VWAD listing",
+      re: /BodgeIt Store[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Beginner pen-test training app",
+      re: /new to pen testing|Self-contained Java\/JSP app/i
+    },
+    {
+      label: "Multi-vuln challenge catalog",
+      re: /Includes XSS,\s*SQL injection,\s*hidden content,\s*CSRF/i
+    },
+    {
+      label: "Scoring page for challenges",
+      re: /scoring page for challenges|insecure object references/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BodgeIt Store VWAD listing documents XSS, SQLi, CSRF, and logic-flaw challenges for beginner penetration testing"
+    }
+  };
+};
 
 const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -15635,6 +15769,7 @@ export const RULES: Record<string, Rule> = {
   domgoAjaxDomXssEvidence,
   domgoWebsocketDomXssEvidence,
   domgoQueryParamDomXssEvidence,
+  domgoSinksCatalogDomXssEvidence,
   clientSideBenstaffordXssDemoEvidence,
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
@@ -15687,6 +15822,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
   clientSideHackThisSiteRealisticMissionEvidence,
+  clientSideHtsRealisticMissionLabEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,
@@ -15791,6 +15927,8 @@ export const RULES: Record<string, Rule> = {
   clientSideAtlasCrewHubEvidence,
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
+  clientSideVwadWackopickoEvidence,
+  clientSideVwadBodgeitEvidence,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,

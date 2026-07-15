@@ -7883,5 +7883,109 @@ export const genericPatterns: Pattern[] = [
       "We mirror HackThisSite Realistic mission hubs. Show how to auth-gate advanced wargame challenges on private deployments.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "domgo-sinks-catalog-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat XSS sinks catalog with eval/innerHTML/document.write demos",
+    description:
+      "DomGoat /cxss/sinks page catalogs interactive eval(), innerHTML, document.write, and document.writeln XSS sink demonstrations.",
+    impactOneline:
+      "Public sink catalogs teach attackers which DOM APIs to target for code execution in client-side apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoSinksCatalogDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose interactive XSS sink playgrounds on production domains.",
+      steps: [
+        "Use textContent instead of innerHTML for untrusted strings.",
+        "Avoid eval(), document.write, and document.writeln with user-controlled input.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat /cxss/sinks page demos eval() and innerHTML sinks. Show safe alternatives and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-wackopicko-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD WackoPicko scanner benchmark lab disclosed",
+    description:
+      "WackoPicko VWAD listing documents XSS, SQLi, directory traversal, and command injection labs from the Why Johnny Can't Pentest scanner benchmark.",
+    impactOneline:
+      "Public WackoPicko registry advertises multi-class vulnerability training surfaces for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadWackopickoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep WackoPicko instances isolated; VWAD listing is intentional but live deployments need monitoring.",
+      steps: [
+        "Deploy WackoPicko only on isolated lab networks.",
+        "Require authentication when exposing scanner benchmark apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our WackoPicko instance is listed in OWASP VWAD. Show how to isolate scanner benchmark labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-bodgeit-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD BodgeIt Store beginner pen-test lab disclosed",
+    description:
+      "BodgeIt Store VWAD listing documents XSS, SQL injection, CSRF, hidden content, and logic-flaw challenges for beginner penetration testing.",
+    impactOneline:
+      "Public BodgeIt registry advertises multi-vulnerability Java/JSP training app for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadBodgeitEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep BodgeIt instances isolated; VWAD listing is intentional but live deployments need monitoring.",
+      steps: [
+        "Deploy BodgeIt only on isolated lab Tomcat instances.",
+        "Require authentication when exposing beginner pen-test apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our BodgeIt Store instance is listed in OWASP VWAD. Show how to isolate beginner pen-test labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hts-realistic-mission-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "HackThisSite Realistic mission instance lab disclosed",
+    description:
+      "HTS Realistic mission pages expose Fischer's Animal Products products.php SQLi labs or Compu-global-Hyper-Mega-Net frameset challenges.",
+    impactOneline:
+      "Public realistic mission instances expose SQLi and legacy web challenge surfaces without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHtsRealisticMissionLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate realistic mission instances; never copy HTS challenge patterns into production.",
+      steps: [
+        "Require HTS login before serving realistic mission challenge VMs.",
+        "Parameterize SQL queries in any products.php-style catalog endpoints.",
+        "Isolate wargame mission infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host HTS-style realistic mission labs with products.php SQLi. Show parameterized queries and auth gating.",
+    version: 1,
+    enabled: true
   }
 ];
