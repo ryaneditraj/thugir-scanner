@@ -1231,6 +1231,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-webvulnsguide-cors-lab-evidence",
+    platform: "generic",
+    category: "Misconfiguration",
+    severityDefault: "medium",
+    title: "Educational CORS misconfiguration lab disclosed",
+    description:
+      "WebVulnsGuide CORS Misconfiguration Lab and similar training pages document reflective-origin API policies that let malicious sites bypass Same-Origin Policy.",
+    impactOneline:
+      "Public CORS dojos teach origin-reflection tricks attackers replay on APIs that echo Access-Control-Allow-Origin from user input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebVulnsGuideCorsLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CORS dojos are intentional training — never reflect arbitrary Origin headers in production APIs.",
+      steps: [
+        "Maintain an explicit allow-list of trusted origins for CORS.",
+        "Never echo the request Origin header without validation.",
+        "Host CORS labs only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror WebVulnsGuide-style CORS misconfiguration training pages. Show how to fix origin reflection and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-eval-filter-bypass-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Educational eval filter bypass lab disclosed",
+    description:
+      "WebVulnsGuide Eval Filter Bypass Playground and similar training pages document eval()/Function() misuse with weak input filters that attackers bypass for arbitrary code execution.",
+    impactOneline:
+      "Public eval-bypass dojos teach filter-evasion tricks attackers replay on apps that dynamically execute user-controlled strings.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideEvalFilterBypassLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Eval-bypass dojos are intentional training — never call eval() or Function() on user input in production.",
+      steps: [
+        "Remove eval(), Function(), and setTimeout(string) from all user-input paths.",
+        "Use safe expression parsers or sandboxed interpreters instead of dynamic code execution.",
+        "Host eval-bypass labs only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror WebVulnsGuide-style eval filter bypass training pages. Show how to eliminate dynamic code execution and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-csrf-evidence",
     platform: "generic",
     category: "Broken access control",

@@ -701,6 +701,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnAuthPortalEvidence",
   "clientSideAuthSecurityProjectEvidence",
   "clientSideOsCommandInjectionLabEvidence",
+  "clientSideWebVulnsGuideCorsLabEvidence",
+  "clientSideEvalFilterBypassLabEvidence",
   "clientSideWebVulnsGuideSstiLabEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
@@ -1345,7 +1347,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/basic/3/",
     "/missions/basic/4/",
     "/missions/basic/5/",
-    "/missions/basic/6/"
+    "/missions/basic/6/",
+    "/missions/basic/7/",
+    "/missions/basic/8/",
+    "/missions/basic/9/",
+    "/missions/basic/10/",
+    "/playlevel/3/",
+    "/missions/playit/stego/1/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1383,7 +1391,8 @@ function extractWebVulnsGuideLabSeeds(html: string, pageUrl: string): string[] {
     "/SSRF.html",
     "/XSS.html",
     "/SQLi.html",
-    "/SSTI.html"
+    "/SSTI.html",
+    "/CORS.html"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
