@@ -7182,6 +7182,52 @@ const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnSite module pages (/sqli/login, /xss/playground) ---------------------------
+const CLIENT_VULN_EXPOSE_MODULE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL auth bypass lab banner",
+    re: /LABORATORIO DE BYPASS DE AUTENTICACI[ÓO]N|SQL Injection - Authentication Bypass/i
+  },
+  {
+    label: "Inline UNION SELECT extraction payloads",
+    re: /UNION SELECT username,password FROM users|admin'\s*UNION SELECT/i
+  },
+  {
+    label: "XSS exploitation lab banner",
+    re: /ENTORNO DE EXPLOTACI[ÓO]N XSS|Laboratorio XSS Interactivo/i
+  },
+  {
+    label: "dangerouslySetInnerHTML XSS mode toggle",
+    re: /Vulnerable \(dangerouslySetInnerHTML\)|dangerouslySetInnerHTML[\s\S]{0,80}innerHTML/i
+  },
+  {
+    label: "Stored/reflected/DOM XSS lab types",
+    re: /Stored XSS \(persistente|Reflected XSS|DOM-based XSS/i
+  }
+];
+
+const clientSideVulnExposeLabModuleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULN_EXPOSE_MODULE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnSite|vuln-expose|vulns-expose/i.test(corpus)) return NEGATIVE;
+  if (!/\/sqli\/|\/xss\/|SQL Injection Authentication Bypass|XSS Laboratory/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      module: pageUrl.match(/\/(sqli|xss)\/[^/?#]+/)?.[0],
+      note: "VulnSite module page documents hands-on SQL auth-bypass or XSS exploitation lab with inline payloads"
+    }
+  };
+};
+
 // --- Wizer developer security CTF (chal*.vercel.app) --------------------------------
 const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -12836,6 +12882,14 @@ const CLIENT_VULNLAB_CMS_PLATFORM_RES: { label: string; re: RegExp }[] = [
     re: /ASP\.NET \/ IIS|PHP \/ Apache|Node\.js \/ Express|Java \/ Spring|Ruby \/ Rails/i
   },
   {
+    label: "ASP.NET ViewState analyzer lab",
+    re: /ViewState Analyzer|\/wEPDwUK[A-Za-z0-9+/=]{20,}/
+  },
+  {
+    label: "web.config backup probe target",
+    re: /web\.config Probe|\/backup\/web\.config\.bak/i
+  },
+  {
     label: "VulnLab resource hub training flow",
     re: /Resource Hub[\s\S]{0,200}intentionally vulnerable/i
   }
@@ -14649,6 +14703,7 @@ export const RULES: Record<string, Rule> = {
   redtigerBlindLoginFormEvidence,
   redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
+  clientSideVulnExposeLabModuleEvidence,
   clientSideWizerCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,

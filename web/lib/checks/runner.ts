@@ -4755,7 +4755,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/owasp/a09.html", home.finalUrl).toString(),
           new URL("/owasp/a10.html", home.finalUrl).toString(),
           new URL("/cms/wordpress.html", home.finalUrl).toString(),
-          new URL("/platform/php.html", home.finalUrl).toString()
+          new URL("/platform/php.html", home.finalUrl).toString(),
+          new URL("/platform/aspnet.html", home.finalUrl).toString(),
+          new URL("/platform/node.html", home.finalUrl).toString(),
+          new URL("/platform/java.html", home.finalUrl).toString(),
+          new URL("/platform/python.html", home.finalUrl).toString()
         ]
       : [];
   const seclabPlaygroundPrioritySeeds =
