@@ -5992,7 +5992,7 @@ const domgoReferrerDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = ctx.home.body;
   const referrer = /document\.referrer/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   if (!referrer || !sink) return NEGATIVE;
@@ -6011,7 +6011,7 @@ const domgoHashDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = ctx.home.body;
   const hashSource = /location\.hash/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   const referrerVuln = /let\s+rfr\s*=\s*document\.referrer/i.test(corpus);
@@ -6031,7 +6031,7 @@ const domgoPostMessageDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = ctx.home.body;
   const messageSource = /(?:window\.)?onmessage|addEventListener\(\s*["']message["']/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   if (!messageSource || !sink) return NEGATIVE;
@@ -6050,7 +6050,7 @@ const domgoLocalStorageDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = ctx.home.body;
   const storageSource = /localStorage\.getItem/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   if (!storageSource || !sink) return NEGATIVE;
