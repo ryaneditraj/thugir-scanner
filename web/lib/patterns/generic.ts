@@ -7987,5 +7987,31 @@ export const genericPatterns: Pattern[] = [
       "We host HTS-style realistic mission labs with products.php SQLi. Show parameterized queries and auth gating.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-hts-login-gated-mission-hub-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackThisSite login-gated mission category hub disclosed",
+    description:
+      "HTS Basic, Forensic, Javascript, or Programming mission hubs return Login Required — documenting challenge categories behind authenticated wargame access.",
+    impactOneline:
+      "Public mission hub gates confirm HTS hosts HTML-comment, forensic disk-image, JS exploit, and programming challenges requiring accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHtsLoginGatedMissionHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate wargame mission instances; hub listing alone is low risk but signals training attack surface.",
+      steps: [
+        "Require HTS login before serving mission challenge content.",
+        "Never copy mission vulnerability patterns into production code.",
+        "Rate-limit unauthenticated probing of mission hub endpoints."
+      ]
+    },
+    fixPrompt:
+      "We mirror HackThisSite login-gated mission hubs. Show how to auth-gate challenge content on private wargame deployments.",
+    version: 1,
+    enabled: true
   }
 ];
