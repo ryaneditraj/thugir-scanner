@@ -3542,7 +3542,32 @@
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level2.php",
       "source": "webspoilt/vulnforge-academy — Level 2 SQLi challenge (GitHub repo structure)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/users",
+      "source": "JuaniVeltri/vuln-expose — SQLi user enumeration & privilege escalation lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/profile",
+      "source": "JuaniVeltri/vuln-expose — stored/reflected XSS profile injection lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/learn/xss",
+      "source": "Web Security Lab — XSS attack/defense side-by-side chapter (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/learn/csrf",
+      "source": "Web Security Lab — CSRF synchronizer-token chapter (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/learn/cookies-samesite",
+      "source": "Web Security Lab — Cookie SameSite/HttpOnly/Secure lab chapter (Vercel deploy)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-15T04:10:00.000Z"
+  "updated_at": "2026-07-15T05:10:00.000Z"
 }
