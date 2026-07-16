@@ -1038,7 +1038,7 @@ values
    true),
   ('client-side-hts-login-gated-mission-hub-evidence', 'generic', 'Broken access control', 'medium',
    'HackThisSite login-gated mission category hub disclosed',
-   'HTS Basic, Application, Forensic, Javascript, Programming, Extended Basic, or Steganography mission hubs return Login Required — documenting challenge categories behind authenticated wargame access.',
+   'HTS Basic, Application, Forensic, Javascript, Programming, Extended Basic, or Steganography mission hubs return Login Required or require_auth — documenting challenge categories behind authenticated wargame access. Indexed mission instance URLs that return 404 still disclose forensic/javascript/programming/stego challenge slots.',
    'Public mission hub gates confirm HTS hosts HTML-comment, application exploit, forensic disk-image, JS exploit, programming, extbasic, and stego challenges requiring accounts.',
    'rule_ref',
    '{"rule":"clientSideHtsLoginGatedMissionHubEvidence"}'::jsonb,
