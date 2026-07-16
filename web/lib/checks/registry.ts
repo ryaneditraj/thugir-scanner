@@ -13153,6 +13153,18 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
   {
     label: "BugBountyHunter challenges disabled notice",
     re: /We have disabled our free challenges whilst we work on our new platform/i
+  },
+  {
+    label: "BugBountyHunter image class manipulation challenge title",
+    re: /Change the class of our image and pick your favourite/i
+  },
+  {
+    label: "BugBountyHunter FastFoodHackings playground",
+    re: /FastFoodHackings.*demo web application|ZSeano(?:'|&#39;)s Playground/i
+  },
+  {
+    label: "BugBountyHunter hacker mindset hunt description",
+    re: /over <b>25<\/b> unique findings to discover|using your newly acquired hacker mindset/i
   }
 ];
 
@@ -13248,6 +13260,18 @@ const BUGBOUNTYHUNTER_CHALLENGE_ORACLES: {
     urlRe: /bugbountyhunter\.com\/challenge\?id=11\b/i,
     titleRe: /I(?:'|&#39;)ve won a bounty/i,
     note: "BugBountyHunter challenge #11 documents a fake bounty generator scenario"
+  },
+  {
+    slug: "image-class-manipulation",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=17\b/i,
+    titleRe: /Change the class of our image and pick your favourite/i,
+    note: "BugBountyHunter challenge #17 documents an image CSS class manipulation scenario"
+  },
+  {
+    slug: "fastfoodhackings-playground",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=20\b/i,
+    titleRe: /FastFoodHackings/i,
+    note: "BugBountyHunter challenge #20 documents the FastFoodHackings multi-vulnerability playground hunt"
   }
 ];
 
