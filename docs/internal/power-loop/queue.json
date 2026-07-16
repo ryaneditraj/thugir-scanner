@@ -3942,7 +3942,32 @@
       "url": "https://vwad.owasp.org/app/owasp-vulnerableapp/",
       "source": "OWASP VWAD — SasanLabs VulnerableApp scanner-evaluation oracle (JWT/SQLi/XSS/SSRF metadata)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnscope.vercel.app/",
+      "source": "jenmar23rondon-ux/vulnscope — intentionally vulnerable security dashboard with auth bypass demos (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/domxss/",
+      "source": "Mario Heiderich domgo.at — DOM XSS execution sinks training hub (complements cxss/intro)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/1/",
+      "source": "Hack This Site — programming mission 1 server-side logic bypass challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/4/",
+      "source": "Hack This Site — play level 4 interactive vulnerability puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/6/",
+      "source": "Hack This Site — realistic mission 6 web application pentest challenge",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T00:10:00.000Z"
+  "updated_at": "2026-07-16T01:06:00.000Z"
 }
