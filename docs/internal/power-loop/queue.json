@@ -4448,7 +4448,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=24",
       "source": "BugBountyHunter zseano — FirstBlood v2 invite code bypass challenge #24 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/25/",
+      "source": "Hack This Site — playlevel arcade mission 25 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/19/",
+      "source": "Hack This Site — application mission 19 reverse-engineering challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/17/",
+      "source": "Hack This Site — javascript mission 17 client-side security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/15/",
+      "source": "Hack This Site — forensic mission 15 steganography/file analysis challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=25",
+      "source": "BugBountyHunter zseano — payment logic / race condition challenge #25 (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T20:10:00.000Z"
+  "updated_at": "2026-07-16T21:02:00.000Z"
 }
