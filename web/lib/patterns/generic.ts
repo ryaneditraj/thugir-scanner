@@ -8229,7 +8229,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "HackThisSite Realistic mission instance lab disclosed",
     description:
-      "HTS Realistic mission pages expose Uncle Arnold vote.php SQLi, defacement challenges, Fischer products.php SQLi labs, XECryption ciphertext oracles, political blog comment injection, U.B.O.A login bypass, Holy Word student.php grades, BudgetSERV page.pl CGI hosting, or Compu-global-Hyper-Mega-Net frameset challenges.",
+      "HTS Realistic mission pages expose Uncle Arnold vote.php SQLi, defacement challenges, Fischer products.php SQLi labs, XECryption ciphertext oracles, political blog comment injection, U.B.O.A login bypass, Holy Word student.php grades, BudgetSERV page.pl CGI hosting, Heartland internet.pl SSRF, Elbonia ENRP members.php roster, Yuppers! search.cgi portal, or Compu-global-Hyper-Mega-Net frameset challenges.",
     impactOneline:
       "Public realistic mission instances expose SQLi and legacy web challenge surfaces without authentication.",
     detectorKind: "rule_ref",
