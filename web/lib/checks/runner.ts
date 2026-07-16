@@ -917,6 +917,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingBrokenAccessControlLessonEvidence",
   "clientSideHacksplainingDnsPoisoningLessonEvidence",
   "clientSideHacksplainingDowngradeAttacksLessonEvidence",
+  "clientSideHacksplainingEmailSpoofingLessonEvidence",
+  "clientSideHacksplainingSslStrippingLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1446,6 +1448,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/22/",
     "/playlevel/23/",
     "/playlevel/24/",
+    "/playlevel/25/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1454,6 +1457,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/16/",
     "/missions/application/17/",
     "/missions/application/18/",
+    "/missions/application/19/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1461,6 +1465,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/13/",
     "/missions/javascript/14/",
     "/missions/javascript/15/",
+    "/missions/javascript/17/",
     "/missions/stego/9/",
     "/missions/stego/10/",
     "/missions/stego/11/",
@@ -1478,7 +1483,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/10/",
     "/missions/forensic/11/",
     "/missions/forensic/12/",
-    "/missions/forensic/13/"
+    "/missions/forensic/13/",
+    "/missions/forensic/15/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());

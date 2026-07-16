@@ -3858,6 +3858,96 @@ const clientSideHacksplainingDowngradeAttacksLessonEvidence: Rule = async (ctx) 
   };
 };
 
+// --- Hacksplaining email spoofing lesson (hacksplaining.com/lessons/email-spoofing) -------
+const CLIENT_HACKSPLAINING_EMAIL_SPOOFING_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Email spoofing lesson URL",
+    re: /hacksplaining\.com\/lessons\/email-spoofing/i
+  },
+  {
+    label: "Email spoofing lesson title",
+    re: /Email Spoofing — Secure Coding Lesson/i
+  },
+  {
+    label: "Email spoofing forged from-address meta description",
+    re: /Email spoofing is the sending of email messages with a forged/i
+  },
+  {
+    label: "Email spoofing lesson step nav",
+    re: /lessons\/email-spoofing\/(?:checking-the-code|spoofed-emails|a-real-world-example|finish)/i
+  },
+  {
+    label: "Email spoofing attack description",
+    re: /forged.*from.*address|spoofed email|SPF|DKIM/i
+  }
+];
+
+const clientSideHacksplainingEmailSpoofingLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/email-spoofing/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_EMAIL_SPOOFING_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/email-spoofing\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining email spoofing lesson documents exploit-then-fix chains where forged From headers bypass weak SPF/DKIM validation"
+    }
+  };
+};
+
+// --- Hacksplaining SSL stripping lesson (hacksplaining.com/lessons/ssl-stripping) -------
+const CLIENT_HACKSPLAINING_SSL_STRIPPING_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSL stripping lesson URL",
+    re: /hacksplaining\.com\/lessons\/ssl-stripping/i
+  },
+  {
+    label: "SSL stripping lesson title",
+    re: /SSL Stripping — Secure Coding Lesson/i
+  },
+  {
+    label: "SSL stripping partial HTTPS meta description",
+    re: /only some actions on your website require HTTPS, an attacker may be able to steal credentials/i
+  },
+  {
+    label: "SSL stripping lesson step nav",
+    re: /lessons\/ssl-stripping\/(?:checking-the-code|partial-https|a-real-world-example|finish)/i
+  },
+  {
+    label: "SSL stripping attack description",
+    re: /ssl strip|partial HTTPS|downgrade.*HTTP|steal credentials/i
+  }
+];
+
+const clientSideHacksplainingSslStrippingLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/ssl-stripping/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_SSL_STRIPPING_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/ssl-stripping\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining SSL stripping lesson documents exploit-then-fix chains where partial HTTPS coverage lets attackers downgrade login flows and steal credentials"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17703,6 +17793,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingBrokenAccessControlLessonEvidence,
   clientSideHacksplainingDnsPoisoningLessonEvidence,
   clientSideHacksplainingDowngradeAttacksLessonEvidence,
+  clientSideHacksplainingEmailSpoofingLessonEvidence,
+  clientSideHacksplainingSslStrippingLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

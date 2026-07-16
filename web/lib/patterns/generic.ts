@@ -3542,6 +3542,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-email-spoofing-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining email spoofing lesson disclosed",
+    description:
+      "Hacksplaining /lessons/email-spoofing publishes an interactive exploit-then-fix walkthrough covering forged From headers and weak SPF/DKIM validation chains.",
+    impactOneline:
+      "Public email spoofing lesson pages document forged-sender exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingEmailSpoofingLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining email spoofing lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable email spoofing lesson instances on private deployments.",
+        "Enforce SPF, DKIM, and DMARC in production — never copy Hacksplaining weak mail validation handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style email spoofing exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-ssl-stripping-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining SSL stripping lesson disclosed",
+    description:
+      "Hacksplaining /lessons/ssl-stripping publishes an interactive exploit-then-fix walkthrough covering partial HTTPS coverage and credential theft via protocol downgrade.",
+    impactOneline:
+      "Public SSL stripping lesson pages document partial-HTTPS downgrade exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingSslStrippingLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining SSL stripping lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable SSL stripping lesson instances on private deployments.",
+        "Enforce sitewide HTTPS and HSTS in production — never copy Hacksplaining partial-HTTPS login handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style SSL stripping exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",
