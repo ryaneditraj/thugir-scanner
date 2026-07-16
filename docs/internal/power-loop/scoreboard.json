@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T07:15:00.000Z",
+  "updated_at": "2026-07-16T07:20:25.790Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 641,
-  "total_findings": 2903,
+  "total_sites_scanned": 648,
+  "total_findings": 2931,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 236,
-  "discovery_findings": 2034,
+  "discovery_urls_added": 241,
+  "discovery_findings": 2063,
   "improvements_shipped": 542,
-  "last_run": "2026-07-16T07:15:00.000Z",
+  "last_run": "2026-07-16T07:20:25.790Z",
   "last_run_summary": {
     "hour_utc": "07:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall (pages_crawled=1 cold pass)",
+      "note": "No benchmark misses — primary heroku 6/6 recall (pages_crawled=1 cold pass)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,23 +50,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "HTS realistic 12-14 lab detection + mission queue drain (javascript/3, stego/3, forensic/3, playlevel/9)",
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 29,
+      "skipped_48h": [
+        "https://hack-this-site-eta.vercel.app/owasp/a06.html",
+        "https://hack-this-site-eta.vercel.app/labs/",
+        "https://gitagent-securebot-app.vercel.app/",
+        "https://vwad.owasp.org/app/grpc-goat/",
+        "https://chal11.vercel.app/"
+      ],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — recurring)"
+      ],
+      "focus": "HTS realistic 12-14 lab detection + mission queue drain; queue head drained chal10/BBH/ctflearn/natas",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 — no benchmark misses",
       "www.hackthissite.org/missions/realistic/14: Yuppers! search.cgi + Web Permit lab (0→4 findings)",
       "www.hackthissite.org/missions/realistic/12: Heartland internet.pl SSRF lab (0→4 findings)",
       "www.hackthissite.org/missions/realistic/13: Elbonia ENRP members.php roster lab (0→5 findings)",
-      "www.hackthissite.org/playlevel/9 + missions/javascript/3/stego/3/forensic/3: login-gated hub evidence (0→6 each)"
+      "www.hackthissite.org/playlevel/9 + missions/javascript/3/stego/3/forensic/3: login-gated hub evidence (0→6 each)",
+      "ctflearn.com: 10 findings — Web4 SQLi + XSS challenge markers",
+      "chal10.vercel.app: 4 findings — Wizer CTF #10 stored DOM XSS lab markers"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "juice-shop shallow crawl (pages_crawled=1): idor-sequential-ids slug flaky on cold pass",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "HTS realistic/15+: not yet seeded — extend loop when queue drains"
+      "HTS playlevel/10 realistic/15-16 programming/3 application/6: queued at tail"
     ]
   },
   "discovery_highlights": {
@@ -103,7 +116,7 @@
     "urban-vampi-staging.up.railway.app": 4,
     "secure-bank-bay.vercel.app": 6,
     "owaspbased-lessons.vercel.app": 1,
-    "hack-this-site-eta.vercel.app": 13,
+    "hack-this-site-eta.vercel.app": 14,
     "zero-health.vercel.app": 3,
     "csrf-xss-demo.vercel.app": 4,
     "ai-security-platform-iota.vercel.app": 3,
@@ -255,9 +268,6 @@
     "sam.wizer-ctf.com": 5,
     "wizer-ctf.com": 4,
     "chal8.vercel.app": 4,
-    "securebank-blog.vercel.app": 6,
-    "hack-health-tutorial.vercel.app": 4,
-    "hack-this-site-eta.vercel.app": 14,
     "solyd.com.br/treinamentos/introducao-ao-hacking-e-pentest": 2,
     "ctflearn.com": 10,
     "natas0.natas.labs.overthewire.org": 4,

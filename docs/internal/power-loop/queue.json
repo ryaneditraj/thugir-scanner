@@ -4098,7 +4098,32 @@
       "url": "https://www.hackthissite.org/missions/forensic/3/",
       "source": "Hack This Site — forensic mission 3 file/metadata analysis challenge",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/10/",
+      "source": "Hack This Site — playlevel arcade mission 10 interactive vulnerability puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/15/",
+      "source": "Hack This Site — realistic mission 15 business-logic / SQLi challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/16/",
+      "source": "Hack This Site — realistic mission 16 advanced web exploitation lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/3/",
+      "source": "Hack This Site — programming mission 3 exploit scripting challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/6/",
+      "source": "Hack This Site — application mission 6 exploit development challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T06:06:00.000Z"
+  "updated_at": "2026-07-16T07:06:00.000Z"
 }
