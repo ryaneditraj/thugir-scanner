@@ -3335,6 +3335,24 @@
       "slug": "client-side-webvulnsguide-ssrf-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SSRF Adventure: Hack The Server! + $_GET['image_url'] fetch vulnerability + metadata.google.internal payload arsenal on /SSRF-2.html; clientSideWebVulnsGuideSsrfLabEvidence + AKIAXX placeholder secret-aws-akid FP fix; dxx33.github.io/WebVulnsGuide/SSRF-2.html findings quality improved (secret-aws-akid FP removed, SSRF lab slug added); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-vulnerableapp-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vwad.owasp.org/app/owasp-vulnerableapp schema.org lists JWT, SQLi, XSS, XXE, SSRF + scanner-test category; vwad findings 3→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-basic-mission-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/basic/11 bare content I love my music + <!--We even have our own collection - if you could find it!-->; basic/11 findings 1→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerableapp.com",
+      "slug": "client-side-vulnerableapp-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DOM Based Cross-Site Scripting Example + dom-xss.html + document.write cookie exfiltration href; vulnerableapp.com findings 0→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5942,6 +5960,21 @@
       "source": "discovery:dxx33.github.io/WebVulnsGuide",
       "slug": "client-side-webvulnsguide-ssrf-lab-evidence",
       "shipped_at": "2026-07-16T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-vulnerableapp-evidence",
+      "shipped_at": "2026-07-16T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-basic-mission-lab-evidence",
+      "shipped_at": "2026-07-16T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerableapp.com",
+      "slug": "client-side-vulnerableapp-dom-xss-evidence",
+      "shipped_at": "2026-07-16T01:15:00.000Z"
     }
   ]
 }
