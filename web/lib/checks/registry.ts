@@ -13008,6 +13008,14 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
     re: /Can you steal the SSO token/i
   },
   {
+    label: "BugBountyHunter information leak challenge title",
+    re: /There(?:'|&#39;)s a leak somewhere/i
+  },
+  {
+    label: "BugBountyHunter XSS Destroyer challenge title",
+    re: /Can you access our private tool, XSS Destroyer/i
+  },
+  {
     label: "BugBountyHunter challenges disabled notice",
     re: /We have disabled our free challenges whilst we work on our new platform/i
   }
@@ -14677,6 +14685,26 @@ const CLIENT_VULNLAB_A07_AUTH_RES: { label: string; re: RegExp }[] = [
   {
     label: "A07 weak credential audit lab",
     re: /A07-001 Weak Password Policy|A07-003 Session Fixation/i
+  },
+  {
+    label: "VulnLab auth hub path",
+    re: /hack-this-site-eta\.vercel\.app\/auth(?:\/|$)/i
+  },
+  {
+    label: "Auth & Session lab hub",
+    re: /Auth & Session Labs|Authentication & Session/i
+  },
+  {
+    label: "Login enumeration training lab",
+    re: /Login Enumeration|Predictable error messages/i
+  },
+  {
+    label: "JWT algorithm confusion lab",
+    re: /JWT Lab|JWT-00[12]|Alg confusion and weak secrets|alg=none|Secret:\s*weaksecret/i
+  },
+  {
+    label: "Session fixation training lab",
+    re: /Session (?:Analysis|Mgmt|Fixation)|Weak session IDs and fixation/i
   }
 ];
 
