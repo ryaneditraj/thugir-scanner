@@ -8680,7 +8680,9 @@ const HTS_LOGIN_GATED_MISSION_NOTES: Record<string, string> = {
   stego:
     "HTS Steganography mission hub is login-gated — documents image steganography CTF missions behind authenticated access",
   "missions-stego":
-    "HTS Steganography mission category is login-gated — documents image/audio steganography CTF challenges behind authenticated access"
+    "HTS Steganography mission category is login-gated — documents image/audio steganography CTF challenges behind authenticated access",
+  realistic:
+    "HTS Realistic mission instance is login-gated — documents advanced web application pentest challenges behind authenticated access"
 };
 
 type HtsLoginGatedHub =
@@ -8701,6 +8703,9 @@ function parseHtsLoginGatedHub(pageUrl: string): HtsLoginGatedHub | null {
 
   const stego = pageUrl.match(/hackthissite\.org\/missions\/playit\/stego(?:\/\d+)?\/?/i);
   if (stego) return { kind: "playit", category: "stego", playSegment: "playit/stego" };
+
+  const realistic = pageUrl.match(/hackthissite\.org\/missions\/realistic\/\d+\/?/i);
+  if (realistic) return { kind: "standard", category: "realistic" };
 
   return null;
 }
@@ -8785,6 +8790,10 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     /posted on/i.test(corpus);
   const uboaLab =
     /Welcome To U\.B\.O\.A/i.test(corpus) && /login1\.php/i.test(corpus);
+  const holyWordGrades =
+    /Holy Word High School/i.test(corpus) &&
+    /student\.php/i.test(corpus) &&
+    /(?:listteachers\.php|Check your grades online)/i.test(corpus);
   if (
     !uncleArnold &&
     !naziParty &&
@@ -8793,7 +8802,8 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     !framesLab &&
     !xecryption &&
     !politicalBlog &&
-    !uboaLab
+    !uboaLab &&
+    !holyWordGrades
   )
     return NEGATIVE;
   const note = uncleArnold
@@ -8810,7 +8820,9 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
               ? "HTS Realistic mission 7 exposes political blog comment surface with posted-on timestamp (comment injection / XSS lab)"
               : uboaLab
                 ? "HTS Realistic mission 8 exposes U.B.O.A login1.php authentication bypass challenge"
-                : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
+                : holyWordGrades
+                  ? "HTS Realistic mission 10 exposes Holy Word High School student.php grade access system (SQLi / IDOR lab)"
+                  : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,

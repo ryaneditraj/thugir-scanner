@@ -1368,6 +1368,11 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/3/",
     "/playlevel/4/",
     "/playlevel/5/",
+    "/playlevel/6/",
+    "/missions/realistic/9/",
+    "/missions/realistic/10/",
+    "/missions/application/4/",
+    "/missions/javascript/2/",
     "/missions/playit/stego/1/",
     "/missions/programming/1/",
     "/missions/application/3/"
@@ -1378,7 +1383,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
-  for (const n of [1, 2, 3, 4, 5, 6, 7, 8]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
     try {
       out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
     } catch {
@@ -1458,6 +1463,15 @@ function extractHtsRealisticMissionSeeds(html: string, pageUrl: string): string[
     for (const frame of ["top.htm", "menu.htm", "main.htm"]) {
       try {
         out.add(new URL(frame, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  if (/Holy Word High School|student\.php/i.test(html)) {
+    for (const child of ["student.php", "listteachers.php", "staff.php", "index.php"]) {
+      try {
+        out.add(new URL(child, pageUrl).toString());
       } catch {
         /* ignore */
       }
