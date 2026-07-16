@@ -3917,7 +3917,32 @@
       "url": "https://csp-jade.vercel.app/",
       "source": "CSP Jade — interactive Content-Security-Policy header bypass exercises (Vercel public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/basic/11/",
+      "source": "Hack This Site — basic mission 11 password-guessing / auth challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/1/",
+      "source": "Hack This Site — forensic mission 1 file/metadata analysis challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/1/",
+      "source": "Hack This Site — javascript mission 1 client-side logic bypass lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/1/",
+      "source": "Hack This Site — steganography mission 1 hidden-data challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/owasp-vulnerableapp/",
+      "source": "OWASP VWAD — SasanLabs VulnerableApp scanner-evaluation oracle (JWT/SQLi/XSS/SSRF metadata)",
+      "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-15T23:10:00.000Z"
+  "updated_at": "2026-07-16T00:10:00.000Z"
 }
