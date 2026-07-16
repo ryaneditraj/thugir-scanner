@@ -4323,7 +4323,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=19",
       "source": "BugBountyHunter zseano — XSS/filter bypass challenge #19 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/20/",
+      "source": "Hack This Site — playlevel arcade mission 20 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/14/",
+      "source": "Hack This Site — application mission 14 server-side web security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/12/",
+      "source": "Hack This Site — javascript mission 12 client-side security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/10/",
+      "source": "Hack This Site — forensic mission 10 steganography/file analysis challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=20",
+      "source": "BugBountyHunter zseano — auth/session manipulation challenge #20 (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T15:05:00.000Z"
+  "updated_at": "2026-07-16T16:05:00.000Z"
 }
