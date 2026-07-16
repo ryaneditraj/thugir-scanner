@@ -1456,7 +1456,10 @@ const idorObjectAccess: Rule = async (ctx) => {
   if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
     const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
     for (let attempt = 0; attempt < 8; attempt++) {
-      const r = await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
+      const r =
+        attempt === 0
+          ? await ctx.probe.get(trackUrl, { maxBytes: 8192, timeoutMs: 18000 })
+          : await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
       if (HEROKU_STUB_RE.test(r.body)) {
         await new Promise((resolve) => setTimeout(resolve, 3000));
         continue;
@@ -8853,6 +8856,14 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     /Yuppers!/i.test(corpus) &&
     /search\.cgi/i.test(corpus) &&
     /(?:Web Permit|login\.html|Y-Web)/i.test(corpus);
+  const secuLas =
+    /secuLas|seculas/i.test(corpus) &&
+    /products\.php/i.test(corpus) &&
+    /(?:defense|anti personnel|laser weapon)/i.test(corpus);
+  const simpleMail =
+    /Simple Mail/i.test(corpus) &&
+    /trustworthy email provider/i.test(corpus) &&
+    /index\.php\?module=(?:login|register|admin_login)/i.test(corpus);
   if (
     !uncleArnold &&
     !naziParty &&
@@ -8866,7 +8877,9 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     !budgetServ &&
     !heartlandSchool &&
     !elboniaEnrp &&
-    !yuppersPortal
+    !yuppersPortal &&
+    !secuLas &&
+    !simpleMail
   )
     return NEGATIVE;
   const note = uncleArnold
@@ -8893,7 +8906,11 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
                         ? "HTS Realistic mission 13 exposes Elbonia National Republican Party members.php candidate roster (SQLi / IDOR lab)"
                         : yuppersPortal
                           ? "HTS Realistic mission 14 exposes Yuppers! portal search.cgi + Web Permit login.html (SQLi / auth bypass lab)"
-                          : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
+                          : secuLas
+                            ? "HTS Realistic mission 15 exposes secuLas Ltd. defense-laser products.php catalog (SQLi / info disclosure lab)"
+                            : simpleMail
+                              ? "HTS Realistic mission 16 exposes Simple Mail index.php?module= login/register/admin_login (SQLi / auth bypass lab)"
+                              : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,

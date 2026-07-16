@@ -1390,9 +1390,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/realistic/12/",
     "/missions/realistic/13/",
     "/missions/realistic/14/",
+    "/missions/realistic/15/",
+    "/missions/realistic/16/",
     "/missions/javascript/3/",
     "/missions/stego/3/",
-    "/missions/forensic/3/"
+    "/missions/forensic/3/",
+    "/missions/programming/3/",
+    "/missions/application/6/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1400,7 +1404,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
-  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) {
     try {
       out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
     } catch {
@@ -1536,6 +1540,24 @@ function extractHtsRealisticMissionSeeds(html: string, pageUrl: string): string[
     ]) {
       try {
         out.add(new URL(child, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  if (/secuLas|seculas/i.test(html)) {
+    for (const child of ["products.php", "questions.php", "jobs.php", "imprint.php"]) {
+      try {
+        out.add(new URL(child, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  if (/Simple Mail|trustworthy email provider/i.test(html)) {
+    for (const mod of ["login", "register", "admin_login", "email", "send", "home"]) {
+      try {
+        out.add(new URL(`index.php?module=${mod}`, pageUrl).toString());
       } catch {
         /* ignore */
       }
