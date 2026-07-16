@@ -6844,6 +6844,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-xss-reflected-lesson-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Hacksplaining reflected XSS lesson disclosed",
+    description:
+      "Hacksplaining /lessons/xss-reflected publishes an interactive exploit-then-fix walkthrough covering URL-reflected script injection, crafting malicious links, and session hijacking.",
+    impactOneline:
+      "Public reflected XSS lesson pages document URL-bounce exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingXssReflectedLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining XSS lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable reflected XSS lesson instances on private deployments.",
+        "Encode all user-supplied output in production — never copy Hacksplaining vulnerable echo handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style reflected XSS exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-portswigger-academy-evidence",
     platform: "generic",
     category: "Injection",
