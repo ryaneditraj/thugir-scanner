@@ -3605,6 +3605,24 @@
       "slug": "client-side-hacksplaining-ssrf-lesson-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/ssrf/start title Server-Side Request Forgery — Secure Coding Lesson + meta probe your internal network; clientSideHacksplainingSsrfLessonEvidence; hacksplaining.com/lessons/ssrf/start findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-20-application-14-javascript-12-forensic-10",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/20 + application/14 + javascript/12 + forensic/10 + programming/9 + stego/10; playlevel/20→6 findings incl client-side-hts-playlevel-hub-evidence; application/14→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-20-fastfoodhackings-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=20 FastFoodHackings demo web application + over 25 unique findings + ZSeano's Playground; BUGBOUNTYHUNTER_CHALLENGE_ORACLES fastfoodhackings-playground; challenge?id=20 findings 0→4 incl client-side-bugbountyhunter-challenge-scenario-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-17-image-class-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=17 title Change the class of our image and pick your favourite; BUGBOUNTYHUNTER_CHALLENGE_ORACLES image-class-manipulation + CLIENT_BUGBOUNTYHUNTER_RES marker; challenge?id=17 findings 0→4 incl client-side-bugbountyhunter-challenge-scenario-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6437,6 +6455,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-ssrf-lesson-evidence",
       "shipped_at": "2026-07-16T16:18:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-20-application-14-javascript-12-forensic-10",
+      "shipped_at": "2026-07-16T17:40:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-20-fastfoodhackings-oracle",
+      "shipped_at": "2026-07-16T17:40:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-17-image-class-oracle",
+      "shipped_at": "2026-07-16T17:40:00.000Z"
     }
   ]
 }
