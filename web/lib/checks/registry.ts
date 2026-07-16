@@ -3678,6 +3678,96 @@ const clientSideHacksplainingClickjackingLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining mass assignment lesson (hacksplaining.com/lessons/mass-assignment) -------
+const CLIENT_HACKSPLAINING_MASS_ASSIGNMENT_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Mass assignment lesson URL",
+    re: /hacksplaining\.com\/lessons\/mass-assignment/i
+  },
+  {
+    label: "Mass assignment lesson title",
+    re: /Mass Assignment — Secure Coding Lesson/i
+  },
+  {
+    label: "Mass assignment HTTP unpacking meta description",
+    re: /Automatically unpacking data from the HTTP request can sometimes be too easy/i
+  },
+  {
+    label: "Mass assignment lesson step nav",
+    re: /lessons\/mass-assignment\/(?:readability|profile|danger|dummy-request|finish)/i
+  },
+  {
+    label: "Mass assignment privilege escalation description",
+    re: /mass assignment|unpack(?:ing)? (?:user|request) (?:data|fields)/i
+  }
+];
+
+const clientSideHacksplainingMassAssignmentLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/mass-assignment/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_MASS_ASSIGNMENT_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/mass-assignment\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining mass assignment lesson documents exploit-then-fix HTTP request unpacking that lets attackers escalate privileges via hidden fields"
+    }
+  };
+};
+
+// --- Hacksplaining broken access control lesson (hacksplaining.com/lessons/broken-access-control) -------
+const CLIENT_HACKSPLAINING_BROKEN_ACCESS_CONTROL_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Broken access control lesson URL",
+    re: /hacksplaining\.com\/lessons\/broken-access-control/i
+  },
+  {
+    label: "Broken access control lesson title",
+    re: /Broken Access Control — Secure Coding Lesson/i
+  },
+  {
+    label: "Broken access control undiscoverable resources meta description",
+    re: /All resources on your site need to have access control implemented, even if they aren't intended to be discoverable/i
+  },
+  {
+    label: "Broken access control lesson step nav",
+    re: /lessons\/broken-access-control\/(?:security-through-obscurity|predictable-paths|a-real-world-example|financial-reports|a-broken-workflow|a-sneaky-user)/i
+  },
+  {
+    label: "Broken access control authorization bypass description",
+    re: /broken access control|security through obscurity|predictable paths/i
+  }
+];
+
+const clientSideHacksplainingBrokenAccessControlLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/broken-access-control/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_BROKEN_ACCESS_CONTROL_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/broken-access-control\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining broken access control lesson documents exploit-then-fix authorization bypass chains via obscured and predictable resource paths"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17519,6 +17609,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingXssReflectedLessonEvidence,
   clientSideHacksplainingXssStoredLessonEvidence,
   clientSideHacksplainingClickjackingLessonEvidence,
+  clientSideHacksplainingMassAssignmentLessonEvidence,
+  clientSideHacksplainingBrokenAccessControlLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
