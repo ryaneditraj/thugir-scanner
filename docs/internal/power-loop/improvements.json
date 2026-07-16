@@ -3551,6 +3551,24 @@
       "slug": "dom-xss-document-write-sink",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dom-xss.html document.write(decodeURIComponent(params.name)) + extractVulnerableappDomXssSeeds; vulnerableapp.com findings 2→3 incl dangerous-html-sinks; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-13-15-scenario-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=13 title There's a leak somewhere + #14 XSS Destroyer + #15 sensitive information; BUGBOUNTYHUNTER_CHALLENGE_ORACLES + CLIENT_BUGBOUNTYHUNTER_RES title markers; challenge #13/#14/#15 findings 2→3 incl client-side-bugbountyhunter-challenge-scenario-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-a07-auth-hub-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /auth/ hub Auth & Session Labs + Login Enumeration + JWT Lab Alg confusion markers; CLIENT_VULNLAB_A07_AUTH_RES extended; hack-this-site-eta.vercel.app/auth/ findings include client-side-vulnlab-a07-auth-evidence (16 total); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-13-14-title-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CLIENT_BUGBOUNTYHUNTER_RES title markers for information leak + XSS Destroyer challenges; complements scenario oracles on challenge?id=13-14; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6338,6 +6356,21 @@
       "source": "discovery:vulnerableapp.com",
       "slug": "dom-xss-document-write-sink",
       "shipped_at": "2026-07-16T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-13-15-scenario-oracles",
+      "shipped_at": "2026-07-16T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-a07-auth-hub-markers",
+      "shipped_at": "2026-07-16T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-13-14-title-oracles",
+      "shipped_at": "2026-07-16T14:15:00.000Z"
     }
   ]
 }

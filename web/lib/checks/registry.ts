@@ -13061,6 +13061,24 @@ const BUGBOUNTYHUNTER_CHALLENGE_ORACLES: {
     note: "BugBountyHunter challenge #7 documents an open-redirect subdomain whitelist bypass"
   },
   {
+    slug: "information-leak",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=13\b/i,
+    titleRe: /There(?:'|&#39;)s a leak somewhere/i,
+    note: "BugBountyHunter challenge #13 documents a sensitive information leak scenario"
+  },
+  {
+    slug: "xss-destroyer-tool",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=14\b/i,
+    titleRe: /Can you access our private tool, XSS Destroyer/i,
+    note: "BugBountyHunter challenge #14 documents a private XSS Destroyer tool access scenario"
+  },
+  {
+    slug: "sensitive-information-leak",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=15\b/i,
+    titleRe: /Can you obtain the sensitive information somehow/i,
+    note: "BugBountyHunter challenge #15 documents a sensitive information disclosure scenario"
+  },
+  {
     slug: "sso-token-theft",
     urlRe: /bugbountyhunter\.com\/challenge\?id=12\b/i,
     titleRe: /Can you steal the SSO token/i,
