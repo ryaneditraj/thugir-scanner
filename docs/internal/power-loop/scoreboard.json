@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T19:13:30.000Z",
+  "updated_at": "2026-07-16T19:43:10.847Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 301,
   "discovery_findings": 2488,
-  "improvements_shipped": 572,
-  "last_run": "2026-07-16T19:13:30.000Z",
+  "improvements_shipped": 575,
+  "last_run": "2026-07-16T19:43:10.847Z",
   "last_run_summary": {
     "hour_utc": "19:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall on first pass (pages_crawled=1 probes=234)",
+      "note": "Primary heroku pass1 4 findings gap idor,sensitive_data; wake retry still degraded; staging fallback 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,26 +50,25 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 37,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue drain: duck-store/dvaib/pentest-ground/owasp-juice.shop/xxe-lab/nextjs-cve; +5 HTS playlevel/23 application/17 javascript/15 forensic/13 + BBH #23 queued at tail",
-      "improvements_shipped_this_run": 0
+      "focus": "HTS playlevel/22 tail seeds + Hacksplaining stored XSS and clickjacking lesson oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — first-pass full recall on shallow crawl",
-      "duck-store.escape.tech: 7 findings incl secret-openai + idor-sequential-ids + vibe-openapi-docs-exposed",
-      "pentest-ground.com:4280: 5 findings incl phpinfo-exposed + reflected-xss-query-param",
-      "pentest-ground.com:9000: server-side-eval-evidence (critical) + vibe-openapi-docs-exposed",
-      "nextjs-cve-hackerone.vercel.app: client-side-react-rsc-cve-evidence (critical)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) via staging fallback after Heroku cold-start degradation",
+      "www.hackthissite.org/playlevel/22: 6 findings incl client-side-hts-playlevel-hub-evidence after tail seed extension",
+      "hacksplaining.com/lessons/xss-stored/start: client-side-hacksplaining-xss-stored-lesson-evidence (7 findings)",
+      "hacksplaining.com/lessons/click-jacking/start: client-side-hacksplaining-clickjacking-lesson-evidence (7 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/23 application/17 javascript/15 forensic/13 + BBH #23 queued at tail — not yet drained",
-      "owasp-juice.shop: marketing/docs SPA — client-side oracles only, no live challenge API surface"
+      "bugbountyhunter.com/challenge?id=22: hub carousel only — no id=22 scenario page published yet",
+      "HTS playlevel/23 application/17 javascript/15 forensic/13 + BBH #23 queued at tail — not yet drained"
     ]
   },
   "discovery_highlights": {
