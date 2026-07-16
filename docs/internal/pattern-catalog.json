@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T21:25:38.733Z",
-  "total": 387,
-  "uniqueSlugs": 387,
+  "generatedAt": "2026-07-16T22:04:15.450Z",
+  "total": 389,
+  "uniqueSlugs": 389,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 369,
+    "generic": 371,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 319,
+    "deep": 321,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 25,
-    "Security misconfiguration": 28,
+    "Security misconfiguration": 30,
     "Broken authentication": 23,
     "Injection": 69,
     "Cross-site scripting": 46,
@@ -141,10 +141,12 @@
     "client-side-hacksplaining-csrf-lesson-evidence",
     "client-side-hacksplaining-dns-poisoning-lesson-evidence",
     "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
+    "client-side-hacksplaining-email-spoofing-lesson-evidence",
     "client-side-hacksplaining-evidence",
     "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
     "client-side-hacksplaining-mass-assignment-lesson-evidence",
     "client-side-hacksplaining-sql-injection-lesson-evidence",
+    "client-side-hacksplaining-ssl-stripping-lesson-evidence",
     "client-side-hacksplaining-ssrf-lesson-evidence",
     "client-side-hacksplaining-xss-reflected-lesson-evidence",
     "client-side-hacksplaining-xss-stored-lesson-evidence",
