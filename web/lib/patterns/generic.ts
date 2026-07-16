@@ -1257,6 +1257,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-webvulnsguide-xxe-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Educational XXE lab disclosed",
+    description:
+      "WebVulnsGuide XXE Vulnerability Demonstration and similar training pages document external entity expansion, file disclosure payloads, and interactive XML parsing demos.",
+    impactOneline:
+      "Public XXE dojos teach entity-expansion tricks attackers replay on apps that parse untrusted XML with external entities enabled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebVulnsGuideXxeLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XXE dojos are intentional training — disable external entities and DTD processing in production XML parsers.",
+      steps: [
+        "Set disallow-doctype-decl and disable external-general-entities on XML parsers.",
+        "Prefer JSON over XML for untrusted input when possible.",
+        "Host XXE labs only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror WebVulnsGuide-style XXE training pages. Show how to harden XML parsers and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-webvulnsguide-ssrf-lab-evidence",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Educational SSRF lab disclosed",
+    description:
+      "WebVulnsGuide SSRF Adventure and similar training pages document server-side URL fetch misuse, internal metadata probes, and unvalidated image_url parameters.",
+    impactOneline:
+      "Public SSRF dojos teach internal-network fetch tricks attackers replay on apps that retrieve user-supplied URLs server-side.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebVulnsGuideSsrfLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SSRF dojos are intentional training — never fetch user-controlled URLs server-side without strict allow-lists.",
+      steps: [
+        "Block private IP ranges, link-local, and cloud metadata endpoints from server-side fetchers.",
+        "Use an allow-list of trusted external hosts instead of open URL retrieval.",
+        "Host SSRF labs only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror WebVulnsGuide-style SSRF training pages. Show how to fix server-side URL fetch validation and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-sql-injection-playground-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Educational SQL injection playground disclosed",
+    description:
+      "Ashkiani SQL Injection Playground and similar client-side demos build queries via string interpolation and flag injection patterns interactively.",
+    impactOneline:
+      "Public SQL playgrounds teach string-concat query building that becomes live injection when wired to a real database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSqlInjectionPlaygroundEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SQL playgrounds are intentional training — use parameterized queries in production, never string-concat SQL.",
+      steps: [
+        "Replace string-concat SQL with prepared statements / ORM parameter binding.",
+        "Remove client-side SQL simulation and auth bypass string checks from production.",
+        "Host SQL injection demos only on isolated GitHub Pages or lab subdomains."
+      ]
+    },
+    fixPrompt:
+      "We mirror Ashkiani-style SQL injection playground pages. Show how to fix query building and host labs safely.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-eval-filter-bypass-lab-evidence",
     platform: "generic",
     category: "Injection",

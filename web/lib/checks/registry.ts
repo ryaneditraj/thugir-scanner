@@ -9036,6 +9036,123 @@ const clientSideEvalFilterBypassLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Educational XXE lab pages (WebVulnsGuide xxe.html, etc.) -----------------------------
+const CLIENT_WEBVULNS_GUIDE_XXE_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XXE Vulnerability Demonstration title",
+    re: /XML External Entity\s*\(\s*XXE\s*\)\s+Vulnerability Demonstration/i
+  },
+  {
+    label: "Interactive XXE demonstration",
+    re: /Interactive XXE Demonstration|simulated XXE vulnerability/i
+  },
+  {
+    label: "XXE processXML client-side simulator",
+    re: /function\s+processXML\s*\(\)|processXML\(\)[\s\S]{0,200}file:\/\/\/etc\/passwd/i
+  },
+  {
+    label: "WebVulnsGuide XXE lab path",
+    re: /WebVulnsGuide\/xxe\.html|dxx33\.github\.io\/WebVulnsGuide\/xxe/i
+  }
+];
+
+const clientSideWebVulnsGuideXxeLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBVULNS_GUIDE_XXE_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational XXE lab documents external entity expansion, file disclosure payloads, and interactive XML parsing demos"
+    }
+  };
+};
+
+// --- Educational SSRF lab pages (WebVulnsGuide SSRF-2.html, etc.) --------------------------
+const CLIENT_WEBVULNS_GUIDE_SSRF_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF Adventure lab title",
+    re: /SSRF Adventure:\s*Hack The Server!/i
+  },
+  {
+    label: "SSRF image_url user input fetch vulnerability",
+    re: /Directly using user input\s*\(\s*<code>\$_GET\['image_url'\]<\/code>\s*\)[\s\S]{0,120}fetch content/i
+  },
+  {
+    label: "SSRF metadata endpoint payload arsenal",
+    re: /metadata\.google\.internal\/computeMetadata|SSRF Payload Arsenal/i
+  },
+  {
+    label: "WebVulnsGuide SSRF-2 lab path",
+    re: /WebVulnsGuide\/SSRF-2\.html|dxx33\.github\.io\/WebVulnsGuide\/SSRF-2/i
+  }
+];
+
+const clientSideWebVulnsGuideSsrfLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBVULNS_GUIDE_SSRF_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational SSRF lab documents server-side URL fetch misuse, internal metadata probes, and unvalidated image_url parameters"
+    }
+  };
+};
+
+// --- Ashkiani SQL Injection Playground (client-side dynamic query demo) -------------------
+const CLIENT_SQL_INJECTION_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection Playground title",
+    re: /SQL Injection Playground/i
+  },
+  {
+    label: "Dynamic SQL statement mockup disclaimer",
+    re: /dynamically generated based on your input|Dynamic SQL Statement/i
+  },
+  {
+    label: "Potential SQL Injection detected warning",
+    re: /Potential SQL Injection detected|sqlInjectionPattern/i
+  },
+  {
+    label: "Ashkiani SQL playground path",
+    re: /ashkiani\.github\.io\/sql-injection-playground/i
+  }
+];
+
+const clientSideSqlInjectionPlaygroundEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_SQL_INJECTION_PLAYGROUND_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Educational SQL injection playground builds queries via string interpolation and flags injection patterns client-side"
+    }
+  };
+};
+
 // --- CyberDefenders blue team / DFIR cyber range platform --------------------------------
 const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
   {
@@ -16347,6 +16464,9 @@ export const RULES: Record<string, Rule> = {
   clientSideWebVulnsGuideCorsLabEvidence,
   clientSideEvalFilterBypassLabEvidence,
   clientSideWebVulnsGuideSstiLabEvidence,
+  clientSideWebVulnsGuideXxeLabEvidence,
+  clientSideWebVulnsGuideSsrfLabEvidence,
+  clientSideSqlInjectionPlaygroundEvidence,
   clientSideCyberDefendersEvidence,
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,

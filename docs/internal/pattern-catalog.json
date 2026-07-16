@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T23:04:20.263Z",
-  "total": 365,
-  "uniqueSlugs": 365,
+  "generatedAt": "2026-07-16T00:04:06.060Z",
+  "total": 368,
+  "uniqueSlugs": 368,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 347,
+    "generic": 350,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 297,
+    "deep": 300,
     "continuous": 0
   },
   "byCategory": {
@@ -27,9 +27,10 @@
     "Information disclosure": 25,
     "Security misconfiguration": 25,
     "Broken authentication": 22,
-    "Injection": 62,
+    "Injection": 64,
     "Cross-site scripting": 42,
     "general": 18,
+    "SSRF": 1,
     "Server-side request forgery": 4,
     "Sensitive data exposure": 5,
     "AI security": 24,
@@ -242,6 +243,7 @@
     "client-side-solyd-training-evidence",
     "client-side-sploitify-exploit-database-evidence",
     "client-side-sql-evidence",
+    "client-side-sql-injection-playground-evidence",
     "client-side-ssrf-evidence",
     "client-side-tegalsec-lab-evidence",
     "client-side-try2hack-evidence",
@@ -282,7 +284,9 @@
     "client-side-websec-challenge-evidence",
     "client-side-webvuln-runner-evidence",
     "client-side-webvulnsguide-cors-lab-evidence",
+    "client-side-webvulnsguide-ssrf-lab-evidence",
     "client-side-webvulnsguide-ssti-lab-evidence",
+    "client-side-webvulnsguide-xxe-lab-evidence",
     "client-side-wechall-evidence",
     "client-side-wizer-ctf-evidence",
     "client-side-wrongsecrets-evidence",

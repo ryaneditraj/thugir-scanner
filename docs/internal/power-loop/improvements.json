@@ -3317,6 +3317,24 @@
       "slug": "client-side-eval-filter-bypass-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Eval Filter Bypass Playground + bypasses input filters to execute arbitrary code + eval() with filtered input on /EvalByPass.html; clientSideEvalFilterBypassLabEvidence; dxx33.github.io/WebVulnsGuide/EvalByPass.html findings 0→5 incl server-side-eval-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ashkiani.github.io/sql-injection-playground",
+      "slug": "client-side-sql-injection-playground-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SQL Injection Playground + dynamically generated based on your input + sqlInjectionPattern warning in script.js; clientSideSqlInjectionPlaygroundEvidence; ashkiani.github.io/sql-injection-playground findings 3→4; benchmark juice-shop.herokuapp.com 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-xxe-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XML External Entity (XXE) Vulnerability Demonstration + Interactive XXE Demonstration + processXML() simulator on /xxe.html; clientSideWebVulnsGuideXxeLabEvidence + extractWebVulnsGuideLabSeeds /xxe.html; dxx33.github.io/WebVulnsGuide/xxe.html findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-ssrf-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SSRF Adventure: Hack The Server! + $_GET['image_url'] fetch vulnerability + metadata.google.internal payload arsenal on /SSRF-2.html; clientSideWebVulnsGuideSsrfLabEvidence + AKIAXX placeholder secret-aws-akid FP fix; dxx33.github.io/WebVulnsGuide/SSRF-2.html findings quality improved (secret-aws-akid FP removed, SSRF lab slug added); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5909,6 +5927,21 @@
       "source": "discovery:dxx33.github.io/WebVulnsGuide",
       "slug": "client-side-eval-filter-bypass-lab-evidence",
       "shipped_at": "2026-07-15T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:ashkiani.github.io/sql-injection-playground",
+      "slug": "client-side-sql-injection-playground-evidence",
+      "shipped_at": "2026-07-16T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-xxe-lab-evidence",
+      "shipped_at": "2026-07-16T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:dxx33.github.io/WebVulnsGuide",
+      "slug": "client-side-webvulnsguide-ssrf-lab-evidence",
+      "shipped_at": "2026-07-16T00:10:00.000Z"
     }
   ]
 }
