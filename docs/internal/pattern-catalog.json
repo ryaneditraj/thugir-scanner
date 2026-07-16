@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T19:08:54.758Z",
-  "total": 383,
-  "uniqueSlugs": 383,
+  "generatedAt": "2026-07-16T20:06:19.922Z",
+  "total": 385,
+  "uniqueSlugs": 385,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 365,
+    "generic": 367,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 315,
+    "deep": 317,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 117,
+    "Broken access control": 119,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -136,10 +136,12 @@
     "client-side-hackinghub-evidence",
     "client-side-hackmyvm-evidence",
     "client-side-hacksec-evidence",
+    "client-side-hacksplaining-broken-access-control-lesson-evidence",
     "client-side-hacksplaining-clickjacking-lesson-evidence",
     "client-side-hacksplaining-csrf-lesson-evidence",
     "client-side-hacksplaining-evidence",
     "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
+    "client-side-hacksplaining-mass-assignment-lesson-evidence",
     "client-side-hacksplaining-sql-injection-lesson-evidence",
     "client-side-hacksplaining-ssrf-lesson-evidence",
     "client-side-hacksplaining-xss-reflected-lesson-evidence",
