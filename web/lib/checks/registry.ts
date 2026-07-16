@@ -3392,10 +3392,11 @@ const clientSideHacksplainingSqlInjectionLessonEvidence: Rule = async (ctx) => {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
+  const onStartStep = /lessons\/sql-injection\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
     evidence: {
       markers: hits.slice(0, 4),
       note: "Hacksplaining SQL injection lesson documents exploit-then-fix database query manipulation with checking-the-code and injection-vulnerability walkthrough steps"
