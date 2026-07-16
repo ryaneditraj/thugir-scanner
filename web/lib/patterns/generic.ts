@@ -8325,5 +8325,83 @@ export const genericPatterns: Pattern[] = [
       "Our NodeGoat instance is listed in OWASP VWAD. Show how to isolate Node.js training labs from production.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-vwad-vulnerableapp-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP VulnerableApp VWAD scanner-evaluation oracle disclosed",
+    description:
+      "OWASP VWAD VulnerableApp listing documents JWT, SQLi, XSS, XXE, SSRF, and path-traversal labs built for vulnerability scanner benchmarking.",
+    impactOneline:
+      "Public VWAD VulnerableApp catalog exposes multi-class deliberately vulnerable Spring/React training surfaces for scanner evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadVulnerableappEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnerableApp is intentional scanner training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy VulnerableApp only via Docker on isolated lab infrastructure.",
+        "Require authentication when exposing scanner benchmark apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our VulnerableApp instance is listed in OWASP VWAD. Show how to isolate scanner evaluation labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hts-basic-mission-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackThisSite Basic mission instance lab disclosed",
+    description:
+      "HTS Basic mission instances like level 11 serve bare challenge content with HTML-comment directory oracle hints without login wrapper.",
+    impactOneline:
+      "Public HTS Basic mission instances expose introductory web challenge surfaces and hidden-path hints without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHtsBasicMissionLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate HTS mission instances; never copy bare-mission oracle patterns into production.",
+      steps: [
+        "Require HTS login before serving mission challenge VMs.",
+        "Do not expose hidden directory hints via HTML comments on public pages.",
+        "Isolate wargame mission infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our app exposes HTS-style bare mission content with HTML comment oracles. Show how to remove hidden-path hints and require authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnerableapp-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SasanLabs vulnerableapp.com DOM XSS demo disclosed",
+    description:
+      "vulnerableapp.com publishes DOM-based XSS training pages with document.write cookie-theft payloads in malicious URL href examples.",
+    impactOneline:
+      "Public DOM XSS demo advertises cookie-exfiltration attack patterns attackers replicate against production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnerableappDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DOM XSS demos are intentional training — isolate from production and never copy sink patterns.",
+      steps: [
+        "Deploy DOM XSS labs only on isolated training hosts.",
+        "Never use document.write with URL-derived input in production code.",
+        "Sanitize or encode all DOM sinks fed by query parameters."
+      ]
+    },
+    fixPrompt:
+      "Our site has DOM XSS patterns like vulnerableapp.com document.write cookie theft. Show safe DOM manipulation alternatives.",
+    version: 1,
+    enabled: true
   }
 ];

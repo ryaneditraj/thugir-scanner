@@ -730,6 +730,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackThisSiteRealisticMissionEvidence",
   "clientSideHtsLoginGatedMissionHubEvidence",
   "clientSideHtsRealisticMissionLabEvidence",
+  "clientSideHtsBasicMissionLabEvidence",
   "clientSideHtsPlaylevelHubEvidence",
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
@@ -881,6 +882,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadSecurityShepherdEvidence",
   "clientSideVwadMutillidaeEvidence",
   "clientSideVwadNodegoatEvidence",
+  "clientSideVwadVulnerableappEvidence",
+  "clientSideVulnerableappDomXssEvidence",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -1357,6 +1360,10 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/basic/8/",
     "/missions/basic/9/",
     "/missions/basic/10/",
+    "/missions/basic/11/",
+    "/missions/forensic/1/",
+    "/missions/javascript/1/",
+    "/missions/stego/1/",
     "/playlevel/3/",
     "/missions/playit/stego/1/"
   ]) {
@@ -5059,10 +5066,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ? ["https://wrongsecrets.herokuapp.com/"]
       : [];
   const vwadScannerBenchPrioritySeeds =
-    /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store)/i.test(home.finalUrl)
+    /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store|owasp-vulnerableapp)/i.test(home.finalUrl)
       ? [
           "https://vwad.owasp.org/app/wackopicko/",
-          "https://vwad.owasp.org/app/bodgeit-store/"
+          "https://vwad.owasp.org/app/bodgeit-store/",
+          "https://vwad.owasp.org/app/owasp-vulnerableapp/",
+          "https://sasanlabs.github.io/VulnerableApp/",
+          "https://sasanlabs.github.io/VulnerableApp/Why_VulnerableApp.html"
         ]
       : [];
 
