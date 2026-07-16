@@ -3707,6 +3707,24 @@
       "slug": "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lessons/downgrade-attacks/start title Downgrade Attacks — Secure Coding Lesson + meta intercept HTTPS traffic if you fail to specify a modern version of TLS + step nav tls-versions/ssl-stripping; hacksplaining.com/lessons/downgrade-attacks/start gains client-side-hacksplaining-downgrade-attacks-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-25-application-19-javascript-17-forensic-15",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/25 + application/19 return HTTP 200; extractHackThisSiteMissionSeeds tail extended; www.hackthissite.org/playlevel/25 findings 6 incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-email-spoofing-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/email-spoofing/start title Email Spoofing — Secure Coding Lesson + meta Email spoofing is the sending of email messages with a forged from address; hacksplaining.com/lessons/email-spoofing/start findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ssl-stripping-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/ssl-stripping/start title SSL Stripping — Secure Coding Lesson + meta only some actions on your website require HTTPS, an attacker may be able to steal credentials; hacksplaining.com/lessons/ssl-stripping/start findings 6→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6614,6 +6632,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
       "shipped_at": "2026-07-16T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-25-application-19-javascript-17-forensic-15",
+      "shipped_at": "2026-07-16T22:38:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-email-spoofing-lesson-evidence",
+      "shipped_at": "2026-07-16T22:38:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ssl-stripping-lesson-evidence",
+      "shipped_at": "2026-07-16T22:38:00.000Z"
     }
   ]
 }
