@@ -3533,6 +3533,24 @@
       "slug": "vulnlab-auth-hub-priority-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /auth/ hub links /auth/login.html + /labs/sqli-error.html; hackThisSiteEtaAuthHubPrioritySeeds prepends auth+jwt+session+reset+labs on /auth/ entry; hack-this-site-eta.vercel.app/auth/ findings 1→15 pages_crawled 1→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-16-application-10-forensic-7",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/16 + application/10 + javascript/8 + stego/8 + programming/8 + forensic/7; playlevel/16→6 findings incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=6 title strict URL filter should prevent XSS + challenge?id=7 open redirect whitelist + challenge?id=16 CORS whitelist bypass; scanUrl oracles; challenge pages findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerableapp.com",
+      "slug": "dom-xss-document-write-sink",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dom-xss.html document.write(decodeURIComponent(params.name)) + extractVulnerableappDomXssSeeds; vulnerableapp.com findings 2→3 incl dangerous-html-sinks; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6305,6 +6323,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-auth-hub-priority-seeds",
       "shipped_at": "2026-07-16T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-16-application-10-forensic-7",
+      "shipped_at": "2026-07-16T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
+      "shipped_at": "2026-07-16T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerableapp.com",
+      "slug": "dom-xss-document-write-sink",
+      "shipped_at": "2026-07-16T13:15:00.000Z"
     }
   ]
 }
