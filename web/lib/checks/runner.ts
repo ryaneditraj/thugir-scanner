@@ -905,6 +905,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideDevsecopsPipelineVisualizerEvidence",
   "clientSideQamaxAdversaryEvidence",
   "clientSideHacksplainingEvidence",
+  "clientSideHacksplainingSqlInjectionLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1413,7 +1414,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/stego/6/",
     "/missions/programming/5/",
     "/missions/programming/6/",
-    "/missions/forensic/5/"
+    "/missions/programming/7/",
+    "/missions/forensic/5/",
+    "/missions/forensic/6/",
+    "/missions/application/9/",
+    "/missions/javascript/7/",
+    "/missions/stego/7/",
+    "/playlevel/15/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -5154,6 +5161,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "https://github.com/WebGoat/WebGoat"
         ]
       : [];
+  const hackThisSiteEtaAuthHubPrioritySeeds =
+    /hack-this-site-eta\.vercel\.app\/auth\/?$/i.test(home.finalUrl)
+      ? [
+          new URL("/auth/login.html", home.finalUrl).toString(),
+          new URL("/auth/jwt.html", home.finalUrl).toString(),
+          new URL("/auth/session.html", home.finalUrl).toString(),
+          new URL("/auth/reset.html", home.finalUrl).toString(),
+          new URL("/labs/sqli-error.html", home.finalUrl).toString(),
+          new URL("/labs/xss-reflected.html", home.finalUrl).toString(),
+          new URL("/labs/idor.html", home.finalUrl).toString(),
+          new URL("/labs/cors.html", home.finalUrl).toString()
+        ]
+      : [];
   const hackThisSiteEtaPrioritySeeds =
     /hack-this-site-eta\.vercel\.app/i.test(home.finalUrl)
       ? [
@@ -5210,6 +5230,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
