@@ -1058,7 +1058,7 @@ values
    true),
   ('client-side-hts-realistic-mission-lab-evidence', 'generic', 'Injection', 'high',
    'HackThisSite Realistic mission instance lab disclosed',
-   'HTS Realistic mission pages expose Uncle Arnold vote.php SQLi, defacement challenges, Fischer products.php SQLi labs, BudgetSERV page.pl CGI hosting, or Compu-global-Hyper-Mega-Net frameset challenges.',
+   'HTS Realistic mission pages expose Uncle Arnold vote.php SQLi, defacement challenges, Fischer products.php SQLi labs, BudgetSERV page.pl CGI hosting, secuLas Ltd. products.php defense catalog, Simple Mail index.php?module= auth labs, or Compu-global-Hyper-Mega-Net frameset challenges.',
    'Public realistic mission instances expose SQLi and legacy web challenge surfaces without authentication.',
    'rule_ref',
    '{"rule":"clientSideHtsRealisticMissionLabEvidence"}'::jsonb,
