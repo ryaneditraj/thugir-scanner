@@ -4348,7 +4348,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=20",
       "source": "BugBountyHunter zseano — auth/session manipulation challenge #20 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/21/",
+      "source": "Hack This Site — playlevel arcade mission 21 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/15/",
+      "source": "Hack This Site — application mission 15 web exploitation challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/13/",
+      "source": "Hack This Site — javascript mission 13 client-side security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/11/",
+      "source": "Hack This Site — forensic mission 11 steganography/file analysis challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=21",
+      "source": "BugBountyHunter zseano — auth/session manipulation challenge #21 (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T16:05:00.000Z"
+  "updated_at": "2026-07-16T17:05:00.000Z"
 }
