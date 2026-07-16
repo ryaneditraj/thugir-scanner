@@ -451,7 +451,9 @@ function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
           (m) =>
             !/WEBPACK|__WEBPACK|MODULE/i.test(m) && (m.match(/_/g) || []).length <= 1
         )
-      : [...raw];
+      : pattern.slug === "secret-aws-akid"
+        ? raw.filter((m) => !/(.)\1{7,}/.test(m.slice(4)) && !/X{8,}/i.test(m))
+        : [...raw];
   if (matches.length === 0) return null;
   // Optional validation substring near the match (e.g. service_role inside a JWT payload).
   if (cfg.validate) {
@@ -704,6 +706,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebVulnsGuideCorsLabEvidence",
   "clientSideEvalFilterBypassLabEvidence",
   "clientSideWebVulnsGuideSstiLabEvidence",
+  "clientSideWebVulnsGuideXxeLabEvidence",
+  "clientSideWebVulnsGuideSsrfLabEvidence",
+  "clientSideSqlInjectionPlaygroundEvidence",
   "clientSidePathTraversalEvidence",
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
@@ -1392,7 +1397,9 @@ function extractWebVulnsGuideLabSeeds(html: string, pageUrl: string): string[] {
     "/XSS.html",
     "/SQLi.html",
     "/SSTI.html",
-    "/CORS.html"
+    "/CORS.html",
+    "/xxe.html",
+    "/SSRF-2.html"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
