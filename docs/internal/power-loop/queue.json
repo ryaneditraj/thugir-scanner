@@ -4123,7 +4123,32 @@
       "url": "https://www.hackthissite.org/missions/application/6/",
       "source": "Hack This Site — application mission 6 exploit development challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/12/",
+      "source": "Hack This Site — playlevel arcade mission 12 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/4/",
+      "source": "Hack This Site — forensic mission 4 file/metadata analysis challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/4/",
+      "source": "Hack This Site — javascript mission 4 client-side logic bypass lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/4/",
+      "source": "Hack This Site — steganography mission 4 hidden-data extraction lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/4/",
+      "source": "Hack This Site — programming mission 4 exploit scripting challenge",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T07:06:00.000Z"
+  "updated_at": "2026-07-16T08:35:00.000Z"
 }
