@@ -8779,7 +8779,22 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     /XECryption algorithm/i.test(corpus) &&
     /encrypted document|encrypted using/i.test(corpus) &&
     /\.\d{2,3}\.\d{2,3}\.\d{2,3}/i.test(corpus);
-  if (!uncleArnold && !naziParty && !defacement && !fischer && !framesLab && !xecryption)
+  const politicalBlog =
+    /Call your congressman/i.test(corpus) &&
+    /(?:same sex marriages|homosexuals)/i.test(corpus) &&
+    /posted on/i.test(corpus);
+  const uboaLab =
+    /Welcome To U\.B\.O\.A/i.test(corpus) && /login1\.php/i.test(corpus);
+  if (
+    !uncleArnold &&
+    !naziParty &&
+    !defacement &&
+    !fischer &&
+    !framesLab &&
+    !xecryption &&
+    !politicalBlog &&
+    !uboaLab
+  )
     return NEGATIVE;
   const note = uncleArnold
     ? "HTS Realistic mission 1 exposes Uncle Arnold band-review vote.php GET parameter SQLi oracle"
@@ -8791,7 +8806,11 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
           ? "HTS Realistic mission exposes Fischer's Animal Products products.php category SQLi lab + addemail.php mailing list"
           : xecryption
             ? "HTS Realistic mission 6 exposes XECryption dot-separated ciphertext oracle with encryption.php algorithm reference"
-            : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
+            : politicalBlog
+              ? "HTS Realistic mission 7 exposes political blog comment surface with posted-on timestamp (comment injection / XSS lab)"
+              : uboaLab
+                ? "HTS Realistic mission 8 exposes U.B.O.A login1.php authentication bypass challenge"
+                : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,
