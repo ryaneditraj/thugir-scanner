@@ -3490,6 +3490,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-dns-poisoning-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining DNS poisoning lesson disclosed",
+    description:
+      "Hacksplaining /lessons/dns-poisoning publishes an interactive exploit-then-fix walkthrough covering upstream DNS cache poisoning and traffic interception chains.",
+    impactOneline:
+      "Public DNS poisoning lesson pages document cache-poisoning exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingDnsPoisoningLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining DNS poisoning lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable DNS poisoning lesson instances on private deployments.",
+        "Validate DNS responses and enforce DNSSEC in production — never copy Hacksplaining vulnerable resolver trust models.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style DNS poisoning exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining downgrade attacks lesson disclosed",
+    description:
+      "Hacksplaining /lessons/downgrade-attacks publishes an interactive exploit-then-fix walkthrough covering TLS version downgrade, SSL stripping, and HTTPS interception chains.",
+    impactOneline:
+      "Public downgrade attacks lesson pages document TLS downgrade exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingDowngradeAttacksLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining downgrade attack lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable downgrade attack lesson instances on private deployments.",
+        "Enforce modern TLS versions and HSTS in production — never copy Hacksplaining weak cipher negotiation handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style downgrade attack exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",

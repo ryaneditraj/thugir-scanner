@@ -1443,6 +1443,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/21/",
     "/playlevel/22/",
     "/playlevel/23/",
+    "/playlevel/24/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1450,12 +1451,14 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/15/",
     "/missions/application/16/",
     "/missions/application/17/",
+    "/missions/application/18/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
     "/missions/javascript/12/",
     "/missions/javascript/13/",
     "/missions/javascript/14/",
+    "/missions/javascript/15/",
     "/missions/stego/9/",
     "/missions/stego/10/",
     "/missions/stego/11/",
@@ -1472,7 +1475,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/9/",
     "/missions/forensic/10/",
     "/missions/forensic/11/",
-    "/missions/forensic/12/"
+    "/missions/forensic/12/",
+    "/missions/forensic/13/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
