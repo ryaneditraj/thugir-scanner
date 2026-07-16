@@ -3992,7 +3992,32 @@
       "url": "https://defhawk.com/vulnAI",
       "source": "defHawk-tech/vulnAI — OWASP LLM Top 10 vulnerable AI application lab (GitHub README)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/9/",
+      "source": "Hack This Site — realistic mission 9 web application pentest challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/10/",
+      "source": "Hack This Site — realistic mission 10 Holy Word High School grade-system challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/6/",
+      "source": "Hack This Site — playlevel arcade mission 6 interactive vulnerability puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/4/",
+      "source": "Hack This Site — application mission 4 exploit development challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/2/",
+      "source": "Hack This Site — javascript mission 2 client-side logic bypass lab",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T02:02:00.000Z"
+  "updated_at": "2026-07-16T03:03:56.980Z"
 }
