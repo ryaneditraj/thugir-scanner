@@ -2433,6 +2433,10 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /document\.write\s*\(\s*(?:search|query|input|val)\b/
   },
   {
+    label: "document.write with decodeURIComponent query param (DOM XSS)",
+    re: /document\.write\s*\([^)]*decodeURIComponent\s*\(\s*params\.name/
+  },
+  {
     label: "Stored comment div.innerHTML assignment",
     re: /div\.innerHTML\s*=\s*comment\b/
   },
@@ -13010,13 +13014,15 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideBugBountyHunterEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_BUGBOUNTYHUNTER_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/BugBountyHunter|@zseano/i.test(ctx.combined)) return NEGATIVE;
+  if (!/BugBountyHunter|@zseano/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.89 : 0.86,
@@ -13025,6 +13031,62 @@ const clientSideBugBountyHunterEvidence: Rule = async (ctx) => {
       note: "BugBountyHunter publishes zseano-style bug bounty challenge scenarios and member playground demos"
     }
   };
+};
+
+// --- BugBountyHunter numbered challenge scenarios (challenge?id=N) --------------------
+const BUGBOUNTYHUNTER_CHALLENGE_ORACLES: {
+  slug: string;
+  urlRe: RegExp;
+  titleRe: RegExp;
+  note: string;
+}[] = [
+  {
+    slug: "xss-url-filter",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=6\b/i,
+    titleRe: /strict URL filter should prevent XSS/i,
+    note: "BugBountyHunter challenge #6 documents a strict URL-filter XSS bypass scenario"
+  },
+  {
+    slug: "open-redirect-whitelist",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=7\b/i,
+    titleRe: /may only redirect to \*\.bugbountyhunter\.com/i,
+    note: "BugBountyHunter challenge #7 documents an open-redirect subdomain whitelist bypass"
+  },
+  {
+    slug: "sso-token-theft",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=12\b/i,
+    titleRe: /Can you steal the SSO token/i,
+    note: "BugBountyHunter challenge #12 documents an SSO token theft scenario"
+  },
+  {
+    slug: "cors-whitelist-bypass",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=16\b/i,
+    titleRe: /whitelisted string is found is a bad approach/i,
+    note: "BugBountyHunter challenge #16 documents a CORS whitelist substring bypass"
+  }
+];
+
+const clientSideBugBountyHunterChallengeScenarioEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/bugbountyhunter\.com/i.test(corpus)) return NEGATIVE;
+  for (const oracle of BUGBOUNTYHUNTER_CHALLENGE_ORACLES) {
+    if (!oracle.urlRe.test(corpus)) continue;
+    const titleMatch = corpus.match(oracle.titleRe);
+    if (!titleMatch) continue;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        markers: [
+          { label: "challenge URL oracle", sample: oracle.slug },
+          { label: "challenge scenario title", sample: titleMatch[0].slice(0, 100) }
+        ],
+        note: oracle.note
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 // --- Valentin Panov BUG Collection (bug-collection.vercel.app) ----------------------
@@ -16964,6 +17026,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNimbusVaultEvidence,
   clientSideSecurebankBlogEvidence,
   clientSideBugBountyHunterEvidence,
+  clientSideBugBountyHunterChallengeScenarioEvidence,
   clientSideBugCollectionEvidence,
   clientSideZeroHealthEvidence,
   clientSideAlfXssWargameEvidence,

@@ -828,6 +828,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideNimbusVaultEvidence",
   "clientSideSecurebankBlogEvidence",
   "clientSideBugBountyHunterEvidence",
+  "clientSideBugBountyHunterChallengeScenarioEvidence",
   "clientSideBugCollectionEvidence",
   "clientSideZeroHealthEvidence",
   "clientSideAlfXssWargameEvidence",
@@ -1420,7 +1421,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/9/",
     "/missions/javascript/7/",
     "/missions/stego/7/",
-    "/playlevel/15/"
+    "/playlevel/15/",
+    "/playlevel/16/",
+    "/missions/application/10/",
+    "/missions/javascript/8/",
+    "/missions/stego/8/",
+    "/missions/programming/8/",
+    "/missions/forensic/7/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -3395,9 +3402,25 @@ function extractBugBountyHunterChallengeSeeds(html: string, pageUrl: string): st
       /* ignore */
     }
   }
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 20; i++) {
     try {
       out.add(new URL(`challenge?id=${i}`, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** SasanLabs vulnerableapp.com — prioritize DOM XSS training page from sparse homepage. */
+function extractVulnerableappDomXssSeeds(html: string, pageUrl: string): string[] {
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  if (!/(?:^|\.)vulnerableapp\.com$/i.test(host)) return [];
+  if (!/dom-xss\.html|DOM Based Cross-Site Scripting/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/dom-xss.html", "/"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -5025,6 +5048,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const archonHostFallbackSeeds = extractArchonHostFallbackSeeds(home.finalUrl);
   const secCodeEducationalSeeds = extractSecCodeEducationalSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
+  const vulnerableappDomXssSeeds = extractVulnerableappDomXssSeeds(home.body, home.finalUrl);
   const bugCollectionSeeds = extractBugCollectionSeeds(home.body, home.finalUrl);
   const oopssecStoreSeeds = extractOopssecStoreSeeds(home.body, home.finalUrl);
   const cookiejarLabSeeds = extractCookiejarLabSeeds(home.body, home.finalUrl);
@@ -5336,6 +5360,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...archonVitepressSeeds,
       ...secCodeEducationalSeeds,
       ...vulnerableAppSeeds,
+      ...vulnerableappDomXssSeeds,
       ...bugCollectionSeeds,
       ...oopssecStoreSeeds,
       ...cookiejarLabSeeds,
