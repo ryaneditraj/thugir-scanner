@@ -388,7 +388,9 @@
     {
       "url": "http://acuart.phpnet.us/",
       "source": "Acunetix acuart — classic intentionally vulnerable PHP art shop demo",
-      "auth": "public_demo"
+      "auth": "public_demo",
+      "enabled": false,
+      "notes": "Hosting DNS resolution error page — lab offline from cloud scans"
     },
     {
       "url": "https://websec.fr/",
@@ -683,7 +685,9 @@
     {
       "url": "https://516-hackers.github.io/516-hackers-vuln-playground/",
       "source": "516hackers/516-hackers-vuln-playground — modular DVWA-style SQLi/XSS/auth lab (GitHub Pages)",
-      "auth": "oss_deploy"
+      "auth": "oss_deploy",
+      "enabled": false,
+      "notes": "GitHub Pages 404 — deploy offline"
     },
     {
       "url": "http://demo.testfire.net/",
@@ -3951,7 +3955,9 @@
     {
       "url": "https://domgo.at/domxss/",
       "source": "Mario Heiderich domgo.at — DOM XSS execution sinks training hub (complements cxss/intro)",
-      "auth": "public_demo"
+      "auth": "public_demo",
+      "enabled": false,
+      "notes": "Returns 404 — use domgo.at/cxss/ routes instead"
     },
     {
       "url": "https://www.hackthissite.org/missions/programming/1/",

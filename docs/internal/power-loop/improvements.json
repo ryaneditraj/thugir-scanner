@@ -3371,6 +3371,24 @@
       "slug": "client-side-vulnscope-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: VulnScope Pro + AI-Powered Vulnerability Scanner + test for SQL Injection/XSS + vulnscope-pro scan output; vulnscope.vercel.app findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-realistic-mission-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/7 Call your congressman + same sex marriages + posted on political blog; realistic/7 findings 2→4 incl client-side-hts-realistic-mission-lab-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-realistic-mission-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/8 Welcome To U.B.O.A + login1.php auth bypass challenge; realistic/8 findings 2→4 incl client-side-hts-realistic-mission-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-6-8-playlevel-4-5",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/6-8 + playlevel/4-5 + programming/1 + application/3; queue drain for pending HTS mission URLs; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6008,6 +6026,21 @@
       "source": "discovery:vulnscope.vercel.app",
       "slug": "client-side-vulnscope-evidence",
       "shipped_at": "2026-07-16T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-7-political-blog-lab",
+      "shipped_at": "2026-07-16T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-8-uboa-login-lab",
+      "shipped_at": "2026-07-16T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-6-8-playlevel-4-5",
+      "shipped_at": "2026-07-16T03:15:00.000Z"
     }
   ]
 }

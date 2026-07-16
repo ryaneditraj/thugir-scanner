@@ -1366,7 +1366,11 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/1/",
     "/missions/stego/1/",
     "/playlevel/3/",
-    "/missions/playit/stego/1/"
+    "/playlevel/4/",
+    "/playlevel/5/",
+    "/missions/playit/stego/1/",
+    "/missions/programming/1/",
+    "/missions/application/3/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1374,7 +1378,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
-  for (const n of [1, 2, 3, 4, 5]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8]) {
     try {
       out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
     } catch {
