@@ -3641,6 +3641,30 @@
       "slug": "hts-mission-seed-playlevel-21-application-15-javascript-13-forensic-11",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: HTS mission seed tail extended through /playlevel/21/ + /missions/application/15/ + javascript/13 + stego/11 + programming/10 + forensic/11; www.hackthissite.org crawl depth maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-22-application-16-javascript-14-forensic-12",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/22 + application/16 + javascript/14 + forensic/12 + stego/12 + programming/11; playlevel/22 direct scan 6 findings incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xss-stored-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/xss-stored/start meta allows users to add content + cannot inject malicious JavaScript + step nav loafing-about/crumby-behaviour; hacksplaining.com/lessons/xss-stored/start findings 6→7 incl client-side-hacksplaining-xss-stored-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-clickjacking-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/click-jacking/start title Clickjacking — Secure Coding Lesson + meta users aren't having their clicks stolen + step nav framing-the-site/a-transparent-overlay; hacksplaining.com/lessons/click-jacking/start findings 6→7 incl client-side-hacksplaining-clickjacking-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-22-csrf-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=22 returns shared training hub carousel (data-url only lists ids 1,3,4,6,7,8,9,12,14,16) — no id=22 scenario title or bugbountytraining.com/challenge-22.php; oracle deferred until BBH publishes distinct challenge page"
     }
   ],
   "shipped": [
@@ -6503,6 +6527,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-playlevel-21-application-15-javascript-13-forensic-11",
       "shipped_at": "2026-07-16T18:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-22-application-16-javascript-14-forensic-12",
+      "shipped_at": "2026-07-16T19:43:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xss-stored-lesson-evidence",
+      "shipped_at": "2026-07-16T19:43:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-clickjacking-lesson-evidence",
+      "shipped_at": "2026-07-16T19:43:00.000Z"
     }
   ]
 }
