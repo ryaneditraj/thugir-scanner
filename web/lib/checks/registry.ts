@@ -8675,7 +8675,9 @@ const HTS_LOGIN_GATED_MISSION_NOTES: Record<string, string> = {
   extbasic:
     "HTS Extended Basic mission hub is login-gated — documents advanced HTML-level wargame challenges behind authenticated access",
   stego:
-    "HTS Steganography mission hub is login-gated — documents image steganography CTF missions behind authenticated access"
+    "HTS Steganography mission hub is login-gated — documents image steganography CTF missions behind authenticated access",
+  "missions-stego":
+    "HTS Steganography mission category is login-gated — documents image/audio steganography CTF challenges behind authenticated access"
 };
 
 type HtsLoginGatedHub =
@@ -8683,6 +8685,9 @@ type HtsLoginGatedHub =
   | { kind: "playit"; category: "extbasic" | "stego"; playSegment: string };
 
 function parseHtsLoginGatedHub(pageUrl: string): HtsLoginGatedHub | null {
+  const missionsStego = pageUrl.match(/hackthissite\.org\/missions\/stego(?:\/\d+)?\/?/i);
+  if (missionsStego) return { kind: "standard", category: "missions-stego" };
+
   const standard = pageUrl.match(
     /hackthissite\.org\/missions\/(basic|forensic|javascript|programming|application)(?:\/\d+)?\/?/i
   );
@@ -8705,14 +8710,10 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
   const corpus = `${ctx.home.body}\n${pageUrl}`;
   if (!/Login Required|You must be logged in to use this page/i.test(corpus)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
-  const pathRe =
-    hub.kind === "standard"
-      ? new RegExp(`/missions/${category}(?:/\\d+)?/?`, "i")
-      : new RegExp(`/missions/${hub.playSegment}(?:/\\d+)?/?`, "i");
-  const navRe =
-    hub.kind === "standard"
-      ? new RegExp(`href\\s*=\\s*["']/missions/${category}/`, "i")
-      : new RegExp(`href\\s*=\\s*["']/missions/${hub.playSegment}/`, "i");
+  const missionPath =
+    category === "missions-stego" ? "stego" : hub.kind === "standard" ? category : hub.playSegment;
+  const pathRe = new RegExp(`/missions/${missionPath}(?:/\\d+)?/?`, "i");
+  const navRe = new RegExp(`href\\s*=\\s*["']/missions/${missionPath}/`, "i");
   const checks: { label: string; re: RegExp }[] = [
     {
       label: `${category} mission hub URL`,
@@ -8781,6 +8782,33 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
   return {
     fired: true,
     confidence: 0.9,
+    evidence: {
+      page: pageUrl,
+      note
+    }
+  };
+};
+
+// --- HackThisSite accessible Basic mission instances (bare content, no login wrapper) -----
+const clientSideHtsBasicMissionLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/hackthissite\.org\/missions\/basic\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const body = ctx.home.body;
+  if (/Login Required|You must be logged in to use this page/i.test(body)) return NEGATIVE;
+  if (/^\s*<!DOCTYPE/i.test(body)) return NEGATIVE;
+  const corpus = `${body}\n${pageUrl}`;
+  const musicCollection =
+    /I love my music/i.test(corpus) &&
+    /<!--[\s\S]{0,120}(?:collection|find it)/i.test(corpus);
+  const htmlCommentOracle = /<!--[\s\S]{0,200}(?:password|collection|hidden|find it)/i.test(corpus);
+  const bareMissionShell = body.length < 8000 && !/<html[\s>]/i.test(body);
+  if (!musicCollection && !(htmlCommentOracle && bareMissionShell)) return NEGATIVE;
+  const note = musicCollection
+    ? "HTS Basic mission 11 exposes bare music-collection page with HTML comment hinting at hidden /missions/basic/11/MP3/ directory"
+    : "HTS Basic mission instance serves bare HTML-comment oracle without site chrome — introductory web challenge surface";
+  return {
+    fired: true,
+    confidence: musicCollection ? 0.9 : 0.87,
     evidence: {
       page: pageUrl,
       note
@@ -16304,6 +16332,89 @@ const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD OWASP VulnerableApp scanner-evaluation oracle listing -------------------------
+const clientSideVwadVulnerableappEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/owasp-vulnerableapp/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "VulnerableApp VWAD listing",
+      re: /OWASP VulnerableApp[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Scanner evaluation platform purpose",
+      re: /deliberately vulnerable application for testing vulnerability scanning tools/i
+    },
+    {
+      label: "Multi-class vuln catalog",
+      re: /JWT,\s*command injection[\s\S]{0,120}SQLi[\s\S]{0,80}XSS[\s\S]{0,80}SSRF/i
+    },
+    {
+      label: "Scanner-test category tag",
+      re: /scanner-test|Scanner test/i
+    },
+    {
+      label: "Spring Boot React stack",
+      re: /Spring Boot,\s*React|Java 8,\s*Spring Boot/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP VulnerableApp VWAD listing documents JWT, SQLi, XSS, XXE, SSRF, and path-traversal labs for scanner benchmarking"
+    }
+  };
+};
+
+// --- SasanLabs vulnerableapp.com DOM XSS training example -------------------------------
+const clientSideVulnerableappDomXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const host = new URL(pageUrl).hostname;
+  if (!/(?:^|\.)vulnerableapp\.com$/i.test(host)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "DOM XSS example title",
+      re: /DOM Based Cross-Site Scripting Example/i
+    },
+    {
+      label: "dom-xss.html training route",
+      re: /dom-xss\.html/i
+    },
+    {
+      label: "Cookie exfiltration payload in href",
+      re: /document\.cookie|document\.write[\s\S]{0,120}cookie/i
+    },
+    {
+      label: "Phishing-style malicious URL demo",
+      re: /tricked into clicking a malicious URL|phishing attack/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "vulnerableapp.com publishes DOM XSS cookie-theft demo with document.write payload in query-string href"
+    }
+  };
+};
+
 // --- deep-tier rules (not run on free path) ---------------------------------
 
 export const RULES: Record<string, Rule> = {
@@ -16458,6 +16569,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackThisSiteRealisticMissionEvidence,
   clientSideHtsLoginGatedMissionHubEvidence,
   clientSideHtsRealisticMissionLabEvidence,
+  clientSideHtsBasicMissionLabEvidence,
   clientSideHtsPlaylevelHubEvidence,
   clientSideAuthSecurityProjectEvidence,
   clientSideOsCommandInjectionLabEvidence,
@@ -16576,6 +16688,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadSecurityShepherdEvidence,
   clientSideVwadMutillidaeEvidence,
   clientSideVwadNodegoatEvidence,
+  clientSideVwadVulnerableappEvidence,
+  clientSideVulnerableappDomXssEvidence,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
