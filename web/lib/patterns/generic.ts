@@ -560,6 +560,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hts-yuppers-search-sqli-probe",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Boolean SQL injection on HTS Yuppers search.cgi",
+    description:
+      "HackThisSite Realistic mission 14 Yuppers search.cgi returns zero results for a nonsense baseline query but many matches for a lone quote — positive proof the search parameter alters SQL query logic.",
+    impactOneline: "Attackers can extract or modify database contents via the search parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "htsYuppersSearchSqliProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries; never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concatenated search queries with prepared statements.",
+        "Return generic errors to clients; log SQL details server-side only.",
+        "Add input validation on search endpoints."
+      ]
+    },
+    fixPrompt:
+      "My search.cgi endpoint shows boolean SQLi behavior (quote-only input returns all rows). Switch to parameterized queries and show the fixed handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "command-injection-form-probe",
     platform: "generic",
     category: "Injection",
