@@ -4148,7 +4148,32 @@
       "url": "https://www.hackthissite.org/missions/programming/4/",
       "source": "Hack This Site — programming mission 4 exploit scripting challenge",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/13/",
+      "source": "Hack This Site — playlevel arcade mission 13 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/7/",
+      "source": "Hack This Site — application mission 7 exploit development challenge (retired mission page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/5/",
+      "source": "Hack This Site — javascript mission 5 client-side logic bypass lab (retired mission page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/5/",
+      "source": "Hack This Site — steganography mission 5 hidden-data extraction lab (retired mission page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/5/",
+      "source": "Hack This Site — programming mission 5 exploit scripting challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T08:35:00.000Z"
+  "updated_at": "2026-07-16T09:58:00.000Z"
 }
