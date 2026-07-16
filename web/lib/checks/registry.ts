@@ -3588,6 +3588,96 @@ const clientSideHacksplainingXssReflectedLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining stored XSS lesson (hacksplaining.com/lessons/xss-stored) -------
+const CLIENT_HACKSPLAINING_XSS_STORED_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Stored XSS lesson URL",
+    re: /hacksplaining\.com\/lessons\/xss-stored/i
+  },
+  {
+    label: "Stored XSS lesson title",
+    re: /Cross-Site Scripting — Secure Coding Lesson/i
+  },
+  {
+    label: "Stored XSS user-content lesson meta description",
+    re: /allows users to add content[\s\S]{0,80}cannot inject malicious JavaScript/i
+  },
+  {
+    label: "Stored XSS lesson step nav",
+    re: /lessons\/xss-stored\/(?:loafing-about|crumby-behaviour|on-a-roll|yeast-of-your-problems|you-are-toast|crumbs)/i
+  },
+  {
+    label: "Stored XSS persistent payload description",
+    re: /stored XSS|persist(?:ent|s) malicious JavaScript|user-generated content/i
+  }
+];
+
+const clientSideHacksplainingXssStoredLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/xss-stored/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_XSS_STORED_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/xss-stored\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining stored XSS lesson documents exploit-then-fix persistent user-content injection with bread-themed walkthrough steps"
+    }
+  };
+};
+
+// --- Hacksplaining clickjacking lesson (hacksplaining.com/lessons/click-jacking) -------
+const CLIENT_HACKSPLAINING_CLICKJACKING_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Clickjacking lesson URL",
+    re: /hacksplaining\.com\/lessons\/click-jacking/i
+  },
+  {
+    label: "Clickjacking lesson title",
+    re: /Clickjacking — Secure Coding Lesson/i
+  },
+  {
+    label: "Clickjacking stolen-clicks meta description",
+    re: /users aren't having their clicks stolen by attackers/i
+  },
+  {
+    label: "Clickjacking lesson step nav",
+    re: /lessons\/click-jacking\/(?:an-attractive-target|click-bait|framing-the-site|a-transparent-overlay|to-steal-the-click|confused-deputy)/i
+  },
+  {
+    label: "Clickjacking iframe overlay description",
+    re: /transparent overlay|iframe|steal the click/i
+  }
+];
+
+const clientSideHacksplainingClickjackingLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/click-jacking/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_CLICKJACKING_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/click-jacking\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining clickjacking lesson documents exploit-then-fix UI-redress attacks using iframe overlays and transparent click theft"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17427,6 +17517,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingCsrfLessonEvidence,
   clientSideHacksplainingSsrfLessonEvidence,
   clientSideHacksplainingXssReflectedLessonEvidence,
+  clientSideHacksplainingXssStoredLessonEvidence,
+  clientSideHacksplainingClickjackingLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

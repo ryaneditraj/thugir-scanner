@@ -6870,6 +6870,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-xss-stored-lesson-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Hacksplaining stored XSS lesson disclosed",
+    description:
+      "Hacksplaining /lessons/xss-stored publishes an interactive exploit-then-fix walkthrough covering persistent user-content script injection and stored payload delivery.",
+    impactOneline:
+      "Public stored XSS lesson pages document persistent user-content exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingXssStoredLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining stored XSS lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable stored XSS lesson instances on private deployments.",
+        "Sanitize and encode all user-generated content in production — never copy Hacksplaining vulnerable storage handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style stored XSS exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-clickjacking-lesson-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Hacksplaining clickjacking lesson disclosed",
+    description:
+      "Hacksplaining /lessons/click-jacking publishes an interactive exploit-then-fix walkthrough covering iframe UI redress, transparent overlays, and stolen-click attacks.",
+    impactOneline:
+      "Public clickjacking lesson pages document UI-redress exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingClickjackingLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining clickjacking lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable clickjacking lesson instances on private deployments.",
+        "Set X-Frame-Options or CSP frame-ancestors in production — never copy Hacksplaining vulnerable framing handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style clickjacking exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-portswigger-academy-evidence",
     platform: "generic",
     category: "Injection",
