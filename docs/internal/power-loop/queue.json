@@ -4073,7 +4073,32 @@
       "url": "https://www.hackthissite.org/missions/application/5/",
       "source": "Hack This Site — application mission 5 exploit development challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/14/",
+      "source": "Hack This Site — realistic mission 14 Yuppers Internet Solutions null-byte/CGI oracle (aldeid wiki)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/9/",
+      "source": "Hack This Site — playlevel arcade mission 9 CrappySoft Software challenge (tuonilabs writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/3/",
+      "source": "Hack This Site — javascript mission 3 client-side logic bypass lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/3/",
+      "source": "Hack This Site — steganography mission 3 hidden-data extraction lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/3/",
+      "source": "Hack This Site — forensic mission 3 file/metadata analysis challenge",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T05:06:00.000Z"
+  "updated_at": "2026-07-16T06:06:00.000Z"
 }
