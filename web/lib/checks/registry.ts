@@ -8794,6 +8794,10 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     /Holy Word High School/i.test(corpus) &&
     /student\.php/i.test(corpus) &&
     /(?:listteachers\.php|Check your grades online)/i.test(corpus);
+  const budgetServ =
+    /BudgetSERV/i.test(corpus) &&
+    /page\.pl\?page=/i.test(corpus) &&
+    /(?:webmail\.php|WebMail|Premium Hosting)/i.test(corpus);
   if (
     !uncleArnold &&
     !naziParty &&
@@ -8803,7 +8807,8 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     !xecryption &&
     !politicalBlog &&
     !uboaLab &&
-    !holyWordGrades
+    !holyWordGrades &&
+    !budgetServ
   )
     return NEGATIVE;
   const note = uncleArnold
@@ -8822,7 +8827,9 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
                 ? "HTS Realistic mission 8 exposes U.B.O.A login1.php authentication bypass challenge"
                 : holyWordGrades
                   ? "HTS Realistic mission 10 exposes Holy Word High School student.php grade access system (SQLi / IDOR lab)"
-                  : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
+                  : budgetServ
+                    ? "HTS Realistic mission 11 exposes BudgetSERV hosting page.pl Perl CGI endpoints + webmail.php login (SQLi / auth bypass lab)"
+                    : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,
@@ -9891,6 +9898,10 @@ const CLIENT_MUTILLIDAE_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "Mutillidae command injection DNS lookup",
     re: /Command Injection[\s\S]{0,200}dns-lookup\.php/i
+  },
+  {
+    label: "Mutillidae pen-test tool lookup command injection",
+    re: /Pen Test Tool Lookup|pen-test-tool-lookup(?:-ajax)?\.php/i
   },
   {
     label: "Mutillidae user-info SQLi route",
