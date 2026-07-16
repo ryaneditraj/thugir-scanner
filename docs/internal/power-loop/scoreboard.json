@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T09:59:20.751Z",
+  "updated_at": "2026-07-16T09:01:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 251,
   "discovery_findings": 2142,
-  "improvements_shipped": 545,
-  "last_run": "2026-07-16T09:59:20.751Z",
+  "improvements_shipped": 548,
+  "last_run": "2026-07-16T09:01:00.000Z",
   "last_run_summary": {
     "hour_utc": "09:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Heroku primary cold-start pass1: 3 findings pages_crawled=1 gap=xss,sqli,sensitive_data; wake retry pass3 pages_crawled=6 gap=sqli,sensitive_data,auth_bypass; staging fallback merged 6/6",
+      "note": "No benchmark misses — recall stable at 6/6 (HTS-only diff this run; prior cold-start wake retries merged)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,26 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 35,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue head drain — Archon/VAmPI/Acunetix acuart/WebSec.fr + HTS playlevel/13 app/js/stego/prog 5 queued at tail",
-      "improvements_shipped_this_run": 0
+      "focus": "HTS playlevel/12 + forensic/javascript/stego/programming level-4 hub detection; forensic/4 404 oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary cold-start 3 findings (pages=1) — staging fallback 7 findings recall 6/6",
-      "archon-eight.vercel.app: 8 findings — DevSecOps microservices lab IDOR/gateway bypass markers",
-      "urban-vampi-production.up.railway.app: 6 findings — OWASP API Top 10 VAmPI Railway deploy",
-      "ctb-pi.vercel.app: 6 findings — corporate cyber training CTF markers",
-      "websec.fr: 3 findings — PHP challenge injectable source evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained — no category gaps",
+      "www.hackthissite.org/playlevel/12: playlevel arcade login gate (0→6 findings incl client-side-hts-playlevel-hub-evidence)",
+      "www.hackthissite.org/missions/forensic/4: mission 404 oracle (0→6 findings incl client-side-hts-login-gated-mission-hub-evidence)",
+      "www.hackthissite.org/missions/javascript/4: require_auth gate (0→6 findings incl login-gated hub slug)",
+      "www.hackthissite.org/missions/stego/4: Steganography login gate (0→6 findings)",
+      "www.hackthissite.org/missions/programming/4: Programming login gate (0→6 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com primary: sqli + sensitive_data missed until staging fallback on cold Heroku (pass3 gap=sqli,sensitive_data,auth_bypass)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hiddeninvestigations.net: react2shell lab is Docker-only — shallow landing markers only",
-      "HTS playlevel/13 application/7 javascript/5 stego/5 programming/5: queued at tail for next drain"
+      "HTS playlevel/13 application/7 javascript/5 stego/5 programming/5: queued at tail for next drain",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
@@ -381,6 +381,11 @@
     "shiny-computing-machine.vercel.app": 7,
     "www.bugbountyhunter.com/challenge?id=16": 2,
     "www.bugbountyhunter.com/challenge?id=6": 2,
-    "www.bugbountyhunter.com/challenge?id=7": 2
+    "www.bugbountyhunter.com/challenge?id=7": 2,
+    "www.hackthissite.org/playlevel/12": 6,
+    "www.hackthissite.org/missions/forensic/4": 6,
+    "www.hackthissite.org/missions/javascript/4": 6,
+    "www.hackthissite.org/missions/stego/4": 6,
+    "www.hackthissite.org/missions/programming/4": 6
   }
 }
