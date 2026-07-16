@@ -3438,6 +3438,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-mass-assignment-lesson-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Hacksplaining mass assignment lesson disclosed",
+    description:
+      "Hacksplaining /lessons/mass-assignment publishes an interactive exploit-then-fix walkthrough covering HTTP request unpacking that lets attackers bind privileged fields.",
+    impactOneline:
+      "Public mass assignment lesson pages document privilege-escalation exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingMassAssignmentLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining mass assignment lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable mass assignment lesson instances on private deployments.",
+        "Use explicit allowlists for bindable request fields in production — never copy Hacksplaining vulnerable unpackers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style mass assignment exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-broken-access-control-lesson-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Hacksplaining broken access control lesson disclosed",
+    description:
+      "Hacksplaining /lessons/broken-access-control publishes an interactive exploit-then-fix walkthrough covering obscured resources, predictable paths, and authorization bypass chains.",
+    impactOneline:
+      "Public broken access control lesson pages document IDOR and authz-bypass exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingBrokenAccessControlLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining broken access control lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable broken access control lesson instances on private deployments.",
+        "Enforce authorization on every resource path in production — never rely on security through obscurity.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style broken access control exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",

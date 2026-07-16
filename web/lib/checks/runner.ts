@@ -913,6 +913,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingXssReflectedLessonEvidence",
   "clientSideHacksplainingXssStoredLessonEvidence",
   "clientSideHacksplainingClickjackingLessonEvidence",
+  "clientSideHacksplainingMassAssignmentLessonEvidence",
+  "clientSideHacksplainingBrokenAccessControlLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1440,12 +1442,14 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/20/",
     "/playlevel/21/",
     "/playlevel/22/",
+    "/playlevel/23/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
     "/missions/application/14/",
     "/missions/application/15/",
     "/missions/application/16/",
+    "/missions/application/17/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1456,7 +1460,11 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/stego/10/",
     "/missions/stego/11/",
     "/missions/stego/12/",
+    "/missions/stego/13/",
+    "/missions/stego/14/",
+    "/missions/stego/15/",
     "/missions/programming/8/",
+    "/missions/programming/12/",
     "/missions/programming/9/",
     "/missions/programming/10/",
     "/missions/programming/11/",
@@ -3443,7 +3451,7 @@ function extractBugBountyHunterChallengeSeeds(html: string, pageUrl: string): st
       /* ignore */
     }
   }
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 1; i <= 25; i++) {
     try {
       out.add(new URL(`challenge?id=${i}`, pageUrl).toString());
     } catch {
