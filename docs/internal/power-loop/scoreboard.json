@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T05:06:00.000Z",
+  "updated_at": "2026-07-16T05:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 632,
-  "total_findings": 2850,
+  "total_sites_scanned": 625,
+  "total_findings": 2776,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 231,
-  "discovery_findings": 1994,
-  "improvements_shipped": 533,
-  "last_run": "2026-07-16T05:06:00.000Z",
+  "discovery_urls_added": 226,
+  "discovery_findings": 1920,
+  "improvements_shipped": 536,
+  "last_run": "2026-07-16T05:16:00.000Z",
   "last_run_summary": {
     "hour_utc": "05:00",
     "benchmark": {
@@ -50,29 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 74,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "hack-this-site-eta OWASP A06-A08 + labs hub drain; HTS basic mission hub; CS Training Academy cybersecurity module",
-      "improvements_shipped_this_run": 0
+      "dns_failures": [],
+      "focus": "HTS realistic/11 BudgetSERV Perl CGI lab + mission seed expansion + Mutillidae pen-test-tool-lookup crawl",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/owasp/a06-a08: VulnLab A06/A07/A08 component+auth+integrity labs (15 findings each)",
-      "hack-this-site-eta.vercel.app/labs: hands-on vuln lab hub with GraphQL introspection (12 findings)",
-      "www.hackthissite.org/missions/basic: reflected XSS + HTS mission hub markers (6 findings)",
-      "computersciencesop2.vercel.app/cybersecurity: OpenAI API key in client bundle + OWASP GenAI lab evidence (10 findings)"
+      "www.hackthissite.org/missions/realistic/11: BudgetSERV page.pl CGI + webmail.php lab (engine improvement 3→4 findings)",
+      "www.hackthissite.org/missions/forensic/2: login-gated forensic hub (6 findings when scanned)",
+      "www.hackthissite.org/playlevel/11: login-gated arcade hub (6 findings when scanned)",
+      "websegura.radwarelatam.com/mutillidae: pen-test-tool-lookup command injection route seeds added"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "hack-this-site-eta.vercel.app/auth: shallow 1-finding pass despite pages_crawled=6 — login-gated lab content may need session probes",
-      "HTS realistic/12-13 + playlevel/7-8 + application/5 queued — pending drain",
+      "HTS application/4 + javascript/2 queued — login-gated hubs already detected when scanned",
       "testhtml5.vulnweb.com: DNS dead — recurring queue skip",
-      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes mapping only"
+      "defhawk.com/vulnAI: OWASP LLM lab landing (local deploy only for exploits)"
     ]
   },
   "discovery_highlights": {
@@ -362,7 +359,6 @@
     "www.hackthissite.org/missions/realistic/10": 5,
     "www.hackthissite.org/missions/realistic/9": 7,
     "www.hackthissite.org/playlevel/6": 6,
-    "www.hackthissite.org/missions/basic": 6,
-    "computersciencesop2.vercel.app": 10
+    "www.hackthissite.org/missions/realistic/11": 4
   }
 }

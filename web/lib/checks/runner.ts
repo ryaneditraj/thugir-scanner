@@ -1375,7 +1375,16 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/2/",
     "/missions/playit/stego/1/",
     "/missions/programming/1/",
-    "/missions/application/3/"
+    "/missions/application/3/",
+    "/missions/realistic/11/",
+    "/missions/forensic/2/",
+    "/missions/programming/2/",
+    "/missions/stego/2/",
+    "/playlevel/7/",
+    "/playlevel/8/",
+    "/playlevel/9/",
+    "/playlevel/10/",
+    "/playlevel/11/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1383,7 +1392,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
-  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) {
     try {
       out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
     } catch {
@@ -1475,6 +1484,20 @@ function extractHtsRealisticMissionSeeds(html: string, pageUrl: string): string[
       } catch {
         /* ignore */
       }
+    }
+  }
+  if (/BudgetSERV|page\.pl\?page=/i.test(html)) {
+    for (const page of ["main", "features", "faq", "terms", "pricing", "email"]) {
+      try {
+        out.add(new URL(`page.pl?page=${page}`, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+    try {
+      out.add(new URL("webmail.php", pageUrl).toString());
+    } catch {
+      /* ignore */
     }
   }
   return [...out];
@@ -1678,7 +1701,9 @@ function extractMutillidaeLabSeeds(html: string, origin: string): string[] {
     "view-someones-blog.php",
     "password-generator.php",
     "show-log.php",
-    "site-footer-xss-discussion.php"
+    "site-footer-xss-discussion.php",
+    "pen-test-tool-lookup.php",
+    "pen-test-tool-lookup-ajax.php"
   ];
   for (const page of pages) {
     try {

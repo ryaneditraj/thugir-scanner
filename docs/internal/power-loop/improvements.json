@@ -3407,6 +3407,24 @@
       "slug": "hts-mission-seed-realistic-9-10-playlevel-6",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/9-10 + playlevel/6 + application/4 + javascript/2; playlevel/6 findings 0→6 incl client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-11-budgetserv-cgi-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/11 BudgetSERV + page.pl?page= Perl CGI nav + webmail.php WebMail login; clientSideHtsRealisticMissionLabEvidence budgetServ branch; realistic/11 findings 3→4 incl client-side-hts-realistic-mission-lab-evidence; pages_crawled 1→6; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-11-playlevel-7-11",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/11 + forensic/2 + programming/2 + stego/2 + playlevel/7-11; queue drain for pending HTS mission URLs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websegura.radwarelatam.com/mutillidae",
+      "slug": "mutillidae-pen-test-tool-lookup-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: index.php?page=pen-test-tool-lookup.php Pen Test Tool Lookup command injection route in Mutillidae nav; extractMutillidaeLabSeeds + CLIENT_MUTILLIDAE_LAB_RES marker; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6074,6 +6092,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-realistic-9-10-playlevel-6",
       "shipped_at": "2026-07-16T04:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-11-budgetserv-cgi-lab",
+      "shipped_at": "2026-07-16T05:16:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-11-playlevel-7-11",
+      "shipped_at": "2026-07-16T05:16:00.000Z"
+    },
+    {
+      "source": "discovery:websegura.radwarelatam.com/mutillidae",
+      "slug": "mutillidae-pen-test-tool-lookup-crawl",
+      "shipped_at": "2026-07-16T05:16:00.000Z"
     }
   ]
 }
