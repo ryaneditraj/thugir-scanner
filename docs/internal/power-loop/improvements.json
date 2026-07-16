@@ -3623,6 +3623,24 @@
       "slug": "bugbountyhunter-challenge-17-image-class-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=17 title Change the class of our image and pick your favourite; BUGBOUNTYHUNTER_CHALLENGE_ORACLES image-class-manipulation + CLIENT_BUGBOUNTYHUNTER_RES marker; challenge?id=17 findings 0→4 incl client-side-bugbountyhunter-challenge-scenario-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-1-4-scenario-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=1 No HTML tags allowed + id=3 CSRF protection bypass + id=4 Only relative redirects; fixed image-class id=17→2 and FastFoodHackings /playground oracle; challenge?id=1 findings 2→3 with client-side-bugbountyhunter-challenge-scenario-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xss-reflected-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/xss-reflected/start title Reflected XSS — Secure Coding Lesson + meta malicious JavaScript bounced off your server; hacksplaining.com/lessons/xss-reflected/start findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-21-application-15-javascript-13-forensic-11",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HTS mission seed tail extended through /playlevel/21/ + /missions/application/15/ + javascript/13 + stego/11 + programming/10 + forensic/11; www.hackthissite.org crawl depth maintained; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6470,6 +6488,21 @@
       "source": "discovery:bugbountyhunter.com",
       "slug": "bugbountyhunter-challenge-17-image-class-oracle",
       "shipped_at": "2026-07-16T17:40:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-1-4-scenario-oracles",
+      "shipped_at": "2026-07-16T18:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xss-reflected-lesson-evidence",
+      "shipped_at": "2026-07-16T18:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-21-application-15-javascript-13-forensic-11",
+      "shipped_at": "2026-07-16T18:20:00.000Z"
     }
   ]
 }
