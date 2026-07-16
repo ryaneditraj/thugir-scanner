@@ -3768,6 +3768,96 @@ const clientSideHacksplainingBrokenAccessControlLessonEvidence: Rule = async (ct
   };
 };
 
+// --- Hacksplaining DNS poisoning lesson (hacksplaining.com/lessons/dns-poisoning) -------
+const CLIENT_HACKSPLAINING_DNS_POISONING_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DNS poisoning lesson URL",
+    re: /hacksplaining\.com\/lessons\/dns-poisoning/i
+  },
+  {
+    label: "DNS poisoning lesson title",
+    re: /DNS Poisoning — Secure Coding Lesson/i
+  },
+  {
+    label: "DNS cache poisoning meta description",
+    re: /upstream DNS caches have been poisoned, attackers may be intercepting traffic/i
+  },
+  {
+    label: "DNS poisoning lesson step nav",
+    re: /lessons\/dns-poisoning\/(?:checking-the-code|dns-cache-poisoning|a-real-world-example|finish)/i
+  },
+  {
+    label: "DNS cache poisoning attack description",
+    re: /dns (?:cache )?poison|upstream DNS|poisoned.*cache/i
+  }
+];
+
+const clientSideHacksplainingDnsPoisoningLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/dns-poisoning/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_DNS_POISONING_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/dns-poisoning\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining DNS poisoning lesson documents exploit-then-fix cache poisoning chains where upstream DNS caches redirect traffic before it reaches the application"
+    }
+  };
+};
+
+// --- Hacksplaining downgrade attacks lesson (hacksplaining.com/lessons/downgrade-attacks) -------
+const CLIENT_HACKSPLAINING_DOWNGRADE_ATTACKS_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Downgrade attacks lesson URL",
+    re: /hacksplaining\.com\/lessons\/downgrade-attacks/i
+  },
+  {
+    label: "Downgrade attacks lesson title",
+    re: /Downgrade Attacks — Secure Coding Lesson/i
+  },
+  {
+    label: "TLS downgrade meta description",
+    re: /intercept, read and manipulate HTTPS traffic if you fail to specify a modern version of TLS/i
+  },
+  {
+    label: "Downgrade attacks lesson step nav",
+    re: /lessons\/downgrade-attacks\/(?:checking-the-code|tls-versions|ssl-stripping|a-real-world-example|finish)/i
+  },
+  {
+    label: "TLS downgrade attack description",
+    re: /downgrade attack|TLS version|ssl stripping|weak cipher/i
+  }
+];
+
+const clientSideHacksplainingDowngradeAttacksLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/downgrade-attacks/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_DOWNGRADE_ATTACKS_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/downgrade-attacks\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining downgrade attacks lesson documents exploit-then-fix TLS version downgrade and SSL stripping chains that let attackers intercept HTTPS traffic"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17611,6 +17701,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingClickjackingLessonEvidence,
   clientSideHacksplainingMassAssignmentLessonEvidence,
   clientSideHacksplainingBrokenAccessControlLessonEvidence,
+  clientSideHacksplainingDnsPoisoningLessonEvidence,
+  clientSideHacksplainingDowngradeAttacksLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
