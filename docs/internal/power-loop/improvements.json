@@ -3425,6 +3425,24 @@
       "slug": "mutillidae-pen-test-tool-lookup-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: index.php?page=pen-test-tool-lookup.php Pen Test Tool Lookup command injection route in Mutillidae nav; extractMutillidaeLabSeeds + CLIENT_MUTILLIDAE_LAB_RES marker; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-auth-session-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /auth/jwt.html Secret: weaksecret + JWT-002 Algorithm Confusion + Accepts alg=none; /auth/login.html AUTH-001 Login Enumeration + Default creds: admin / admin123; clientSideVulnlabAuthSessionLabEvidence; rule unit test confidence 0.91; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-sub-lab-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hackThisSiteEtaPrioritySeeds now prepends /auth/login.html /auth/jwt.html /auth/session.html /auth/reset.html; auth hub pages_crawled=6 when Vercel checkpoint allows; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:defhawk.com",
+      "slug": "client-side-defhawk-practice-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Real World Vulnerability Exploitation + Hack Arena gamified cybersecurity challenges + defhawk-assets-prod PracticeLab path; defhawk.com/vulnAI findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6107,6 +6125,21 @@
       "source": "discovery:websegura.radwarelatam.com/mutillidae",
       "slug": "mutillidae-pen-test-tool-lookup-crawl",
       "shipped_at": "2026-07-16T05:16:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-auth-session-lab-evidence",
+      "shipped_at": "2026-07-16T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-sub-lab-crawl",
+      "shipped_at": "2026-07-16T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:defhawk.com",
+      "slug": "client-side-defhawk-practice-lab-evidence",
+      "shipped_at": "2026-07-16T06:10:00.000Z"
     }
   ]
 }
