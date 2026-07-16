@@ -1396,7 +1396,12 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/stego/3/",
     "/missions/forensic/3/",
     "/missions/programming/3/",
-    "/missions/application/6/"
+    "/missions/application/6/",
+    "/playlevel/12/",
+    "/missions/forensic/4/",
+    "/missions/javascript/4/",
+    "/missions/stego/4/",
+    "/missions/programming/4/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
