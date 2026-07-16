@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T15:06:30.611Z",
+  "updated_at": "2026-07-16T15:27:27.135Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 281,
   "discovery_findings": 2354,
-  "improvements_shipped": 560,
-  "last_run": "2026-07-16T15:06:30.611Z",
+  "improvements_shipped": 563,
+  "last_run": "2026-07-16T15:27:27.135Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Category recall 6/6 but shallow crawl (pages_crawled=1 probes=235); secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes",
+      "note": "No benchmark misses — pass1 gap xss,sqli on cold start; wake retry merged to 7 findings 6/6",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,19 +55,22 @@
       "findings": 41,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue backlog drain — XSS victim/attacker pair, DevSecOps lab, VulnLab, JuiceSec Workers variant",
-      "improvements_shipped_this_run": 0
+      "focus": "BBH challenge 8-11 scenario oracles (URL-match fix); HTS playlevel/17-18 tail seeds; Hacksplaining host-header lesson",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — shallow crawl pages_crawled=1",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: secret-openai + IDOR/gateway bypass lab evidence (7 findings)",
-      "vulnlab.vercel.app: SSRF/XXE/file-upload client-side evidence (7 findings)",
-      "juicesec.mrdinesh.workers.dev: JWT alg:none + IDOR + SQLi Juice Shop variant (7 findings)",
-      "xss-attacker.vercel.app: XSS C2 collector /api/collect exfil endpoint (4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings after Heroku wake retry)",
+      "bugbountyhunter.com/challenge?id=8: scenario oracle now #8 harmless-page XSS (was false-positive #6 from sidebar links)",
+      "bugbountyhunter.com/challenge?id=10: HackerPhotos IDOR scenario oracle verified",
+      "www.hacksplaining.com/lessons/host-header-poisoning/start: dedicated lesson evidence 4→5 findings",
+      "www.hackthissite.org/playlevel/17/: login-gated playlevel hub evidence (6 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: pages_crawled=1 despite 6/6 recall — shallow crawl misses secret-resend slug",
+      "juice-shop.herokuapp.com: pages_crawled=1 on cold pass despite 6/6 recall — shallow crawl misses secret-resend slug",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "www.hacksplaining.com: Vercel Security Checkpoint intermittently blocks cloud scans",
+      "bugbountyhunter.com/challenge?id=17-18: challenge pages redirect to homepage (not yet published)",
+      "HTS playlevel/17-18 application/11-12: login-gated — hub markers only without credentials",
       "HTS playlevel/19 application/13 javascript/11 forensic/9 queued at tail — not yet drained"
     ]
   },
