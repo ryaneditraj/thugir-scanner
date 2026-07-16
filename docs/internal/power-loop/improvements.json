@@ -3569,6 +3569,24 @@
       "slug": "bugbountyhunter-challenge-13-14-title-oracles",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CLIENT_BUGBOUNTYHUNTER_RES title markers for information leak + XSS Destroyer challenges; complements scenario oracles on challenge?id=13-14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-8-11-scenario-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=8 harmless page XSS + #9 admin panel + #10 HackerPhotos IDOR + #11 bounty generator; urlRe now matches scanUrl only (fixes #6 false positive on sidebar links); challenge #8/#10 scenario notes verified; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-17-18-application-11-12",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/17-18 + application/11-12 + javascript/9-10 + stego/9 + programming/8 + forensic/8; playlevel/17→6 findings incl client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/host-header-poisoning/start title Host Header Poisoning — Secure Coding Lesson + meta dangerous to rely on Host header; host-header-poisoning/start findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6371,6 +6389,21 @@
       "source": "discovery:bugbountyhunter.com",
       "slug": "bugbountyhunter-challenge-13-14-title-oracles",
       "shipped_at": "2026-07-16T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-8-11-scenario-oracles",
+      "shipped_at": "2026-07-16T15:27:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-17-18-application-11-12",
+      "shipped_at": "2026-07-16T15:27:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
+      "shipped_at": "2026-07-16T15:27:00.000Z"
     }
   ]
 }
