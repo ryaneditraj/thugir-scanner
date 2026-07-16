@@ -3461,6 +3461,24 @@
       "slug": "hts-mission-seed-realistic-12-14-login-gated-3-playlevel-9",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/12-14 + javascript/3 + stego/3 + forensic/3 + playlevel/9; playlevel/9/javascript/3/stego/3/forensic/3 findings 0→6 incl login-gated hub slugs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-15-seculas-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/15 secuLas Ltd. products.php + anti personnel laser catalog; clientSideHtsRealisticMissionLabEvidence secuLas branch; realistic/15 findings 0→3 incl client-side-hts-realistic-mission-lab-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-16-simple-mail-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/16 Simple Mail index.php?module=login/register/admin_login; simpleMail branch; realistic/16 findings 0→4 incl client-side-hts-realistic-mission-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-15-16-programming-3-application-6",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/15-16 + programming/3 + application/6 + realistic loop 1-16; extractHtsRealisticMissionSeeds secuLas/Simple Mail child paths; benchmark juice-shop cold 3→retry 6 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6173,6 +6191,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-realistic-12-14-login-gated-3-playlevel-9",
       "shipped_at": "2026-07-16T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-15-seculas-lab",
+      "shipped_at": "2026-07-16T08:45:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-16-simple-mail-lab",
+      "shipped_at": "2026-07-16T08:45:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-15-16-programming-3-application-6",
+      "shipped_at": "2026-07-16T08:45:00.000Z"
     }
   ]
 }
