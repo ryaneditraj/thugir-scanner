@@ -3689,6 +3689,24 @@
       "slug": "bugbountyhunter-challenge-23-oracle",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=23 returns shared training hub carousel (data-url only lists ids 4,6,9,11,13,14,15,16) — no id=23 scenario title; oracle deferred until BBH publishes distinct challenge page"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-24-application-18-javascript-15-forensic-13",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/24 + application/18 return HTTP 200; extractHackThisSiteMissionSeeds tail extended; www.hackthissite.org/playlevel/24 findings include client-side-hts-playlevel-hub-evidence (6 findings, 6 pages crawled); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-dns-poisoning-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/dns-poisoning/start title DNS Poisoning — Secure Coding Lesson + meta upstream DNS caches have been poisoned + step nav dns-cache-poisoning/a-real-world-example; hacksplaining.com/lessons/dns-poisoning/start gains client-side-hacksplaining-dns-poisoning-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/downgrade-attacks/start title Downgrade Attacks — Secure Coding Lesson + meta intercept HTTPS traffic if you fail to specify a modern version of TLS + step nav tls-versions/ssl-stripping; hacksplaining.com/lessons/downgrade-attacks/start gains client-side-hacksplaining-downgrade-attacks-lesson-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6581,6 +6599,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-broken-access-control-lesson-evidence",
       "shipped_at": "2026-07-16T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-24-application-18-javascript-15-forensic-13",
+      "shipped_at": "2026-07-16T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-dns-poisoning-lesson-evidence",
+      "shipped_at": "2026-07-16T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
+      "shipped_at": "2026-07-16T21:10:00.000Z"
     }
   ]
 }
