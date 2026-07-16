@@ -753,6 +753,7 @@ const DEEP_RULES = new Set<string>([
   "redtigerClassicLoginSqlEvidence",
   "redtigerBlindLoginFormEvidence",
   "redtigerSpecialChallengeEvidence",
+  "htsYuppersSearchSqliProbe",
   "clientSideVulnExposeEvidence",
   "clientSideVulnExposeLabModuleEvidence",
   "clientSideWizerCtfEvidence",
@@ -1401,7 +1402,18 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/4/",
     "/missions/javascript/4/",
     "/missions/stego/4/",
-    "/missions/programming/4/"
+    "/missions/programming/4/",
+    "/playlevel/13/",
+    "/playlevel/14/",
+    "/missions/application/7/",
+    "/missions/application/8/",
+    "/missions/javascript/5/",
+    "/missions/javascript/6/",
+    "/missions/stego/5/",
+    "/missions/stego/6/",
+    "/missions/programming/5/",
+    "/missions/programming/6/",
+    "/missions/forensic/5/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -5121,7 +5133,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ? ["/vulnerabilities", "/catalog", "/blog"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
   const redTigerPrioritySeeds = /redtiger\.labs\.overthewire\.org/i.test(home.finalUrl)
-    ? ["http://redtiger.labs.overthewire.org/", "http://redtiger.labs.overthewire.org/level1.php"]
+    ? [
+        "http://redtiger.labs.overthewire.org/",
+        "http://redtiger.labs.overthewire.org/level1.php",
+        "http://redtiger.labs.overthewire.org/special1.php"
+      ]
     : [];
   const grpcGoatPrioritySeeds =
     /vwad\.owasp\.org\/app\/grpc-goat|rootxjs\.github\.io\/blog\/grpc-goat/i.test(home.finalUrl)

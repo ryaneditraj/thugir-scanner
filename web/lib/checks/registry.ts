@@ -8931,6 +8931,63 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HTS Realistic 14 Yuppers search.cgi boolean SQLi (quote vs baseline differential) -----
+const HTS_YUPPERS_SQLI_BASELINE = "thugirSqliBaseline0";
+
+async function probeHtsYuppersSearchSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.home.body}\n${ctx.combined}\n${pageUrl}`;
+  if (!/Yuppers!|search\.cgi|Web Permit/i.test(corpus)) return null;
+  let searchBase: string | null = null;
+  const direct = pageUrl.match(/^(https:\/\/www\.hackthissite\.org\/missions\/realistic\/\d+\/)/i);
+  if (direct) {
+    searchBase = direct[1];
+  } else {
+    const fromCorpus = corpus.match(
+      /(?:https:\/\/)?(?:www\.)?hackthissite\.org\/missions\/realistic\/(\d+)\//i
+    );
+    if (fromCorpus) searchBase = `https://www.hackthissite.org/missions/realistic/${fromCorpus[1]}/`;
+  }
+  if (!searchBase) return null;
+  let searchUrl: string;
+  try {
+    searchUrl = new URL("search.cgi", searchBase).toString();
+  } catch {
+    return null;
+  }
+  const baselineU = new URL(searchUrl);
+  baselineU.searchParams.set("search", HTS_YUPPERS_SQLI_BASELINE);
+  const probeU = new URL(searchUrl);
+  probeU.searchParams.set("search", "'");
+  const [baseline, probe] = await Promise.all([
+    ctx.probe.get(baselineU.toString(), { maxBytes: 16_384 }),
+    ctx.probe.get(probeU.toString(), { maxBytes: 16_384 })
+  ]);
+  if (baseline.status < 200 || baseline.status >= 400) return null;
+  if (probe.status < 200 || probe.status >= 400) return null;
+  const baselineMatch = baseline.body.match(/Displaying\s+(\d+)\s+of\s+(\d+)/i);
+  const probeMatch = probe.body.match(/Displaying\s+(\d+)\s+of\s+(\d+)/i);
+  if (!baselineMatch || !probeMatch) return null;
+  const baseDisplayed = Number.parseInt(baselineMatch[1], 10);
+  const probeDisplayed = Number.parseInt(probeMatch[1], 10);
+  if (!Number.isFinite(baseDisplayed) || !Number.isFinite(probeDisplayed)) return null;
+  if (baseDisplayed !== 0 || probeDisplayed < 5) return null;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      url: probeU.toString(),
+      baseline: { url: baselineU.toString(), displayed: baseDisplayed },
+      probe: { displayed: probeDisplayed, total: probeMatch[2] },
+      snippet: probe.body.slice(0, 240).trim(),
+      note: "HTS Yuppers search.cgi returns abnormally many matches for quote-only input vs baseline — SQL injection likely"
+    }
+  };
+}
+
+const htsYuppersSearchSqliProbe: Rule = async (ctx) =>
+  (await probeHtsYuppersSearchSqli(ctx)) ?? NEGATIVE;
+
 // --- HackThisSite accessible Basic mission instances (bare content, no login wrapper) -----
 const clientSideHtsBasicMissionLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -16808,6 +16865,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackThisSiteRealisticMissionEvidence,
   clientSideHtsLoginGatedMissionHubEvidence,
   clientSideHtsRealisticMissionLabEvidence,
+  htsYuppersSearchSqliProbe,
   clientSideHtsBasicMissionLabEvidence,
   clientSideHtsPlaylevelHubEvidence,
   clientSideAuthSecurityProjectEvidence,
