@@ -3665,6 +3665,30 @@
       "slug": "bugbountyhunter-challenge-22-csrf-oracle",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=22 returns shared training hub carousel (data-url only lists ids 1,3,4,6,7,8,9,12,14,16) — no id=22 scenario title or bugbountytraining.com/challenge-22.php; oracle deferred until BBH publishes distinct challenge page"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-23-application-17-stego-13-15-programming-12",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/23 + application/17 + stego/13-15 + programming/12; www.hackthissite.org/playlevel/23 direct scan 6 findings incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-mass-assignment-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/mass-assignment/start title Mass Assignment — Secure Coding Lesson + meta Automatically unpacking data from the HTTP request + step nav profile/danger/dummy-request; hacksplaining.com/lessons/mass-assignment/start findings 6→8 incl client-side-hacksplaining-mass-assignment-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-broken-access-control-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/broken-access-control/start title Broken Access Control — Secure Coding Lesson + meta All resources on your site need to have access control implemented + step nav security-through-obscurity/predictable-paths/a-broken-workflow; hacksplaining.com/lessons/broken-access-control/start findings 6→7 incl client-side-hacksplaining-broken-access-control-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-23-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=23 returns shared training hub carousel (data-url only lists ids 4,6,9,11,13,14,15,16) — no id=23 scenario title; oracle deferred until BBH publishes distinct challenge page"
     }
   ],
   "shipped": [
@@ -6542,6 +6566,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-clickjacking-lesson-evidence",
       "shipped_at": "2026-07-16T19:43:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-23-application-17-stego-13-15-programming-12",
+      "shipped_at": "2026-07-16T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-mass-assignment-lesson-evidence",
+      "shipped_at": "2026-07-16T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-broken-access-control-lesson-evidence",
+      "shipped_at": "2026-07-16T20:35:00.000Z"
     }
   ]
 }
