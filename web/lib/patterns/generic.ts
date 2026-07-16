@@ -4374,6 +4374,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-bugbountyhunter-challenge-scenario-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "BugBountyHunter numbered challenge scenario disclosed",
+    description:
+      "BugBountyHunter challenge?id=N pages publish zseano-style bug bounty scenario titles for XSS filter bypass, open redirect, SSO token theft, and CORS whitelist flaws.",
+    impactOneline:
+      "Public BugBountyHunter challenge URLs document real-world bug bounty hunting scenarios attackers study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBugBountyHunterChallengeScenarioEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugBountyHunter challenges are intentional training — gate active scenarios behind membership.",
+      steps: [
+        "Require authentication before serving live challenge instances.",
+        "Do not expose production-like bug bounty scenarios without access controls.",
+        "Monitor challenge endpoints for automated scanner abuse."
+      ]
+    },
+    fixPrompt:
+      "We host BugBountyHunter-style numbered challenge scenarios. Show how to gate live challenges behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-zero-health-evidence",
     platform: "generic",
     category: "Broken access control",
