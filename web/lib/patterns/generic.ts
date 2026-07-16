@@ -6714,6 +6714,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-sql-injection-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Hacksplaining SQL injection lesson disclosed",
+    description:
+      "Hacksplaining /lessons/sql-injection publishes an interactive exploit-then-fix walkthrough covering database query manipulation, injection-vulnerability steps, and server-error oracles.",
+    impactOneline:
+      "Public SQL injection lesson pages document query-concatenation exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingSqlInjectionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining SQLi lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable SQL injection lesson instances on private deployments.",
+        "Use parameterized queries in production — never copy Hacksplaining vulnerable query builders.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style SQL injection exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-portswigger-academy-evidence",
     platform: "generic",
     category: "Injection",

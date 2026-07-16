@@ -3359,6 +3359,50 @@ const clientSideHacksplainingEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining SQL injection lesson (hacksplaining.com/lessons/sql-injection) -------
+const CLIENT_HACKSPLAINING_SQL_INJECTION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL injection lesson URL",
+    re: /hacksplaining\.com\/lessons\/sql-injection/i
+  },
+  {
+    label: "SQL injection lesson title",
+    re: /SQL Injection — Secure Coding Lesson/i
+  },
+  {
+    label: "SQL injection lesson meta description",
+    re: /vulnerable to SQL Injection, attackers can run arbitrary commands/i
+  },
+  {
+    label: "SQL injection lesson step nav",
+    re: /lessons\/sql-injection\/(?:checking-the-code|injection-vulnerability|injection-explained|server-error)/i
+  },
+  {
+    label: "SQL injection exploit database queries description",
+    re: /Exploit database queries to access or manipulate data/i
+  }
+];
+
+const clientSideHacksplainingSqlInjectionLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/sql-injection/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_SQL_INJECTION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining SQL injection lesson documents exploit-then-fix database query manipulation with checking-the-code and injection-vulnerability walkthrough steps"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17009,6 +17053,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
   clientSideHacksplainingEvidence,
+  clientSideHacksplainingSqlInjectionLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
