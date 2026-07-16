@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T13:15:00.000Z",
+  "updated_at": "2026-07-16T14:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 710,
-  "total_findings": 3205,
+  "total_sites_scanned": 719,
+  "total_findings": 3253,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 271,
-  "discovery_findings": 2272,
+  "discovery_urls_added": 276,
+  "discovery_findings": 2313,
   "improvements_shipped": 557,
-  "last_run": "2026-07-16T13:15:00.000Z",
+  "last_run": "2026-07-16T14:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings; pages_crawled=6)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings; pages_crawled=6 probes=260)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,29 +52,24 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 36,
-      "skipped_48h": [
-        "https://www.hackthissite.org/playlevel/16/",
-        "https://www.hackthissite.org/missions/application/10/",
-        "https://www.hackthissite.org/missions/javascript/8/",
-        "https://www.hackthissite.org/missions/stego/8/",
-        "https://www.hackthissite.org/missions/programming/8/"
-      ],
+      "findings": 41,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "HTS playlevel/16 tail seeds; BugBountyHunter challenge URL oracles; vulnerableapp.com DOM XSS document.write sink",
-      "improvements_shipped_this_run": 3
+      "focus": "Hacksplaining XSSI lesson oracle; OSS lab backlog (HackLab, WebVulnsGuide, frontend-security-examples); demo.weblock.ru CORS+IDOR+prompt-injection; HTS playlevel/18 tail seeds queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings)",
-      "vulnerableapp.com: dangerous-html-sinks on document.write(decodeURIComponent(params.name)) — findings 2→3",
-      "bugbountyhunter.com/challenge?id=6,7,16: challenge scenario evidence via scanUrl oracles — findings 2→3 each",
-      "www.hackthissite.org/playlevel/16: HTS tail mission seeds — 6 findings incl playlevel hub evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings; no Heroku cold-start miss)",
+      "demo.weblock.ru: cors-reflect-origin + idor-sequential-ids + client-side-prompt-injection-evidence + vibe-openapi-docs-exposed (8 findings)",
+      "ashimkoirala.github.io/HackLab: client-side-idor-evidence + sql-evidence (6 findings)",
+      "dxx33.github.io/WebVulnsGuide: client-side-webvulnsguide-ssti-lab-evidence",
+      "www.hacksplaining.com/lessons/xssi/start: XSSI lesson oracle via client-side-hacksplaining-evidence (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "www.hacksplaining.com: Vercel Security Checkpoint intermittently blocks cloud scans",
-      "HTS playlevel/16 application/10 forensic/7: login-gated — challenge content behind authenticated access"
-    ]
+      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
+      "HTS playlevel/17–18 application/11–12: login-gated — queued tail missions not yet drained",
+      "testhtml5.vulnweb.com: DNS dead — skip in queue drain"
     ]
   },
   "discovery_highlights": {
@@ -394,6 +389,9 @@
     "www.hackthissite.org/missions/forensic/4": 6,
     "www.hackthissite.org/missions/javascript/4": 6,
     "www.hackthissite.org/missions/stego/4": 6,
+    "www.hacksplaining.com/lessons/xssi/start": 4,
+    "akbarbashakm.github.io/frontend-security-examples": 5,
+    "dev-lucasoliveira.github.io/frontend-xss-demo": 4,
     "www.hackthissite.org/missions/programming/4": 6
   }
 }

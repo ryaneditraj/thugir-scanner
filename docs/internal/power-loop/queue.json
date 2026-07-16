@@ -4273,7 +4273,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=17",
       "source": "BugBountyHunter zseano — XSS/IDOR challenge #17 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/18/",
+      "source": "Hack This Site — playlevel arcade mission 18 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/12/",
+      "source": "Hack This Site — application mission 12 web exploitation challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/10/",
+      "source": "Hack This Site — javascript mission 10 client-side security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/8/",
+      "source": "Hack This Site — forensic mission 8 steganography/file analysis challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=18",
+      "source": "BugBountyHunter zseano — open redirect/SSRF challenge #18 (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T13:05:00.000Z"
+  "updated_at": "2026-07-16T14:05:00.000Z"
 }
