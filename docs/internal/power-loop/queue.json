@@ -4023,7 +4023,32 @@
       "url": "https://www.hackthissite.org/missions/javascript/2/",
       "source": "Hack This Site — javascript mission 2 client-side logic bypass lab",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/11/",
+      "source": "Hack This Site — realistic mission 11 BudgetServ hosting SQLi/IDOR challenge (aldeid wiki)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/11/",
+      "source": "Hack This Site — playlevel arcade mission 11 interactive vulnerability puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/2/",
+      "source": "Hack This Site — forensic mission 2 steganography/file analysis challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/2/",
+      "source": "Hack This Site — programming mission 2 exploit development challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/2/",
+      "source": "Hack This Site — steganography mission 2 hidden-data extraction lab",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T03:03:56.980Z"
+  "updated_at": "2026-07-16T04:06:00.000Z"
 }
