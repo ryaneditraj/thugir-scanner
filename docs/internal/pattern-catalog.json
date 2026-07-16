@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T01:04:20.394Z",
-  "total": 371,
-  "uniqueSlugs": 371,
+  "generatedAt": "2026-07-16T02:07:41.722Z",
+  "total": 372,
+  "uniqueSlugs": 372,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 353,
+    "generic": 354,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 303,
+    "deep": 304,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 25,
     "Security misconfiguration": 25,
     "Broken authentication": 22,
-    "Injection": 65,
+    "Injection": 66,
     "Cross-site scripting": 43,
     "general": 18,
     "SSRF": 1,
@@ -271,6 +271,7 @@
     "client-side-vulnlab-a10-ssrf-evidence",
     "client-side-vulnlab-academy-evidence",
     "client-side-vulnlab-cms-platform-evidence",
+    "client-side-vulnscope-evidence",
     "client-side-vulnshop-evidence",
     "client-side-vulnweb-lab-evidence",
     "client-side-vwad-bodgeit-evidence",

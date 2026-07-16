@@ -3353,6 +3353,24 @@
       "slug": "client-side-vulnerableapp-dom-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: DOM Based Cross-Site Scripting Example + dom-xss.html + document.write cookie exfiltration href; vulnerableapp.com findings 0→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-login-gated-mission-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/javascript/1 returns require_auth error (not Login Required); HTS_AUTH_GATE_RE extended; javascript/1 findings 0→6 incl login-gated hub; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "client-side-hts-realistic-mission-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/6 bare XECryption algorithm ciphertext oracle + dot-separated numbers; realistic/6 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnscope.vercel.app",
+      "slug": "client-side-vulnscope-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VulnScope Pro + AI-Powered Vulnerability Scanner + test for SQL Injection/XSS + vulnscope-pro scan output; vulnscope.vercel.app findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -5975,6 +5993,21 @@
       "source": "discovery:vulnerableapp.com",
       "slug": "client-side-vulnerableapp-dom-xss-evidence",
       "shipped_at": "2026-07-16T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-javascript-require-auth-gate",
+      "shipped_at": "2026-07-16T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-xecryption-mission-6",
+      "shipped_at": "2026-07-16T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnscope.vercel.app",
+      "slug": "client-side-vulnscope-evidence",
+      "shipped_at": "2026-07-16T02:15:00.000Z"
     }
   ]
 }
