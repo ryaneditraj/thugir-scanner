@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T11:30:00.000Z",
+  "updated_at": "2026-07-16T11:40:18.222Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 683,
-  "total_findings": 3085,
+  "total_sites_scanned": 692,
+  "total_findings": 3119,
   "critical_findings": 25,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 256,
-  "discovery_findings": 2173,
+  "discovery_urls_added": 261,
+  "discovery_findings": 2200,
   "improvements_shipped": 551,
-  "last_run": "2026-07-16T11:30:00.000Z",
+  "last_run": "2026-07-16T11:40:18.222Z",
   "last_run_summary": {
     "hour_utc": "11:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 503 during run — validated on juice-shop-staging 7 findings 6/6 recall; no benchmark misses",
+      "note": "Heroku primary pass1: 6 findings pages_crawled=6 gap=sensitive_data; pass2 cold regression 2 findings pages_crawled=1; pass3 wake retry merged 7 findings pages_crawled=1 probes=235 — 6/6 on primary, no staging fallback",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,28 +48,28 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 27,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Engine evolve — HTS queue tail seeds + Yuppers search.cgi SQLi boolean probe + RedTiger special1 priority",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue head drain — bugbountyhunter 12, OWASP WebGoat VWAD, OverTheWire redtiger levels 7-10, Hacksplaining XSS/command lessons; HTS playlevel/15 app/9 js/7 stego/7 prog/7 queued at tail",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — primary heroku 503",
-      "HTS realistic/14: hts-yuppers-search-sqli-probe added (findings 4→5)",
-      "HTS playlevel/14 + application/8: login-gated hub evidence via extended mission seeds (6 findings each)",
-      "redtiger special1.php: redtiger-special-challenge-evidence via priority seed (3 findings)"
+      "juice-shop.herokuapp.com: 7 findings 6/6 recall after Heroku wake retries (pass1 gap=sensitive_data only)",
+      "vwad.owasp.org/app/webgoat/: 5 findings — OWASP WebGoat vulnerable app directory markers",
+      "www.hacksplaining.com/lessons/xss-reflected: 4 findings — interactive XSS lesson evidence",
+      "www.hacksplaining.com/lessons/command-execution: 4 findings — command injection lesson markers",
+      "redtiger.labs.overthewire.org levels 7-10: 3 findings each — SQLi training lab pages"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com primary 503 Service Unavailable — staging fallback required",
+      "juice-shop.herokuapp.com pass1: 6/6 categories except sensitive_data (secret-resend slug absent; recovered via vibe-unauthenticated-api-routes on merge)",
+      "juice-shop.herokuapp.com pass2: Heroku cold regression — 2 findings pages_crawled=1 (idor+misconfig only)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS missions/application/8 through programming/6: login-gated — challenge content behind auth",
-      "acuart.phpnet.us: DNS resolution error page — lab offline from cloud scans",
-      "www.bugbountyhunter.com: free challenges disabled while new platform ships"
+      "HTS playlevel/15 application/9 javascript/7 stego/7 programming/7: queued at tail for next drain"
     ]
   },
   "discovery_highlights": {
