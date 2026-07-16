@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T05:16:17.320Z",
-  "total": 372,
-  "uniqueSlugs": 372,
+  "generatedAt": "2026-07-16T06:09:04.475Z",
+  "total": 374,
+  "uniqueSlugs": 374,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 354,
+    "generic": 356,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 304,
+    "deep": 306,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 25,
     "Security misconfiguration": 25,
-    "Broken authentication": 22,
-    "Injection": 66,
+    "Broken authentication": 23,
+    "Injection": 67,
     "Cross-site scripting": 43,
     "general": 18,
     "SSRF": 1,
@@ -103,6 +103,7 @@
     "client-side-cylab-academy-evidence",
     "client-side-damn-vulnerable-bank-evidence",
     "client-side-defendtheweb-evidence",
+    "client-side-defhawk-practice-lab-evidence",
     "client-side-deserialization-evidence",
     "client-side-devsecops-lab-evidence",
     "client-side-devsecops-pipeline-visualizer-evidence",
@@ -270,6 +271,7 @@
     "client-side-vulnlab-a09-logging-evidence",
     "client-side-vulnlab-a10-ssrf-evidence",
     "client-side-vulnlab-academy-evidence",
+    "client-side-vulnlab-auth-session-lab-evidence",
     "client-side-vulnlab-cms-platform-evidence",
     "client-side-vulnscope-evidence",
     "client-side-vulnshop-evidence",

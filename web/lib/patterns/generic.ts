@@ -2321,6 +2321,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-defhawk-practice-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "DefHawk PracticeLab cybersecurity training disclosed",
+    description:
+      "DefHawk vulnAI / PracticeLab publishes real-world vulnerability exploitation drills and Hack Arena gamified challenge simulations.",
+    impactOneline:
+      "Public DefHawk practice hubs document hands-on exploitation training used to calibrate scanners against lab targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDefhawkPracticeLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DefHawk labs are intentional training — isolate practice environments from production networks.",
+      steps: [
+        "Run vulnerability exploitation drills only on dedicated training tenants.",
+        "Require authenticated accounts before launching Hack Arena challenge instances.",
+        "Use DefHawk lab findings to patch similar gaps in production applications."
+      ]
+    },
+    fixPrompt:
+      "We host DefHawk-style real-world exploitation practice labs. Show how to isolate training instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-immersive-labs-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -5281,6 +5307,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our A07 auth lab exposes brute-force and predictable reset-token flows. Show secure alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-auth-session-lab-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnLab auth & session labs disclosed",
+    description:
+      "VulnLab Academy /auth/* modules document JWT weak secrets, alg=none confusion, login enumeration, and default credentials.",
+    impactOneline:
+      "Public auth/session labs advertise JWT bypass and credential-guessing patterns for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabAuthSessionLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg=none JWTs, use strong signing secrets, and normalize login error messages.",
+      steps: [
+        "Allowlist JWT algorithms and reject alg=none or key-confusion payloads.",
+        "Store signing secrets server-side only; rotate weak or demo secrets.",
+        "Return identical login errors for invalid username and password."
+      ]
+    },
+    fixPrompt:
+      "Our /auth/jwt.html lab exposes weaksecret and alg=none. Show secure JWT verification patterns.",
     version: 1,
     enabled: true
   },

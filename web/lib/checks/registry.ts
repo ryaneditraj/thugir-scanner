@@ -6952,6 +6952,50 @@ const clientSideKontraApplicationSecurityEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DefHawk PracticeLab / Hack Arena (defhawk.com/vulnAI) ------------------------------
+const CLIENT_DEFHAWK_PRACTICE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DefHawk cybersecurity training platform",
+    re: /defhawk\.com|DefHawk|HACK\s*\|\s*ANALYZE\s*\|\s*WAR-GAME/i
+  },
+  {
+    label: "Real world vulnerability exploitation practice",
+    re: /Real World Vulnerability Exploitation|hands-on practice to help you master/i
+  },
+  {
+    label: "Hack Arena gamified challenge platform",
+    re: /Hack Arena is a gamified interface for solving cybersecurity challenges/i
+  },
+  {
+    label: "Practice lab asset path",
+    re: /defhawk-assets-prod[\s\S]{0,80}PracticeLab/i
+  },
+  {
+    label: "vulnAI product route",
+    re: /\/vulnAI|vulnAI/i
+  }
+];
+
+const clientSideDefhawkPracticeLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DEFHAWK_PRACTICE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/defhawk\.com|DefHawk/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DefHawk PracticeLab / Hack Arena documents real-world vulnerability exploitation training and gamified cybersecurity challenges"
+    }
+  };
+};
+
 // --- VULNEX web hacking playbook (vulnex.vercel.app) ----------------------------------
 const CLIENT_VULNEX_PLAYBOOK_RES: { label: string; re: RegExp }[] = [
   {
@@ -14444,6 +14488,57 @@ const clientSideVulnlabA07AuthEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy /auth/* session labs (JWT, login enumeration, weak secrets) ---------
+const CLIENT_VULNLAB_AUTH_SESSION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Auth session lab hub path",
+    re: /\/auth\/(?:jwt|login|session|reset)\.html/i
+  },
+  {
+    label: "JWT lab weak signing secret disclosed",
+    re: /Secret:\s*weaksecret/i
+  },
+  {
+    label: "JWT alg=none algorithm confusion lab",
+    re: /JWT-002 Algorithm Confusion|Accepts alg=none|["']alg["']\s*:\s*["']none["']/i
+  },
+  {
+    label: "JWT decoder training lab",
+    re: /JWT-001 Decoder|decodeJwt\(\)|\/api\/jwt\/decode/i
+  },
+  {
+    label: "Login enumeration lab",
+    re: /AUTH-001 Login Enumeration|Different error messages for invalid user vs password/i
+  },
+  {
+    label: "Default credentials in login lab",
+    re: /Default creds:\s*admin\s*\/\s*admin123/i
+  },
+  {
+    label: "Session management weak session ID lab",
+    re: /Session Analysis|Weak session IDs and fixation/i
+  }
+];
+
+const clientSideVulnlabAuthSessionLabEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_AUTH_SESSION_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab /auth/* labs document JWT weak secrets, alg=none confusion, and login enumeration with default credentials"
+    }
+  };
+};
+
 // --- VulnLab Academy A08 integrity failures (hack-this-site-eta.vercel.app/owasp/a08.html) -
 const CLIENT_VULNLAB_A08_INTEGRITY_RES: { label: string; re: RegExp }[] = [
   {
@@ -16624,6 +16719,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
+  clientSideDefhawkPracticeLabEvidence,
   clientSideVulnexEvidence,
   clientSideSecureflagEvidence,
   clientSideImmersiveLabsEvidence,
@@ -16752,6 +16848,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA03InjectionEvidence,
   clientSideVulnlabA06ComponentsEvidence,
   clientSideVulnlabA07AuthEvidence,
+  clientSideVulnlabAuthSessionLabEvidence,
   clientSideVulnlabA08IntegrityEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
