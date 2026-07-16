@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T04:05:10.726Z",
+  "updated_at": "2026-07-16T04:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 221,
   "discovery_findings": 1891,
-  "improvements_shipped": 530,
-  "last_run": "2026-07-16T04:05:10.726Z",
+  "improvements_shipped": 533,
+  "last_run": "2026-07-16T04:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -50,31 +50,27 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 29,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 18,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "HTS realistic/7 political blog + realistic/8 U.B.O.A + mission seed expansion; queue head drain",
+      "dns_failures": [],
+      "focus": "HTS realistic/9-10 + playlevel/6 queue drain; Holy Word grades lab + login-gated realistic",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "www.hackthissite.org/missions/realistic/7: political blog comment injection lab detected (2→4 findings)",
-      "www.hackthissite.org/missions/realistic/8: U.B.O.A login1.php auth bypass lab detected (2→4 findings)",
-      "openvaultbank.com/api/v1/users+admin: OWASP API Top 10 lab evidence (5 findings each)",
-      "maz4lhacks.vercel.app/posts/reflected-xss: reflected XSS writeup evidence (5 findings)",
-      "redtiger L5-L6: blind SQLi login-bypass form evidence (3 findings each)"
+      "www.hackthissite.org/missions/realistic/10: Holy Word High School student.php grade-access lab (0→5 findings)",
+      "www.hackthissite.org/missions/realistic/9: login-gated realistic mission hub evidence (0→7 findings)",
+      "www.hackthissite.org/playlevel/6: playlevel arcade login-gated hub (0→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "HTS forensic/1 + stego/1 login-gated — covered by existing hub rule; queue drain pending",
+      "HTS application/4 + javascript/2 queued — seeds added, pending scan drain",
       "domgo.at/domxss/ returns 404 — disabled in queue; use domgo.at/cxss/ routes",
       "516-hackers-vuln-playground + acuart.phpnet.us offline — queue entries disabled",
-      "testhtml5.vulnweb.com: DNS dead — recurring queue skip",
-      "HTS realistic/9-10 + playlevel/6 queued at tail — pending drain"
+      "testhtml5.vulnweb.com: DNS dead — recurring queue skip"
     ]
   },
   "discovery_highlights": {
@@ -359,6 +355,9 @@
     "vulnscope.vercel.app": 3,
     "maz4lhacks.vercel.app": 5,
     "www.hackthissite.org/missions/realistic/7": 4,
-    "www.hackthissite.org/missions/realistic/8": 4
+    "www.hackthissite.org/missions/realistic/8": 4,
+    "www.hackthissite.org/missions/realistic/10": 5,
+    "www.hackthissite.org/missions/realistic/9": 7,
+    "www.hackthissite.org/playlevel/6": 6
   }
 }

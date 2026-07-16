@@ -3389,6 +3389,24 @@
       "slug": "hts-mission-seed-realistic-6-8-playlevel-4-5",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/6-8 + playlevel/4-5 + programming/1 + application/3; queue drain for pending HTS mission URLs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-10-holy-word-grades-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/10 Holy Word High School + student.php + Check your grades online; clientSideHtsRealisticMissionLabEvidence holyWordGrades branch; realistic/10 findings 0→5 incl client-side-hts-realistic-mission-lab-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-9-login-gated",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/9 returns Login Required + You must be logged in; parseHtsLoginGatedHub extended for realistic instances; realistic/9 findings 0→7 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-9-10-playlevel-6",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/9-10 + playlevel/6 + application/4 + javascript/2; playlevel/6 findings 0→6 incl client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6041,6 +6059,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-realistic-6-8-playlevel-4-5",
       "shipped_at": "2026-07-16T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-10-holy-word-grades-lab",
+      "shipped_at": "2026-07-16T04:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-9-login-gated",
+      "shipped_at": "2026-07-16T04:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-9-10-playlevel-6",
+      "shipped_at": "2026-07-16T04:15:00.000Z"
     }
   ]
 }
