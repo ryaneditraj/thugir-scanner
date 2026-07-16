@@ -3497,6 +3497,24 @@
       "slug": "hts-login-gated-require-auth-marker",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/javascript/4 returns Error! require_auth gate; HTS_AUTH_GATE_RE already matches require_auth; javascript/4 findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-13-14-application-8",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/13-14 + application/7-8 + javascript/5-6 + stego/5-6 + programming/5-6 + forensic/5; playlevel/14→6 findings incl client-side-hts-playlevel-hub-evidence; application/8→6 findings incl client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-yuppers-search-sqli-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /missions/realistic/14/search.cgi?search=' returns Displaying 12 of 12 vs baseline thugirSqliBaseline0 Displaying 0 of 0; htsYuppersSearchSqliProbe; realistic/14 findings 4→5; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-special1-priority-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: special1.php send me an SMS + name=solution POST form; redTigerPrioritySeeds now prepends special1.php; special1.php findings 3 incl redtiger-special-challenge-evidence; benchmark juice-shop-staging 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6239,6 +6257,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-login-gated-require-auth-marker",
       "shipped_at": "2026-07-16T09:01:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-13-14-application-8",
+      "shipped_at": "2026-07-16T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-yuppers-search-sqli-probe",
+      "shipped_at": "2026-07-16T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-special1-priority-seed",
+      "shipped_at": "2026-07-16T11:15:00.000Z"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T09:07:31.816Z",
-  "total": 374,
-  "uniqueSlugs": 374,
+  "generatedAt": "2026-07-16T11:10:41.248Z",
+  "total": 375,
+  "uniqueSlugs": 375,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 356,
+    "generic": 357,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 306,
+    "deep": 307,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 25,
     "Security misconfiguration": 25,
     "Broken authentication": 23,
-    "Injection": 67,
+    "Injection": 68,
     "Cross-site scripting": 43,
     "general": 18,
     "SSRF": 1,
@@ -336,6 +336,7 @@
     "graphql-introspection-enabled",
     "hidden-prompt-injection",
     "html-comment-credential-disclosure",
+    "hts-yuppers-search-sqli-probe",
     "http-403-bypass-probe",
     "idor-sequential-ids",
     "inline-state-secrets",
