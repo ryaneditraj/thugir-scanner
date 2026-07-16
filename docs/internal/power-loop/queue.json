@@ -4048,7 +4048,32 @@
       "url": "https://www.hackthissite.org/missions/stego/2/",
       "source": "Hack This Site — steganography mission 2 hidden-data extraction lab",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/12/",
+      "source": "Hack This Site — realistic mission 12 Heartland School District LFI/admin bypass (aldeid wiki)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/13/",
+      "source": "Hack This Site — realistic mission 13 Elbonian Republican Party MD5 path traversal (aldeid wiki)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/7/",
+      "source": "Hack This Site — playlevel arcade mission 7 interactive vulnerability puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/8/",
+      "source": "Hack This Site — playlevel arcade mission 8 interactive vulnerability puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/5/",
+      "source": "Hack This Site — application mission 5 exploit development challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T04:06:00.000Z"
+  "updated_at": "2026-07-16T05:06:00.000Z"
 }
