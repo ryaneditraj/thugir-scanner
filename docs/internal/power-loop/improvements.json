@@ -3515,6 +3515,24 @@
       "slug": "redtiger-special1-priority-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: special1.php send me an SMS + name=solution POST form; redTigerPrioritySeeds now prepends special1.php; special1.php findings 3 incl redtiger-special-challenge-evidence; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-15-application-9-javascript-7-stego-7-programming-7",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/15 + application/9 + javascript/7 + stego/7 + programming/7 + forensic/6; playlevel/15/application/9/javascript/7/stego/7/programming/7→6 findings incl client-side-hts-playlevel-hub-evidence + client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-sql-injection-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/sql-injection/start title SQL Injection — Secure Coding Lesson + meta vulnerable to SQL Injection; clientSideHacksplainingSqlInjectionLessonEvidence; hacksplaining.com/lessons/sql-injection/start findings 4→5 incl new sql-injection-lesson slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-hub-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /auth/ hub links /auth/login.html + /labs/sqli-error.html; hackThisSiteEtaAuthHubPrioritySeeds prepends auth+jwt+session+reset+labs on /auth/ entry; hack-this-site-eta.vercel.app/auth/ findings 1→15 pages_crawled 1→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6272,6 +6290,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-special1-priority-seed",
       "shipped_at": "2026-07-16T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-15-application-9-javascript-7-stego-7-programming-7",
+      "shipped_at": "2026-07-16T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-sql-injection-lesson-evidence",
+      "shipped_at": "2026-07-16T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-hub-priority-seeds",
+      "shipped_at": "2026-07-16T12:15:00.000Z"
     }
   ]
 }
