@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T20:06:57.443Z",
+  "updated_at": "2026-07-16T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 765,
-  "total_findings": 3464,
-  "critical_findings": 25,
+  "total_sites_scanned": 773,
+  "total_findings": 3500,
+  "critical_findings": 27,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 301,
-  "discovery_findings": 2488,
+  "discovery_urls_added": 306,
+  "discovery_findings": 2524,
   "improvements_shipped": 575,
-  "last_run": "2026-07-16T20:06:57.443Z",
+  "last_run": "2026-07-16T20:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku pass1 4 findings gap idor,sensitive_data; wake retry still degraded; staging fallback 7 findings 6/6",
+      "note": "First-pass full recall on shallow crawl (pages_crawled=1 probes=235); no Heroku wake retry needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,25 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 36,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "HTS playlevel/22 tail seeds + Hacksplaining stored XSS and clickjacking lesson oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "Hacksplaining DNS/downgrade lessons + Hack Yourself First + TestSparker PHP lab queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) via staging fallback after Heroku cold-start degradation",
-      "www.hackthissite.org/playlevel/22: 6 findings incl client-side-hts-playlevel-hub-evidence after tail seed extension",
-      "hacksplaining.com/lessons/xss-stored/start: client-side-hacksplaining-xss-stored-lesson-evidence (7 findings)",
-      "hacksplaining.com/lessons/click-jacking/start: client-side-hacksplaining-clickjacking-lesson-evidence (7 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) first-pass shallow crawl — no category gap",
+      "hack-yourself-first.azurewebsites.net: sensitive-api-password-leakage (critical) + reflected-xss-query-param (7 findings)",
+      "php.testsparker.com: phpinfo-exposed (high) + tech-stack-disclosure (6 findings)",
+      "hacksplaining.com/lessons/dns-poisoning/start: client-side-hacksplaining-xss-reflected-lesson-evidence (6 findings)",
+      "cyberdesserts.github.io/cookiejar-lab/demo: client-side-session-hijack-evidence (4 findings)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "bugbountyhunter.com/challenge?id=22: hub carousel only — no id=22 scenario page published yet",
-      "HTS playlevel/23 application/17 javascript/15 forensic/13 + BBH #23 queued at tail — not yet drained"
+      "owasp-finbot-ctf-demo.onrender.com: shallow crawl (1 finding) — agentic AI exploit chains need authenticated CTF namespace",
+      "HTS playlevel/24 application/18 javascript/16 forensic/14 + BBH #24 queued at tail — not yet drained"
     ]
   },
   "discovery_highlights": {
