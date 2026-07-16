@@ -3453,6 +3453,96 @@ const clientSideHacksplainingHostHeaderPoisoningLessonEvidence: Rule = async (ct
   };
 };
 
+// --- Hacksplaining CSRF lesson (hacksplaining.com/lessons/csrf) -------
+const CLIENT_HACKSPLAINING_CSRF_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CSRF lesson URL",
+    re: /hacksplaining\.com\/lessons\/csrf/i
+  },
+  {
+    label: "CSRF lesson title",
+    re: /Cross-Site Request Forgery — Secure Coding Lesson/i
+  },
+  {
+    label: "CSRF lesson meta description",
+    re: /forge HTTP requests to your site[\s\S]{0,80}trigger unintended actions/i
+  },
+  {
+    label: "CSRF lesson step nav",
+    re: /lessons\/csrf\/(?:cross-domain-requests|forged-requests|crafting-the-url|request-forged)/i
+  },
+  {
+    label: "CSRF forged request demo description",
+    re: /Force users to execute unwanted actions on authenticated sites/i
+  }
+];
+
+const clientSideHacksplainingCsrfLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/csrf/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_CSRF_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/csrf\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining CSRF lesson documents exploit-then-fix forged-request attack chains against authenticated sessions"
+    }
+  };
+};
+
+// --- Hacksplaining SSRF lesson (hacksplaining.com/lessons/ssrf) -------
+const CLIENT_HACKSPLAINING_SSRF_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF lesson URL",
+    re: /hacksplaining\.com\/lessons\/ssrf/i
+  },
+  {
+    label: "SSRF lesson title",
+    re: /Server-Side Request Forgery — Secure Coding Lesson/i
+  },
+  {
+    label: "SSRF lesson meta description",
+    re: /SSRF vulnerabilities to probe your internal network/i
+  },
+  {
+    label: "SSRF lesson step nav",
+    re: /lessons\/ssrf\/(?:arbitrary-domains|internal-networks|metadata|link-sharing)/i
+  },
+  {
+    label: "SSRF internal network probe description",
+    re: /probe (?:your )?internal network|server-side request forgery/i
+  }
+];
+
+const clientSideHacksplainingSsrfLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/ssrf/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_SSRF_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/ssrf\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining SSRF lesson documents exploit-then-fix server-side fetch abuse against internal networks and metadata endpoints"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17235,6 +17325,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingEvidence,
   clientSideHacksplainingSqlInjectionLessonEvidence,
   clientSideHacksplainingHostHeaderPoisoningLessonEvidence,
+  clientSideHacksplainingCsrfLessonEvidence,
+  clientSideHacksplainingSsrfLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
