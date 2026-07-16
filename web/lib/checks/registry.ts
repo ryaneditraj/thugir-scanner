@@ -8842,6 +8842,17 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     /BudgetSERV/i.test(corpus) &&
     /page\.pl\?page=/i.test(corpus) &&
     /(?:webmail\.php|WebMail|Premium Hosting)/i.test(corpus);
+  const heartlandSchool =
+    /Heartland School District/i.test(corpus) &&
+    /internet\.pl/i.test(corpus) &&
+    /(?:page\.pl|iframe)/i.test(corpus);
+  const elboniaEnrp =
+    /Elbonia National Republican/i.test(corpus) &&
+    /members\.php/i.test(corpus);
+  const yuppersPortal =
+    /Yuppers!/i.test(corpus) &&
+    /search\.cgi/i.test(corpus) &&
+    /(?:Web Permit|login\.html|Y-Web)/i.test(corpus);
   if (
     !uncleArnold &&
     !naziParty &&
@@ -8852,7 +8863,10 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
     !politicalBlog &&
     !uboaLab &&
     !holyWordGrades &&
-    !budgetServ
+    !budgetServ &&
+    !heartlandSchool &&
+    !elboniaEnrp &&
+    !yuppersPortal
   )
     return NEGATIVE;
   const note = uncleArnold
@@ -8873,7 +8887,13 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
                   ? "HTS Realistic mission 10 exposes Holy Word High School student.php grade access system (SQLi / IDOR lab)"
                   : budgetServ
                     ? "HTS Realistic mission 11 exposes BudgetSERV hosting page.pl Perl CGI endpoints + webmail.php login (SQLi / auth bypass lab)"
-                    : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
+                    : heartlandSchool
+                      ? "HTS Realistic mission 12 exposes Heartland School District internet.pl URL fetch form with page.pl iframe (SSRF / open redirect lab)"
+                      : elboniaEnrp
+                        ? "HTS Realistic mission 13 exposes Elbonia National Republican Party members.php candidate roster (SQLi / IDOR lab)"
+                        : yuppersPortal
+                          ? "HTS Realistic mission 14 exposes Yuppers! portal search.cgi + Web Permit login.html (SQLi / auth bypass lab)"
+                          : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,

@@ -1386,7 +1386,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/8/",
     "/playlevel/9/",
     "/playlevel/10/",
-    "/playlevel/11/"
+    "/playlevel/11/",
+    "/missions/realistic/12/",
+    "/missions/realistic/13/",
+    "/missions/realistic/14/",
+    "/missions/javascript/3/",
+    "/missions/stego/3/",
+    "/missions/forensic/3/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -1394,7 +1400,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
-  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]) {
     try {
       out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
     } catch {
@@ -1500,6 +1506,39 @@ function extractHtsRealisticMissionSeeds(html: string, pageUrl: string): string[
       out.add(new URL("webmail.php", pageUrl).toString());
     } catch {
       /* ignore */
+    }
+  }
+  if (/Heartland School District|internet\.pl/i.test(html)) {
+    try {
+      out.add(new URL("cgi-bin/internet.pl", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (/Elbonia National Republican|members\.php/i.test(html)) {
+    for (const child of ["members.php", "debates.php", "newsletter.php", "mailinglist.php"]) {
+      try {
+        out.add(new URL(child, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+  if (/Yuppers!|search\.cgi|Web Permit/i.test(html)) {
+    for (const child of [
+      "search.cgi",
+      "login.html",
+      "news.cgi",
+      "finance/",
+      "mail/",
+      "yweb/",
+      "people.html"
+    ]) {
+      try {
+        out.add(new URL(child, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   return [...out];
