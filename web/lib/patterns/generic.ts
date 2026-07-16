@@ -6766,6 +6766,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining host header poisoning lesson disclosed",
+    description:
+      "Hacksplaining /lessons/host-header-poisoning publishes an interactive exploit-then-fix walkthrough covering untrusted Host header values and cache-poisoning attack chains.",
+    impactOneline:
+      "Public host header poisoning lesson pages document cache-poisoning exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingHostHeaderPoisoningLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining host header lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable host header poisoning lesson instances on private deployments.",
+        "Validate Host headers against an allowlist in production — never trust client-supplied Host values.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style host header poisoning exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-portswigger-academy-evidence",
     platform: "generic",
     category: "Injection",

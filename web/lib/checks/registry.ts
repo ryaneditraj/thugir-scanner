@@ -3408,6 +3408,51 @@ const clientSideHacksplainingSqlInjectionLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining host header poisoning lesson (hacksplaining.com/lessons/host-header-poisoning) -------
+const CLIENT_HACKSPLAINING_HOST_HEADER_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Host header poisoning lesson URL",
+    re: /hacksplaining\.com\/lessons\/host-header-poisoning/i
+  },
+  {
+    label: "Host header poisoning lesson title",
+    re: /Host Header Poisoning — Secure Coding Lesson/i
+  },
+  {
+    label: "Host header poisoning lesson meta description",
+    re: /dangerous to rely on the value supplied in Host header of an HTTP request/i
+  },
+  {
+    label: "Host header poisoning lesson step nav",
+    re: /lessons\/host-header-poisoning\/(?:checking-the-code|exploit|fix|server-error)/i
+  },
+  {
+    label: "Host header cache poisoning description",
+    re: /poison (?:web )?caches|cache poisoning via Host header/i
+  }
+];
+
+const clientSideHacksplainingHostHeaderPoisoningLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/host-header-poisoning/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_HOST_HEADER_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/host-header-poisoning\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining host header poisoning lesson documents exploit-then-fix cache poisoning via untrusted Host header values"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -13089,15 +13134,40 @@ const BUGBOUNTYHUNTER_CHALLENGE_ORACLES: {
     urlRe: /bugbountyhunter\.com\/challenge\?id=16\b/i,
     titleRe: /whitelisted string is found is a bad approach/i,
     note: "BugBountyHunter challenge #16 documents a CORS whitelist substring bypass"
+  },
+  {
+    slug: "harmless-page-xss",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=8\b/i,
+    titleRe: /Can you find any XSS on this .harmless. page/i,
+    note: "BugBountyHunter challenge #8 documents a harmless-page XSS filter bypass scenario"
+  },
+  {
+    slug: "admin-panel-enumeration",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=9\b/i,
+    titleRe: /What(?:'|&#39;)s behind this admin panel/i,
+    note: "BugBountyHunter challenge #9 documents an admin panel access scenario"
+  },
+  {
+    slug: "hackerphotos-idor",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=10\b/i,
+    titleRe: /Check out these HackerPhotos/i,
+    note: "BugBountyHunter challenge #10 documents a HackerPhotos IDOR scenario with encoded user IDs"
+  },
+  {
+    slug: "bounty-generator",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=11\b/i,
+    titleRe: /I(?:'|&#39;)ve won a bounty/i,
+    note: "BugBountyHunter challenge #11 documents a fake bounty generator scenario"
   }
 ];
 
 const clientSideBugBountyHunterChallengeScenarioEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
   const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
   if (!/bugbountyhunter\.com/i.test(corpus)) return NEGATIVE;
   for (const oracle of BUGBOUNTYHUNTER_CHALLENGE_ORACLES) {
-    if (!oracle.urlRe.test(corpus)) continue;
+    if (!oracle.urlRe.test(urlCorpus)) continue;
     const titleMatch = corpus.match(oracle.titleRe);
     if (!titleMatch) continue;
     return {
@@ -17164,6 +17234,7 @@ export const RULES: Record<string, Rule> = {
   clientSideQamaxAdversaryEvidence,
   clientSideHacksplainingEvidence,
   clientSideHacksplainingSqlInjectionLessonEvidence,
+  clientSideHacksplainingHostHeaderPoisoningLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
