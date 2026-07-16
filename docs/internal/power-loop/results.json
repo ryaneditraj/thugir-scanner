@@ -1,184 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-15T07:28:11.265Z",
-      "url": "https://koadt.github.io/oss-oopssec-store/roadmap",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-csrf-evidence",
-          "title": "Client bundle documents CSRF-vulnerable transfer flows",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-oopssec-store-evidence",
-          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 275,
-      "status": "ok",
-      "scanned_at": "2026-07-15T07:28:11.265Z"
-    },
-    {
-      "run_id": "2026-07-15T07:28:12.898Z",
-      "url": "https://koadt.github.io/oss-oopssec-store/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-path-traversal-evidence",
-          "title": "Client-side path traversal / LFI lab documented in crawl",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-csrf-evidence",
-          "title": "Client bundle documents CSRF-vulnerable transfer flows",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-oopssec-store-evidence",
-          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 274,
-      "status": "ok",
-      "scanned_at": "2026-07-15T07:28:12.898Z"
-    },
-    {
-      "run_id": "2026-07-15T07:28:14.303Z",
-      "url": "https://ashimkoirala.github.io/HackLab/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-devsecops-lab-evidence",
-          "title": "DevSecOps microservices lab documents IDOR and gateway bypass attacks",
-          "severity": "high",
-          "confidence": 0.87,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 270,
-      "status": "ok",
-      "scanned_at": "2026-07-15T07:28:14.303Z"
-    },
-    {
       "run_id": "2026-07-15T07:28:16.031Z",
       "url": "https://vulnshop.vercel.app/",
       "auth": "oss_deploy",
@@ -9916,6 +9738,145 @@
       "probes_run": 303,
       "status": "ok",
       "scanned_at": "2026-07-16T09:59:00.322Z"
+    },
+    {
+      "run_id": "2026-07-16T10:01:16.243Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 25,
+      "status": "ok",
+      "scanned_at": "2026-07-16T10:01:16.243Z"
+    },
+    {
+      "run_id": "2026-07-16T10:21:13.007Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 50,
+      "status": "ok",
+      "scanned_at": "2026-07-16T10:21:13.007Z"
+    },
+    {
+      "run_id": "2026-07-16T10:37:24.416Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 260,
+      "status": "ok",
+      "scanned_at": "2026-07-16T10:37:24.416Z"
     }
   ],
   "teacher_delta_runs": [
@@ -11641,6 +11602,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only idor+misconfig before wake retry merged to 6/6.",
       "scanned_at": "2026-07-16T08:33:53.000Z"
+    },
+    {
+      "run_id": "2026-07-16T10:37:40.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 2 findings gap=sqli,idor,auth_bypass,sensitive_data pages_crawled=1; pass2: 4 findings; final: pages_crawled=6 probes=260)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only misconfig+xss before wake retry merged to 6/6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
+      "scanned_at": "2026-07-16T10:37:40.000Z"
     }
   ]
 }
