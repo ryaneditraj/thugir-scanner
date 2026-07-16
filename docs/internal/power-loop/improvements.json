@@ -3479,6 +3479,24 @@
       "slug": "hts-mission-seed-realistic-15-16-programming-3-application-6",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/15-16 + programming/3 + application/6 + realistic loop 1-16; extractHtsRealisticMissionSeeds secuLas/Simple Mail child paths; benchmark juice-shop cold 3→retry 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-12-forensic-4-javascript-4-stego-4-programming-4",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/12 + forensic/4 + javascript/4 + stego/4 + programming/4; deep-scan validation playlevel/12→6 findings incl client-side-hts-playlevel-hub-evidence; javascript/4/stego/4/programming/4→6 findings incl client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop 6/6 maintained (HTS-only diff)"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-forensic-mission-404-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/forensic/4 returns requested URL was not found on this server; HTS_MISSION_NOT_FOUND_RE + clientSideHtsLoginGatedMissionHubEvidence 404 branch; forensic/4 findings 0→6 incl login-gated hub slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-login-gated-require-auth-marker",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/javascript/4 returns Error! require_auth gate; HTS_AUTH_GATE_RE already matches require_auth; javascript/4 findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6206,6 +6224,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-realistic-15-16-programming-3-application-6",
       "shipped_at": "2026-07-16T08:45:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-12-forensic-4-javascript-4-stego-4-programming-4",
+      "shipped_at": "2026-07-16T09:01:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-forensic-mission-404-evidence",
+      "shipped_at": "2026-07-16T09:01:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-login-gated-require-auth-marker",
+      "shipped_at": "2026-07-16T09:01:00.000Z"
     }
   ]
 }
