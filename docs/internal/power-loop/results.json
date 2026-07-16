@@ -11696,6 +11696,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data only; sensitive_data recovered via vibe-unauthenticated-api-routes merge; secret-resend slug absent.",
       "scanned_at": "2026-07-16T16:18:30.000Z"
+    },
+    {
+      "run_id": "2026-07-16T18:32:36.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku after wake retry (pass1: 5 findings gap=sensitive_data pages_crawled=1 probes=173; pass2: 4 findings; pass3: 5 findings; merged 6/6)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data before Heroku wake retries; sensitive_data via vibe-unauthenticated-api-routes; secret-resend slug absent.",
+      "scanned_at": "2026-07-16T18:32:36.000Z"
     }
   ]
 }

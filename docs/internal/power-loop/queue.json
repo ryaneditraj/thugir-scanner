@@ -4373,7 +4373,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=21",
       "source": "BugBountyHunter zseano — auth/session manipulation challenge #21 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/22/",
+      "source": "Hack This Site — playlevel arcade mission 22 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/16/",
+      "source": "Hack This Site — application mission 16 reverse-engineering challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/14/",
+      "source": "Hack This Site — javascript mission 14 client-side security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/forensic/12/",
+      "source": "Hack This Site — forensic mission 12 steganography/file analysis challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=22",
+      "source": "BugBountyHunter zseano — CSRF protection bypass challenge #22 (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T17:05:00.000Z"
+  "updated_at": "2026-07-16T18:35:00.000Z"
 }
