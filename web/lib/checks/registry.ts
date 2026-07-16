@@ -3543,6 +3543,51 @@ const clientSideHacksplainingSsrfLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining reflected XSS lesson (hacksplaining.com/lessons/xss-reflected) -------
+const CLIENT_HACKSPLAINING_XSS_REFLECTED_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Reflected XSS lesson URL",
+    re: /hacksplaining\.com\/lessons\/xss-reflected/i
+  },
+  {
+    label: "Reflected XSS lesson title",
+    re: /Reflected XSS — Secure Coding Lesson/i
+  },
+  {
+    label: "Reflected XSS lesson meta description",
+    re: /malicious JavaScript to be bounced off your server/i
+  },
+  {
+    label: "Reflected XSS lesson step nav",
+    re: /lessons\/xss-reflected\/(?:reflected-attacks|crafting-the-url|session-hijacked|script-injected)/i
+  },
+  {
+    label: "Reflected XSS session hijack description",
+    re: /session hijack|bounce malicious JavaScript/i
+  }
+];
+
+const clientSideHacksplainingXssReflectedLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/xss-reflected/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_XSS_REFLECTED_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/xss-reflected\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining reflected XSS lesson documents exploit-then-fix URL-reflection attack chains leading to session hijacking"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -13159,6 +13204,18 @@ const CLIENT_BUGBOUNTYHUNTER_RES: { label: string; re: RegExp }[] = [
     re: /Change the class of our image and pick your favourite/i
   },
   {
+    label: "BugBountyHunter XSS no HTML tags challenge title",
+    re: /Can you find any XSS\? No HTML tags allowed!/i
+  },
+  {
+    label: "BugBountyHunter CSRF protection bypass challenge title",
+    re: /cross site request forgery \(CSRF\) protection, but how good is it/i
+  },
+  {
+    label: "BugBountyHunter relative redirect challenge title",
+    re: /Only relative redirects are allowed!/i
+  },
+  {
     label: "BugBountyHunter FastFoodHackings playground",
     re: /FastFoodHackings.*demo web application|ZSeano(?:'|&#39;)s Playground/i
   },
@@ -13195,6 +13252,30 @@ const BUGBOUNTYHUNTER_CHALLENGE_ORACLES: {
   titleRe: RegExp;
   note: string;
 }[] = [
+  {
+    slug: "xss-no-html-tags",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=1\b/i,
+    titleRe: /Can you find any XSS\? No HTML tags allowed!/i,
+    note: "BugBountyHunter challenge #1 documents an XSS filter bypass with no HTML tags allowed"
+  },
+  {
+    slug: "image-class-manipulation",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=2\b/i,
+    titleRe: /Change the class of our image and pick your favourite/i,
+    note: "BugBountyHunter challenge #2 documents an image CSS class manipulation scenario"
+  },
+  {
+    slug: "csrf-protection-bypass",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=3\b/i,
+    titleRe: /cross site request forgery \(CSRF\) protection, but how good is it/i,
+    note: "BugBountyHunter challenge #3 documents a weak CSRF protection bypass scenario"
+  },
+  {
+    slug: "relative-redirect-only",
+    urlRe: /bugbountyhunter\.com\/challenge\?id=4\b/i,
+    titleRe: /Only relative redirects are allowed!/i,
+    note: "BugBountyHunter challenge #4 documents a relative-only open redirect bypass scenario"
+  },
   {
     slug: "xss-url-filter",
     urlRe: /bugbountyhunter\.com\/challenge\?id=6\b/i,
@@ -13262,16 +13343,10 @@ const BUGBOUNTYHUNTER_CHALLENGE_ORACLES: {
     note: "BugBountyHunter challenge #11 documents a fake bounty generator scenario"
   },
   {
-    slug: "image-class-manipulation",
-    urlRe: /bugbountyhunter\.com\/challenge\?id=17\b/i,
-    titleRe: /Change the class of our image and pick your favourite/i,
-    note: "BugBountyHunter challenge #17 documents an image CSS class manipulation scenario"
-  },
-  {
     slug: "fastfoodhackings-playground",
-    urlRe: /bugbountyhunter\.com\/challenge\?id=20\b/i,
-    titleRe: /FastFoodHackings/i,
-    note: "BugBountyHunter challenge #20 documents the FastFoodHackings multi-vulnerability playground hunt"
+    urlRe: /bugbountyhunter\.com\/playground\b/i,
+    titleRe: /FastFoodHackings|ZSeano(?:'|&#39;)s Playground/i,
+    note: "BugBountyHunter /playground documents the FastFoodHackings multi-vulnerability playground hunt"
   }
 ];
 
@@ -17351,6 +17426,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingHostHeaderPoisoningLessonEvidence,
   clientSideHacksplainingCsrfLessonEvidence,
   clientSideHacksplainingSsrfLessonEvidence,
+  clientSideHacksplainingXssReflectedLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
