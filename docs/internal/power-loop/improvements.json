@@ -3443,6 +3443,24 @@
       "slug": "client-side-defhawk-practice-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle Real World Vulnerability Exploitation + Hack Arena gamified cybersecurity challenges + defhawk-assets-prod PracticeLab path; defhawk.com/vulnAI findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-14-yuppers-search-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/realistic/14 Yuppers! search.cgi + Web Permit login.html + Y-Web portal; clientSideHtsRealisticMissionLabEvidence yuppersPortal branch; realistic/14 findings 0→4 incl client-side-hts-realistic-mission-lab-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-12-13-heartland-elbonia-lab",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: realistic/12 cgi-bin/internet.pl Heartland School District URL fetch + page.pl iframe; realistic/13 Elbonia ENRP members.php candidate roster; heartlandSchool + elboniaEnrp branches; realistic/12 findings 0→4, realistic/13 0→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-12-14-login-gated-3-playlevel-9",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended realistic/12-14 + javascript/3 + stego/3 + forensic/3 + playlevel/9; playlevel/9/javascript/3/stego/3/forensic/3 findings 0→6 incl login-gated hub slugs; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6140,6 +6158,21 @@
       "source": "discovery:defhawk.com",
       "slug": "client-side-defhawk-practice-lab-evidence",
       "shipped_at": "2026-07-16T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-14-yuppers-search-lab",
+      "shipped_at": "2026-07-16T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-realistic-12-13-heartland-elbonia-lab",
+      "shipped_at": "2026-07-16T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-realistic-12-14-login-gated-3-playlevel-9",
+      "shipped_at": "2026-07-16T07:15:00.000Z"
     }
   ]
 }
