@@ -1,128 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-15T08:12:53.706Z",
-      "url": "http://redtiger.labs.overthewire.org/level10.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-redtiger-hackit-evidence",
-          "title": "RedTiger PHP/SQL hackit disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-blind-login-form-evidence",
-          "title": "RedTiger blind login-bypass form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 321,
-      "status": "ok",
-      "scanned_at": "2026-07-15T08:12:53.706Z"
-    },
-    {
-      "run_id": "2026-07-15T08:13:10.320Z",
-      "url": "https://www.hacksplaining.com/lessons/xss-reflected/start",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-hacksplaining-evidence",
-          "title": "Hacksplaining interactive OWASP secure-coding lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 273,
-      "status": "ok",
-      "scanned_at": "2026-07-15T08:13:10.320Z"
-    },
-    {
-      "run_id": "2026-07-15T08:13:19.956Z",
-      "url": "https://www.hacksplaining.com/lessons/command-execution/start",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-hacksplaining-evidence",
-          "title": "Hacksplaining interactive OWASP secure-coding lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 273,
-      "status": "ok",
-      "scanned_at": "2026-07-15T08:13:19.956Z"
-    },
-    {
       "run_id": "2026-07-15T09:17:15.833Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -9854,6 +9732,152 @@
       "probes_run": 268,
       "status": "ok",
       "scanned_at": "2026-07-16T10:41:15.077Z"
+    },
+    {
+      "run_id": "2026-07-16T11:02:57.199Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 123,
+      "status": "ok",
+      "scanned_at": "2026-07-16T11:02:57.199Z"
+    },
+    {
+      "run_id": "2026-07-16T11:16:11.078Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 4,
+      "status": "ok",
+      "scanned_at": "2026-07-16T11:16:11.078Z"
+    },
+    {
+      "run_id": "2026-07-16T11:34:52.647Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 235,
+      "status": "ok",
+      "scanned_at": "2026-07-16T11:34:52.647Z"
     }
   ],
   "teacher_delta_runs": [
@@ -11590,6 +11614,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only misconfig+xss before wake retry merged to 6/6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T10:37:40.000Z"
+    },
+    {
+      "run_id": "2026-07-16T11:37:44.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 6 findings gap=sensitive_data pages_crawled=6 probes=123; pass2: 2 findings pages_crawled=1; pass3: 6 findings pages_crawled=1 probes=235)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data only; pass2 Heroku regression (2 findings pages_crawled=1); sensitive_data recovered via vibe-unauthenticated-api-routes merge; secret-resend slug absent.",
+      "scanned_at": "2026-07-16T11:37:44.000Z"
     }
   ]
 }
