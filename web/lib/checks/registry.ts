@@ -8661,6 +8661,9 @@ const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
 };
 
 // --- HackThisSite login-gated mission hubs (basic / application / playit extbasic+stego) --
+const HTS_AUTH_GATE_RE =
+  /Login Required|You must be logged in to use this page|require_auth/i;
+
 const HTS_LOGIN_GATED_MISSION_NOTES: Record<string, string> = {
   basic:
     "HTS Basic mission hub is login-gated — documents HTML-comment password oracle and introductory web challenges behind authenticated access",
@@ -8708,12 +8711,15 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
   if (!hub) return NEGATIVE;
   const category = hub.category;
   const corpus = `${ctx.home.body}\n${pageUrl}`;
-  if (!/Login Required|You must be logged in to use this page/i.test(corpus)) return NEGATIVE;
+  if (!HTS_AUTH_GATE_RE.test(corpus)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   const missionPath =
     category === "missions-stego" ? "stego" : hub.kind === "standard" ? category : hub.playSegment;
   const pathRe = new RegExp(`/missions/${missionPath}(?:/\\d+)?/?`, "i");
-  const navRe = new RegExp(`href\\s*=\\s*["']/missions/${missionPath}/`, "i");
+  const navRe =
+    category === "missions-stego"
+      ? /href\s*=\s*["']\/missions\/(?:stego|playit\/stego)\//i
+      : new RegExp(`href\\s*=\\s*["']/missions/${missionPath}/`, "i");
   const checks: { label: string; re: RegExp }[] = [
     {
       label: `${category} mission hub URL`,
@@ -8721,7 +8727,7 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
     },
     {
       label: "Login required for mission access",
-      re: /Login Required|You must be logged in to use this page/i
+      re: HTS_AUTH_GATE_RE
     },
     {
       label: "HTS ethical hacking training ground",
@@ -8769,7 +8775,12 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
   const framesLab =
     /Compu-global-Hyper-Mega-Net/i.test(corpus) &&
     /(?:frameset|top\.htm|menu\.htm|main\.htm)/i.test(corpus);
-  if (!uncleArnold && !naziParty && !defacement && !fischer && !framesLab) return NEGATIVE;
+  const xecryption =
+    /XECryption algorithm/i.test(corpus) &&
+    /encrypted document|encrypted using/i.test(corpus) &&
+    /\.\d{2,3}\.\d{2,3}\.\d{2,3}/i.test(corpus);
+  if (!uncleArnold && !naziParty && !defacement && !fischer && !framesLab && !xecryption)
+    return NEGATIVE;
   const note = uncleArnold
     ? "HTS Realistic mission 1 exposes Uncle Arnold band-review vote.php GET parameter SQLi oracle"
     : naziParty
@@ -8778,7 +8789,9 @@ const clientSideHtsRealisticMissionLabEvidence: Rule = async (ctx) => {
         ? "HTS Realistic mission 3 exposes defaced political page (Insane Krypt Skiddies h4x0r3d challenge)"
         : fischer
           ? "HTS Realistic mission exposes Fischer's Animal Products products.php category SQLi lab + addemail.php mailing list"
-          : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
+          : xecryption
+            ? "HTS Realistic mission 6 exposes XECryption dot-separated ciphertext oracle with encryption.php algorithm reference"
+            : "HTS Realistic mission exposes Compu-global-Hyper-Mega-Net frameset challenge (top.htm/menu.htm/main.htm)";
   return {
     fired: true,
     confidence: 0.9,
@@ -8821,7 +8834,7 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/hackthissite\.org\/playlevel(?:\/\d+)?\/?/i.test(pageUrl)) return NEGATIVE;
   const corpus = `${ctx.home.body}\n${pageUrl}`;
-  if (!/Login Required|You must be logged in to use this page/i.test(corpus)) return NEGATIVE;
+  if (!HTS_AUTH_GATE_RE.test(corpus)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   const checks: { label: string; re: RegExp }[] = [
     {
@@ -8830,7 +8843,7 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
     },
     {
       label: "Login required for arcade access",
-      re: /Login Required|You must be logged in to use this page/i
+      re: HTS_AUTH_GATE_RE
     },
     {
       label: "HTS ethical hacking training ground",
@@ -9698,6 +9711,47 @@ const clientSideSkfLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "SKF (secureby.design) publishes free Auth Bypass, SQLi, and XSS labs via lab-player webcomponents with ASVS write-ups"
+    }
+  };
+};
+
+// --- VulnScope Pro AI vulnerability scanner demo (Vercel + Render API) ----------------
+const CLIENT_VULNSCOPE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnScope Pro branding",
+    re: /VulnScope Pro/i
+  },
+  {
+    label: "AI-powered vulnerability scanner tagline",
+    re: /AI-Powered (?:Web )?Vulnerability Scanner/i
+  },
+  {
+    label: "Automated SQLi and XSS assessment",
+    re: /test for SQL Injection[\s\S]{0,80}XSS/i
+  },
+  {
+    label: "Preset vulnweb benchmark targets",
+    re: /testphp\.vulnweb\.com|testasp\.vulnweb\.com|OWASP Juice Shop/i
+  },
+  {
+    label: "Terminal scan output UI",
+    re: /vulnscope-pro\s*[—-]\s*scan output/i
+  }
+];
+
+const clientSideVulnscopeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNSCOPE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnScope Pro demo exposes automated SQLi/XSS scanner UI with preset vulnweb and Juice Shop benchmark targets"
     }
   };
 };
@@ -16591,6 +16645,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterAcademyLabEvidence,
   clientSideCyberScavengerHuntEvidence,
   clientSideSkfLabEvidence,
+  clientSideVulnscopeEvidence,
   clientSideGoogleGruyereCodelabEvidence,
   clientSideMetasploitableLabEvidence,
   clientSideMutillidaeEvidence,

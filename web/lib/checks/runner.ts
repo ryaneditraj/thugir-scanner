@@ -790,6 +790,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterAcademyLabEvidence",
   "clientSideCyberScavengerHuntEvidence",
   "clientSideSkfLabEvidence",
+  "clientSideVulnscopeEvidence",
   "clientSideGoogleGruyereCodelabEvidence",
   "clientSideMetasploitableLabEvidence",
   "clientSideBlueTeamLabsEvidence",

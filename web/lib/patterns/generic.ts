@@ -8403,5 +8403,31 @@ export const genericPatterns: Pattern[] = [
       "Our site has DOM XSS patterns like vulnerableapp.com document.write cookie theft. Show safe DOM manipulation alternatives.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-vulnscope-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VulnScope Pro vulnerability scanner demo disclosed",
+    description:
+      "VulnScope Pro publishes an AI-powered web vulnerability scanner UI that crawls targets and tests for SQL injection and XSS with preset vulnweb benchmark URLs.",
+    impactOneline:
+      "Public scanner demos expose automated injection testing workflows attackers reuse against production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnscopeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate scanner demos behind auth; never point automated injection tools at production without authorization.",
+      steps: [
+        "Require login before launching automated vulnerability scans.",
+        "Run scanner demos on isolated infrastructure with synthetic targets only.",
+        "Rate-limit scan API endpoints to prevent abuse as a free attack proxy."
+      ]
+    },
+    fixPrompt:
+      "Our VulnScope-style scanner demo tests live URLs for SQLi and XSS. Show how to gate the scan API and restrict targets to authorized lab hosts.",
+    version: 1,
+    enabled: true
   }
 ];
