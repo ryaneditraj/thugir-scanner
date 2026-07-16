@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T01:06:24.935Z",
+  "updated_at": "2026-07-16T01:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 211,
   "discovery_findings": 1830,
-  "improvements_shipped": 521,
-  "last_run": "2026-07-16T01:06:24.935Z",
+  "improvements_shipped": 524,
+  "last_run": "2026-07-16T01:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall (pages_crawled=1 probes=235; shallow crawl)",
+      "note": "No benchmark misses — primary heroku 7 findings 6/6 recall maintained after engine evolve",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 65,
-      "focus": "Queue drain — hack-this-site-eta OWASP/API labs + VWAD grpc-goat + chal1/5/7; +5 vulnscope/domxss/HTS seeds",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "Queue tail HTS basic/11 + VWAD VulnerableApp + vulnerableapp.com DOM XSS oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/owasp/a01.html: exposed-source-maps + dangerous-html-sinks + client-side-api-security-lab-evidence (14 findings)",
-      "hack-this-site-eta.vercel.app/api-labs/: 14 findings — API security lab markers",
-      "vwad.owasp.org/app/grpc-goat/: 6 findings — gRPC security oracle metadata",
-      "chal7.vercel.app: 6 findings — CTF challenge lab misconfig/CORS"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "vwad.owasp.org/app/owasp-vulnerableapp: client-side-vwad-vulnerableapp-evidence (3→5 findings)",
+      "hackthissite.org/missions/basic/11: client-side-hts-basic-mission-lab-evidence bare mission oracle (1→4 findings)",
+      "vulnerableapp.com: client-side-vulnerableapp-dom-xss-evidence DOM cookie-theft demo (0→2 findings)",
+      "hackthissite.org/missions/stego/1: login-gated hub now matches /missions/stego/ category"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop: shallow crawl pages_crawled=1 despite 6/6 recall — secret-resend slug absent",
-      "queue tail: WebVulnsGuide xxe/SSRF-2 + csp-jade + HTS basic/11 + VWAD VulnerableApp pending next drain",
-      "new seeds vulnscope/domxss/HTS programming+realistic/6 not yet scanned (appended tail)"
+      "HTS basic/1-10 remain login-gated — only basic/11 serves bare challenge content without wrapper",
+      "VulnerableApp live Docker instance offline — VWAD + sasanlabs docs are metadata oracles only",
+      "queue tail: HTS forensic/1 + javascript/1 pending queue drain with new login-gated hub coverage"
     ]
   },
   "discovery_highlights": {
@@ -343,6 +343,9 @@
     "dxx33.github.io/WebVulnsGuide/EvalByPass.html": 5,
     "chal7.vercel.app": 6,
     "chal1.vercel.app": 4,
-    "chal5.vercel.app": 4
+    "chal5.vercel.app": 4,
+    "vwad.owasp.org/app/owasp-vulnerableapp": 5,
+    "www.hackthissite.org/missions/basic/11": 4,
+    "vulnerableapp.com": 2
   }
 }
