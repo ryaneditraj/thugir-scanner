@@ -3587,6 +3587,24 @@
       "slug": "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/host-header-poisoning/start title Host Header Poisoning — Secure Coding Lesson + meta dangerous to rely on Host header; host-header-poisoning/start findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-19-application-13-javascript-11-forensic-9",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractHackThisSiteMissionSeeds extended playlevel/19 + application/13 + javascript/11 + forensic/9; playlevel/19→6 findings incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-csrf-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/csrf/start title Cross-Site Request Forgery — Secure Coding Lesson + meta forge HTTP requests; clientSideHacksplainingCsrfLessonEvidence; hacksplaining.com/lessons/csrf/start findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ssrf-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/ssrf/start title Server-Side Request Forgery — Secure Coding Lesson + meta probe your internal network; clientSideHacksplainingSsrfLessonEvidence; hacksplaining.com/lessons/ssrf/start findings 4→5; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6404,6 +6422,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
       "shipped_at": "2026-07-16T15:27:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-19-application-13-javascript-11-forensic-9",
+      "shipped_at": "2026-07-16T16:18:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-csrf-lesson-evidence",
+      "shipped_at": "2026-07-16T16:18:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ssrf-lesson-evidence",
+      "shipped_at": "2026-07-16T16:18:00.000Z"
     }
   ]
 }

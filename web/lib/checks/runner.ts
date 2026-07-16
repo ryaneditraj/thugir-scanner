@@ -908,6 +908,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingEvidence",
   "clientSideHacksplainingSqlInjectionLessonEvidence",
   "clientSideHacksplainingHostHeaderPoisoningLessonEvidence",
+  "clientSideHacksplainingCsrfLessonEvidence",
+  "clientSideHacksplainingSsrfLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1431,13 +1433,17 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/7/",
     "/playlevel/17/",
     "/playlevel/18/",
+    "/playlevel/19/",
     "/missions/application/11/",
     "/missions/application/12/",
+    "/missions/application/13/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
+    "/missions/javascript/11/",
     "/missions/stego/9/",
     "/missions/programming/8/",
-    "/missions/forensic/8/"
+    "/missions/forensic/8/",
+    "/missions/forensic/9/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -2469,6 +2475,8 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/xss-dom/start",
     "/lessons/xss-dom/checking-the-code",
     "/lessons/csrf/start",
+    "/lessons/csrf/cross-domain-requests",
+    "/lessons/csrf/forged-requests",
     "/lessons/open-redirects/start",
     "/lessons/ai-prompt-injection/start",
     "/lessons/click-jacking/start",
@@ -2479,6 +2487,8 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/css-injection/checking-the-code",
     "/lessons/directory-traversal/start",
     "/lessons/ssrf/start",
+    "/lessons/ssrf/arbitrary-domains",
+    "/lessons/ssrf/internal-networks",
     "/lessons/broken-access-control/start",
     "/lessons/xml-external-entities/start",
     "/lessons/command-execution/start",

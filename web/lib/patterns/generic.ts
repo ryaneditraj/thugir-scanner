@@ -6792,6 +6792,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-csrf-lesson-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Hacksplaining CSRF lesson disclosed",
+    description:
+      "Hacksplaining /lessons/csrf publishes an interactive exploit-then-fix walkthrough covering forged cross-site requests, cross-domain request abuse, and authenticated action hijacking.",
+    impactOneline:
+      "Public CSRF lesson pages document session-riding exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingCsrfLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining CSRF lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable CSRF lesson instances on private deployments.",
+        "Use synchronizer tokens or SameSite cookies in production — never copy Hacksplaining vulnerable forms.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style CSRF exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-ssrf-lesson-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Hacksplaining SSRF lesson disclosed",
+    description:
+      "Hacksplaining /lessons/ssrf publishes an interactive exploit-then-fix walkthrough covering arbitrary-domain fetches, internal-network probing, and cloud metadata abuse.",
+    impactOneline:
+      "Public SSRF lesson pages document server-side fetch exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingSsrfLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining SSRF lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable SSRF lesson instances on private deployments.",
+        "Blocklist internal IP ranges and metadata URLs in production fetchers — never copy Hacksplaining vulnerable proxies.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style SSRF exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-portswigger-academy-evidence",
     platform: "generic",
     category: "Injection",

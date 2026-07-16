@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T15:12:53.264Z",
-  "total": 378,
-  "uniqueSlugs": 378,
+  "generatedAt": "2026-07-16T16:05:40.395Z",
+  "total": 380,
+  "uniqueSlugs": 380,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 360,
+    "generic": 362,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 310,
+    "deep": 312,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 115,
+    "Broken access control": 116,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -31,7 +31,7 @@
     "Cross-site scripting": 44,
     "general": 18,
     "SSRF": 1,
-    "Server-side request forgery": 4,
+    "Server-side request forgery": 5,
     "Sensitive data exposure": 5,
     "AI security": 24,
     "XSS": 1
@@ -136,9 +136,11 @@
     "client-side-hackinghub-evidence",
     "client-side-hackmyvm-evidence",
     "client-side-hacksec-evidence",
+    "client-side-hacksplaining-csrf-lesson-evidence",
     "client-side-hacksplaining-evidence",
     "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
     "client-side-hacksplaining-sql-injection-lesson-evidence",
+    "client-side-hacksplaining-ssrf-lesson-evidence",
     "client-side-hackthebox-academy-evidence",
     "client-side-hackthebox-evidence",
     "client-side-hackthissite-evidence",
