@@ -4248,7 +4248,32 @@
       "url": "https://www.hackthissite.org/missions/programming/8/",
       "source": "Hack This Site — programming mission 8 exploit scripting challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/17/",
+      "source": "Hack This Site — playlevel arcade mission 17 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/11/",
+      "source": "Hack This Site — application mission 11 web exploitation challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/9/",
+      "source": "Hack This Site — javascript mission 9 client-side security challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/9/",
+      "source": "Hack This Site — steganography mission 9 hidden-data extraction lab (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/challenge?id=17",
+      "source": "BugBountyHunter zseano — XSS/IDOR challenge #17 (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T12:20:00.000Z"
+  "updated_at": "2026-07-16T13:05:00.000Z"
 }
