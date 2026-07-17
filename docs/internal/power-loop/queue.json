@@ -4748,7 +4748,32 @@
       "url": "https://www.hackthissite.org/missions/application/29/",
       "source": "Hack This Site — application mission 29 web exploit challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level109/index.php",
+      "source": "Net-Force — web exploit training challenge level 109 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/30/",
+      "source": "Hack This Site — application mission 30 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_03/",
+      "source": "PentesterLab — XSS 03 non-recursive filter bypass exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_03/",
+      "source": "PentesterLab — Authorization 03 access-control exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/16/",
+      "source": "Hack This Site — stego mission 16 steganography challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T12:08:00.000Z"
+  "updated_at": "2026-07-17T13:27:00.000Z"
 }
