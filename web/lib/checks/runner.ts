@@ -693,6 +693,7 @@ const DEEP_RULES = new Set<string>([
   "owaspCtfLinkedLabProbe",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
+  "clientSideCtfdPlatformEvidence",
   "clientSideCtfChallengeHubEvidence",
   "clientSideBouvetIntroCtfEvidence",
   "clientSideCodeBreakingEvidence",
@@ -866,6 +867,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabA08IntegrityEvidence",
   "clientSideVulnlabCmsPlatformEvidence",
   "clientSideVulnlabA09LoggingEvidence",
+  "clientSideVulnlabVerbose404Evidence",
   "clientSideVulnlabA10SsrfEvidence",
   "clientSideVulnerableWebSiteEvidence",
   "clientSideNivaraSecurityEvidence",
@@ -5291,7 +5293,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level101/index.php",
         "http://www.net-force.nl/challenge/level102/index.php",
         "http://www.net-force.nl/challenge/level103/index.php",
-        "http://www.net-force.nl/challenge/level104/index.php"
+        "http://www.net-force.nl/challenge/level104/index.php",
+        "http://www.net-force.nl/challenge/level105/index.php"
       ]
     : [];
   const grpcGoatPrioritySeeds =
@@ -5354,7 +5357,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/platform/aspnet.html", home.finalUrl).toString(),
           new URL("/platform/node.html", home.finalUrl).toString(),
           new URL("/platform/java.html", home.finalUrl).toString(),
-          new URL("/platform/python.html", home.finalUrl).toString()
+          new URL("/platform/python.html", home.finalUrl).toString(),
+          new URL("/sqli/", home.finalUrl).toString()
         ]
       : [];
   const seclabPlaygroundPrioritySeeds =

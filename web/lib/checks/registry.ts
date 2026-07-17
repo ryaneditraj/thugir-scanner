@@ -6098,6 +6098,48 @@ const clientSideCtfPlatformEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CTFd open-source CTF platform (hackerfire.com and ctfd.io deployments) -----------
+const CLIENT_CTFD_PLATFORM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Powered by CTFd footer",
+    re: /Powered by CTFd/i
+  },
+  {
+    label: "CTFd.io platform link",
+    re: /href\s*=\s*["']https?:\/\/ctfd\.io/i
+  },
+  {
+    label: "CTF challenges navigation",
+    re: /href\s*=\s*["']\/challenges["']/i
+  },
+  {
+    label: "CTFd window.init bootstrap",
+    re: /window\.init\s*=\s*\{[\s\S]{0,240}csrfNonce/i
+  },
+  {
+    label: "CTFd admin setup prompt",
+    re: /login and setup your CTF/i
+  }
+];
+
+const clientSideCtfdPlatformEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTFD_PLATFORM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Powered by CTFd|ctfd\.io/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CTFd open-source CTF platform exposes challenge catalog and registration — isolate from production and harden admin setup"
+    }
+  };
+};
+
 // --- Static CTF challenge hub index (webexp05 / shiny-computing-machine style /cN/ links) -
 const CLIENT_CTF_CHALLENGE_HUB_RES: { label: string; re: RegExp }[] = [
   {
@@ -8762,6 +8804,18 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Right-click disable JS protection",
     re: /Right click disabled|protected with a simple JavaScript protection/i
+  },
+  {
+    label: "JScript.Encode obfuscated challenge script",
+    re: /JScript\.Encode|language\s*=\s*["']JScript\.Encode["']/i
+  },
+  {
+    label: "tester() client-side password check",
+    re: /onClick\s*=\s*["']tester\s*\(\s*\)["']|function\s+tester\s*\(/i
+  },
+  {
+    label: "unescape then document.write challenge HTML",
+    re: /unescape\s*\(\s*\w+\s*\)[\s\S]{0,120}document\.write/i
   }
 ];
 
@@ -8777,7 +8831,9 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
   if (hits.length < 2) return NEGATIVE;
   const level = pageUrl.match(/level(\d+)/i)?.[1];
   const note =
-    /validate\s*\(/i.test(corpus) && /document\.write\s*\(\s*unescape/i.test(corpus)
+    /JScript\.Encode/i.test(corpus) && /tester\s*\(/i.test(corpus)
+      ? `Net-Force level ${level ?? "NN"} ships JScript.Encode obfuscation with tester() client-side password gate — decode unescape(Words) or reverse encoded script`
+      : /validate\s*\(/i.test(corpus) && /document\.write\s*\(\s*unescape/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} exposes obfuscated client-side validate() credential check — bypass by reading embedded username/password literals`
       : /password\s*=\s*password\s*\+\s*\w+\.substring/i.test(corpus)
         ? `Net-Force level ${level ?? "NN"} builds password via substring() in client JavaScript — credential oracle in page source`
@@ -8791,6 +8847,44 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
       level,
       markers: hits.slice(0, 4),
       note
+    }
+  };
+};
+
+// --- VulnLab Academy verbose 404 credential leak (hack-this-site-eta.vercel.app/sqli/) -
+const CLIENT_VULNLAB_VERBOSE_404_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Verbose 404 error page title",
+    re: /404\s*-\s*Verbose Error\s*-\s*VulnLab Academy/i
+  },
+  {
+    label: "Stack trace with file path",
+    re: /StackTrace:\s*at\s+[\w.]+\(/i
+  },
+  {
+    label: "DB_PASS credential in error body",
+    re: /DB_PASS\s*=\s*passw0rd!/i
+  },
+  {
+    label: "NODE_ENV in verbose error",
+    re: /NODE_ENV\s*=\s*development/i
+  }
+];
+
+const clientSideVulnlabVerbose404Evidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_VERBOSE_404_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VulnLab Academy|Pentest Toolkit|hack-this-site-eta\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab verbose 404 page leaks DB_PASS and stack trace in HTML — sensitive data in error responses training lab"
     }
   };
 };
@@ -17892,6 +17986,7 @@ export const RULES: Record<string, Rule> = {
   owaspCtfLinkedLabProbe,
   clientSideSecurityGameEvidence,
   clientSideCtfPlatformEvidence,
+  clientSideCtfdPlatformEvidence,
   clientSideCtfChallengeHubEvidence,
   clientSideBouvetIntroCtfEvidence,
   clientSideXssC2CollectorEvidence,
@@ -17947,6 +18042,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
   clientSideNetForceChallengeEvidence,
+  clientSideVulnlabVerbose404Evidence,
   clientSideBrutelogicXssGymEvidence,
   clientSideBrutelogicXssTestPageEvidence,
   clientSideKnoxssTestPageEvidence,
