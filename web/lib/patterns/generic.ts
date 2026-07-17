@@ -2320,6 +2320,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-idor-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Authorization 01 IDOR exercise disclosed",
+    description:
+      "PentesterLab Authorization 01 hosted exercise documents Insecure Direct Object Reference via incrementing URL IDs to access other users' data without authorization checks.",
+    impactOneline:
+      "Public IDOR exercise instance reveals predictable object-reference patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabIdorExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce object-level authorization in production.",
+      steps: [
+        "Require authentication before serving IDOR exercise instances.",
+        "Validate session ownership on every object-access API route.",
+        "Use non-enumerable identifiers instead of sequential IDs in production."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Authorization 01-style IDOR labs. Show how to gate labs behind auth and enforce object-level authorization in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PentesterLab XSS and MySQL FILE exercise disclosed",
+    description:
+      "PentesterLab XSS and MySQL FILE hosted exercise documents an XSS-to-admin-access chain followed by SQL injection for server-side code execution.",
+    impactOneline:
+      "Public multi-step exercise instance reveals XSS-to-SQLi exploitation chains for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXssMysqlExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; prevent XSS-to-SQLi chains in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode reflected output and use parameterized SQL queries in production.",
+        "Isolate exercise infrastructure from production databases."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS and MySQL FILE-style multi-step labs. Show how to gate labs behind auth and break XSS-to-SQLi chains in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-kontra-application-security-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -7854,6 +7906,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host BreakTheFlask-style Flask training writeups. Show how to fix SQLi, SSTI via render_template_string, command injection, and IDOR on /profile routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-flask-vulnapp-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnApp intentionally vulnerable Flask practice app disclosed",
+    description:
+      "VulnApp (web-security-practice-app) is a deliberately vulnerable Flask application with SQL injection on login/register forms and stored XSS in an unescaped comment system.",
+    impactOneline:
+      "Public VulnApp instances expose Flask SQLi and XSS training surfaces attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFlaskVulnappEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnApp is intentional training — never deploy similar vulnerable Flask routes to production.",
+      steps: [
+        "Run VulnApp only on isolated lab infrastructure.",
+        "Use parameterized queries and Jinja2 autoescape in production Flask apps.",
+        "HTML-encode all user-controlled output in comment and search templates."
+      ]
+    },
+    fixPrompt:
+      "We host VulnApp-style Flask training apps. Show how to fix SQLi on login forms and stored XSS in comment systems.",
     version: 1,
     enabled: true
   },
