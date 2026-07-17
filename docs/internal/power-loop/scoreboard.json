@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T13:10:00.000Z",
+  "updated_at": "2026-07-17T13:29:23.225Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 891,
-  "total_findings": 4246,
+  "total_sites_scanned": 900,
+  "total_findings": 4301,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 951,
-  "discovery_findings": 3107,
-  "improvements_shipped": 614,
-  "last_run": "2026-07-17T13:10:00.000Z",
+  "discovery_urls_added": 956,
+  "discovery_findings": 3155,
+  "improvements_shipped": 617,
+  "last_run": "2026-07-17T13:29:23.225Z",
   "last_run_summary": {
     "hour_utc": "13:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 503 during full power-scan wake retry; staging validation 7 findings 6/6 (sensitive_data via vibe-unauthenticated-api-routes)",
+      "note": "Pass1 degraded: 5 findings gap=sqli (pages=1 probes=127); pass2 retry: 7 findings 6/6 (pages=6 probes=97). Staging cross-check 6/6.",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,29 +50,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 48,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queued tail drain: Net-Force level108 + PentesterLab autho_02/xss_02 exercise oracles",
+      "focus": "Queue head drain: BugBountyHunter ch6/7/16 + Chimera + bWAPP + Broken Crystals; tail oracles level108 + PentesterLab autho_02/xss_02; +5 queued (Net-Force 109, HTS app/30 stego/16, PentesterLab xss_03/autho_03)",
       "improvements_shipped_this_run": 3,
       "urls_validated": [
-        "http://www.net-force.nl/challenge/level108/index.html",
-        "https://pentesterlab.com/exercises/autho_02/",
-        "https://pentesterlab.com/exercises/xss_02/"
+        "http://www.net-force.nl/challenge/level109/index.php",
+        "https://www.hackthissite.org/missions/application/30/",
+        "https://pentesterlab.com/exercises/xss_03/",
+        "https://pentesterlab.com/exercises/autho_03/",
+        "https://www.hackthissite.org/missions/stego/16/"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category gap",
+      "juice-shop.herokuapp.com: 6/6 after Heroku wake retry (pass1 gap=sqli 5 findings; pass2 7 findings)",
+      "chimera.atlascrew.dev: IDOR + JWT-none + XXE + prompt-injection evidence (9 findings)",
+      "brokencrystals.com: client-side lab markers + postMessage DOM XSS + sitemap paths (15 findings)",
       "net-force level108: innerHTML→HTML comment Login() popup (0→2 findings)",
-      "pentesterlab autho_02: Authorization 02 IDOR exercise markers (0→4 findings)",
-      "pentesterlab xss_02: case-variation XSS filter bypass exercise markers (0→4 findings)"
+      "pentesterlab autho_02/xss_02: IDOR + case-variation XSS exercise markers (0→4 each)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
-      "HTS application/29: login-gated — client-side-hts-login-gated-mission-hub-evidence only"
+      "juice-shop.herokuapp.com: pass1 cold-start missed sqli — wake retry required (secret-resend slug absent)",
+      "HTS application/29: login-gated — client-side-hts-login-gated-mission-hub-evidence only",
+      "Net-Force 109 + HTS app/30 stego/16 + PentesterLab xss_03/autho_03 queued at tail — pending drain"
     ]
   },
   "discovery_highlights": {
