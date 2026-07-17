@@ -8128,6 +8128,88 @@ const clientSidePentesterlabAutho03ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab SQL Injection 04 space-filter bypass exercise (pentesterlab.com/exercises/sqli_04)
+const CLIENT_PENTESTERLAB_SQLI04_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 04 course title",
+    re: /SQL Injection 04|PentesterLab:\s*SQL Injection 04/i
+  },
+  {
+    label: "Space-filter bypass via tab characters lab description",
+    re: /filters out spaces[\s\S]{0,120}bypass this protection using tab characters|bypass this protection using tab characters and URL encoding/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 04"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]04/i
+  }
+];
+
+const clientSidePentesterlabSqli04ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/sqli[_-]04/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI04_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 04 exercise documents login-form SQLi bypassing space filters with tab characters and URL encoding"
+    }
+  };
+};
+
+// --- PentesterLab Authorization 04 ORM mass-assignment exercise (pentesterlab.com/exercises/autho_04)
+const CLIENT_PENTESTERLAB_AUTHO04_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Authorization 04 course title",
+    re: /Authorization 04|PentesterLab:\s*Authorization 04/i
+  },
+  {
+    label: "ORM mass-assignment privilege escalation lab description",
+    re: /Object-Relational Mapping \(ORM\)[\s\S]{0,160}Mass-Assignment vulnerabilities[\s\S]{0,120}escalate privileges/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Authorization 04"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/autho[_-]04/i
+  }
+];
+
+const clientSidePentesterlabAutho04ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/autho[_-]04/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_AUTHO04_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Authorization 04 exercise documents ORM mass-assignment privilege escalation via unguarded model attributes"
+    }
+  };
+};
+
 // --- PentesterLab XSS 03 non-recursive filter bypass exercise (pentesterlab.com/exercises/xss_03)
 const CLIENT_PENTESTERLAB_XSS03_RES: { label: string; re: RegExp }[] = [
   {
@@ -18713,12 +18795,14 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqliExerciseEvidence,
   clientSidePentesterlabSqli02ExerciseEvidence,
   clientSidePentesterlabSqli03ExerciseEvidence,
+  clientSidePentesterlabSqli04ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,
   clientSidePentesterlabIdorExerciseEvidence,
   clientSidePentesterlabAutho02ExerciseEvidence,
   clientSidePentesterlabAutho03ExerciseEvidence,
+  clientSidePentesterlabAutho04ExerciseEvidence,
   clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXss03ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,

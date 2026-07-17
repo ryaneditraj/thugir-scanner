@@ -2294,6 +2294,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-sqli-04-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentesterLab SQL Injection 04 exercise disclosed",
+    description:
+      "PentesterLab SQL Injection 04 hosted exercise documents bypassing login-form space filters using tab characters and URL encoding to exploit SQL injection.",
+    impactOneline:
+      "Public SQLi exercise instance reveals whitespace-filter bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSqli04ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab SQL in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use parameterized queries and normalize whitespace before validation in production login handlers.",
+        "Isolate exercise infrastructure from production databases."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SQL Injection 04-style space-filter bypass labs. Show how to gate labs behind auth and use parameterized queries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2472,6 +2498,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab Authorization 03-style content-negotiation IDOR labs. Show how to gate labs behind auth and mask sensitive fields across all representations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-autho-04-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Authorization 04 mass-assignment exercise disclosed",
+    description:
+      "PentesterLab Authorization 04 hosted exercise documents ORM mass-assignment vulnerabilities that let attackers escalate privileges via unguarded model attributes.",
+    impactOneline:
+      "Public mass-assignment exercise reveals ORM privilege-escalation patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabAutho04ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; whitelist assignable attributes in production APIs.",
+      steps: [
+        "Require authentication before serving mass-assignment exercise instances.",
+        "Use explicit allowlists for user-updatable model fields in production APIs.",
+        "Reject privileged attribute updates from unauthenticated or low-privilege callers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Authorization 04-style ORM mass-assignment labs. Show how to gate labs behind auth and whitelist assignable attributes in production.",
     version: 1,
     enabled: true
   },
