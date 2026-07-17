@@ -4097,6 +4097,24 @@
       "slug": "client-side-pentesterlab-sqli-07-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/sqli_07/ returns PentesterLab 404 page — exercise slug offline or renamed; no portable detection signal"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-05-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD SQL Injection 05 + blocks spaces and tabulations + avoiding spaces between keywords; pentesterlab.com/exercises/sqli_05 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-38-playlevel-39-mission-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/38/ + /playlevel/39/ Login Required gates; extractHackThisSiteMissionSeeds extended; application/38 findings 0→6, playlevel/39 findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:unicord.dev",
+      "slug": "client-side-nextjs-middleware-cve-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: unicord.dev redirects to GitHub README CVE-2025-29927 + x-middleware-subrequest middleware bypass; unicord.dev/exploit-CVE-2025-29927 findings 0→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7289,6 +7307,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
       "shipped_at": "2026-07-17T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-05-exercise-evidence",
+      "shipped_at": "2026-07-17T22:16:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-38-playlevel-39-mission-seeds",
+      "shipped_at": "2026-07-17T22:16:00.000Z"
+    },
+    {
+      "source": "discovery:unicord.dev",
+      "slug": "client-side-nextjs-middleware-cve-evidence",
+      "shipped_at": "2026-07-17T22:16:00.000Z"
     }
   ]
 }
