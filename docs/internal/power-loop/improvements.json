@@ -3893,6 +3893,24 @@
       "slug": "hts-mission-seed-playlevel-34-application-29-javascript-21",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/34/ login-gated arcade hub + application/29 javascript/21 mission tail slots; extractHackThisSiteMissionSeeds extended; playlevel/34 findings 6 incl client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-35-application-30-javascript-22",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/35/ login-gated arcade hub + application/30 javascript/22 stego/17 forensic/19 programming/13 mission tail slots; extractHackThisSiteMissionSeeds extended; playlevel/35 findings 6 incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-5-10-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-5 K8s Configmap based secret + kubectl find the secret walkthrough; wrongSecretsHubPrioritySeeds extended challenge-0..4→challenge-10 + K8s configmap markers; wrongsecrets.herokuapp.com hub findings 5→6 incl client-side-wrongsecrets-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level7-level10-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level7.php name=level7login POST password blind login form; redTigerPrioritySeeds adds level7.php + level10.php; level7.php findings 3 incl redtiger-blind-login-form-evidence + client-side-redtiger-hackit-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6935,6 +6953,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-playlevel-33-application-28-javascript-20",
       "shipped_at": "2026-07-17T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-35-application-30-javascript-22",
+      "shipped_at": "2026-07-17T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-5-10-priority-seeds",
+      "shipped_at": "2026-07-17T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level7-level10-priority-seeds",
+      "shipped_at": "2026-07-17T11:10:00.000Z"
     }
   ]
 }
