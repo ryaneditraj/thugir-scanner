@@ -4037,6 +4037,24 @@
       "slug": "client-side-pentesterlab-sqli-03-exercise-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD SQL Injection 03 + only one result is returned by the database bypass with LIMIT; pentesterlab.com/exercises/sqli_03/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-04-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD SQL Injection 04 + filters out spaces bypass using tab characters and URL encoding; pentesterlab.com/exercises/sqli_04 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-04-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Authorization 04 + ORM Mass-Assignment vulnerabilities escalate privileges; pentesterlab.com/exercises/autho_04 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-35-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/35/ returns Login Required + HTS training ground tagline; extractHackThisSiteMissionSeeds adds application/35; findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7184,6 +7202,21 @@
       "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-sqli-03-exercise-evidence",
       "shipped_at": "2026-07-17T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-04-exercise-evidence",
+      "shipped_at": "2026-07-17T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-04-exercise-evidence",
+      "shipped_at": "2026-07-17T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-35-mission-seed",
+      "shipped_at": "2026-07-17T19:10:00.000Z"
     }
   ]
 }
