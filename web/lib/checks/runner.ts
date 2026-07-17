@@ -734,6 +734,7 @@ const DEEP_RULES = new Set<string>([
   "domgoWebsocketDomXssEvidence",
   "domgoQueryParamDomXssEvidence",
   "domgoSinksCatalogDomXssEvidence",
+  "domgoSourcesCatalogDomXssEvidence",
   "clientSideBenstaffordXssDemoEvidence",
   "clientSideHackThisSiteRealisticMissionEvidence",
   "clientSideHtsLoginGatedMissionHubEvidence",
@@ -804,6 +805,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWrongSecretsEvidence",
   "clientSideWrongSecretsChallengeEvidence",
   "clientSideMaestroAgenticAiEvidence",
+  "clientSideMaestroRagSqliEvidence",
   "clientSideZerodayTrainingEvidence",
   "clientSideCtfResearchTeamEvidence",
   "clientSidePentesterAcademyLabEvidence",
@@ -1154,14 +1156,21 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 10; n++) {
+  for (let n = 1; n <= 11; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
       /* ignore */
     }
   }
-  for (const path of ["/cxss/sinks", "/cxss/example/10", "/cxss/example/1", "/cxss/example/2", "/cxss/example/3"]) {
+  for (const path of [
+    "/cxss/sources/somevalue?param1=paramvalue#hashvalue",
+    "/cxss/sinks",
+    "/cxss/example/10",
+    "/cxss/example/1",
+    "/cxss/example/2",
+    "/cxss/example/3"
+  ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
     } catch {
@@ -1518,6 +1527,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/29/",
     "/missions/application/30/",
     "/missions/application/31/",
+    "/missions/application/32/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",

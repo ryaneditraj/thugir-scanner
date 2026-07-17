@@ -4062,6 +4062,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-maestro-rag-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "MAESTRO demo documents SQL injection via agent memory queries",
+    description:
+      "MAESTRO Framework agentic AI demos document unsanitized user input in RAG/vector memory search queries enabling SQL injection against agent storage.",
+    impactOneline:
+      "Agent memory search SQLi can poison or exfiltrate data from vector databases backing LLM agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMaestroRagSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize all memory/vector search queries; never concatenate user input into SQL.",
+      steps: [
+        "Use parameterized queries or ORM bindings for memory search APIs.",
+        "Validate and sanitize user input before vector/relational memory lookups.",
+        "Isolate agent memory stores from production databases."
+      ]
+    },
+    fixPrompt:
+      "Our MAESTRO agent demo documents SQL injection via memory queries. Show parameterized memory search and input validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-zeroday-training-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -9024,6 +9050,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DomGoat /cxss/sinks page demos eval() and innerHTML sinks. Show safe alternatives and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-sources-catalog-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat XSS sources catalog with location/postMessage/WebSocket demos",
+    description:
+      "DomGoat /cxss/sources page catalogs URL-based DOM property sources (location.*, document.referrer) plus postMessage, WebSocket, and AJAX live source demos.",
+    impactOneline:
+      "Public source catalogs teach attackers which client-side inputs can feed DOM XSS sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoSourcesCatalogDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose interactive XSS source playgrounds on production domains.",
+      steps: [
+        "Validate and encode all URL fragments, query params, and referrer values before DOM insertion.",
+        "Verify postMessage origin before handling untrusted payloads.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat /cxss/sources page demos location.hash and postMessage sources. Show safe handling and lab isolation.",
     version: 1,
     enabled: true
   },

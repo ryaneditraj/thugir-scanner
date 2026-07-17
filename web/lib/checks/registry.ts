@@ -7153,6 +7153,32 @@ const domgoSinksCatalogDomXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- DomGoat /cxss/sources URL-based DOM property source catalog -------------------
+const domgoSourcesCatalogDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/sources/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const catalog =
+    /Client XSS Sources|URL-based DOM Property Sources/i.test(corpus) &&
+    /location\.(?:href|search|hash|pathname)/i.test(corpus);
+  const navSources =
+    /document\.referrer/i.test(corpus) &&
+    /(?:Communication based Sources|Storage-based Sources)/i.test(corpus);
+  const liveDemos =
+    /postMessage\s*\(/i.test(corpus) &&
+    (/new\s+WebSocket/i.test(corpus) || /XMLHttpRequest|\.open\s*\(/i.test(corpus));
+  if (!catalog || !navSources || !liveDemos) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat /cxss/sources catalogs location.*, document.referrer, postMessage, WebSocket, and AJAX DOM XSS source vectors with live demos"
+    }
+  };
+};
+
 // --- DomGoat location.href query param → msgboard.innerHTML DOM XSS (example/10) ----
 const domgoQueryParamDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
@@ -11184,6 +11210,27 @@ const clientSideMaestroAgenticAiEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "MAESTRO Framework demo documents ElizaOS agentic AI exploit chains — prompt injection, memory poisoning, and zero-auth deployments"
+    }
+  };
+};
+
+// --- MAESTRO demo RAG memory SQL injection oracle ----------------------------------
+const clientSideMaestroRagSqliEvidence: Rule = async (ctx) => {
+  const corpus = ctx.combined;
+  if (!/MAESTRO (?:Framework|Security Architecture)/i.test(corpus)) return NEGATIVE;
+  const ragLayer =
+    /RAG pipeline|vector databases|memory management/i.test(corpus) &&
+    /RAG Memory Poisoning|vector database persists/i.test(corpus);
+  const sqliOracle =
+    /SQL Injection via Memory Queries/i.test(corpus) &&
+    /Unsanitized user input in memory search/i.test(corpus);
+  if (!ragLayer || !sqliOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      page: ctx.home.finalUrl || ctx.origin,
+      note: "MAESTRO demo documents SQL injection via unsanitized agent memory search queries against vector/RAG storage"
     }
   };
 };
@@ -18474,6 +18521,7 @@ export const RULES: Record<string, Rule> = {
   domgoWebsocketDomXssEvidence,
   domgoQueryParamDomXssEvidence,
   domgoSinksCatalogDomXssEvidence,
+  domgoSourcesCatalogDomXssEvidence,
   clientSideBenstaffordXssDemoEvidence,
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
@@ -18557,6 +18605,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWrongSecretsEvidence,
   clientSideWrongSecretsChallengeEvidence,
   clientSideMaestroAgenticAiEvidence,
+  clientSideMaestroRagSqliEvidence,
   clientSideZerodayTrainingEvidence,
   clientSideCtfResearchTeamEvidence,
   clientSidePentesterAcademyLabEvidence,
