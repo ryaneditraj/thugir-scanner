@@ -2638,7 +2638,7 @@ values
    true),
   ('client-side-wrongsecrets-challenge-evidence', 'generic', 'Exposed secret', 'high',
    'OWASP WrongSecrets challenge walkthrough page disclosed',
-   'WrongSecrets /challenge/challenge-N pages document hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI.',
+   'WrongSecrets /challenge/challenge-N pages document hardcoded-secret hunting in Git, Docker layers, K8s configmaps, or cloud config with answer submission UI.',
    'Public WrongSecrets challenge walkthroughs teach attackers where production apps commonly hide secrets in code and containers.',
    'rule_ref',
    '{"rule":"clientSideWrongSecretsChallengeEvidence"}'::jsonb,
