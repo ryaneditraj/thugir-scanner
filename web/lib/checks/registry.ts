@@ -8828,22 +8828,36 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "HTML Guardian Net-Force challenge title",
     re: /HTML Guardian|Net-Force Challenge\s*-\s*10[67]/i
+  },
+  {
+    label: "HTML PROTECT obfuscated challenge script",
+    re: /HTML PROTECT\s*3|protected by HTML PROTECT/i
+  },
+  {
+    label: "SHA1 client-side password hash gate",
+    re: /calcSHA1|sha1\s*\(|HTMIP/i
   }
 ];
 
 const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
-  const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/net-force\.nl\/challenge\/level\d+/i.test(pageUrl)) return NEGATIVE;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const onChallengeInstance =
+    /net-force\.nl\/challenge\/level\d+/i.test(pageUrl) ||
+    /Net-Force Challenge\s*-\s*\d+/i.test(corpus);
+  if (!/net-force\.nl/i.test(pageUrl) || !onChallengeInstance) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_NET_FORCE_CHALLENGE_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  const level = pageUrl.match(/level(\d+)/i)?.[1];
+  const level =
+    pageUrl.match(/level(\d+)/i)?.[1] ?? corpus.match(/Net-Force Challenge\s*-\s*(\d+)/i)?.[1];
   const note =
-    /eval\s*\(\s*unescape/i.test(corpus) && /function\s+koh\s*\(/i.test(corpus)
+    /HTML PROTECT/i.test(corpus) && /calcSHA1|sha1\s*\(/i.test(corpus)
+      ? `Net-Force level ${level ?? "NN"} ships HTML PROTECT 3 + SHA1 client-side password hash gate — decode unescape payload or reverse obfuscated showlogin() script`
+      : /eval\s*\(\s*unescape/i.test(corpus) && /function\s+koh\s*\(/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} ships eval(unescape()) + koh() string-reversal obfuscation — decode nested unescape or reverse koh() output`
       : /eval\s*\(\s*unescape/i.test(corpus)
         ? `Net-Force level ${level ?? "NN"} ships eval(unescape()) obfuscated challenge script — decode percent-encoded payload in page source`
@@ -10723,28 +10737,39 @@ const CLIENT_WRONGSECRETS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Secrets in Git/Docker/cloud focus",
     re: /secret.*(?:Git|Docker|environment variables|cloud infrastructure)/i
+  },
+  {
+    label: "Spring Boot application.properties secret",
+    re: /application\.properties|Spring Boot application|Spring Cloud Config/i
   }
 ];
 
 const clientSideWrongSecretsChallengeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/challenge-\d+/i.test(pageUrl))
-    return NEGATIVE;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const onChallengePage =
+    /\/challenge\/challenge-\d+/i.test(pageUrl) || /\/challenge\/challenge-\d+/i.test(corpus);
+  if (!/wrongsecrets/i.test(pageUrl) || !onChallengePage) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WRONGSECRETS_CHALLENGE_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  const challengeId = pageUrl.match(/challenge-(\d+)/i)?.[1];
+  const challengeId =
+    pageUrl.match(/challenge-(\d+)/i)?.[1] ?? corpus.match(/challenge-(\d+)/i)?.[1];
+  const note = /application\.properties|Spring Boot application/i.test(corpus)
+    ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
+    : /Docker documentation|copy the Jar file/i.test(corpus)
+      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
+      : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.91 : 0.88,
     evidence: {
       challengeId,
       markers: hits.slice(0, 4),
-      note: `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`
+      note
     }
   };
 };

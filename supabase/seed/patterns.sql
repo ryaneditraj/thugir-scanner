@@ -1328,7 +1328,7 @@ values
    true),
   ('client-side-net-force-challenge-evidence', 'generic', 'Broken authentication', 'medium',
    'Net-Force.nl JavaScript auth-bypass challenge disclosed',
-   'Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, eval(unescape()) koh() decoders, or substring password-generation drills for authentication bypass training.',
+   'Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, eval(unescape()) koh() decoders, HTML PROTECT SHA1 hash gates, or substring password-generation drills for authentication bypass training.',
    'Public Net-Force challenge pages document trivial client-side credential checks attackers bypass without server validation.',
    'rule_ref',
    '{"rule":"clientSideNetForceChallengeEvidence"}'::jsonb,

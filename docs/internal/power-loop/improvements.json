@@ -3875,6 +3875,24 @@
       "slug": "hts-mission-seed-playlevel-33-application-28-javascript-20",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/33/ login-gated arcade hub + application/28 javascript/20 mission tail slots; extractHackThisSiteMissionSeeds extended; playlevel/33 findings 6 incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-combined-corpus-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub scan used home.body only so challenge walkthrough rule missed crawled /challenge/challenge-N pages; clientSideWrongSecretsChallengeEvidence now uses ctx.combined + Spring application.properties markers + priority seeds challenge-3/4; wrongsecrets.herokuapp.com hub findings 5→6 incl client-side-wrongsecrets-challenge-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level107-html-protect-sha1",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level107/index.php HTML PROTECT 3 + calcSHA1/sha1 client-side hash gate + eval(unescape) obfuscation; clientSideNetForceChallengeEvidence uses combined corpus + HTML PROTECT/SHA1 markers; net-force.nl/challenges/ findings 3→4 incl challenge evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-34-application-29-javascript-21",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/34/ login-gated arcade hub + application/29 javascript/21 mission tail slots; extractHackThisSiteMissionSeeds extended; playlevel/34 findings 6 incl client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
