@@ -4848,7 +4848,32 @@
       "url": "http://www.net-force.nl/challenge/level111/index.php",
       "source": "Net-Force — web exploit training challenge level 111 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-waf.vercel.app/",
+      "source": "AI WAF — live threat analyzer / prompt-injection demo dashboard (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/34/",
+      "source": "Hack This Site — application mission 34 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level112/index.php",
+      "source": "Net-Force — web exploit training challenge level 112 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/sqli_03/",
+      "source": "PentesterLab — SQL Injection 03 LIMIT-bypass login exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/http-request-smuggling/start",
+      "source": "Hacksplaining — HTTP request smuggling secure-coding lesson (lessons catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T16:00:06.016Z"
+  "updated_at": "2026-07-17T17:05:00.000Z"
 }
