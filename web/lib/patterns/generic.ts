@@ -2580,6 +2580,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-autho-06-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Authorization 06 exercise disclosed",
+    description:
+      "PentesterLab Authorization 06 hosted exercise documents Rails mass-assignment via organisation_id to join privileged organizations and access protected keys.",
+    impactOneline:
+      "Public authorization exercise reveals Rails mass-assignment patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabAutho06ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use strong parameter filtering in production Rails APIs.",
+      steps: [
+        "Require authentication before serving authorization exercise instances.",
+        "Use strong parameters or explicit allowlists for model attribute assignment.",
+        "Reject client-supplied organisation_id or role fields on profile update endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Authorization 06-style Rails mass-assignment labs. Show how to gate labs behind auth and harden strong-parameter filtering in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-03-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4214,6 +4240,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style XML bomb exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Hacksplaining subdomain squatting lesson disclosed",
+    description:
+      "Hacksplaining /lessons/subdomain-squatting publishes an interactive exploit-then-fix walkthrough covering dangling DNS records and subdomain takeover for malware delivery.",
+    impactOneline:
+      "Public subdomain squatting lesson pages document dangling-subdomain takeover patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingSubdomainSquattingLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining subdomain squatting lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable subdomain squatting lesson instances on private deployments.",
+        "Audit and remove dangling DNS records and stale CNAME targets in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style subdomain squatting exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
     version: 1,
     enabled: true
   },
@@ -7750,6 +7802,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style clickjacking exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Hacksplaining subdomain squatting lesson disclosed",
+    description:
+      "Hacksplaining /lessons/subdomain-squatting publishes an interactive exploit-then-fix walkthrough covering dangling DNS records and subdomain takeover for malware delivery.",
+    impactOneline:
+      "Public subdomain squatting lesson pages document dangling-subdomain takeover patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingSubdomainSquattingLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining subdomain squatting lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable subdomain squatting lesson instances on private deployments.",
+        "Audit and remove dangling DNS records and stale CNAME targets in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style subdomain squatting exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
     version: 1,
     enabled: true
   },

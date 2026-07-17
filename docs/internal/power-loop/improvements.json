@@ -4073,6 +4073,30 @@
       "slug": "redtiger-command-injection-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level10.php HTML comment !`sh >& /dev/tcp/...` + level10login POST password form; redtiger level10 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-06-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Authorization 06 + mass-assignment organisation_id Rails lab; pentesterlab.com/exercises/autho_06 findings 0→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-37-playlevel-38-mission-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/37/ Login Required + HTS training ground; extractHackThisSiteMissionSeeds adds application/37 + playlevel/38; findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta description steal dangling subdomains to deliver malware + Subdomain Squatting — Secure Coding Lesson title; hacksplaining.com/lessons/subdomain-squatting/start findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-07-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/sqli_07/ returns PentesterLab 404 page — exercise slug offline or renamed; no portable detection signal"
     }
   ],
   "shipped": [
@@ -7250,6 +7274,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-command-injection-evidence",
       "shipped_at": "2026-07-17T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-06-exercise-evidence",
+      "shipped_at": "2026-07-17T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-37-playlevel-38-mission-seeds",
+      "shipped_at": "2026-07-17T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
+      "shipped_at": "2026-07-17T21:20:00.000Z"
     }
   ]
 }

@@ -761,6 +761,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabAutho03ExerciseEvidence",
   "clientSidePentesterlabAutho04ExerciseEvidence",
   "clientSidePentesterlabAutho05ExerciseEvidence",
+  "clientSidePentesterlabAutho06ExerciseEvidence",
   "clientSidePentesterlabXss02ExerciseEvidence",
   "clientSidePentesterlabXss03ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
@@ -955,6 +956,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
   "clientSideHacksplainingXmlBombLessonEvidence",
+  "clientSideHacksplainingSubdomainSquattingLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1313,6 +1315,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/sqli-06",
     "/exercises/autho_05",
     "/exercises/autho-05",
+    "/exercises/autho_06",
+    "/exercises/autho-06",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1552,6 +1556,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/35/",
     "/missions/application/36/",
     "/playlevel/37/",
+    "/missions/application/37/",
+    "/playlevel/38/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -5381,7 +5387,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://www.net-force.nl/challenge/level109/",
         "http://www.net-force.nl/challenge/level405/index.php",
         "http://www.net-force.nl/challenge/level113/index.php",
-        "http://www.net-force.nl/challenge/level114/index.php"
+        "http://www.net-force.nl/challenge/level114/index.php",
+        "http://www.net-force.nl/challenge/level116/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
