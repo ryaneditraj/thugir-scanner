@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T18:15:00.000Z",
+  "updated_at": "2026-07-17T18:38:56.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 934,
-  "total_findings": 4457,
+  "total_sites_scanned": 944,
+  "total_findings": 4509,
   "critical_findings": 29,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 976,
-  "discovery_findings": 3285,
+  "discovery_urls_added": 978,
+  "discovery_findings": 3330,
   "improvements_shipped": 629,
-  "last_run": "2026-07-17T18:15:00.000Z",
+  "last_run": "2026-07-17T18:38:56.000Z",
   "last_run_summary": {
     "hour_utc": "18:00",
     "benchmark": {
@@ -31,7 +31,13 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — heroku 503 during live re-scan; prior 16:00 run 7 findings 6/6; staging 5/6 (sensitive_data gap on staging only)",
+      "first_pass_recall": "4/6",
+      "first_pass_gap": [
+        "idor",
+        "sensitive_data"
+      ],
+      "retries": 2,
+      "note": "First pass degraded (5 findings, gap idor+sensitive_data); Heroku wake retry recovered 6/6 (7 findings, pages=6 probes=259)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,36 +52,64 @@
             "misconfig"
           ]
         }
+      },
+      "benchmark_recall_first_pass": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 4,
+          "gap": [
+            "idor",
+            "sensitive_data"
+          ],
+          "hit": [
+            "xss",
+            "sqli",
+            "auth_bypass",
+            "misconfig"
+          ]
+        }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 18,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 45,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "Hacksplaining command-execution + xml-bomb lesson oracles; PentesterLab SQLi 03 LIMIT bypass; HTS app/34 seeds queued",
-      "improvements_shipped_this_run": 3,
-      "urls_validated": [
-        "https://www.hacksplaining.com/lessons/command-execution/start",
-        "https://www.hacksplaining.com/lessons/xml-bombs/start",
-        "https://pentesterlab.com/exercises/sqli_03/"
-      ]
+      "urls_queued": [
+        "https://www.hackthissite.org/missions/application/35/",
+        "https://www.hackthissite.org/playlevel/37/",
+        "https://pentesterlab.com/exercises/sqli_04/",
+        "http://www.net-force.nl/challenge/level113/index.php",
+        "https://pentesterlab.com/exercises/autho_04/"
+      ],
+      "urls_drained": [
+        "https://www.hacksplaining.com/lessons/toxic-dependencies/start",
+        "https://www.hacksplaining.com/lessons/unencrypted-communication/start",
+        "https://www.hacksplaining.com/lessons/xssi/start",
+        "https://ucu-owasp-ctf.vercel.app/",
+        "https://ogtamimi.github.io/OGT-Cyber-Game/",
+        "https://koadt.github.io/oss-oopssec-store/",
+        "https://ashimkoirala.github.io/HackLab/",
+        "https://vulnshop.vercel.app/"
+      ],
+      "focus": "Queue drain: Hacksplaining supply-chain/crypto/XSSI lessons + UCU CTF + OSS deploy labs"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (prior run 7 findings; heroku 503 at 18:00 re-scan)",
-      "hacksplaining.com/lessons/command-execution/start: dedicated command execution lesson evidence (6→7 findings)",
-      "hacksplaining.com/lessons/xml-bombs/start: dedicated XML bomb lesson evidence (6→7 findings)",
-      "pentesterlab.com/exercises/sqli_03/: SQL Injection 03 LIMIT bypass exercise (3→4 findings)"
+      "juice-shop.herokuapp.com: first-pass 4/6 (gap idor,sensitive_data) \u2014 final retry 6/6 (7 findings)",
+      "www.hacksplaining.com/lessons/toxic-dependencies/start: supply-chain / dependency confusion lesson (6 findings)",
+      "www.hacksplaining.com/lessons/unencrypted-communication/start: TLS downgrade / cleartext lesson (6 findings)",
+      "www.hacksplaining.com/lessons/xssi/start: cross-site script inclusion lesson (6 findings)",
+      "ucu-owasp-ctf.vercel.app: OWASP Top 10 CTF scoreboard + admin panel (5 findings)",
+      "koadt.github.io/oss-oopssec-store: OSS supply-chain demo store (7 findings)",
+      "ashimkoirala.github.io/HackLab: interactive web security lab (6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku dyno asleep (503) — use staging fallback or apple-oracle wake",
-      "hacksplaining.com/lessons/http-request-smuggling/start: 404 — lesson removed or renamed",
-      "www.hackthissite.org/missions/application/34/: login-gated — seeds added, playlevel/37 queued",
-      "www.net-force.nl/challenge/level112: offline redirect to homepage",
-      "ai-waf.vercel.app: LLM WAF demo queued — prompt-injection bypass lab"
+      "juice-shop.herokuapp.com: shallow first pass misses idor+sensitive_data \u2014 Heroku cold-start / crawl depth sensitivity",
+      "HTS app/35 + playlevel/37 + PentesterLab sqli_04/autho_04 + Net-Force 113 queued at tail \u2014 pending drain",
+      "hacksplaining.com/lessons/http-request-smuggling/start: 404 \u2014 lesson removed or renamed",
+      "www.net-force.nl/challenge/level112: offline redirect to homepage"
     ]
   },
   "discovery_highlights": {
@@ -134,13 +168,13 @@
     "playground.fabraix.com": 2,
     "dvwa.vercel.app": 4,
     "vulnshop.vercel.app": 4,
-    "ashimkoirala.github.io/HackLab": 5,
+    "ashimkoirala.github.io/HackLab": 6,
     "vulnweb.netlify.app": 3,
     "web-pentest-playground.onrender.com": 3,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "tempehs.github.io/The_Unsecure_PWA": 3,
     "yusufarbc.github.io/apigoat": 2,
-    "koadt.github.io/oss-oopssec-store": 2,
+    "koadt.github.io/oss-oopssec-store": 7,
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 3,
@@ -322,6 +356,9 @@
     "www.hacksplaining.com/lessons/command-execution/start": 6,
     "cyberdesserts.github.io/cookiejar-lab": 4,
     "www.hacksplaining.com/lessons/xml-bombs/start": 6,
-    "www.hacksplaining.com/lessons/subdomain-squatting/start": 4
+    "www.hacksplaining.com/lessons/subdomain-squatting/start": 4,
+    "www.hacksplaining.com/lessons/toxic-dependencies/start": 6,
+    "www.hacksplaining.com/lessons/unencrypted-communication/start": 6,
+    "www.hacksplaining.com/lessons/xssi/start": 6
   }
 }
