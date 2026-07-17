@@ -9715,6 +9715,26 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "mysql_db_query string-concat login SQL",
     re: /mysql_db_query[\s\S]{0,120}WHERE\s+user\s*=\s*['"]\$login['"]/i
+  },
+  {
+    label: "SeSSxploit session fixation challenge",
+    re: /SeSSxploit|get yourself admin level\s*\d/i
+  },
+  {
+    label: "Session fixation source download",
+    re: /href\s*=\s*["']login\.zip["']|Download source/i
+  },
+  {
+    label: "LeetSS step-by-step login challenge",
+    re: /Leet\s*Security\s*Scripts|LeetSS\s*3\.0/i
+  },
+  {
+    label: "Secure Extension command signing challenge",
+    re: /Secure Extension|Sign shellcommand|name\s*=\s*["']cmdsign["']/i
+  },
+  {
+    label: "Signed command execution form",
+    re: /name\s*=\s*["']cmd["'][\s\S]{0,200}name\s*=\s*["']hash["']/i
   }
 ];
 
@@ -9769,7 +9789,13 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
   const level =
     pageUrl.match(/level(\d+)/i)?.[1] ?? corpus.match(/Net-Force Challenge\s*-\s*(\d+)/i)?.[1];
   const note =
-    /mysql_db_query/i.test(corpus) && /WHERE\s+user\s*=\s*['"]\$login['"]/i.test(corpus)
+    /SeSSxploit|get yourself admin level/i.test(corpus) && /login\.zip|Download source/i.test(corpus)
+      ? `Net-Force level ${level ?? "NN"} SeSSxploit session-fixation challenge ships login.zip source — fixate session ID to reach admin level 8`
+      : /Secure Extension|cmdsign/i.test(corpus) && /name\s*=\s*["']hash["']/i.test(corpus)
+        ? `Net-Force level ${level ?? "NN"} Secure Extension challenge signs shell commands (ls/date/ps/whoami) — forge signature hash to execute arbitrary cmd on server 2`
+        : /LeetSS|Leet Security Scripts/i.test(corpus) && /action\s*=\s*["']secured\//i.test(corpus)
+          ? `Net-Force level ${level ?? "NN"} Step by step LeetSS login form POSTs to secured/ — probe username/password for auth bypass or SQLi`
+          : /mysql_db_query/i.test(corpus) && /WHERE\s+user\s*=\s*['"]\$login['"]/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} exposes mysql_db_query login SQL with unescaped $login — UNION/injection via POST login field (see source.txt)`
       : /UNION makes FORCE|Exploit this login system/i.test(corpus) &&
           /href\s*=\s*["']source\.txt["']/i.test(corpus)
