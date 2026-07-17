@@ -4019,6 +4019,24 @@
       "slug": "client-side-vwad-app-not-found-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /app/voice-goat/ returns VWAD page-404 shell; guards webgoat/api-security rules on VWAD app pages; voice-goat findings 5→4 (removes webgoat/api-security FPs, adds vwad-app-not-found); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-command-execution-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/command-execution/start title Command Execution — Secure Coding Lesson + meta If your application calls out to the OS; command-execution/start findings 6→7 incl dedicated lesson slug; benchmark juice-shop 6/6 maintained (prior 16:00 run 7 findings)"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xml-bomb-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/xml-bombs/start title XML Bombs — Secure Coding Lesson + meta Unsafe treatment of XML macros; xml-bombs/start findings 6→7 incl dedicated lesson slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-03-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD SQL Injection 03 + only one result is returned by the database bypass with LIMIT; pentesterlab.com/exercises/sqli_03/ findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7151,6 +7169,21 @@
       "source": "discovery:vwad.owasp.org",
       "slug": "client-side-vwad-app-not-found-evidence",
       "shipped_at": "2026-07-17T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-command-execution-lesson-evidence",
+      "shipped_at": "2026-07-17T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xml-bomb-lesson-evidence",
+      "shipped_at": "2026-07-17T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-03-exercise-evidence",
+      "shipped_at": "2026-07-17T18:15:00.000Z"
     }
   ]
 }

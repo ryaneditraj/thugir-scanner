@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T17:10:32.319Z",
-  "total": 411,
-  "uniqueSlugs": 411,
+  "generatedAt": "2026-07-17T18:03:36.667Z",
+  "total": 414,
+  "uniqueSlugs": 414,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 393,
+    "generic": 396,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 343,
+    "deep": 346,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 28,
     "Security misconfiguration": 31,
     "Broken authentication": 25,
-    "Injection": 73,
+    "Injection": 76,
     "Cross-site scripting": 50,
     "general": 18,
     "SSRF": 1,
@@ -141,6 +141,7 @@
     "client-side-hacksec-evidence",
     "client-side-hacksplaining-broken-access-control-lesson-evidence",
     "client-side-hacksplaining-clickjacking-lesson-evidence",
+    "client-side-hacksplaining-command-execution-lesson-evidence",
     "client-side-hacksplaining-csrf-lesson-evidence",
     "client-side-hacksplaining-dns-poisoning-lesson-evidence",
     "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
@@ -155,6 +156,7 @@
     "client-side-hacksplaining-sql-injection-lesson-evidence",
     "client-side-hacksplaining-ssl-stripping-lesson-evidence",
     "client-side-hacksplaining-ssrf-lesson-evidence",
+    "client-side-hacksplaining-xml-bomb-lesson-evidence",
     "client-side-hacksplaining-xss-dom-lesson-evidence",
     "client-side-hacksplaining-xss-reflected-lesson-evidence",
     "client-side-hacksplaining-xss-stored-lesson-evidence",
@@ -224,6 +226,7 @@
     "client-side-pentesterlab-evidence",
     "client-side-pentesterlab-idor-exercise-evidence",
     "client-side-pentesterlab-sqli-02-exercise-evidence",
+    "client-side-pentesterlab-sqli-03-exercise-evidence",
     "client-side-pentesterlab-sqli-exercise-evidence",
     "client-side-pentesterlab-sqli-to-shell-evidence",
     "client-side-pentesterlab-ssrf-exercise-evidence",
