@@ -7798,6 +7798,88 @@ const clientSidePentesterlabIdorExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab Authorization 02 IDOR exercise (pentesterlab.com/exercises/autho_02)
+const CLIENT_PENTESTERLAB_AUTHO02_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Authorization 02 course title",
+    re: /Authorization 02|PentesterLab:\s*Authorization 02/i
+  },
+  {
+    label: "IDOR via incrementing URL parameters lab description",
+    re: /exploit insecure direct object references \(IDOR\) by incrementing URL parameters/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Authorization 02"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/autho[_-]02/i
+  }
+];
+
+const clientSidePentesterlabAutho02ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/autho[_-]02/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_AUTHO02_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Authorization 02 exercise documents IDOR via incrementing URL parameters to access other users' data"
+    }
+  };
+};
+
+// --- PentesterLab XSS 02 case-variation bypass exercise (pentesterlab.com/exercises/xss_02)
+const CLIENT_PENTESTERLAB_XSS02_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 02 course title",
+    re: /XSS 02|PentesterLab:\s*XSS 02/i
+  },
+  {
+    label: "Case variation XSS filter bypass lab description",
+    re: /bypass basic XSS filters[\s\S]{0,120}case variation/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 02"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]02/i
+  }
+];
+
+const clientSidePentesterlabXss02ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]02/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS02_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 02 exercise documents reflected XSS filter bypass via case variation techniques"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -8959,6 +9041,14 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "SHA1 client-side password hash gate",
     re: /calcSHA1|sha1\s*\(|HTMIP/i
+  },
+  {
+    label: "innerHTML leaked into HTML comment",
+    re: /getElementsByTagName\(["']html["']\)\[0\]\.innerHTML[\s\S]{0,220}<!--["']\s*\+\s*value/i
+  },
+  {
+    label: "HTML comment injection Login() popup",
+    re: /function\s+Login\s*\([\s\S]{0,500}<!--["']\s*\+\s*value\s*\+\s*["']-->/i
   }
 ];
 
@@ -8980,7 +9070,10 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
   const note =
     /HTML PROTECT/i.test(corpus) && /calcSHA1|sha1\s*\(/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} ships HTML PROTECT 3 + SHA1 client-side password hash gate — decode unescape payload or reverse obfuscated showlogin() script`
-      : /eval\s*\(\s*unescape/i.test(corpus) && /function\s+koh\s*\(/i.test(corpus)
+      : /getElementsByTagName\(["']html["']\)\[0\]\.innerHTML/i.test(corpus) &&
+          /<!--["']\s*\+\s*value/i.test(corpus)
+        ? `Net-Force level ${level ?? "NN"} leaks escaped page innerHTML into an HTML comment via Login() popup — XSS via comment injection or source review`
+        : /eval\s*\(\s*unescape/i.test(corpus) && /function\s+koh\s*\(/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} ships eval(unescape()) + koh() string-reversal obfuscation — decode nested unescape or reverse koh() output`
       : /eval\s*\(\s*unescape/i.test(corpus)
         ? `Net-Force level ${level ?? "NN"} ships eval(unescape()) obfuscated challenge script — decode percent-encoded payload in page source`
@@ -18239,6 +18332,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,
   clientSidePentesterlabIdorExerciseEvidence,
+  clientSidePentesterlabAutho02ExerciseEvidence,
+  clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,

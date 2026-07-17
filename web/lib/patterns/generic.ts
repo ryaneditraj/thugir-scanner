@@ -2346,6 +2346,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-autho-02-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Authorization 02 IDOR exercise disclosed",
+    description:
+      "PentesterLab Authorization 02 hosted exercise documents Insecure Direct Object Reference via incrementing URL parameters to access other users' data without authorization checks.",
+    impactOneline:
+      "Public IDOR exercise instance reveals predictable URL-parameter object-reference patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabAutho02ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce object-level authorization in production.",
+      steps: [
+        "Require authentication before serving IDOR exercise instances.",
+        "Validate session ownership on every object-access API route.",
+        "Use non-enumerable identifiers instead of sequential URL parameters in production."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Authorization 02-style IDOR labs. Show how to gate labs behind auth and enforce object-level authorization in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-02-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 02 filter-bypass exercise disclosed",
+    description:
+      "PentesterLab XSS 02 hosted exercise documents reflected XSS filter bypass using case variation techniques to trigger alert-box payloads.",
+    impactOneline:
+      "Public XSS exercise instance reveals case-variation filter bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss02ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; encode output and use robust XSS filters in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Use context-aware output encoding instead of blacklist-based tag filters."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 02-style filter-bypass labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
