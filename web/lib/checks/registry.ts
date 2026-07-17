@@ -4269,6 +4269,52 @@ const clientSideHacksplainingXmlBombLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining subdomain squatting lesson (hacksplaining.com/lessons/subdomain-squatting) -------
+const CLIENT_HACKSPLAINING_SUBDOMAIN_SQUATTING_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Subdomain squatting lesson URL",
+    re: /hacksplaining\.com\/lessons\/subdomain-squatting/i
+  },
+  {
+    label: "Subdomain squatting lesson title",
+    re: /Subdomain Squatting — Secure Coding Lesson/i
+  },
+  {
+    label: "Dangling subdomain lesson meta description",
+    re: /steal dangling subdomains to deliver malware|dangling subdomains to deliver malware/i
+  },
+  {
+    label: "Subdomain squatting lesson step nav",
+    re: /lessons\/subdomain-squatting\/(?:checking-the-code|a-real-world-example|finish)/i
+  },
+  {
+    label: "Subdomain takeover attack description",
+    re: /dangling subdomain|subdomain takeover|typosquat/i
+  }
+];
+
+const clientSideHacksplainingSubdomainSquattingLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/subdomain-squatting/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_SUBDOMAIN_SQUATTING_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/subdomain-squatting\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining subdomain squatting lesson documents exploit-then-fix chains where dangling DNS records enable subdomain takeover for malware delivery"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -8288,6 +8334,47 @@ const clientSidePentesterlabAutho05ExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab Authorization 05 exercise documents alternate privilege-escalation vector after direct admin-creation was blocked"
+    }
+  };
+};
+
+// --- PentesterLab Authorization 06 Rails mass-assignment exercise (pentesterlab.com/exercises/autho_06)
+const CLIENT_PENTESTERLAB_AUTHO06_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Authorization 06 course title",
+    re: /Authorization 06|PentesterLab:\s*Authorization 06/i
+  },
+  {
+    label: "Rails mass-assignment organisation_id lab description",
+    re: /mass-assignment vulnerability[\s\S]{0,160}join an organization[\s\S]{0,120}manipulating the\s*(?:<code>)?organisation_id(?:<\/code>)?/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Authorization 06"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/autho[_-]06/i
+  }
+];
+
+const clientSidePentesterlabAutho06ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/autho[_-]06/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_AUTHO06_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Authorization 06 exercise documents Rails mass-assignment via organisation_id to join privileged organizations"
     }
   };
 };
@@ -18910,6 +18997,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabAutho03ExerciseEvidence,
   clientSidePentesterlabAutho04ExerciseEvidence,
   clientSidePentesterlabAutho05ExerciseEvidence,
+  clientSidePentesterlabAutho06ExerciseEvidence,
   clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXss03ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
@@ -19129,6 +19217,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingFileUploadLessonEvidence,
   clientSideHacksplainingCommandExecutionLessonEvidence,
   clientSideHacksplainingXmlBombLessonEvidence,
+  clientSideHacksplainingSubdomainSquattingLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
