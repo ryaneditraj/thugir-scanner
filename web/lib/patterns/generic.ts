@@ -2684,6 +2684,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-net-force-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Net-Force.nl JavaScript auth-bypass challenge disclosed",
+    description:
+      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), or substring password-generation drills for authentication bypass training.",
+    impactOneline:
+      "Public Net-Force challenge pages document trivial client-side credential checks attackers bypass without server validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNetForceChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Net-Force challenges are intentional training — never implement client-side-only authentication in production.",
+      steps: [
+        "Validate credentials server-side on every protected route.",
+        "Do not embed passwords in JavaScript or obfuscated document.write blocks.",
+        "Gate challenge instances behind authenticated lab accounts."
+      ]
+    },
+    fixPrompt:
+      "We host Net-Force-style JS auth-bypass challenges. Show how to move credential checks server-side and isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-brutelogic-xss-gym-evidence",
     platform: "generic",
     category: "Cross-site scripting",

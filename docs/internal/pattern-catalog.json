@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T05:06:55.922Z",
-  "total": 395,
-  "uniqueSlugs": 395,
+  "generatedAt": "2026-07-17T07:36:05.777Z",
+  "total": 396,
+  "uniqueSlugs": 396,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 377,
+    "generic": 378,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 327,
+    "deep": 328,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 25,
     "Security misconfiguration": 31,
-    "Broken authentication": 24,
+    "Broken authentication": 25,
     "Injection": 69,
     "Cross-site scripting": 47,
     "general": 18,
@@ -187,6 +187,7 @@
     "client-side-metasploitable-lab-evidence",
     "client-side-mlastg-evidence",
     "client-side-mutillidae-evidence",
+    "client-side-net-force-challenge-evidence",
     "client-side-net-force-evidence",
     "client-side-nimbus-vault-evidence",
     "client-side-nivara-security-evidence",

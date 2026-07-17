@@ -767,6 +767,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
+  "clientSideNetForceChallengeEvidence",
   "clientSideBrutelogicXssGymEvidence",
   "clientSideBrutelogicXssTestPageEvidence",
   "clientSideKnoxssTestPageEvidence",
@@ -1484,6 +1485,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/24/",
     "/missions/application/25/",
     "/missions/application/26/",
+    "/missions/application/27/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1492,6 +1494,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/14/",
     "/missions/javascript/15/",
     "/missions/javascript/17/",
+    "/missions/javascript/19/",
     "/missions/stego/9/",
     "/missions/stego/10/",
     "/missions/stego/11/",
@@ -1522,7 +1525,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
       /* ignore */
     }
   }
-  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]) {
     try {
       out.add(new URL(`/missions/realistic/${n}/`, origin).toString());
     } catch {
@@ -5283,6 +5286,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://redtiger.labs.overthewire.org/special1.php"
       ]
     : [];
+  const netForcePrioritySeeds = /net-force\.nl/i.test(home.finalUrl)
+    ? [
+        "http://www.net-force.nl/challenge/level101/index.php",
+        "http://www.net-force.nl/challenge/level102/index.php",
+        "http://www.net-force.nl/challenge/level103/index.php",
+        "http://www.net-force.nl/challenge/level104/index.php"
+      ]
+    : [];
   const grpcGoatPrioritySeeds =
     /vwad\.owasp\.org\/app\/grpc-goat|rootxjs\.github\.io\/blog\/grpc-goat/i.test(home.finalUrl)
       ? [
@@ -5376,6 +5387,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
+      ...netForcePrioritySeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,

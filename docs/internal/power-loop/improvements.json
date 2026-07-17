@@ -3821,6 +3821,24 @@
       "slug": "redtiger-level6-priority-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET level6.php POST name=level6login password field blind SQLi drill; redTigerPrioritySeeds adds level6.php; level6.php findings 3 incl redtiger-blind-login-form-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level104 document.write(unescape)+validate(text1,text2,text3,text4) client-side credential check; level101 Right click disabled + JavaScript protection; www.net-force.nl/challenge/level104 findings 3→4 (+client-side-net-force-challenge-evidence); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-priority-seeds-101-104",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: netForcePrioritySeeds prepends level101–104 on net-force.nl scans; queued tail level104 drained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-application-27-javascript-19-realistic-17-18",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/27/ Login Required + /missions/javascript/19/ 404 slot + /missions/realistic/18/ 404 slot; extractHackThisSiteMissionSeeds tail extended; application/27 gains client-side-hts-login-gated-mission-hub-evidence (6 findings); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6818,6 +6836,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-level6-priority-seed",
       "shipped_at": "2026-07-17T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-challenge-evidence",
+      "shipped_at": "2026-07-17T07:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-priority-seeds-101-104",
+      "shipped_at": "2026-07-17T07:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-application-27-javascript-19-realistic-17-18",
+      "shipped_at": "2026-07-17T07:20:00.000Z"
     }
   ]
 }
