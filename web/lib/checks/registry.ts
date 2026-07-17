@@ -8210,6 +8210,88 @@ const clientSidePentesterlabAutho04ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab SQL Injection 06 GBK charset bypass exercise (pentesterlab.com/exercises/sqli_06)
+const CLIENT_PENTESTERLAB_SQLI06_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 06 course title",
+    re: /SQL Injection 06|PentesterLab:\s*SQL Injection 06/i
+  },
+  {
+    label: "GBK charset single-quote escaping lab description",
+    re: /improper escaping of single quotes in a GBK charset connection|different charsets interact[\s\S]{0,120}bypass authentication/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 06"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]06/i
+  }
+];
+
+const clientSidePentesterlabSqli06ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/sqli[_-]06/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI06_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 06 exercise documents GBK charset single-quote escaping bypass for authentication SQLi"
+    }
+  };
+};
+
+// --- PentesterLab Authorization 05 alternate privilege-escalation exercise (pentesterlab.com/exercises/autho_05)
+const CLIENT_PENTESTERLAB_AUTHO05_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Authorization 05 course title",
+    re: /Authorization 05|PentesterLab:\s*Authorization 05/i
+  },
+  {
+    label: "Alternate admin-privilege escalation vector lab description",
+    re: /preventing direct creation of a user with admin privileges[\s\S]{0,160}another vector to achieve the same result/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Authorization 05"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/autho[_-]05/i
+  }
+];
+
+const clientSidePentesterlabAutho05ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/autho[_-]05/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_AUTHO05_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Authorization 05 exercise documents alternate privilege-escalation vector after direct admin-creation was blocked"
+    }
+  };
+};
+
 // --- PentesterLab XSS 03 non-recursive filter bypass exercise (pentesterlab.com/exercises/xss_03)
 const CLIENT_PENTESTERLAB_XSS03_RES: { label: string; re: RegExp }[] = [
   {
@@ -8950,6 +9032,29 @@ const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       levelPath: "special1.php",
       note: "RedTiger special1.php documents SMS exfiltration challenge with solution POST form — non-SQL web hacking drill"
+    }
+  };
+};
+
+// --- RedTiger level10 backtick command-injection login challenge --------------------
+const redtigerCommandInjectionEvidence: Rule = async (ctx) => {
+  if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/level10\.php/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const backtickShell =
+    /!`sh[\s\S]{0,60}\/dev\/tcp\/[0-9.]+\/[0-9]+/i.test(corpus) ||
+    /<!--[\s\S]{0,120}!`sh/i.test(corpus);
+  const level10Login =
+    /name="level10login"/i.test(corpus) &&
+    /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,400}?name="password"/i.test(corpus);
+  if (!backtickShell || !level10Login) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      levelPath: "level10.php",
+      note: "RedTiger level10 documents backtick command-injection login bypass via password field — HTML comment leaks `!`sh` shell payload oracle"
     }
   };
 };
@@ -18796,6 +18901,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqli02ExerciseEvidence,
   clientSidePentesterlabSqli03ExerciseEvidence,
   clientSidePentesterlabSqli04ExerciseEvidence,
+  clientSidePentesterlabSqli06ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,
@@ -18803,6 +18909,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabAutho02ExerciseEvidence,
   clientSidePentesterlabAutho03ExerciseEvidence,
   clientSidePentesterlabAutho04ExerciseEvidence,
+  clientSidePentesterlabAutho05ExerciseEvidence,
   clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXss03ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
@@ -18819,6 +18926,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRedtigerHackitEvidence,
   redtigerClassicLoginSqlEvidence,
   redtigerBlindLoginFormEvidence,
+  redtigerCommandInjectionEvidence,
   redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
   clientSideVulnExposeLabModuleEvidence,

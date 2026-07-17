@@ -2528,6 +2528,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-sqli-06-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentesterLab SQL Injection 06 exercise disclosed",
+    description:
+      "PentesterLab SQL Injection 06 hosted exercise documents GBK charset single-quote escaping bypasses that let attackers defeat authentication SQL injection filters.",
+    impactOneline:
+      "Public SQLi exercise instance reveals charset-encoding bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSqli06ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use UTF-8 and parameterized queries in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use parameterized queries and consistent UTF-8 charset handling in production login handlers.",
+        "Isolate exercise infrastructure from production databases."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SQL Injection 06-style GBK charset bypass labs. Show how to gate labs behind auth and use parameterized queries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-autho-05-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Authorization 05 exercise disclosed",
+    description:
+      "PentesterLab Authorization 05 hosted exercise documents alternate privilege-escalation vectors after direct admin-user creation was blocked.",
+    impactOneline:
+      "Public authorization exercise reveals secondary privilege-escalation patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabAutho05ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce defense-in-depth on privilege changes in production APIs.",
+      steps: [
+        "Require authentication before serving authorization exercise instances.",
+        "Audit all code paths that can grant admin or privileged roles.",
+        "Reject indirect privilege escalation via related-object creation or updates."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Authorization 05-style alternate privilege-escalation labs. Show how to gate labs behind auth and harden role-assignment APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-03-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2706,6 +2758,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host RedTiger blind SQLi login-bypass levels. Show how to isolate training labs and fix authentication SQLi.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "redtiger-command-injection-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "RedTiger command-injection login challenge disclosed",
+    description:
+      "RedTiger Hackit level10 exposes a password-only POST login that evaluates backtick shell metacharacters — HTML comments leak the command-injection payload oracle.",
+    impactOneline:
+      "Public RedTiger level10 page documents OS command injection via login password field for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "redtigerCommandInjectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RedTiger command-injection levels are intentional training — isolate hackit VMs from production.",
+      steps: [
+        "Run RedTiger challenges only on dedicated training VMs.",
+        "Never pass user input to shell interpreters in production authentication handlers.",
+        "Remove sensitive payload oracles from HTML comments on public pages."
+      ]
+    },
+    fixPrompt:
+      "We host RedTiger-style command-injection login levels. Show how to isolate training labs and prevent shell metacharacter evaluation in production.",
     version: 1,
     enabled: true
   },
