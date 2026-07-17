@@ -4723,7 +4723,32 @@
       "url": "https://www.hackthissite.org/missions/javascript/20/",
       "source": "Hack This Site — javascript mission 20 client-side logic bypass challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level107/index.php",
+      "source": "Net-Force — HTML PROTECT 3 + SHA1 client-side auth bypass challenge 107 (Infosec writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level108/index.html",
+      "source": "Net-Force — Drugs are bad client-side JS decode challenge 108 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_02/",
+      "source": "PentesterLab — Authorization 02 IDOR/access-control exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_02/",
+      "source": "PentesterLab — XSS 02 reflected/stored injection exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/29/",
+      "source": "Hack This Site — application mission 29 web exploit challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T11:26:00.000Z"
+  "updated_at": "2026-07-17T12:08:00.000Z"
 }
