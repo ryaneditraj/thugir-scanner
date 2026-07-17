@@ -26,6 +26,19 @@ export async function resolveUserTier(userId: string): Promise<Tier> {
   return "free";
 }
 
+// Count active deep scan credits (not yet consumed).
+export async function countDeepCredits(userId: string): Promise<number> {
+  if (IS_DEV_MODE) return devTier() === "free" ? 0 : 1;
+  const svc = getServiceSupabase();
+  const { count } = await svc
+    .from("entitlements")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .eq("kind", "deep_scan_credit")
+    .eq("status", "active");
+  return count ?? 0;
+}
+
 // Whether a user holds at least one consumable deep scan credit.
 export async function hasDeepCredit(userId: string): Promise<boolean> {
   const svc = getServiceSupabase();
