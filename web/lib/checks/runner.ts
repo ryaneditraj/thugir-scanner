@@ -930,6 +930,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingMalvertisingLessonEvidence",
   "clientSideHacksplainingOpenRedirectsLessonEvidence",
   "clientSideHacksplainingXssDomLessonEvidence",
+  "clientSideHacksplainingSessionFixationLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1465,6 +1466,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/28/",
     "/playlevel/29/",
     "/playlevel/30/",
+    "/playlevel/31/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1478,6 +1480,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/22/",
     "/missions/application/23/",
     "/missions/application/24/",
+    "/missions/application/25/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -5271,6 +5274,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://redtiger.labs.overthewire.org/",
         "http://redtiger.labs.overthewire.org/level1.php",
         "http://redtiger.labs.overthewire.org/level4.php",
+        "http://redtiger.labs.overthewire.org/level5.php",
         "http://redtiger.labs.overthewire.org/special1.php"
       ]
     : [];

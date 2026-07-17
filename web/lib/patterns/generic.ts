@@ -3672,6 +3672,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-session-fixation-lesson-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining session fixation lesson disclosed",
+    description:
+      "Hacksplaining /lessons/session-fixation publishes an interactive exploit-then-fix walkthrough covering attacker-controlled session IDs that enable session hijacking after login.",
+    impactOneline:
+      "Public session fixation lesson pages document pre-auth session ID injection patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingSessionFixationLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining session fixation lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable session fixation lesson instances on private deployments.",
+        "Regenerate session IDs after authentication in production — never copy Hacksplaining weak session handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style session fixation exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",
