@@ -3947,6 +3947,24 @@
       "slug": "client-side-pentesterlab-xss-02-exercise-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: XSS 02 JSON-LD bypass basic XSS filters using case variation on /exercises/xss_02; pentesterlab.com/exercises/xss_02 findings 0→4 incl client-side-pentesterlab-xss-02-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level109-eval-devaluation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://www.net-force.nl/challenge/level109/ Devaluation + eval(thePassChecker) + String.prototype.hash username-dependent decoder; netForcePrioritySeeds adds level109/ (index.php redirects); level109 findings 0→2 incl client-side-net-force-challenge-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-03-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS 03 JSON-LD bypass non-recursive filter for script injection on /exercises/xss_03; pentesterlab.com/exercises/xss_03 findings 0→4 incl client-side-pentesterlab-xss-03-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-03-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Authorization 03 JSON-LD JSON representations expose unmasked sensitive data via content negotiation on /exercises/autho_03; pentesterlab.com/exercises/autho_03 findings 0→4 incl client-side-pentesterlab-autho-03-exercise-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
