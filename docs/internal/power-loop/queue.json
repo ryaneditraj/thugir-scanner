@@ -4923,7 +4923,32 @@
       "url": "https://www.hackthissite.org/missions/application/36/",
       "source": "Hack This Site \u2014 application mission 36 reverse-engineering challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/37/",
+      "source": "Hack This Site \u2014 application mission 37 reverse-engineering challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level116/index.php",
+      "source": "Net-Force \u2014 web exploit training challenge level 116 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/sqli_07/",
+      "source": "PentesterLab \u2014 SQL Injection 07 time-based blind SQLi exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_06/",
+      "source": "PentesterLab \u2014 Authorization 06 horizontal privilege escalation exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/38/",
+      "source": "Hack This Site \u2014 playlevel arcade hub challenge 38 (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T19:05:00.000Z"
+  "updated_at": "2026-07-17T20:33:00.000Z"
 }
