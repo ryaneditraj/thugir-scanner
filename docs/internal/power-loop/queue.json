@@ -4998,7 +4998,32 @@
       "url": "https://www.hackthissite.org/missions/application/39/",
       "source": "Hack This Site — application mission 39 reverse-engineering challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_40/",
+      "source": "PentesterLab — HTTP 40 YAML POST request crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level409/index.php",
+      "source": "Net-Force — session/auth challenge level 409 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/40/",
+      "source": "Hack This Site — application mission 40 challenge hub (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/41/",
+      "source": "Hack This Site — playlevel arcade hub challenge 41 (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_01/",
+      "source": "PentesterLab — Server-Side Template Injection 01 exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T22:08:24.583Z"
+  "updated_at": "2026-07-17T23:05:00.000Z"
 }
