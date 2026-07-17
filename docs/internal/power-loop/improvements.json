@@ -3911,6 +3911,24 @@
       "slug": "redtiger-level7-level10-priority-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET level7.php name=level7login POST password blind login form; redTigerPrioritySeeds adds level7.php + level10.php; level7.php findings 3 incl redtiger-blind-login-form-evidence + client-side-redtiger-hackit-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "client-side-flask-vulnapp-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VulnApp footer + Built-in Vulnerabilities SQLi/XSS + INTENTIONAL VULNERABILITY: XSS No HTML escaping on /comments; web-security-practice-app.onrender.com findings 1→2; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-idor-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Authorization 01 meta Insecure Direct Object Reference + incrementing the ID in the URL on /exercises/autho_01; pentesterlab.com/exercises/autho_01 findings 3→4 incl client-side-pentesterlab-idor-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-mysql-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS and MySQL FILE course JSON-LD XSS-to-SQLi code execution chain on /exercises/xss-and-mysql-file; findings 4→5 incl client-side-pentesterlab-xss-mysql-exercise-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6968,6 +6986,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-level7-level10-priority-seeds",
       "shipped_at": "2026-07-17T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "client-side-flask-vulnapp-evidence",
+      "shipped_at": "2026-07-17T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-idor-exercise-evidence",
+      "shipped_at": "2026-07-17T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-mysql-exercise-evidence",
+      "shipped_at": "2026-07-17T12:10:00.000Z"
     }
   ]
 }

@@ -5523,6 +5523,47 @@ const clientSideBreakTheFlaskEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnApp Flask practice app (web-security-practice-app.onrender.com) ---------------
+const CLIENT_FLASK_VULNAPP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnApp deliberately vulnerable Flask branding",
+    re: /VulnApp|Vulnerable Web App|deliberately vulnerable web application designed for security practice/i
+  },
+  {
+    label: "Built-in SQLi and XSS vulnerability catalog",
+    re: /Built-in Vulnerabilities|Vulnerable login and registration forms with SQL injection|Comment system with XSS vulnerabilities/i
+  },
+  {
+    label: "Intentional XSS HTML comment marker",
+    re: /INTENTIONAL VULNERABILITY:\s*XSS[\s\S]{0,40}No HTML escaping/i
+  },
+  {
+    label: "web-security-practice-app GitHub origin",
+    re: /github\.com\/n00by3te\/web-security-practice-app|web-security-practice-app/i
+  }
+];
+
+const clientSideFlaskVulnappEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FLASK_VULNAPP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (
+    !/VulnApp|web-security-practice-app|n00by3te\/web-security-practice-app/i.test(ctx.combined)
+  )
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnApp Flask practice app documents intentional SQL injection on login/register and stored XSS in the comment system"
+    }
+  };
+};
+
 // --- SecuredAI Lab agentic security playground (mnthnx64.github.io/secured-ai) --------
 const CLIENT_SECURED_AI_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -7712,6 +7753,88 @@ const clientSidePentesterlabSsrfExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab SSRF 01 exercise documents server-side fetch of internal resources via url parameter"
+    }
+  };
+};
+
+// --- PentesterLab Authorization 01 IDOR exercise (pentesterlab.com/exercises/autho_01)
+const CLIENT_PENTESTERLAB_IDOR_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Authorization 01 course title",
+    re: /Authorization 01|PentesterLab:\s*Authorization 01/i
+  },
+  {
+    label: "IDOR via incrementing URL ID lab description",
+    re: /Insecure Direct Object Reference \(IDOR\)|incrementing the ID in the URL[\s\S]{0,120}other users/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Authorization 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/autho[_-]01/i
+  }
+];
+
+const clientSidePentesterlabIdorExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/autho[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_IDOR_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Authorization 01 exercise documents IDOR via predictable URL IDs without authorization checks"
+    }
+  };
+};
+
+// --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
+const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS and MySQL FILE course title",
+    re: /XSS and MySQL FILE|PentesterLab:\s*XSS and MySQL FILE/i
+  },
+  {
+    label: "XSS to admin access and SQLi code execution chain",
+    re: /exploit Cross-Site Scripting \(XSS\)[\s\S]{0,200}SQL injection for code execution|detecting and exploiting XSS[\s\S]{0,120}SQL injection/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS and MySQL FILE"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]and[_-]mysql[_-]file/i
+  }
+];
+
+const clientSidePentesterlabXssMysqlExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]and[_-]mysql[_-]file/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS and MySQL FILE exercise documents XSS-to-admin-access and SQLi-to-code-execution exploitation chain"
     }
   };
 };
@@ -18115,6 +18238,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,
+  clientSidePentesterlabIdorExerciseEvidence,
+  clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
   clientSideVulnexEvidence,
@@ -18344,6 +18469,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRailsgoatEvidence,
   clientSidePcPartsStoreLabEvidence,
   clientSideBreakTheFlaskEvidence,
+  clientSideFlaskVulnappEvidence,
   clientSideGrpcGoatLabEvidence,
   clientSideWebvulnRunnerEvidence,
   clientSideFrontendXssDemoEvidence,
