@@ -3743,6 +3743,30 @@
       "slug": "hts-mission-seed-playlevel-26-application-20-forensic-16",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/26/ + /missions/application/20/ + /missions/forensic/16/ return Login Required arcade/mission gates; www.hackthissite.org queue tail drained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-27-28-application-22-forensic-17",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/28/ Login Required + /missions/application/22/ Login Required + /missions/forensic/17/ 404 mission slot; extractHackThisSiteMissionSeeds tail extended; playlevel/28 gains client-side-hts-playlevel-hub-evidence; application/22 + forensic/17 gain client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-open-redirects-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/open-redirects/start title Open Redirects — Secure Coding Lesson + meta forwards to URLs supplied in a query string + step nav phishing/crafting-the-url/redirecting; hacksplaining.com/lessons/open-redirects/start gains client-side-hacksplaining-open-redirects-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xss-dom-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/xss-dom/start title DOM-based XSS — Secure Coding Lesson + meta URI fragments inject malicious JavaScript + step nav fragments/malicious-intent/hack-achieved; hacksplaining.com/lessons/xss-dom/start gains client-side-hacksplaining-xss-dom-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbountyhunter.com",
+      "slug": "bugbountyhunter-challenge-27-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=27 returns HTTP 302 to homepage — no distinct scenario title or challenge page; oracle deferred until BBH publishes challenge #27"
     }
   ],
   "shipped": [
@@ -6680,6 +6704,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-mission-seed-playlevel-26-application-20-forensic-16",
       "shipped_at": "2026-07-17T00:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-27-28-application-22-forensic-17",
+      "shipped_at": "2026-07-17T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-open-redirects-lesson-evidence",
+      "shipped_at": "2026-07-17T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xss-dom-lesson-evidence",
+      "shipped_at": "2026-07-17T02:20:00.000Z"
     }
   ]
 }
