@@ -6977,6 +6977,44 @@ const clientSideReactRscCveEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Next.js middleware authorization bypass CVE lab (CVE-2025-29927 / UNICORDev) --
+const CLIENT_NEXTJS_MIDDLEWARE_CVE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CVE-2025-29927 identifier",
+    re: /CVE-2025-29927/i
+  },
+  {
+    label: "Middleware authorization bypass description",
+    re: /bypass authorization checks[\s\S]{0,160}middleware|authorization bypass[\s\S]{0,120}Next\.js/i
+  },
+  {
+    label: "x-middleware-subrequest exploit header",
+    re: /x-middleware-subrequest/i
+  },
+  {
+    label: "UNICORDev exploit repository path",
+    re: /exploit-CVE-2025-29927|UNICORDev\/exploit-CVE-2025-29927/i
+  }
+];
+
+const clientSideNextjsMiddlewareCveEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NEXTJS_MIDDLEWARE_CVE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CVE-2025-29927/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "page documents CVE-2025-29927 Next.js middleware authorization bypass via x-middleware-subrequest header"
+    }
+  };
+};
+
 // --- Chimera WAF honeypot documentation (chimera.atlascrew.dev) -----------------
 const CLIENT_CHIMERA_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -8211,6 +8249,47 @@ const clientSidePentesterlabSqli04ExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab SQL Injection 04 exercise documents login-form SQLi bypassing space filters with tab characters and URL encoding"
+    }
+  };
+};
+
+// --- PentesterLab SQL Injection 05 space/tab keyword-concat bypass (pentesterlab.com/exercises/sqli_05)
+const CLIENT_PENTESTERLAB_SQLI05_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 05 course title",
+    re: /SQL Injection 05|PentesterLab:\s*SQL Injection 05/i
+  },
+  {
+    label: "Space/tab filter bypass via keyword concatenation lab description",
+    re: /blocks spaces and tabulations[\s\S]{0,160}avoiding spaces between keywords|avoiding spaces between keywords[\s\S]{0,120}using\s*(?:<code>)?#(?:<\/code>)?/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 05"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]05/i
+  }
+];
+
+const clientSidePentesterlabSqli05ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/sqli[_-]05/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI05_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 05 exercise documents login-form SQLi bypassing space/tab filters via keyword concatenation and # comment terminators"
     }
   };
 };
@@ -18962,6 +19041,7 @@ export const RULES: Record<string, Rule> = {
   clientSideGraphqlLabEvidence,
   clientSideGraphqlSecurityHubEvidence,
   clientSideReactRscCveEvidence,
+  clientSideNextjsMiddlewareCveEvidence,
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,
   clientSideDomGoatLabEvidence,
@@ -18988,6 +19068,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqli02ExerciseEvidence,
   clientSidePentesterlabSqli03ExerciseEvidence,
   clientSidePentesterlabSqli04ExerciseEvidence,
+  clientSidePentesterlabSqli05ExerciseEvidence,
   clientSidePentesterlabSqli06ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,

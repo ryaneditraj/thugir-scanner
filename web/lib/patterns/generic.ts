@@ -1100,6 +1100,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-nextjs-middleware-cve-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Next.js middleware authorization bypass CVE lab disclosed",
+    description:
+      "HTML or documentation documents CVE-2025-29927 — a Next.js middleware authorization bypass via the x-middleware-subrequest header that skips auth checks enforced in middleware.",
+    impactOneline:
+      "Public CVE-2025-29927 exploit demo advertises a known middleware auth-bypass chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNextjsMiddlewareCveEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js to patched releases; block x-middleware-subrequest from external clients.",
+      steps: [
+        "Upgrade Next.js to 12.3.5, 13.5.9, 14.2.25, or 15.2.3+.",
+        "Strip or reject external requests carrying the x-middleware-subrequest header at the edge.",
+        "Remove public CVE exploit demos from production domains."
+      ]
+    },
+    fixPrompt:
+      "Our site documents CVE-2025-29927 Next.js middleware bypass via x-middleware-subrequest. Show patched Next.js versions and how to block this header at the edge.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-xss-c2-collector-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2316,6 +2342,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab SQL Injection 04-style space-filter bypass labs. Show how to gate labs behind auth and use parameterized queries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-sqli-05-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentesterLab SQL Injection 05 exercise disclosed",
+    description:
+      "PentesterLab SQL Injection 05 hosted exercise documents bypassing login-form space and tab filters by omitting whitespace between SQL keywords and using # comment terminators.",
+    impactOneline:
+      "Public SQLi exercise instance reveals keyword-concatenation filter bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSqli05ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab SQL in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use parameterized queries and reject keyword-stripped payloads in production login handlers.",
+        "Isolate exercise infrastructure from production databases."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SQL Injection 05-style space/tab-filter bypass labs. Show how to gate labs behind auth and use parameterized queries in production.",
     version: 1,
     enabled: true
   },
