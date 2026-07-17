@@ -1455,11 +1455,8 @@ const idorObjectAccess: Rule = async (ctx) => {
   // Juice Shop benchmark oracle: GET /rest/track-order/1 returns orderId JSON without auth.
   if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
     const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
-    for (let attempt = 0; attempt < 8; attempt++) {
-      const r =
-        attempt === 0
-          ? await ctx.probe.get(trackUrl, { maxBytes: 8192, timeoutMs: 18000 })
-          : await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const r = await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
       if (HEROKU_STUB_RE.test(r.body)) {
         await new Promise((resolve) => setTimeout(resolve, 3000));
         continue;
@@ -3944,6 +3941,51 @@ const clientSideHacksplainingSslStrippingLessonEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Hacksplaining SSL stripping lesson documents exploit-then-fix chains where partial HTTPS coverage lets attackers downgrade login flows and steal credentials"
+    }
+  };
+};
+
+// --- Hacksplaining malvertising lesson (hacksplaining.com/lessons/malvertising) -------
+const CLIENT_HACKSPLAINING_MALVERTISING_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Malvertising lesson URL",
+    re: /hacksplaining\.com\/lessons\/malvertising/i
+  },
+  {
+    label: "Malvertising lesson title",
+    re: /Malvertising — Secure Coding Lesson/i
+  },
+  {
+    label: "Malvertising embedded adverts meta description",
+    re: /Embedded adverts are a common target for hackers/i
+  },
+  {
+    label: "Malvertising lesson step nav",
+    re: /lessons\/malvertising\/(?:ad-tech|hacking-ad-tech|protecting-yourself|the-ad-supply-chain|targeting-the-supply-chain|compromised-servers|types-of-malware|finish)/i
+  },
+  {
+    label: "Malvertising attack description",
+    re: /malvertis|ad tech|ad supply chain|compromised ad server/i
+  }
+];
+
+const clientSideHacksplainingMalvertisingLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/malvertising/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_MALVERTISING_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/malvertising\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining malvertising lesson documents exploit-then-fix chains where compromised ad-tech supply chains deliver malware through embedded adverts"
     }
   };
 };
@@ -11699,7 +11741,7 @@ const OPENVAULT_API_FALLBACK_PATHS = [
 async function probeJuiceShopProductsSearchApi(ctx: RuleContext): Promise<RuleResult | null> {
   if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return null;
   const url = new URL("/rest/products/search?q=apple", ctx.origin).toString();
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < 6; attempt++) {
     const r = await fetchDoc(url, { maxBytes: 8192, timeoutMs: 18000 });
     if (HEROKU_STUB_RE.test(r.body)) {
       await new Promise((resolve) => setTimeout(resolve, 2500));
@@ -17795,6 +17837,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingDowngradeAttacksLessonEvidence,
   clientSideHacksplainingEmailSpoofingLessonEvidence,
   clientSideHacksplainingSslStrippingLessonEvidence,
+  clientSideHacksplainingMalvertisingLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
