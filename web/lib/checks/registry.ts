@@ -44,6 +44,12 @@ type Rule = (ctx: RuleContext, options?: Record<string, unknown>) => Promise<Rul
 
 const NEGATIVE: RuleResult = { fired: false, confidence: 0, evidence: {} };
 
+function isVwadAppNotFoundPage(ctx: RuleContext): boolean {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\//i.test(pageUrl)) return false;
+  return /page-404|Page not found\.|class="page-404"/i.test(ctx.home.body);
+}
+
 function extractSupabase(ctx: RuleContext) {
   return extractSupabaseFromText(ctx.combined);
 }
@@ -9226,12 +9232,47 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+const clientSideNetForceOfflineChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanUrl = ctx.scanUrl || pageUrl;
+  const requested = scanUrl.match(/net-force\.nl\/challenge\/level(\d+)/i);
+  const onHomepage = /^https?:\/\/(?:www\.)?net-force\.nl\/?$/i.test(pageUrl);
+  if (!requested || !onHomepage) return NEGATIVE;
+  if (!/Welcome to Net-Force|Online community with hacking challenges/i.test(ctx.home.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      level: requested[1],
+      note: `Net-Force level ${requested[1]} redirects to homepage — challenge instance offline or decommissioned`
+    }
+  };
+};
+
+const clientSideVwadAppNotFoundEvidence: Rule = async (ctx) => {
+  if (!isVwadAppNotFoundPage(ctx)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const appSlug = pageUrl.match(/vwad\.owasp\.org\/app\/([^/?#]+)/i)?.[1];
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      appSlug,
+      note: `OWASP VWAD app listing /app/${appSlug ?? "unknown"}/ returns 404 — training instance removed or URL stale`
+    }
+  };
+};
+
 const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const scanUrl = ctx.scanUrl || pageUrl;
+  if (/net-force\.nl\/challenge\/level\d+/i.test(scanUrl) && /^https?:\/\/(?:www\.)?net-force\.nl\/?$/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const onChallengePage = /net-force\.nl\/challenge\/level\d+/i.test(pageUrl);
+  const corpus = onChallengePage ? `${ctx.combined}\n${pageUrl}` : `${ctx.home.body}\n${pageUrl}`;
   const onChallengeInstance =
-    /net-force\.nl\/challenge\/level\d+/i.test(pageUrl) ||
-    /Net-Force Challenge\s*-\s*\d+/i.test(corpus);
+    onChallengePage || /Net-Force Challenge\s*-\s*\d+/i.test(ctx.home.body);
   if (!/net-force\.nl/i.test(pageUrl) || !onChallengeInstance) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_NET_FORCE_CHALLENGE_RES) {
@@ -13140,9 +13181,12 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
+  if (isVwadAppNotFoundPage(ctx)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = /vwad\.owasp\.org\/app\//i.test(pageUrl) ? ctx.home.body : ctx.combined;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_API_SECURITY_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length === 0) return NEGATIVE;
@@ -13327,13 +13371,16 @@ const CLIENT_WEBGOAT_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideWebgoatEvidence: Rule = async (ctx) => {
+  if (isVwadAppNotFoundPage(ctx)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = /vwad\.owasp\.org\/app\//i.test(pageUrl) ? ctx.home.body : ctx.combined;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBGOAT_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/WebGoat|webgoat/i.test(ctx.combined)) return NEGATIVE;
+  if (!/WebGoat|webgoat/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.91 : 0.88,
@@ -18561,6 +18608,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
+  clientSideNetForceOfflineChallengeEvidence,
   clientSideNetForceChallengeEvidence,
   clientSideVulnlabVerbose404Evidence,
   clientSideBrutelogicXssGymEvidence,
@@ -18706,6 +18754,7 @@ export const RULES: Record<string, Rule> = {
   clientSideAtlasCrewHubEvidence,
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
+  clientSideVwadAppNotFoundEvidence,
   clientSideVwadWackopickoEvidence,
   clientSideVwadBodgeitEvidence,
   clientSideVwadSecurityShepherdEvidence,

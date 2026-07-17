@@ -4001,6 +4001,24 @@
       "slug": "client-side-maestro-rag-sqli-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SQL Injection via Memory Queries + Unsanitized user input in memory search queries on MAESTRO ElizaOS demo; maestro-agentic findings 3→4 incl client-side-maestro-rag-sqli-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-33-playlevel-36-mission-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/33/ + /playlevel/36/ Login Required hubs; extractHackThisSiteMissionSeeds tail extended; application/33 + playlevel/36 findings 6 incl login-gated/playlevel hub evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-offline-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level111/index.php 301 → homepage; clientSideNetForceChallengeEvidence no longer false-positives from homepage crawl; level111 findings swap auth-bypass FP for offline-oracle slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-app-not-found-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /app/voice-goat/ returns VWAD page-404 shell; guards webgoat/api-security rules on VWAD app pages; voice-goat findings 5→4 (removes webgoat/api-security FPs, adds vwad-app-not-found); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7118,6 +7136,21 @@
       "source": "discovery:maestro-agentic-ai-security-demo-mon.netlify.app",
       "slug": "client-side-maestro-rag-sqli-evidence",
       "shipped_at": "2026-07-17T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-33-playlevel-36-mission-seeds",
+      "shipped_at": "2026-07-17T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-offline-challenge-evidence",
+      "shipped_at": "2026-07-17T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-app-not-found-evidence",
+      "shipped_at": "2026-07-17T17:10:00.000Z"
     }
   ]
 }
