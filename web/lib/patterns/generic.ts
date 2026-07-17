@@ -2268,6 +2268,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-sqli-03-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentesterLab SQL Injection 03 exercise disclosed",
+    description:
+      "PentesterLab SQL Injection 03 hosted exercise documents bypassing single-row result checks using LIMIT keyword payloads against injectable login queries.",
+    impactOneline:
+      "Public SQLi exercise instance reveals LIMIT-based row-count bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSqli03ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab SQL in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use parameterized queries and row-count validation in production login handlers.",
+        "Isolate exercise infrastructure from production databases."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SQL Injection 03-style LIMIT bypass labs. Show how to gate labs behind auth and use parameterized queries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4006,6 +4032,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style file upload exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-command-execution-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Hacksplaining command execution lesson disclosed",
+    description:
+      "Hacksplaining /lessons/command-execution publishes an interactive exploit-then-fix walkthrough covering unsanitized OS command string construction and shell injection.",
+    impactOneline:
+      "Public command execution lesson pages document OS command injection patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingCommandExecutionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining command execution lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable command execution lesson instances on private deployments.",
+        "Avoid shelling out with user input in production — never copy Hacksplaining vulnerable OS call handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style command execution exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-xml-bomb-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Hacksplaining XML bomb lesson disclosed",
+    description:
+      "Hacksplaining /lessons/xml-bombs publishes an interactive exploit-then-fix walkthrough covering recursive XML entity expansion and billion-laughs denial-of-service attacks.",
+    impactOneline:
+      "Public XML bomb lesson pages document entity-expansion DoS patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingXmlBombLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining XML bomb lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable XML bomb lesson instances on private deployments.",
+        "Disable dangerous XML entity expansion in production parsers — never copy Hacksplaining vulnerable XML handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style XML bomb exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
     version: 1,
     enabled: true
   },
