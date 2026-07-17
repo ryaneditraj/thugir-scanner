@@ -8737,6 +8737,64 @@ const clientSideNetForceEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Net-Force.nl individual challenge instances (level101–104 JS auth bypass labs) -----
+const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Net-Force challenge page title",
+    re: /Net-Force Challenge\s*-\s*\d+/i
+  },
+  {
+    label: "TRAINING challenge marker",
+    re: /This is a TRAINING challenge|part of the basic training/i
+  },
+  {
+    label: "JavaScript client-side auth validate()",
+    re: /function\s+validate\s*\([^)]*\)[\s\S]{0,220}==[\s\S]{0,120}alert\s*\(/i
+  },
+  {
+    label: "Obfuscated document.write login form",
+    re: /document\.write\s*\(\s*unescape\s*\(/i
+  },
+  {
+    label: "Client-side password substring generator",
+    re: /password\s*=\s*password\s*\+\s*\w+\.substring\s*\(/i
+  },
+  {
+    label: "Right-click disable JS protection",
+    re: /Right click disabled|protected with a simple JavaScript protection/i
+  }
+];
+
+const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/net-force\.nl\/challenge\/level\d+/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NET_FORCE_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  const level = pageUrl.match(/level(\d+)/i)?.[1];
+  const note =
+    /validate\s*\(/i.test(corpus) && /document\.write\s*\(\s*unescape/i.test(corpus)
+      ? `Net-Force level ${level ?? "NN"} exposes obfuscated client-side validate() credential check — bypass by reading embedded username/password literals`
+      : /password\s*=\s*password\s*\+\s*\w+\.substring/i.test(corpus)
+        ? `Net-Force level ${level ?? "NN"} builds password via substring() in client JavaScript — credential oracle in page source`
+        : /Right click disabled|JavaScript protection/i.test(corpus)
+          ? `Net-Force level ${level ?? "NN"} uses trivial JavaScript protection (right-click disable / secret.html) — client-side auth bypass training lab`
+          : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      level,
+      markers: hits.slice(0, 4),
+      note
+    }
+  };
+};
+
 // --- Brute Logic XSS Gym (x55.is/brutelogic/gym.php) --------------------------------
 const CLIENT_BRUTELOGIC_XSS_GYM_RES: { label: string; re: RegExp }[] = [
   {
@@ -17888,6 +17946,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
+  clientSideNetForceChallengeEvidence,
   clientSideBrutelogicXssGymEvidence,
   clientSideBrutelogicXssTestPageEvidence,
   clientSideKnoxssTestPageEvidence,

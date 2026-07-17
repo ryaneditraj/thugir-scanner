@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T06:25:01.010Z",
+  "updated_at": "2026-07-17T07:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 928,
   "discovery_findings": 2953,
-  "improvements_shipped": 599,
-  "last_run": "2026-07-17T06:25:01.010Z",
+  "improvements_shipped": 602,
+  "last_run": "2026-07-17T07:25:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=100; pass2: 6 findings pages=1 probes=225)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings); secret-resend still absent (sensitive_data via vibe-unauthenticated-api-routes)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,13 +50,13 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 96,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "HTS-ETA OWASP a06-a08 + labs/auth hubs; classic TestFire/zero.webappsecurity; HackAdvisor Labs",
-      "improvements_shipped_this_run": 0,
+      "focus": "Net-Force level101–104 JS auth-bypass oracle + HTS mission tail seeds (application/27, javascript/19, realistic/17–18)",
+      "improvements_shipped_this_run": 3,
       "urls_validated": [
         "http://www.net-force.nl/challenge/level104/index.php",
         "https://www.hackthissite.org/missions/stego/14/",
@@ -66,16 +66,16 @@
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) after wake retry — cold-start gap=sensitive_data on pass1",
-      "hack-this-site-eta.vercel.app/owasp/a06-a08: VulnLab OWASP lab markers + SQLi/XSS/IDOR evidence (16 findings each)",
-      "hack-this-site-eta.vercel.app/labs: client-side-vulnlab-academy-evidence hub (15 findings)",
-      "demo.testfire.net: classic banking vuln benchmark markers (6 findings)",
-      "labs.hackadvisor.io: real-world bug-report CTF platform evidence (7 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "net-force.nl/challenge/level104: validate()+document.write(unescape) client-side auth bypass (3→4 findings)",
+      "net-force.nl/challenge/level101: Right-click disable JS protection lab (3 findings incl challenge-evidence)",
+      "hackthissite.org/missions/application/27: login-gated mission hub evidence (6 findings)",
+      "hackthissite.org/missions/realistic/18: 404 mission slot + realistic hub evidence (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only; Heroku cold-start still drops sensitive_data on pass1",
-      "Net-Force level101-104 + HTS stego/14 application/27 realistic/18 javascript/19 queued at tail — not yet drained",
+      "juice-shop.herokuapp.com: secret-resend slug absent — Resend API key lives in scheduled social-media posts, not web crawl surface",
+      "HTS stego/14 + javascript/19: login-gated or 404 — rules fire but challenge payloads require authenticated session",
       "defendtheweb.net: platform on hiatus — goodbye page only"
     ]
   },
@@ -278,6 +278,7 @@
     "openvaultbank.com/api/v1/users": 5,
     "maz4lhacks.vercel.app/posts/reflected-xss": 5,
     "redtiger.labs.overthewire.org/level6.php": 3,
-    "516-hackers.github.io/516-hackers-vuln-playground": 2
+    "516-hackers.github.io/516-hackers-vuln-playground": 2,
+    "www.net-force.nl/challenge/level104/index.php": 4
   }
 }
