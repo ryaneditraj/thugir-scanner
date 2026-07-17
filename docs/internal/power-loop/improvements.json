@@ -3983,6 +3983,24 @@
       "slug": "hts-application-31-mission-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/31/ Login Required + HTS training ground hub; extractHackThisSiteMissionSeeds tail extended; application/31 findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-32-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/32/ Login Required + application mission nav; extractHackThisSiteMissionSeeds tail extended; application/32 findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-sources-catalog-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/sources catalogs location.href/search/hash + document.referrer + postMessage/WebSocket live demos; domgo.at/cxss/sources findings 3→4 incl domgo-sources-catalog-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:maestro-agentic-ai-security-demo-mon.netlify.app",
+      "slug": "client-side-maestro-rag-sqli-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SQL Injection via Memory Queries + Unsanitized user input in memory search queries on MAESTRO ElizaOS demo; maestro-agentic findings 3→4 incl client-side-maestro-rag-sqli-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7085,6 +7103,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-application-31-mission-seed",
       "shipped_at": "2026-07-17T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-32-mission-seed",
+      "shipped_at": "2026-07-17T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-sources-catalog-dom-xss-evidence",
+      "shipped_at": "2026-07-17T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:maestro-agentic-ai-security-demo-mon.netlify.app",
+      "slug": "client-side-maestro-rag-sqli-evidence",
+      "shipped_at": "2026-07-17T16:10:00.000Z"
     }
   ]
 }

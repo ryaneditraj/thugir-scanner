@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T15:04:10.557Z",
-  "total": 407,
-  "uniqueSlugs": 407,
+  "generatedAt": "2026-07-17T16:02:58.468Z",
+  "total": 409,
+  "uniqueSlugs": 409,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 389,
+    "generic": 391,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 339,
+    "deep": 341,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 26,
     "Security misconfiguration": 31,
     "Broken authentication": 25,
-    "Injection": 72,
-    "Cross-site scripting": 49,
+    "Injection": 73,
+    "Cross-site scripting": 50,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -184,6 +184,7 @@
     "client-side-kontra-application-security-evidence",
     "client-side-llm-sec-evidence",
     "client-side-maestro-agentic-ai-evidence",
+    "client-side-maestro-rag-sqli-evidence",
     "client-side-mcp-sherpa-workshop-evidence",
     "client-side-mcp-supply-chain-evidence",
     "client-side-metasploitable-lab-evidence",
@@ -356,6 +357,7 @@
     "domgo-query-param-dom-xss-evidence",
     "domgo-referrer-dom-xss-evidence",
     "domgo-sinks-catalog-dom-xss-evidence",
+    "domgo-sources-catalog-dom-xss-evidence",
     "domgo-websocket-dom-xss-evidence",
     "domgo-window-name-dom-xss-evidence",
     "exposed-config-backup",
