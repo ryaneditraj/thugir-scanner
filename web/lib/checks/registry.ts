@@ -3990,6 +3990,96 @@ const clientSideHacksplainingMalvertisingLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining open redirects lesson (hacksplaining.com/lessons/open-redirects) ---
+const CLIENT_HACKSPLAINING_OPEN_REDIRECTS_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Open redirects lesson URL",
+    re: /hacksplaining\.com\/lessons\/open-redirects/i
+  },
+  {
+    label: "Open redirects lesson title",
+    re: /Open Redirects — Secure Coding Lesson/i
+  },
+  {
+    label: "Open redirects query-string meta description",
+    re: /forwards to URLs supplied in a query string, you could be enabling phishing attacks/i
+  },
+  {
+    label: "Open redirects lesson step nav",
+    re: /lessons\/open-redirects\/(?:phishing|anti-anti-phishing|circle-of-trust|crafting-the-url|encoding-the-url|setting-the-trap|redirecting|finish)/i
+  },
+  {
+    label: "Open redirects phishing attack description",
+    re: /open redirect|phishing attack|redirect.*query string/i
+  }
+];
+
+const clientSideHacksplainingOpenRedirectsLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/open-redirects/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_OPEN_REDIRECTS_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/open-redirects\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining open redirects lesson documents exploit-then-fix chains where attacker-controlled query parameters enable phishing via unvalidated redirects"
+    }
+  };
+};
+
+// --- Hacksplaining DOM XSS lesson (hacksplaining.com/lessons/xss-dom) -----------------
+const CLIENT_HACKSPLAINING_XSS_DOM_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DOM XSS lesson URL",
+    re: /hacksplaining\.com\/lessons\/xss-dom/i
+  },
+  {
+    label: "DOM XSS lesson title",
+    re: /DOM-based XSS — Secure Coding Lesson/i
+  },
+  {
+    label: "DOM XSS URI fragment meta description",
+    re: /URI fragments in your site, you need to ensure they cannot be abused to inject malicious JavaScript/i
+  },
+  {
+    label: "DOM XSS lesson step nav",
+    re: /lessons\/xss-dom\/(?:fragments|client-side-vulnerabilities|malicious-intent|hack-achieved|finish)/i
+  },
+  {
+    label: "DOM XSS fragment sink description",
+    re: /DOM-based XSS|URI fragment|malicious JavaScript/i
+  }
+];
+
+const clientSideHacksplainingXssDomLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/xss-dom/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_XSS_DOM_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/xss-dom\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining DOM XSS lesson documents exploit-then-fix chains where URI fragments are written to dangerous client-side sinks"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17838,6 +17928,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingEmailSpoofingLessonEvidence,
   clientSideHacksplainingSslStrippingLessonEvidence,
   clientSideHacksplainingMalvertisingLessonEvidence,
+  clientSideHacksplainingOpenRedirectsLessonEvidence,
+  clientSideHacksplainingXssDomLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

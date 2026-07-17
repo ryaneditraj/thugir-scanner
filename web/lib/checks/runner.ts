@@ -927,6 +927,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingEmailSpoofingLessonEvidence",
   "clientSideHacksplainingSslStrippingLessonEvidence",
   "clientSideHacksplainingMalvertisingLessonEvidence",
+  "clientSideHacksplainingOpenRedirectsLessonEvidence",
+  "clientSideHacksplainingXssDomLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1458,6 +1460,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/24/",
     "/playlevel/25/",
     "/playlevel/26/",
+    "/playlevel/27/",
+    "/playlevel/28/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1468,6 +1472,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/18/",
     "/missions/application/19/",
     "/missions/application/20/",
+    "/missions/application/22/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1495,7 +1500,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/12/",
     "/missions/forensic/13/",
     "/missions/forensic/15/",
-    "/missions/forensic/16/"
+    "/missions/forensic/16/",
+    "/missions/forensic/17/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());

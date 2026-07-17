@@ -3620,6 +3620,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-open-redirects-lesson-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hacksplaining open redirects lesson disclosed",
+    description:
+      "Hacksplaining /lessons/open-redirects publishes an interactive exploit-then-fix walkthrough covering unvalidated redirect parameters that enable phishing attacks.",
+    impactOneline:
+      "Public open-redirect lesson pages document query-string redirect bypass patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingOpenRedirectsLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining open redirect lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable open-redirect lesson instances on private deployments.",
+        "Validate redirect targets against an allowlist in production — never copy Hacksplaining unvalidated redirect handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style open redirect exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-xss-dom-lesson-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Hacksplaining DOM XSS lesson disclosed",
+    description:
+      "Hacksplaining /lessons/xss-dom publishes an interactive exploit-then-fix walkthrough covering URI fragment sinks that inject malicious JavaScript.",
+    impactOneline:
+      "Public DOM XSS lesson pages document fragment-based client-side XSS patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingXssDomLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining DOM XSS lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable DOM XSS lesson instances on private deployments.",
+        "Sanitize or avoid writing URI fragments to dangerous sinks in production — never copy Hacksplaining vulnerable fragment handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style DOM XSS exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",
