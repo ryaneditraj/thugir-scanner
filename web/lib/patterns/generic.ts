@@ -2690,7 +2690,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "Net-Force.nl JavaScript auth-bypass challenge disclosed",
     description:
-      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), or substring password-generation drills for authentication bypass training.",
+      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, or substring password-generation drills for authentication bypass training.",
     impactOneline:
       "Public Net-Force challenge pages document trivial client-side credential checks attackers bypass without server validation.",
     detectorKind: "rule_ref",
@@ -2706,6 +2706,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host Net-Force-style JS auth-bypass challenges. Show how to move credential checks server-side and isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-verbose-404-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnLab verbose 404 credential leak disclosed",
+    description:
+      "VulnLab Academy ships verbose 404 error pages that echo stack traces with DB_PASS and NODE_ENV secrets for sensitive-data-in-errors training.",
+    impactOneline:
+      "Public VulnLab verbose 404 labs leak database credentials and stack traces in HTML error responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabVerbose404Evidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return stack traces or secrets in production error pages.",
+      steps: [
+        "Return generic 404 pages without internal paths or environment variables.",
+        "Log detailed errors server-side only.",
+        "Redact DB_PASS and other secrets from all client-visible diagnostics."
+      ]
+    },
+    fixPrompt:
+      "Our VulnLab verbose 404 lab leaks DB_PASS in HTML. Show how to return generic errors and redact secrets in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctfd-platform-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "CTFd open-source CTF platform disclosed",
+    description:
+      "CTFd deployments (hackerfire.com and ctfd.io instances) expose challenge catalogs, registration, and admin setup prompts without production isolation.",
+    impactOneline:
+      "Public CTFd instances document challenge infrastructure attackers use to enumerate training targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfdPlatformEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate CTFd challenge platforms from production networks and harden admin setup.",
+      steps: [
+        "Run CTFd on dedicated training infrastructure with network isolation.",
+        "Require strong admin passwords and disable public registration when not needed.",
+        "Do not reuse CTF challenge credentials in production systems."
+      ]
+    },
+    fixPrompt:
+      "We host a CTFd challenge platform. Show how to isolate it from production and harden admin registration.",
     version: 1,
     enabled: true
   },
