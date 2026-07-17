@@ -1999,7 +1999,7 @@ function extractPostSqlForms(html: string, origin: string): { action: string; fi
   let m: RegExpExecArray | null;
   while ((m = re.exec(html)) && forms.length < 6) {
     const block = m[0];
-    if (!/name\s*=\s*["'](?:username|user|email)["']/i.test(block)) continue;
+    if (!/name\s*=\s*["'](?:username|user|email|login)["']/i.test(block)) continue;
     if (!/name\s*=\s*["'](?:password|pass)["']/i.test(block)) continue;
     const action = m[1] || "";
     const fields: string[] = [];
@@ -2080,6 +2080,7 @@ async function probePostFormSqlDisclosure(ctx: RuleContext): Promise<RuleResult 
       password: "x",
       user: POST_SQLI_USERNAME,
       email: POST_SQLI_USERNAME,
+      login: POST_SQLI_USERNAME,
       pass: "x"
     }).toString();
     const r = await ctx.probe.get(action, {
@@ -7634,6 +7635,47 @@ const clientSidePentesterlabSqliExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab hosted SQL Injection 02 exercise (pentesterlab.com/exercises/sqli_02)
+const CLIENT_PENTESTERLAB_SQLI02_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 02 course title",
+    re: /SQL Injection 02|PentesterLab:\s*SQL Injection 02/i
+  },
+  {
+    label: "Double-quoted string SQLi login lab description",
+    re: /SQL injection vulnerability in a login form that uses double quotes|injecting a payload that returns at least one record/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 02"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]02/i
+  }
+];
+
+const clientSidePentesterlabSqli02ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/sqli[_-]02/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI02_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 02 exercise documents login-form SQLi with double-quoted string payloads"
+    }
+  };
+};
+
 // --- PentesterLab hosted XSS 01 exercise (pentesterlab.com/exercises/xss_01)
 const CLIENT_PENTESTERLAB_XSS_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -9143,6 +9185,18 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Custom String.prototype.hash password gate",
     re: /String\.prototype\.hash\s*=\s*function|thePassChecker\.hash\s*\(\s*\)/i
+  },
+  {
+    label: "UNION SQL injection challenge title",
+    re: /UNION makes FORCE|Exploit this login system/i
+  },
+  {
+    label: "Challenge source.txt disclosure link",
+    re: /href\s*=\s*["']source\.txt["']/i
+  },
+  {
+    label: "mysql_db_query string-concat login SQL",
+    re: /mysql_db_query[\s\S]{0,120}WHERE\s+user\s*=\s*['"]\$login['"]/i
   }
 ];
 
@@ -9162,7 +9216,12 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
   const level =
     pageUrl.match(/level(\d+)/i)?.[1] ?? corpus.match(/Net-Force Challenge\s*-\s*(\d+)/i)?.[1];
   const note =
-    /HTML PROTECT/i.test(corpus) && /calcSHA1|sha1\s*\(/i.test(corpus)
+    /mysql_db_query/i.test(corpus) && /WHERE\s+user\s*=\s*['"]\$login['"]/i.test(corpus)
+      ? `Net-Force level ${level ?? "NN"} exposes mysql_db_query login SQL with unescaped $login — UNION/injection via POST login field (see source.txt)`
+      : /UNION makes FORCE|Exploit this login system/i.test(corpus) &&
+          /href\s*=\s*["']source\.txt["']/i.test(corpus)
+        ? `Net-Force level ${level ?? "NN"} UNION SQL injection login challenge ships source.txt with string-concat SELECT — probe POST login field`
+        : /HTML PROTECT/i.test(corpus) && /calcSHA1|sha1\s*\(/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} ships HTML PROTECT 3 + SHA1 client-side password hash gate — decode unescape payload or reverse obfuscated showlogin() script`
       : /getElementsByTagName\(["']html["']\)\[0\]\.innerHTML/i.test(corpus) &&
           /<!--["']\s*\+\s*value/i.test(corpus)
@@ -18424,6 +18483,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterLabEvidence,
   clientSidePentesterlabWebForPentesterEvidence,
   clientSidePentesterlabSqliExerciseEvidence,
+  clientSidePentesterlabSqli02ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,

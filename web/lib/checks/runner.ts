@@ -748,6 +748,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterLabEvidence",
   "clientSidePentesterlabWebForPentesterEvidence",
   "clientSidePentesterlabSqliExerciseEvidence",
+  "clientSidePentesterlabSqli02ExerciseEvidence",
   "clientSidePentesterlabXssExerciseEvidence",
   "clientSidePentesterlabSqliToShellEvidence",
   "clientSidePentesterlabSsrfExerciseEvidence",
@@ -1267,6 +1268,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/web_for_pentester",
     "/exercises/sqli_01",
     "/exercises/sqli-01",
+    "/exercises/sqli_02",
+    "/exercises/sqli-02",
     "/exercises/xss_01",
     "/exercises/xss-01",
     "/exercises/from_sqli_to_shell",
@@ -1514,6 +1517,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/28/",
     "/missions/application/29/",
     "/missions/application/30/",
+    "/missions/application/31/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -3596,6 +3600,14 @@ function extractNetForceChallengeSeeds(html: string, pageUrl: string): string[] 
       /* ignore */
     }
   }
+  const sourceRe = /href\s*=\s*["']([^"']*source\.txt)["']/gi;
+  while ((m = sourceRe.exec(html)) && out.size < 12) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   return [...out];
 }
 
@@ -5332,7 +5344,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level106/index.php",
         "http://www.net-force.nl/challenge/level107/index.php",
         "http://www.net-force.nl/challenge/level108/index.html",
-        "https://www.net-force.nl/challenge/level109/"
+        "https://www.net-force.nl/challenge/level109/",
+        "http://www.net-force.nl/challenge/level405/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
