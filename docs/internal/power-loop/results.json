@@ -1,99 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-16T08:38:45.390Z",
-      "url": "https://chal11.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wizer-ctf-evidence",
-          "title": "Wizer developer security CTF disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 301,
-      "status": "ok",
-      "scanned_at": "2026-07-16T08:38:45.390Z"
-    },
-    {
-      "run_id": "2026-07-16T08:38:54.859Z",
-      "url": "https://chal14.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wizer-ctf-evidence",
-          "title": "Wizer developer security CTF disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 312,
-      "status": "ok",
-      "scanned_at": "2026-07-16T08:38:54.859Z"
-    },
-    {
       "run_id": "2026-07-16T08:38:59.336Z",
       "url": "https://chal15.vercel.app/",
       "auth": "public_demo",
@@ -10307,6 +10214,101 @@
       "probes_run": 259,
       "status": "ok",
       "scanned_at": "2026-07-17T10:48:53.467Z"
+    },
+    {
+      "run_id": "2026-07-17T11:04:30.337Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 63,
+      "status": "ok",
+      "scanned_at": "2026-07-17T11:04:30.337Z"
+    },
+    {
+      "run_id": "2026-07-17T11:22:33.683Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 259,
+      "status": "ok",
+      "scanned_at": "2026-07-17T11:22:33.683Z"
     }
   ],
   "teacher_delta_runs": [
@@ -12186,6 +12188,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T07:10:00.000Z"
+    },
+    {
+      "run_id": "2026-07-17T11:25:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 2 findings gap=xss,sqli,auth_bypass pages=1 probes=63; pass2: 7 findings pages=6 probes=259)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available. Cold-start miss signal: pass1 gap=xss,sqli,auth_bypass (only misconfig+sensitive_data via vibe-unauthenticated-api-routes); pass2 retry restored 6/6. secret-resend slug absent.",
+      "scanned_at": "2026-07-17T11:25:00.000Z"
     }
   ]
 }
