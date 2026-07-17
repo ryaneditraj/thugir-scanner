@@ -3803,6 +3803,24 @@
       "slug": "redtiger-level5-priority-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET level5.php POST name=level5login password field blind SQLi drill; redTigerPrioritySeeds adds level5.php; level5.php findings 3 incl redtiger-blind-login-form-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-32-application-26-stego-16",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/32/ Login Required + /missions/application/26/ Login Required + /missions/stego/16/; extractHackThisSiteMissionSeeds tail extended; playlevel/32 gains client-side-hts-playlevel-hub-evidence (6 findings); application/26 gains client-side-hts-login-gated-mission-hub-evidence (6 findings); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-file-upload-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/file-upload/start title File Upload Vulnerabilities — Secure Coding Lesson + meta File uploads are an easy way for an attacker to inject malicious code; hacksplaining.com/lessons/file-upload/start findings 7 incl client-side-hacksplaining-file-upload-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level6-priority-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level6.php POST name=level6login password field blind SQLi drill; redTigerPrioritySeeds adds level6.php; level6.php findings 3 incl redtiger-blind-login-form-evidence; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6785,6 +6803,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-level5-priority-seed",
       "shipped_at": "2026-07-17T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-32-application-26-stego-16",
+      "shipped_at": "2026-07-17T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-file-upload-lesson-evidence",
+      "shipped_at": "2026-07-17T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level6-priority-seed",
+      "shipped_at": "2026-07-17T05:10:00.000Z"
     }
   ]
 }

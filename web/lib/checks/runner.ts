@@ -931,6 +931,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingOpenRedirectsLessonEvidence",
   "clientSideHacksplainingXssDomLessonEvidence",
   "clientSideHacksplainingSessionFixationLessonEvidence",
+  "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1467,6 +1468,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/29/",
     "/playlevel/30/",
     "/playlevel/31/",
+    "/playlevel/32/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1481,6 +1483,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/23/",
     "/missions/application/24/",
     "/missions/application/25/",
+    "/missions/application/26/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1496,6 +1499,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/stego/13/",
     "/missions/stego/14/",
     "/missions/stego/15/",
+    "/missions/stego/16/",
     "/missions/programming/8/",
     "/missions/programming/12/",
     "/missions/programming/9/",
@@ -5275,6 +5279,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://redtiger.labs.overthewire.org/level1.php",
         "http://redtiger.labs.overthewire.org/level4.php",
         "http://redtiger.labs.overthewire.org/level5.php",
+        "http://redtiger.labs.overthewire.org/level6.php",
         "http://redtiger.labs.overthewire.org/special1.php"
       ]
     : [];
