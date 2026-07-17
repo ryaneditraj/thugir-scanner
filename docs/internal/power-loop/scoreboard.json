@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T20:35:00.000Z",
+  "updated_at": "2026-07-17T20:36:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 953,
-  "total_findings": 4555,
+  "total_sites_scanned": 960,
+  "total_findings": 4593,
   "critical_findings": 29,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 983,
-  "discovery_findings": 3363,
+  "discovery_urls_added": 988,
+  "discovery_findings": 3401,
   "improvements_shipped": 635,
-  "last_run": "2026-07-17T20:35:00.000Z",
+  "last_run": "2026-07-17T20:36:00.000Z",
   "last_run_summary": {
     "hour_utc": "20:00",
     "benchmark": {
@@ -31,7 +31,9 @@
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (6 findings on cold Heroku pass)",
+      "first_pass_recall": "5/6",
+      "first_pass_gap": ["sensitive_data"],
+      "note": "Heroku cold-start degraded first pass (gap=sensitive_data); wake retry recovered 6/6 (6 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +52,30 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+      "urls_added": 5,
+      "urls_scanned": 10,
+      "findings": 50,
       "urls_queued": [
-        "https://www.hackthissite.org/playlevel/37/",
-        "http://www.net-force.nl/challenge/level114/index.php",
-        "https://www.hackthissite.org/missions/application/36/"
+        "https://www.hackthissite.org/missions/application/37/",
+        "http://www.net-force.nl/challenge/level116/index.php",
+        "https://pentesterlab.com/exercises/sqli_07/",
+        "https://pentesterlab.com/exercises/autho_06/",
+        "https://www.hackthissite.org/playlevel/38/"
       ],
-      "focus": "PentesterLab sqli_06/autho_05 GBK SQLi + alternate privilege escalation; RedTiger level10 command-injection oracle; HTS application/36 seed",
+      "focus": "PentesterLab sqli_06/autho_05 + RedTiger level10; queue drain WebVulnsGuide, frontend-security-examples, SQLInjection WASM, demo.weblock.ru, frontend-xss-demo, xss-victim, DevSecOps-Hacking-Lab",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku wake retry (first-pass gap=sensitive_data)",
       "pentesterlab.com/exercises/sqli_06: GBK charset single-quote SQLi lab (3→4 findings)",
       "pentesterlab.com/exercises/autho_05: alternate admin-privilege escalation vector (3→4 findings)",
-      "redtiger.labs.overthewire.org/level10.php: backtick command-injection login oracle (3→4 findings)"
+      "demo.weblock.ru: 8 findings — banking + AI prompt-injection + OpenAPI docs exposed",
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: SIEM/WAF/IDS attack scenarios (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "www.hackthissite.org/playlevel/37: login-gated — client-side-hts-playlevel-hub-evidence already fires (6 findings)",
-      "www.hackthissite.org/missions/application/36: login-gated — client-side-hts-login-gated-mission-hub-evidence fires (6 findings)",
+      "juice-shop.herokuapp.com: sensitive_data only via vibe-unauthenticated-api-routes on cold-start shallow crawl",
+      "HTS app/37 + playlevel/38 + PentesterLab sqli_07/autho_06 + Net-Force 116 queued at tail — pending drain",
       "www.net-force.nl/challenge/level114: offline redirect — client-side-net-force-offline-challenge-evidence fires (4 findings)",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
     ]
