@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T11:22:51.159Z",
+  "updated_at": "2026-07-17T11:27:16.446Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 877,
-  "total_findings": 4185,
+  "total_sites_scanned": 882,
+  "total_findings": 4204,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 941,
-  "discovery_findings": 3052,
+  "discovery_urls_added": 946,
+  "discovery_findings": 3071,
   "improvements_shipped": 608,
-  "last_run": "2026-07-17T11:22:51.159Z",
+  "last_run": "2026-07-17T11:27:16.446Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — staging oracle 7 findings recall maintained (primary heroku 503 cold-start)",
+      "note": "6/6 recall after Heroku wake retry — pass1 degraded (2 findings, gap=xss,sqli,auth_bypass); pass2 merged 7 findings",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,44 +50,45 @@
       "primary_miss_signal": {
         "juice-shop": {
           "categories_expected": 6,
-          "categories_hit": 1,
+          "categories_hit": 2,
           "gap": [
             "xss",
             "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
+            "auth_bypass"
           ],
-          "note": "juice-shop.herokuapp.com Heroku 503 on cold start — highest-value miss signal"
+          "note": "pass1 cold-start: only misconfig+sensitive_data before wake retry — highest-value learning signal"
         }
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 19,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "WrongSecrets hub combined-corpus oracle; Net-Force level107 HTML PROTECT SHA1; HTS playlevel/34 + application/29 + javascript/21 tail seeds",
-      "improvements_shipped_this_run": 3,
+      "focus": "Flask practice app + PentesterLab IDOR/XSS chain + HTS playlevel/34 + VWAD voice-goat oracle",
+      "improvements_shipped_this_run": 0,
       "urls_validated": [
-        "https://wrongsecrets.herokuapp.com/",
-        "http://www.net-force.nl/challenge/level107/index.php",
-        "https://www.hackthissite.org/playlevel/34/"
+        "https://web-security-practice-app.onrender.com/",
+        "https://pentesterlab.com/exercises/autho_01/",
+        "https://pentesterlab.com/exercises/xss-and-mysql-file/",
+        "https://www.hackthissite.org/playlevel/34/",
+        "https://vwad.owasp.org/app/voice-goat/"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com hub: challenge walkthrough evidence now fires from crawled challenge pages (5→6 findings)",
-      "net-force.nl/challenge/level107: HTML PROTECT 3 + SHA1 client-side hash gate markers",
-      "www.hackthissite.org/playlevel/34: login-gated arcade hub evidence (6 findings)"
+      "juice-shop.herokuapp.com: benchmark 6/6 (7 findings) after wake retry — pass1 gap=xss,sqli,auth_bypass",
+      "pentesterlab.com/exercises/autho_01: reflected XSS + sitemap sensitive paths (3 findings)",
+      "pentesterlab.com/exercises/xss-and-mysql-file: XSS + PentesterLab platform evidence (4 findings)",
+      "www.hackthissite.org/playlevel/34: arcade hub + mission evidence (6 findings)",
+      "vwad.owasp.org/app/voice-goat: VWAD + API lab oracle markers (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku dyno sleep causes intermittent 503 — wake retry in power-scan",
-      "damn-vulnerable-startup.fly.dev: DVS Fly.io deploy offline — 55-challenge oracle unreachable",
-      "www.net-force.nl/challenge/level108: redirects to homepage — no challenge instance"
+      "juice-shop.herokuapp.com: Heroku cold-start pass1 misses xss/sqli/auth_bypass — wake retry required",
+      "web-security-practice-app.onrender.com: shallow misconfig-only on 5-page crawl — Flask SQLi/XSS oracles likely behind routes",
+      "vwad.owasp.org/app/voice-goat: VWAD directory page only — voice-goat has no public deploy (Docker-only per Show HN)"
     ]
   },
   "discovery_highlights": {
@@ -297,6 +298,11 @@
     "sam.wizer-ctf.com": 5,
     "chal8.vercel.app": 4,
     "hackerfire.com": 3,
-    "www.hackthissite.org/playlevel/33": 6
+    "www.hackthissite.org/playlevel/33": 6,
+    "web-security-practice-app.onrender.com": 1,
+    "pentesterlab.com/exercises/autho_01": 3,
+    "pentesterlab.com/exercises/xss-and-mysql-file": 4,
+    "www.hackthissite.org/playlevel/34": 6,
+    "vwad.owasp.org/app/voice-goat": 5
   }
 }
