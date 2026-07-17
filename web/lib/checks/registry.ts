@@ -8816,6 +8816,18 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "unescape then document.write challenge HTML",
     re: /unescape\s*\(\s*\w+\s*\)[\s\S]{0,120}document\.write/i
+  },
+  {
+    label: "eval(unescape) obfuscated challenge decoder",
+    re: /eval\s*\(\s*unescape\s*\(/i
+  },
+  {
+    label: "koh() string-reversal challenge decoder",
+    re: /function\s+koh\s*\(/i
+  },
+  {
+    label: "HTML Guardian Net-Force challenge title",
+    re: /HTML Guardian|Net-Force Challenge\s*-\s*10[67]/i
   }
 ];
 
@@ -8831,7 +8843,11 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
   if (hits.length < 2) return NEGATIVE;
   const level = pageUrl.match(/level(\d+)/i)?.[1];
   const note =
-    /JScript\.Encode/i.test(corpus) && /tester\s*\(/i.test(corpus)
+    /eval\s*\(\s*unescape/i.test(corpus) && /function\s+koh\s*\(/i.test(corpus)
+      ? `Net-Force level ${level ?? "NN"} ships eval(unescape()) + koh() string-reversal obfuscation — decode nested unescape or reverse koh() output`
+      : /eval\s*\(\s*unescape/i.test(corpus)
+        ? `Net-Force level ${level ?? "NN"} ships eval(unescape()) obfuscated challenge script — decode percent-encoded payload in page source`
+        : /JScript\.Encode/i.test(corpus) && /tester\s*\(/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} ships JScript.Encode obfuscation with tester() client-side password gate — decode unescape(Words) or reverse encoded script`
       : /validate\s*\(/i.test(corpus) && /document\.write\s*\(\s*unescape/i.test(corpus)
       ? `Net-Force level ${level ?? "NN"} exposes obfuscated client-side validate() credential check — bypass by reading embedded username/password literals`
@@ -10682,6 +10698,53 @@ const clientSideWrongSecretsEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP WrongSecrets CTF challenges hide secrets in source, config, Docker layers, and cloud metadata"
+    }
+  };
+};
+
+// --- OWASP WrongSecrets individual challenge walkthrough pages ------------------
+const CLIENT_WRONGSECRETS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WrongSecrets challenge page path",
+    re: /\/challenge\/challenge-\d+/i
+  },
+  {
+    label: "Find the secret hidden challenge prompt",
+    re: /Find the secret hidden in/i
+  },
+  {
+    label: "Challenge answer submission textbox",
+    re: /data-cy="answer-textbox"|Enter the secret you found/i
+  },
+  {
+    label: "Hardcoded secrets walkthrough",
+    re: /hardcoded secrets|Centralized hardcoded password|grep can be used/i
+  },
+  {
+    label: "Secrets in Git/Docker/cloud focus",
+    re: /secret.*(?:Git|Docker|environment variables|cloud infrastructure)/i
+  }
+];
+
+const clientSideWrongSecretsChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/challenge-\d+/i.test(pageUrl))
+    return NEGATIVE;
+  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WRONGSECRETS_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  const challengeId = pageUrl.match(/challenge-(\d+)/i)?.[1];
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      challengeId,
+      markers: hits.slice(0, 4),
+      note: `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`
     }
   };
 };
@@ -18083,6 +18146,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackAdvisorLabEvidence,
   clientSideAgenticAiCtfEvidence,
   clientSideWrongSecretsEvidence,
+  clientSideWrongSecretsChallengeEvidence,
   clientSideMaestroAgenticAiEvidence,
   clientSideZerodayTrainingEvidence,
   clientSideCtfResearchTeamEvidence,
