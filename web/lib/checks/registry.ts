@@ -4080,6 +4080,51 @@ const clientSideHacksplainingXssDomLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining session fixation lesson (hacksplaining.com/lessons/session-fixation) -
+const CLIENT_HACKSPLAINING_SESSION_FIXATION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Session fixation lesson URL",
+    re: /hacksplaining\.com\/lessons\/session-fixation/i
+  },
+  {
+    label: "Session fixation lesson title",
+    re: /Session Fixation — Secure Coding Lesson/i
+  },
+  {
+    label: "Session fixation session hijack meta description",
+    re: /Insecure treatment of session IDs can leave your users vulnerable to having their session hijacked/i
+  },
+  {
+    label: "Session fixation lesson step nav",
+    re: /lessons\/session-fixation\/(?:consequences-will-never-be-the-same|introducing-mal|crafting-the-url|introducing-vic|setting-the-trap|oh-no|hamster-achieved|all-your-hamsters|finish)/i
+  },
+  {
+    label: "Session fixation attacker-controlled session description",
+    re: /session fixation|session hijack|attacker.*session ID/i
+  }
+];
+
+const clientSideHacksplainingSessionFixationLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/session-fixation/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_SESSION_FIXATION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/session-fixation\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining session fixation lesson documents exploit-then-fix chains where attacker-supplied session IDs enable hijacking after victim login"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -17983,6 +18028,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingMalvertisingLessonEvidence,
   clientSideHacksplainingOpenRedirectsLessonEvidence,
   clientSideHacksplainingXssDomLessonEvidence,
+  clientSideHacksplainingSessionFixationLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
