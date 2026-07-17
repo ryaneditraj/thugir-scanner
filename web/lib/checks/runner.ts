@@ -1477,6 +1477,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/32/",
     "/playlevel/33/",
     "/playlevel/34/",
+    "/playlevel/35/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1495,6 +1496,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/27/",
     "/missions/application/28/",
     "/missions/application/29/",
+    "/missions/application/30/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1506,6 +1508,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/19/",
     "/missions/javascript/20/",
     "/missions/javascript/21/",
+    "/missions/javascript/22/",
     "/missions/stego/9/",
     "/missions/stego/10/",
     "/missions/stego/11/",
@@ -1514,8 +1517,10 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/stego/14/",
     "/missions/stego/15/",
     "/missions/stego/16/",
+    "/missions/stego/17/",
     "/missions/programming/8/",
     "/missions/programming/12/",
+    "/missions/programming/13/",
     "/missions/programming/9/",
     "/missions/programming/10/",
     "/missions/programming/11/",
@@ -1528,7 +1533,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/15/",
     "/missions/forensic/16/",
     "/missions/forensic/17/",
-    "/missions/forensic/18/"
+    "/missions/forensic/18/",
+    "/missions/forensic/19/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -5294,6 +5300,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://redtiger.labs.overthewire.org/level4.php",
         "http://redtiger.labs.overthewire.org/level5.php",
         "http://redtiger.labs.overthewire.org/level6.php",
+        "http://redtiger.labs.overthewire.org/level7.php",
+        "http://redtiger.labs.overthewire.org/level10.php",
         "http://redtiger.labs.overthewire.org/special1.php"
       ]
     : [];
@@ -5314,7 +5322,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-3",
-        "https://wrongsecrets.herokuapp.com/challenge/challenge-4"
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-4",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-7",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-9",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-10"
       ]
     : [];
   const grpcGoatPrioritySeeds =
