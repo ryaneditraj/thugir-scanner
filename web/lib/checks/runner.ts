@@ -1564,6 +1564,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/38/",
     "/missions/application/38/",
     "/playlevel/39/",
+    "/missions/application/39/",
+    "/playlevel/40/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -3654,6 +3656,14 @@ function extractNetForceChallengeSeeds(html: string, pageUrl: string): string[] 
       /* ignore */
     }
   }
+  const challengeChildRe = /href\s*=\s*["']([^"']*(?:login\/|login\.zip|secured\/)[^"']*)["']/gi;
+  while ((m = challengeChildRe.exec(html)) && out.size < 16) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   return [...out];
 }
 
@@ -5395,7 +5405,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level113/index.php",
         "http://www.net-force.nl/challenge/level114/index.php",
         "http://www.net-force.nl/challenge/level116/index.php",
-        "http://www.net-force.nl/challenge/level117/index.php"
+        "http://www.net-force.nl/challenge/level117/index.php",
+        "http://www.net-force.nl/challenge/level406/index.php",
+        "http://www.net-force.nl/challenge/level406/login/",
+        "http://www.net-force.nl/challenge/level407/index.php",
+        "http://www.net-force.nl/challenge/level408/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
