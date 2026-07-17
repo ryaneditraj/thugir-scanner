@@ -4623,7 +4623,32 @@
       "url": "https://www.hackthissite.org/missions/stego/13/",
       "source": "Hack This Site — stego mission 13 steganography challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level104/index.php",
+      "source": "Net-Force — client-side password bypass training challenge 104 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/14/",
+      "source": "Hack This Site — stego mission 14 steganography challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/27/",
+      "source": "Hack This Site — application mission 27 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/18/",
+      "source": "Hack This Site — realistic mission 18 web hacking challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/19/",
+      "source": "Hack This Site — javascript mission 19 client-side logic bypass challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T05:08:38.051Z"
+  "updated_at": "2026-07-17T06:25:00.000Z"
 }

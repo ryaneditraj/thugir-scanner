@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T05:08:38.059Z",
+  "updated_at": "2026-07-17T06:25:01.010Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 846,
-  "total_findings": 3963,
+  "total_sites_scanned": 855,
+  "total_findings": 4065,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 923,
-  "discovery_findings": 2857,
-  "improvements_shipped": 596,
-  "last_run": "2026-07-17T05:07:39.275Z",
+  "discovery_urls_added": 928,
+  "discovery_findings": 2953,
+  "improvements_shipped": 599,
+  "last_run": "2026-07-17T06:25:01.010Z",
   "last_run_summary": {
-    "hour_utc": "05:00",
+    "hour_utc": "06:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 6/6 recall first pass (7 findings pages=6 probes=259); no benchmark misses",
+      "note": "Primary heroku 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=100; pass2: 6 findings pages=1 probes=225)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,38 +50,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 10,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 35,
+      "findings": 96,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Merged parallel runs: Net-Force level101-103 + HTS programming/11 stego/13; HTS playlevel/32 application/26 stego/16; queue drain appsecmaster/redtiger",
+      "focus": "HTS-ETA OWASP a06-a08 + labs/auth hubs; classic TestFire/zero.webappsecurity; HackAdvisor Labs",
       "improvements_shipped_this_run": 0,
       "urls_validated": [
-        "http://www.net-force.nl/challenge/level101/index.php",
-        "http://www.net-force.nl/challenge/level102/index.php",
-        "http://www.net-force.nl/challenge/level103/index.php",
-        "https://www.hackthissite.org/missions/programming/11/",
-        "https://www.hackthissite.org/missions/stego/13/",
-        "https://www.hackthissite.org/playlevel/32/",
-        "https://www.hackthissite.org/missions/application/26/",
-        "https://www.hacksplaining.com/lessons/file-upload/start",
-        "https://www.hackthissite.org/missions/stego/16/"
+        "http://www.net-force.nl/challenge/level104/index.php",
+        "https://www.hackthissite.org/missions/stego/14/",
+        "https://www.hackthissite.org/missions/application/27/",
+        "https://www.hackthissite.org/missions/realistic/18/",
+        "https://www.hackthissite.org/missions/javascript/19/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "appsecmaster.net: client-side-appsec-master-lab-hub-evidence + RSC CVE lab markers (8 findings)",
-      "openvaultbank.com/api/v1/users: client-side-openvault-learn-evidence (5 findings)",
-      "hackthissite.org/playlevel/32: client-side-hts-playlevel-hub-evidence (6 findings)",
-      "hacksplaining.com/lessons/file-upload/start: client-side-hacksplaining-file-upload-lesson-evidence (7 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) after wake retry — cold-start gap=sensitive_data on pass1",
+      "hack-this-site-eta.vercel.app/owasp/a06-a08: VulnLab OWASP lab markers + SQLi/XSS/IDOR evidence (16 findings each)",
+      "hack-this-site-eta.vercel.app/labs: client-side-vulnlab-academy-evidence hub (15 findings)",
+      "demo.testfire.net: classic banking vuln benchmark markers (6 findings)",
+      "labs.hackadvisor.io: real-world bug-report CTF platform evidence (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
-      "516-hackers-vuln-playground: GitHub Pages 404 shell — only weak CSP marker (2 findings)",
-      "Net-Force level101-103 + HTS programming/11 stego/13 queued at tail — not yet drained",
-      "HTS playlevel/33+ and application/27+ not yet published"
+      "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only; Heroku cold-start still drops sensitive_data on pass1",
+      "Net-Force level101-104 + HTS stego/14 application/27 realistic/18 javascript/19 queued at tail — not yet drained",
+      "defendtheweb.net: platform on hiatus — goodbye page only"
     ]
   },
   "discovery_highlights": {
@@ -266,6 +261,11 @@
     "hack-this-site-eta.vercel.app/api-labs": 15,
     "hack-this-site-eta.vercel.app/owasp/a03.html": 15,
     "hack-this-site-eta.vercel.app/owasp/a01.html": 15,
+    "hack-this-site-eta.vercel.app/owasp/a06.html": 16,
+    "hack-this-site-eta.vercel.app/owasp/a07.html": 16,
+    "hack-this-site-eta.vercel.app/owasp/a08.html": 16,
+    "hack-this-site-eta.vercel.app/labs": 15,
+    "hack-this-site-eta.vercel.app/auth": 15,
     "chal7.vercel.app": 6,
     "redtiger.labs.overthewire.org/level4.php": 3,
     "chal1.vercel.app": 4,
