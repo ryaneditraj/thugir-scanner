@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T01:32:29.622Z",
+  "updated_at": "2026-07-17T01:38:45.350Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 801,
-  "total_findings": 3651,
+  "total_sites_scanned": 809,
+  "total_findings": 3687,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 321,
-  "discovery_findings": 2648,
+  "discovery_urls_added": 326,
+  "discovery_findings": 2684,
   "improvements_shipped": 587,
-  "last_run": "2026-07-17T01:32:29.622Z",
+  "last_run": "2026-07-17T01:38:45.350Z",
   "last_run_summary": {
-    "hour_utc": "00:00",
+    "hour_utc": "01:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 7 findings 6/6 recall validated (pages=6 probes=171); apple search oracle added to wake/bootstrap; idorObjectAccess uses direct fetchDoc retries",
+      "note": "Primary heroku 6/6 after 3 Heroku wake retries (pass1–2: 5 findings gap=sensitive_data pages=1; pass3: 6 findings adds vibe-unauthenticated-api-routes)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -44,7 +44,11 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ]
+          ],
+          "pass1_recall": {
+            "categories_hit": 5,
+            "gap": ["sensitive_data"]
+          }
         }
       }
     },
@@ -52,30 +56,42 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 41,
-      "skipped_48h": [
-        "https://wrongsecrets.herokuapp.com/",
-        "https://bwapp.hakhub.net/",
-        "https://brokencrystals.com/",
-        "https://ginandjuice.shop/"
-      ],
+      "findings": 36,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "HTS playlevel/26 + application/20 + forensic/16 tail seeds; Hacksplaining malvertising lesson oracle; Juice Shop apple oracle cold-start hardening",
-      "improvements_shipped_this_run": 3
+      "focus": "HTS playlevel/28 + application/22 + forensic/16–17 tail seeds; BBH challenge #27; AI prompt-injection lab queue drain",
+      "improvements_shipped_this_run": 0,
+      "urls_added_list": [
+        "https://www.hackthissite.org/playlevel/28/",
+        "https://www.hackthissite.org/missions/application/22/",
+        "https://www.hackthissite.org/missions/forensic/16/",
+        "https://www.hackthissite.org/missions/forensic/17/",
+        "https://www.bugbountyhunter.com/challenge?id=27"
+      ],
+      "urls_scanned_list": [
+        "https://ai-prompt-lab.vercel.app/",
+        "https://prompt-injection-playground.vercel.app/",
+        "https://ai-security-demo.vercel.app/",
+        "https://csrf-xss-demo.vercel.app/",
+        "https://idor-website.vercel.app/",
+        "https://vuln-expose.vercel.app/",
+        "http://redtiger.labs.overthewire.org/level3.php",
+        "https://cyberdefenders.org/"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary 7 findings 6/6 recall — apple oracle wake + idor fetchDoc retries",
-      "hacksplaining.com/lessons/malvertising/start: dedicated lesson oracle shipped (6→7 findings)",
-      "www.hackthissite.org: playlevel/26 + application/20 + forensic/16 mission seeds drained",
+      "juice-shop.herokuapp.com: 6/6 recall after Heroku wake — sensitive_data gap on pass1–2 closed by vibe-unauthenticated-api-routes on pass3",
+      "vuln-expose.vercel.app: 7 findings — SQLi + XSS + hardcoded credentials (new queue hit)",
+      "ai-security-demo.vercel.app: stack-database-url-in-bundle critical finding",
       "cyberdefenders.org: 8 findings — blue-team CTF platform evidence",
-      "appsecmaster.net: 8 findings — Docker-based web hacking lab platform"
+      "redtiger.labs.overthewire.org/level3.php: blind SQLi login-bypass oracle"
     ],
     "learning_gaps": [
-      "hacksplaining malvertising + HTS playlevel/26 seeds shipped this run",
-      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes mapping only",
+      "juice-shop pass1–2: sensitive_data miss on cold Heroku wake (pages_crawled=1) — recovered on pass3 only",
+      "secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes mapping only",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline",
-      "bugbountytraining.com/fastfoodhackings: invite-only registration may limit scanner depth"
+      "HTS tail seeds (playlevel/27–28, forensic/16–17) queued but not yet drained — queue scans from head",
+      "VoiceGoat (Show HN): no public deploy — Docker-only"
     ]
   },
   "discovery_highlights": {
@@ -252,6 +268,8 @@
     "angular.testsparker.com": 5,
     "aspnet.testsparker.com": 6,
     "516-hackers.github.io": 2,
-    "owasp-finbot-ctf.org": 3
+    "owasp-finbot-ctf.org": 3,
+    "vuln-expose.vercel.app": 7,
+    "redtiger.labs.overthewire.org": 3
   }
 }
