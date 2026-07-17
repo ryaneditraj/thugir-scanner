@@ -751,12 +751,14 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabSqliExerciseEvidence",
   "clientSidePentesterlabSqli02ExerciseEvidence",
   "clientSidePentesterlabSqli03ExerciseEvidence",
+  "clientSidePentesterlabSqli04ExerciseEvidence",
   "clientSidePentesterlabXssExerciseEvidence",
   "clientSidePentesterlabSqliToShellEvidence",
   "clientSidePentesterlabSsrfExerciseEvidence",
   "clientSidePentesterlabIdorExerciseEvidence",
   "clientSidePentesterlabAutho02ExerciseEvidence",
   "clientSidePentesterlabAutho03ExerciseEvidence",
+  "clientSidePentesterlabAutho04ExerciseEvidence",
   "clientSidePentesterlabXss02ExerciseEvidence",
   "clientSidePentesterlabXss03ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
@@ -1300,6 +1302,10 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/xss-03",
     "/exercises/autho_03",
     "/exercises/autho-03",
+    "/exercises/sqli_04",
+    "/exercises/sqli-04",
+    "/exercises/autho_04",
+    "/exercises/autho-04",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1536,6 +1542,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/33/",
     "/playlevel/36/",
     "/missions/application/34/",
+    "/missions/application/35/",
     "/playlevel/37/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
@@ -5364,7 +5371,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level107/index.php",
         "http://www.net-force.nl/challenge/level108/index.html",
         "https://www.net-force.nl/challenge/level109/",
-        "http://www.net-force.nl/challenge/level405/index.php"
+        "http://www.net-force.nl/challenge/level405/index.php",
+        "http://www.net-force.nl/challenge/level113/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
