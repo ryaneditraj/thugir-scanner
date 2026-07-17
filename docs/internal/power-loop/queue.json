@@ -4648,7 +4648,32 @@
       "url": "https://www.hackthissite.org/missions/javascript/19/",
       "source": "Hack This Site — javascript mission 19 client-side logic bypass challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/",
+      "source": "0xSV1/DVS — Damn Vulnerable Startup Fly.io public deploy (55 OWASP Top 10 + LLM challenges)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://net-force.nl/challenges/",
+      "source": "Net-Force.nl — public web/security CTF challenge platform catalog (CTF-wiki hacking sites)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level105/index.php",
+      "source": "Net-Force — web exploit training challenge level 105 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackerfire.com/",
+      "source": "HackerFire — learning CTF from CTFd developers (CTF-wiki hacking sites)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/sqli/",
+      "source": "dkyazzentwatwa/hack-this-site — dedicated SQLi lab route on Vercel OSS deploy",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-17T06:25:00.000Z"
+  "updated_at": "2026-07-17T07:10:00.000Z"
 }
