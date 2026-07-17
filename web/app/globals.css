@@ -1231,6 +1231,80 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
 .lightsite .tag.low { color: #1f6f97; }
 .lightsite .tag.verified { color: #0d7a63; }
 
+/* ===== unified scan report (app + marketing) ===== */
+.scan-results-shell { margin-top: 8px; }
+.scan-report-page { max-width: 820px; }
+.scan-report-header {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 20px;
+  align-items: flex-start; margin-bottom: 12px;
+}
+.scan-report-header h1 {
+  font-family: var(--display); font-size: clamp(22px, 3.5vw, 32px);
+  margin: 6px 0 0; letter-spacing: -0.02em; word-break: break-word;
+}
+.scan-report-badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.scan-section-title { font-family: var(--display); font-size: 22px; margin: 0 0 12px; }
+.inline-platform { color: var(--accent-bright); text-decoration: underline; text-underline-offset: 2px; }
+.inline-platform:hover { color: var(--text); }
+
+.scan-share-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 18px;
+  margin: 0 0 18px; padding: 16px 18px; border-radius: var(--radius-lg);
+  border: 1px solid rgba(47, 147, 176, 0.35); background: linear-gradient(135deg, var(--panel) 0%, rgba(18, 58, 67, 0.85) 100%);
+}
+.scan-share-muted { border-style: dashed; border-color: var(--line); background: var(--panel); }
+.scan-share-muted p { margin: 0; font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+.scan-share-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-bright); }
+.scan-share-target { margin: 4px 0 0; font-size: 14px; color: var(--text); word-break: break-all; }
+.scan-share-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-sm { padding: 9px 14px; font-size: 13px; border-radius: 10px; }
+
+.finding-card {
+  margin-bottom: 14px; border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel)); overflow: hidden;
+  transition: border-color 0.2s var(--ease);
+}
+.finding-card:hover { border-color: rgba(47, 147, 176, 0.35); }
+.finding-card-open { border-color: rgba(47, 147, 176, 0.45); }
+.finding-card-head { padding: 18px 20px 14px; }
+.finding-card-head h3 { margin: 10px 0 8px; font-size: 17px; line-height: 1.35; }
+.finding-card-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.finding-card-idx {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--text-faint);
+  padding-right: 4px;
+}
+.finding-card-body { border-top: 1px solid var(--line); }
+.finding-card-body > summary {
+  cursor: pointer; padding: 12px 20px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-bright); list-style: none;
+}
+.finding-card-body > summary::-webkit-details-marker { display: none; }
+.finding-card-body[open] > summary { border-bottom: 1px solid var(--line); }
+.finding-card-body .finding-detail { padding: 16px 20px 18px; }
+.app-evidence { margin: 0; font-size: 12px; }
+
+.evidence-dl { margin: 0; display: grid; gap: 10px; }
+.evidence-row { display: grid; grid-template-columns: minmax(100px, 28%) 1fr; gap: 8px 14px; font-size: 13px; }
+.evidence-row dt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); }
+.evidence-row dd { margin: 0; color: var(--text-dim); word-break: break-word; white-space: pre-wrap; }
+
+.dash-credit-pill {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+  padding: 5px 10px; border-radius: 999px; border: 1px solid rgba(60, 198, 166, 0.4);
+  background: var(--ok-soft); color: var(--ok);
+}
+.upgrade-credit-note { margin-top: 10px !important; color: var(--ok) !important; font-size: 13px !important; }
+.scan-count-cell { display: flex; flex-wrap: wrap; gap: 6px; }
+.sev-pill.compact { padding: 3px 8px; font-size: 10px; }
+.scan-row-actions { display: flex; gap: 10px; white-space: nowrap; }
+.scan-locked-section { margin-top: 24px; padding-top: 8px; border-top: 1px solid var(--line); }
+
+@media (max-width: 640px) {
+  .scan-share-bar { flex-direction: column; align-items: stretch; }
+  .scan-share-actions { justify-content: flex-start; }
+  .evidence-row { grid-template-columns: 1fr; }
+}
+
 /* the hero keeps its full-bleed dark treatment on small screens too */
 @media (max-width: 620px) {
   .lightsite .hero { border-radius: 0; }

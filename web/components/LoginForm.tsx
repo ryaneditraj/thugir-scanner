@@ -8,7 +8,10 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const nextPath = searchParams.get("next") || "/dashboard";
   const redirectTo = useMemo(() => {
-    const origin = window.location.origin;
+    const origin =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     const path = nextPath.startsWith("/") ? nextPath : "/dashboard";
     return `${origin}${path}`;
   }, [nextPath]);

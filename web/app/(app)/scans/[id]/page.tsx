@@ -1,17 +1,14 @@
-import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import FindingCard from "@/components/scan/FindingCard";
+import ScanResultsPanel from "@/components/scan/ScanResultsPanel";
+import ScanShareBar from "@/components/scan/ScanShareBar";
+import type { ScanFinding } from "@/components/scan/types";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { resolveUserTier } from "@/lib/entitlements";
 import { serializeDbFinding, type DbFindingRow } from "@/lib/findings/gate";
 
 export const dynamic = "force-dynamic";
-
-function evidenceLines(ev?: Record<string, unknown>): string {
-  if (!ev) return "";
-  return Object.entries(ev)
-    .map(([k, v]) => `${k}: ${v && typeof v === "object" ? JSON.stringify(v) : String(v)}`)
-    .join("\n");
-}
 
 export default async function ScanDetailPage({ params }: { params: { id: string } }) {
   const supabase = getServerSupabase();
@@ -22,7 +19,7 @@ export default async function ScanDetailPage({ params }: { params: { id: string 
 
   const { data: scan } = await supabase
     .from("scans")
-    .select("id, target_url, tier, status, detected_platform, created_at")
+    .select("id, target_url, tier, status, detected_platform, created_at, finished_at, error")
     .eq("id", params.id)
     .maybeSingle();
   if (!scan) notFound();
@@ -35,107 +32,88 @@ export default async function ScanDetailPage({ params }: { params: { id: string 
     )
     .eq("scan_id", scan.id);
 
-  const findings = (rows ?? []).map((r) => serializeDbFinding(r as DbFindingRow, tier));
-  const locked = findings.filter((f) => !f.unlocked);
-  const visible = findings.filter((f) => f.unlocked);
+  const findings: ScanFinding[] = (rows ?? []).map((r) => {
+    const s = serializeDbFinding(r as DbFindingRow, tier);
+    return {
+      id: s.id,
+      category: s.category,
+      title: s.title,
+      severity: s.severity,
+      tierRequired: s.tierRequired,
+      impactOneline: s.impactOneline,
+      maxDamageOneline: "maxDamageOneline" in s ? s.maxDamageOneline : undefined,
+      unlocked: s.unlocked,
+      evidence: "evidence" in s && s.evidence ? s.evidence : undefined,
+      remediation: "remediation" in s && s.remediation ? s.remediation : undefined,
+      fixPrompt: "fixPrompt" in s && s.fixPrompt ? s.fixPrompt : undefined,
+      status: s.status
+    };
+  });
+
+  const visible = findings.filter((f) => f.unlocked !== false);
+  const locked = findings.filter((f) => f.unlocked === false);
+  const critCount = visible.filter((f) => f.severity === "critical").length;
 
   return (
-    <article>
+    <article className="scan-report-page">
       <Link href="/dashboard" className="back-link">
         ← Back to dashboard
       </Link>
-      <h1 style={{ fontFamily: "var(--display)", marginBottom: 8 }}>Scan report</h1>
+
+      <header className="scan-report-header">
+        <div>
+          <p className="dash-eyebrow">Scan report</p>
+          <h1>{scan.target_url}</h1>
+        </div>
+        <div className="scan-report-badges">
+          <span className={`dash-plan-badge tier-${scan.tier}`}>{scan.tier}</span>
+          <span className={`status-pill status-${scan.status}`}>{scan.status}</span>
+        </div>
+      </header>
+
       <div className="scan-report-meta">
         <span>
-          Target: <b>{scan.target_url}</b>
-        </span>
-        <span>
-          Tier: <b>{scan.tier}</b>
-        </span>
-        <span>
-          Status: <span className={`status-pill status-${scan.status}`}>{scan.status}</span>
+          Scanned <b>{new Date(scan.finished_at ?? scan.created_at).toLocaleString()}</b>
         </span>
         {scan.detected_platform && (
           <span>
-            Stack: <b>{scan.detected_platform}</b>
+            Stack:{" "}
+            <Link href={`/platforms/${scan.detected_platform}`}>
+              <b>{scan.detected_platform}</b>
+            </Link>
+          </span>
+        )}
+        {critCount > 0 && (
+          <span>
+            <b>{critCount}</b> critical open
           </span>
         )}
       </div>
 
-      <h2 style={{ fontFamily: "var(--display)", fontSize: 22, marginBottom: 14 }}>Findings</h2>
-      {visible.length === 0 && <p className="muted">No unlocked findings for your current plan.</p>}
-      {visible.map((f) => {
-        const unlocked = f as typeof f & {
-          maxDamageOneline?: string;
-          evidence?: Record<string, unknown>;
-          remediation?: { summary: string; steps: string[] };
-          fixPrompt?: string;
-        };
-        return (
-        <div className="finding" key={f.id}>
-          <h3>
-            <span className={`tag ${f.severity}`}>{f.severity}</span>
-            <span className="tag verified">verified</span>
-            {f.title}
-          </h3>
-          <p className="impact">{f.impactOneline}</p>
-          {unlocked.maxDamageOneline && (
-            <div className="max-damage">
-              <span className="max-damage-label">Worst case for your company</span>
-              <p>{unlocked.maxDamageOneline}</p>
-            </div>
-          )}
-          {(unlocked.evidence || unlocked.remediation || unlocked.fixPrompt) && (
-            <details>
-              <summary>Evidence &amp; fix</summary>
-              <div className="finding-detail">
-                {unlocked.evidence && Object.keys(unlocked.evidence).length > 0 && (
-                  <div className="fd-block">
-                    <div className="fd-label">Evidence</div>
-                    <pre className="code">{evidenceLines(unlocked.evidence)}</pre>
-                  </div>
-                )}
-                {unlocked.remediation && (
-                  <div className="fd-block">
-                    <div className="fd-label">How to fix</div>
-                    <p className="fd-text">{unlocked.remediation.summary}</p>
-                    {unlocked.remediation.steps?.length > 0 && (
-                      <ol className="fd-steps">
-                        {unlocked.remediation.steps.map((s: string, i: number) => (
-                          <li key={i}>{s}</li>
-                        ))}
-                      </ol>
-                    )}
-                  </div>
-                )}
-                {unlocked.fixPrompt && (
-                  <div className="fd-block">
-                    <div className="fd-label">Fix prompt</div>
-                    <pre className="code">{unlocked.fixPrompt}</pre>
-                  </div>
-                )}
-              </div>
-            </details>
-          )}
-        </div>
-        );
-      })}
+      {scan.error && (
+        <p className="notice" style={{ marginBottom: 16 }}>
+          Scan ended with error: {scan.error}
+        </p>
+      )}
+
+      <ScanShareBar scanId={scan.id} target={scan.target_url} />
+
+      <ScanResultsPanel
+        scanId={scan.id}
+        target={scan.target_url}
+        tierLabel={scan.tier}
+        detectedPlatform={scan.detected_platform}
+        findings={visible}
+        showShare={false}
+        hideHeader
+      />
 
       {locked.length > 0 && (
-        <section style={{ marginTop: 28 }}>
-          <h2 style={{ fontFamily: "var(--display)", fontSize: 22, marginBottom: 14 }}>Locked findings</h2>
+        <section className="scan-locked-section" style={{ marginTop: 28 }}>
+          <h2 className="scan-section-title">Locked findings</h2>
+          <p className="result-head">Upgrade to unlock evidence and fix prompts</p>
           {locked.map((f) => (
-            <div className="finding locked" key={f.id}>
-              <h3>
-                <span className={`tag ${f.severity}`}>{f.severity}</span>
-                {f.title}
-              </h3>
-              <p className="impact">{f.impactOneline}</p>
-              <div className="lock-row">
-                <span aria-hidden="true">🔒</span>
-                <span>Unlock full evidence + fix with a {f.tierRequired} scan.</span>
-              </div>
-            </div>
+            <FindingCard key={f.id ?? f.title} finding={f} locked />
           ))}
         </section>
       )}

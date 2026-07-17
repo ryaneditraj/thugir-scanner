@@ -22,7 +22,13 @@ function loadRazorpayScript(): Promise<boolean> {
   });
 }
 
-export default function UpgradePanel({ currentTier }: { currentTier: string }) {
+export default function UpgradePanel({
+  currentTier,
+  deepCredits = 0
+}: {
+  currentTier: string;
+  deepCredits?: number;
+}) {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
@@ -57,8 +63,7 @@ export default function UpgradePanel({ currentTier }: { currentTier: string }) {
       const options: Record<string, unknown> = {
         key: data.keyId,
         name: "Thugir Scanner",
-        description:
-          kind === "continuous_sub" ? "Continuous Protection" : "Deep Scan credit",
+        description: kind === "continuous_sub" ? "Continuous Protection" : "Deep Scan credit",
         prefill: data.prefill || {},
         theme: { color: "#12667e" },
         handler: async (response: {
@@ -71,8 +76,6 @@ export default function UpgradePanel({ currentTier }: { currentTier: string }) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              // Send order and subscription ids in their own fields — the server verifies each
-              // with the correct HMAC field order (they differ for subscriptions).
               orderId: response.razorpay_order_id,
               subscriptionId: response.razorpay_subscription_id,
               paymentId: response.razorpay_payment_id,
@@ -112,9 +115,16 @@ export default function UpgradePanel({ currentTier }: { currentTier: string }) {
       <div className="upgrade-copy">
         <h2>Unlock full findings</h2>
         <p>
-          Free scans show teaser cards. Deep Scan unlocks evidence, fix prompts, and the full
-          pattern library. Continuous adds scheduled re-scans.
+          Free scans show confirmed issues plus sealed teasers. <b>Deep Scan</b> unlocks every
+          pattern, full evidence, and paste-back fix prompts. <b>Continuous</b> re-scans on a schedule
+          and emails you when things change.
         </p>
+        {deepCredits > 0 && (
+          <p className="upgrade-credit-note">
+            You have <b>{deepCredits}</b> unused Deep Scan credit{deepCredits === 1 ? "" : "s"} —
+            run a Deep Scan in the portal below.
+          </p>
+        )}
       </div>
       <div className="upgrade-actions">
         {currentTier === "free" && (
@@ -124,7 +134,7 @@ export default function UpgradePanel({ currentTier }: { currentTier: string }) {
             disabled={busy !== null}
             onClick={() => startCheckout("deep_scan_credit")}
           >
-            {busy === "deep_scan_credit" ? "Opening checkout…" : "Buy Deep Scan"}
+            {busy === "deep_scan_credit" ? "Opening checkout…" : "Buy Deep Scan · from ₹499"}
           </button>
         )}
         <button
