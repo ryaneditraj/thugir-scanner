@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T03:09:35.160Z",
+  "updated_at": "2026-07-17T03:12:50.847Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 828,
-  "total_findings": 3847,
+  "total_sites_scanned": 836,
+  "total_findings": 3914,
   "critical_findings": 28,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 331,
-  "discovery_findings": 2755,
+  "discovery_urls_added": 336,
+  "discovery_findings": 2822,
   "improvements_shipped": 590,
-  "last_run": "2026-07-17T03:09:35.160Z",
+  "last_run": "2026-07-17T03:12:50.847Z",
   "last_run_summary": {
-    "hour_utc": "02:00",
+    "hour_utc": "03:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 6/6 recall maintained (6 findings); no benchmark misses",
+      "note": "Primary heroku 6/6 recall first pass (6 findings pages=1 probes=204); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,17 +52,16 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 71,
+      "findings": 67,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "HTS playlevel/27–28 + application/22 + forensic/17 tail seeds; Hacksplaining open-redirects + DOM XSS dedicated lesson oracles",
-      "improvements_shipped_this_run": 3,
+      "focus": "SkillAudit playground + HTS realistic/17 forensic/18 javascript/18 stego/12 tail seeds",
       "urls_added_list": [
-        "https://www.hackthissite.org/playlevel/29/",
-        "https://www.hackthissite.org/missions/application/23/",
-        "https://www.hackthissite.org/playlevel/30/",
-        "https://www.hackthissite.org/missions/application/24/",
-        "https://0x4d31.github.io/airt/"
+        "https://skillaudit.vercel.app/playground",
+        "https://www.hackthissite.org/missions/realistic/17/",
+        "https://www.hackthissite.org/missions/forensic/18/",
+        "https://www.hackthissite.org/missions/javascript/18/",
+        "https://www.hackthissite.org/missions/stego/12/"
       ],
       "urls_scanned_list": [
         "https://gitagent-securebot-app.vercel.app/",
@@ -71,31 +70,22 @@
         "https://hack-this-site-eta.vercel.app/owasp/a03.html",
         "https://hack-this-site-eta.vercel.app/owasp/a01.html",
         "https://chal7.vercel.app/",
-        "http://redtiger.labs.overthewire.org/level4.php",
-        "https://appsecmaster.net/"
-      ],
-      "urls_validated": [
-        "https://www.hacksplaining.com/lessons/open-redirects/start",
-        "https://www.hacksplaining.com/lessons/xss-dom/start",
-        "https://www.hackthissite.org/playlevel/28/",
-        "https://www.hackthissite.org/missions/application/22/",
-        "https://www.hackthissite.org/missions/forensic/17/"
+        "https://chal1.vercel.app/",
+        "http://redtiger.labs.overthewire.org/level4.php"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "hacksplaining.com/lessons/open-redirects/start: client-side-hacksplaining-open-redirects-lesson-evidence",
-      "hacksplaining.com/lessons/xss-dom/start: client-side-hacksplaining-xss-dom-lesson-evidence",
-      "hackthissite.org/playlevel/28: client-side-hts-playlevel-hub-evidence",
-      "hack-this-site-eta.vercel.app/api-labs: 15 findings (OWASP API lab markers)",
+      "hack-this-site-eta.vercel.app/api-labs + owasp/a01 + a03: 15 findings each (rich OWASP lab markers)",
       "vwad.owasp.org/app/grpc-goat: 6 findings (gRPC vuln lab directory)",
-      "redtiger.labs.overthewire.org/level4.php: 3 findings (blind SQLi oracle)"
+      "chal7.vercel.app: 6 findings; chal1.vercel.app: 4 findings",
+      "gitagent-securebot-app.vercel.app: 3 findings (bundled VulnBot target markers)"
     ],
     "learning_gaps": [
-      "bugbountyhunter.com/challenge?id=27: HTTP 302 to homepage — challenge not published",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
-      "HTS playlevel/29–30 + application/23–24 + AIRT queued for next drain"
+      "HTS playlevel/29–30 + application/23–24 + AIRT + new tail seeds queued for next drain",
+      "bugbountyhunter.com/challenge?id=27: HTTP 302 to homepage — challenge not published"
     ]
   },
   "discovery_highlights": {
@@ -281,6 +271,7 @@
     "hack-this-site-eta.vercel.app/owasp/a03.html": 15,
     "hack-this-site-eta.vercel.app/owasp/a01.html": 15,
     "chal7.vercel.app": 6,
-    "redtiger.labs.overthewire.org/level4.php": 3
+    "redtiger.labs.overthewire.org/level4.php": 3,
+    "chal1.vercel.app": 4
   }
 }
