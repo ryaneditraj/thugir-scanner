@@ -4115,6 +4115,18 @@
       "slug": "client-side-nextjs-middleware-cve-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: unicord.dev redirects to GitHub README CVE-2025-29927 + x-middleware-subrequest middleware bypass; unicord.dev/exploit-CVE-2025-29927 findings 0→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-39-playlevel-40-mission-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/39/ + /playlevel/40/ Login Required gates; extractHackThisSiteMissionSeeds extended; application/39 findings 0→6, playlevel/40 findings 0→6; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level406 SeSSxploit + login.zip session fixation, level407 LeetSS 3.0.12 step-by-step login POST secured/, level408 Secure Extension cmdsign/hash command signing; level406 0→3, level407 0→4, level408 0→3 findings; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7322,6 +7334,16 @@
       "source": "discovery:unicord.dev",
       "slug": "client-side-nextjs-middleware-cve-evidence",
       "shipped_at": "2026-07-17T22:16:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-39-playlevel-40-mission-seeds",
+      "shipped_at": "2026-07-17T23:00:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-406-408-session-sqli-command-signing",
+      "shipped_at": "2026-07-17T23:00:00.000Z"
     }
   ]
 }
