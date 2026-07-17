@@ -4823,7 +4823,32 @@
       "url": "https://domgo.at/cxss/example/11",
       "source": "Mario Heiderich domgo.at — DomGoat level 11 hash+name DOM XSS (complements cxss/example/10)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/33/",
+      "source": "Hack This Site — application mission 33 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/14/",
+      "source": "Hack This Site — programming mission 14 exploit scripting challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/20/",
+      "source": "Hack This Site — realistic mission 20 web hacking challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/36/",
+      "source": "Hack This Site — playlevel arcade hub challenge 36 (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level111/index.php",
+      "source": "Net-Force — web exploit training challenge level 111 (net-force.nl catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T15:05:32.108Z"
+  "updated_at": "2026-07-17T16:00:06.016Z"
 }
