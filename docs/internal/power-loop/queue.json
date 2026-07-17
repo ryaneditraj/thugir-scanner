@@ -4498,7 +4498,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=26",
       "source": "BugBountyHunter zseano \u2014 business-logic / access-control challenge #26 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/27/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 27 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/21/",
+      "source": "Hack This Site \u2014 application mission 21 reverse-engineering challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/11/",
+      "source": "Hack This Site \u2014 steganography mission 11 image/file analysis challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/10/",
+      "source": "Hack This Site \u2014 programming mission 10 exploit scripting challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountytraining.com/fastfoodhackings/",
+      "source": "zseano FastFoodHackings \u2014 25+ vuln playground on bugbountytraining.com (BugBountyHunter playground)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-16T22:02:00.000Z"
+  "updated_at": "2026-07-17T00:06:00.000Z"
 }
