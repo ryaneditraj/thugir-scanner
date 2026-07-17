@@ -4773,7 +4773,32 @@
       "url": "https://www.hackthissite.org/missions/stego/16/",
       "source": "Hack This Site — stego mission 16 steganography challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level405/index.php",
+      "source": "Net-Force — UNION SQL injection login exploit challenge 405 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/13/",
+      "source": "Hack This Site — programming mission 13 exploit scripting challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/realistic/19/",
+      "source": "Hack This Site — realistic mission 19 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/31/",
+      "source": "Hack This Site — application mission 31 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/sqli_02/",
+      "source": "PentesterLab — SQL Injection 02 double-quote delimiter exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T13:27:00.000Z"
+  "updated_at": "2026-07-17T14:18:00.000Z"
 }
