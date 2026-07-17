@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T10:50:00.000Z",
+  "updated_at": "2026-07-17T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 941,
   "discovery_findings": 3052,
-  "improvements_shipped": 611,
-  "last_run": "2026-07-17T10:50:00.000Z",
+  "improvements_shipped": 614,
+  "last_run": "2026-07-17T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — staging oracle 7 findings recall maintained (primary heroku 503 cold-start)",
+      "note": "No benchmark misses — primary heroku 6 findings 6/6 recall maintained",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,42 +46,35 @@
             "misconfig"
           ]
         }
-      },
-      "primary_miss_signal": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 1,
-          "gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
-          "note": "juice-shop.herokuapp.com Heroku 503 on cold start — highest-value miss signal"
-        }
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_scanned": 3,
+      "findings": 15,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "WrongSecrets hub combined-corpus oracle; Net-Force level107 HTML PROTECT SHA1; HTS playlevel/34 + application/29 + javascript/21 tail seeds",
+      "focus": "HTS playlevel/35 tail seeds; WrongSecrets challenge-5..10 crawl + K8s configmap markers; RedTiger level7/10 priority seeds",
       "improvements_shipped_this_run": 3,
       "urls_validated": [
+        "https://www.hackthissite.org/playlevel/35/",
         "https://wrongsecrets.herokuapp.com/",
-        "http://www.net-force.nl/challenge/level107/index.php",
-        "https://www.hackthissite.org/playlevel/34/"
+        "http://redtiger.labs.overthewire.org/level7.php"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com hub: challenge walkthrough evidence now fires from crawled challenge pages (5→6 findings)",
-      "net-force.nl/challenge/level107: HTML PROTECT 3 + SHA1 client-side hash gate markers",
-      "www.hackthissite.org/playlevel/34: login-gated arcade hub evidence (6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "www.hackthissite.org/playlevel/35: login-gated arcade hub evidence (6 findings)",
+      "wrongsecrets.herokuapp.com: hub crawl now surfaces challenge walkthrough evidence (5→6 findings)",
+      "redtiger.labs.overthewire.org/level7.php: blind login-bypass form evidence (3 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: Heroku dyno sleep causes intermittent 503 — wake retry in power-scan",
-      "damn-vulnerable-startup.fly.dev: DVS Fly.io deploy offline — 55-challenge oracle unreachable",
-      "www.net-force.nl/challenge/level108: redirects to homepage — no challenge instance"
+      "juice-shop.herokuapp.com: Heroku dyno sleep causes intermittent cold-start gaps before wake retries",
+      "bugbountyhunter.com challenge?id=17-27: shared training hub carousel — no distinct scenario titles",
+      "www.net-force.nl/challenge/level108: redirects to homepage — no challenge instance",
+      "damn-vulnerable-startup.fly.dev: DVS Fly.io deploy offline"
     ]
   },
   "discovery_highlights": {
@@ -283,6 +276,7 @@
     "openvaultbank.com/api/v1/users": 5,
     "maz4lhacks.vercel.app/posts/reflected-xss": 5,
     "redtiger.labs.overthewire.org/level6.php": 3,
+    "redtiger.labs.overthewire.org/level7.php": 3,
     "516-hackers.github.io/516-hackers-vuln-playground": 2,
     "www.net-force.nl/challenge/level104/index.php": 4,
     "www.net-force.nl/challenge/level105/index.php": 3,
@@ -291,6 +285,8 @@
     "sam.wizer-ctf.com": 5,
     "chal8.vercel.app": 4,
     "hackerfire.com": 3,
-    "www.hackthissite.org/playlevel/33": 6
+    "www.hackthissite.org/playlevel/33": 6,
+    "www.hackthissite.org/playlevel/34": 6,
+    "www.hackthissite.org/playlevel/35": 6
   }
 }
