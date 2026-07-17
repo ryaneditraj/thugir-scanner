@@ -5527,6 +5527,58 @@ const clientSideGitagentSecurebotEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- AIRT AI Red Team Academy (0x4d31.github.io/airt) --------------------------------
+const CLIENT_AIRT_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "AIRT AI Red Team Academy title",
+    re: /AIRT[\s\S]{0,40}AI Red Team Academy|AI Red Team Academy \| Free AI Security Course/i
+  },
+  {
+    label: "Offensive AI security course description",
+    re: /offensive security testing of AI systems[\s\S]{0,80}prompt injection to supply chain attacks/i
+  },
+  {
+    label: "Docker lab module curriculum",
+    re: /8 Modules[\s\S]{0,40}60\+ Hours[\s\S]{0,40}Docker|hands-on Docker labs/i
+  },
+  {
+    label: "LLM RAG multi-agent lab scope",
+    re: /LLMs, RAG pipelines, multi-agent systems|vulnerable chatbot application/i
+  },
+  {
+    label: "Prompt injection terminal demo",
+    re: /Testing prompt injection vectors|Direct prompt injection[\s\S]{0,40}system prompt override/i
+  },
+  {
+    label: "OWASP Top 10 for LLM reference",
+    re: /OWASP Top 10 for LLM Applications|genai\.owasp\.org\/llm-top-10/i
+  },
+  {
+    label: "AIRT module page catalog",
+    re: /module\d+\.html|Foundations of AI Red Teaming|Read Module \d+/i
+  }
+];
+
+const clientSideAirtAcademyEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AIRT_ACADEMY_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/AIRT|0x4d31\.github\.io\/airt|AI Red Team Academy/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "AIRT AI Red Team Academy publishes an open-source offensive AI security curriculum with prompt injection, RAG, multi-agent, and supply-chain Docker labs"
+    }
+  };
+};
+
 // --- gRPC Goat vulnerability practice lab docs (rootxjs.github.io)
 const CLIENT_GRPC_GOAT_RES: { label: string; re: RegExp }[] = [
   {
@@ -17899,6 +17951,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSkillauditEvidence,
   clientSideSecuredAiLabEvidence,
   clientSideGitagentSecurebotEvidence,
+  clientSideAirtAcademyEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   clientSideVapiEvidence,
