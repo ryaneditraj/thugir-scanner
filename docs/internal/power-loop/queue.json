@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://web-security-practice-app.onrender.com/",
+      "source": "n00by3te/web-security-practice-app — intentionally vulnerable Flask app (Medium deploy link)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_01/",
+      "source": "PentesterLab — Authorization 01 IDOR free exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss-and-mysql-file/",
+      "source": "PentesterLab — XSS to SQLi chain free exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/34/",
+      "source": "Hack This Site — playlevel arcade hub challenge 34 (power-loop prior run)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/voice-goat/",
+      "source": "OWASP VWAD — redcaller/voice-goat voice-agent LLM attack lab (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://hack-this-site-eta.vercel.app/owasp/a06.html",
       "source": "dkyazzentwatwa/hack-this-site — OWASP A06 Vulnerable Components module (Vercel deploy)",
       "auth": "oss_deploy"
@@ -4698,32 +4723,7 @@
       "url": "https://www.hackthissite.org/missions/javascript/20/",
       "source": "Hack This Site — javascript mission 20 client-side logic bypass challenge (missions hub)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://web-security-practice-app.onrender.com/",
-      "source": "n00by3te/web-security-practice-app — intentionally vulnerable Flask app (Medium deploy link)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pentesterlab.com/exercises/autho_01/",
-      "source": "PentesterLab — Authorization 01 IDOR free exercise (web search)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pentesterlab.com/exercises/xss-and-mysql-file/",
-      "source": "PentesterLab — XSS to SQLi chain free exercise (web search)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://www.hackthissite.org/playlevel/34/",
-      "source": "Hack This Site — playlevel arcade hub challenge 34 (power-loop prior run)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vwad.owasp.org/app/voice-goat/",
-      "source": "OWASP VWAD — redcaller/voice-goat voice-agent LLM attack lab (Show HN 2025)",
-      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T11:25:00.000Z"
+  "updated_at": "2026-07-17T11:26:00.000Z"
 }
