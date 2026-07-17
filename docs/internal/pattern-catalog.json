@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T21:08:36.822Z",
-  "total": 422,
-  "uniqueSlugs": 421,
+  "generatedAt": "2026-07-17T22:03:39.615Z",
+  "total": 424,
+  "uniqueSlugs": 423,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 404,
+    "generic": 406,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 354,
+    "deep": 356,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 28,
     "Security misconfiguration": 33,
-    "Broken authentication": 25,
-    "Injection": 79,
+    "Broken authentication": 26,
+    "Injection": 80,
     "Cross-site scripting": 50,
     "general": 18,
     "SSRF": 1,
@@ -196,6 +196,7 @@
     "client-side-net-force-challenge-evidence",
     "client-side-net-force-evidence",
     "client-side-net-force-offline-challenge-evidence",
+    "client-side-nextjs-middleware-cve-evidence",
     "client-side-nimbus-vault-evidence",
     "client-side-nivara-security-evidence",
     "client-side-nodegoat-evidence",
@@ -232,6 +233,7 @@
     "client-side-pentesterlab-sqli-02-exercise-evidence",
     "client-side-pentesterlab-sqli-03-exercise-evidence",
     "client-side-pentesterlab-sqli-04-exercise-evidence",
+    "client-side-pentesterlab-sqli-05-exercise-evidence",
     "client-side-pentesterlab-sqli-06-exercise-evidence",
     "client-side-pentesterlab-sqli-exercise-evidence",
     "client-side-pentesterlab-sqli-to-shell-evidence",
