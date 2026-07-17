@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T15:10:00.000Z",
+  "updated_at": "2026-07-17T15:08:46.820Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 912,
-  "total_findings": 4356,
+  "total_sites_scanned": 918,
+  "total_findings": 4385,
   "critical_findings": 29,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 961,
-  "discovery_findings": 3203,
+  "discovery_urls_added": 966,
+  "discovery_findings": 3226,
   "improvements_shipped": 620,
-  "last_run": "2026-07-17T15:10:00.000Z",
+  "last_run": "2026-07-17T15:08:46.820Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
+      "note": "First-pass full recall on shallow crawl (pages_crawled=1 probes=235; no wake retry needed).",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,30 +50,40 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 13,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 36,
+      "skipped_48h": [
+        "https://pentesterlab.com/exercises/autho_01/",
+        "https://www.hackthissite.org/playlevel/34/",
+        "https://vwad.owasp.org/app/voice-goat/",
+        "https://www.bugbountyhunter.com/challenge?id=16",
+        "https://web-security-practice-app.onrender.com/"
+      ],
       "dns_failures": [],
-      "focus": "Queue drain: Net-Force level405 UNION SQLi + PentesterLab sqli_02 + HTS application/31",
-      "improvements_shipped_this_run": 3,
+      "focus": "Queue drain: BugBountyHunter ch9-11 + OopsSec roadmap + vulnbank + ginandjuice + MAESTRO agentic demo; +5 queued (HTS app/32 playlevel/35 stego/17, Net-Force 110, domgo cxss/11)",
+      "improvements_shipped_this_run": 0,
       "urls_validated": [
-        "http://www.net-force.nl/challenge/level405/index.php",
-        "https://pentesterlab.com/exercises/sqli_02/",
-        "https://www.hackthissite.org/missions/application/31/"
+        "https://www.hackthissite.org/missions/application/32/",
+        "https://www.hackthissite.org/playlevel/35/",
+        "http://www.net-force.nl/challenge/level110/index.php",
+        "https://www.hackthissite.org/missions/stego/17/",
+        "https://domgo.at/cxss/example/11"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "net-force.nl/challenge/level405: UNION SQLi login + source.txt mysql_db_query (0→3 findings)",
-      "pentesterlab.com/exercises/sqli_02: double-quote login SQLi exercise evidence (0→4 findings)",
-      "hackthissite.org/missions/application/31: login-gated mission hub evidence (0→6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 first pass (6 findings pages=1 probes=235) — no benchmark misses",
+      "ginandjuice.shop: SQLi error disclosure + reflected XSS + scanner-lab oracle (6 findings)",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url-in-bundle critical + agentic AI lab evidence (3 findings)",
+      "koadt.github.io/oss-oopssec-store/roadmap: IDOR/CSRF/API Top 10 lab markers (6 findings)",
+      "www.bugbountyhunter.com/challenge?id=9-11: zseano challenge scenario evidence (3 findings each)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop.herokuapp.com: secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes)",
-      "hackthissite.org/missions/realistic/19: 404 — mission slot does not exist",
-      "hiddeninvestigations.net: react2shell exploit chain requires local Docker — public landing is marketing only"
+      "juice-shop.herokuapp.com: secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes only)",
+      "HTS app/32 playlevel/35 stego/17 + Net-Force 110 + domgo cxss/11 queued at tail — pending drain",
+      "vwad.owasp.org/app/voice-goat: 404 — directory entry offline",
+      "realistic/20 and programming/14: HTS mission numbers return 404"
     ]
   },
   "discovery_highlights": {
@@ -147,7 +157,7 @@
     "aryan-rajoria.github.io/vuln-web-sec-proj": 2,
     "xss-payload-lab.vercel.app": 3,
     "cyber-ctf-website.vercel.app": 1,
-    "vulnbank.org": 4,
+    "vulnbank.org": 6,
     "dev-lucasoliveira.github.io/frontend-xss-demo": 3,
     "web-security-lab.vercel.app": 3,
     "vuln-demo.vercel.app": 4,
@@ -245,7 +255,7 @@
     "api.graphqlbook.org": 6,
     "pentesterlab.com": 4,
     "www.root-me.org": 5,
-    "www.hackthissite.org": 6,
+    "www.hackthissite.org": 5,
     "domgo.at": 3,
     "php.testsparker.com": 5,
     "hacksec.in": 6,
@@ -298,6 +308,11 @@
     "www.net-force.nl/challenge/level108/index.html": 2,
     "pentesterlab.com/exercises/autho_02": 4,
     "pentesterlab.com/exercises/xss_02": 4,
+    "koadt.github.io/oss-oopssec-store/roadmap": 6,
+    "maestro-agentic-ai-security-demo-mon.netlify.app": 3,
+    "www.bugbountyhunter.com/challenge?id=9": 3,
+    "www.bugbountyhunter.com/challenge?id=10": 3,
+    "www.bugbountyhunter.com/challenge?id=11": 3,
     "www.net-force.nl/challenge/level405/index.php": 3,
     "pentesterlab.com/exercises/sqli_02": 4,
     "www.hackthissite.org/missions/application/31": 6

@@ -4798,7 +4798,32 @@
       "url": "https://pentesterlab.com/exercises/sqli_02/",
       "source": "PentesterLab — SQL Injection 02 double-quote delimiter exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/32/",
+      "source": "Hack This Site — application mission 32 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/35/",
+      "source": "Hack This Site — playlevel arcade hub challenge 35 (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level110/index.php",
+      "source": "Net-Force — web exploit training challenge level 110 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/17/",
+      "source": "Hack This Site — stego mission 17 steganography challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/11",
+      "source": "Mario Heiderich domgo.at — DomGoat level 11 hash+name DOM XSS (complements cxss/example/10)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T14:18:00.000Z"
+  "updated_at": "2026-07-17T15:05:32.108Z"
 }
