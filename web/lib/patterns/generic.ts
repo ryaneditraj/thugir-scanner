@@ -3594,6 +3594,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-malvertising-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining malvertising lesson disclosed",
+    description:
+      "Hacksplaining /lessons/malvertising publishes an interactive exploit-then-fix walkthrough covering compromised ad-tech supply chains and malware delivery via embedded adverts.",
+    impactOneline:
+      "Public malvertising lesson pages document ad-supply-chain exploit patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingMalvertisingLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining malvertising lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable malvertising lesson instances on private deployments.",
+        "Vet third-party ad scripts and enforce CSP in production — never copy Hacksplaining weak ad-tech handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style malvertising exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",

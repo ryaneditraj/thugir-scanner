@@ -3725,6 +3725,24 @@
       "slug": "client-side-hacksplaining-ssl-stripping-lesson-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lessons/ssl-stripping/start title SSL Stripping — Secure Coding Lesson + meta only some actions on your website require HTTPS, an attacker may be able to steal credentials; hacksplaining.com/lessons/ssl-stripping/start findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-apple-oracle-bootstrap-wake",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary heroku cold-start missed idor/sensitive_data (probes=54 pass3); added /rest/products/search?q=apple to health/prime/bootstrap wake + idorObjectAccess fetchDoc 10×; juice-shop.herokuapp.com 7 findings 6/6 recall on primary (pages=6 probes=171)"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-malvertising-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/malvertising/start title Malvertising — Secure Coding Lesson + meta Embedded adverts are a common target for hackers + ad-tech/hacking-ad-tech step nav; hacksplaining.com/lessons/malvertising/start findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-26-application-20-forensic-16",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/26/ + /missions/application/20/ + /missions/forensic/16/ return Login Required arcade/mission gates; www.hackthissite.org queue tail drained; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6647,6 +6665,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-ssl-stripping-lesson-evidence",
       "shipped_at": "2026-07-16T22:38:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-apple-oracle-bootstrap-wake",
+      "shipped_at": "2026-07-17T00:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-malvertising-lesson-evidence",
+      "shipped_at": "2026-07-17T00:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-26-application-20-forensic-16",
+      "shipped_at": "2026-07-17T00:25:00.000Z"
     }
   ]
 }

@@ -255,6 +255,7 @@ const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/admin/application-configuration",
   "/rest/track-order/1",
   "/rest/products/search?q=warmup",
+  "/rest/products/search?q=apple",
   "/rest/products/search?q='))"
 ];
 
@@ -273,7 +274,12 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
       // Juice Shop SQLi oracle returns HTTP 500 with SQLITE_ERROR — still proves API is live.
       if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return true;
       if (doc.status >= 500) continue;
-      if (p.includes("search") && (/"products"|"data"\s*:/i.test(doc.body) || doc.status === 200))
+      if (
+        p.includes("search") &&
+        (/"products"|"data"\s*:\s*\[/i.test(doc.body) ||
+          (/"status"\s*:\s*"success"/i.test(doc.body) && /"name"\s*:/i.test(doc.body)) ||
+          doc.status === 200)
+      )
         return true;
     } catch {
       /* ignore */
@@ -320,7 +326,8 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     "/rest/admin/application-configuration",
     "/rest/track-order/1",
     "/rest/products/search?q=''))",
-    "/rest/products/search?q=warmup"
+    "/rest/products/search?q=warmup",
+    "/rest/products/search?q=apple"
   ];
   const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
@@ -919,6 +926,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingDowngradeAttacksLessonEvidence",
   "clientSideHacksplainingEmailSpoofingLessonEvidence",
   "clientSideHacksplainingSslStrippingLessonEvidence",
+  "clientSideHacksplainingMalvertisingLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1449,6 +1457,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/23/",
     "/playlevel/24/",
     "/playlevel/25/",
+    "/playlevel/26/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1458,6 +1467,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/17/",
     "/missions/application/18/",
     "/missions/application/19/",
+    "/missions/application/20/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1484,7 +1494,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/11/",
     "/missions/forensic/12/",
     "/missions/forensic/13/",
-    "/missions/forensic/15/"
+    "/missions/forensic/15/",
+    "/missions/forensic/16/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -5575,9 +5586,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     bootDocs.set(mainJsUrl, mainJsDoc);
     const trackUrl = bootstrapUrls[2]!;
     const sqlUrl = bootstrapUrls[3]!;
+    const appleUrl = bootstrapUrls[4]!;
     for (let attempt = 0; attempt < 8; attempt++) {
       const trackBody = bootDocs.get(trackUrl)?.body ?? "";
       const sqlBody = bootDocs.get(sqlUrl)?.body ?? "";
+      const appleBody = bootDocs.get(appleUrl)?.body ?? "";
       const mainJsReady =
         !HEROKU_APP_ERROR_RE.test(mainJsDoc.body) &&
         /bypassSecurityTrustHtml|re_[A-Za-z0-9_]{20,}/i.test(mainJsDoc.body);
@@ -5585,7 +5598,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         !HEROKU_APP_ERROR_RE.test(trackBody) &&
         /"status"\s*:\s*"success"|"orderId"/i.test(trackBody);
       const sqlReady = /SQLITE_ERROR|syntax error|sequelize/i.test(sqlBody);
-      if (mainJsReady && trackReady && sqlReady) break;
+      const appleReady =
+        !HEROKU_APP_ERROR_RE.test(appleBody) &&
+        /"status"\s*:\s*"success"/i.test(appleBody) &&
+        /"data"\s*:\s*\[\s*\{/.test(appleBody);
+      if (mainJsReady && trackReady && sqlReady && appleReady) break;
       await new Promise((r) => setTimeout(r, 2500));
       if (!mainJsReady) {
         mainJsDoc = await probe.get(mainJsUrl, {
@@ -5599,6 +5616,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       }
       if (!sqlReady) {
         bootDocs.set(sqlUrl, await probe.get(sqlUrl, { maxBytes: 8192, timeoutMs: 12000 }));
+      }
+      if (!appleReady) {
+        bootDocs.set(appleUrl, await probe.get(appleUrl, { maxBytes: 8192, timeoutMs: 12000 }));
       }
     }
     juiceShopBootstrap = [...bootDocs.values()]
