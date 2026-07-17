@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-17T17:10:26.318Z",
-=======
-  "updated_at": "2026-07-17T17:10:00.000Z",
->>>>>>> aec6428 (engine: HTS seeds, Net-Force offline oracle, VWAD 404 guard)
+  "updated_at": "2026-07-17T17:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -23,31 +19,19 @@
   "total_findings": 4457,
   "critical_findings": 29,
   "teacher_delta_count": 0,
-<<<<<<< HEAD
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 976,
   "discovery_findings": 3285,
-  "improvements_shipped": 623,
-  "last_run": "2026-07-17T17:10:26.318Z",
-=======
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 971,
-  "discovery_findings": 3253,
   "improvements_shipped": 626,
-  "last_run": "2026-07-17T17:10:00.000Z",
->>>>>>> aec6428 (engine: HTS seeds, Net-Force offline oracle, VWAD 404 guard)
+  "last_run": "2026-07-17T17:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "17:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-<<<<<<< HEAD
-      "note": "First-pass full recall on shallow crawl (pages_crawled=1 probes=225; no wake retry needed).",
-=======
       "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
->>>>>>> aec6428 (engine: HTS seeds, Net-Force offline oracle, VWAD 404 guard)
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -66,7 +50,6 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 7,
       "findings": 32,
@@ -74,28 +57,15 @@
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Queue drain: RedTiger level7/10, Hacksplaining xss-reflected/command-execution/xml-bombs/subdomain-squatting, cookiejar-lab root",
+      "focus": "Queue drain + engine evolve: Hacksplaining/RedTiger/cookiejar-lab; HTS app/33 + playlevel/36 seeds; Net-Force offline redirect; VWAD 404 guard",
+      "improvements_shipped_this_run": 3,
       "urls_queued": [
         "https://ai-waf.vercel.app/",
         "https://www.hackthissite.org/missions/application/34/",
         "http://www.net-force.nl/challenge/level112/index.php",
         "https://pentesterlab.com/exercises/sqli_03/",
         "https://www.hacksplaining.com/lessons/http-request-smuggling/start"
-      ]
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 first pass (6 findings pages=1 probes=225) — no benchmark misses",
-      "www.hacksplaining.com/lessons/xss-reflected/start: reflected XSS + CSRF lesson oracles (6 findings)",
-      "www.hacksplaining.com/lessons/command-execution/start: OS command execution lesson evidence (6 findings)",
-      "www.hacksplaining.com/lessons/xml-bombs/start: XML bomb / billion-laughs DoS lesson (6 findings)",
-      "cyberdesserts.github.io/cookiejar-lab/: CSRF/session cookie security demo (4 findings)",
-      "redtiger.labs.overthewire.org level7+10: SQL hackit markers (3 findings each)"
-=======
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "Engine evolve: HTS app/33 + playlevel/36 crawl seeds; Net-Force offline redirect oracle; VWAD 404 stale-listing guard",
-      "improvements_shipped_this_run": 3,
+      ],
       "urls_validated": [
         "https://www.hackthissite.org/missions/application/33/",
         "https://www.hackthissite.org/playlevel/36/",
@@ -105,21 +75,20 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "www.hackthissite.org/missions/application/33: login-gated application hub seeded (6 findings)",
-      "www.hackthissite.org/playlevel/36: playlevel arcade hub seeded (6 findings)",
+      "www.hacksplaining.com/lessons/xss-reflected/start: reflected XSS + CSRF lesson oracles (6 findings)",
+      "www.hacksplaining.com/lessons/command-execution/start: OS command execution lesson evidence (6 findings)",
+      "www.hacksplaining.com/lessons/xml-bombs/start: XML bomb / billion-laughs DoS lesson (6 findings)",
+      "cyberdesserts.github.io/cookiejar-lab/: CSRF/session cookie security demo (4 findings)",
+      "redtiger.labs.overthewire.org level7+10: SQL hackit markers (3 findings each)",
+      "www.hackthissite.org/missions/application/33 + playlevel/36: login-gated hub seeds (6 findings each)",
       "www.net-force.nl/challenge/level111: offline redirect oracle replaces auth-bypass false positive",
       "vwad.owasp.org/app/voice-goat: stale 404 listing detected; webgoat/api-security FPs removed"
->>>>>>> aec6428 (engine: HTS seeds, Net-Force offline oracle, VWAD 404 guard)
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop.herokuapp.com: secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes only)",
-<<<<<<< HEAD
-      "HTS app/33-34 programming/14 realistic/20 playlevel/36 + Net-Force 111-112 queued at tail",
-=======
-      "www.hackthissite.org/missions/programming/14 + realistic/20: 404 mission slots",
-      "www.net-force.nl/challenge/level110: redirects to homepage — challenge offline",
->>>>>>> aec6428 (engine: HTS seeds, Net-Force offline oracle, VWAD 404 guard)
+      "HTS app/34 programming/14 realistic/20 + Net-Force 112 queued at tail",
+      "www.net-force.nl/challenge/level110-111: redirects to homepage — challenge offline",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
