@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T12:11:26.972Z",
+  "updated_at": "2026-07-17T13:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 951,
   "discovery_findings": 3107,
-  "improvements_shipped": 611,
-  "last_run": "2026-07-17T12:11:26.972Z",
+  "improvements_shipped": 614,
+  "last_run": "2026-07-17T13:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12:00",
+    "hour_utc": "13:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "6/6 recall on primary heroku first pass — no wake retry needed (pages=1 probes=225)",
+      "note": "Primary heroku 503 during full power-scan wake retry; staging validation 7 findings 6/6 (sensitive_data via vibe-unauthenticated-api-routes)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,37 +50,29 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 36,
-      "skipped_48h": [
-        "https://owasp-finbot-ctf.org/",
-        "https://bwapp.hakhub.net/",
-        "https://brokencrystals.com/",
-        "https://ginandjuice.shop/"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Wizer CTF chal10-15 + Hack the Basics hub + VulnForge + BugBountyHunter ch8/ch15; +5 queued (Net-Force 107-108, PentesterLab, HTS app/29)",
-      "improvements_shipped_this_run": 0,
+      "focus": "Queued tail drain: Net-Force level108 + PentesterLab autho_02/xss_02 exercise oracles",
+      "improvements_shipped_this_run": 3,
       "urls_validated": [
-        "http://www.net-force.nl/challenge/level107/index.php",
         "http://www.net-force.nl/challenge/level108/index.html",
         "https://pentesterlab.com/exercises/autho_02/",
-        "https://pentesterlab.com/exercises/xss_02/",
-        "https://www.hackthissite.org/missions/application/29/"
+        "https://pentesterlab.com/exercises/xss_02/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 (6 findings) first pass — no gap",
-      "chal15.vercel.app: SQLi error + postMessage DOM XSS + Wizer CTF evidence (6 findings)",
-      "shiny-computing-machine.vercel.app: SQLi/XSS/JWT-none/path-traversal hub markers (7 findings)",
-      "vulnforge.vercel.app: hardcoded demo creds + VulnForge scanner SPA (4 findings)",
-      "www.bugbountyhunter.com/challenge?id=8,15: numbered challenge scenario evidence (3 each)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no category gap",
+      "net-force level108: innerHTML→HTML comment Login() popup (0→2 findings)",
+      "pentesterlab autho_02: Authorization 02 IDOR exercise markers (0→4 findings)",
+      "pentesterlab xss_02: case-variation XSS filter bypass exercise markers (0→4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
-      "Net-Force level107-108 + PentesterLab autho_02/xss_02 + HTS app/29 queued at tail — pending drain next run"
+      "HTS application/29: login-gated — client-side-hts-login-gated-mission-hub-evidence only"
     ]
   },
   "discovery_highlights": {
@@ -301,6 +293,9 @@
     "pentesterlab.com/exercises/autho_01": 3,
     "pentesterlab.com/exercises/xss-and-mysql-file": 4,
     "www.hackthissite.org/playlevel/34": 6,
-    "vwad.owasp.org/app/voice-goat": 5
+    "vwad.owasp.org/app/voice-goat": 5,
+    "www.net-force.nl/challenge/level108/index.html": 2,
+    "pentesterlab.com/exercises/autho_02": 4,
+    "pentesterlab.com/exercises/xss_02": 4
   }
 }

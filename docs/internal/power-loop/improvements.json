@@ -3929,6 +3929,24 @@
       "slug": "client-side-pentesterlab-xss-mysql-exercise-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: XSS and MySQL FILE course JSON-LD XSS-to-SQLi code execution chain on /exercises/xss-and-mysql-file; findings 4→5 incl client-side-pentesterlab-xss-mysql-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level108-html-comment-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level108/index.html Login() escapes getElementsByTagName('html')[0].innerHTML into <!-- + value + --> HTML comment; netForcePrioritySeeds adds level108; level108 findings 0→2 incl client-side-net-force-challenge-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-02-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Authorization 02 JSON-LD exploit IDOR by incrementing URL parameters on /exercises/autho_02; pentesterlab.com/exercises/autho_02 findings 0→4 incl client-side-pentesterlab-autho-02-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-02-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: XSS 02 JSON-LD bypass basic XSS filters using case variation on /exercises/xss_02; pentesterlab.com/exercises/xss_02 findings 0→4 incl client-side-pentesterlab-xss-02-exercise-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7001,6 +7019,21 @@
       "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-xss-mysql-exercise-evidence",
       "shipped_at": "2026-07-17T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level108-html-comment-xss",
+      "shipped_at": "2026-07-17T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-02-exercise-evidence",
+      "shipped_at": "2026-07-17T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-02-exercise-evidence",
+      "shipped_at": "2026-07-17T13:10:00.000Z"
     }
   ]
 }
