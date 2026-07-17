@@ -55,7 +55,14 @@
       "findings": 67,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "SkillAudit playground + HTS realistic/17 forensic/18 javascript/18 stego/12 tail seeds",
+      "focus": "HTS playlevel/29–30 + application/23–24 tail seeds; AIRT AI Red Team Academy evidence; RedTiger level4 priority crawl",
+      "improvements_shipped_this_run": 3,
+      "urls_validated": [
+        "https://0x4d31.github.io/airt/",
+        "https://www.hackthissite.org/playlevel/29/",
+        "https://www.hackthissite.org/missions/application/23/",
+        "http://redtiger.labs.overthewire.org/level4.php"
+      ],
       "urls_added_list": [
         "https://skillaudit.vercel.app/playground",
         "https://www.hackthissite.org/missions/realistic/17/",
@@ -76,15 +83,17 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "0x4d31.github.io/airt: client-side-airt-academy-evidence (5 findings incl prompt-injection terminal demo)",
+      "hackthissite.org/playlevel/29: client-side-hts-playlevel-hub-evidence (6 findings)",
+      "hackthissite.org/missions/application/23: client-side-hts-login-gated-mission-hub-evidence (6 findings)",
+      "redtiger.labs.overthewire.org/level4.php: redtiger-blind-login-form-evidence (3 findings)",
       "hack-this-site-eta.vercel.app/api-labs + owasp/a01 + a03: 15 findings each (rich OWASP lab markers)",
-      "vwad.owasp.org/app/grpc-goat: 6 findings (gRPC vuln lab directory)",
-      "chal7.vercel.app: 6 findings; chal1.vercel.app: 4 findings",
-      "gitagent-securebot-app.vercel.app: 3 findings (bundled VulnBot target markers)"
+      "vwad.owasp.org/app/grpc-goat: 6 findings (gRPC vuln lab directory)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop.herokuapp.com: secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
-      "HTS playlevel/29–30 + application/23–24 + AIRT + new tail seeds queued for next drain",
+      "HTS playlevel/30 + application/24 queued — seeds shipped, drain on next queue run",
       "bugbountyhunter.com/challenge?id=27: HTTP 302 to homepage — challenge not published"
     ]
   },
@@ -272,6 +281,7 @@
     "hack-this-site-eta.vercel.app/owasp/a01.html": 15,
     "chal7.vercel.app": 6,
     "redtiger.labs.overthewire.org/level4.php": 3,
-    "chal1.vercel.app": 4
+    "chal1.vercel.app": 4,
+    "0x4d31.github.io/airt": 5
   }
 }

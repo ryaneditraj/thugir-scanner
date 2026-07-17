@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T02:03:15.825Z",
-  "total": 392,
-  "uniqueSlugs": 392,
+  "generatedAt": "2026-07-17T03:05:22.377Z",
+  "total": 393,
+  "uniqueSlugs": 393,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 374,
+    "generic": 375,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 324,
+    "deep": 325,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "SSRF": 1,
     "Server-side request forgery": 5,
     "Sensitive data exposure": 5,
-    "AI security": 24,
+    "AI security": 25,
     "XSS": 1
   },
   "slugs": [
@@ -42,6 +42,7 @@
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
     "client-side-aikido-zen-demo-evidence",
+    "client-side-airt-academy-evidence",
     "client-side-alf-serviceworker-evidence",
     "client-side-alf-xss-wargame-evidence",
     "client-side-api-security-lab-evidence",
