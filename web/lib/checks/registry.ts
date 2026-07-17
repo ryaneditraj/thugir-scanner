@@ -4177,6 +4177,98 @@ const clientSideHacksplainingFileUploadLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining command execution lesson (hacksplaining.com/lessons/command-execution) -------
+const CLIENT_HACKSPLAINING_COMMAND_EXECUTION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Command execution lesson URL",
+    re: /hacksplaining\.com\/lessons\/command-execution/i
+  },
+  {
+    label: "Command execution lesson title",
+    re: /Command Execution — Secure Coding Lesson/i
+  },
+  {
+    label: "OS command string construction lesson meta description",
+    re: /If your application calls out to the OS, you need to be sure command strings are securely constructed/i
+  },
+  {
+    label: "Command execution lesson step nav",
+    re: /lessons\/command-execution\/(?:checking-the-code|command-injection|a-real-world-example|finish)/i
+  },
+  {
+    label: "Command execution attack description",
+    re: /command injection|shell metacharacter|OS call/i
+  }
+];
+
+const clientSideHacksplainingCommandExecutionLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/command-execution/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_COMMAND_EXECUTION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/command-execution\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining command execution lesson documents exploit-then-fix chains where unsanitized OS command strings enable shell injection"
+    }
+  };
+};
+
+// --- Hacksplaining XML bomb lesson (hacksplaining.com/lessons/xml-bombs) -------
+const CLIENT_HACKSPLAINING_XML_BOMB_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XML bomb lesson URL",
+    re: /hacksplaining\.com\/lessons\/xml-bombs/i
+  },
+  {
+    label: "XML bomb lesson title",
+    re: /XML Bombs — Secure Coding Lesson/i
+  },
+  {
+    label: "XML macro expansion lesson meta description",
+    re: /Unsafe treatment of XML macros can make your server vulnerable/i
+  },
+  {
+    label: "XML bomb lesson step nav",
+    re: /lessons\/xml-bombs\/(?:checking-the-code|billion-laughs|a-real-world-example|finish)/i
+  },
+  {
+    label: "XML bomb attack description",
+    re: /billion laughs|XML macro|entity expansion|denial of service/i
+  }
+];
+
+const clientSideHacksplainingXmlBombLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/xml-bombs/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_XML_BOMB_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/xml-bombs\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining XML bomb lesson documents exploit-then-fix chains where recursive XML entity expansion can exhaust server memory"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -7704,6 +7796,47 @@ const clientSidePentesterlabSqli02ExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab SQL Injection 02 exercise documents login-form SQLi with double-quoted string payloads"
+    }
+  };
+};
+
+// --- PentesterLab hosted SQL Injection 03 exercise (pentesterlab.com/exercises/sqli_03)
+const CLIENT_PENTESTERLAB_SQLI03_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SQL Injection 03 course title",
+    re: /SQL Injection 03|PentesterLab:\s*SQL Injection 03/i
+  },
+  {
+    label: "LIMIT keyword single-row bypass lab description",
+    re: /only one result is returned by the database[\s\S]{0,80}bypass this check by using the keyword LIMIT/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"SQL Injection 03"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/sqli[_-]03/i
+  }
+];
+
+const clientSidePentesterlabSqli03ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/sqli[_-]03/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SQLI03_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SQL Injection 03 exercise documents single-row result checks bypassed with LIMIT keyword payloads"
     }
   };
 };
@@ -18579,6 +18712,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabWebForPentesterEvidence,
   clientSidePentesterlabSqliExerciseEvidence,
   clientSidePentesterlabSqli02ExerciseEvidence,
+  clientSidePentesterlabSqli03ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,
   clientSidePentesterlabSsrfExerciseEvidence,
@@ -18801,6 +18935,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingXssDomLessonEvidence,
   clientSideHacksplainingSessionFixationLessonEvidence,
   clientSideHacksplainingFileUploadLessonEvidence,
+  clientSideHacksplainingCommandExecutionLessonEvidence,
+  clientSideHacksplainingXmlBombLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
