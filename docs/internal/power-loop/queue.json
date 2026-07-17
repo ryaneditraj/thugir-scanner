@@ -4548,7 +4548,32 @@
       "url": "https://www.bugbountyhunter.com/challenge?id=27",
       "source": "BugBountyHunter zseano \u2014 business-logic / access-control challenge #27 (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/29/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 29 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/23/",
+      "source": "Hack This Site \u2014 application mission 23 web exploitation challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/30/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 30 interactive vulnerability puzzle (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/24/",
+      "source": "Hack This Site \u2014 application mission 24 web exploitation challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://0x4d31.github.io/airt/",
+      "source": "0x4d31/AIRT \u2014 AI Red Team Academy free course with Docker lab curriculum (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-17T01:35:00.000Z"
+  "updated_at": "2026-07-17T02:10:00.000Z"
 }
