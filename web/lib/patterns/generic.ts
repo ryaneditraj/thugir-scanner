@@ -2398,6 +2398,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-autho-03-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Authorization 03 content-negotiation exercise disclosed",
+    description:
+      "PentesterLab Authorization 03 hosted exercise documents IDOR via alternate JSON representations that expose unmasked sensitive data hidden in HTML views.",
+    impactOneline:
+      "Public content-negotiation IDOR exercise reveals JSON/HTML representation mismatch patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabAutho03ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce consistent field masking across all API representations.",
+      steps: [
+        "Require authentication before serving IDOR exercise instances.",
+        "Apply the same sensitive-field masking on JSON and HTML API responses.",
+        "Reject unauthenticated alternate-format requests for user records."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Authorization 03-style content-negotiation IDOR labs. Show how to gate labs behind auth and mask sensitive fields across all representations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-03-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 03 non-recursive filter exercise disclosed",
+    description:
+      "PentesterLab XSS 03 hosted exercise documents reflected XSS filter bypass by exploiting non-recursive blacklist sanitization to inject script payloads.",
+    impactOneline:
+      "Public XSS exercise instance reveals non-recursive filter evasion patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss03ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use recursive/context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Replace blacklist filters with context-aware sanitizers that normalize nested payloads."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 03-style non-recursive filter labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

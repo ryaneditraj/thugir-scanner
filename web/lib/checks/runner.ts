@@ -753,7 +753,9 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabSsrfExerciseEvidence",
   "clientSidePentesterlabIdorExerciseEvidence",
   "clientSidePentesterlabAutho02ExerciseEvidence",
+  "clientSidePentesterlabAutho03ExerciseEvidence",
   "clientSidePentesterlabXss02ExerciseEvidence",
+  "clientSidePentesterlabXss03ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -1277,6 +1279,10 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/autho-02",
     "/exercises/xss_02",
     "/exercises/xss-02",
+    "/exercises/xss_03",
+    "/exercises/xss-03",
+    "/exercises/autho_03",
+    "/exercises/autho-03",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -5325,7 +5331,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level105/index.php",
         "http://www.net-force.nl/challenge/level106/index.php",
         "http://www.net-force.nl/challenge/level107/index.php",
-        "http://www.net-force.nl/challenge/level108/index.html"
+        "http://www.net-force.nl/challenge/level108/index.html",
+        "https://www.net-force.nl/challenge/level109/"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
