@@ -2690,7 +2690,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "Net-Force.nl JavaScript auth-bypass challenge disclosed",
     description:
-      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, eval(unescape()) koh() decoders, or substring password-generation drills for authentication bypass training.",
+      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, eval(unescape()) koh() decoders, HTML PROTECT SHA1 hash gates, or substring password-generation drills for authentication bypass training.",
     impactOneline:
       "Public Net-Force challenge pages document trivial client-side credential checks attackers bypass without server validation.",
     detectorKind: "rule_ref",

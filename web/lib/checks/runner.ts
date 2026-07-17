@@ -1476,6 +1476,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/31/",
     "/playlevel/32/",
     "/playlevel/33/",
+    "/playlevel/34/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1493,6 +1494,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/26/",
     "/missions/application/27/",
     "/missions/application/28/",
+    "/missions/application/29/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1503,6 +1505,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/17/",
     "/missions/javascript/19/",
     "/missions/javascript/20/",
+    "/missions/javascript/21/",
     "/missions/stego/9/",
     "/missions/stego/10/",
     "/missions/stego/11/",
@@ -5309,7 +5312,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ? [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
-        "https://wrongsecrets.herokuapp.com/challenge/challenge-2"
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-3",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-4"
       ]
     : [];
   const grpcGoatPrioritySeeds =
