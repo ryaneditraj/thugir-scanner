@@ -10741,6 +10741,10 @@ const CLIENT_WRONGSECRETS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Spring Boot application.properties secret",
     re: /application\.properties|Spring Boot application|Spring Cloud Config/i
+  },
+  {
+    label: "K8s configmap secret walkthrough",
+    re: /K8s Configmap|config-map in the default namespace|kubectl.*find the secret/i
   }
 ];
 
@@ -10758,7 +10762,9 @@ const clientSideWrongSecretsChallengeEvidence: Rule = async (ctx) => {
   if (hits.length < 3) return NEGATIVE;
   const challengeId =
     pageUrl.match(/challenge-(\d+)/i)?.[1] ?? corpus.match(/challenge-(\d+)/i)?.[1];
-  const note = /application\.properties|Spring Boot application/i.test(corpus)
+  const note = /K8s Configmap|config-map in the default namespace/i.test(corpus)
+    ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Kubernetes configmap secret extraction with answer submission UI`
+    : /application\.properties|Spring Boot application/i.test(corpus)
     ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
     : /Docker documentation|copy the Jar file/i.test(corpus)
       ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
