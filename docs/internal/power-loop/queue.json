@@ -4673,7 +4673,32 @@
       "url": "https://hack-this-site-eta.vercel.app/sqli/",
       "source": "dkyazzentwatwa/hack-this-site — dedicated SQLi lab route on Vercel OSS deploy",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level106/index.php",
+      "source": "Net-Force — HTML Guardian client-side JS decode challenge 106 (Infosec writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/12/",
+      "source": "Hack This Site — programming mission 12 exploit scripting challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/15/",
+      "source": "Hack This Site — stego mission 15 steganography challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/28/",
+      "source": "Hack This Site — application mission 28 web exploit challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/javascript/20/",
+      "source": "Hack This Site — javascript mission 20 client-side logic bypass challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T07:10:00.000Z"
+  "updated_at": "2026-07-17T10:05:00.000Z"
 }
