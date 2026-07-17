@@ -3965,6 +3965,24 @@
       "slug": "client-side-pentesterlab-autho-03-exercise-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Authorization 03 JSON-LD JSON representations expose unmasked sensitive data via content negotiation on /exercises/autho_03; pentesterlab.com/exercises/autho_03 findings 0→4 incl client-side-pentesterlab-autho-03-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level405-union-sqli",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level405 UNION makes FORCE + source.txt mysql_db_query WHERE user='$login'; netForcePrioritySeeds level405 + source.txt crawl + POST login field probes; level405 findings 0→3 incl client-side-net-force-challenge-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-02-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SQL Injection 02 JSON-LD double-quoted string login SQLi on /exercises/sqli_02; pentesterlab.com/exercises/sqli_02 findings 0→4 incl client-side-pentesterlab-sqli-02-exercise-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-31-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/31/ Login Required + HTS training ground hub; extractHackThisSiteMissionSeeds tail extended; application/31 findings 0→6 incl client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7052,6 +7070,21 @@
       "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-xss-02-exercise-evidence",
       "shipped_at": "2026-07-17T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level405-union-sqli",
+      "shipped_at": "2026-07-17T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-sqli-02-exercise-evidence",
+      "shipped_at": "2026-07-17T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-31-mission-seed",
+      "shipped_at": "2026-07-17T15:10:00.000Z"
     }
   ]
 }

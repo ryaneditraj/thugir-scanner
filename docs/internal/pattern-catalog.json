@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T14:02:45.490Z",
-  "total": 406,
-  "uniqueSlugs": 406,
+  "generatedAt": "2026-07-17T15:04:10.557Z",
+  "total": 407,
+  "uniqueSlugs": 407,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 388,
+    "generic": 389,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 338,
+    "deep": 339,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 26,
     "Security misconfiguration": 31,
     "Broken authentication": 25,
-    "Injection": 71,
+    "Injection": 72,
     "Cross-site scripting": 49,
     "general": 18,
     "SSRF": 1,
@@ -221,6 +221,7 @@
     "client-side-pentesterlab-autho-03-exercise-evidence",
     "client-side-pentesterlab-evidence",
     "client-side-pentesterlab-idor-exercise-evidence",
+    "client-side-pentesterlab-sqli-02-exercise-evidence",
     "client-side-pentesterlab-sqli-exercise-evidence",
     "client-side-pentesterlab-sqli-to-shell-evidence",
     "client-side-pentesterlab-ssrf-exercise-evidence",
