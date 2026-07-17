@@ -4948,7 +4948,32 @@
       "url": "https://www.hackthissite.org/playlevel/38/",
       "source": "Hack This Site \u2014 playlevel arcade hub challenge 38 (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/38/",
+      "source": "Hack This Site \u2014 application mission 38 reverse-engineering challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/39/",
+      "source": "Hack This Site \u2014 playlevel arcade hub challenge 39 (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level117/index.php",
+      "source": "Net-Force \u2014 web exploit training challenge level 117 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://unicord.dev/exploit-CVE-2025-29927",
+      "source": "UNICORDev CVE-2025-29927 Next.js middleware authorization bypass demo (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/sqli_05/",
+      "source": "PentesterLab \u2014 SQL Injection 05 stacked queries exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T20:33:00.000Z"
+  "updated_at": "2026-07-17T21:10:00.000Z"
 }

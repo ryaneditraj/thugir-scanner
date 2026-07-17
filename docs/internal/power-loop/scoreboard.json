@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-17T20:36:00.000Z",
+  "updated_at": "2026-07-17T21:07:06.060Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 960,
-  "total_findings": 4593,
+  "total_sites_scanned": 961,
+  "total_findings": 4599,
   "critical_findings": 29,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 988,
   "discovery_findings": 3401,
   "improvements_shipped": 635,
-  "last_run": "2026-07-17T20:36:00.000Z",
+  "last_run": "2026-07-17T21:07:06.060Z",
   "last_run_summary": {
     "hour_utc": "20:00",
     "benchmark": {
@@ -32,7 +32,9 @@
       "oracle_recall": "6/6",
       "gap": [],
       "first_pass_recall": "5/6",
-      "first_pass_gap": ["sensitive_data"],
+      "first_pass_gap": [
+        "sensitive_data"
+      ],
       "note": "Heroku cold-start degraded first pass (gap=sensitive_data); wake retry recovered 6/6 (6 findings)",
       "benchmark_recall": {
         "juice-shop": {
