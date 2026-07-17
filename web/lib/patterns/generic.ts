@@ -3698,6 +3698,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-file-upload-lesson-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Hacksplaining file upload lesson disclosed",
+    description:
+      "Hacksplaining /lessons/file-upload publishes an interactive exploit-then-fix walkthrough covering unvalidated file uploads that let attackers inject malicious code.",
+    impactOneline:
+      "Public file upload lesson pages document unsafe upload handling patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingFileUploadLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining file upload lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable file upload lesson instances on private deployments.",
+        "Validate file types, extensions, and content in production — never copy Hacksplaining weak upload handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style file upload exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",

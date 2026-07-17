@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T04:03:10.902Z",
-  "total": 394,
-  "uniqueSlugs": 394,
+  "generatedAt": "2026-07-17T05:06:55.922Z",
+  "total": 395,
+  "uniqueSlugs": 395,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 376,
+    "generic": 377,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 326,
+    "deep": 327,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 120,
+    "Broken access control": 121,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -144,6 +144,7 @@
     "client-side-hacksplaining-downgrade-attacks-lesson-evidence",
     "client-side-hacksplaining-email-spoofing-lesson-evidence",
     "client-side-hacksplaining-evidence",
+    "client-side-hacksplaining-file-upload-lesson-evidence",
     "client-side-hacksplaining-host-header-poisoning-lesson-evidence",
     "client-side-hacksplaining-malvertising-lesson-evidence",
     "client-side-hacksplaining-mass-assignment-lesson-evidence",

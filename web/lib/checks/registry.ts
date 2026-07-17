@@ -4125,6 +4125,51 @@ const clientSideHacksplainingSessionFixationLessonEvidence: Rule = async (ctx) =
   };
 };
 
+// --- Hacksplaining file upload lesson (hacksplaining.com/lessons/file-upload) ---------
+const CLIENT_HACKSPLAINING_FILE_UPLOAD_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "File upload lesson URL",
+    re: /hacksplaining\.com\/lessons\/file-upload/i
+  },
+  {
+    label: "File upload lesson title",
+    re: /File Upload Vulnerabilities — Secure Coding Lesson/i
+  },
+  {
+    label: "File upload malicious code meta description",
+    re: /File uploads are an easy way for an attacker to inject malicious code into your application/i
+  },
+  {
+    label: "File upload lesson step nav",
+    re: /lessons\/file-upload\/(?:a-tempting-opportunity|a-simple-example|introducing-mal|uploading-with-javascript-disabled|attack-vector-established|getting-database-access|finish)/i
+  },
+  {
+    label: "File upload attacker payload description",
+    re: /file upload|malicious code upload|upload.*malicious/i
+  }
+];
+
+const clientSideHacksplainingFileUploadLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/file-upload/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_FILE_UPLOAD_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/file-upload\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining file upload lesson documents exploit-then-fix chains where unvalidated uploads enable malicious code injection and remote execution"
+    }
+  };
+};
+
 // --- OopsSec Store CTF walkthrough roadmap (koadt.github.io/oss-oopssec-store) --------
 const CLIENT_OOPSSEC_STORE_RES: { label: string; re: RegExp }[] = [
   {
@@ -18029,6 +18074,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingOpenRedirectsLessonEvidence,
   clientSideHacksplainingXssDomLessonEvidence,
   clientSideHacksplainingSessionFixationLessonEvidence,
+  clientSideHacksplainingFileUploadLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
