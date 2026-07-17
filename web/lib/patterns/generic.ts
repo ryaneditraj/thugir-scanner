@@ -2690,7 +2690,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "Net-Force.nl JavaScript auth-bypass challenge disclosed",
     description:
-      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, or substring password-generation drills for authentication bypass training.",
+      "Net-Force.nl /challenge/levelNN/ instances expose client-side validate(), document.write(unescape()), JScript.Encode tester() gates, eval(unescape()) koh() decoders, or substring password-generation drills for authentication bypass training.",
     impactOneline:
       "Public Net-Force challenge pages document trivial client-side credential checks attackers bypass without server validation.",
     detectorKind: "rule_ref",
@@ -3512,6 +3512,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our app mirrors OWASP WrongSecrets-style secret hiding. Show how to detect and remove secrets from code, Docker, and Git.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-wrongsecrets-challenge-evidence",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge walkthrough page disclosed",
+    description:
+      "WrongSecrets /challenge/challenge-N pages document hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI.",
+    impactOneline:
+      "Public WrongSecrets challenge walkthroughs teach attackers where production apps commonly hide secrets in code and containers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWrongSecretsChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenges are intentional training — remove hardcoded secrets from production code and images.",
+      steps: [
+        "Scan repositories and container layers for secrets before deploy.",
+        "Use secret managers instead of application.properties or env files in images.",
+        "Never ship answer-submission CTF walkthroughs on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets-style challenge pages document hardcoded secrets in Git/Docker. Show how to detect and remove secrets from code, containers, and cloud config.",
     version: 1,
     enabled: true
   },

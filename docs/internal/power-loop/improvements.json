@@ -3857,6 +3857,24 @@
       "slug": "client-side-ctfd-platform-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Powered by CTFd footer + ctfd.io link + /challenges nav; hackerfire.com findings 2→3 incl client-side-ctfd-platform-evidence; benchmark juice-shop-staging 7 findings recall maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level106-107-eval-unescape",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level106/index.php eval(unescape('%6B...')) + function koh() + HTML Guardian title; netForcePrioritySeeds adds level106–107; level106 findings 1→3 incl client-side-net-force-challenge-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "client-side-wrongsecrets-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-1 Find the secret hidden in + data-cy=answer-textbox + Centralized hardcoded password walkthrough; wrongSecretsHubPrioritySeeds challenge-0–2; challenge-1 findings 5→6 incl client-side-wrongsecrets-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-33-application-28-javascript-20",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/33/ login-gated arcade hub + application/28 javascript/20 mission tail slots; extractHackThisSiteMissionSeeds extended; playlevel/33 findings 6 incl client-side-hts-playlevel-hub-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6884,6 +6902,21 @@
       "source": "discovery:hackerfire.com",
       "slug": "client-side-ctfd-platform-evidence",
       "shipped_at": "2026-07-17T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level106-107-eval-unescape",
+      "shipped_at": "2026-07-17T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "client-side-wrongsecrets-challenge-evidence",
+      "shipped_at": "2026-07-17T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-33-application-28-javascript-20",
+      "shipped_at": "2026-07-17T09:20:00.000Z"
     }
   ]
 }

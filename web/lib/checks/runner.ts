@@ -795,6 +795,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackAdvisorLabEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideWrongSecretsEvidence",
+  "clientSideWrongSecretsChallengeEvidence",
   "clientSideMaestroAgenticAiEvidence",
   "clientSideZerodayTrainingEvidence",
   "clientSideCtfResearchTeamEvidence",
@@ -1423,6 +1424,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/realistic/14/",
     "/missions/realistic/15/",
     "/missions/realistic/16/",
+    "/missions/realistic/17/",
+    "/missions/realistic/18/",
     "/missions/javascript/3/",
     "/missions/stego/3/",
     "/missions/forensic/3/",
@@ -1472,6 +1475,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/30/",
     "/playlevel/31/",
     "/playlevel/32/",
+    "/playlevel/33/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1488,6 +1492,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/25/",
     "/missions/application/26/",
     "/missions/application/27/",
+    "/missions/application/28/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1497,6 +1502,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/javascript/15/",
     "/missions/javascript/17/",
     "/missions/javascript/19/",
+    "/missions/javascript/20/",
     "/missions/stego/9/",
     "/missions/stego/10/",
     "/missions/stego/11/",
@@ -5294,7 +5300,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level102/index.php",
         "http://www.net-force.nl/challenge/level103/index.php",
         "http://www.net-force.nl/challenge/level104/index.php",
-        "http://www.net-force.nl/challenge/level105/index.php"
+        "http://www.net-force.nl/challenge/level105/index.php",
+        "http://www.net-force.nl/challenge/level106/index.php",
+        "http://www.net-force.nl/challenge/level107/index.php"
+      ]
+    : [];
+  const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
+    ? [
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-2"
       ]
     : [];
   const grpcGoatPrioritySeeds =
@@ -5387,6 +5402,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
+      ...wrongSecretsHubPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,

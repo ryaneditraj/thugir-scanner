@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T08:18:25.632Z",
-  "total": 398,
-  "uniqueSlugs": 398,
+  "generatedAt": "2026-07-17T09:07:53.919Z",
+  "total": 399,
+  "uniqueSlugs": 399,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 380,
+    "generic": 381,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 330,
+    "deep": 331,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 122,
-    "Exposed secret": 15,
+    "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -318,6 +318,7 @@
     "client-side-webvulnsguide-xxe-lab-evidence",
     "client-side-wechall-evidence",
     "client-side-wizer-ctf-evidence",
+    "client-side-wrongsecrets-challenge-evidence",
     "client-side-wrongsecrets-evidence",
     "client-side-xor-auth-evidence",
     "client-side-xss-c2-collector-evidence",
