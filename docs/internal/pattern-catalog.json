@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T16:02:58.468Z",
-  "total": 409,
-  "uniqueSlugs": 409,
+  "generatedAt": "2026-07-17T17:10:32.319Z",
+  "total": 411,
+  "uniqueSlugs": 411,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 391,
+    "generic": 393,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 341,
+    "deep": 343,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 26,
+    "Information disclosure": 28,
     "Security misconfiguration": 31,
     "Broken authentication": 25,
     "Injection": 73,
@@ -192,6 +192,7 @@
     "client-side-mutillidae-evidence",
     "client-side-net-force-challenge-evidence",
     "client-side-net-force-evidence",
+    "client-side-net-force-offline-challenge-evidence",
     "client-side-nimbus-vault-evidence",
     "client-side-nivara-security-evidence",
     "client-side-nodegoat-evidence",
@@ -308,6 +309,7 @@
     "client-side-vulnscope-evidence",
     "client-side-vulnshop-evidence",
     "client-side-vulnweb-lab-evidence",
+    "client-side-vwad-app-not-found-evidence",
     "client-side-vwad-bodgeit-evidence",
     "client-side-vwad-mutillidae-evidence",
     "client-side-vwad-nodegoat-evidence",

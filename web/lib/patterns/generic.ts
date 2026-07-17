@@ -9210,6 +9210,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-app-not-found-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "OWASP VWAD app listing returns 404",
+    description:
+      "OWASP VWAD /app/{slug}/ detail URLs that return the site-wide 404 shell indicate a stale directory entry — the vulnerable training instance was removed or never deployed.",
+    impactOneline:
+      "Stale VWAD app URLs mislead scanners into false positives from crawled sibling listings on the 404 page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadAppNotFoundEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or update stale VWAD listings when training apps go offline.",
+      steps: [
+        "Open a VWAD GitHub issue to delist removed training instances.",
+        "Do not link production security tools to VWAD URLs without verifying the app still loads.",
+        "Gate scanner benchmarks on live oracle checks, not directory metadata alone."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD app listing returns 404. Show how to delist stale entries and avoid false-positive scans from sibling app crawls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-net-force-offline-challenge-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "Net-Force.nl challenge instance offline (redirects to homepage)",
+    description:
+      "Net-Force /challenge/levelNN/ URLs that 301 to the homepage indicate decommissioned training challenges (e.g. level110–111).",
+    impactOneline:
+      "Offline Net-Force challenge URLs pollute discovery queues and can trigger false positives from homepage crawl siblings.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNetForceOfflineChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Net-Force challenges are retired over time — remove dead level URLs from scanner queues.",
+      steps: [
+        "Verify /challenge/levelNN/ returns a challenge title before enqueueing.",
+        "Treat homepage redirects as offline oracles, not auth-bypass labs.",
+        "Prefer active Net-Force levels 101–109 and 405 from the challenges catalog."
+      ]
+    },
+    fixPrompt:
+      "We link to Net-Force challenges that redirect to the homepage. Show how to detect offline instances and prune scanner queues.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vwad-security-shepherd-evidence",
     platform: "generic",
     category: "Broken access control",
