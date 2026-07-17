@@ -3767,6 +3767,24 @@
       "slug": "bugbountyhunter-challenge-27-oracle",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge?id=27 returns HTTP 302 to homepage — no distinct scenario title or challenge page; oracle deferred until BBH publishes challenge #27"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-29-30-application-23-24-forensic-18",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/29/ + /playlevel/30/ Login Required + /missions/application/23/ Login Required + /missions/application/24/ Login Required; extractHackThisSiteMissionSeeds tail extended; playlevel/29 gains client-side-hts-playlevel-hub-evidence; application/23 gains client-side-hts-login-gated-mission-hub-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:0x4d31.github.io/airt",
+      "slug": "client-side-airt-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title AIRT — AI Red Team Academy + meta prompt injection to supply chain attacks + terminal [!] VULN: Direct prompt injection — system prompt override; extractAirtAcademySeeds module1-8.html; 0x4d31.github.io/airt findings 0→5 incl client-side-airt-academy-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level4-priority-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level4.php POST name=level4login password field blind SQLi drill; redTigerPrioritySeeds adds level4.php; level4.php findings 3 incl redtiger-blind-login-form-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6719,6 +6737,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-xss-dom-lesson-evidence",
       "shipped_at": "2026-07-17T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-29-30-application-23-24-forensic-18",
+      "shipped_at": "2026-07-17T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:0x4d31.github.io/airt",
+      "slug": "client-side-airt-academy-evidence",
+      "shipped_at": "2026-07-17T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level4-priority-seed",
+      "shipped_at": "2026-07-17T03:10:00.000Z"
     }
   ]
 }
