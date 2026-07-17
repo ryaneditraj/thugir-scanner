@@ -901,6 +901,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSkillauditEvidence",
   "clientSideSecuredAiLabEvidence",
   "clientSideGitagentSecurebotEvidence",
+  "clientSideAirtAcademyEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
   "clientSideVapiEvidence",
@@ -1462,6 +1463,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/26/",
     "/playlevel/27/",
     "/playlevel/28/",
+    "/playlevel/29/",
+    "/playlevel/30/",
     "/missions/application/11/",
     "/missions/application/12/",
     "/missions/application/13/",
@@ -1473,6 +1476,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/19/",
     "/missions/application/20/",
     "/missions/application/22/",
+    "/missions/application/23/",
+    "/missions/application/24/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -1501,7 +1506,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/forensic/13/",
     "/missions/forensic/15/",
     "/missions/forensic/16/",
-    "/missions/forensic/17/"
+    "/missions/forensic/17/",
+    "/missions/forensic/18/"
   ]) {
     try {
       out.add(new URL(p, origin).toString());
@@ -3771,6 +3777,24 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** AIRT AI Red Team Academy (0x4d31.github.io/airt) — seed module lab pages. */
+function extractAirtAcademySeeds(html: string, pageUrl: string): string[] {
+  if (!/AIRT[\s\S]{0,40}AI Red Team Academy|0x4d31\.github\.io\/airt/i.test(`${html}\n${pageUrl}`))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (let i = 1; i <= 8; i++) {
+    try {
+      const u = new URL(`./module${i}.html`, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** GitAgent SecureBot demo scanner (gitagent-securebot-app.vercel.app) — seed demo scan route. */
 function extractGitagentSecurebotSeeds(html: string, pageUrl: string): string[] {
   if (!/GitAgent SecureBot|gitagent-securebot|open-gitagent\/gitagent/i.test(html)) return [];
@@ -5099,6 +5123,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secResearchLabSeeds = extractSecResearchLabSeeds(home.body, home.finalUrl);
   const skillauditSeeds = extractSkillauditDocSeeds(home.body, home.finalUrl);
   const gitagentSecurebotSeeds = extractGitagentSecurebotSeeds(home.body, home.finalUrl);
+  const airtAcademySeeds = extractAirtAcademySeeds(home.body, home.finalUrl);
   const appsecMasterLabSeeds = extractAppsecMasterLabSeeds(home.body, origin);
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
@@ -5245,6 +5270,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ? [
         "http://redtiger.labs.overthewire.org/",
         "http://redtiger.labs.overthewire.org/level1.php",
+        "http://redtiger.labs.overthewire.org/level4.php",
         "http://redtiger.labs.overthewire.org/special1.php"
       ]
     : [];
@@ -5415,6 +5441,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secResearchLabSeeds,
       ...skillauditSeeds,
       ...gitagentSecurebotSeeds,
+      ...airtAcademySeeds,
       ...appsecMasterLabSeeds,
       ...istEduVulnPortalSeeds,
       ...vulnforgeSeeds,

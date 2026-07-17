@@ -6740,6 +6740,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-airt-academy-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AIRT AI Red Team Academy course disclosed",
+    description:
+      "AIRT (AI Red Team Academy) publishes a free open-source offensive AI security curriculum covering prompt injection, RAG pipelines, multi-agent systems, and supply-chain attacks with Docker-based labs.",
+    impactOneline:
+      "Public AI red-team course pages document prompt-injection and LLM attack lab modules attackers can use to tune scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAirtAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AIRT Docker labs are intentional training — isolate lab environments from production AI systems.",
+      steps: [
+        "Run AIRT vulnerable chatbot labs on private networks only.",
+        "Gate module lab downloads behind authenticated training portals on private deployments.",
+        "Never expose Ollama or vector-database lab targets to the public internet without access controls."
+      ]
+    },
+    fixPrompt:
+      "We host an AIRT-style AI red-team training academy with Docker labs. Show how to isolate vulnerable LLM lab targets from production agent deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-secresearchlab-evidence",
     platform: "generic",
     category: "Broken access control",
