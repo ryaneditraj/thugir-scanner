@@ -4598,7 +4598,32 @@
       "url": "https://www.hackthissite.org/missions/stego/12/",
       "source": "Hack This Site — stego mission 12 steganography challenge (missions hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level101/index.php",
+      "source": "Net-Force — Javascript client-side auth bypass training challenge 101 (Infosec writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level102/index.php",
+      "source": "Net-Force — Javascript generated-password bypass training challenge 102 (NUSGreyhats lrn2lrn)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level103/index.php",
+      "source": "Net-Force — login bypass / form auth training challenge 103 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/programming/11/",
+      "source": "Hack This Site — programming mission 11 exploit scripting challenge (missions hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/stego/13/",
+      "source": "Hack This Site — stego mission 13 steganography challenge (missions hub)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-17T03:11:48.798Z"
+  "updated_at": "2026-07-17T05:08:38.051Z"
 }
