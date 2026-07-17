@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-17T07:36:05.777Z",
-  "total": 396,
-  "uniqueSlugs": 396,
+  "generatedAt": "2026-07-17T08:18:25.632Z",
+  "total": 398,
+  "uniqueSlugs": 398,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,22 +9,22 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 378,
+    "generic": 380,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 328,
+    "deep": 330,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 121,
+    "Broken access control": 122,
     "Exposed secret": 15,
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 25,
+    "Information disclosure": 26,
     "Security misconfiguration": 31,
     "Broken authentication": 25,
     "Injection": 69,
@@ -87,6 +87,7 @@
     "client-side-ctf-platform-evidence",
     "client-side-ctf-research-team-evidence",
     "client-side-ctfchallenge-evidence",
+    "client-side-ctfd-platform-evidence",
     "client-side-ctflearn-evidence",
     "client-side-ctflearn-webeight-evidence",
     "client-side-ctflearn-webfour-evidence",
@@ -294,6 +295,7 @@
     "client-side-vulnlab-academy-evidence",
     "client-side-vulnlab-auth-session-lab-evidence",
     "client-side-vulnlab-cms-platform-evidence",
+    "client-side-vulnlab-verbose-404-evidence",
     "client-side-vulnscope-evidence",
     "client-side-vulnshop-evidence",
     "client-side-vulnweb-lab-evidence",
