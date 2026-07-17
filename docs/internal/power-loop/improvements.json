@@ -3785,6 +3785,24 @@
       "slug": "redtiger-level4-priority-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET level4.php POST name=level4login password field blind SQLi drill; redTigerPrioritySeeds adds level4.php; level4.php findings 3 incl redtiger-blind-login-form-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-31-application-25",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/31/ Login Required + /missions/application/25/ Login Required; extractHackThisSiteMissionSeeds tail extended; playlevel/31 gains client-side-hts-playlevel-hub-evidence (6 findings); application/25 gains client-side-hts-login-gated-mission-hub-evidence (6 findings); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-session-fixation-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/session-fixation/start title Session Fixation — Secure Coding Lesson + meta Insecure treatment of session IDs can leave your users vulnerable to having their session hijacked; hacksplaining.com/lessons/session-fixation/start findings 7 incl client-side-hacksplaining-session-fixation-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level5-priority-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET level5.php POST name=level5login password field blind SQLi drill; redTigerPrioritySeeds adds level5.php; level5.php findings 3 incl redtiger-blind-login-form-evidence; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -6752,6 +6770,21 @@
       "source": "discovery:redtiger.labs.overthewire.org",
       "slug": "redtiger-level4-priority-seed",
       "shipped_at": "2026-07-17T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-mission-seed-playlevel-31-application-25",
+      "shipped_at": "2026-07-17T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-session-fixation-lesson-evidence",
+      "shipped_at": "2026-07-17T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level5-priority-seed",
+      "shipped_at": "2026-07-17T04:10:00.000Z"
     }
   ]
 }
