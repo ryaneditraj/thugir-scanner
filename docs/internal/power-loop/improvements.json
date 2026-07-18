@@ -4565,6 +4565,24 @@
       "slug": "hts-playlevel-60-application-58-netforce-426-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/60 Login Required hub (0→6) + application/58 login-gated mission hub (0→6) + level426 homepage redirect offline oracle (0→4); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-07-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 07 + find an information leak via Angular ng-app + ng-app attribute hint; pentesterlab.com/exercises/api_07 findings 0→4; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-06-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 06 + CSRF protection headers/cookies + compressed JavaScript beautifier hidden endpoint; pentesterlab.com/exercises/api_06 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-61-application-59-netforce-427-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/61 Login Required hub (0→6) + application/59 login-gated mission hub (0→6) + level427 homepage redirect offline oracle; benchmark juice-shop-staging 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8062,6 +8080,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-60-application-58-netforce-426-seeds",
       "shipped_at": "2026-07-18T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-07-exercise-evidence",
+      "shipped_at": "2026-07-18T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-06-exercise-evidence",
+      "shipped_at": "2026-07-18T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-61-application-59-netforce-427-seeds",
+      "shipped_at": "2026-07-18T19:15:00.000Z"
     }
   ]
 }
