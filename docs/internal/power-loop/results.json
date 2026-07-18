@@ -1,6 +1,114 @@
 {
   "runs": [
     {
+      "run_id": "2026-07-17T16:03:44.928Z",
+      "url": "https://yusufarbc.github.io/apigoat/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 268,
+      "status": "ok",
+      "scanned_at": "2026-07-17T16:03:44.928Z"
+    },
+    {
+      "run_id": "2026-07-17T16:03:46.722Z",
+      "url": "https://reef-mcp-registry.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "secret-openai",
+          "title": "OpenAI API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "secret-twilio",
+          "title": "Twilio account SID + auth exposed in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-mcp-supply-chain-evidence",
+          "title": "MCP supply-chain security demo with attack pack catalog disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "AI security"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 292,
+      "status": "ok",
+      "scanned_at": "2026-07-17T16:03:46.722Z"
+    },
+    {
+      "run_id": "2026-07-17T16:03:51.528Z",
+      "url": "http://testhtml5.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-17T16:03:51.528Z",
+      "error": "We couldn't reach testhtml5.vulnweb.com (domain not found (DNS)). Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
       "run_id": "2026-07-17T17:01:21.603Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -9834,7 +9942,7 @@
       "scanned_at": "2026-07-18T16:40:40.410Z"
     },
     {
-      "run_id": "2026-07-18T17:02:57.162Z",
+      "run_id": "2026-07-18T17:03:30.225Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -9896,10 +10004,10 @@
       "pages_crawled": 6,
       "probes_run": 262,
       "status": "ok",
-      "scanned_at": "2026-07-18T17:02:57.162Z"
+      "scanned_at": "2026-07-18T17:03:30.225Z"
     },
     {
-      "run_id": "2026-07-18T17:04:09.426Z",
+      "run_id": "2026-07-18T17:03:58.264Z",
       "url": "https://www.bugbountyhunter.com/challenge?id=9",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -9932,10 +10040,10 @@
       "pages_crawled": 6,
       "probes_run": 275,
       "status": "ok",
-      "scanned_at": "2026-07-18T17:04:09.426Z"
+      "scanned_at": "2026-07-18T17:03:58.264Z"
     },
     {
-      "run_id": "2026-07-18T17:04:28.032Z",
+      "run_id": "2026-07-18T17:04:15.433Z",
       "url": "https://www.bugbountyhunter.com/challenge?id=10",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -9968,10 +10076,10 @@
       "pages_crawled": 6,
       "probes_run": 275,
       "status": "ok",
-      "scanned_at": "2026-07-18T17:04:28.032Z"
+      "scanned_at": "2026-07-18T17:04:15.433Z"
     },
     {
-      "run_id": "2026-07-18T17:04:47.654Z",
+      "run_id": "2026-07-18T17:04:31.557Z",
       "url": "https://www.bugbountyhunter.com/challenge?id=11",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -10004,10 +10112,10 @@
       "pages_crawled": 6,
       "probes_run": 275,
       "status": "ok",
-      "scanned_at": "2026-07-18T17:04:47.654Z"
+      "scanned_at": "2026-07-18T17:04:31.557Z"
     },
     {
-      "run_id": "2026-07-18T17:05:07.626Z",
+      "run_id": "2026-07-18T17:04:47.422Z",
       "url": "https://koadt.github.io/oss-oopssec-store/roadmap/",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -10061,10 +10169,10 @@
       "pages_crawled": 6,
       "probes_run": 277,
       "status": "ok",
-      "scanned_at": "2026-07-18T17:05:07.626Z"
+      "scanned_at": "2026-07-18T17:04:47.422Z"
     },
     {
-      "run_id": "2026-07-18T17:07:16.846Z",
+      "run_id": "2026-07-18T17:07:16.857Z",
       "url": "https://koadt.github.io/oss-oopssec-store/roadmap",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -10118,164 +10226,7 @@
       "pages_crawled": 6,
       "probes_run": 278,
       "status": "ok",
-      "scanned_at": "2026-07-18T17:07:16.846Z"
-    },
-    {
-      "run_id": "2026-07-18T17:07:32.546Z",
-      "url": "https://vulnbank.org/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 296,
-      "status": "ok",
-      "scanned_at": "2026-07-18T17:07:32.546Z"
-    },
-    {
-      "run_id": "2026-07-18T17:08:12.265Z",
-      "url": "https://ginandjuice.shop/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-gin-and-juice-scanner-lab-evidence",
-          "title": "Gin & Juice Shop scanner evaluation lab documents vulnerability oracle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-open-redirect-evidence",
-          "title": "Client-side open redirect validation documented in bundle",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 268,
-      "status": "ok",
-      "scanned_at": "2026-07-18T17:08:12.265Z"
-    },
-    {
-      "run_id": "2026-07-18T17:08:25.156Z",
-      "url": "https://maestro-agentic-ai-security-demo-mon.netlify.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-maestro-agentic-ai-evidence",
-          "title": "MAESTRO agentic AI security analysis demo disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-maestro-rag-sqli-evidence",
-          "title": "MAESTRO demo documents SQL injection via agent memory queries",
-          "severity": "high",
-          "confidence": 0.89,
-          "category": "Injection"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 270,
-      "status": "ok",
-      "scanned_at": "2026-07-18T17:08:25.156Z"
+      "scanned_at": "2026-07-18T17:07:16.857Z"
     }
   ],
   "teacher_delta_runs": [
@@ -12439,17 +12390,6 @@
       "teacher_delta": [],
       "notes": "No teacher tools available. Pass1 Heroku 503 degraded to misconfig-only; retry recovered full 6/6 recall.",
       "scanned_at": "2026-07-18T16:42:00.000Z"
-    },
-    {
-      "run_id": "2026-07-18T17:09:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 7 findings, 6/6 recall first pass (pages_crawled=6 probes=262; no gap, no retry needed)",
-      "teacher_delta": [],
-      "notes": "No teacher tools available. First-pass full recall; sensitive_data via vibe-unauthenticated-api-routes (secret-resend slug absent).",
-      "scanned_at": "2026-07-18T17:09:00.000Z"
     }
   ]
 }
