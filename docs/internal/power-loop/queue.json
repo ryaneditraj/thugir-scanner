@@ -5393,7 +5393,32 @@
       "url": "https://pentesterlab.com/exercises/api_01/",
       "source": "PentesterLab — API 01 IDOR exercise (Essential badge API track)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/15",
+      "source": "Mario Heiderich domgo.at — DomGoat level 15 location.hash+unescape→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/56/",
+      "source": "Hack This Site — playlevel arcade hub challenge 56 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level423/index.php",
+      "source": "Net-Force — session/auth challenge level 423 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/55/",
+      "source": "Hack This Site — application mission 55 login-gated wargame hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_02/",
+      "source": "PentesterLab — API 02 mass assignment exercise (Essential badge API track)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T12:05:00.000Z"
+  "updated_at": "2026-07-18T13:05:00.000Z"
 }
