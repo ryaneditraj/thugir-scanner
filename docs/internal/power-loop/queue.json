@@ -5073,7 +5073,32 @@
       "url": "https://pentesterlab.com/exercises/ssti_03/",
       "source": "PentesterLab — Server-Side Template Injection 03 Jinja2 RCE exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/44/",
+      "source": "Hack This Site — playlevel arcade hub challenge 44 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/43/",
+      "source": "Hack This Site — application mission 43 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level412/index.php",
+      "source": "Net-Force — session/auth challenge level 412 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_44/",
+      "source": "PentesterLab — HTTP 44 chunked-encoding request crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_04/",
+      "source": "PentesterLab — Server-Side Template Injection 04 Freemarker RCE exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T01:10:00.000Z"
+  "updated_at": "2026-07-18T02:05:00.000Z"
 }
