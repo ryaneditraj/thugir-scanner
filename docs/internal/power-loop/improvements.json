@@ -4601,6 +4601,30 @@
       "slug": "net-force-level428-offline-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level428/index.php redirects to homepage; client-side-net-force-offline-challenge-evidence fires level=428; net-force level428 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-08-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 08 + trusting user-provided paths in $_SERVER['PHP_SELF']; pentesterlab.com/exercises/xss_08 findings 0→4 incl client-side-pentesterlab-xss-08-exercise-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-63-application-61-netforce-429-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/63 login-gated arcade hub (0→6) + application/61 login-gated mission hub (0→6); benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level429-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level429/index.php redirects to homepage; client-side-net-force-offline-challenge-evidence fires level=429; net-force level429 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-09-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /exercises/autho_09/ returns 404 — exercise not published yet; no implementable detection signal"
     }
   ],
   "shipped": [
@@ -8128,6 +8152,21 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level428-offline-seed",
       "shipped_at": "2026-07-18T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-08-exercise-evidence",
+      "shipped_at": "2026-07-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-63-application-61-netforce-429-seeds",
+      "shipped_at": "2026-07-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level429-offline-seed",
+      "shipped_at": "2026-07-18T21:10:00.000Z"
     }
   ]
 }
