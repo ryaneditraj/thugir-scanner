@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T07:09:05.090Z",
+  "updated_at": "2026-07-18T07:10:54.602Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1046,
-  "total_findings": 5006,
+  "total_sites_scanned": 1053,
+  "total_findings": 5069,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1043,
-  "discovery_findings": 3785,
+  "discovery_findings": 3848,
   "improvements_shipped": 661,
-  "last_run": "2026-07-18T07:09:05.090Z",
+  "last_run": "2026-07-18T07:10:54.602Z",
   "last_run_summary": {
     "hour_utc": "07:00",
     "benchmark": {
@@ -53,18 +53,26 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "HTS playlevel/50 + app/49, Net-Force 417, PentesterLab http_48/ssti_08 queued at tail — queue drain pending",
+      "urls_scanned": 7,
+      "findings": 63,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
+      ],
+      "focus": "Queue drain: VWAD grpc-goat, hack-this-site-eta API/OWASP labs, chal7/chal1 Wizer CTF, redtiger level4; HTS playlevel/50 + app/49 + Net-Force 417 + PentesterLab http_48/ssti_08 queued at tail",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses on shallow crawl"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses on shallow crawl",
+      "hack-this-site-eta.vercel.app: exposed source maps + OWASP lab markers across api-labs and A01/A03 modules (15 findings each)",
+      "chal7.vercel.app: SQLi error disclosure + XSS sinks + Wizer CTF evidence (6 findings)",
+      "vwad.owasp.org/app/grpc-goat: gRPC Goat lab + VWAD directory markers (5 findings)",
+      "redtiger.labs.overthewire.org/level4.php: blind login-bypass form evidence (3 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "juice-shop shallow crawl (1 page) still 6/6 — deeper crawl may surface secret-resend slug",
       "HTS playlevel/50 + application/49 + Net-Force 417 + PentesterLab http_48/ssti_08 queued at tail — pending drain",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes"
     ]
   },
@@ -260,7 +268,7 @@
     "vuln-expose.vercel.app": 7,
     "redtiger.labs.overthewire.org": 3,
     "gitagent-securebot-app.vercel.app": 3,
-    "vwad.owasp.org/app/grpc-goat": 6,
+    "vwad.owasp.org/app/grpc-goat": 5,
     "hack-this-site-eta.vercel.app/api-labs": 15,
     "hack-this-site-eta.vercel.app/owasp/a03.html": 15,
     "hack-this-site-eta.vercel.app/owasp/a01.html": 15,
