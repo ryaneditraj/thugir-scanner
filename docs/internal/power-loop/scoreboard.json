@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T20:10:00.000Z",
+  "updated_at": "2026-07-18T20:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1169,
-  "total_findings": 5749,
+  "total_sites_scanned": 1176,
+  "total_findings": 5786,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1108,
-  "discovery_findings": 4448,
+  "discovery_urls_added": 1113,
+  "discovery_findings": 4485,
   "improvements_shipped": 705,
-  "last_run": "2026-07-18T20:10:00.000Z",
+  "last_run": "2026-07-18T20:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "20:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 (7 findings)",
+      "note": "First-pass full recall on deep crawl (7 findings pages=6 probes=262; no gap, no retry needed)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,22 +50,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 12,
-      "focus": "Queued tail drain — PentesterLab XSS 07, DomGoat cxss/example/20, Net-Force level428",
-      "queued_pending": [],
+      "urls_added": 5,
+      "urls_scanned": 10,
+      "findings": 49,
+      "focus": "Head drain (Hacksplaining toxic-deps/unencrypted/xssi, reef-mcp-registry, UCU CTF, OGT Cyber Game, itsecgames) + tail drain (XSS 07, DomGoat cxss/20, Net-Force 428)",
+      "queued_pending": [
+        "https://pentesterlab.com/exercises/autho_09/",
+        "https://pentesterlab.com/exercises/xss_08/",
+        "https://www.hackthissite.org/playlevel/63/",
+        "https://www.hackthissite.org/missions/application/61/",
+        "http://www.net-force.nl/challenge/level429/index.php"
+      ],
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+      ],
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "reef-mcp-registry.vercel.app: secret-openai + secret-twilio + MCP supply-chain evidence (6 findings)",
       "pentesterlab.com/exercises/xss_07: HTML-encoded script-tag injection JSON-LD (0→4 findings)",
       "domgo.at/cxss/example/20: unescape(hash)→msgboard.innerHTML DOM XSS lab (0→4 findings)",
-      "www.net-force.nl/challenge/level428: offline challenge redirect oracle (0→4 findings)"
+      "hacksplaining.com: toxic-dependencies + unencrypted-communication + xssi lessons (6 findings each)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop pass1 Heroku cold-start can degrade to 2 findings before retry recovers 6/6",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "PentesterLab autho_09 + xss_08 + HTS playlevel/63 + application/61 + Net-Force 429 queued at tail — pending drain",
       "damn-vulnerable-startup.fly.dev: 403 from cloud egress"
     ]
   },
