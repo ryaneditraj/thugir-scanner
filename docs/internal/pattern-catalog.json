@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T08:03:28.295Z",
-  "total": 429,
-  "uniqueSlugs": 428,
+  "generatedAt": "2026-07-18T09:10:18.186Z",
+  "total": 431,
+  "uniqueSlugs": 430,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 411,
+    "generic": 413,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 361,
+    "deep": 363,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 28,
     "Security misconfiguration": 36,
     "Broken authentication": 26,
-    "Injection": 82,
+    "Injection": 84,
     "Cross-site scripting": 50,
     "general": 18,
     "SSRF": 1,
@@ -112,6 +112,8 @@
     "client-side-devsecops-pipeline-visualizer-evidence",
     "client-side-dom-goat-lab-evidence",
     "client-side-dotnet-serialization-lab-evidence",
+    "client-side-drag-security-flaws-evidence",
+    "client-side-drag-security-flaws-lab-module-evidence",
     "client-side-eks-goat-evidence",
     "client-side-epicdetect-evidence",
     "client-side-eval-filter-bypass-lab-evidence",

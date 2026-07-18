@@ -4343,6 +4343,42 @@
       "slug": "client-side-pentesterlab-ssti-08-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_08/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub HTML Web Security Vulnerabilities + /security/xss|csrf|idor nav; drag-security-flaws.vercel.app findings 5→6+ with hub slug when reachable; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /security/xss Cross-Site Scripting (XSS) + Stored/Reflected/DOM lessons; /security/idor Insecure Direct Object References + profile?userId=123; module pages gain lab-module slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-51-application-50-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/51/ login-gated arcade hub (0→6 findings) + /missions/application/50/ mission hub (0→6 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level418-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level418/index.php 301 redirects to net-force.nl homepage; level418 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-49-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_49/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-09-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_09/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -7685,6 +7721,26 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level417-offline-seed",
       "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-evidence",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-lab-module-evidence",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-51-application-50-seeds",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level418-offline-seed",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
     }
   ]
 }
