@@ -3047,6 +3047,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-05-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 05 compressed-JS hidden endpoint exercise disclosed",
+    description:
+      "PentesterLab API 05 hosted exercise documents discovering a hidden API endpoint by reviewing minified/compressed client JavaScript with a beautifier.",
+    impactOneline:
+      "Public API security exercise instance reveals hidden-endpoint enumeration via obfuscated client bundles for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi05ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; avoid exposing hidden API routes in client JavaScript regardless of minification.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Do not embed undocumented API paths in client JavaScript bundles.",
+        "Enumerate and protect all API routes server-side regardless of client-side obscurity."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 05-style hidden-endpoint labs with minified JS. Show how to gate labs behind auth and remove undocumented API routes from client bundles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-06-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 06 script-tag injection exercise disclosed",
+    description:
+      "PentesterLab XSS 06 hosted exercise documents reflected XSS by injecting JavaScript inside a pre-existing script tag to trigger an alert with a UUID.",
+    impactOneline:
+      "Public XSS exercise instance reveals script-context injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss06ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Avoid reflecting user input inside script blocks without strict validation."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 06-style script-tag injection labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

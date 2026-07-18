@@ -9058,6 +9058,92 @@ const clientSidePentesterlabApi04ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 05 hidden compressed-JS endpoint exercise (pentesterlab.com/exercises/api_05)
+const CLIENT_PENTESTERLAB_API05_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 05 course title",
+    re: /API 05|PentesterLab:\s*API 05/i
+  },
+  {
+    label: "Compressed JavaScript hidden endpoint lab description",
+    re: /review the JavaScript of the page to find a hidden endpoint[\s\S]{0,120}compressed[\s\S]{0,80}beautifier/i
+  },
+  {
+    label: "Inspect JavaScript for unused endpoints",
+    re: /inspect JavaScript code to identify unused endpoints/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 05"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]05/i
+  }
+];
+
+const clientSidePentesterlabApi05ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]05/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API05_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 05 exercise documents discovering a hidden API endpoint in minified/compressed client JavaScript"
+    }
+  };
+};
+
+// --- PentesterLab XSS 06 script-tag injection exercise (pentesterlab.com/exercises/xss_06)
+const CLIENT_PENTESTERLAB_XSS06_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 06 course title",
+    re: /XSS 06|PentesterLab:\s*XSS 06/i
+  },
+  {
+    label: "Script-tag injection lab description",
+    re: /injecting JavaScript code within a pre-existing script tag|create an alert box with your unique identifier \(UUID\)/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 06"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]06/i
+  }
+];
+
+const clientSidePentesterlabXss06ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]06/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS06_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 06 exercise documents reflected XSS via JavaScript injection inside an existing script tag"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -19892,6 +19978,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi02ExerciseEvidence,
   clientSidePentesterlabApi03ExerciseEvidence,
   clientSidePentesterlabApi04ExerciseEvidence,
+  clientSidePentesterlabApi05ExerciseEvidence,
+  clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
