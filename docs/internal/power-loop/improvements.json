@@ -4127,6 +4127,24 @@
       "slug": "client-side-net-force-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level406 SeSSxploit + login.zip session fixation, level407 LeetSS 3.0.12 step-by-step login POST secured/, level408 Secure Extension cmdsign/hash command signing; level406 0→3, level407 0→4, level408 0→3 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-40-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD HTTP 40 + POST /pentesterlab application/yaml YAML key:please; pentesterlab.com/exercises/http_40 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-01-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Server Side Template Injection 01 + SSTI in 404 errors + subprocess.Popen; pentesterlab.com/exercises/ssti_01 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-41-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/41/ Login Required gate + HTS training ground meta; playlevel/41 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7344,6 +7362,21 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-406-408-session-sqli-command-signing",
       "shipped_at": "2026-07-17T23:00:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-40-exercise-evidence",
+      "shipped_at": "2026-07-18T00:16:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-01-exercise-evidence",
+      "shipped_at": "2026-07-18T00:16:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-41-mission-seed",
+      "shipped_at": "2026-07-18T00:16:00.000Z"
     }
   ]
 }
