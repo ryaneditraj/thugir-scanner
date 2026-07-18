@@ -4643,6 +4643,30 @@
       "slug": "domgo-cxss-example-21-hts-64-62-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/21 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/64 arcade hub (0→6) + application/62 mission hub (0→6); extractDomGoatCxssSeeds extended to example/21; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-10-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /exercises/autho_10/ returns 404 — exercise not published yet; no implementable detection signal"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-09-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 09 + DOM-based XSS via URL anchor portion without escaping; pentesterlab.com/exercises/xss_09 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-11-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 11 + register administrator bypassing @libcurl.so email filter; pentesterlab.com/exercises/api_11 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-22-hts-65-63-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/22 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/65 arcade hub (0→6) + application/63 mission hub (0→6); extractDomGoatCxssSeeds extended to example/22; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8200,6 +8224,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-cxss-example-21-hts-64-62-seeds",
       "shipped_at": "2026-07-18T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-09-exercise-evidence",
+      "shipped_at": "2026-07-18T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-11-exercise-evidence",
+      "shipped_at": "2026-07-18T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-22-hts-65-63-seeds",
+      "shipped_at": "2026-07-18T23:10:00.000Z"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T22:10:00.000Z",
+  "updated_at": "2026-07-18T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1123,
   "discovery_findings": 4562,
-  "improvements_shipped": 711,
-  "last_run": "2026-07-18T22:10:00.000Z",
+  "improvements_shipped": 714,
+  "last_run": "2026-07-18T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22:00",
+    "hour_utc": "23:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -52,14 +52,14 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 23,
-      "focus": "Drain queue: PentesterLab API 10, vulnerable-chatbot-demo, DomGoat cxss/21, HTS playlevel/64 + application/62",
+      "findings": 24,
+      "focus": "Drain queue: PentesterLab XSS 09 + API 11, DomGoat cxss/22, HTS playlevel/65 + application/63",
       "queued_pending": [
-        "https://pentesterlab.com/exercises/autho_10/",
-        "https://pentesterlab.com/exercises/xss_09/",
-        "https://pentesterlab.com/exercises/api_11/",
-        "https://www.hackthissite.org/playlevel/65/",
-        "https://domgo.at/cxss/example/22"
+        "https://pentesterlab.com/exercises/autho_10/ (404 — rejected)",
+        "https://pentesterlab.com/exercises/xss_10/",
+        "https://pentesterlab.com/exercises/api_12/",
+        "https://www.hackthissite.org/playlevel/66/",
+        "https://domgo.at/cxss/example/23"
       ],
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
@@ -73,16 +73,17 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "pentesterlab.com/exercises/api_10: email-filter bypass JSON-LD + @libcurl.so oracle (0→4 findings)",
-      "vulnerable-chatbot-demo.vercel.app: INTENTIONALLY VULNERABLE ShopBot + /api/chat agent safety demo (0→3 findings)",
-      "domgo.at/cxss/example/21: hash→innerHTML DOM XSS lab via extended cxss seeds (0→4 findings)",
-      "www.hackthissite.org/playlevel/64: login-gated arcade hub (0→6 findings)",
-      "www.hackthissite.org/missions/application/62: login-gated application mission hub (0→6 findings)"
+      "pentesterlab.com/exercises/xss_09: DOM anchor/hash XSS JSON-LD + lab description (0→4 findings)",
+      "pentesterlab.com/exercises/api_11: email-filter bypass @libcurl.so oracle (0→4 findings)",
+      "domgo.at/cxss/example/22: location.hash→msgboard.innerHTML DOM XSS lab (0→4 findings)",
+      "www.hackthissite.org/playlevel/65: login-gated arcade hub (0→6 findings)",
+      "www.hackthissite.org/missions/application/63: login-gated application mission hub (0→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "pentesterlab.com/exercises/autho_10: 404 — exercise not published yet",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "PentesterLab autho_10 + xss_09 + api_11 + HTS playlevel/65 + DomGoat cxss/22 queued at tail — pending drain",
+      "PentesterLab xss_10 + api_12 + HTS playlevel/66 + DomGoat cxss/23 queued at tail — pending drain",
       "damn-vulnerable-startup.fly.dev: 403 from cloud egress"
     ]
   },
@@ -444,6 +445,11 @@
     "domgo.at/cxss/example/21": 4,
     "www.hackthissite.org/playlevel/64": 6,
     "www.hackthissite.org/missions/application/62": 6,
-    "computersciencesop2.vercel.app/cybersecurity": 10
+    "computersciencesop2.vercel.app/cybersecurity": 10,
+    "pentesterlab.com/exercises/xss_09": 4,
+    "pentesterlab.com/exercises/api_11": 4,
+    "domgo.at/cxss/example/22": 4,
+    "www.hackthissite.org/playlevel/65": 6,
+    "www.hackthissite.org/missions/application/63": 6
   }
 }
