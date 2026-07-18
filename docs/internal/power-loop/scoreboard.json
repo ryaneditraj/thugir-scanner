@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T01:10:00.000Z",
+  "updated_at": "2026-07-18T02:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1005,
-  "total_findings": 4794,
+  "total_sites_scanned": 1013,
+  "total_findings": 4839,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1013,
-  "discovery_findings": 3602,
+  "discovery_urls_added": 1018,
+  "discovery_findings": 3640,
   "improvements_shipped": 649,
-  "last_run": "2026-07-18T01:10:00.000Z",
+  "last_run": "2026-07-18T02:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -53,35 +53,36 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
+      "urls_scanned": 7,
       "findings": 38,
       "urls_queued": [
-        "https://www.hackthissite.org/playlevel/43/",
-        "https://www.hackthissite.org/missions/application/42/",
-        "http://www.net-force.nl/challenge/level411/index.php",
-        "https://pentesterlab.com/exercises/http_43/",
-        "https://pentesterlab.com/exercises/ssti_03/"
+        "https://www.hackthissite.org/playlevel/44/",
+        "https://www.hackthissite.org/missions/application/43/",
+        "http://www.net-force.nl/challenge/level412/index.php",
+        "https://pentesterlab.com/exercises/http_44/",
+        "https://pentesterlab.com/exercises/ssti_04/"
       ],
       "skipped_48h": [],
-      "focus": "Queue drain: Hacksplaining DNS/downgrade lessons, web-pentest-playground, cookiejar-lab, BlackHat GraphQL lab, FinBot CTF demo, Hack Yourself First, TestSparker PHP",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+      ],
+      "focus": "Queue drain: OWASP VWAD pixi, Hacksplaining email/malvertising/ssl-stripping, vAPI, CVE-2025-55182 RSC demo, secureby.design SKF labs",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "www.hacksplaining.com/lessons/dns-poisoning: 7 findings — interactive security lesson platform",
-      "www.hacksplaining.com/lessons/downgrade-attacks: 7 findings — TLS downgrade lesson markers",
-      "hack-yourself-first.azurewebsites.net: 7 findings — Troy Hunt vulnerable training app",
-      "php.testsparker.com: 6 findings — SQLi/XSS injection testbed",
-      "lab.blackhatgraphql.com:9001: 3 findings — GraphQL security lab",
-      "owasp-finbot-ctf-demo.onrender.com: 1 finding — agentic AI CTF demo (shallow)"
+      "secureby.design: 7 findings — postMessage DOM XSS + CORS reflect + exposed source maps",
+      "vapi.apisec.ai: secret-openai in client bundle + API Top 10 lab markers",
+      "cve-2025-55182-demo.vercel.app: dangerous-html-sinks — Next.js RSC CVE demo",
+      "www.hacksplaining.com/lessons/email-spoofing: 7 findings — interactive lesson platform",
+      "vwad.owasp.org/app/pixi: 3 findings — OWASP VWAD directory entry"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/42 + app/41 + Net-Force 410 + PentesterLab http_42/ssti_02 still in queue ahead of new tail",
-      "HTS playlevel/43 + app/42 + Net-Force 411 + PentesterLab http_43/ssti_03 queued at tail — pending drain",
-      "pentesterlab.com/exercises/ssti_03 may return 404 — exercise not always deployed",
-      "owasp-finbot-ctf-demo.onrender.com: agentic exploit chains need authenticated CTF namespace",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
+      "HTS playlevel/43-44 + app/42-43 + Net-Force 411-412 + PentesterLab http_43/ssti_03/http_44/ssti_04 queued at tail — pending drain",
+      "pentesterlab.com/exercises/ssti_03/ssti_04 may return 404 — exercise not always deployed",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
+      "secureby.design: SKF lab instances require authenticated lab start for exploit chains"
     ]
   },
   "discovery_highlights": {
@@ -264,7 +265,6 @@
     "cyberdefenders.org": 8,
     "appsecmaster.net": 8,
     "hack-yourself-first.azurewebsites.net": 7,
-    "php.testsparker.com": 6,
     "www.hacksplaining.com": 7,
     "angular.testsparker.com": 5,
     "aspnet.testsparker.com": 6,
@@ -355,6 +355,11 @@
     "www.net-force.nl/challenge/level409/index.php": 4,
     "pentesterlab.com/exercises/http_42": 4,
     "pentesterlab.com/exercises/ssti_02": 4,
-    "www.hackthissite.org/missions/application/40": 6
+    "www.hackthissite.org/missions/application/40": 6,
+    "vwad.owasp.org/app/pixi": 3,
+    "www.hacksplaining.com/lessons/email-spoofing/start": 7,
+    "www.hacksplaining.com/lessons/malvertising/start": 7,
+    "www.hacksplaining.com/lessons/ssl-stripping/start": 7,
+    "secureby.design": 7
   }
 }
