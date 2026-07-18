@@ -5428,7 +5428,32 @@
       "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/xss",
       "source": "mehdiaitsaid/owasp-top-10-labs — A03 XSS interactive module (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "http://whgojp.top/login",
+      "source": "whgojp/JavaSecLab — comprehensive Java vulnerability platform public demo (GitHub homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/druid/index.html",
+      "source": "whgojp/JavaSecLab — exposed Druid monitor + Spring Boot misconfig oracle (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/druid/basic.json",
+      "source": "whgojp/JavaSecLab — unauthenticated Druid basic.json information disclosure (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/16",
+      "source": "Mario Heiderich domgo.at — DomGoat level 16 location.hash DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/57/",
+      "source": "Hack This Site — playlevel 57 wargame challenge hub",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T13:21:25.000Z"
+  "updated_at": "2026-07-18T14:36:00.000Z"
 }
