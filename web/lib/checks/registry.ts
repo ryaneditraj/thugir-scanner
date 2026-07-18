@@ -10911,6 +10911,9 @@ const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
 const HTS_AUTH_GATE_RE =
   /Login Required|You must be logged in to use this page|require_auth/i;
 
+const HTS_MAINTENANCE_RE =
+  /Offline for Maintenance|temporarily offline for maintenance|htscdn\.org\/images\/maintenance/i;
+
 const HTS_MISSION_NOT_FOUND_RE =
   /requested URL \/missions\/[a-z]+\/\d+\/? was not found|not found on this server/i;
 
@@ -10968,7 +10971,8 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
   const corpus = `${ctx.home.body}\n${pageUrl}`;
   const missionMissing = HTS_MISSION_NOT_FOUND_RE.test(corpus);
   const authGated = HTS_AUTH_GATE_RE.test(corpus);
-  if (!authGated && !missionMissing) return NEGATIVE;
+  const maintenance = HTS_MAINTENANCE_RE.test(corpus);
+  if (!authGated && !missionMissing && !maintenance) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   const missionPath =
     category === "missions-stego" ? "stego" : hub.kind === "standard" ? category : hub.playSegment;
@@ -10983,14 +10987,22 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
       re: pathRe
     },
     {
-      label: missionMissing
-        ? "HTS mission instance not deployed (404)"
-        : "Login required for mission access",
-      re: missionMissing ? HTS_MISSION_NOT_FOUND_RE : HTS_AUTH_GATE_RE
+      label: maintenance
+        ? "HTS nightly maintenance window"
+        : missionMissing
+          ? "HTS mission instance not deployed (404)"
+          : "Login required for mission access",
+      re: maintenance
+        ? HTS_MAINTENANCE_RE
+        : missionMissing
+          ? HTS_MISSION_NOT_FOUND_RE
+          : HTS_AUTH_GATE_RE
     },
     {
       label: "HTS ethical hacking training ground",
-      re: /HackThisSite\.org is a free, safe and legal training ground/i
+      re: maintenance
+        ? /HackThisSite\.org|hackthissite\.org/i
+        : /HackThisSite\.org is a free, safe and legal training ground/i
     },
     {
       label: "Mission challenge nav category",
@@ -11002,9 +11014,11 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  const note = missionMissing
-    ? `HTS ${category} mission instance URL is indexed but returns 404 — documents wargame challenge slot not yet deployed on this node`
-    : (HTS_LOGIN_GATED_MISSION_NOTES[category] ?? `HTS ${category} mission hub is login-gated`);
+  const note = maintenance
+    ? `HTS ${category} mission hub is offline for nightly maintenance — challenge content unreachable until backup window completes`
+    : missionMissing
+      ? `HTS ${category} mission instance URL is indexed but returns 404 — documents wargame challenge slot not yet deployed on this node`
+      : (HTS_LOGIN_GATED_MISSION_NOTES[category] ?? `HTS ${category} mission hub is login-gated`);
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.9 : 0.87,
@@ -11220,7 +11234,9 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/hackthissite\.org\/playlevel(?:\/\d+)?\/?/i.test(pageUrl)) return NEGATIVE;
   const corpus = `${ctx.home.body}\n${pageUrl}`;
-  if (!HTS_AUTH_GATE_RE.test(corpus)) return NEGATIVE;
+  const maintenance = HTS_MAINTENANCE_RE.test(corpus);
+  const authGated = HTS_AUTH_GATE_RE.test(corpus);
+  if (!authGated && !maintenance) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   const checks: { label: string; re: RegExp }[] = [
     {
@@ -11228,12 +11244,14 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
       re: /\/playlevel(?:\/\d+)?\/?/i
     },
     {
-      label: "Login required for arcade access",
-      re: HTS_AUTH_GATE_RE
+      label: maintenance ? "HTS nightly maintenance window" : "Login required for arcade access",
+      re: maintenance ? HTS_MAINTENANCE_RE : HTS_AUTH_GATE_RE
     },
     {
       label: "HTS ethical hacking training ground",
-      re: /HackThisSite\.org is a free, safe and legal training ground/i
+      re: maintenance
+        ? /HackThisSite\.org|hackthissite\.org/i
+        : /HackThisSite\.org is a free, safe and legal training ground/i
     },
     {
       label: "Arcade wargame challenge nav",
@@ -11250,7 +11268,9 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
     confidence: hits.length >= 4 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "HTS playlevel arcade hub is login-gated — documents browser-based wargame challenge levels behind authenticated access"
+      note: maintenance
+        ? "HTS playlevel arcade hub is offline for nightly maintenance — challenge content unreachable until backup window completes"
+        : "HTS playlevel arcade hub is login-gated — documents browser-based wargame challenge levels behind authenticated access"
     }
   };
 };
