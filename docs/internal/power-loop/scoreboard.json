@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T11:01:46.693Z",
+  "updated_at": "2026-07-18T11:05:28.551Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1079,
-  "total_findings": 5258,
+  "total_sites_scanned": 1087,
+  "total_findings": 5340,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1058,
-  "discovery_findings": 4009,
+  "discovery_urls_added": 1063,
+  "discovery_findings": 4091,
   "improvements_shipped": 676,
-  "last_run": "2026-07-18T11:01:46.694Z",
+  "last_run": "2026-07-18T11:05:28.551Z",
   "last_run_summary": {
-    "hour_utc": "10:00",
+    "hour_utc": "11:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -50,28 +50,28 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 24,
+      "urls_scanned": 8,
+      "findings": 82,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue tail drain: drag-security CSRF/SQLi modules + HTS playlevel/52 + application/51 + Net-Force 419; PentesterLab http_50/ssti_10 rejected (404)",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue head drain: HTS-eta OWASP A06–A08 + labs/auth hubs; TestFire + zero.webappsecurity http fallback; HackAdvisor labs",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "drag-security-flaws.vercel.app/security/sqlInjection: SQL injection lesson module (4 findings when reachable)",
-      "drag-security-flaws.vercel.app/security/csrf: CSRF module markers tuned for malicious-request lesson text",
-      "www.hackthissite.org/playlevel/52: login-gated arcade hub evidence (6 findings)",
-      "www.hackthissite.org/missions/application/51: login-gated application mission hub (6 findings)",
-      "www.net-force.nl/challenge/level419: offline challenge redirect to homepage (4 findings)"
+      "hack-this-site-eta.vercel.app/owasp/a06–a08: 16–17 findings each — A06 components + A07 auth + A08 integrity lab markers",
+      "hack-this-site-eta.vercel.app/labs: 14 findings — hands-on vuln lab hub with GraphQL introspection + IDOR evidence",
+      "demo.testfire.net: 6 findings via http protocol fallback",
+      "zero.webappsecurity.com: 5 findings — classic Acunetix-style training markers",
+      "labs.hackadvisor.io: 7 findings — browser-based CTF challenge platform evidence"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "pentesterlab.com/exercises/http_50 and ssti_10: 404 — not deployed",
-      "drag-security-flaws.vercel.app: Vercel Security Checkpoint intermittently blocks cloud scans",
-      "HTS playlevel/53 + application/52 + Net-Force 420 + PentesterLab http_51/ssti_11 + drag-security SSRF/clickjacking + VWAD ai-goat + domgo cxss/12 queued at tail — pending drain",
+      "hack-this-site-eta.vercel.app/auth: shallow auth hub only (1 finding) — deeper session/JWT probes need authenticated flows",
+      "domgo.at/cxss/example/13 + HTS playlevel/54 + Net-Force 421 + mehdiaitsaid SQLi lab + PentesterLab WfP-II queued at tail — pending drain",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
     ]
   },
