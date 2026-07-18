@@ -7166,7 +7166,7 @@ const domgoReferrerDomXssEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (example/1) --------
+// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (plain hash, no unescape) --------
 const domgoHashDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -7175,16 +7175,40 @@ const domgoHashDomXssEvidence: Rule = async (ctx) => {
   const hashSource = /location\.hash/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   const referrerVuln = /let\s+rfr\s*=\s*document\.referrer/i.test(corpus);
+  const unescapeHash = /unescape\s*\(\s*hash\.substr/i.test(corpus);
   const sanitizationBypass =
-    /unescape\s*\(\s*hash\.substr/i.test(corpus) && /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+    unescapeHash && /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
   const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
-  if (!hashSource || !sink || referrerVuln || sanitizationBypass || windowNameCombo) return NEGATIVE;
+  if (!hashSource || !sink || referrerVuln || unescapeHash || sanitizationBypass || windowNameCombo)
+    return NEGATIVE;
   return {
     fired: true,
     confidence: 0.88,
     evidence: {
       page: pageUrl,
       note: "DomGoat exercise assigns location.hash to msgboard.innerHTML — hash-fragment DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat unescape(location.hash) → msgboard.innerHTML DOM XSS exercises (example/1,14,15) ---
+const domgoUnescapeHashDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.home.body;
+  const unescapeHash =
+    /unescape\s*\(\s*hash\.substr/i.test(corpus) && /location\.hash/i.test(corpus);
+  const weakSanitize = /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+  const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
+  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+  if (!unescapeHash || !sink || weakSanitize || windowNameCombo) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      page: pageUrl,
+      note: "DomGoat exercise unescapes location.hash via unescape() before msgboard.innerHTML — URL-encoded fragment DOM XSS lab"
     }
   };
 };
@@ -8824,6 +8848,92 @@ const clientSidePentesterlabApi01ExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab API 01 exercise documents BOLA — accessing admin account secrets via broken object-level authorization"
+    }
+  };
+};
+
+// --- PentesterLab XSS 05 alert-word filter bypass exercise (pentesterlab.com/exercises/xss_05)
+const CLIENT_PENTESTERLAB_XSS05_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 05 course title",
+    re: /XSS 05|PentesterLab:\s*XSS 05/i
+  },
+  {
+    label: "Alert-word filter bypass lab description",
+    re: /bypass a filter that stops the execution of PHP code when the word ["']alert["'] is detected|trigger an alert box without directly using the word ["']alert["']/i
+  },
+  {
+    label: "eval and String.fromCharCode bypass technique",
+    re: /JavaScript(?:&#x27;|')s\s+<code>eval<\/code>[\s\S]{0,120}<code>String\.fromCharCode\(\)<\/code>|eval[\s\S]{0,80}String\.fromCharCode/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 05"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]05/i
+  }
+];
+
+const clientSidePentesterlabXss05ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]05/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS05_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 05 exercise documents reflected XSS filter bypass when alert is blacklisted via eval and String.fromCharCode"
+    }
+  };
+};
+
+// --- PentesterLab API 02 BOLA exercise (pentesterlab.com/exercises/api_02)
+const CLIENT_PENTESTERLAB_API02_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 02 course title",
+    re: /API 02|PentesterLab:\s*API 02/i
+  },
+  {
+    label: "Admin secret key BOLA lab description",
+    re: /access a secret key stored by the user admin@libcurl\.so|identify a vulnerability that allows you to access a secret key/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 02"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]02/i
+  }
+];
+
+const clientSidePentesterlabApi02ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]02/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API02_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 02 exercise documents BOLA — accessing admin@libcurl.so secret key via broken object-level authorization"
     }
   };
 };
@@ -19570,6 +19680,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,
+  domgoUnescapeHashDomXssEvidence,
   domgoHashSanitizationBypassDomXssEvidence,
   domgoWindowNameDomXssEvidence,
   domgoPostMessageDomXssEvidence,
@@ -19611,7 +19722,9 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXss03ExerciseEvidence,
   clientSidePentesterlabXss04ExerciseEvidence,
+  clientSidePentesterlabXss05ExerciseEvidence,
   clientSidePentesterlabApi01ExerciseEvidence,
+  clientSidePentesterlabApi02ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
