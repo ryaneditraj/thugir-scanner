@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T20:03:53.832Z",
-  "total": 446,
-  "uniqueSlugs": 445,
+  "generatedAt": "2026-07-18T21:03:27.803Z",
+  "total": 447,
+  "uniqueSlugs": 446,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 428,
+    "generic": 429,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 377,
+    "deep": 378,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 37,
     "Broken authentication": 27,
     "Injection": 85,
-    "Cross-site scripting": 55,
+    "Cross-site scripting": 56,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -261,6 +261,7 @@
     "client-side-pentesterlab-xss-05-exercise-evidence",
     "client-side-pentesterlab-xss-06-exercise-evidence",
     "client-side-pentesterlab-xss-07-exercise-evidence",
+    "client-side-pentesterlab-xss-08-exercise-evidence",
     "client-side-pentesterlab-xss-exercise-evidence",
     "client-side-pentesterlab-xss-mysql-exercise-evidence",
     "client-side-peruggia-evidence",
