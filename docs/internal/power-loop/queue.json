@@ -5328,7 +5328,32 @@
       "url": "https://domgo.at/cxss/example/12",
       "source": "Mario Heiderich domgo.at — DomGoat level 12 hash+name DOM XSS (cxss series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/13",
+      "source": "Mario Heiderich domgo.at — DomGoat level 13 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/54/",
+      "source": "Hack This Site — playlevel arcade hub challenge 54 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level421/index.php",
+      "source": "Net-Force — session/auth challenge level 421 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/sql-injection",
+      "source": "mehdiaitsaid/owasp-top-10-labs — SQL injection walkthrough + sqlmap lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/web-for-pentester-II/",
+      "source": "PentesterLab — Web for Pentester II SQLi/XSS/NoSQL challenge set (free ISO course)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T10:10:00.000Z"
+  "updated_at": "2026-07-18T11:05:00.000Z"
 }
