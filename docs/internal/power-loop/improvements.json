@@ -4433,6 +4433,30 @@
       "slug": "hts-playlevel-54-netforce-421-queue-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/54 Login Required hub (0→6) + level421 homepage redirect (0→4 offline oracle) + mehdiaitsaid sql-injection priority seeds (0→6 owasp-educational-lab); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-14-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/14 location.hash→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–16; domgo.at/cxss/example/14 findings 0→4 (+domgo-hash-dom-xss-evidence); benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-55-application-54-netforce-422-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/55 Login Required hub (0→6) + application/54 login-gated mission hub (0→6) + level422 homepage redirect (0→4 offline oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-04-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 04 + bypass filter that blocks script word + alternative HTML tags; pentesterlab.com/exercises/xss_04 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-iii-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/web-for-pentester-III returns PentesterLab 404 — course not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -7830,6 +7854,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-54-netforce-421-queue-seeds",
       "shipped_at": "2026-07-18T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-14-seed",
+      "shipped_at": "2026-07-18T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-55-application-54-netforce-422-seeds",
+      "shipped_at": "2026-07-18T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-04-exercise-evidence",
+      "shipped_at": "2026-07-18T12:15:00.000Z"
     }
   ]
 }
