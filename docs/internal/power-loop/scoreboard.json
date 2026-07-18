@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T19:51:52.772Z",
+  "updated_at": "2026-07-18T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1166,
-  "total_findings": 5737,
+  "total_sites_scanned": 1169,
+  "total_findings": 5749,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1108,
-  "discovery_findings": 4436,
-  "improvements_shipped": 702,
-  "last_run": "2026-07-18T19:51:52.772Z",
+  "discovery_findings": 4448,
+  "improvements_shipped": 705,
+  "last_run": "2026-07-18T20:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19:00",
+    "hour_utc": "20:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 Heroku cold-start degraded (2 findings gap=xss,sqli,auth_bypass,sensitive_data pages=1 probes=26); retry hung; restart recovered 6/6 (6 findings pages=1 probes=196)",
+      "note": "Benchmark recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,38 +46,26 @@
             "misconfig"
           ]
         }
-      },
-      "pass1_miss_signal": {
-        "findings": 2,
-        "gap": ["xss", "sqli", "auth_bypass", "sensitive_data"],
-        "pages_crawled": 1,
-        "probes_run": 26
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 40,
-      "focus": "Queue head drain — RedTiger level7/10, Hacksplaining XSS/command/XML/subdomain, cyberdesserts cookiejar, maestro-agentic-ai",
-      "queued_pending": [
-        "https://pentesterlab.com/exercises/xss_07/",
-        "https://domgo.at/cxss/example/20",
-        "http://www.net-force.nl/challenge/level428/index.php"
-      ],
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 12,
+      "focus": "Queued tail drain — PentesterLab XSS 07, DomGoat cxss/example/20, Net-Force level428",
+      "queued_pending": [],
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: pass1 cold-start gap=xss,sqli,auth_bypass,sensitive_data; restart 6/6 recall (6 findings)",
-      "redtiger.labs.overthewire.org/level10: command-injection + blind-login evidence (4 findings)",
-      "hacksplaining.com: reflected XSS + command-execution + XML bombs lessons (6-7 findings each)",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: stack-database-url-in-bundle + agentic SQLi (4 findings)",
-      "cyberdesserts.github.io/cookiejar-lab: CSRF/session cookie lab evidence (4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "pentesterlab.com/exercises/xss_07: HTML-encoded script-tag injection JSON-LD (0→4 findings)",
+      "domgo.at/cxss/example/20: unescape(hash)→msgboard.innerHTML DOM XSS lab (0→4 findings)",
+      "www.net-force.nl/challenge/level428: offline challenge redirect oracle (0→4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop pass1 Heroku cold-start: 2 findings only (gap=xss,sqli,auth_bypass,sensitive_data); in-script retry hung ~35min",
-      "PentesterLab xss_07 + domgo cxss/20 + Net-Force 428 queued at tail — pending drain",
+      "juice-shop pass1 Heroku cold-start can degrade to 2 findings before retry recovers 6/6",
       "damn-vulnerable-startup.fly.dev: 403 from cloud egress"
     ]
   },

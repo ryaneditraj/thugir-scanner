@@ -4583,6 +4583,24 @@
       "slug": "hts-playlevel-61-application-59-netforce-427-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/61 Login Required hub (0→6) + application/59 login-gated mission hub (0→6) + level427 homepage redirect offline oracle; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-07-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 07 + special characters are HTML-encoded + inject JavaScript code into a script tag; pentesterlab.com/exercises/xss_07 findings 0→4 incl client-side-pentesterlab-xss-07-exercise-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-20-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/20 unescape(hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/20; domgo.at/cxss/example/20 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level428-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level428/index.php redirects to homepage; client-side-net-force-offline-challenge-evidence fires level=428; net-force level428 findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8095,6 +8113,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-61-application-59-netforce-427-seeds",
       "shipped_at": "2026-07-18T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-07-exercise-evidence",
+      "shipped_at": "2026-07-18T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-20-seed",
+      "shipped_at": "2026-07-18T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level428-offline-seed",
+      "shipped_at": "2026-07-18T20:10:00.000Z"
     }
   ]
 }
