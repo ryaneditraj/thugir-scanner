@@ -2372,6 +2372,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-http-40-exercise-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "PentesterLab HTTP 40 exercise disclosed",
+    description:
+      "PentesterLab HTTP 40 hosted exercise documents crafting POST /pentesterlab with a YAML body and Content-Type application/yaml to bypass parser assumptions.",
+    impactOneline:
+      "Public HTTP smuggling/content-type exercise reveals YAML parser abuse patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabHttp40ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; validate Content-Type and body parsers in production.",
+      steps: [
+        "Require authentication before serving exercise instances.",
+        "Reject unexpected Content-Type values on sensitive endpoints in production APIs.",
+        "Isolate exercise infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab HTTP 40-style YAML Content-Type labs. Show how to gate labs behind auth and strictly validate request Content-Type in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-ssti-01-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PentesterLab SSTI 01 exercise disclosed",
+    description:
+      "PentesterLab Server Side Template Injection 01 hosted exercise documents exploiting SSTI in 404 error handlers to reach Python subprocess.Popen code execution.",
+    impactOneline:
+      "Public SSTI exercise instance reveals template-injection-to-RCE patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSsti01ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never evaluate user input in server templates.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use logic-less templates and sandboxed rendering in production error pages.",
+        "Isolate exercise infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SSTI 01-style template injection labs. Show how to gate labs behind auth and avoid evaluating user input in server templates.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",

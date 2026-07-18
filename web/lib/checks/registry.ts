@@ -8294,6 +8294,88 @@ const clientSidePentesterlabSqli05ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab HTTP 40 YAML Content-Type exercise (pentesterlab.com/exercises/http_40)
+const CLIENT_PENTESTERLAB_HTTP40_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTTP 40 course title",
+    re: /HTTP 40|PentesterLab:\s*HTTP 40/i
+  },
+  {
+    label: "application/yaml POST body challenge description",
+    re: /POST request to \/pentesterlab[\s\S]{0,160}application\/yaml|Content-Type header to application\/yaml[\s\S]{0,120}YAML:\s*key:\s*please/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"HTTP 40"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/http[_-]40/i
+  }
+];
+
+const clientSidePentesterlabHttp40ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/http[_-]40/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_HTTP40_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab HTTP 40 exercise documents sending POST /pentesterlab with YAML body and Content-Type application/yaml"
+    }
+  };
+};
+
+// --- PentesterLab Server Side Template Injection 01 exercise (pentesterlab.com/exercises/ssti_01)
+const CLIENT_PENTESTERLAB_SSTI01_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSTI 01 course title",
+    re: /Server Side Template Injection 01|PentesterLab:\s*Server Side Template Injection 01/i
+  },
+  {
+    label: "404-handler SSTI to subprocess.Popen lab description",
+    re: /Server-Side Template Injection \(SSTI\)[\s\S]{0,160}management of 404 errors|subprocess\.Popen/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,220}"name"\s*:\s*"Server Side Template Injection 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/ssti[_-]01/i
+  }
+];
+
+const clientSidePentesterlabSsti01ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/ssti[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SSTI01_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SSTI 01 exercise documents server-side template injection in 404 error pages chaining to Python subprocess.Popen code execution"
+    }
+  };
+};
+
 // --- PentesterLab Authorization 04 ORM mass-assignment exercise (pentesterlab.com/exercises/autho_04)
 const CLIENT_PENTESTERLAB_AUTHO04_RES: { label: string; re: RegExp }[] = [
   {
@@ -19095,6 +19177,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqli03ExerciseEvidence,
   clientSidePentesterlabSqli04ExerciseEvidence,
   clientSidePentesterlabSqli05ExerciseEvidence,
+  clientSidePentesterlabHttp40ExerciseEvidence,
+  clientSidePentesterlabSsti01ExerciseEvidence,
   clientSidePentesterlabSqli06ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,
