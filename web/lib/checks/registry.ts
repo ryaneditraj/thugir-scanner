@@ -8968,6 +8968,51 @@ const clientSidePentesterlabApi02ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 03 JWT weak-signature exercise (pentesterlab.com/exercises/api_03)
+const CLIENT_PENTESTERLAB_API03_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 03 course title",
+    re: /API 03|PentesterLab:\s*API 03/i
+  },
+  {
+    label: "JWT weak signature lab description",
+    re: /exploiting the JWT token(?:&#x27;|')s weak signature|retrieve it by exploiting the JWT token(?:&#x27;|')s weak signature/i
+  },
+  {
+    label: "Admin secret JWT lab objective",
+    re: /access the key stored as a secret in the admin(?:'|&#x27;)s account/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 03"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]03/i
+  }
+];
+
+const clientSidePentesterlabApi03ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]03/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API03_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 03 exercise documents JWT weak-signature forgery to access admin account secrets"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -19800,6 +19845,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabXss05ExerciseEvidence,
   clientSidePentesterlabApi01ExerciseEvidence,
   clientSidePentesterlabApi02ExerciseEvidence,
+  clientSidePentesterlabApi03ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,

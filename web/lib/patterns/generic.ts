@@ -2995,6 +2995,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-03-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 03 JWT weak-signature exercise disclosed",
+    description:
+      "PentesterLab API 03 hosted exercise documents JWT weak-signature forgery where attackers retrieve admin account secrets by exploiting unsigned or weakly signed tokens.",
+    impactOneline:
+      "Public API security exercise instance reveals JWT signature bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi03ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce strong JWT signature algorithms in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Reject JWT alg:none and enforce HMAC/RSA with strong secrets.",
+        "Validate issuer, audience, and expiry on every API request."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 03-style JWT weak-signature labs. Show how to gate labs behind auth and enforce RS256/HS256 with strong secrets in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
