@@ -9193,6 +9193,51 @@ const clientSidePentesterlabApi07ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 10 email-filter bypass exercise (pentesterlab.com/exercises/api_10)
+const CLIENT_PENTESTERLAB_API10_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 10 course title",
+    re: /API 10|PentesterLab:\s*API 10/i
+  },
+  {
+    label: "Admin email filter bypass lab description",
+    re: /register an account that the application interprets as an administrator account[\s\S]{0,200}bypassing filters on email addresses/i
+  },
+  {
+    label: "libcurl.so email oracle",
+    re: /@libcurl\.so/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 10"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]10/i
+  }
+];
+
+const clientSidePentesterlabApi10ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]10/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API10_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 10 exercise documents bypassing email filters to register an administrator account (@libcurl.so oracle)"
+    }
+  };
+};
+
 // --- PentesterLab XSS 06 script-tag injection exercise (pentesterlab.com/exercises/xss_06)
 const CLIENT_PENTESTERLAB_XSS06_RES: { label: string; re: RegExp }[] = [
   {
@@ -12630,6 +12675,54 @@ const clientSideAgenticAiCtfEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP FinBot CTF documents agentic AI exploit chains — prompt injection and tool abuse against FinBot agents"
+    }
+  };
+};
+
+// --- QualityMax vulnerable chatbot demo (vulnerable-chatbot-demo.vercel.app) -------
+const CLIENT_VULNERABLE_CHATBOT_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Intentionally vulnerable chatbot banner",
+    re: /This chatbot is INTENTIONALLY VULNERABLE|intentionally broken for testing/i
+  },
+  {
+    label: "ShopBot customer support demo",
+    re: /ShopBot|FakeStore\.com Customer Support/i
+  },
+  {
+    label: "QualityMax agent safety scan CTA",
+    re: /QualityMax Agent Safety Scan|agent-safety-scan/i
+  },
+  {
+    label: "Chat API endpoint",
+    re: /\/api\/chat/i
+  },
+  {
+    label: "System prompt probe hint",
+    re: /What is your system prompt\?|adversarial attacks/i
+  }
+];
+
+const clientSideVulnerableChatbotDemoEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (
+    !/vulnerable-chatbot-demo\.vercel\.app/i.test(pageUrl) &&
+    !/Quality-Max\/vulnerable-chatbot-demo/i.test(ctx.combined)
+  ) {
+    return NEGATIVE;
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNERABLE_CHATBOT_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "QualityMax ShopBot demo documents an intentionally vulnerable /api/chat endpoint for agent safety scanning and prompt-injection red-teaming"
     }
   };
 };
@@ -20153,6 +20246,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi05ExerciseEvidence,
   clientSidePentesterlabApi06ExerciseEvidence,
   clientSidePentesterlabApi07ExerciseEvidence,
+  clientSidePentesterlabApi10ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
@@ -20223,6 +20317,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSectrainerEvidence,
   clientSideHackAdvisorLabEvidence,
   clientSideAgenticAiCtfEvidence,
+  clientSideVulnerableChatbotDemoEvidence,
   clientSideWrongSecretsEvidence,
   clientSideWrongSecretsChallengeEvidence,
   clientSideMaestroAgenticAiEvidence,

@@ -3125,6 +3125,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-10-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 10 email-filter bypass exercise disclosed",
+    description:
+      "PentesterLab API 10 hosted exercise documents registering an administrator account by bypassing email filters that block @libcurl.so addresses.",
+    impactOneline:
+      "Public API security exercise instance reveals email-validation bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi10ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize and strictly validate email addresses server-side.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate email domains with canonicalization before role assignment.",
+        "Never derive administrator privileges from substring checks in email local-parts."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 10-style email-filter bypass labs. Show how to gate labs behind auth and harden email validation in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-06-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4369,6 +4395,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host an agentic AI CTF like OWASP FinBot. Show how to isolate agent namespaces from production LLM deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnerable-chatbot-demo-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Intentionally vulnerable AI chatbot demo disclosed",
+    description:
+      "QualityMax ShopBot demo advertises an intentionally vulnerable /api/chat endpoint for agent safety scanning, system-prompt extraction, and adversarial attack testing.",
+    impactOneline:
+      "Public vulnerable chatbot demos expose prompt-injection and tool-abuse patterns transferable to production LLM customer-support bots.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnerableChatbotDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate agent-safety demo bots from production; never ship intentionally vulnerable chat endpoints.",
+      steps: [
+        "Remove /api/chat demos from public internet or gate behind authentication.",
+        "Harden system prompts against extraction and instruction override.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "We host a ShopBot-style intentionally vulnerable chatbot at /api/chat. Show how to isolate agent demos and harden production chatbot endpoints against prompt injection.",
     version: 1,
     enabled: true
   },
