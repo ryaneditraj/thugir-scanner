@@ -5048,7 +5048,27 @@
       "url": "https://pentesterlab.com/exercises/ssti_02/",
       "source": "PentesterLab — Server-Side Template Injection 02 Twig RCE exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/42/",
+      "source": "Hack This Site — application mission 42 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/43/",
+      "source": "Hack This Site — playlevel arcade hub challenge 43 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level411/index.php",
+      "source": "Net-Force — session/auth challenge level 411 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_43/",
+      "source": "PentesterLab — HTTP 43 request crafting exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T00:10:00.000Z"
+  "updated_at": "2026-07-18T01:10:00.000Z"
 }
