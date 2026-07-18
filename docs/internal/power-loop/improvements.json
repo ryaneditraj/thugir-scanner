@@ -4163,6 +4163,30 @@
       "slug": "hts-application-40-mission-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/40/ Login Required gate + application mission nav; application/40 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-43-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD HTTP 43 + WebSocket /pentesterlab send string key; pentesterlab.com/exercises/http_43 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-43-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/43/ Login Required gate + HTS training ground meta; playlevel/43 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-42-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/42/ Login Required gate + application mission nav; application/42 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-03-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_03/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -7410,6 +7434,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-application-40-mission-seed",
       "shipped_at": "2026-07-18T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-43-exercise-evidence",
+      "shipped_at": "2026-07-18T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-43-mission-seed",
+      "shipped_at": "2026-07-18T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-42-mission-seed",
+      "shipped_at": "2026-07-18T02:10:00.000Z"
     }
   ]
 }
