@@ -5248,7 +5248,32 @@
       "url": "http://www.net-force.nl/challenge/level418/index.php",
       "source": "Net-Force — session/auth challenge level 418 (exploits catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/50/",
+      "source": "Hack This Site — application mission 50 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_49/",
+      "source": "PentesterLab — HTTP 49 request crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_09/",
+      "source": "PentesterLab — Server-Side Template Injection 09 exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/csrf",
+      "source": "drag-security-flaws — Cross-Site Request Forgery interactive lab module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/sqli",
+      "source": "drag-security-flaws — SQL Injection interactive lab module",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T08:05:00.000Z"
+  "updated_at": "2026-07-18T09:05:00.000Z"
 }
