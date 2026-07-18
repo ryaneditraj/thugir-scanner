@@ -5265,8 +5265,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://drag-security-flaws.vercel.app/security/sqli",
-      "source": "drag-security-flaws — SQL Injection interactive lab module",
+      "url": "https://drag-security-flaws.vercel.app/security/sqlInjection",
+      "source": "drag-security-flaws — SQL Injection interactive lab module (/security/sqlInjection; /security/sqli is 404)",
       "auth": "public_demo"
     },
     {
