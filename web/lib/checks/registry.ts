@@ -8376,6 +8376,88 @@ const clientSidePentesterlabSsti01ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab HTTP 42 Basic authentication exercise (pentesterlab.com/exercises/http_42)
+const CLIENT_PENTESTERLAB_HTTP42_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTTP 42 course title",
+    re: /HTTP 42|PentesterLab:\s*HTTP 42/i
+  },
+  {
+    label: "Basic auth GET /pentesterlab challenge description",
+    re: /GET request to \/pentesterlab[\s\S]{0,160}Basic authentication[\s\S]{0,120}username\s*["']key["'][\s\S]{0,80}password\s*["']please["']/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,220}"name"\s*:\s*"HTTP 42"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/http[_-]42/i
+  }
+];
+
+const clientSidePentesterlabHttp42ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/http[_-]42/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_HTTP42_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab HTTP 42 exercise documents sending GET /pentesterlab with HTTP Basic authentication username key and password please"
+    }
+  };
+};
+
+// --- PentesterLab Server Side Template Injection 02 exercise (pentesterlab.com/exercises/ssti_02)
+const CLIENT_PENTESTERLAB_SSTI02_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSTI 02 course title",
+    re: /Server Side Template Injection 02|PentesterLab:\s*Server Side Template Injection 02/i
+  },
+  {
+    label: "Twig 1.9.0 SSTI code execution lab description",
+    re: /Server Side Template Injection \(SSTI\)[\s\S]{0,160}Twig \(1\.9\.0\)|outdated version of Twig \(1\.9\.0\)/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,220}"name"\s*:\s*"Server Side Template Injection 02"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/ssti[_-]02/i
+  }
+];
+
+const clientSidePentesterlabSsti02ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/ssti[_-]02/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_SSTI02_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab SSTI 02 exercise documents exploiting Twig 1.9.0 server-side template injection to gain remote code execution"
+    }
+  };
+};
+
 // --- PentesterLab Authorization 04 ORM mass-assignment exercise (pentesterlab.com/exercises/autho_04)
 const CLIENT_PENTESTERLAB_AUTHO04_RES: { label: string; re: RegExp }[] = [
   {
@@ -19179,6 +19261,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabSqli05ExerciseEvidence,
   clientSidePentesterlabHttp40ExerciseEvidence,
   clientSidePentesterlabSsti01ExerciseEvidence,
+  clientSidePentesterlabHttp42ExerciseEvidence,
+  clientSidePentesterlabSsti02ExerciseEvidence,
   clientSidePentesterlabSqli06ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,
   clientSidePentesterlabSqliToShellEvidence,

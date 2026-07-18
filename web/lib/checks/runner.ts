@@ -756,6 +756,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabSqli05ExerciseEvidence",
   "clientSidePentesterlabHttp40ExerciseEvidence",
   "clientSidePentesterlabSsti01ExerciseEvidence",
+  "clientSidePentesterlabHttp42ExerciseEvidence",
+  "clientSidePentesterlabSsti02ExerciseEvidence",
   "clientSidePentesterlabSqli06ExerciseEvidence",
   "clientSidePentesterlabXssExerciseEvidence",
   "clientSidePentesterlabSqliToShellEvidence",
@@ -1317,8 +1319,12 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/sqli-05",
     "/exercises/http_40",
     "/exercises/http-40",
+    "/exercises/http_42",
+    "/exercises/http-42",
     "/exercises/ssti_01",
     "/exercises/ssti-01",
+    "/exercises/ssti_02",
+    "/exercises/ssti-02",
     "/exercises/autho_04",
     "/exercises/autho-04",
     "/exercises/sqli_06",
@@ -1573,6 +1579,9 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/39/",
     "/playlevel/40/",
     "/playlevel/41/",
+    "/playlevel/42/",
+    "/missions/application/40/",
+    "/missions/application/41/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -5417,7 +5426,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level406/login/",
         "http://www.net-force.nl/challenge/level407/index.php",
         "http://www.net-force.nl/challenge/level408/index.php",
-        "http://www.net-force.nl/challenge/level409/index.php"
+        "http://www.net-force.nl/challenge/level409/index.php",
+        "http://www.net-force.nl/challenge/level410/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
