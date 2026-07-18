@@ -5503,7 +5503,32 @@
       "url": "http://www.net-force.nl/challenge/level425/index.php",
       "source": "Net-Force — web exploit training challenge level 425 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/19",
+      "source": "Mario Heiderich domgo.at — DomGoat level 19 location.hash DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_05/",
+      "source": "PentesterLab — API 05 broken object-level authorization exercise",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/60/",
+      "source": "Hack This Site — playlevel 60 wargame challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/58/",
+      "source": "Hack This Site — application mission 58 login-gated wargame hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_06/",
+      "source": "PentesterLab — XSS 06 filter-evasion hosted exercise",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T16:32:00.000Z"
+  "updated_at": "2026-07-18T17:04:00.000Z"
 }
