@@ -5401,12 +5401,17 @@
     },
     {
       "url": "https://www.hackthissite.org/playlevel/56/",
-      "source": "Hack This Site — playlevel arcade hub challenge 56 (missions catalog)",
+      "source": "Hack This Site — playlevel 56 wargame challenge hub",
       "auth": "public_demo"
     },
     {
       "url": "http://www.net-force.nl/challenge/level423/index.php",
-      "source": "Net-Force — session/auth challenge level 423 (exploits catalog)",
+      "source": "Net-Force — web hacking challenge level 423 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_05/",
+      "source": "PentesterLab — XSS 05 filter-evasion hosted exercise",
       "auth": "public_demo"
     },
     {
@@ -5418,7 +5423,12 @@
       "url": "https://pentesterlab.com/exercises/api_02/",
       "source": "PentesterLab — API 02 mass assignment exercise (Essential badge API track)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/xss",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A03 XSS interactive module (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-18T13:05:00.000Z"
+  "updated_at": "2026-07-18T13:21:25.000Z"
 }
