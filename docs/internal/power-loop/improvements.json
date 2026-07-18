@@ -4493,6 +4493,24 @@
       "slug": "client-side-pentesterlab-api-02-exercise-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 02 + access secret key stored by admin@libcurl.so BOLA description; pentesterlab.com/exercises/api_02 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "druid-monitor-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /druid/basic.json returns {\"ResultCode\":1,\"Content\":{\"Version\":\"1.2.16\"...}}; /druid/index.html Druid Stat Index HTML; whgojp.top/login findings 2→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "client-side-javaseclab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JavaSeclab平台登录 + 综合型Java漏洞平台 + SpringBoot+SpringSecurity+MyBatis + github.com/whgojp/JavaSecLab; whgojp.top/login findings 2→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "reach-target-protocol-scoring",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: https://whgojp.top/login returns 404 len=0; reachTarget now prefers caller protocol + scores 2xx body over empty 404; http://whgojp.top/login combined 0→602646 enabling druid+javaseclab rules; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7930,6 +7948,21 @@
       "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-api-02-exercise-evidence",
       "shipped_at": "2026-07-18T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "druid-monitor-exposed",
+      "shipped_at": "2026-07-18T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "client-side-javaseclab-evidence",
+      "shipped_at": "2026-07-18T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "reach-target-protocol-scoring",
+      "shipped_at": "2026-07-18T15:15:00.000Z"
     }
   ]
 }

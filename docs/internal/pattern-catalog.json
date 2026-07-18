@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T14:03:22.266Z",
-  "total": 437,
-  "uniqueSlugs": 436,
+  "generatedAt": "2026-07-18T15:11:34.259Z",
+  "total": 439,
+  "uniqueSlugs": 438,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 419,
+    "generic": 421,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 68,
-    "deep": 369,
+    "free": 69,
+    "deep": 370,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 28,
-    "Security misconfiguration": 36,
+    "Security misconfiguration": 37,
     "Broken authentication": 26,
-    "Injection": 84,
+    "Injection": 85,
     "Cross-site scripting": 53,
     "general": 18,
     "SSRF": 1,
@@ -179,6 +179,7 @@
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-ist-edu-vuln-portal-evidence",
+    "client-side-javaseclab-evidence",
     "client-side-judgement-day-arena-evidence",
     "client-side-juice-shop-project-evidence",
     "client-side-juice-shop-vapt-evidence",
@@ -386,6 +387,7 @@
     "domgo-unescape-hash-dom-xss-evidence",
     "domgo-websocket-dom-xss-evidence",
     "domgo-window-name-dom-xss-evidence",
+    "druid-monitor-exposed",
     "exposed-config-backup",
     "exposed-env-file",
     "exposed-git-dir",

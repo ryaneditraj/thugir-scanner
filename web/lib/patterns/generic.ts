@@ -1696,6 +1696,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "druid-monitor-exposed",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Alibaba Druid database monitor exposed",
+    description:
+      "Alibaba Druid monitoring endpoints (/druid/index.html, /druid/basic.json) respond without authentication. Attackers can read JDBC driver names, JVM version, classpath, and SQL execution statistics.",
+    impactOneline: "Database connection pool monitor is publicly reachable — JDBC and JVM metadata may leak.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "druidMonitorExposed" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Restrict Druid monitor to internal networks and require authentication in production.",
+      steps: [
+        "Set druid.stat-view-servlet.login-username and login-password in production.",
+        "Block /druid/* from the public internet via firewall or reverse proxy.",
+        "Disable Druid stat servlet when not needed for operations."
+      ]
+    },
+    fixPrompt:
+      "My Spring Boot app exposes /druid/index.html and /druid/basic.json publicly. Lock down the Druid stat servlet with authentication, block public access, and show me the application.properties changes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-javaseclab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "JavaSecLab comprehensive Java vulnerability platform disclosed",
+    description:
+      "JavaSecLab (whgojp/JavaSecLab) documents comprehensive Java vulnerability scenarios with audit SINK points, fix code, and traffic analysis across Spring Boot, MyBatis, and Thymeleaf stacks.",
+    impactOneline:
+      "Public JavaSecLab demo confirms deliberate Java vulnerability training surface including exposed Druid monitor.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJavaSecLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deploy vulnerability training platforms to production; auth-gate lab instances.",
+      steps: [
+        "Restrict JavaSecLab and similar platforms to internal networks.",
+        "Disable exposed Druid monitor endpoints in production Spring apps.",
+        "Do not copy JavaSecLab vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We mirror JavaSecLab's public demo. Show how to auth-gate vulnerability training platforms and disable exposed Druid monitors on Spring Boot deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "hidden-prompt-injection",
     platform: "generic",
     category: "AI security",

@@ -1418,6 +1418,36 @@ const springActuatorExposed: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- Alibaba Druid monitor exposed (read-only GET) -----------------------------
+// Java/Spring apps often leave /druid/index.html and /druid/basic.json reachable.
+const DRUID_PROBE_PATHS = ["/druid/index.html", "/druid/basic.json", "/druid/sql.json"];
+
+const druidMonitorExposed: Rule = async (ctx) => {
+  const urls = DRUID_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const body = r.body.trim();
+    const isBasicJson =
+      /"ResultCode"\s*:\s*1/.test(body) &&
+      /"Content"\s*:\s*\{/.test(body) &&
+      /"Version"\s*:/.test(body);
+    const isDruidHtml =
+      /Druid Stat Index|druid\.index/i.test(body) && /DruidVersion|basic\.json/i.test(body);
+    if (!isBasicJson && !isDruidHtml) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url,
+        snippet: body.slice(0, 200).trim(),
+        note: "Alibaba Druid database monitor reachable without authentication — JDBC drivers and JVM metadata exposed"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- IDOR: unauthenticated read by sequential numeric ID (active GET probe) ---
 // Positive proof when /resource/1 returns record JSON without an auth challenge.
 const IDOR_FALLBACK_PATHS = [
@@ -9423,6 +9453,50 @@ const clientSideJuicesecLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "JuiceSec documents inline OWASP labs for SQLi, JWT alg:none, SSRF link-preview, and DOM XSS on Cloudflare Workers"
+    }
+  };
+};
+
+// --- JavaSecLab comprehensive Java vulnerability platform (whgojp/JavaSecLab) ----
+const CLIENT_JAVASECLAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JavaSecLab platform title",
+    re: /JavaSecLab|JavaSeclab平台登录/i
+  },
+  {
+    label: "Comprehensive Java vulnerability platform",
+    re: /综合型Java漏洞平台|Java vulnerability platform/i
+  },
+  {
+    label: "SpringBoot + SpringSecurity stack",
+    re: /SpringBoot\+SpringSecurity\+MyBatis|SpringBoot\s*\+\s*SpringSecurity/i
+  },
+  {
+    label: "GitHub whgojp/JavaSecLab reference",
+    re: /github\.com\/whgojp\/JavaSecLab|whgojp\/JavaSecLab/i
+  },
+  {
+    label: "Audit SINK point and vulnerability scenarios",
+    re: /审计SINK点|漏洞场景|vulnerability scenarios/i
+  }
+];
+
+const clientSideJavaSecLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JAVASECLAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/JavaSecLab|JavaSeclab/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "JavaSecLab documents comprehensive Java vulnerability scenarios with audit SINK points — Spring Boot training platform"
     }
   };
 };
@@ -19656,6 +19730,7 @@ export const RULES: Record<string, Rule> = {
   domEvalXss,
   postMessageDomXssEvidence,
   springActuatorExposed,
+  druidMonitorExposed,
   idorObjectAccess,
   hiddenPromptInjection,
   clientSidePromptInjectionEvidence,
@@ -19734,6 +19809,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBlueTeamLabsEvidence,
   clientSideJuiceShopProjectEvidence,
   clientSideJuicesecLabEvidence,
+  clientSideJavaSecLabEvidence,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
@@ -20031,6 +20107,7 @@ export const FREE_RULES = new Set([
   "dangerousHtmlSinks",
   "domEvalXss",
   "springActuatorExposed",
+  "druidMonitorExposed",
   "hiddenPromptInjection",
   "ssrfEndpointProbe",
   "http403BypassProbe"

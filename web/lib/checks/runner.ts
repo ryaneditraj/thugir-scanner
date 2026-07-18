@@ -409,33 +409,67 @@ async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise
   return best;
 }
 
-async function reachTarget(target: URL, _rawInput: string): Promise<FetchedDoc> {
+async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
   const apexHost = target.hostname.replace(/^www\./i, "");
   const hadWww = target.hostname.toLowerCase().startsWith("www.");
 
   const hosts = hadWww ? [target.hostname, apexHost] : [apexHost, `www.${apexHost}`];
   // Legacy training benchmarks (demo.testfire.net, zero.webappsecurity.com) are http-only — always
   // fall back to http when https DNS/TLS fails even if the user pasted an https:// URL.
-  const protocols = ["https:", "http:"];
+  let protocols = ["https:", "http:"];
+  try {
+    const inputProto = new URL(rawInput).protocol;
+    if (inputProto === "http:" || inputProto === "https:") {
+      protocols = [inputProto, ...protocols.filter((p) => p !== inputProto)];
+    }
+  } catch {
+    /* ignore */
+  }
 
-  // Interleave so we prefer https on both hosts before dropping to http.
+  const reachScore = (doc: FetchedDoc): number => {
+    if (doc.status === 0) return -1;
+    if (doc.status >= 200 && doc.status < 300) return 1000 + Math.min(doc.body.length, 5000);
+    if (doc.status === 401 || doc.status === 403) return 500 + Math.min(doc.body.length, 2000);
+    if (doc.status === 404 && doc.body.length < 256) return 1;
+    return 50 + Math.min(doc.body.length, 1000);
+  };
+
+  // Interleave so we prefer https on both hosts before dropping to http (unless caller specified http).
   const candidates: Array<{ protocol: string; hostname: string }> = [];
   for (const protocol of protocols) {
     for (const hostname of hosts) candidates.push({ protocol, hostname });
   }
 
-  let last: FetchedDoc | null = null;
+  let best: FetchedDoc | null = null;
+  let bestScore = -1;
   for (let i = 0; i < candidates.length; i++) {
     const c = candidates[i];
-    target.protocol = c.protocol;
-    target.hostname = c.hostname;
-    // Give the primary attempt the full timeout; keep fallbacks short so the total stays well
-    // under the function's 60s budget even if several variants hang.
-    const doc = await fetchDoc(target.toString(), { timeoutMs: i === 0 ? 15000 : 7000 });
-    if (doc.status !== 0) return doc;
-    last = doc;
+    const candidateUrl = new URL(target.toString());
+    candidateUrl.protocol = c.protocol;
+    candidateUrl.hostname = c.hostname;
+    const doc = await fetchDoc(candidateUrl.toString(), { timeoutMs: i === 0 ? 15000 : 7000 });
+    if (doc.status === 0) continue;
+    const score = reachScore(doc);
+    if (score > bestScore) {
+      best = doc;
+      bestScore = score;
+      target.protocol = c.protocol;
+      target.hostname = c.hostname;
+    }
+    if (score >= 1000) return doc;
   }
-  return last as FetchedDoc;
+  if (best) return best;
+  return {
+    url: target.toString(),
+    finalUrl: target.toString(),
+    status: 0,
+    ok: false,
+    headers: {},
+    setCookies: [],
+    body: "",
+    truncated: false,
+    error: "no response"
+  };
 }
 
 function reachFailureMessage(target: URL, reason?: string): string {
@@ -840,6 +874,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideBlueTeamLabsEvidence",
   "clientSideJuiceShopProjectEvidence",
   "clientSideJuicesecLabEvidence",
+  "clientSideJavaSecLabEvidence",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
   "clientSideMutillidaeEvidence",
@@ -1200,8 +1235,23 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/12",
     "/cxss/example/13",
     "/cxss/example/14",
-    "/cxss/example/15"
+    "/cxss/example/15",
+    "/cxss/example/16"
   ]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** JavaSecLab (whgojp/JavaSecLab) — public demo exposes Druid monitor and vulnerability labs. */
+function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/JavaSecLab|JavaSeclab|whgojp\/JavaSecLab|综合型Java漏洞平台/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const path of ["/druid/index.html", "/druid/basic.json", "/druid/sql.json", "/login"]) {
     try {
       out.add(new URL(path, pageUrl).toString());
     } catch {
@@ -1615,6 +1665,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/54/",
     "/playlevel/55/",
     "/playlevel/56/",
+    "/playlevel/57/",
     "/missions/application/54/",
     "/missions/application/55/",
     "/missions/application/40/",
@@ -5267,6 +5318,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
   const jekyllBlogPostSeeds = extractJekyllBlogPostSeeds(home.body, home.finalUrl);
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
+  const javaSecLabSeeds = extractJavaSecLabSeeds(home.body, home.finalUrl);
   const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
@@ -5653,6 +5705,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...jekyllSecurityDocSeeds,
       ...jekyllBlogPostSeeds,
       ...domGoatCxssSeeds,
+      ...javaSecLabSeeds,
       ...benstaffordXssSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
