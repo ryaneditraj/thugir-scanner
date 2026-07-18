@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T04:00:51.144Z",
+  "updated_at": "2026-07-18T04:05:36.245Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1022,
-  "total_findings": 4888,
+  "total_sites_scanned": 1029,
+  "total_findings": 4924,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1023,
-  "discovery_findings": 3675,
+  "discovery_urls_added": 1028,
+  "discovery_findings": 3711,
   "improvements_shipped": 655,
-  "last_run": "2026-07-18T04:00:51.144Z",
+  "last_run": "2026-07-18T04:05:36.245Z",
   "last_run_summary": {
-    "hour_utc": "03:00",
+    "hour_utc": "04:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -50,29 +50,28 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 35,
+      "findings": 36,
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Queue drain: HTS playlevel/44 + application/43 mission seeds; Net-Force level412 offline redirect",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue drain: SSRF platform, GraphQL bookstore, PentesterLab/HTS/Root-Me hubs; HTS playlevel/46 + Net-Force 414 queued at tail",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "www.hackthissite.org/playlevel/44: 6 findings — login-gated arcade wargame hub",
-      "www.hackthissite.org/missions/application/43: 6 findings — login-gated application mission hub",
-      "www.net-force.nl/challenge/level412: 4 findings — offline redirect to homepage (seed added)",
-      "angular.testsparker.com: critical AWS access key in client bundle + hardcoded demo credentials (5 findings)",
-      "aspnet.testsparker.com: reflected XSS + sitemap-listed sensitive file (6 findings)"
+      "ssrf-defense-platform.onrender.com: 6 findings — SSRF admin panel + XSS sinks",
+      "api.graphqlbook.org: 6 findings — GraphQL introspection + prompt-injection evidence",
+      "www.root-me.org: 4 findings — Twilio SID in client bundle + reflected XSS",
+      "agentpwn.com: 5 findings — hidden prompt-injection instructions in page HTML",
+      "hacksec.in: 6 findings — password-protected portal markers + reflected XSS"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "pentesterlab.com/exercises/http_44 + ssti_04 return 404 — exercises not deployed (rejected this run)",
-      "HTS playlevel/45 + app/44 + Net-Force 413 queued at tail — pending drain",
+      "HTS playlevel/45-46 + app/44-45 + Net-Force 413-414 + PentesterLab http_45-46/ssti_05-06 queued at tail — pending drain",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
       "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes"
     ]
