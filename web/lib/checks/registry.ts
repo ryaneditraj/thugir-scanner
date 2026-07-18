@@ -7802,6 +7802,48 @@ const clientSidePentesterlabWebForPentesterEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab Web for Pentester II free course (pentesterlab.com/exercises/web-for-pentester-II)
+const CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_II_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web for Pentester II course title",
+    re: /Web for Pentester II(?:\s+Free Exercise)?/i
+  },
+  {
+    label: "Auth bypass and SQLi challenge set",
+    re: /bypass authentication and exploit SQL vulnerabilities/i
+  },
+  {
+    label: "CAPTCHA and authorization flaw labs",
+    re: /CAPTCHA weaknesses, authorization flaws, mass-assignment attacks/i
+  },
+  {
+    label: "MongoDB injection course module",
+    re: /randomness issues, and MongoDB injections/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Web for Pentester II"/i
+  }
+];
+
+const clientSidePentesterlabWebForPentesterIiEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_II_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Web for Pentester II documents auth bypass, SQLi, CAPTCHA, authorization, mass-assignment, and NoSQL injection labs"
+    }
+  };
+};
+
 // --- PentesterLab hosted SQL Injection 01 exercise (pentesterlab.com/exercises/sqli_01)
 const CLIENT_PENTESTERLAB_SQLI_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -12947,6 +12989,10 @@ const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQL injection prism tutorial with mysqli_prepare contrast",
     re: /mysqli_prepare\(\)|PDO::prepare\(\)/
+  },
+  {
+    label: "Docusaurus SQL injection tutorial overview",
+    re: /untrusted input in an SQL query without proper validation|Union-based:\s*use\s*`?UNION SELECT`?/i
   }
 ];
 
@@ -19451,6 +19497,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSidePentesterlabWebForPentesterEvidence,
+  clientSidePentesterlabWebForPentesterIiEvidence,
   clientSidePentesterlabSqliExerciseEvidence,
   clientSidePentesterlabSqli02ExerciseEvidence,
   clientSidePentesterlabSqli03ExerciseEvidence,
