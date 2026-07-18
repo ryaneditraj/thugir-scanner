@@ -4547,6 +4547,24 @@
       "slug": "hts-playlevel-59-application-57-netforce-425-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/59 Login Required hub (0→6) + application/57 login-gated mission hub (0→6) + level425 homepage redirect offline oracle (0→4); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-19-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/19 unescape(hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/19; domgo.at/cxss/example/19 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-05-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 05 + hidden endpoint in compressed JavaScript + beautifier hint; pentesterlab.com/exercises/api_05 findings 0→4; XSS 06 script-tag injection JSON-LD + pentesterlab.com/exercises/xss_06 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-60-application-58-netforce-426-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/60 Login Required hub (0→6) + application/58 login-gated mission hub (0→6) + level426 homepage redirect offline oracle (0→4); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8029,6 +8047,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-59-application-57-netforce-425-seeds",
       "shipped_at": "2026-07-18T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-19-seed",
+      "shipped_at": "2026-07-18T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-05-exercise-evidence",
+      "shipped_at": "2026-07-18T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-60-application-58-netforce-426-seeds",
+      "shipped_at": "2026-07-18T18:12:00.000Z"
     }
   ]
 }

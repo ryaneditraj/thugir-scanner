@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T17:03:29.431Z",
-  "total": 441,
-  "uniqueSlugs": 440,
+  "generatedAt": "2026-07-18T18:02:17.566Z",
+  "total": 443,
+  "uniqueSlugs": 442,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 423,
+    "generic": 425,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 372,
+    "deep": 374,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 132,
+    "Broken access control": 133,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 37,
     "Broken authentication": 27,
     "Injection": 85,
-    "Cross-site scripting": 53,
+    "Cross-site scripting": 54,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -230,6 +230,7 @@
     "client-side-pentesterlab-api-02-exercise-evidence",
     "client-side-pentesterlab-api-03-exercise-evidence",
     "client-side-pentesterlab-api-04-exercise-evidence",
+    "client-side-pentesterlab-api-05-exercise-evidence",
     "client-side-pentesterlab-autho-02-exercise-evidence",
     "client-side-pentesterlab-autho-03-exercise-evidence",
     "client-side-pentesterlab-autho-04-exercise-evidence",
@@ -256,6 +257,7 @@
     "client-side-pentesterlab-xss-03-exercise-evidence",
     "client-side-pentesterlab-xss-04-exercise-evidence",
     "client-side-pentesterlab-xss-05-exercise-evidence",
+    "client-side-pentesterlab-xss-06-exercise-evidence",
     "client-side-pentesterlab-xss-exercise-evidence",
     "client-side-pentesterlab-xss-mysql-exercise-evidence",
     "client-side-peruggia-evidence",
