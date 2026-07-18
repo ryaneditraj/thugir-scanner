@@ -817,9 +817,11 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi06ExerciseEvidence",
   "clientSidePentesterlabApi07ExerciseEvidence",
   "clientSidePentesterlabApi10ExerciseEvidence",
+  "clientSidePentesterlabApi11ExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
+  "clientSidePentesterlabXss09ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -1228,7 +1230,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 21; n++) {
+  for (let n = 1; n <= 22; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1251,7 +1253,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/18",
     "/cxss/example/19",
     "/cxss/example/20",
-    "/cxss/example/21"
+    "/cxss/example/21",
+    "/cxss/example/22"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1437,6 +1440,12 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/xss-07",
     "/exercises/xss_08",
     "/exercises/xss-08",
+    "/exercises/xss_09",
+    "/exercises/xss-09",
+    "/exercises/api_10",
+    "/exercises/api-10",
+    "/exercises/api_11",
+    "/exercises/api-11",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1702,7 +1711,9 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/61/",
     "/playlevel/63/",
     "/playlevel/64/",
+    "/playlevel/65/",
     "/missions/application/54/",
+    "/missions/application/63/",
     "/missions/application/55/",
     "/missions/application/56/",
     "/missions/application/57/",
