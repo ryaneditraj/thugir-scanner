@@ -7822,7 +7822,7 @@ const CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_II_RES: { label: string; re: RegExp 
   },
   {
     label: "Course JSON-LD schema",
-    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Web for Pentester II"/i
+    re: /"@type"\s*:\s*"Course(?:Instance)?"[\s\S]{0,240}"name"\s*:\s*"Web for Pentester II"/i
   }
 ];
 
