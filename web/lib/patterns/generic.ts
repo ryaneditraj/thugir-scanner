@@ -3177,6 +3177,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-xss-08-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 08 PHP_SELF path injection exercise disclosed",
+    description:
+      "PentesterLab XSS 08 hosted exercise documents reflected XSS caused by trusting user-provided paths in the PHP $_SERVER['PHP_SELF'] variable.",
+    impactOneline:
+      "Public XSS exercise instance reveals PHP_SELF path-injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss08ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never echo PHP_SELF or REQUEST_URI without encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Avoid reflecting PHP_SELF, REQUEST_URI, or path segments without strict validation."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 08-style PHP_SELF path-injection labs. Show how to gate labs behind auth and avoid echoing server path variables in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

@@ -9275,6 +9275,47 @@ const clientSidePentesterlabXss07ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab XSS 08 PHP_SELF path injection exercise (pentesterlab.com/exercises/xss_08)
+const CLIENT_PENTESTERLAB_XSS08_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 08 course title",
+    re: /XSS 08|PentesterLab:\s*XSS 08/i
+  },
+  {
+    label: "PHP_SELF path injection lab description",
+    re: /trusting user-provided paths in the\s*(?:<code>)?\$_SERVER\[['"]PHP_SELF['"]\](?:<\/code>)?|improper handling of this variable can allow attackers to inject malicious payloads/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 08"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]08/i
+  }
+];
+
+const clientSidePentesterlabXss08ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]08/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS08_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 08 exercise documents reflected XSS via trusting user-provided paths in PHP $_SERVER['PHP_SELF']"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20114,6 +20155,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi07ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
+  clientSidePentesterlabXss08ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
