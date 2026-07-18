@@ -5453,7 +5453,32 @@
       "url": "https://www.hackthissite.org/playlevel/57/",
       "source": "Hack This Site — playlevel 57 wargame challenge hub",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/17",
+      "source": "Mario Heiderich domgo.at — DomGoat level 17 location.hash DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_03/",
+      "source": "PentesterLab — API 03 JWT hash-cracking / admin impersonation exercise",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/58/",
+      "source": "Hack This Site — playlevel 58 wargame challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.net-force.nl/challenge/level424/index.php",
+      "source": "Net-Force — web exploit training challenge level 424 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/56/",
+      "source": "Hack This Site — application mission 56 login-gated wargame hub",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T14:36:00.000Z"
+  "updated_at": "2026-07-18T15:13:00.000Z"
 }
