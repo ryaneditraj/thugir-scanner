@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T18:20:00.000Z",
+  "updated_at": "2026-07-18T19:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1157,
-  "total_findings": 5691,
+  "total_sites_scanned": 1161,
+  "total_findings": 5715,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1100,
-  "discovery_findings": 4396,
-  "improvements_shipped": 699,
-  "last_run": "2026-07-18T18:20:00.000Z",
+  "discovery_urls_added": 1103,
+  "discovery_findings": 4408,
+  "improvements_shipped": 702,
+  "last_run": "2026-07-18T19:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18:00",
+    "hour_utc": "19:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (6 findings, pages=1 probes=169)",
+      "note": "No benchmark misses — primary heroku unreachable; staging fallback 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,36 +50,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 33,
-      "focus": "Queue head drain — BBH challenge 12, VWAD WebGoat, RedTiger level8/9, vulnbank, DVWA Vercel, apigoat, ginandjuice",
+      "urls_added": 3,
+      "urls_scanned": 4,
+      "findings": 20,
+      "focus": "PentesterLab API 06/07 exercise evidence; HTS playlevel/61 + application/59; Net-Force level427 seeds",
       "queued_pending": [
-        "https://domgo.at/cxss/example/19",
-        "https://pentesterlab.com/exercises/api_05/",
-        "https://www.hackthissite.org/playlevel/60/",
-        "https://www.hackthissite.org/missions/application/58/",
-        "https://pentesterlab.com/exercises/xss_06/",
-        "https://pentesterlab.com/exercises/api_07/",
-        "https://pentesterlab.com/exercises/autho_08/",
-        "https://www.hackthissite.org/playlevel/61/",
-        "https://www.hackthissite.org/missions/application/59/",
-        "http://www.net-force.nl/challenge/level426/index.php"
+        "https://pentesterlab.com/exercises/xss_07/",
+        "https://pentesterlab.com/exercises/api_08/",
+        "https://www.hackthissite.org/playlevel/62/",
+        "https://www.hackthissite.org/missions/application/60/",
+        "http://www.net-force.nl/challenge/level428/index.php"
       ],
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings, shallow crawl pages=1) — no benchmark misses",
-      "vwad.owasp.org/app/webgoat: postMessage DOM XSS + CORS evidence (5 findings)",
-      "vulnbank.org: CORS reflect-origin + unauthenticated API routes (6 findings)",
-      "ginandjuice.shop: SQLi + IDOR + admin endpoint (6 findings)",
-      "dvwa.vercel.app: client-side SQLi lab evidence (4 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses; primary heroku unreachable",
+      "pentesterlab.com/exercises/api_07: Angular ng-app information leak JSON-LD (0→4 findings)",
+      "pentesterlab.com/exercises/api_06: CSRF + compressed JS hidden endpoint JSON-LD (0→4 findings)",
+      "www.hackthissite.org/playlevel/61: login-gated arcade hub evidence (0→6 findings)",
+      "www.hackthissite.org/missions/application/59: login-gated application mission hub (0→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop shallow crawl (pages=1) despite 6/6 recall — Heroku wake latency risk",
-      "domgo cxss/19 + PentesterLab api_05/xss_06 + HTS playlevel/60/61 + application/58/59 + api_07/autho_08 + Net-Force 426 queued at tail — pending drain",
-      "Net-Force level426+ and RedTiger levels: challenge instances may redirect offline"
+      "juice-shop.herokuapp.com: primary oracle DNS/unreachable — staging fallback required",
+      "pentesterlab.com/exercises/autho_08: 404 — exercise not published; skip autho_07/08/09",
+      "PentesterLab xss_07 + api_08 + HTS playlevel/62 + application/60 + Net-Force 428 queued at tail"
     ]
   },
   "discovery_highlights": {
@@ -426,6 +421,10 @@
     "www.hackthissite.org/missions/application/58": 6,
     "www.net-force.nl/challenge/level426/index.php": 4,
     "picoctf.org": 4,
-    "server.vulnapp.id/mutillidae": 7
+    "server.vulnapp.id/mutillidae": 7,
+    "pentesterlab.com/exercises/api_06": 4,
+    "pentesterlab.com/exercises/api_07": 4,
+    "www.hackthissite.org/playlevel/61": 6,
+    "www.hackthissite.org/missions/application/59": 6
   }
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T18:02:17.566Z",
-  "total": 443,
-  "uniqueSlugs": 442,
+  "generatedAt": "2026-07-18T19:03:28.570Z",
+  "total": 445,
+  "uniqueSlugs": 444,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,22 +9,22 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 425,
+    "generic": 427,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 374,
+    "deep": 376,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 133,
+    "Broken access control": 134,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 28,
+    "Information disclosure": 29,
     "Security misconfiguration": 37,
     "Broken authentication": 27,
     "Injection": 85,
@@ -231,6 +231,8 @@
     "client-side-pentesterlab-api-03-exercise-evidence",
     "client-side-pentesterlab-api-04-exercise-evidence",
     "client-side-pentesterlab-api-05-exercise-evidence",
+    "client-side-pentesterlab-api-06-exercise-evidence",
+    "client-side-pentesterlab-api-07-exercise-evidence",
     "client-side-pentesterlab-autho-02-exercise-evidence",
     "client-side-pentesterlab-autho-03-exercise-evidence",
     "client-side-pentesterlab-autho-04-exercise-evidence",
