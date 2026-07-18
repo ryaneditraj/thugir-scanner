@@ -2866,6 +2866,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-01-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 01 BOLA exercise disclosed",
+    description:
+      "PentesterLab API 01 hosted exercise documents broken object-level authorization where attackers access secrets stored in an admin account via predictable API identifiers.",
+    impactOneline:
+      "Public API security exercise instance reveals BOLA/IDOR patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi01ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce object-level authorization on every API route.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate the authenticated principal owns the requested object on every API call.",
+        "Avoid exposing admin secrets via enumerable user or account identifiers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 01-style BOLA labs. Show how to gate labs behind auth and enforce per-object authorization in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

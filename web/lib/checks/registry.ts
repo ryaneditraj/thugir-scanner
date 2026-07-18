@@ -8787,6 +8787,47 @@ const clientSidePentesterlabXss04ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 01 BOLA exercise (pentesterlab.com/exercises/api_01)
+const CLIENT_PENTESTERLAB_API01_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 01 course title",
+    re: /API 01|PentesterLab:\s*API 01/i
+  },
+  {
+    label: "Admin secret BOLA lab description",
+    re: /access the key stored as a secret in the admin(?:'|&#x27;)s account|find the vulnerability that allows you to access the key stored as a secret/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]01/i
+  }
+];
+
+const clientSidePentesterlabApi01ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API01_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 01 exercise documents BOLA — accessing admin account secrets via broken object-level authorization"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -13034,6 +13075,14 @@ const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   {
     label: "Docusaurus SQL injection tutorial overview",
     re: /untrusted input in an SQL query without proper validation|Union-based:\s*use\s*`?UNION SELECT`?/i
+  },
+  {
+    label: "Stored XSS forum comments lab",
+    re: /exploit the comments field to perform stored XSS|Stored \(Persistent\) XSS[\s\S]{0,200}comments/i
+  },
+  {
+    label: "DOM-based XSS innerHTML lab text",
+    re: /DOM-based XSS[\s\S]{0,300}innerHTML/i
   }
 ];
 
@@ -19562,6 +19611,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXss03ExerciseEvidence,
   clientSidePentesterlabXss04ExerciseEvidence,
+  clientSidePentesterlabApi01ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
