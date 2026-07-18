@@ -5353,7 +5353,32 @@
       "url": "https://pentesterlab.com/exercises/web-for-pentester-II/",
       "source": "PentesterLab — Web for Pentester II SQLi/XSS/NoSQL challenge set (free ISO course)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/55/",
+      "source": "Hack This Site — playlevel arcade hub challenge 55 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level422/index.php",
+      "source": "Net-Force — session/auth challenge level 422 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/broken-access-control",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A01 broken access control interactive module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/ssrf",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A10 SSRF interactive module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_01/",
+      "source": "PentesterLab — API 01 IDOR exercise (Essential badge API track)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T11:05:00.000Z"
+  "updated_at": "2026-07-18T12:05:00.000Z"
 }
