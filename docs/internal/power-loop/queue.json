@@ -5613,7 +5613,32 @@
       "url": "http://www.net-force.nl/challenge/level429/index.php",
       "source": "Net-Force — web exploit training challenge level 429 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-chatbot-demo.vercel.app/",
+      "source": "Quality-Max/vulnerable-chatbot-demo — intentionally vulnerable AI chatbot for agent safety scanning (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/64/",
+      "source": "Hack This Site — playlevel 64 wargame challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/21",
+      "source": "DomGoat — Client XSS Exercise-1 location.hash→unescape→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_10/",
+      "source": "PentesterLab — API 10 admin email filter bypass exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/62/",
+      "source": "Hack This Site — application mission 62 login-gated wargame hub",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T20:12:00.000Z"
+  "updated_at": "2026-07-18T21:05:00.000Z"
 }
