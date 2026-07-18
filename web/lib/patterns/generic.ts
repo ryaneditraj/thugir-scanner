@@ -2424,6 +2424,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-http-42-exercise-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "PentesterLab HTTP 42 exercise disclosed",
+    description:
+      "PentesterLab HTTP 42 hosted exercise documents crafting GET /pentesterlab with HTTP Basic authentication using username key and password please.",
+    impactOneline:
+      "Public HTTP Basic-auth exercise reveals credential-gated endpoint patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabHttp42ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use stronger auth than static Basic credentials in production.",
+      steps: [
+        "Require authentication before serving exercise instances.",
+        "Replace static Basic-auth credentials with token-based auth in production APIs.",
+        "Isolate exercise infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab HTTP 42-style Basic authentication labs. Show how to gate labs behind auth and avoid static credentials in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-ssti-02-exercise-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PentesterLab SSTI 02 exercise disclosed",
+    description:
+      "PentesterLab Server Side Template Injection 02 hosted exercise documents exploiting Twig 1.9.0 SSTI to gain remote code execution via template functions.",
+    impactOneline:
+      "Public Twig SSTI exercise instance reveals template-injection-to-RCE patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabSsti02ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never evaluate user input in server templates.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Upgrade Twig and use sandboxed template rendering in production.",
+        "Isolate exercise infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab SSTI 02-style Twig template injection labs. Show how to gate labs behind auth and sandbox template rendering in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
