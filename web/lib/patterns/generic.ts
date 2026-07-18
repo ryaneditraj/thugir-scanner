@@ -3151,6 +3151,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-xss-07-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 07 HTML-encoded script-tag injection exercise disclosed",
+    description:
+      "PentesterLab XSS 07 hosted exercise documents reflected XSS where special characters are HTML-encoded and the attacker must inject JavaScript inside a script tag.",
+    impactOneline:
+      "Public XSS exercise instance reveals HTML-encoded script-context injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss07ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Avoid reflecting user input inside script blocks without strict validation."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 07-style HTML-encoded script-tag injection labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

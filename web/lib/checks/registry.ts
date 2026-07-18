@@ -9234,6 +9234,47 @@ const clientSidePentesterlabXss06ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab XSS 07 HTML-encoded script-tag injection exercise (pentesterlab.com/exercises/xss_07)
+const CLIENT_PENTESTERLAB_XSS07_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 07 course title",
+    re: /XSS 07|PentesterLab:\s*XSS 07/i
+  },
+  {
+    label: "HTML-encoded script-tag injection lab description",
+    re: /special characters are HTML-encoded[\s\S]{0,120}inject JavaScript code into a script tag|inject JavaScript code into a script tag to trigger an alert box with your unique identifier/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 07"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]07/i
+  }
+];
+
+const clientSidePentesterlabXss07ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]07/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS07_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 07 exercise documents reflected XSS via script-tag injection when special characters are HTML-encoded"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20072,6 +20113,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi06ExerciseEvidence,
   clientSidePentesterlabApi07ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
+  clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
