@@ -4145,6 +4145,24 @@
       "slug": "hts-playlevel-41-mission-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/41/ Login Required gate + HTS training ground meta; playlevel/41 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-42-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD HTTP 42 + GET /pentesterlab Basic auth username key password please; pentesterlab.com/exercises/http_42 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-02-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Server Side Template Injection 02 + Twig (1.9.0) SSTI code execution; pentesterlab.com/exercises/ssti_02 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-40-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/40/ Login Required gate + application mission nav; application/40 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7377,6 +7395,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-41-mission-seed",
       "shipped_at": "2026-07-18T00:16:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-42-exercise-evidence",
+      "shipped_at": "2026-07-18T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-02-exercise-evidence",
+      "shipped_at": "2026-07-18T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-40-mission-seed",
+      "shipped_at": "2026-07-18T01:10:00.000Z"
     }
   ]
 }
