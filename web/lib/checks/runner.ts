@@ -813,6 +813,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi02ExerciseEvidence",
   "clientSidePentesterlabApi03ExerciseEvidence",
   "clientSidePentesterlabApi04ExerciseEvidence",
+  "clientSidePentesterlabApi05ExerciseEvidence",
+  "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -1220,7 +1222,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 17; n++) {
+  for (let n = 1; n <= 19; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1240,7 +1242,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/15",
     "/cxss/example/16",
     "/cxss/example/17",
-    "/cxss/example/18"
+    "/cxss/example/18",
+    "/cxss/example/19"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1673,10 +1676,12 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/56/",
     "/playlevel/57/",
     "/playlevel/59/",
+    "/playlevel/60/",
     "/missions/application/54/",
     "/missions/application/55/",
     "/missions/application/56/",
     "/missions/application/57/",
+    "/missions/application/58/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
@@ -5577,7 +5582,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level422/index.php",
         "http://www.net-force.nl/challenge/level423/index.php",
         "http://www.net-force.nl/challenge/level424/index.php",
-        "http://www.net-force.nl/challenge/level425/index.php"
+        "http://www.net-force.nl/challenge/level425/index.php",
+        "http://www.net-force.nl/challenge/level426/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
