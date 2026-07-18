@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T08:03:48.633Z",
+  "updated_at": "2026-07-18T08:06:19.316Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 1054,
-  "total_findings": 5076,
+  "total_sites_scanned": 1061,
+  "total_findings": 5139,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1043,
-  "discovery_findings": 3848,
+  "discovery_urls_added": 1048,
+  "discovery_findings": 3911,
   "improvements_shipped": 664,
-  "last_run": "2026-07-18T08:03:48.633Z",
+  "last_run": "2026-07-18T08:06:19.316Z",
   "last_run_summary": {
-    "hour_utc": "07:00",
+    "hour_utc": "08:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
       "first_pass_recall": "6/6",
       "first_pass_gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (6 findings, pages=1 probes=212; shallow crawl)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages=6 probes=259; deeper crawl)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,7 +50,7 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
@@ -58,21 +58,21 @@
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
       ],
-      "focus": "Queue tail drain: HTS playlevel/49 + application/48 + Net-Force level416 offline seed; PentesterLab http_47/ssti_07 rejected (404)",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue head drain: VWAD grpc-goat oracle + hack-this-site-eta OWASP modules + chal7/chal1 + redtiger level4; +5 drag-security-flaws/HTS51/Net-Force418 queued at tail",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "www.hackthissite.org/playlevel/49: login-gated playlevel hub evidence (0→6 findings)",
-      "www.hackthissite.org/missions/application/48: login-gated application mission hub (0→6 findings)",
-      "www.net-force.nl/challenge/level416: offline challenge redirect to homepage (0→4 findings)",
-      "hack-this-site-eta.vercel.app: exposed source maps + OWASP lab markers across api-labs and A01/A03 modules (15 findings each)",
-      "chal7.vercel.app: SQLi error disclosure + XSS sinks + Wizer CTF evidence (6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "vwad.owasp.org/app/grpc-goat: gRPC lab oracle metadata + misconfig markers (5 findings)",
+      "hack-this-site-eta.vercel.app/api-labs + owasp/a01 + a03: exposed source maps + OWASP lab markers (15 findings each)",
+      "chal7.vercel.app: SQLi error disclosure + XSS sinks (6 findings)",
+      "chal1.vercel.app: Wizer CTF evidence (4 findings)",
+      "redtiger.labs.overthewire.org/level4.php: cookie/session challenge markers (3 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "pentesterlab.com/exercises/http_47 and ssti_07: 404 — not deployed",
-      "HTS playlevel/50 + application/49 + Net-Force 417 + PentesterLab http_48/ssti_08 queued at tail — pending drain",
+      "HTS playlevel/50-51 + application/49-50 + Net-Force 417-418 + PentesterLab http_48/ssti_08 queued at tail — pending drain",
+      "drag-security-flaws.vercel.app: XSS/CSRF/IDOR modules queued at tail — pending drain",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes"
     ]
