@@ -9013,6 +9013,51 @@ const clientSidePentesterlabApi03ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 04 hidden Angular endpoint exercise (pentesterlab.com/exercises/api_04)
+const CLIENT_PENTESTERLAB_API04_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 04 course title",
+    re: /API 04|PentesterLab:\s*API 04/i
+  },
+  {
+    label: "Hidden Angular endpoint lab description",
+    re: /find a hidden endpoint by leveraging the Angular application name|review the JavaScript of the page to find a hidden endpoint/i
+  },
+  {
+    label: "Angular framework tag",
+    re: />\s*Angular\s*</i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 04"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]04/i
+  }
+];
+
+const clientSidePentesterlabApi04ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]04/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API04_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 04 exercise documents discovering a hidden API endpoint via Angular application name in client JavaScript"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -19846,6 +19891,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi01ExerciseEvidence,
   clientSidePentesterlabApi02ExerciseEvidence,
   clientSidePentesterlabApi03ExerciseEvidence,
+  clientSidePentesterlabApi04ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,

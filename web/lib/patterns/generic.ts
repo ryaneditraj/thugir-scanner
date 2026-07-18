@@ -3021,6 +3021,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-04-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 04 hidden Angular endpoint exercise disclosed",
+    description:
+      "PentesterLab API 04 hosted exercise documents discovering a hidden API endpoint by reviewing client JavaScript and leveraging the Angular application name in the HTML page.",
+    impactOneline:
+      "Public API security exercise instance reveals hidden-endpoint enumeration via Angular app metadata for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi04ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; avoid exposing hidden API routes via client-side framework metadata.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Do not embed undocumented API paths in client JavaScript bundles.",
+        "Enumerate and protect all API routes server-side regardless of client-side obscurity."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 04-style hidden-endpoint labs. Show how to gate labs behind auth and remove undocumented API routes from client bundles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
