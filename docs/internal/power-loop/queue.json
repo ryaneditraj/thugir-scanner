@@ -5663,7 +5663,32 @@
       "url": "https://domgo.at/cxss/example/22",
       "source": "DomGoat — Client XSS Exercise-2 location.hash→innerHTML sink (cxss catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/playground/intro11",
+      "source": "Defend the Web — Intro 11 inspect-source password challenge (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hacksplaining.com/lessons/xss-stored/start",
+      "source": "Hacksplaining — stored XSS interactive secure-coding lesson (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_11/",
+      "source": "PentesterLab — Authorization 11 access-control exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data",
+      "source": "PortSwigger Web Security Academy — SQLi hidden-data lab landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://portswigger.net/web-security/cross-site-scripting/reflected/lab-html-context-nothing-encoded",
+      "source": "PortSwigger Web Security Academy — reflected XSS lab landing (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T22:05:00.000Z"
+  "updated_at": "2026-07-18T23:03:00.000Z"
 }

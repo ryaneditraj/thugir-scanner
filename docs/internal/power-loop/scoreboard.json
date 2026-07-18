@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T23:10:00.000Z",
+  "updated_at": "2026-07-18T23:16:40.656Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1192,
-  "total_findings": 5877,
+  "total_sites_scanned": 1233,
+  "total_findings": 6073,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1123,
-  "discovery_findings": 4562,
+  "discovery_urls_added": 1128,
+  "discovery_findings": 4775,
   "improvements_shipped": 714,
-  "last_run": "2026-07-18T23:10:00.000Z",
+  "last_run": "2026-07-18T23:16:40.656Z",
   "last_run_summary": {
     "hour_utc": "23:00",
     "benchmark": {
@@ -51,39 +51,42 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 24,
-      "focus": "Drain queue: PentesterLab XSS 09 + API 11, DomGoat cxss/22, HTS playlevel/65 + application/63",
+      "urls_scanned": 45,
+      "findings": 213,
+      "focus": "Bulk queue drain (40 URLs) + tail PentesterLab XSS/API + DomGoat cxss/22; +5 new discovery URLs",
       "queued_pending": [
         "https://pentesterlab.com/exercises/autho_10/ (404 — rejected)",
         "https://pentesterlab.com/exercises/xss_10/",
         "https://pentesterlab.com/exercises/api_12/",
         "https://www.hackthissite.org/playlevel/66/",
-        "https://domgo.at/cxss/example/23"
+        "https://domgo.at/cxss/example/23",
+        "https://defendtheweb.net/playground/intro11",
+        "https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data"
       ],
       "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
+        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — 3 queue attempts this run)"
       ],
       "skipped_48h": [
-        "https://web-security-practice-app.onrender.com/",
-        "https://pentesterlab.com/exercises/autho_01/",
-        "https://hack-this-site-eta.vercel.app/owasp/a06.html"
-      ],
-      "improvements_shipped_this_run": 3
+        "https://juice-shop.herokuapp.com/ (benchmark scanned this hour)",
+        "https://pentesterlab.com/exercises/api_10/ (scanned <48h)"
+      ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "security-trainer.vercel.app: 18 findings — multi-module OWASP training hub",
       "pentesterlab.com/exercises/xss_09: DOM anchor/hash XSS JSON-LD + lab description (0→4 findings)",
       "pentesterlab.com/exercises/api_11: email-filter bypass @libcurl.so oracle (0→4 findings)",
       "domgo.at/cxss/example/22: location.hash→msgboard.innerHTML DOM XSS lab (0→4 findings)",
-      "www.hackthissite.org/playlevel/65: login-gated arcade hub (0→6 findings)",
-      "www.hackthissite.org/missions/application/63: login-gated application mission hub (0→6 findings)"
+      "skillaudit.vercel.app: 8 findings — skill-audit security lab platform",
+      "demo.weblock.ru: 8 findings — Vulnerable Bank + AI prompt-injection demo"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "pentesterlab.com/exercises/autho_10: 404 — exercise not published yet",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
       "PentesterLab xss_10 + api_12 + HTS playlevel/66 + DomGoat cxss/23 queued at tail — pending drain",
+      "PortSwigger Academy labs require per-user ephemeral .web-security-academy.net instances — landing pages only",
+      "defendtheweb.net: platform on hiatus (goodbye page) — intro11 may 404",
       "damn-vulnerable-startup.fly.dev: 403 from cloud egress"
     ]
   },
