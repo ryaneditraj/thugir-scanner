@@ -4415,6 +4415,24 @@
       "slug": "client-side-pentesterlab-ssti-10-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_10/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-13-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/13 location.hash→unescape→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–13; domgo.at/cxss/example/13 findings 0→4 (+domgo-hash-dom-xss-evidence); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-ii-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD CourseInstance Web for Pentester II + bypass authentication/CAPTCHA/MongoDB injection description; pentesterlab.com/exercises/web-for-pentester-II findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-54-netforce-421-queue-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/54 Login Required hub (0→6) + level421 homepage redirect (0→4 offline oracle) + mehdiaitsaid sql-injection priority seeds (0→6 owasp-educational-lab); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7797,6 +7815,21 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level419-offline-seed",
       "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-13-seed",
+      "shipped_at": "2026-07-18T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-ii-evidence",
+      "shipped_at": "2026-07-18T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-54-netforce-421-queue-seeds",
+      "shipped_at": "2026-07-18T11:10:00.000Z"
     }
   ]
 }
