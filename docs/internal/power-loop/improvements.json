@@ -4307,6 +4307,42 @@
       "slug": "client-side-pentesterlab-ssti-07-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_07/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-maintenance-window-detection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/50 + application/49 return Offline for Maintenance during 8:00 UTC backup window; HTS_MAINTENANCE_RE extends playlevel + mission hub rules; playlevel/50 0→4, application/49 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-50-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/50/ maintenance gate + HTS title; playlevel/50 findings 0→4 via client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-49-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/49/ maintenance gate; application/49 findings 0→4 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level417-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level417/index.php 301 redirects to net-force.nl homepage; level417 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-48-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_48/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-08-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_08/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -7629,6 +7665,26 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level416-offline-seed",
       "shipped_at": "2026-07-18T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-maintenance-window-detection",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-50-mission-seed",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-49-mission-seed",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level417-offline-seed",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
     }
   ]
 }
