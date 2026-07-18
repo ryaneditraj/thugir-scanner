@@ -5198,7 +5198,32 @@
       "url": "https://pentesterlab.com/exercises/ssti_07/",
       "source": "PentesterLab — Server-Side Template Injection 07 Mako RCE exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/50/",
+      "source": "Hack This Site — playlevel arcade hub challenge 50 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/49/",
+      "source": "Hack This Site — application mission 49 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level417/index.php",
+      "source": "Net-Force — session/auth challenge level 417 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_48/",
+      "source": "PentesterLab — HTTP 48 request crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_08/",
+      "source": "PentesterLab — Server-Side Template Injection 08 exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T06:10:00.000Z"
+  "updated_at": "2026-07-18T07:10:00.000Z"
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T06:12:01.971Z",
+  "updated_at": "2026-07-18T07:09:05.090Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 1045,
-  "total_findings": 5000,
+  "total_sites_scanned": 1046,
+  "total_findings": 5006,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1038,
+  "discovery_urls_added": 1043,
   "discovery_findings": 3785,
   "improvements_shipped": 661,
-  "last_run": "2026-07-18T06:12:01.971Z",
+  "last_run": "2026-07-18T07:09:05.090Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
       "first_pass_recall": "6/6",
       "first_pass_gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages=6 probes=259)",
+      "note": "No benchmark misses — recall stable at 6/6 (6 findings, pages=1 probes=212; shallow crawl)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,30 +50,21 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 31,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Queue drain: gitagent-securebot, ai-security-demo, csrf-xss-demo, idor-website, vuln-expose, redtiger level3, cyberdefenders; HTS playlevel/49 + app/48 + Net-Force 416 + PentesterLab http_47/ssti_07 queued at tail",
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "HTS playlevel/50 + app/49, Net-Force 417, PentesterLab http_48/ssti_08 queued at tail — queue drain pending",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "vuln-expose.vercel.app: SQLi error disclosure + client-side SQL evidence + XSS sinks (7 findings)",
-      "cyberdefenders.org: secret-openai in client bundle + CTF platform markers (8 findings)",
-      "ai-security-demo.vercel.app: stack-database-url-in-bundle critical + prompt-injection evidence (4 findings)",
-      "csrf-xss-demo.vercel.app: dom-eval-xss + hardcoded demo credentials (4 findings)",
-      "redtiger.labs.overthewire.org/level3.php: blind login-bypass form evidence (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses on shallow crawl"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/49 + application/48 + Net-Force 416 + PentesterLab http_47/ssti_07 queued at tail — pending drain",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "cyberdefenders.org: CTF challenge instances require authenticated lab start",
+      "juice-shop shallow crawl (1 page) still 6/6 — deeper crawl may surface secret-resend slug",
+      "HTS playlevel/50 + application/49 + Net-Force 417 + PentesterLab http_48/ssti_08 queued at tail — pending drain",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes"
     ]
   },
