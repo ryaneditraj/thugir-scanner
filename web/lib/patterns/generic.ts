@@ -2866,6 +2866,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-xss-05-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 05 alert-filter exercise disclosed",
+    description:
+      "PentesterLab XSS 05 hosted exercise documents reflected XSS filter bypass when the word alert is blacklisted using eval and String.fromCharCode.",
+    impactOneline:
+      "Public XSS exercise instance reveals alert-word blacklist evasion patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss05ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Replace keyword blacklists with allowlist-based sanitizers and CSP."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 05-style alert-filter labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-api-01-exercise-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -2888,6 +2914,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab API 01-style BOLA labs. Show how to gate labs behind auth and enforce per-object authorization in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-02-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 02 BOLA exercise disclosed",
+    description:
+      "PentesterLab API 02 hosted exercise documents broken object-level authorization where attackers access a secret key stored by admin@libcurl.so.",
+    impactOneline:
+      "Public API security exercise instance reveals BOLA/IDOR patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi02ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce object-level authorization on every API route.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate the authenticated principal owns the requested object on every API call.",
+        "Avoid exposing admin secrets via enumerable user or account identifiers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 02-style BOLA labs. Show how to gate labs behind auth and enforce per-object authorization in production APIs.",
     version: 1,
     enabled: true
   },
@@ -9336,6 +9388,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DomGoat exercise writes location.hash into msgboard.innerHTML. Show safe textContent alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "domgo-unescape-hash-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat unescape(hash) DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages unescape location.hash fragments via unescape() before msgboard.innerHTML — deliberate URL-encoded hash DOM XSS labs.",
+    impactOneline:
+      "unescape(location.hash) into innerHTML enables DOM XSS when attackers craft percent-encoded malicious URL fragments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoUnescapeHashDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unescape and render location.hash into innerHTML; use textContent or strict sanitization.",
+      steps: [
+        "Use textContent instead of innerHTML for hash-derived strings.",
+        "Reject or encode percent-encoded payloads before DOM insertion.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise unescapes location.hash then writes to msgboard.innerHTML. Show safe textContent alternatives.",
     version: 1,
     enabled: true
   },
