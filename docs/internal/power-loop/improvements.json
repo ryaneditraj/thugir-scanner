@@ -4475,6 +4475,24 @@
       "slug": "client-side-pentesterlab-web-for-pentester-iii-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/web-for-pentester-III returns PentesterLab 404 — course not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-unescape-hash-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/15 unescape(hash.substr(1))→msgboard.innerHTML; domgo.at/cxss/example/15 findings 0→4 (+domgo-unescape-hash-dom-xss-evidence); benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-05-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 05 + bypass filter when word alert detected via eval and String.fromCharCode; pentesterlab.com/exercises/xss_05 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-02-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 02 + access secret key stored by admin@libcurl.so BOLA description; pentesterlab.com/exercises/api_02 findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7897,6 +7915,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-56-application-55-netforce-423-seeds",
       "shipped_at": "2026-07-18T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-unescape-hash-dom-xss-evidence",
+      "shipped_at": "2026-07-18T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-05-exercise-evidence",
+      "shipped_at": "2026-07-18T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-02-exercise-evidence",
+      "shipped_at": "2026-07-18T14:15:00.000Z"
     }
   ]
 }
