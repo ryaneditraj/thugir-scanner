@@ -1592,6 +1592,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/49/",
     "/playlevel/50/",
     "/playlevel/51/",
+    "/playlevel/52/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
@@ -1601,6 +1602,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/48/",
     "/missions/application/49/",
     "/missions/application/50/",
+    "/missions/application/51/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -5481,7 +5483,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level415/index.php",
         "http://www.net-force.nl/challenge/level416/index.php",
         "http://www.net-force.nl/challenge/level417/index.php",
-        "http://www.net-force.nl/challenge/level418/index.php"
+        "http://www.net-force.nl/challenge/level418/index.php",
+        "http://www.net-force.nl/challenge/level419/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
