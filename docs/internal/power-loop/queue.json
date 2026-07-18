@@ -5223,7 +5223,32 @@
       "url": "https://pentesterlab.com/exercises/ssti_08/",
       "source": "PentesterLab — Server-Side Template Injection 08 exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/",
+      "source": "drag-security-flaws — Remix web security vulnerability hub (XSS/CSRF/IDOR/SQLi modules, web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/idor",
+      "source": "drag-security-flaws — Insecure Direct Object Reference interactive lab module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/xss",
+      "source": "drag-security-flaws — Cross-Site Scripting interactive lab module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/51/",
+      "source": "Hack This Site — playlevel arcade hub challenge 51 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level418/index.php",
+      "source": "Net-Force — session/auth challenge level 418 (exploits catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T07:10:00.000Z"
+  "updated_at": "2026-07-18T08:05:00.000Z"
 }
