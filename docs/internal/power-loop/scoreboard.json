@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T14:38:55.220Z",
+  "updated_at": "2026-07-18T15:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,27 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1121,
-  "total_findings": 5512,
+  "total_sites_scanned": 1123,
+  "total_findings": 5534,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1080,
-  "discovery_findings": 4243,
-  "improvements_shipped": 688,
-  "last_run": "2026-07-18T14:38:55.220Z",
+  "discovery_findings": 4252,
+  "improvements_shipped": 691,
+  "last_run": "2026-07-18T15:25:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14:00",
+    "hour_utc": "15:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "first_pass_recall": "5/6",
-      "first_pass_gap": [
-        "sensitive_data"
-      ],
-      "note": "Heroku 503 on hung first retry; wake retry restored 6/6 (7 findings, pages=6 probes=259; pass1 pages=1 probes=82 gap=sensitive_data)",
+      "note": "Benchmark recall stable 6/6 (7 findings); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,32 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 48,
-      "focus": "Queue head drain (chal10-15, shiny-computing-machine, vulnforge, BBH 8/15) + tail drain (domgo cxss/15, PentesterLab xss_05, api_02)",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 15,
+      "focus": "Queued tail drain: whgojp JavaSecLab + domgo cxss/16 + HTS playlevel/57",
       "queued_pending": [
-        "http://whgojp.top/login",
-        "http://whgojp.top/druid/index.html",
-        "https://domgo.at/cxss/example/16",
-        "https://www.hackthissite.org/playlevel/57/",
         "http://www.net-force.nl/challenge/level423/index.php"
-      ]
+      ],
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — pass1 gap sensitive_data only; retry restored vibe-unauthenticated-api-routes",
-      "shiny-computing-machine.vercel.app: 7 findings — SQLi/XSS/JWT-none/path-traversal CTF hub markers",
-      "chal15.vercel.app: 6 findings — SQL error disclosure + postMessage DOM XSS + Wizer CTF evidence",
-      "domgo.at/cxss/example/15: unescape(location.hash)→innerHTML DOM XSS lab (4 findings)",
-      "pentesterlab.com/exercises/xss_05: alert-word filter bypass via eval+String.fromCharCode (4 findings)",
-      "pentesterlab.com/exercises/api_02: admin@libcurl.so secret key BOLA exercise (4 findings)",
-      "chal14.vercel.app: 5 findings — postMessage DOM XSS + permissive CORS",
-      "vulnforge.vercel.app: 4 findings — hardcoded demo credentials + VulnForge scanner SPA"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "whgojp.top/login: Druid monitor + JavaSecLab evidence (2→5 findings) after reachTarget http fallback fix",
+      "domgo.at/cxss/example/16: domgo-unescape-hash-dom-xss-evidence (4 findings)",
+      "www.hackthissite.org/playlevel/57: client-side-hts-playlevel-hub-evidence (6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop Heroku 503: first retry hung ~30min; killed and re-ran — pass1 gap=sensitive_data only on shallow crawl",
-      "whgojp.top JavaSecLab + domgo cxss/16 + HTS playlevel/57 queued at tail — pending drain",
+      "www.net-force.nl/challenge/level423: redirects to homepage — challenge offline",
       "mehdiaitsaid.github.io/owasp-top-10-labs/labs/ssrf: lab not yet active (placeholder page)"
     ]
   },
@@ -401,12 +389,15 @@
     "mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/sql-injection": 6,
     "domgo.at/cxss/example/14": 4,
     "domgo.at/cxss/example/15": 4,
+    "domgo.at/cxss/example/16": 4,
     "www.hackthissite.org/playlevel/55": 6,
     "www.hackthissite.org/missions/application/54": 6,
     "www.net-force.nl/challenge/level422/index.php": 4,
     "pentesterlab.com/exercises/xss_04": 4,
     "pentesterlab.com/exercises/xss_05": 4,
     "picoctf.org": 4,
-    "server.vulnapp.id/mutillidae": 7
+    "server.vulnapp.id/mutillidae": 7,
+    "whgojp.top": 5,
+    "www.hackthissite.org/playlevel/57": 6
   }
 }
