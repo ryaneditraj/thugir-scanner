@@ -4625,6 +4625,24 @@
       "slug": "client-side-pentesterlab-autho-09-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: /exercises/autho_09/ returns 404 — exercise not published yet; no implementable detection signal"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-10-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 10 + register administrator by bypassing email filters + @libcurl.so oracle; pentesterlab.com/exercises/api_10 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-chatbot-demo.vercel.app",
+      "slug": "client-side-vulnerable-chatbot-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: INTENTIONALLY VULNERABLE ShopBot + QualityMax Agent Safety Scan + POST /api/chat; vulnerable-chatbot-demo.vercel.app findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-21-hts-64-62-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/21 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/64 arcade hub (0→6) + application/62 mission hub (0→6); extractDomGoatCxssSeeds extended to example/21; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8167,6 +8185,21 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level429-offline-seed",
       "shipped_at": "2026-07-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-10-exercise-evidence",
+      "shipped_at": "2026-07-18T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-chatbot-demo.vercel.app",
+      "slug": "client-side-vulnerable-chatbot-demo-evidence",
+      "shipped_at": "2026-07-18T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-21-hts-64-62-seeds",
+      "shipped_at": "2026-07-18T22:10:00.000Z"
     }
   ]
 }
