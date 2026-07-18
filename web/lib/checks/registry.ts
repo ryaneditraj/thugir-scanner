@@ -9238,6 +9238,51 @@ const clientSidePentesterlabApi10ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 11 email-filter bypass exercise (pentesterlab.com/exercises/api_11)
+const CLIENT_PENTESTERLAB_API11_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 11 course title",
+    re: /API 11|PentesterLab:\s*API 11/i
+  },
+  {
+    label: "Admin email filter bypass lab description",
+    re: /register an account that will be interpreted by the application as an administrator account[\s\S]{0,200}@libcurl\.so/i
+  },
+  {
+    label: "libcurl.so email oracle",
+    re: /@libcurl\.so/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 11"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]11/i
+  }
+];
+
+const clientSidePentesterlabApi11ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]11/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API11_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 11 exercise documents bypassing email filters to register an administrator account (@libcurl.so oracle)"
+    }
+  };
+};
+
 // --- PentesterLab XSS 06 script-tag injection exercise (pentesterlab.com/exercises/xss_06)
 const CLIENT_PENTESTERLAB_XSS06_RES: { label: string; re: RegExp }[] = [
   {
@@ -9357,6 +9402,47 @@ const clientSidePentesterlabXss08ExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab XSS 08 exercise documents reflected XSS via trusting user-provided paths in PHP $_SERVER['PHP_SELF']"
+    }
+  };
+};
+
+// --- PentesterLab XSS 09 DOM anchor injection exercise (pentesterlab.com/exercises/xss_09)
+const CLIENT_PENTESTERLAB_XSS09_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 09 course title",
+    re: /XSS 09|PentesterLab:\s*XSS 09/i
+  },
+  {
+    label: "DOM anchor hash injection lab description",
+    re: /DOM-based XSS vulnerability where the JavaScript code uses the URL's anchor portion|URL's anchor portion to dynamically write content into the page without proper escaping/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 09"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]09/i
+  }
+];
+
+const clientSidePentesterlabXss09ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]09/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS09_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 09 exercise documents DOM-based XSS via URL anchor/hash written into the page without escaping"
     }
   };
 };
@@ -20247,9 +20333,11 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi06ExerciseEvidence,
   clientSidePentesterlabApi07ExerciseEvidence,
   clientSidePentesterlabApi10ExerciseEvidence,
+  clientSidePentesterlabApi11ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
+  clientSidePentesterlabXss09ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,

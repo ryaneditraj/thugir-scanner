@@ -3151,6 +3151,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-11-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 11 email-filter bypass exercise disclosed",
+    description:
+      "PentesterLab API 11 hosted exercise documents registering an administrator account by bypassing email filters that block direct @libcurl.so registration.",
+    impactOneline:
+      "Public API security exercise instance reveals email-validation bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi11ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize and strictly validate email addresses server-side.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate email domains with canonicalization before role assignment.",
+        "Never derive administrator privileges from substring checks in email local-parts."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 11-style email-filter bypass labs. Show how to gate labs behind auth and harden email validation in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-06-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -3225,6 +3251,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab XSS 08-style PHP_SELF path-injection labs. Show how to gate labs behind auth and avoid echoing server path variables in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-09-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 09 DOM anchor injection exercise disclosed",
+    description:
+      "PentesterLab XSS 09 hosted exercise documents DOM-based XSS where JavaScript reads the URL anchor/hash and writes it into the page without escaping.",
+    impactOneline:
+      "Public XSS exercise instance reveals DOM hash/anchor injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss09ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never assign location.hash to innerHTML without encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use textContent instead of innerHTML for hash-derived content in production.",
+        "Sanitize or encode all client-side DOM writes from URL fragments."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 09-style DOM anchor injection labs. Show how to gate labs behind auth and avoid writing location.hash to HTML sinks in production.",
     version: 1,
     enabled: true
   },
