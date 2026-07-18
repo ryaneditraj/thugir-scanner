@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T10:08:54.554Z",
-  "total": 431,
-  "uniqueSlugs": 430,
+  "generatedAt": "2026-07-18T11:13:32.752Z",
+  "total": 432,
+  "uniqueSlugs": 431,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 413,
+    "generic": 414,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 363,
+    "deep": 364,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 128,
+    "Broken access control": 129,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -246,6 +246,7 @@
     "client-side-pentesterlab-ssti-01-exercise-evidence",
     "client-side-pentesterlab-ssti-02-exercise-evidence",
     "client-side-pentesterlab-web-for-pentester-evidence",
+    "client-side-pentesterlab-web-for-pentester-ii-evidence",
     "client-side-pentesterlab-xss-02-exercise-evidence",
     "client-side-pentesterlab-xss-03-exercise-evidence",
     "client-side-pentesterlab-xss-exercise-evidence",
