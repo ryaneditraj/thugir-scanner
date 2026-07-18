@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T15:11:47.226Z",
+  "updated_at": "2026-07-18T15:16:16.085Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,27 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 1122,
-  "total_findings": 5519,
+  "total_sites_scanned": 1130,
+  "total_findings": 5567,
   "critical_findings": 32,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1080,
-  "discovery_findings": 4243,
+  "discovery_urls_added": 1085,
+  "discovery_findings": 4291,
   "improvements_shipped": 687,
-  "last_run": "2026-07-18T15:11:47.226Z",
+  "last_run": "2026-07-18T15:16:16.085Z",
   "last_run_summary": {
-    "hour_utc": "14:00",
+    "hour_utc": "15:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "first_pass_recall": "5/6",
-      "first_pass_gap": [
-        "sensitive_data"
-      ],
-      "note": "Heroku 503 on hung first retry; wake retry restored 6/6 (7 findings, pages=6 probes=259; pass1 pages=1 probes=82 gap=sensitive_data)",
+      "first_pass_recall": "6/6",
+      "first_pass_gap": [],
+      "note": "First-pass full recall — no retry needed (7 findings, pages=6 probes=166)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,32 +53,29 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
+      "urls_scanned": 8,
       "findings": 48,
-      "focus": "Queue head drain (chal10-15, shiny-computing-machine, vulnforge, BBH 8/15) + tail drain (domgo cxss/15, PentesterLab xss_05, api_02)",
+      "focus": "Queue head drain (BBH chal 6/7/16, chimera, finbot, bwapp, brokencrystals) + 5 new tail URLs pending",
       "queued_pending": [
         "http://whgojp.top/login",
-        "http://whgojp.top/druid/index.html",
         "https://domgo.at/cxss/example/16",
         "https://www.hackthissite.org/playlevel/57/",
-        "http://www.net-force.nl/challenge/level423/index.php"
+        "https://domgo.at/cxss/example/17",
+        "https://pentesterlab.com/exercises/api_03/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — pass1 gap sensitive_data only; retry restored vibe-unauthenticated-api-routes",
-      "shiny-computing-machine.vercel.app: 7 findings — SQLi/XSS/JWT-none/path-traversal CTF hub markers",
-      "chal15.vercel.app: 6 findings — SQL error disclosure + postMessage DOM XSS + Wizer CTF evidence",
-      "domgo.at/cxss/example/15: unescape(location.hash)→innerHTML DOM XSS lab (4 findings)",
-      "pentesterlab.com/exercises/xss_05: alert-word filter bypass via eval+String.fromCharCode (4 findings)",
-      "pentesterlab.com/exercises/api_02: admin@libcurl.so secret key BOLA exercise (4 findings)",
-      "chal14.vercel.app: 5 findings — postMessage DOM XSS + permissive CORS",
-      "vulnforge.vercel.app: 4 findings — hardcoded demo credentials + VulnForge scanner SPA"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — first-pass full recall, no Heroku wake retry needed",
+      "chimera.atlascrew.dev: 9 findings — 456+ vuln API lab markers + JWT-none + IDOR + XXE evidence",
+      "brokencrystals.com: 15 findings — exposed .env/.git, GraphQL introspection, postMessage DOM XSS",
+      "bwapp.hakhub.net: 7 findings — phpinfo + directory listing + bWAPP training markers",
+      "owasp-finbot-ctf.org: 5 findings — agentic AI CTF + OpenAPI docs exposed"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop Heroku 503: first retry hung ~30min; killed and re-ran — pass1 gap=sensitive_data only on shallow crawl",
-      "whgojp.top JavaSecLab + domgo cxss/16 + HTS playlevel/57 queued at tail — pending drain",
-      "mehdiaitsaid.github.io/owasp-top-10-labs/labs/ssrf: lab not yet active (placeholder page)"
+      "secret-resend slug absent on juice-shop — sensitive_data mapped via vibe-unauthenticated-api-routes only",
+      "whgojp.top JavaSecLab + domgo cxss/16-17 + HTS playlevel/57-58 + PentesterLab api_03 queued at tail — pending drain",
+      "brokencrystals.com: pages_crawled=2 — shallow crawl may miss deeper API oracles"
     ]
   },
   "discovery_highlights": {
