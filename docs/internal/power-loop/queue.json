@@ -5066,7 +5066,12 @@
     },
     {
       "url": "https://pentesterlab.com/exercises/http_43/",
-      "source": "PentesterLab — HTTP 43 request crafting exercise (web search)",
+      "source": "PentesterLab — HTTP 43 request smuggling/crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_03/",
+      "source": "PentesterLab — Server-Side Template Injection 03 Jinja2 RCE exercise (web search)",
       "auth": "public_demo"
     }
   ],
