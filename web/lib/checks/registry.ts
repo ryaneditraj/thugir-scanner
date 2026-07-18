@@ -8417,6 +8417,47 @@ const clientSidePentesterlabHttp42ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab HTTP 43 WebSocket exercise (pentesterlab.com/exercises/http_43)
+const CLIENT_PENTESTERLAB_HTTP43_EXERCISE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTTP 43 course title",
+    re: /HTTP 43|PentesterLab:\s*HTTP 43/i
+  },
+  {
+    label: "WebSocket /pentesterlab key challenge description",
+    re: /connect to the WebSocket \/pentesterlab[\s\S]{0,160}send the string\s*["']key["']/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,220}"name"\s*:\s*"HTTP 43"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/http[_-]43/i
+  }
+];
+
+const clientSidePentesterlabHttp43ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/http[_-]43/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_HTTP43_EXERCISE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab HTTP 43 exercise documents connecting to WebSocket /pentesterlab and sending the string key"
+    }
+  };
+};
+
 // --- PentesterLab Server Side Template Injection 02 exercise (pentesterlab.com/exercises/ssti_02)
 const CLIENT_PENTESTERLAB_SSTI02_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -19262,6 +19303,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabHttp40ExerciseEvidence,
   clientSidePentesterlabSsti01ExerciseEvidence,
   clientSidePentesterlabHttp42ExerciseEvidence,
+  clientSidePentesterlabHttp43ExerciseEvidence,
   clientSidePentesterlabSsti02ExerciseEvidence,
   clientSidePentesterlabSqli06ExerciseEvidence,
   clientSidePentesterlabXssExerciseEvidence,

@@ -2450,6 +2450,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-http-43-exercise-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "PentesterLab HTTP 43 exercise disclosed",
+    description:
+      "PentesterLab HTTP 43 hosted exercise documents connecting to WebSocket /pentesterlab and sending the string key.",
+    impactOneline:
+      "Public WebSocket exercise reveals real-time protocol abuse patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabHttp43ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; authenticate WebSocket endpoints in production.",
+      steps: [
+        "Require authentication before serving exercise instances.",
+        "Validate WebSocket origin and authenticate upgrade requests in production.",
+        "Isolate exercise infrastructure from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab HTTP 43-style WebSocket labs. Show how to gate labs behind auth and secure WebSocket endpoints in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-ssti-02-exercise-evidence",
     platform: "generic",
     category: "Injection",
