@@ -2242,6 +2242,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-web-for-pentester-ii-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Web for Pentester II course disclosed",
+    description:
+      "PentesterLab Web for Pentester II documents auth bypass, SQLi, CAPTCHA weaknesses, authorization flaws, mass-assignment, and MongoDB injection labs.",
+    impactOneline:
+      "Public Web for Pentester II curriculum reveals advanced web app pentest challenge taxonomy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabWebForPentesterIiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab code in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Isolate exercise infrastructure from production networks.",
+        "Monitor outbound traffic from lab containers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Web for Pentester II-style exercises. Show how to gate labs behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-sqli-exercise-evidence",
     platform: "generic",
     category: "Injection",

@@ -1177,7 +1177,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 11; n++) {
+  for (let n = 1; n <= 13; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1190,7 +1190,9 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/10",
     "/cxss/example/1",
     "/cxss/example/2",
-    "/cxss/example/3"
+    "/cxss/example/3",
+    "/cxss/example/12",
+    "/cxss/example/13"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1593,6 +1595,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/50/",
     "/playlevel/51/",
     "/playlevel/52/",
+    "/playlevel/53/",
+    "/playlevel/54/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
@@ -1603,6 +1607,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/49/",
     "/missions/application/50/",
     "/missions/application/51/",
+    "/missions/application/52/",
+    "/missions/application/53/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -5484,7 +5490,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level416/index.php",
         "http://www.net-force.nl/challenge/level417/index.php",
         "http://www.net-force.nl/challenge/level418/index.php",
-        "http://www.net-force.nl/challenge/level419/index.php"
+        "http://www.net-force.nl/challenge/level419/index.php",
+        "http://www.net-force.nl/challenge/level420/index.php",
+        "http://www.net-force.nl/challenge/level421/index.php"
+      ]
+    : [];
+  const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
+    ? [
+        new URL("/labs/injection/sql-injection", home.finalUrl).toString(),
+        new URL("/labs/injection/xss", home.finalUrl).toString(),
+        new URL("/labs/broken-access-control", home.finalUrl).toString()
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
@@ -5593,6 +5608,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
+      ...owaspTop10LabsPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
