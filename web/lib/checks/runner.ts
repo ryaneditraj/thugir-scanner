@@ -749,6 +749,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSidePentesterlabWebForPentesterEvidence",
+  "clientSidePentesterlabWebForPentesterIiEvidence",
   "clientSidePentesterlabSqliExerciseEvidence",
   "clientSidePentesterlabSqli02ExerciseEvidence",
   "clientSidePentesterlabSqli03ExerciseEvidence",
