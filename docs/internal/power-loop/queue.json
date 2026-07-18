@@ -5638,7 +5638,32 @@
       "url": "https://www.hackthissite.org/missions/application/62/",
       "source": "Hack This Site — application mission 62 login-gated wargame hub",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_10/",
+      "source": "PentesterLab — Authorization 10 access-control exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_09/",
+      "source": "PentesterLab — XSS 09 filter-evasion hosted exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_11/",
+      "source": "PentesterLab — API 11 broken authentication exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/65/",
+      "source": "Hack This Site — playlevel 65 wargame challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/22",
+      "source": "DomGoat — Client XSS Exercise-2 location.hash→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T21:05:00.000Z"
+  "updated_at": "2026-07-18T22:05:00.000Z"
 }
