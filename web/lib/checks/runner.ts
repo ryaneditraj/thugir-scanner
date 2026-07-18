@@ -773,6 +773,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabXss02ExerciseEvidence",
   "clientSidePentesterlabXss03ExerciseEvidence",
   "clientSidePentesterlabXss04ExerciseEvidence",
+  "clientSidePentesterlabApi01ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -1195,7 +1196,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/3",
     "/cxss/example/12",
     "/cxss/example/13",
-    "/cxss/example/14"
+    "/cxss/example/14",
+    "/cxss/example/15"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1321,6 +1323,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/xss-03",
     "/exercises/xss_04",
     "/exercises/xss-04",
+    "/exercises/api_01",
+    "/exercises/api-01",
     "/exercises/autho_03",
     "/exercises/autho-03",
     "/exercises/sqli_04",
@@ -1603,7 +1607,9 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/53/",
     "/playlevel/54/",
     "/playlevel/55/",
+    "/playlevel/56/",
     "/missions/application/54/",
+    "/missions/application/55/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
@@ -5500,7 +5506,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level419/index.php",
         "http://www.net-force.nl/challenge/level420/index.php",
         "http://www.net-force.nl/challenge/level421/index.php",
-        "http://www.net-force.nl/challenge/level422/index.php"
+        "http://www.net-force.nl/challenge/level422/index.php",
+        "http://www.net-force.nl/challenge/level423/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
