@@ -5283,7 +5283,32 @@
       "url": "http://www.net-force.nl/challenge/level419/index.php",
       "source": "Net-Force — session/auth challenge level 419 (exploits catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/ai-goat/",
+      "source": "OWASP VWAD — AI Goat LLM attack lab directory entry (vwad.owasp.org)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/53/",
+      "source": "Hack This Site — arcade playlevel 53 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/52/",
+      "source": "Hack This Site — application mission 52 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level420/index.php",
+      "source": "Net-Force — session/auth challenge level 420 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/12",
+      "source": "Mario Heiderich domgo.at — DomGoat level 12 hash+name DOM XSS (cxss series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T09:10:00.000Z"
+  "updated_at": "2026-07-18T10:05:00.000Z"
 }
