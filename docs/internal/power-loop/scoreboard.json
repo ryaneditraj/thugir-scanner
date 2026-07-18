@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1033,
   "discovery_findings": 3742,
-  "improvements_shipped": 655,
+  "improvements_shipped": 658,
   "last_run": "2026-07-18T05:10:30.812Z",
   "last_run_summary": {
     "hour_utc": "05:00",
@@ -33,7 +33,7 @@
       "gap": [],
       "first_pass_recall": "6/6",
       "first_pass_gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages=6 probes=259)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,27 +52,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 31,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Queue drain: LLM prompt labs, WebGoat, OverTheWire Natas, Mutillidae, Hacking-Lab, HTS basic missions; HTS playlevel/47-48 + app/46-47 + Net-Force 415 queued at tail",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 16,
+      "focus": "Queue drain: HTS playlevel/45 + application/44 mission seeds; Net-Force level413-414 offline seeds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "ai-prompt-lab.vercel.app: 4 findings — OpenAI API key in client bundle (secret-openai)",
-      "webgoat.org: 6 findings — postMessage DOM XSS + Juice Shop oracle markers",
-      "websegura.radwarelatam.com/mutillidae: 5 findings — exposed config backup (critical) + HTML comment credentials",
-      "www.hackthissite.org/missions/basic: 6 findings — reflected XSS + mission hub evidence"
+      "www.hackthissite.org/playlevel/45: login-gated arcade hub evidence (0→6 findings)",
+      "www.hackthissite.org/missions/application/44: login-gated application mission hub (0→6 findings)",
+      "www.net-force.nl/challenge/level413: offline challenge redirect to homepage (0→4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/47-48 + app/46-47 + Net-Force 415 queued at tail — pending drain",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes"
+      "PentesterLab http_45/http_46/ssti_05/ssti_06 return 404 — skip until exercises deploy",
+      "HTS playlevel/46 + application/45 + Net-Force 415 queued at tail — pending drain",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
@@ -364,6 +360,9 @@
     "www.net-force.nl/challenge/level412/index.php": 4,
     "websegura.radwarelatam.com/mutillidae": 5,
     "natas0.natas.labs.overthewire.org": 4,
-    "www.hackthissite.org/missions/basic": 6
+    "www.hackthissite.org/missions/basic": 6,
+    "www.hackthissite.org/playlevel/45": 6,
+    "www.hackthissite.org/missions/application/44": 6,
+    "www.net-force.nl/challenge/level413/index.php": 4
   }
 }
