@@ -9103,6 +9103,96 @@ const clientSidePentesterlabApi05ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 06 CSRF + compressed-JS hidden endpoint exercise (pentesterlab.com/exercises/api_06)
+const CLIENT_PENTESTERLAB_API06_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 06 course title",
+    re: /API 06|PentesterLab:\s*API 06/i
+  },
+  {
+    label: "CSRF-protected compressed JavaScript hidden endpoint lab",
+    re: /find a hidden endpoint[\s\S]{0,200}compressed[\s\S]{0,120}CSRF protection/i
+  },
+  {
+    label: "CSRF headers and cookies requirement",
+    re: /handle CSRF protection by using appropriate headers and cookies/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 06"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]06/i
+  }
+];
+
+const clientSidePentesterlabApi06ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]06/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API06_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 06 exercise documents discovering a CSRF-protected hidden API endpoint in compressed client JavaScript"
+    }
+  };
+};
+
+// --- PentesterLab API 07 Angular ng-app information leak exercise (pentesterlab.com/exercises/api_07)
+const CLIENT_PENTESTERLAB_API07_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 07 course title",
+    re: /API 07|PentesterLab:\s*API 07/i
+  },
+  {
+    label: "Angular ng-app information leak lab description",
+    re: /find an information leak[\s\S]{0,160}Angular application[\s\S]{0,80}ng-app/i
+  },
+  {
+    label: "ng-app HTML attribute reference",
+    re: /ng-app/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 07"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]07/i
+  }
+];
+
+const clientSidePentesterlabApi07ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]07/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API07_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 07 exercise documents discovering an information leak by reviewing client JavaScript with Angular ng-app metadata"
+    }
+  };
+};
+
 // --- PentesterLab XSS 06 script-tag injection exercise (pentesterlab.com/exercises/xss_06)
 const CLIENT_PENTESTERLAB_XSS06_RES: { label: string; re: RegExp }[] = [
   {
@@ -19979,6 +20069,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi03ExerciseEvidence,
   clientSidePentesterlabApi04ExerciseEvidence,
   clientSidePentesterlabApi05ExerciseEvidence,
+  clientSidePentesterlabApi06ExerciseEvidence,
+  clientSidePentesterlabApi07ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,

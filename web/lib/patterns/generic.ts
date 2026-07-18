@@ -3073,6 +3073,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-06-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 06 CSRF-protected hidden endpoint exercise disclosed",
+    description:
+      "PentesterLab API 06 hosted exercise documents discovering a hidden API endpoint in compressed client JavaScript while handling CSRF protection via headers and cookies.",
+    impactOneline:
+      "Public API security exercise instance reveals CSRF-gated hidden-endpoint enumeration via obfuscated client bundles for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi06ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce CSRF tokens and avoid exposing hidden API routes in client JavaScript.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Do not embed undocumented API paths in client JavaScript bundles.",
+        "Validate CSRF tokens server-side on all state-changing API requests."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 06-style CSRF-protected hidden-endpoint labs. Show how to gate labs behind auth and remove undocumented API routes from client bundles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-07-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab API 07 Angular ng-app information leak exercise disclosed",
+    description:
+      "PentesterLab API 07 hosted exercise documents finding an information leak by reviewing client JavaScript and using the Angular application name from the ng-app HTML attribute.",
+    impactOneline:
+      "Public API security exercise instance reveals Angular metadata information-leak patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi07ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; avoid leaking sensitive metadata via client-side framework attributes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Remove sensitive configuration from client-side JavaScript and HTML attributes.",
+        "Audit Angular ng-app and module metadata for information disclosure in production builds."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 07-style Angular information-leak labs. Show how to gate labs behind auth and strip framework metadata from production client bundles.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-06-exercise-evidence",
     platform: "generic",
     category: "Cross-site scripting",
