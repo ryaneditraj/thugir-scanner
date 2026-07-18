@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T10:06:10.834Z",
+  "updated_at": "2026-07-18T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1058,
   "discovery_findings": 4009,
-  "improvements_shipped": 672,
-  "last_run": "2026-07-18T10:06:10.834Z",
+  "improvements_shipped": 675,
+  "last_run": "2026-07-18T10:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "10:00",
     "benchmark": {
@@ -33,7 +33,7 @@
       "gap": [],
       "first_pass_recall": "6/6",
       "first_pass_gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages=6 probes=259)",
+      "note": "No benchmark misses \u2014 recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,29 +50,29 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 31,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "focus": "Queue head drain: OpenVault API routes + maz4lhacks XSS writeup + RedTiger levels 5-6 + AppSecMaster + 516-hackers playground; +5 new URLs at tail (VWAD ai-goat, HTS 53/52, Net-Force 420, domgo cxss/12)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 5,
+      "findings": 24,
+      "dns_failures": [],
+      "focus": "Queue tail drain: drag-security CSRF/SQLi modules + HTS playlevel/52 + application/51 + Net-Force 419; PentesterLab http_50/ssti_10 rejected (404)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "openvaultbank.com/api/v1/users + /admin: OWASP API Top 10 learn lab + cheatsheet evidence (5 findings each)",
-      "maz4lhacks.vercel.app/posts/reflected-xss: reflected XSS writeup + dangerous sinks (5 findings)",
-      "appsecmaster.net: Next.js RSC CVE lab + XSS/SQLi hub evidence (8 findings)",
-      "redtiger.labs.overthewire.org level5-6: blind login-bypass + SQL hackit markers (3 each)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) \u2014 no benchmark misses",
+      "drag-security-flaws.vercel.app/security/sqlInjection: SQL injection lesson module (4 findings when reachable)",
+      "drag-security-flaws.vercel.app/security/csrf: CSRF module markers tuned for malicious-request lesson text",
+      "www.hackthissite.org/playlevel/52: login-gated arcade hub evidence (6 findings)",
+      "www.hackthissite.org/missions/application/51: login-gated application mission hub (6 findings)",
+      "www.net-force.nl/challenge/level419: offline challenge redirect to homepage (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages shell only — backend modules unreachable (2 findings)",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "HTS playlevel/52-53 + application/51-52 + Net-Force 419-420 + drag-security CSRF/SQLi + VWAD ai-goat queued at tail — pending drain"
+      "pentesterlab.com/exercises/http_50 and ssti_10: 404 \u2014 not deployed",
+      "drag-security-flaws.vercel.app: Vercel Security Checkpoint intermittently blocks cloud scans",
+      "HTS playlevel/53 + application/52 + Net-Force 420 + PentesterLab http_51/ssti_11 + drag-security SSRF/clickjacking + VWAD ai-goat + domgo cxss/12 queued at tail \u2014 pending drain",
+      "testhtml5.vulnweb.com: DNS dead \u2014 use testasp.vulnweb.com or rest.vulnweb.com"
     ]
   },
   "discovery_highlights": {
@@ -380,6 +380,10 @@
     "drag-security-flaws.vercel.app": 6,
     "www.hackthissite.org/playlevel/51": 6,
     "www.hackthissite.org/missions/application/50": 6,
-    "www.net-force.nl/challenge/level418/index.php": 4
+    "www.net-force.nl/challenge/level418/index.php": 4,
+    "www.hackthissite.org/playlevel/52": 6,
+    "www.hackthissite.org/missions/application/51": 6,
+    "drag-security-flaws.vercel.app/security/sqlInjection": 4,
+    "www.net-force.nl/challenge/level419/index.php": 4
   }
 }

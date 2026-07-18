@@ -9701,7 +9701,10 @@ const DRAG_SECURITY_FLAWS_MODULE_SPECS: {
     pathRe: /\/security\/csrf(?:\/|$|\?)/i,
     markers: [
       { label: "CSRF module title", re: /Cross-Site Request Forgery \(CSRF\)/i },
-      { label: "CSRF attack mechanics", re: /forged request|state-changing request/i },
+      {
+        label: "CSRF attack mechanics",
+        re: /forged request|state-changing request|malicious request|unauthorized action/i
+      },
       { label: "Anti-CSRF token lesson", re: /CSRF token|anti-CSRF|SameSite cookie/i }
     ],
     note: "drag-security-flaws /security/csrf module documents cross-site request forgery attack mechanics and mitigations"

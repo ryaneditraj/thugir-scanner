@@ -4379,6 +4379,42 @@
       "slug": "client-side-pentesterlab-ssti-09-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_09/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-csrf-module-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /security/csrf publishes malicious request + unauthorized actions + CSRF token Remix lesson; CSRF module markers extended; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-sqli-queue-path-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /security/sqli 404; /security/sqlInjection 200 with SQL Injection + parameterized queries lesson; queue URL corrected; sqlInjection scan 4 findings incl lab-module slug"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-52-application-51-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/52 Login Required arcade hub (0→6 findings) + /missions/application/51 login-gated mission hub (0→6 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level419-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level419/index.php redirects to net-force.nl homepage; level419 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-50-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_50/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-10-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_10/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -7741,6 +7777,26 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level418-offline-seed",
       "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-csrf-module-markers",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-sqli-queue-path-fix",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-52-application-51-seeds",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level419-offline-seed",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
     }
   ]
 }

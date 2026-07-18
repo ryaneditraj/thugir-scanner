@@ -5285,13 +5285,28 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vwad.owasp.org/app/ai-goat/",
-      "source": "OWASP VWAD — AI Goat LLM attack lab directory entry (vwad.owasp.org)",
-      "auth": "benchmark"
+      "url": "https://drag-security-flaws.vercel.app/security/ssrf",
+      "source": "drag-security-flaws — Server-Side Request Forgery interactive lab module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/clickjacking",
+      "source": "drag-security-flaws — Clickjacking interactive lab module",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_50/",
+      "source": "PentesterLab — HTTP 50 request crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_10/",
+      "source": "PentesterLab — Server-Side Template Injection 10 exercise (web search)",
+      "auth": "public_demo"
     },
     {
       "url": "https://www.hackthissite.org/playlevel/53/",
-      "source": "Hack This Site — arcade playlevel 53 challenge hub (missions catalog)",
+      "source": "Hack This Site — playlevel arcade hub challenge 53 (missions catalog)",
       "auth": "public_demo"
     },
     {
@@ -5305,10 +5320,15 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://vwad.owasp.org/app/ai-goat/",
+      "source": "OWASP VWAD — AI Goat LLM attack lab directory entry (vwad.owasp.org)",
+      "auth": "benchmark"
+    },
+    {
       "url": "https://domgo.at/cxss/example/12",
       "source": "Mario Heiderich domgo.at — DomGoat level 12 hash+name DOM XSS (cxss series)",
       "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T10:05:00.000Z"
+  "updated_at": "2026-07-18T10:10:00.000Z"
 }
