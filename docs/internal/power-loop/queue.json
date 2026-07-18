@@ -5173,7 +5173,32 @@
       "url": "https://www.hackthissite.org/missions/application/47/",
       "source": "Hack This Site — application mission 47 challenge hub (missions catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/49/",
+      "source": "Hack This Site — playlevel arcade hub challenge 49 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/48/",
+      "source": "Hack This Site — application mission 48 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level416/index.php",
+      "source": "Net-Force — session/auth challenge level 416 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/http_47/",
+      "source": "PentesterLab — HTTP 47 request crafting exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/ssti_07/",
+      "source": "PentesterLab — Server-Side Template Injection 07 Mako RCE exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T05:05:00.000Z"
+  "updated_at": "2026-07-18T06:10:00.000Z"
 }
