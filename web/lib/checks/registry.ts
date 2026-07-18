@@ -9628,6 +9628,139 @@ const clientSideVulnExposeLabModuleEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- drag-security-flaws Remix vulnerability education hub (drag-security-flaws.vercel.app)
+const CLIENT_DRAG_SECURITY_FLAWS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Security Flaws hub title",
+    re: /Web Security Vulnerabilities|Security Flaws/i
+  },
+  {
+    label: "Educational vulnerability catalog tagline",
+    re: /Explore common security flaws and learn how to protect your applications/i
+  },
+  {
+    label: "Frontend security module nav",
+    re: /href\s*=\s*["']\/security\/(?:xss|csrf|idor|clickjacking)["']/i
+  },
+  {
+    label: "Backend security module nav",
+    re: /href\s*=\s*["']\/security\/(?:sqlInjection|ssrf|injection)["']/i
+  },
+  {
+    label: "Remix drag-security-flaws host",
+    re: /drag-security-flaws\.vercel\.app/i
+  }
+];
+
+const clientSideDragSecurityFlawsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/drag-security-flaws\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DRAG_SECURITY_FLAWS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "drag-security-flaws publishes Remix educational modules for XSS, CSRF, IDOR, SQLi, SSRF, and clickjacking vulnerability classes"
+    }
+  };
+};
+
+const DRAG_SECURITY_FLAWS_MODULE_SPECS: {
+  pathRe: RegExp;
+  markers: { label: string; re: RegExp }[];
+  note: string;
+}[] = [
+  {
+    pathRe: /\/security\/xss(?:\/|$|\?)/i,
+    markers: [
+      { label: "XSS module title", re: /Cross-Site Scripting \(XSS\)/i },
+      { label: "Stored XSS lesson", re: /Stored XSS:/i },
+      { label: "Reflected XSS lesson", re: /Reflected XSS:/i },
+      { label: "DOM-based XSS lesson", re: /DOM-Based XSS:/i }
+    ],
+    note: "drag-security-flaws /security/xss module documents stored, reflected, and DOM-based XSS attack classes"
+  },
+  {
+    pathRe: /\/security\/idor(?:\/|$|\?)/i,
+    markers: [
+      { label: "IDOR module title", re: /Insecure Direct Object References \(IDOR\)/i },
+      { label: "Object reference exposure lesson", re: /Object Reference Exposure:/i },
+      { label: "Authorization bypass lesson", re: /Lack of Authorization:/i },
+      { label: "Profile enumeration example", re: /profile\?userId=\d+/i }
+    ],
+    note: "drag-security-flaws /security/idor module documents predictable object reference IDOR scenarios"
+  },
+  {
+    pathRe: /\/security\/csrf(?:\/|$|\?)/i,
+    markers: [
+      { label: "CSRF module title", re: /Cross-Site Request Forgery \(CSRF\)/i },
+      { label: "CSRF attack mechanics", re: /forged request|state-changing request/i },
+      { label: "Anti-CSRF token lesson", re: /CSRF token|anti-CSRF|SameSite cookie/i }
+    ],
+    note: "drag-security-flaws /security/csrf module documents cross-site request forgery attack mechanics and mitigations"
+  },
+  {
+    pathRe: /\/security\/(?:sqlInjection|injection)(?:\/|$|\?)/i,
+    markers: [
+      { label: "SQL injection module title", re: /SQL Injection|Injection Attacks/i },
+      { label: "String concatenation risk", re: /string concatenation|unsanitized input/i },
+      { label: "Parameterized query lesson", re: /parameterized quer|prepared statement/i }
+    ],
+    note: "drag-security-flaws SQL injection module documents concatenation-based injection and parameterized query defenses"
+  },
+  {
+    pathRe: /\/security\/ssrf(?:\/|$|\?)/i,
+    markers: [
+      { label: "SSRF module title", re: /Server-Side Request Forgery \(SSRF\)|SSRF/i },
+      { label: "Internal network fetch risk", re: /internal (?:network|service|metadata)|fetch.*URL/i },
+      { label: "URL validation lesson", re: /validate.*URL|allowlist|blocklist/i }
+    ],
+    note: "drag-security-flaws /security/ssrf module documents server-side URL fetch abuse and validation mitigations"
+  },
+  {
+    pathRe: /\/security\/clickjacking(?:\/|$|\?)/i,
+    markers: [
+      { label: "Clickjacking module title", re: /Clickjacking/i },
+      { label: "Iframe overlay attack", re: /iframe|transparent overlay|UI redress/i },
+      { label: "X-Frame-Options lesson", re: /X-Frame-Options|frame-ancestors|CSP/i }
+    ],
+    note: "drag-security-flaws /security/clickjacking module documents UI redress attacks and frame-busting defenses"
+  }
+];
+
+const clientSideDragSecurityFlawsLabModuleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const hostCorpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/drag-security-flaws\.vercel\.app/i.test(hostCorpus)) return NEGATIVE;
+
+  const spec = DRAG_SECURITY_FLAWS_MODULE_SPECS.find((s) => s.pathRe.test(pageUrl));
+  if (!spec) return NEGATIVE;
+
+  const pageCorpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = pageCorpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      module: pageUrl.match(/\/security\/[^/?#]+/)?.[0],
+      note: spec.note
+    }
+  };
+};
+
 // --- Wizer developer security CTF (chal*.vercel.app) --------------------------------
 const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -19355,6 +19488,8 @@ export const RULES: Record<string, Rule> = {
   redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
   clientSideVulnExposeLabModuleEvidence,
+  clientSideDragSecurityFlawsEvidence,
+  clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,

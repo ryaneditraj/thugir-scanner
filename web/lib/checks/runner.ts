@@ -786,6 +786,8 @@ const DEEP_RULES = new Set<string>([
   "htsYuppersSearchSqliProbe",
   "clientSideVulnExposeEvidence",
   "clientSideVulnExposeLabModuleEvidence",
+  "clientSideDragSecurityFlawsEvidence",
+  "clientSideDragSecurityFlawsLabModuleEvidence",
   "clientSideWizerCtfEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -1589,6 +1591,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/46/",
     "/playlevel/49/",
     "/playlevel/50/",
+    "/playlevel/51/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
@@ -1597,6 +1600,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/45/",
     "/missions/application/48/",
     "/missions/application/49/",
+    "/missions/application/50/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -3510,6 +3514,32 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
 }
 
 /** VulnSite (vuln-expose.vercel.app) — seed explicit SQLi/XSS/IDOR/CMDi lab routes from homepage. */
+/** drag-security-flaws — Remix vulnerability education hub with /security/* module pages. */
+function extractDragSecurityFlawsSeeds(html: string, pageUrl: string): string[] {
+  if (!/drag-security-flaws\.vercel\.app|Web Security Vulnerabilities|security flaws and learn how to protect/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/security/xss",
+    "/security/csrf",
+    "/security/idor",
+    "/security/sqlInjection",
+    "/security/ssrf",
+    "/security/clickjacking",
+    "/security/injection"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnSite|vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(html)) return [];
   const out = new Set<string>();
@@ -5245,6 +5275,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
   const wizerCtfSeeds = extractWizerCtfSeeds(home.body, home.finalUrl);
   const vulnExposeSeeds = extractVulnExposeSeeds(home.body, home.finalUrl);
+  const dragSecurityFlawsSeeds = extractDragSecurityFlawsSeeds(home.body, home.finalUrl);
   const vulnPortalAuthSeeds = extractVulnPortalAuthSeeds(home.body, home.finalUrl);
   const picoctfCylabSeeds = extractPicoctfCylabSeeds(home.body, home.finalUrl);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
@@ -5449,7 +5480,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level414/index.php",
         "http://www.net-force.nl/challenge/level415/index.php",
         "http://www.net-force.nl/challenge/level416/index.php",
-        "http://www.net-force.nl/challenge/level417/index.php"
+        "http://www.net-force.nl/challenge/level417/index.php",
+        "http://www.net-force.nl/challenge/level418/index.php"
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
@@ -5616,6 +5648,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...redTigerSeeds,
       ...wizerCtfSeeds,
       ...vulnExposeSeeds,
+      ...dragSecurityFlawsSeeds,
       ...vulnPortalAuthSeeds,
       ...bugBountyHunterSeeds,
       ...picoctfCylabSeeds,
