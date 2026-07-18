@@ -5048,11 +5048,6 @@
       "url": "https://pentesterlab.com/exercises/ssti_02/",
       "source": "PentesterLab — Server-Side Template Injection 02 Twig RCE exercise (web search)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://www.hacksplaining.com/lessons/clickjacking/start",
-      "source": "Hacksplaining — interactive clickjacking secure-coding lesson with live exploit demo (web search)",
-      "auth": "public_demo"
     }
   ],
   "updated_at": "2026-07-18T00:10:00.000Z"
