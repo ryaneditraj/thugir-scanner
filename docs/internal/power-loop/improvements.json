@@ -4277,6 +4277,36 @@
       "slug": "client-side-pentesterlab-ssti-06-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_06/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-49-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/49/ Login Required gate + HTS training ground meta; playlevel/49 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-48-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/48/ Login Required gate + application mission nav; application/48 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level416-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level416/index.php 301 redirects to net-force.nl homepage; level416 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-47-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_47/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-07-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_07/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -7584,6 +7614,21 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level415-offline-seed",
       "shipped_at": "2026-07-18T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-49-mission-seed",
+      "shipped_at": "2026-07-18T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-48-mission-seed",
+      "shipped_at": "2026-07-18T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level416-offline-seed",
+      "shipped_at": "2026-07-18T07:10:00.000Z"
     }
   ]
 }
