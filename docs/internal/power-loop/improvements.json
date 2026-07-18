@@ -4454,6 +4454,24 @@
     },
     {
       "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-01-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 01 + access the key stored as a secret in the admin's account BOLA description; pentesterlab.com/exercises/api_01 findings 3→4 (+client-side-pentesterlab-api-01-exercise-evidence); benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "mehdiaitsaid-owasp-xss-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: stored XSS comments field + DOM-based XSS innerHTML tutorial markers in CLIENT_OWASP_EDU_RES; mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/xss findings 5→6 (+client-side-owasp-educational-lab-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-56-application-55-netforce-423-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/56 Login Required hub (6 findings) + application/55 login-gated mission hub (6 findings) + level423 homepage redirect offline oracle (4 findings); runner priority seeds extended; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-web-for-pentester-iii-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/web-for-pentester-III returns PentesterLab 404 — course not deployed; skip until page is live"
@@ -7867,8 +7885,18 @@
     },
     {
       "source": "discovery:pentesterlab.com",
-      "slug": "client-side-pentesterlab-xss-04-exercise-evidence",
-      "shipped_at": "2026-07-18T12:15:00.000Z"
+      "slug": "client-side-pentesterlab-api-01-exercise-evidence",
+      "shipped_at": "2026-07-18T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "mehdiaitsaid-owasp-xss-lab-markers",
+      "shipped_at": "2026-07-18T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-56-application-55-netforce-423-seeds",
+      "shipped_at": "2026-07-18T13:15:00.000Z"
     }
   ]
 }

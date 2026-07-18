@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-18T12:15:33.609Z",
-  "total": 433,
-  "uniqueSlugs": 432,
+  "generatedAt": "2026-07-18T13:12:42.437Z",
+  "total": 434,
+  "uniqueSlugs": 433,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 415,
+    "generic": 416,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 68,
-    "deep": 365,
+    "deep": 366,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 129,
+    "Broken access control": 130,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -225,6 +225,7 @@
     "client-side-path-traversal-evidence",
     "client-side-pc-parts-store-lab-evidence",
     "client-side-pentester-academy-lab-evidence",
+    "client-side-pentesterlab-api-01-exercise-evidence",
     "client-side-pentesterlab-autho-02-exercise-evidence",
     "client-side-pentesterlab-autho-03-exercise-evidence",
     "client-side-pentesterlab-autho-04-exercise-evidence",
