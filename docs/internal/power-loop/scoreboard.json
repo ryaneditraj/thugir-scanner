@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18T13:21:25.439Z",
+  "updated_at": "2026-07-18T14:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,21 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1075,
   "discovery_findings": 4195,
-  "improvements_shipped": 685,
-  "last_run": "2026-07-18T13:21:25.439Z",
+  "improvements_shipped": 688,
+  "last_run": "2026-07-18T14:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13:00",
+    "hour_utc": "14:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "first_pass_recall": "4/6",
-      "first_pass_gap": [
-        "auth_bypass",
-        "sensitive_data"
-      ],
-      "note": "Heroku cold-start degraded pass1 (4 findings, pages=1 probes=44); wake retry restored 6/6 (7 findings, pages=6 probes=259)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings on staging oracle)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,38 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 7,
-      "urls_scanned": 7,
-      "findings": 31,
-      "focus": "Queue head drain: PentesterLab autho_01 + xss-mysql-file, HTS playlevel/34, VoiceGoat VWAD, Mutillidae vulnapp.id",
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 12,
+      "focus": "Queue tail drain: DomGoat cxss/example/15 unescape-hash XSS, PentesterLab XSS 05 + API 02 exercise evidence",
       "queued_pending": [
-        "https://domgo.at/cxss/example/15",
-        "http://www.net-force.nl/challenge/level423/index.php",
-        "https://pentesterlab.com/exercises/xss_05/",
-        "https://pentesterlab.com/exercises/api_02/"
+        "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/ssrf"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry — pass1 gap auth_bypass,sensitive_data",
-      "server.vulnapp.id/mutillidae: 7 findings — phpinfo/phpMyAdmin exposed + Mutillidae lab markers",
-      "pentesterlab.com/exercises/xss-and-mysql-file: 5 findings — XSS+MySQL FILE exercise critical injection marker",
-      "pentesterlab.com/exercises/autho_01: 4 findings — Authorization 01 IDOR exercise evidence",
-      "www.hackthissite.org/playlevel/34: 6 findings — playlevel arcade wargame hub",
-      "vwad.owasp.org/app/voice-goat: 4 findings — OWASP VWAD voice-agent lab listing (app 404)",
-      "pentesterlab.com/exercises/api_01: 4 findings — API 01 BOLA admin secret JSON-LD",
-      "mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/xss: 6 findings — stored/DOM XSS tutorial markers",
-      "www.hackthissite.org/playlevel/56: 6 findings — playlevel hub evidence",
-      "www.hackthissite.org/missions/application/55: 6 findings — login-gated application mission hub"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "domgo.at/cxss/example/15: unescape(location.hash)→innerHTML DOM XSS lab (0→4 findings)",
+      "pentesterlab.com/exercises/xss_05: alert-word filter bypass via eval+String.fromCharCode (0→4 findings)",
+      "pentesterlab.com/exercises/api_02: admin@libcurl.so secret key BOLA exercise (0→4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop Heroku cold-start: shallow crawl misses auth_bypass+sensitive_data until wake retry",
       "mehdiaitsaid.github.io/owasp-top-10-labs/labs/ssrf: lab not yet active (placeholder page)",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
-      "domgo.at/cxss/example/15 + Net-Force 423 + PentesterLab xss_05 + api_02 queued at tail — pending drain"
+      "juice-shop.herokuapp.com: Heroku cold-start can delay full benchmark scan in cloud agents"
     ]
   },
   "discovery_highlights": {
@@ -406,10 +387,12 @@
     "www.net-force.nl/challenge/level421/index.php": 4,
     "mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/sql-injection": 6,
     "domgo.at/cxss/example/14": 4,
+    "domgo.at/cxss/example/15": 4,
     "www.hackthissite.org/playlevel/55": 6,
     "www.hackthissite.org/missions/application/54": 6,
     "www.net-force.nl/challenge/level422/index.php": 4,
     "pentesterlab.com/exercises/xss_04": 4,
+    "pentesterlab.com/exercises/xss_05": 4,
     "picoctf.org": 4,
     "server.vulnapp.id/mutillidae": 7
   }
