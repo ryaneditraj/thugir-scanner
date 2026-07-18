@@ -5588,7 +5588,32 @@
       "url": "http://www.net-force.nl/challenge/level428/index.php",
       "source": "Net-Force — web exploit training challenge level 428 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/autho_09/",
+      "source": "PentesterLab — Authorization 09 IDOR/access-control exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_08/",
+      "source": "PentesterLab — XSS 08 hosted exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/63/",
+      "source": "Hack This Site — playlevel 63 wargame challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/61/",
+      "source": "Hack This Site — application mission 61 login-gated wargame hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level429/index.php",
+      "source": "Net-Force — web exploit training challenge level 429 (net-force.nl catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T19:52:00.000Z"
+  "updated_at": "2026-07-18T20:12:00.000Z"
 }
