@@ -9910,5 +9910,57 @@ export const genericPatterns: Pattern[] = [
       "Our VulnScope-style scanner demo tests live URLs for SQLi and XSS. Show how to gate the scan API and restrict targets to authorized lab hosts.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-drag-security-flaws-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "drag-security-flaws Remix vulnerability education hub disclosed",
+    description:
+      "drag-security-flaws.vercel.app is a Remix educational site cataloging XSS, CSRF, IDOR, SQL injection, SSRF, and clickjacking modules under /security/* routes.",
+    impactOneline:
+      "Public drag-security-flaws hub documents hands-on web vulnerability lesson modules for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDragSecurityFlawsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "drag-security-flaws is intentional training — isolate lesson deployments from production apps.",
+      steps: [
+        "Run drag-security-flaws modules only on isolated training infrastructure.",
+        "Do not copy lesson vulnerability patterns into production code.",
+        "Gate interactive exploit demos behind authenticated training accounts."
+      ]
+    },
+    fixPrompt:
+      "We host drag-security-flaws-style vulnerability lesson hubs. Show how to isolate Remix training modules from production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-drag-security-flaws-lab-module-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "drag-security-flaws hands-on vulnerability lesson module disclosed",
+    description:
+      "drag-security-flaws /security/* module pages publish XSS (stored/reflected/DOM), IDOR, CSRF, SQL injection, SSRF, and clickjacking lesson content with attack mechanics and mitigation guidance.",
+    impactOneline:
+      "Public drag-security-flaws lesson modules accelerate attacker training on common OWASP vulnerability classes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDragSecurityFlawsLabModuleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "drag-security-flaws lesson modules are intentional training — never copy attack patterns to production.",
+      steps: [
+        "Run drag-security-flaws XSS/IDOR/CSRF modules only on isolated training infrastructure.",
+        "Use parameterized queries and output encoding in production auth and comment flows.",
+        "Implement CSRF tokens and frame-busting headers on state-changing production endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host drag-security-flaws XSS and IDOR lesson modules. Show how to isolate educational attack walkthroughs from production user data flows.",
+    version: 1,
+    enabled: true
   }
 ];
