@@ -2840,6 +2840,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-xss-04-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 04 script-tag filter exercise disclosed",
+    description:
+      "PentesterLab XSS 04 hosted exercise documents reflected XSS filter bypass when the word script is blocked but alternative HTML tags and event attributes still execute JavaScript.",
+    impactOneline:
+      "Public XSS exercise instance reveals script-word blacklist evasion patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss04ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Replace keyword blacklists with allowlist-based sanitizers and CSP."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 04-style script-tag filter labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

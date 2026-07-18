@@ -772,6 +772,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabAutho06ExerciseEvidence",
   "clientSidePentesterlabXss02ExerciseEvidence",
   "clientSidePentesterlabXss03ExerciseEvidence",
+  "clientSidePentesterlabXss04ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -1178,7 +1179,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 13; n++) {
+  for (let n = 1; n <= 16; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1193,7 +1194,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/2",
     "/cxss/example/3",
     "/cxss/example/12",
-    "/cxss/example/13"
+    "/cxss/example/13",
+    "/cxss/example/14"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1317,6 +1319,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/xss-02",
     "/exercises/xss_03",
     "/exercises/xss-03",
+    "/exercises/xss_04",
+    "/exercises/xss-04",
     "/exercises/autho_03",
     "/exercises/autho-03",
     "/exercises/sqli_04",
@@ -1598,6 +1602,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/52/",
     "/playlevel/53/",
     "/playlevel/54/",
+    "/playlevel/55/",
+    "/missions/application/54/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
@@ -5493,7 +5499,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level418/index.php",
         "http://www.net-force.nl/challenge/level419/index.php",
         "http://www.net-force.nl/challenge/level420/index.php",
-        "http://www.net-force.nl/challenge/level421/index.php"
+        "http://www.net-force.nl/challenge/level421/index.php",
+        "http://www.net-force.nl/challenge/level422/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)

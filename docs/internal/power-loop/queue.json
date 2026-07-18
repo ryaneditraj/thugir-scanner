@@ -5355,6 +5355,11 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://domgo.at/cxss/example/14",
+      "source": "Mario Heiderich domgo.at — DomGoat level 14 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://www.hackthissite.org/playlevel/55/",
       "source": "Hack This Site — playlevel arcade hub challenge 55 (missions catalog)",
       "auth": "public_demo"
@@ -5362,6 +5367,16 @@
     {
       "url": "http://www.net-force.nl/challenge/level422/index.php",
       "source": "Net-Force — session/auth challenge level 422 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/54/",
+      "source": "Hack This Site — application mission 54 login-gated wargame hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_04/",
+      "source": "PentesterLab — XSS 04 script-tag filter bypass hosted exercise",
       "auth": "public_demo"
     },
     {
