@@ -5148,7 +5148,32 @@
       "url": "https://pentesterlab.com/exercises/ssti_06/",
       "source": "PentesterLab — Server-Side Template Injection 06 Pebble RCE exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/47/",
+      "source": "Hack This Site — playlevel arcade hub challenge 47 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/46/",
+      "source": "Hack This Site — application mission 46 challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level415/index.php",
+      "source": "Net-Force — session/auth challenge level 415 (exploits catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/48/",
+      "source": "Hack This Site — playlevel arcade hub challenge 48 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/47/",
+      "source": "Hack This Site — application mission 47 challenge hub (missions catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T04:05:00.000Z"
+  "updated_at": "2026-07-18T05:05:00.000Z"
 }
