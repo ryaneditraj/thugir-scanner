@@ -6038,7 +6038,32 @@
       "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/intro",
       "source": "mehdiaitsaid/owasp-top-10-labs — OWASP Top 10 lab intro hub (sitemap)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/41",
+      "source": "Mario Heiderich domgo.at — DomGoat level 41 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/42",
+      "source": "Mario Heiderich domgo.at — DomGoat level 42 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/43",
+      "source": "Mario Heiderich domgo.at — DomGoat level 43 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/44",
+      "source": "Mario Heiderich domgo.at — DomGoat level 44 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/45",
+      "source": "Mario Heiderich domgo.at — DomGoat level 45 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T12:05:00.000Z"
+  "updated_at": "2026-07-19T13:10:00.000Z"
 }
