@@ -6238,7 +6238,32 @@
       "url": "http://www.net-force.nl/challenge/level201/index.php",
       "source": "Net-Force.nl challenge level 201 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/65",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 65 postMessage\u2192eval DOM XSS (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/82/",
+      "source": "HackThisSite realistic mission playlevel 82 \u2014 advanced web exploitation training (mission writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/76/",
+      "source": "HackThisSite application mission 76 \u2014 server-side logic / injection challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level202/index.php",
+      "source": "Net-Force.nl challenge level 202 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/vulnerable-mcp-servers-lab/",
+      "source": "OWASP VWAD \u2014 Appsecco vulnerable MCP servers lab (prompt injection, tool poisoning, RCE oracles)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T20:24:00.000Z"
+  "updated_at": "2026-07-19T21:35:00.000Z"
 }
