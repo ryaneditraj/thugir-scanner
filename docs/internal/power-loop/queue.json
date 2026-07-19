@@ -5713,7 +5713,32 @@
       "url": "https://vulnerable-chatbot-demo.vercel.app/api/chat",
       "source": "Quality-Max/vulnerable-chatbot-demo — intentionally vulnerable AI chatbot API endpoint (GitHub README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/xss_10/",
+      "source": "PentesterLab — XSS 10 advanced filter-evasion hosted exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_12/",
+      "source": "PentesterLab — API 12 broken object-level authorization exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/66/",
+      "source": "Hack This Site — playlevel 66 wargame challenge hub (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/23",
+      "source": "DomGoat — Client XSS Exercise-3 location.hash→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level430/index.php",
+      "source": "Net-Force — web exploit training challenge level 430 (net-force.nl catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T00:05:00.000Z"
+  "updated_at": "2026-07-19T01:05:00.000Z"
 }
