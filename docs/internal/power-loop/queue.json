@@ -5878,7 +5878,32 @@
       "url": "http://www.net-force.nl/challenge/level434/index.php",
       "source": "Net-Force — web exploit training challenge level 434 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_21/",
+      "source": "PentesterLab — API 21 Go authentication bypass exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/30",
+      "source": "DomGoat — Client XSS Exercise-30 location.hash→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level435/index.php",
+      "source": "Net-Force — web exploit training challenge level 435 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/web-fundamentals-graphql",
+      "source": "PentesterLab — Web Fundamentals GraphQL exercise (Essential badge track)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/cors-ii",
+      "source": "PentesterLab — CORS II sensitive-data exfiltration exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T06:10:00.000Z"
+  "updated_at": "2026-07-19T07:15:00.000Z"
 }
