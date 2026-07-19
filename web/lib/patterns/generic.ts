@@ -3385,6 +3385,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-15-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 15 password decryption exercise disclosed",
+    description:
+      "PentesterLab API 15 hosted exercise documents retrieving admin@libcurl.so credentials by decrypting leaked API call data after auditing the encryption method.",
+    impactOneline:
+      "Public API security exercise instance reveals reversible encryption and API-call leakage patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi15ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use strong encryption and never leak API call payloads.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use industry-standard password hashing instead of reversible encryption.",
+        "Strip sensitive fields from API responses and debug traces."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 15-style API-call decryption labs. Show how to gate labs behind auth and prevent reversible credential encryption in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
