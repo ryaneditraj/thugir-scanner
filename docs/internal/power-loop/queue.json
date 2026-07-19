@@ -6138,7 +6138,32 @@
       "url": "https://www.hackthissite.org/missions/application/72/",
       "source": "HackThisSite application mission 72 — public vulnerable web challenge",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/56",
+      "source": "Mario Heiderich domgo.at — DomGoat level 56 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/57",
+      "source": "Mario Heiderich domgo.at — DomGoat level 57 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/58",
+      "source": "Mario Heiderich domgo.at — DomGoat level 58 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/59",
+      "source": "Mario Heiderich domgo.at — DomGoat level 59 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/60",
+      "source": "Mario Heiderich domgo.at — DomGoat level 60 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T16:05:00.000Z"
+  "updated_at": "2026-07-19T17:05:00.000Z"
 }
