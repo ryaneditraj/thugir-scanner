@@ -853,6 +853,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi05ExerciseEvidence",
   "clientSidePentesterlabApi06ExerciseEvidence",
   "clientSidePentesterlabApi07ExerciseEvidence",
+  "clientSidePentesterlabApi08ExerciseEvidence",
+  "clientSidePentesterlabApi09ExerciseEvidence",
   "clientSidePentesterlabApi10ExerciseEvidence",
   "clientSidePentesterlabApi11ExerciseEvidence",
   "clientSidePentesterlabApi12ExerciseEvidence",
@@ -1283,7 +1285,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 40; n++) {
+  for (let n = 1; n <= 45; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1325,7 +1327,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/37",
     "/cxss/example/38",
     "/cxss/example/39",
-    "/cxss/example/40"
+    "/cxss/example/40",
+    "/cxss/example/41",
+    "/cxss/example/42",
+    "/cxss/example/43",
+    "/cxss/example/44",
+    "/cxss/example/45"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -5814,6 +5821,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         new URL("/cxss/sinks", home.finalUrl).toString()
       ]
     : [];
+  const domgoCxssTailPrioritySeeds =
+    /domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)
+      ? Array.from({ length: 5 }, (_, i) =>
+          new URL(`/cxss/example/${41 + i}`, home.finalUrl).toString()
+        )
+      : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
     ? [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
@@ -5942,6 +5955,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspTop10LabsPrioritySeeds,
       ...owaspTop10IntroHubPrioritySeeds,
       ...domgoCxssIntroPrioritySeeds,
+      ...domgoCxssTailPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,

@@ -9253,6 +9253,96 @@ const clientSidePentesterlabApi07ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 08 reset-password URL leak exercise (pentesterlab.com/exercises/api_08)
+const CLIENT_PENTESTERLAB_API08_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 08 course title",
+    re: /API 08|PentesterLab:\s*API 08/i
+  },
+  {
+    label: "Reset password URL leak lab description",
+    re: /reset password functionality[\s\S]{0,200}URL leak[\s\S]{0,120}admin@libcurl\.so/i
+  },
+  {
+    label: "Admin libcurl login objective",
+    re: /log in as admin@libcurl\.so[\s\S]{0,200}challenge key/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 08"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]08/i
+  }
+];
+
+const clientSidePentesterlabApi08ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]08/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API08_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 08 exercise documents reset-password URL leak enabling admin@libcurl.so account takeover"
+    }
+  };
+};
+
+// --- PentesterLab API 09 API response information leak exercise (pentesterlab.com/exercises/api_09)
+const CLIENT_PENTESTERLAB_API09_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 09 course title",
+    re: /API 09|PentesterLab:\s*API 09/i
+  },
+  {
+    label: "API response information leak lab description",
+    re: /review the requests and responses from various API endpoints[\s\S]{0,200}information leak[\s\S]{0,120}admin@libcurl\.so/i
+  },
+  {
+    label: "Admin libcurl login objective",
+    re: /log in as admin@libcurl\.so[\s\S]{0,160}obtain the key/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 09"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]09/i
+  }
+];
+
+const clientSidePentesterlabApi09ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]09/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API09_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 09 exercise documents API response information leak enabling admin@libcurl.so login"
+    }
+  };
+};
+
 // --- PentesterLab API 10 email-filter bypass exercise (pentesterlab.com/exercises/api_10)
 const CLIENT_PENTESTERLAB_API10_RES: { label: string; re: RegExp }[] = [
   {
@@ -21119,6 +21209,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi05ExerciseEvidence,
   clientSidePentesterlabApi06ExerciseEvidence,
   clientSidePentesterlabApi07ExerciseEvidence,
+  clientSidePentesterlabApi08ExerciseEvidence,
+  clientSidePentesterlabApi09ExerciseEvidence,
   clientSidePentesterlabApi10ExerciseEvidence,
   clientSidePentesterlabApi11ExerciseEvidence,
   clientSidePentesterlabApi12ExerciseEvidence,

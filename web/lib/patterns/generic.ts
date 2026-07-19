@@ -3177,6 +3177,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-08-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab API 08 reset-password URL leak exercise disclosed",
+    description:
+      "PentesterLab API 08 hosted exercise documents uncovering a reset-password URL leak that enables logging in as admin@libcurl.so and retrieving the challenge key.",
+    impactOneline:
+      "Public API security exercise instance reveals password-reset URL leak patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi08ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never expose reset tokens in API responses.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Deliver password-reset links out-of-band only; never echo reset URLs in JSON responses.",
+        "Audit reset-password flows for information disclosure to unauthenticated callers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 08-style reset-password URL leak labs. Show how to gate labs behind auth and prevent reset links from leaking via API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-09-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab API 09 response information leak exercise disclosed",
+    description:
+      "PentesterLab API 09 hosted exercise documents reviewing API endpoint responses to find an information leak that enables admin@libcurl.so login.",
+    impactOneline:
+      "Public API security exercise instance reveals excessive API response disclosure patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi09ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; minimize sensitive data in API responses.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Redact internal identifiers and privileged account hints from API responses.",
+        "Audit list/detail endpoints for excessive data exposure (OWASP API3:2023)."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 09-style API response leak labs. Show how to gate labs behind auth and redact sensitive fields from JSON responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-api-10-exercise-evidence",
     platform: "generic",
     category: "Broken access control",
