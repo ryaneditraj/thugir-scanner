@@ -1286,7 +1286,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 60; n++) {
+  for (let n = 1; n <= 65; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1348,7 +1348,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/57",
     "/cxss/example/58",
     "/cxss/example/59",
-    "/cxss/example/60"
+    "/cxss/example/60",
+    "/cxss/example/61",
+    "/cxss/example/62",
+    "/cxss/example/63",
+    "/cxss/example/64",
+    "/cxss/example/65"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -5852,12 +5857,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         new URL("/cxss/sinks", home.finalUrl).toString()
       ]
     : [];
-  const domgoCxssTailPrioritySeeds =
-    /domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)
-      ? Array.from({ length: 5 }, (_, i) =>
-          new URL(`/cxss/example/${56 + i}`, home.finalUrl).toString()
-        )
-      : [];
+  const domgoCxssTailPrioritySeeds = (() => {
+    const exampleM = /domgo\.at\/cxss\/example\/(\d+)\/?$/i.exec(home.finalUrl);
+    if (exampleM) {
+      const n = Number.parseInt(exampleM[1], 10);
+      if (!Number.isFinite(n) || n < 55) return [] as string[];
+    } else if (!/domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)) {
+      return [] as string[];
+    }
+    return Array.from({ length: 5 }, (_, i) =>
+      new URL(`/cxss/example/${61 + i}`, home.finalUrl).toString()
+    );
+  })();
   const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)
     ? [
         new URL("/pages/create", home.finalUrl).toString(),
