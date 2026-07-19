@@ -5057,6 +5057,24 @@
       "slug": "client-side-hacksplaining-prototype-pollution-lesson-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta If an attacker can access and modify prototype objects in JavaScript + Prototype Pollution — Secure Coding Lesson; www.hacksplaining.com/lessons/prototype-pollution/start findings 0→5 incl new slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Third-party libraries could be introducing vulnerabilities or malicious code + lesson step nav log4j/supply-chain-attacks/heartbleed; www.hacksplaining.com/lessons/toxic-dependencies/start findings 2→7; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-79-80-application-73-74-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/79 Login Required + application/73 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence on direct scan (6 findings each); seeds added to extractHackThisSiteMissionSeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "hacksplaining-toxic-dependencies-lesson-step-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: toxic-dependencies/start had pages_crawled=1; hacksplainingToxicDependenciesPrioritySeeds + extractHacksplainingLessonSeeds step paths (log4j, supply-chain-attacks, heartbleed); enables lesson-specific slug on shallow scans; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8884,6 +8902,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-prototype-pollution-lesson-evidence",
       "shipped_at": "2026-07-19T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+      "shipped_at": "2026-07-19T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-79-80-application-73-74-seeds",
+      "shipped_at": "2026-07-19T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "hacksplaining-toxic-dependencies-lesson-step-crawl",
+      "shipped_at": "2026-07-19T20:15:00.000Z"
     }
   ]
 }

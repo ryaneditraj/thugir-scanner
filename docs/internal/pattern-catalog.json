@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-19T19:02:19.558Z",
-  "total": 473,
-  "uniqueSlugs": 471,
+  "generatedAt": "2026-07-19T20:02:35.886Z",
+  "total": 474,
+  "uniqueSlugs": 472,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 455,
+    "generic": 456,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 404,
+    "deep": 405,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 34,
-    "Security misconfiguration": 38,
+    "Security misconfiguration": 39,
     "Broken authentication": 34,
     "Injection": 87,
     "Cross-site scripting": 58,
@@ -161,6 +161,7 @@
     "client-side-hacksplaining-ssl-stripping-lesson-evidence",
     "client-side-hacksplaining-ssrf-lesson-evidence",
     "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
+    "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
     "client-side-hacksplaining-xml-bomb-lesson-evidence",
     "client-side-hacksplaining-xss-dom-lesson-evidence",
     "client-side-hacksplaining-xss-reflected-lesson-evidence",
