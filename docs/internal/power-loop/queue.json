@@ -5963,7 +5963,32 @@
       "url": "http://www.net-force.nl/challenge/level437/index.php",
       "source": "Net-Force — web exploit training challenge level 437 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/34",
+      "source": "Mario Heiderich domgo.at — DomGoat level 34 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/35",
+      "source": "Mario Heiderich domgo.at — DomGoat level 35 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/cryptographic-failures",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A02 cryptographic failures interactive module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/identification-authentication-failures",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A07 identification & authentication failures module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/insecure-design",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A04 insecure design interactive module (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-19T09:05:00.000Z"
+  "updated_at": "2026-07-19T10:05:00.000Z"
 }
