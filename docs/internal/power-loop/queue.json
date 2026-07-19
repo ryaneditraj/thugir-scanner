@@ -5820,6 +5820,11 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://pentesterlab.com/exercises/api_18/",
+      "source": "PentesterLab — API 18 Go authentication bypass exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://www.hackthissite.org/playlevel/70/",
       "source": "Hack This Site — playlevel arcade hub challenge 70 (missions catalog)",
       "auth": "public_demo"
@@ -5835,5 +5840,5 @@
       "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T05:05:00.000Z"
+  "updated_at": "2026-07-19T05:06:00.000Z"
 }
