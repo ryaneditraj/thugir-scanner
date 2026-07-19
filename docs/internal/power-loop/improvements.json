@@ -4703,6 +4703,24 @@
       "slug": "domgo-cxss-example-24-hts-67-65-netforce-431-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/24 unescape(location.hash)→msgboard.innerHTML (0→4) + HTS playlevel/67 arcade hub (0→6) + application/65 mission hub + Net-Force level431 offline oracle; extractDomGoatCxssSeeds extended to example/24; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-15-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 15 + leverage leaked API call information to retrieve admin@libcurl.so password via encryption-method audit + decrypter; pentesterlab.com/exercises/api_15 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "hackadvisor-challenges-catalog-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta 100+ web security challenges + Practice XSS, SQL injection, SSRF, IDOR, RCE; hackAdvisorPrioritySeeds prepends /challenges; labs.hackadvisor.io/challenges findings 0→7 incl client-side-hackadvisor-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "cyberdefenders-blueteam-ctf-challenges-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title Dive into Blue Team CTF Challenges + blue team ctf challenges keywords; cyberDefendersPrioritySeeds prepends /blueteam-ctf-challenges; cyberdefenders.org/blueteam-ctf-challenges findings 0→9 incl client-side-cyberdefenders-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8305,6 +8323,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-cxss-example-24-hts-67-65-netforce-431-seeds",
       "shipped_at": "2026-07-19T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-15-exercise-evidence",
+      "shipped_at": "2026-07-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "hackadvisor-challenges-catalog-seeds",
+      "shipped_at": "2026-07-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "cyberdefenders-blueteam-ctf-challenges-seeds",
+      "shipped_at": "2026-07-19T02:10:00.000Z"
     }
   ]
 }
