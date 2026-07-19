@@ -1291,7 +1291,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 80; n++) {
+  for (let n = 1; n <= 85; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1373,10 +1373,36 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/77",
     "/cxss/example/78",
     "/cxss/example/79",
-    "/cxss/example/80"
+    "/cxss/example/80",
+    "/cxss/example/81",
+    "/cxss/example/82",
+    "/cxss/example/83",
+    "/cxss/example/84",
+    "/cxss/example/85"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Aikido Zen demo (zen-demo-*.fly.dev) — SQLi/SSRF lab pages linked from homepage nav. */
+const ZEN_DEMO_LAB_LINK_RE = /href\s*=\s*["'](\/pages\/[^"']+)["']/gi;
+
+function extractZenDemoLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(pageUrl)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = ZEN_DEMO_LAB_LINK_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
     } catch {
       /* ignore */
     }
@@ -1885,11 +1911,13 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/80/",
     "/playlevel/81/",
     "/playlevel/82/",
+    "/playlevel/83/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
     "/missions/application/75/",
     "/missions/application/76/",
+    "/missions/application/77/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5872,7 +5900,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level436/index.php",
         "http://www.net-force.nl/challenge/level437/index.php",
         "http://www.net-force.nl/challenge/level201/index.php",
-        "http://www.net-force.nl/challenge/level202/index.php"
+        "http://www.net-force.nl/challenge/level202/index.php",
+        "http://www.net-force.nl/challenge/level203/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
@@ -5926,6 +5955,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       new URL(`/cxss/example/${nextStart + i}`, home.finalUrl).toString()
     );
   })();
+  const zenDemoLabNavSeeds = extractZenDemoLabSeeds(home.body, home.finalUrl);
   const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)
     ? [
         new URL("/pages/create", home.finalUrl).toString(),
@@ -6079,6 +6109,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...domgoCxssIntroPrioritySeeds,
       ...domgoCxssTailPrioritySeeds,
       ...domgoCxssProgressiveTailSeeds,
+      ...zenDemoLabNavSeeds,
       ...zenDemoPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,

@@ -4676,7 +4676,7 @@
     },
     {
       "url": "https://damn-vulnerable-startup.fly.dev/",
-      "source": "0xSV1/DVS \u2014 Damn Vulnerable Startup Fly.io public deploy (55 OWASP Top 10 + LLM challenges)",
+      "source": "0xSV1/DVS DeployBro \u2014 OWASP Top 10 (2025) + LLM Top 10 satirical SaaS lab (55 challenges; Fly.io DNS offline Jul 2026 \u2014 was dvs.vercel.app Vietnamese IT company)",
       "auth": "public_demo"
     },
     {
@@ -6263,11 +6263,6 @@
       "url": "https://vwad.owasp.org/app/vulnerable-mcp-servers-lab/",
       "source": "OWASP VWAD \u2014 Appsecco vulnerable MCP servers lab (prompt injection, tool poisoning, RCE oracles)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://dvs.vercel.app/",
-      "source": "0xSV1/DVS DeployBro \u2014 OWASP Top 10 (2025) + LLM Top 10 satirical SaaS lab (55 challenges, Vercel deploy)",
-      "auth": "oss_deploy"
     },
     {
       "url": "https://domgo.at/cxss/example/66",
