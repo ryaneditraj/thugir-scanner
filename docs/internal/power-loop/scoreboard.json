@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T20:34:00.000Z",
+  "updated_at": "2026-07-19T21:36:12.146Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 1419,
-  "total_findings": 6994,
+  "total_sites_scanned": 1428,
+  "total_findings": 7045,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1229,
-  "discovery_findings": 5521,
+  "discovery_urls_added": 1234,
+  "discovery_findings": 5565,
   "improvements_shipped": 768,
-  "last_run": "2026-07-19T20:34:00.000Z",
+  "last_run": "2026-07-19T21:36:12.146Z",
   "last_run_summary": {
-    "hour_utc": "20:00",
+    "hour_utc": "21:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku pass1 gap=sensitive_data (6 findings); 12s wake retry restored 6/6 (7 findings) without staging fallback",
+      "note": "Primary heroku pass1 gap=sqli,auth_bypass (4 findings, 1 page); 12s wake retry merged 7 findings for 6/6 recall without staging fallback",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,16 +50,19 @@
       },
       "pass_signals": {
         "pass1": {
-          "findings": 6,
+          "findings": 4,
           "gap": [
-            "sensitive_data"
+            "sqli",
+            "auth_bypass"
           ],
-          "pages": 6,
-          "probes": 63
+          "pages": 1,
+          "probes": 74
         },
         "wake_retry": {
-          "findings": 6,
-          "note": "vibe-unauthenticated-api-routes restored sensitive_data on shallow crawl (pages=1 probes=231)"
+          "findings": 5,
+          "pages": 6,
+          "probes": 179,
+          "note": "sql-error-disclosure + unauthenticated-admin-endpoint restored sqli + auth_bypass; merged 7 findings"
         }
       }
     },
@@ -67,40 +70,39 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 46,
+      "findings": 44,
       "urls_added_list": [
-        "https://whoopspay.onrender.com/",
-        "https://domgo.at/cxss/example/64",
-        "https://www.hackthissite.org/playlevel/81/",
-        "https://www.hackthissite.org/missions/application/75/",
-        "http://www.net-force.nl/challenge/level201/index.php"
+        "https://domgo.at/cxss/example/65",
+        "https://www.hackthissite.org/playlevel/82/",
+        "https://www.hackthissite.org/missions/application/76/",
+        "http://www.net-force.nl/challenge/level202/index.php",
+        "https://vwad.owasp.org/app/vulnerable-mcp-servers-lab/"
       ],
       "urls_scanned_list": [
-        "https://www.hacksplaining.com/lessons/unencrypted-communication/start",
-        "https://www.hacksplaining.com/lessons/xssi/start",
-        "https://ucu-owasp-ctf.vercel.app/",
-        "https://ogtamimi.github.io/OGT-Cyber-Game/",
-        "https://koadt.github.io/oss-oopssec-store/",
-        "https://ashimkoirala.github.io/HackLab/",
-        "https://vulnshop.vercel.app/",
-        "https://domgo.at/cxss/intro"
+        "https://dxx33.github.io/WebVulnsGuide/",
+        "https://akbarbashakm.github.io/frontend-security-examples/",
+        "https://gauravkhurana.com/SQLInjection/",
+        "https://demo.weblock.ru/",
+        "https://dev-lucasoliveira.github.io/frontend-xss-demo/",
+        "https://swarnadip-kar.github.io/xss-victim/",
+        "https://everdan0075.github.io/DevSecOps-Hacking-Lab/",
+        "https://ssrf-defense-platform.onrender.com/"
       ],
-      "focus": "Hacksplaining unencrypted-communication + XSSI lesson drain; WhoopsPay + HTS playlevel/81 + application/75 + net-force level201 queued at tail",
+      "focus": "GitHub Pages OWASP lab drain + demo.weblock.ru + SSRF defense platform; domgo/65 + HTS playlevel/82 + application/76 + net-force level202 + VWAD MCP lab queued at tail",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop: benchmark recall 6/6 (7 findings) after pass1 sensitive_data gap + wake retry",
-      "koadt.github.io/oss-oopssec-store: Next.js middleware CVE + path-traversal + API Top 10 lab markers (8 findings)",
-      "ashimkoirala.github.io/HackLab: OWASP educational + DevSecOps microservices IDOR markers (7 findings)",
-      "hacksplaining unencrypted-communication/xssi: CSRF + reflected XSS lesson markers (6 findings each)",
-      "ucu-owasp-ctf.vercel.app: OWASP CTF hub + Firebase config exposure (5 findings)"
+      "juice-shop: benchmark recall 6/6 (7 findings) after pass1 sqli+auth_bypass gap + wake retry",
+      "demo.weblock.ru: 8 findings — multi-vuln training platform markers",
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: 7 findings — DevSecOps pipeline vulnerability oracles",
+      "gauravkhurana.com/SQLInjection: 6 findings — SQLi training lab markers",
+      "ssrf-defense-platform.onrender.com: 6 findings — SSRF defense training surface"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start misses sensitive_data on pass1 — wake retry recovered without staging this hour",
+      "juice-shop.herokuapp.com: Heroku cold-start misses sqli+auth_bypass on shallow pass1 (1 page) — wake retry recovered without staging",
       "secret-resend slug absent on all juice-shop passes (sensitive_data via vibe-unauthenticated-api-routes proxy)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "whoopspay + domgo/64 + HTS playlevel/81 + application/75 + net-force level201 queued at tail — pending drain",
-      "whoopspay.onrender.com: Render cold-start ~18s — may need extended fetch timeout on first probe"
+      "domgo/65 + HTS playlevel/82 + application/76 + net-force level202 + VWAD MCP lab queued at tail — pending drain"
     ]
   },
   "discovery_highlights": {
