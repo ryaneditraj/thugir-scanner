@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T19:05:00.000Z",
+  "updated_at": "2026-07-19T19:49:50.152Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 1401,
-  "total_findings": 6893,
+  "total_sites_scanned": 1410,
+  "total_findings": 6941,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1219,
-  "discovery_findings": 5434,
+  "discovery_urls_added": 1224,
+  "discovery_findings": 5475,
   "improvements_shipped": 765,
-  "last_run": "2026-07-19T19:05:00.000Z",
+  "last_run": "2026-07-19T19:49:50.152Z",
   "last_run_summary": {
     "hour_utc": "19:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings); Heroku cold-start may transiently miss sensitive_data before retry",
+      "note": "Primary heroku cold-start gap=sensitive_data (6 findings); staging fallback restored 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,27 +47,51 @@
             "misconfig"
           ]
         }
+      },
+      "pass_signals": {
+        "pass1": { "findings": 6, "gap": ["sensitive_data"], "pages": 6, "probes": 165 },
+        "wake_retry": { "findings": 1, "note": "Heroku cold-start degraded to headers-only" },
+        "fallback": { "url": "https://juice-shop-staging.herokuapp.com", "findings": 7, "pages": 6, "probes": 247 }
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 15,
-      "focus": "DomGoat 66-70 tail seeds; HTS playlevel 77-78 queue drain; Hacksplaining prototype-pollution lesson evidence",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 41,
+      "urls_added_list": [
+        "https://www.hackthissite.org/playlevel/79/",
+        "https://www.hackthissite.org/playlevel/80/",
+        "https://www.hackthissite.org/missions/application/73/",
+        "https://www.hackthissite.org/missions/application/74/",
+        "https://net-force.nl/challenge/level200/index.php"
+      ],
+      "urls_scanned_list": [
+        "http://redtiger.labs.overthewire.org/level7.php",
+        "http://redtiger.labs.overthewire.org/level10.php",
+        "https://www.hacksplaining.com/lessons/xss-reflected/start",
+        "https://www.hacksplaining.com/lessons/command-execution/start",
+        "https://cyberdesserts.github.io/cookiejar-lab/",
+        "https://www.hacksplaining.com/lessons/xml-bombs/start",
+        "https://www.hacksplaining.com/lessons/subdomain-squatting/start",
+        "https://www.hacksplaining.com/lessons/toxic-dependencies/start"
+      ],
+      "focus": "RedTiger level7/10 + Hacksplaining lesson drain; HTS playlevel/79-80 + application/73-74 queued at tail",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained — no benchmark misses",
-      "domgo.at/cxss/example/66: unescape(hash)→msgboard.innerHTML DOM XSS (4 findings on direct validation)",
-      "www.hackthissite.org/playlevel/77/: login-gated playlevel hub evidence (6 findings)",
-      "www.hacksplaining.com/lessons/prototype-pollution/start: new prototype-pollution lesson slug (5 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary heroku sensitive_data gap",
+      "redtiger level7/10: SQLi + command-injection login markers (5 findings each)",
+      "hacksplaining command-execution: command execution + CSRF + XSS lesson markers (7 findings)",
+      "hacksplaining xml-bombs: XML bomb + injection lesson evidence (7 findings)",
+      "cyberdesserts cookiejar-lab: session hijack + CookieJar training markers (4 findings)"
     ],
     "learning_gaps": [
+      "juice-shop.herokuapp.com: Heroku cold-start misses sensitive_data on pass1; wake retry can degrade to 1 finding — staging fallback required",
+      "secret-resend slug absent on all juice-shop passes (sensitive_data via vibe-unauthenticated-api-routes proxy)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "domgo.at/cxss/example/71+ at progressive tail — pending queue drain",
-      "HTS playlevel/78 queued; playlevel/77 validated on direct scan",
-      "hacksplaining lessons: interactive exploit chains require in-browser lesson progression"
+      "HTS playlevel/79-80 + application/73-74 + net-force level200 queued at tail — pending drain",
+      "hacksplaining toxic-dependencies: shallow crawl (1 page) — lesson-specific markers need deeper lesson progression"
     ]
   },
   "discovery_highlights": {
@@ -271,13 +296,14 @@
     "pentesterlab.com/exercises/api_08": 4,
     "pentesterlab.com/exercises/api_09": 4,
     "vwad.owasp.org/app/webgoat": 5,
-    "redtiger.labs.overthewire.org/level7.php": 3,
-    "redtiger.labs.overthewire.org/level10.php": 4,
+    "redtiger.labs.overthewire.org/level7.php": 5,
+    "redtiger.labs.overthewire.org/level10.php": 5,
     "www.hacksplaining.com/lessons/xss-reflected/start": 6,
     "www.hacksplaining.com/lessons/command-execution/start": 7,
     "www.hacksplaining.com/lessons/prototype-pollution/start": 5,
     "cyberdesserts.github.io/cookiejar-lab": 4,
     "www.hacksplaining.com/lessons/xml-bombs/start": 7,
-    "www.hacksplaining.com/lessons/subdomain-squatting/start": 6
+    "www.hacksplaining.com/lessons/subdomain-squatting/start": 5,
+    "www.hacksplaining.com/lessons/toxic-dependencies/start": 2
   }
 }
