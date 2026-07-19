@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-19T10:08:53.727Z",
-  "total": 466,
-  "uniqueSlugs": 465,
+  "generatedAt": "2026-07-19T11:03:59.480Z",
+  "total": 467,
+  "uniqueSlugs": 466,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 448,
+    "generic": 449,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 397,
+    "deep": 398,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 140,
+    "Broken access control": 141,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -352,6 +352,7 @@
     "client-side-vulnlab-a09-logging-evidence",
     "client-side-vulnlab-a10-ssrf-evidence",
     "client-side-vulnlab-academy-evidence",
+    "client-side-vulnlab-api-labs-evidence",
     "client-side-vulnlab-auth-session-lab-evidence",
     "client-side-vulnlab-cms-platform-evidence",
     "client-side-vulnlab-verbose-404-evidence",
