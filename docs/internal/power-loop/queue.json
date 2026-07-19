@@ -6188,7 +6188,32 @@
       "url": "https://www.hackthissite.org/playlevel/78/",
       "source": "HackThisSite realistic mission playlevel \u2014 business logic / injection training",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/79/",
+      "source": "HackThisSite realistic mission playlevel 79 \u2014 advanced web exploitation training (mission writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/80/",
+      "source": "HackThisSite realistic mission playlevel 80 \u2014 advanced web exploitation training (mission writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/73/",
+      "source": "HackThisSite application mission 73 \u2014 server-side logic / injection challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/74/",
+      "source": "HackThisSite application mission 74 \u2014 server-side logic / injection challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://net-force.nl/challenge/level200/index.php",
+      "source": "Net-Force.nl challenge level 200 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T18:03:24.379929Z"
+  "updated_at": "2026-07-19T19:48:00.000Z"
 }
