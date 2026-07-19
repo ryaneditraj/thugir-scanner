@@ -824,6 +824,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi15ExerciseEvidence",
   "clientSidePentesterlabApi16ExerciseEvidence",
   "clientSidePentesterlabApi17ExerciseEvidence",
+  "clientSidePentesterlabApi18ExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
@@ -982,6 +983,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadAppNotFoundEvidence",
   "clientSideVwadWackopickoEvidence",
   "clientSideVwadGinJuiceEvidence",
+  "clientSideVwadPixiEvidence",
   "clientSideVwadBodgeitEvidence",
   "clientSideVwadSecurityShepherdEvidence",
   "clientSideVwadMutillidaeEvidence",
@@ -1239,7 +1241,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 26; n++) {
+  for (let n = 1; n <= 27; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1267,7 +1269,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/23",
     "/cxss/example/24",
     "/cxss/example/25",
-    "/cxss/example/26"
+    "/cxss/example/26",
+    "/cxss/example/27"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1473,6 +1476,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/api-16",
     "/exercises/api_17",
     "/exercises/api-17",
+    "/exercises/api_18",
+    "/exercises/api-18",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1742,6 +1747,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/66/",
     "/playlevel/67/",
     "/playlevel/68/",
+    "/playlevel/69/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
