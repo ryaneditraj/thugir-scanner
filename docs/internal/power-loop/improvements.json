@@ -5021,6 +5021,24 @@
       "slug": "zen-demo-python-lab-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Zen by Aikido SQL Injection | Create a new Pet + SSRF | Fetch a page lab pages; zenDemoPrioritySeeds for /pages/create|/request + CLIENT_AIKIDO_ZEN_DEMO_RES SQL/SSRF markers; zen-demo-python.fly.dev findings 0→3; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-classic-login",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level5.php crawl includes level1.php with Tablename: level1_users + POST user/password; redtigerClassicLoginSqlEvidence now scans combined corpus; redtiger.labs.overthewire.org/level5.php findings 3→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-command-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level10.php HTML comment !`sh`/dev/tcp backtick payload crawled from level5 hub; redtigerCommandInjectionEvidence uses combined corpus; level5.php gains redtiger-command-injection-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-61-65-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/61-65 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–60→1–65 + domgoCxssTailPrioritySeeds 61–65 from intro/example/55+; domgo.at/cxss/example/57 direct scan 4 findings incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8818,6 +8836,21 @@
       "source": "discovery:zen-demo-python.fly.dev",
       "slug": "zen-demo-python-lab-seeds",
       "shipped_at": "2026-07-19T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-classic-login",
+      "shipped_at": "2026-07-19T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-command-injection",
+      "shipped_at": "2026-07-19T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-61-65-seeds",
+      "shipped_at": "2026-07-19T18:12:00.000Z"
     }
   ]
 }
