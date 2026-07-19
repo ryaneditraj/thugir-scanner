@@ -5860,6 +5860,11 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://www.hackthissite.org/missions/application/65/",
+      "source": "Hack This Site — application challenge 65 reverse-engineering mission hub",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://pentesterlab.com/exercises/api_20/",
       "source": "PentesterLab — API 20 Go authentication bypass exercise (web search)",
       "auth": "public_demo"
