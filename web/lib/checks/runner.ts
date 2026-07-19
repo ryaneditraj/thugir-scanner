@@ -1076,6 +1076,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingXmlBombLessonEvidence",
   "clientSideHacksplainingPrototypePollutionLessonEvidence",
   "clientSideHacksplainingSubdomainSquattingLessonEvidence",
+  "clientSideHacksplainingToxicDependenciesLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1867,7 +1868,11 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/76/",
     "/playlevel/77/",
     "/playlevel/78/",
+    "/playlevel/79/",
+    "/playlevel/80/",
     "/missions/application/72/",
+    "/missions/application/73/",
+    "/missions/application/74/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -2995,6 +3000,15 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/xml-bombs/start",
     "/lessons/subdomain-squatting/start",
     "/lessons/toxic-dependencies/start",
+    "/lessons/toxic-dependencies/dependency-management",
+    "/lessons/toxic-dependencies/third-party-code",
+    "/lessons/toxic-dependencies/libraries-as-a-target",
+    "/lessons/toxic-dependencies/log4j",
+    "/lessons/toxic-dependencies/the-log4j-vulnerability",
+    "/lessons/toxic-dependencies/supply-chain-attacks",
+    "/lessons/toxic-dependencies/heartbleed",
+    "/lessons/toxic-dependencies/xcodeghost",
+    "/lessons/toxic-dependencies/finish",
     "/lessons/unencrypted-communication/start",
     "/lessons/xssi/start",
     "/lessons/dns-poisoning/start",
@@ -5760,6 +5774,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
         ].map((p) => new URL(p, home.finalUrl).toString())
       : [];
+  const hacksplainingToxicDependenciesPrioritySeeds =
+    /hacksplaining\.com\/lessons\/toxic-dependencies/i.test(home.finalUrl)
+      ? [
+          "/lessons/toxic-dependencies/dependency-management",
+          "/lessons/toxic-dependencies/third-party-code",
+          "/lessons/toxic-dependencies/libraries-as-a-target",
+          "/lessons/toxic-dependencies/log4j",
+          "/lessons/toxic-dependencies/the-log4j-vulnerability",
+          "/lessons/toxic-dependencies/supply-chain-attacks",
+          "/lessons/toxic-dependencies/heartbleed",
+          "/lessons/toxic-dependencies/xcodeghost",
+          "/lessons/toxic-dependencies/finish"
+        ].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
   const ginAndJuicePrioritySeeds =
     /ginandjuice\.shop|Gin & Juice Shop|vulnerability scanner to the test/i.test(home.body) ||
     /ginandjuice\.shop/i.test(home.finalUrl)
@@ -6037,6 +6065,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
+      ...hacksplainingToxicDependenciesPrioritySeeds,
       ...netForcePrioritySeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,

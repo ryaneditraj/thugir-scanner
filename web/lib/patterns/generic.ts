@@ -5361,6 +5361,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Hacksplaining toxic dependencies lesson disclosed",
+    description:
+      "Hacksplaining /lessons/toxic-dependencies publishes an interactive exploit-then-fix walkthrough covering supply-chain risks from third-party libraries (Log4j, Heartbleed, XcodeGhost).",
+    impactOneline:
+      "Public toxic dependencies lesson pages document supply-chain vulnerability patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingToxicDependenciesLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining toxic dependencies lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable supply-chain lesson instances on private deployments.",
+        "Pin and audit third-party dependencies with SBOM tooling in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style toxic dependencies exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
     platform: "generic",
     category: "Security misconfiguration",
