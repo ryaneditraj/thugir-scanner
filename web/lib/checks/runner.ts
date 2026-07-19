@@ -961,6 +961,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabA09LoggingEvidence",
   "clientSideVulnlabVerbose404Evidence",
   "clientSideVulnlabA10SsrfEvidence",
+  "clientSideVulnlabApiLabsEvidence",
   "clientSideVulnerableWebSiteEvidence",
   "clientSideNivaraSecurityEvidence",
   "clientSideEksGoatEvidence",
@@ -1245,7 +1246,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 33; n++) {
+  for (let n = 1; n <= 35; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1280,7 +1281,9 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/30",
     "/cxss/example/31",
     "/cxss/example/32",
-    "/cxss/example/33"
+    "/cxss/example/33",
+    "/cxss/example/34",
+    "/cxss/example/35"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -3391,6 +3394,10 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
   for (const p of [
     "/home/",
     "/owasp/",
+    "/api-labs/",
+    "/api-labs/rest.html",
+    "/api-labs/graphql.html",
+    "/api-labs/soap.html",
     "/labs/xss-reflected.html",
     "/labs/sqli-error.html",
     "/labs/idor.html",
@@ -5727,7 +5734,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ? [
         new URL("/labs/injection/sql-injection", home.finalUrl).toString(),
         new URL("/labs/injection/xss", home.finalUrl).toString(),
-        new URL("/labs/broken-access-control", home.finalUrl).toString()
+        new URL("/labs/broken-access-control", home.finalUrl).toString(),
+        new URL("/labs/cryptographic-failures", home.finalUrl).toString()
       ]
     : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
@@ -5790,6 +5798,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/auth/session.html", home.finalUrl).toString(),
           new URL("/auth/reset.html", home.finalUrl).toString(),
           new URL("/api-labs/", home.finalUrl).toString(),
+          new URL("/api-labs/rest.html", home.finalUrl).toString(),
+          new URL("/api-labs/graphql.html", home.finalUrl).toString(),
+          new URL("/api-labs/soap.html", home.finalUrl).toString(),
           new URL("/owasp/a01.html", home.finalUrl).toString(),
           new URL("/owasp/a02.html", home.finalUrl).toString(),
           new URL("/owasp/a03.html", home.finalUrl).toString(),

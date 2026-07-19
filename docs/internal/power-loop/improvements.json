@@ -4883,6 +4883,36 @@
       "slug": "net-force-level437-offline-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level437/index.php 301 redirects to net-force.nl homepage; netForcePrioritySeeds adds level437; level437 findings 4 incl client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-34-35-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/34-35 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/35; domgo.at/cxss/example/34 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-api-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api-labs/rest.html API-002 BOLA/IDOR + API-004 Mass Assignment + GQL-001 introspection markers; clientSideVulnlabApiLabsEvidence + api-labs subpage seeds; api-labs/rest.html findings 1→17 incl client-side-vulnlab-api-labs-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-docusaurus-crypto-failures-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/cryptographic-failures documents MD5/SHA-1 weak hashes + hardcoded keys + plaintext password leak scenarios; CLIENT_OWASP_EDU_RES crypto markers + priority seed; findings 3→6 incl client-side-owasp-educational-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-docusaurus-auth-failures-lab",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/identification-authentication-failures meta description ⚠️ This lab is not yet active — no runnable vulnerable content to detect"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-docusaurus-insecure-design-lab",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/insecure-design meta description ⚠️ This lab is not yet active — no runnable vulnerable content to detect"
     }
   ],
   "shipped": [
