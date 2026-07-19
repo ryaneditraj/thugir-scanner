@@ -7285,19 +7285,24 @@ const domgoHashDomXssEvidence: Rule = async (ctx) => {
 const domgoUnescapeHashDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/\/cxss\/example(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.home.body;
-  const unescapeHash =
-    /unescape\s*\(\s*hash\.substr/i.test(corpus) && /location\.hash/i.test(corpus);
-  const weakSanitize = /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
-  const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
-  const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
-  if (!unescapeHash || !sink || weakSanitize || windowNameCombo) return NEGATIVE;
+  if (!/\/cxss\/(?:example|intro)/i.test(pageUrl) && !/\/cxss\/example\/\d+/i.test(ctx.combined))
+    return NEGATIVE;
+  const matchUnescape = (corpus: string): string | null => {
+    const unescapeHash =
+      /unescape\s*\(\s*hash\.substr/i.test(corpus) && /location\.hash/i.test(corpus);
+    const weakSanitize = /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+    const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
+    const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+    if (!unescapeHash || !sink || weakSanitize || windowNameCombo) return null;
+    return corpus.match(/\/cxss\/example\/\d+/i)?.[0] ?? "example";
+  };
+  const examplePath = matchUnescape(ctx.home.body) ?? matchUnescape(ctx.combined);
+  if (!examplePath) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.89,
     evidence: {
-      page: pageUrl,
+      page: /\/cxss\/example\/\d+/i.test(pageUrl) ? pageUrl : `${ctx.origin}${examplePath}`,
       note: "DomGoat exercise unescapes location.hash via unescape() before msgboard.innerHTML — URL-encoded fragment DOM XSS lab"
     }
   };
@@ -10799,25 +10804,44 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
   };
 };
 
+function findRedTigerClassicLoginEvidence(
+  corpus: string
+): { table: string; levelPath: string } | null {
+  const tableRe = /Tablename:\s*(level(\d+)_users)/gi;
+  let best: { table: string; levelPath: string; levelNum: number } | null = null;
+  let m: RegExpExecArray | null;
+  while ((m = tableRe.exec(corpus))) {
+    const levelNum = Number.parseInt(m[2], 10);
+    const table = m[1];
+    const slice = corpus.slice(m.index, m.index + 1800);
+    if (/name="level\d+login"/i.test(slice)) continue;
+    const formBlock = slice.match(
+      /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,700}?name="user"[\s\S]{0,400}?name="password"/i
+    );
+    if (!formBlock) continue;
+    if (!best || levelNum < best.levelNum) {
+      best = { table, levelPath: `level${levelNum}.php`, levelNum };
+    }
+  }
+  return best ? { table: best.table, levelPath: best.levelPath } : null;
+}
+
 // --- RedTiger classic SQLi login (username + password POST on level1/2) ----------------
 const redtigerClassicLoginSqlEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const pageCorpus = `${ctx.home.body}\n${pageUrl}`;
-  if (/name="level\d+login"/i.test(pageCorpus)) return NEGATIVE;
-  const table = pageCorpus.match(/Tablename:\s*(level\d+_users)/i)?.[1];
-  const formBlock = pageCorpus.match(
-    /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,700}?name="user"[\s\S]{0,400}?name="password"/i
-  );
-  if (!table || !formBlock) return NEGATIVE;
-  const levelPath = pageUrl.match(/level\d+\.php/i)?.[0];
+  const homeCorpus = `${ctx.home.body}\n${pageUrl}`;
+  const hit =
+    findRedTigerClassicLoginEvidence(homeCorpus) ??
+    findRedTigerClassicLoginEvidence(ctx.combined);
+  if (!hit) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.88,
     evidence: {
-      table,
-      levelPath,
-      note: `RedTiger ${levelPath ?? "level"} exposes classic SQL injection login drill via POST user+password (${table})`
+      table: hit.table,
+      levelPath: hit.levelPath,
+      note: `RedTiger ${hit.levelPath} exposes classic SQL injection login drill via POST user+password (${hit.table})`
     }
   };
 };
@@ -10853,7 +10877,7 @@ const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
 const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const corpus = `${ctx.home.body}\n${pageUrl}\n${ctx.combined}`;
   if (!/special1\.php/i.test(corpus)) return NEGATIVE;
   const smsChallenge = /send me an SMS|mobile number/i.test(corpus);
   const solutionForm = /name="solution"[\s\S]{0,250}name="name"/i.test(corpus);
@@ -10872,8 +10896,8 @@ const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
 const redtigerCommandInjectionEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/level10\.php/i.test(pageUrl)) return NEGATIVE;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const corpus = `${ctx.home.body}\n${pageUrl}\n${ctx.combined}`;
+  if (!/level10\.php/i.test(corpus)) return NEGATIVE;
   const backtickShell =
     /!`sh[\s\S]{0,60}\/dev\/tcp\/[0-9.]+\/[0-9]+/i.test(corpus) ||
     /<!--[\s\S]{0,120}!`sh/i.test(corpus);
