@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T15:05:36.638Z",
+  "updated_at": "2026-07-19T15:15:49.370Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1366,
-  "total_findings": 6716,
+  "total_sites_scanned": 1374,
+  "total_findings": 6769,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1199,
-  "discovery_findings": 5277,
+  "discovery_urls_added": 1204,
+  "discovery_findings": 5330,
   "improvements_shipped": 753,
-  "last_run": "2026-07-19T15:05:36.638Z",
+  "last_run": "2026-07-19T15:15:49.370Z",
   "last_run_summary": {
     "hour_utc": "15:00",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 (7 findings)",
+      "note": "First-pass full recall (7 findings pages=6 probes=265; no gap)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,22 +50,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": [
-        "https://domgo.at/cxss/example/46",
-        "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/security-misconfiguration"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 53,
+      "urls_added_list": [
+        "https://domgo.at/cxss/example/51",
+        "https://domgo.at/cxss/example/52",
+        "https://domgo.at/cxss/example/53",
+        "https://domgo.at/cxss/example/54",
+        "https://domgo.at/cxss/example/55"
       ],
-      "focus": "DomGoat cxss/46-50 tail drain + mehdiaitsaid inactive lab stubs",
+      "skipped_48h": [
+        "https://web-security-practice-app.onrender.com/",
+        "https://pentesterlab.com/exercises/autho_01/",
+        "https://pentesterlab.com/exercises/xss-and-mysql-file/",
+        "https://www.hackthissite.org/playlevel/34/",
+        "https://vwad.owasp.org/app/voice-goat/",
+        "https://hack-this-site-eta.vercel.app/owasp/a06.html"
+      ],
+      "focus": "BugBountyHunter 16, hack-this-site-eta, Chimera API lab, Archon training, VAmPI Railway; domgo cxss/51-55 queued",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) maintained",
-      "domgo.at/cxss/example/46: domgo-unescape-hash-dom-xss-evidence (4 findings)",
-      "mehdiaitsaid.github.io/owasp-top-10-labs/labs/security-misconfiguration: client-side-owasp-educational-lab-stub-evidence (7 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) first pass — no cold-start gap",
+      "hack-this-site-eta.vercel.app: 15 findings (GraphQL introspection, admin endpoint, IDOR/XSS lab evidence)",
+      "chimera.atlascrew.dev: 9 findings — 450+ vulnerable API endpoint lab markers",
+      "archon-eight.vercel.app: 8 findings — mobile/web security training platform",
+      "urban-vampi-production.up.railway.app: 6 findings — OWASP API Top 10 VAmPI Railway deploy"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "domgo.at/cxss/example/51+ still at progressive tail — 200+ exercises exist",
-      "mehdiaitsaid A06/A08/A09 stub pages pending queue drain",
+      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
+      "domgo.at/cxss/example/51-55 queued at tail — pending drain",
+      "mehdiaitsaid A05/A06/A08/A09 stub pages still at queue tail",
       "pentesterlab api_21/api_22 still 404 — rejected until deployed"
     ]
   },
@@ -101,6 +118,7 @@
     "idor-website.vercel.app": 3,
     "vulnerable-web-site.vercel.app": 2,
     "urban-vampi-staging.up.railway.app": 4,
+    "urban-vampi-production.up.railway.app": 6,
     "secure-bank-bay.vercel.app": 6,
     "owaspbased-lessons.vercel.app": 1,
     "hack-this-site-eta.vercel.app": 15,
@@ -206,8 +224,8 @@
     "securebank-blog.vercel.app": 6,
     "hack-health-tutorial.vercel.app": 4,
     "preview-zeroday-sec.vercel.app": 3,
-    "chimera.atlascrew.dev": 10,
-    "archon-eight.vercel.app": 4,
+    "chimera.atlascrew.dev": 19,
+    "archon-eight.vercel.app": 12,
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
     "websec.fr": 3,
