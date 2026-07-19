@@ -1274,7 +1274,9 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/26",
     "/cxss/example/27",
     "/cxss/example/28",
-    "/cxss/example/29"
+    "/cxss/example/29",
+    "/cxss/example/30",
+    "/cxss/example/31"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1758,6 +1760,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/69/",
     "/playlevel/70/",
     "/playlevel/71/",
+    "/playlevel/72/",
+    "/playlevel/73/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5702,7 +5706,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level430/index.php",
         "http://www.net-force.nl/challenge/level431/index.php",
         "http://www.net-force.nl/challenge/level432/index.php",
-        "http://www.net-force.nl/challenge/level433/index.php"
+        "http://www.net-force.nl/challenge/level433/index.php",
+        "http://www.net-force.nl/challenge/level434/index.php",
+        "http://www.net-force.nl/challenge/level435/index.php",
+        "http://www.net-force.nl/challenge/level436/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
