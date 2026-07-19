@@ -818,10 +818,12 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi07ExerciseEvidence",
   "clientSidePentesterlabApi10ExerciseEvidence",
   "clientSidePentesterlabApi11ExerciseEvidence",
+  "clientSidePentesterlabApi12ExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
   "clientSidePentesterlabXss09ExerciseEvidence",
+  "clientSidePentesterlabXss10ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -1230,7 +1232,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 22; n++) {
+  for (let n = 1; n <= 23; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1254,7 +1256,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/19",
     "/cxss/example/20",
     "/cxss/example/21",
-    "/cxss/example/22"
+    "/cxss/example/22",
+    "/cxss/example/23"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1446,6 +1449,10 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/api-10",
     "/exercises/api_11",
     "/exercises/api-11",
+    "/exercises/xss_10",
+    "/exercises/xss-10",
+    "/exercises/api_12",
+    "/exercises/api-12",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1712,8 +1719,10 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/63/",
     "/playlevel/64/",
     "/playlevel/65/",
+    "/playlevel/66/",
     "/missions/application/54/",
     "/missions/application/63/",
+    "/missions/application/64/",
     "/missions/application/55/",
     "/missions/application/56/",
     "/missions/application/57/",
@@ -5625,7 +5634,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level426/index.php",
         "http://www.net-force.nl/challenge/level427/index.php",
         "http://www.net-force.nl/challenge/level428/index.php",
-        "http://www.net-force.nl/challenge/level429/index.php"
+        "http://www.net-force.nl/challenge/level429/index.php",
+        "http://www.net-force.nl/challenge/level430/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
