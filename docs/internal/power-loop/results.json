@@ -10244,6 +10244,8 @@
       "probes_run": 262,
       "status": "ok",
       "scanned_at": "2026-07-19T12:02:58.925Z"
+      "scanned_at": "2026-07-19T12:03:08.621Z"
+>>>>>>> 50296a7 (docs: power-loop scoreboard + improvements for 2026-07-19 12:00 UTC run)
     }
   ],
   "teacher_delta_runs": [
