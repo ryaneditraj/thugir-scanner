@@ -5758,7 +5758,32 @@
       "url": "https://vwad.owasp.org/app/gin-juice-shop/",
       "source": "OWASP VWAD — PortSwigger Gin & Juice Shop online demo directory entry (web search)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/68/",
+      "source": "Hack This Site — playlevel arcade hub challenge 68 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/63/",
+      "source": "Hack This Site — application challenge 63 reverse-engineering mission hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/25",
+      "source": "DomGoat — Client XSS Exercise-25 postMessage→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level431/index.php",
+      "source": "Net-Force — web exploit training challenge level 431 (net-force.nl catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_14/",
+      "source": "PentesterLab — API 14 leaked encrypted password exercise (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T02:12:00.000Z"
+  "updated_at": "2026-07-19T03:05:00.000Z"
 }
