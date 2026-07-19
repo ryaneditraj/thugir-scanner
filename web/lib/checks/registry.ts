@@ -9529,6 +9529,88 @@ const clientSidePentesterlabApi12ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 13 Unicode email bypass exercise (pentesterlab.com/exercises/api_13)
+const CLIENT_PENTESTERLAB_API13_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 13 course title",
+    re: /API 13|PentesterLab:\s*API 13/i
+  },
+  {
+    label: "Unicode email domain bypass lab description",
+    re: /register an account that will be interpreted by the application as an administrator account[\s\S]{0,240}@libcurl\.so[\s\S]{0,120}Unicode-based bypass/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 13"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]13/i
+  }
+];
+
+const clientSidePentesterlabApi13ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]13/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API13_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 13 exercise documents Unicode-based email bypass to register an administrator @libcurl.so account"
+    }
+  };
+};
+
+// --- PentesterLab API 14 leaked encrypted password exercise (pentesterlab.com/exercises/api_14)
+const CLIENT_PENTESTERLAB_API14_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 14 course title",
+    re: /API 14|PentesterLab:\s*API 14/i
+  },
+  {
+    label: "Leaked encrypted password login lab description",
+    re: /log in as the user admin@libcurl\.so[\s\S]{0,200}leaked API call information|leaked encrypted password to gain access/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 14"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]14/i
+  }
+];
+
+const clientSidePentesterlabApi14ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]14/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API14_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 14 exercise documents logging in as admin@libcurl.so via leaked encrypted password or API call data"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20417,6 +20499,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi10ExerciseEvidence,
   clientSidePentesterlabApi11ExerciseEvidence,
   clientSidePentesterlabApi12ExerciseEvidence,
+  clientSidePentesterlabApi13ExerciseEvidence,
+  clientSidePentesterlabApi14ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
