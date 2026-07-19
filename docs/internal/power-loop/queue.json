@@ -6283,7 +6283,32 @@
       "url": "http://www.net-force.nl/challenge/level203/index.php",
       "source": "Net-Force.nl challenge level 203 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/84/",
+      "source": "HackThisSite realistic mission playlevel 84 \u2014 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/77/",
+      "source": "HackThisSite application mission 77 \u2014 web app exploitation challenge series",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level204/index.php",
+      "source": "Net-Force.nl challenge level 204 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.aevum.build/",
+      "source": "Aevum consent-ledger demo \u2014 FastAPI security playground on Fly.io (aevum.build deployment docs)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/85/",
+      "source": "HackThisSite realistic mission playlevel 85 \u2014 advanced web exploitation training",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T22:06:52.000Z"
+  "updated_at": "2026-07-19T23:01:00.000Z"
 }
