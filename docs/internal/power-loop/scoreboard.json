@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T17:18:00.000Z",
+  "updated_at": "2026-07-19T18:05:45.412740Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1392,
-  "total_findings": 6844,
+  "total_sites_scanned": 1401,
+  "total_findings": 6893,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1214,
-  "discovery_findings": 5392,
+  "discovery_urls_added": 1219,
+  "discovery_findings": 5434,
   "improvements_shipped": 759,
-  "last_run": "2026-07-19T17:18:00.000Z",
+  "last_run": "2026-07-19T18:05:45.412740Z",
   "last_run_summary": {
-    "hour_utc": "17:00",
+    "hour_utc": "18:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -48,43 +48,41 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 33,
+      "findings": 42,
       "urls_added_list": [
-        "https://domgo.at/cxss/example/56",
-        "https://domgo.at/cxss/example/57",
-        "https://domgo.at/cxss/example/58",
-        "https://domgo.at/cxss/example/59",
-        "https://domgo.at/cxss/example/60"
+        "https://domgo.at/cxss/example/61",
+        "https://domgo.at/cxss/example/62",
+        "https://domgo.at/cxss/example/63",
+        "https://www.hackthissite.org/playlevel/77/",
+        "https://www.hackthissite.org/playlevel/78/"
       ],
       "skipped_48h": [
         "https://web-security-practice-app.onrender.com/",
         "https://pentesterlab.com/exercises/autho_01/",
         "https://pentesterlab.com/exercises/xss-and-mysql-file/",
         "https://www.hackthissite.org/playlevel/34/",
-        "https://vwad.owasp.org/app/voice-goat/",
-        "https://hack-this-site-eta.vercel.app/owasp/a06.html"
+        "https://vwad.owasp.org/app/voice-goat/"
       ],
-      "focus": "DomGoat 56-60 tail, HTS 75/76/72 queue drain, Zen Python SQL/SSRF lab seeds",
-      "improvements_shipped_this_run": 3
+      "focus": "RedTiger OTW levels 7/10, Hacksplaining lesson suite, DomGoat intro hub, CookieJar lab",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "domgo.at/cxss/example/56: unescape hash→msgboard.innerHTML DOM XSS (0→4 findings)",
-      "zen-demo-python.fly.dev: Aikido Zen SQL/SSRF lab pages + rate-limit demo (0→3 findings)",
-      "www.hackthissite.org/playlevel/75: login-gated arcade hub evidence (6 findings)",
-      "angular.testsparker.com: 5 findings incl secret-aws-akid (critical) + vibe-hardcoded-demo-credentials",
-      "vulnbank.org: 6 findings (IDOR, CORS reflect, OpenAPI docs, XSS sinks)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) \u2014 no benchmark misses",
+      "redtiger.labs.overthewire.org/level10: command-injection + blind-login SQLi evidence (4 findings)",
+      "hacksplaining.com/lessons/command-execution: command execution + CSRF + XSS lesson markers (7 findings)",
+      "hacksplaining.com/lessons/xml-bombs: XML bomb + injection lesson evidence (7 findings)",
+      "domgo.at/cxss/intro: DOM XSS sources/sinks catalog + dangerous-html-sinks (5 findings)",
+      "cyberdesserts.github.io/cookiejar-lab: session hijack + cookie security training (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "domgo.at/cxss/example/57-60 queued via progressive tail — pending drain",
-      "bugbountyhunter.com/training + HTS 76/application/72 at queue tail",
-      "hiddeninvestigations.net: react2shell CVE lab requires local Docker — no public RSC exploit surface",
-      "pentesterlab api_21/api_22 still 404 — rejected until deployed"
+      "domgo.at/cxss/example/61-63 + HTS playlevel/77-78 queued at tail \u2014 pending drain",
+      "hacksplaining lessons: interactive exploit chains require in-browser lesson progression",
+      "redtiger levels: server-side SQLi/command injection oracles need authenticated form POST"
     ]
   },
   "discovery_highlights": {
@@ -286,6 +284,13 @@
     "web-security-practice-app.onrender.com": 3,
     "pentesterlab.com/exercises/api_08": 4,
     "pentesterlab.com/exercises/api_09": 4,
-    "vwad.owasp.org/app/webgoat": 5
+    "vwad.owasp.org/app/webgoat": 5,
+    "redtiger.labs.overthewire.org/level7.php": 3,
+    "redtiger.labs.overthewire.org/level10.php": 4,
+    "www.hacksplaining.com/lessons/xss-reflected/start": 6,
+    "www.hacksplaining.com/lessons/command-execution/start": 7,
+    "cyberdesserts.github.io/cookiejar-lab": 4,
+    "www.hacksplaining.com/lessons/xml-bombs/start": 7,
+    "www.hacksplaining.com/lessons/subdomain-squatting/start": 6
   }
 }
