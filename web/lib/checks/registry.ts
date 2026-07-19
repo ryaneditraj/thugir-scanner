@@ -4305,6 +4305,52 @@ const clientSideHacksplainingXmlBombLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining prototype pollution lesson (hacksplaining.com/lessons/prototype-pollution) -------
+const CLIENT_HACKSPLAINING_PROTOTYPE_POLLUTION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Prototype pollution lesson URL",
+    re: /hacksplaining\.com\/lessons\/prototype-pollution/i
+  },
+  {
+    label: "Prototype pollution lesson title",
+    re: /Prototype Pollution — Secure Coding Lesson/i
+  },
+  {
+    label: "Prototype pollution lesson meta description",
+    re: /access and modify prototype objects in JavaScript/i
+  },
+  {
+    label: "Prototype pollution lesson step nav",
+    re: /lessons\/prototype-pollution\/(?:prototypes|the-power-of-prototypes|prototype-pollution|checking-the-code)/i
+  },
+  {
+    label: "Prototype pollution attack description",
+    re: /pollute (?:the )?Object\.prototype|prototype chain|__proto__/i
+  }
+];
+
+const clientSideHacksplainingPrototypePollutionLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/prototype-pollution/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_PROTOTYPE_POLLUTION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/prototype-pollution\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining prototype pollution lesson documents exploit-then-fix chains where attacker-controlled __proto__ keys pollute Object.prototype and alter application logic"
+    }
+  };
+};
+
 // --- Hacksplaining subdomain squatting lesson (hacksplaining.com/lessons/subdomain-squatting) -------
 const CLIENT_HACKSPLAINING_SUBDOMAIN_SQUATTING_LESSON_RES: { label: string; re: RegExp }[] = [
   {
@@ -21544,6 +21590,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingFileUploadLessonEvidence,
   clientSideHacksplainingCommandExecutionLessonEvidence,
   clientSideHacksplainingXmlBombLessonEvidence,
+  clientSideHacksplainingPrototypePollutionLessonEvidence,
   clientSideHacksplainingSubdomainSquattingLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
