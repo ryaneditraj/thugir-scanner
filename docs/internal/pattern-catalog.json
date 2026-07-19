@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-19T12:03:01.888Z",
-  "total": 467,
-  "uniqueSlugs": 466,
+  "generatedAt": "2026-07-19T13:17:20.184Z",
+  "total": 468,
+  "uniqueSlugs": 467,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 449,
+    "generic": 450,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 398,
+    "deep": 399,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 30,
+    "Information disclosure": 31,
     "Security misconfiguration": 38,
     "Broken authentication": 34,
     "Injection": 85,
@@ -223,6 +223,7 @@
     "client-side-owasp-ctf-evidence",
     "client-side-owasp-educational-lab-evidence",
     "client-side-owasp-genai-lab-evidence",
+    "client-side-owasp-top10-intro-hub-evidence",
     "client-side-owasp-vwad-evidence",
     "client-side-path-traversal-evidence",
     "client-side-pc-parts-store-lab-evidence",

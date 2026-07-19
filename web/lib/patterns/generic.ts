@@ -970,6 +970,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-owasp-top10-intro-hub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "OWASP Top 10 intro hub documents 2021 risk category catalog",
+    description:
+      "The OWASP Top 10 labs intro page lists all 2021 web application security risk categories (Broken Access Control through Logging and Monitoring Failures) with hands-on lab navigation.",
+    impactOneline:
+      "Public OWASP Top 10 training hubs map every risk category to reachable lab modules — useful recon for attackers targeting educational vulnerable apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspTop10IntroHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host OWASP lab hubs on isolated domains; gate inactive modules from public enumeration.",
+      steps: [
+        "Keep OWASP Top 10 lab navigation on a dedicated training domain, not production apps.",
+        "Require authentication before linking to hands-on vulnerable lab modules.",
+        "Mark inactive lab modules as unavailable instead of exposing stub routes."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Top 10 intro hub lists all 2021 risk categories with links to lab modules. Show how to isolate the training site and hide inactive lab stubs from public crawlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwt-none-evidence",
     platform: "generic",
     category: "Broken authentication",

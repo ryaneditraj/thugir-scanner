@@ -755,6 +755,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePrototypePollutionEvidence",
   "clientSideJwtNoneEvidence",
   "clientSideOwaspEducationalLabEvidence",
+  "clientSideOwaspTop10IntroHubEvidence",
   "serverSideEvalEvidence",
   "clientSidePromptInjectionEvidence",
   "pentestForgeLinkedLabProbe",
@@ -5796,6 +5797,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         new URL("/labs/cryptographic-failures", home.finalUrl).toString()
       ]
     : [];
+  const owaspTop10IntroHubPrioritySeeds =
+    /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/labs\/intro/i.test(home.finalUrl)
+      ? [
+          new URL("/labs/security-misconfiguration", home.finalUrl).toString(),
+          new URL("/labs/logging-monitoring-failures", home.finalUrl).toString(),
+          new URL("/labs/vulnerable-outdated-components", home.finalUrl).toString(),
+          new URL("/labs/software-data-integrity-failures", home.finalUrl).toString(),
+          new URL("/labs/insecure-design", home.finalUrl).toString(),
+          new URL("/labs/identification-authentication-failures", home.finalUrl).toString()
+        ]
+      : [];
+  const domgoCxssIntroPrioritySeeds = /domgo\.at\/cxss\/intro/i.test(home.finalUrl)
+    ? [
+        new URL("/cxss/sources/somevalue?param1=paramvalue#hashvalue", home.finalUrl).toString(),
+        new URL("/cxss/sinks", home.finalUrl).toString()
+      ]
+    : [];
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
     ? [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
@@ -5922,6 +5940,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadGinJuiceLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
+      ...owaspTop10IntroHubPrioritySeeds,
+      ...domgoCxssIntroPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
