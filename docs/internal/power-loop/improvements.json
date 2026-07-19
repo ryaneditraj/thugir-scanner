@@ -5039,6 +5039,24 @@
       "slug": "domgo-cxss-example-61-65-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/61-65 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–60→1–65 + domgoCxssTailPrioritySeeds 61–65 from intro/example/55+; domgo.at/cxss/example/57 direct scan 4 findings incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-66-70-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/66 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–65→1–70 + dynamic domgoCxssTailPrioritySeeds (floor(n/5)*5+6); domgo.at/cxss/example/66 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-77-78-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/77 Login Required + clientSideHtsPlaylevelHubEvidence; seeds /playlevel/77/ + /playlevel/78/ added to extractHackThisSiteMissionSeeds; www.hackthissite.org/playlevel/77/ direct scan 6 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta If an attacker can access and modify prototype objects in JavaScript + Prototype Pollution — Secure Coding Lesson; www.hacksplaining.com/lessons/prototype-pollution/start findings 0→5 incl new slug; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8851,6 +8869,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-cxss-example-61-65-seeds",
       "shipped_at": "2026-07-19T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-66-70-seeds",
+      "shipped_at": "2026-07-19T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-77-78-seeds",
+      "shipped_at": "2026-07-19T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+      "shipped_at": "2026-07-19T19:05:00.000Z"
     }
   ]
 }

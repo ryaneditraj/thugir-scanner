@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-19T18:11:40.857Z",
-  "total": 471,
-  "uniqueSlugs": 470,
+  "generatedAt": "2026-07-19T19:02:19.558Z",
+  "total": 473,
+  "uniqueSlugs": 471,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 453,
+    "generic": 455,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 402,
+    "deep": 404,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 34,
     "Security misconfiguration": 38,
     "Broken authentication": 34,
-    "Injection": 85,
+    "Injection": 87,
     "Cross-site scripting": 58,
     "general": 18,
     "SSRF": 1,
@@ -155,6 +155,7 @@
     "client-side-hacksplaining-malvertising-lesson-evidence",
     "client-side-hacksplaining-mass-assignment-lesson-evidence",
     "client-side-hacksplaining-open-redirects-lesson-evidence",
+    "client-side-hacksplaining-prototype-pollution-lesson-evidence",
     "client-side-hacksplaining-session-fixation-lesson-evidence",
     "client-side-hacksplaining-sql-injection-lesson-evidence",
     "client-side-hacksplaining-ssl-stripping-lesson-evidence",
