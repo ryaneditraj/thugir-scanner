@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T14:18:59.211Z",
+  "updated_at": "2026-07-19T15:05:36.638Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1365,
-  "total_findings": 6709,
+  "total_sites_scanned": 1366,
+  "total_findings": 6716,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1199,
   "discovery_findings": 5277,
-  "improvements_shipped": 750,
-  "last_run": "2026-07-19T14:18:59.211Z",
+  "improvements_shipped": 753,
+  "last_run": "2026-07-19T15:05:36.638Z",
   "last_run_summary": {
-    "hour_utc": "14:00",
+    "hour_utc": "15:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 degraded (5 findings gap=sqli); Heroku wake retry restored 6/6 (7 findings pages=6 probes=265)",
+      "note": "Benchmark recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,39 +50,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 28,
-      "urls_added_list": [
+      "urls_validated": [
         "https://domgo.at/cxss/example/46",
-        "https://domgo.at/cxss/example/47",
-        "https://domgo.at/cxss/example/48",
-        "https://domgo.at/cxss/example/49",
-        "https://domgo.at/cxss/example/50"
+        "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/security-misconfiguration"
       ],
-      "skipped_48h": [
-        "https://web-security-practice-app.onrender.com/",
-        "https://pentesterlab.com/exercises/autho_01/",
-        "https://pentesterlab.com/exercises/xss-and-mysql-file/",
-        "https://www.hackthissite.org/playlevel/34/",
-        "https://vwad.owasp.org/app/voice-goat/",
-        "https://hack-this-site-eta.vercel.app/owasp/a06.html"
-      ],
-      "focus": "BugBountyHunter challenges 6/7/16, RedTiger level5-6, SecureBank blog + Hack Health + 0day training Vercel labs",
+      "focus": "DomGoat cxss/46-50 tail drain + mehdiaitsaid inactive lab stubs",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry — cold-start gap=sqli on pass1",
-      "securebank-blog.vercel.app: SQLi + CSRF + XSS educational lab evidence (6 findings)",
-      "hack-health-tutorial.vercel.app: intentional SQL injection tutorial markers (4 findings)",
-      "bugbountyhunter.com/challenge?id=6-7,16: zseano challenge scenario evidence (3 each)",
-      "redtiger.labs.overthewire.org/level5-6: blind login-bypass + SQL hackit markers (3 each)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) maintained",
+      "domgo.at/cxss/example/46: domgo-unescape-hash-dom-xss-evidence (4 findings)",
+      "mehdiaitsaid.github.io/owasp-top-10-labs/labs/security-misconfiguration: client-side-owasp-educational-lab-stub-evidence (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "domgo.at/cxss/example/46-50 queued at tail — pending drain",
-      "mehdiaitsaid A05/A06/A08/A09 stub pages still at queue tail"
+      "domgo.at/cxss/example/51+ still at progressive tail — 200+ exercises exist",
+      "mehdiaitsaid A06/A08/A09 stub pages pending queue drain",
+      "pentesterlab api_21/api_22 still 404 — rejected until deployed"
     ]
   },
   "discovery_highlights": {

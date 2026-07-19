@@ -4967,6 +4967,24 @@
       "slug": "client-side-pentesterlab-api-09-exercise-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: API 09 JSON-LD review API responses for information leak + admin@libcurl.so key objective; pentesterlab.com/exercises/api_09/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-46-50-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/46 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–45→1–50 + domgoCxssTailPrioritySeeds 46–50; domgo.at/cxss/example/46 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-progressive-tail-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: domgoCxssProgressiveTailSeeds from /cxss/example/N seeds N+1..N+5 (cap 200); enables incremental drain of 200+ DomGoat exercises without hardcoding each batch; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-educational-lab-stub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta description ⚠️ This lab is not yet active on /labs/security-misconfiguration; clientSideOwaspEducationalLabStubEvidence; mehdiaitsaid A05 stub findings 6→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8719,6 +8737,21 @@
       "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-api-09-exercise-evidence",
       "shipped_at": "2026-07-19T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-46-50-seeds",
+      "shipped_at": "2026-07-19T15:05:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-progressive-tail-seeds",
+      "shipped_at": "2026-07-19T15:05:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-educational-lab-stub-evidence",
+      "shipped_at": "2026-07-19T15:05:00.000Z"
     }
   ]
 }
