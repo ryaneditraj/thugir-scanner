@@ -1286,7 +1286,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 55; n++) {
+  for (let n = 1; n <= 60; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1343,7 +1343,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/52",
     "/cxss/example/53",
     "/cxss/example/54",
-    "/cxss/example/55"
+    "/cxss/example/55",
+    "/cxss/example/56",
+    "/cxss/example/57",
+    "/cxss/example/58",
+    "/cxss/example/59",
+    "/cxss/example/60"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1847,6 +1852,9 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/72/",
     "/playlevel/73/",
     "/playlevel/74/",
+    "/playlevel/75/",
+    "/playlevel/76/",
+    "/missions/application/72/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5847,9 +5855,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const domgoCxssTailPrioritySeeds =
     /domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)
       ? Array.from({ length: 5 }, (_, i) =>
-          new URL(`/cxss/example/${51 + i}`, home.finalUrl).toString()
+          new URL(`/cxss/example/${56 + i}`, home.finalUrl).toString()
         )
       : [];
+  const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)
+    ? [
+        new URL("/pages/create", home.finalUrl).toString(),
+        new URL("/pages/request", home.finalUrl).toString()
+      ]
+    : [];
   const domgoCxssProgressiveTailSeeds = (() => {
     const m = /domgo\.at\/cxss\/example\/(\d+)\/?$/i.exec(home.finalUrl);
     if (!m) return [] as string[];
@@ -5997,6 +6011,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...domgoCxssIntroPrioritySeeds,
       ...domgoCxssTailPrioritySeeds,
       ...domgoCxssProgressiveTailSeeds,
+      ...zenDemoPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
