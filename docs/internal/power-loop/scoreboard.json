@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T07:17:25.141Z",
+  "updated_at": "2026-07-19T07:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -53,11 +53,15 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 57,
-      "focus": "Queue drain: hack-this-site-eta OWASP A01/A03, chal1/chal5/chal7 Vercel labs, openvaultbank API routes, RedTiger L4; +5 new URLs queued (api_21, cxss/30, level435, web-fundamentals-graphql, cors-ii)",
-      "improvements_shipped_this_run": 0
+      "focus": "Engine improvements: PentesterLab API 20, DomGoat cxss/29, HTS playlevel/71 + application/67; queue drain: hack-this-site-eta OWASP A01/A03, chal7, openvaultbank, RedTiger L4; +7 new URLs queued (playlevel/72, application/68, api_21, cxss/30, level435, web-fundamentals-graphql, cors-ii)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings, pages=6 probes=169) — Heroku wake delay, no category gap",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "pentesterlab.com/exercises/api_20: API 20 Go auth-bypass exercise evidence (0→4 findings)",
+      "domgo.at/cxss/example/29: unescape(hash)→innerHTML DOM XSS lab (4 findings)",
+      "hackthissite.org/playlevel/71: login-gated arcade hub evidence (6 findings)",
+      "hackthissite.org/missions/application/67: login-gated application mission hub (6 findings)",
       "hack-this-site-eta.vercel.app/owasp/a01.html: 15 findings — OWASP A01 broken access control lab markers",
       "hack-this-site-eta.vercel.app/owasp/a03.html: 15 findings — OWASP A03 injection lab markers",
       "chal7.vercel.app: 6 findings — Vercel security challenge lab",
@@ -66,9 +70,9 @@
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop: idor-sequential-ids slug absent — idor covered via vibe-unauthenticated-api-routes only",
+      "juice-shop: idor-sequential-ids slug intermittent — idor covered via vibe-unauthenticated-api-routes",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "PentesterLab api_21 + DomGoat cxss/30 + Net-Force 435 + web-fundamentals-graphql + cors-ii queued at tail — pending drain"
+      "PentesterLab api_21 not published yet (404) — queue playlevel/72 + application/68 + cxss/30 + Net-Force 435 + web-fundamentals-graphql + cors-ii"
     ]
   },
   "discovery_highlights": {
