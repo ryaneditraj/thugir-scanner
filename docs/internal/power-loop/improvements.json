@@ -5003,6 +5003,24 @@
       "slug": "owasp-stub-evidence-combined-corpus",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: clientSideOwaspEducationalLabStubEvidence required /labs/ on home.finalUrl; now fires when combined corpus includes This lab is not yet active from crawled stub pages; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-56-60-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/56 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–55→1–60 + domgoCxssTailPrioritySeeds 56–60; domgo.at/cxss/example/56 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-75-76-application-72-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/75 Login Required + application/72 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings playlevel/75); seeds added to extractHackThisSiteMissionSeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-python.fly.dev",
+      "slug": "zen-demo-python-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Zen by Aikido SQL Injection | Create a new Pet + SSRF | Fetch a page lab pages; zenDemoPrioritySeeds for /pages/create|/request + CLIENT_AIKIDO_ZEN_DEMO_RES SQL/SSRF markers; zen-demo-python.fly.dev findings 0→3; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8785,6 +8803,21 @@
       "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
       "slug": "owasp-stub-evidence-combined-corpus",
       "shipped_at": "2026-07-19T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-56-60-seeds",
+      "shipped_at": "2026-07-19T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-75-76-application-72-seeds",
+      "shipped_at": "2026-07-19T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-python.fly.dev",
+      "slug": "zen-demo-python-lab-seeds",
+      "shipped_at": "2026-07-19T17:15:00.000Z"
     }
   ]
 }
