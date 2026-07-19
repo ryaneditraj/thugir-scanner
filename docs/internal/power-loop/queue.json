@@ -5738,7 +5738,27 @@
       "url": "http://www.net-force.nl/challenge/level430/index.php",
       "source": "Net-Force — web exploit training challenge level 430 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/67/",
+      "source": "Hack This Site — playlevel arcade hub challenge 67 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_13/",
+      "source": "PentesterLab — API 13 broken object-level authorization exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/24/",
+      "source": "Mario Heiderich domgo.at — DomGoat level 24 postMessage DOM XSS oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/gin-juice-shop/",
+      "source": "OWASP VWAD — PortSwigger Gin & Juice Shop online demo directory entry (web search)",
+      "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-19T01:05:00.000Z"
+  "updated_at": "2026-07-19T02:12:00.000Z"
 }
