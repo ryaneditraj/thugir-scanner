@@ -15,24 +15,14 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 1365,
   "total_findings": 6709,
-=======
-  "total_sites_scanned": 1357,
-  "total_findings": 6700,
->>>>>>> 5669f69 (power-scan: benchmark + 5 discovery, 28 findings [14 UTC])
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1199,
-<<<<<<< HEAD
   "discovery_findings": 5277,
   "improvements_shipped": 750,
-=======
-  "discovery_findings": 5268,
-  "improvements_shipped": 747,
->>>>>>> 5669f69 (power-scan: benchmark + 5 discovery, 28 findings [14 UTC])
   "last_run": "2026-07-19T14:18:59.211Z",
   "last_run_summary": {
     "hour_utc": "14:00",
@@ -79,11 +69,7 @@
         "https://hack-this-site-eta.vercel.app/owasp/a06.html"
       ],
       "focus": "BugBountyHunter challenges 6/7/16, RedTiger level5-6, SecureBank blog + Hack Health + 0day training Vercel labs",
-<<<<<<< HEAD
       "improvements_shipped_this_run": 3
-=======
-      "improvements_shipped_this_run": 0
->>>>>>> 5669f69 (power-scan: benchmark + 5 discovery, 28 findings [14 UTC])
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) after Heroku wake retry — cold-start gap=sqli on pass1",

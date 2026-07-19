@@ -755,6 +755,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePrototypePollutionEvidence",
   "clientSideJwtNoneEvidence",
   "clientSideOwaspEducationalLabEvidence",
+  "clientSideOwaspEducationalLabStubEvidence",
   "clientSideOwaspTop10IntroHubEvidence",
   "serverSideEvalEvidence",
   "clientSidePromptInjectionEvidence",
@@ -1285,7 +1286,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 45; n++) {
+  for (let n = 1; n <= 50; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1332,7 +1333,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/42",
     "/cxss/example/43",
     "/cxss/example/44",
-    "/cxss/example/45"
+    "/cxss/example/45",
+    "/cxss/example/46",
+    "/cxss/example/47",
+    "/cxss/example/48",
+    "/cxss/example/49",
+    "/cxss/example/50"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -5824,9 +5830,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const domgoCxssTailPrioritySeeds =
     /domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)
       ? Array.from({ length: 5 }, (_, i) =>
-          new URL(`/cxss/example/${41 + i}`, home.finalUrl).toString()
+          new URL(`/cxss/example/${46 + i}`, home.finalUrl).toString()
         )
       : [];
+  const domgoCxssProgressiveTailSeeds = (() => {
+    const m = /domgo\.at\/cxss\/example\/(\d+)\/?$/i.exec(home.finalUrl);
+    if (!m) return [] as string[];
+    const current = Number.parseInt(m[1], 10);
+    if (!Number.isFinite(current) || current < 1) return [];
+    const out: string[] = [];
+    for (let offset = 1; offset <= 5; offset++) {
+      const next = current + offset;
+      if (next > 200) break;
+      try {
+        out.push(new URL(`/cxss/example/${next}`, home.finalUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+    return out;
+  })();
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
     ? [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
@@ -5956,6 +5979,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...owaspTop10IntroHubPrioritySeeds,
       ...domgoCxssIntroPrioritySeeds,
       ...domgoCxssTailPrioritySeeds,
+      ...domgoCxssProgressiveTailSeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
