@@ -6013,7 +6013,32 @@
       "url": "https://domgo.at/cxss/example/40",
       "source": "Mario Heiderich domgo.at — DomGoat level 40 location.hash→innerHTML DOM XSS (cxss series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/security-misconfiguration",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A05 security misconfiguration interactive module (sitemap)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/vulnerable-outdated-components",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A06 vulnerable & outdated components module (sitemap)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/software-data-integrity-failures",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A08 software & data integrity failures module (sitemap)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/logging-monitoring-failures",
+      "source": "mehdiaitsaid/owasp-top-10-labs — A09 logging & monitoring failures module (sitemap)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/intro",
+      "source": "mehdiaitsaid/owasp-top-10-labs — OWASP Top 10 lab intro hub (sitemap)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-19T11:36:00.000Z"
+  "updated_at": "2026-07-19T12:05:00.000Z"
 }
