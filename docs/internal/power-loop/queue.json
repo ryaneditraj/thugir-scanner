@@ -5783,7 +5783,32 @@
       "url": "https://pentesterlab.com/exercises/api_14/",
       "source": "PentesterLab — API 14 leaked encrypted password exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_15/",
+      "source": "PentesterLab — API 15 client-side encryption audit exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/69/",
+      "source": "Hack This Site — playlevel arcade hub challenge 69 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/26",
+      "source": "DomGoat — Client XSS Exercise-1 location.hash→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/64/",
+      "source": "Hack This Site — application challenge 64 reverse-engineering mission hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level432/index.php",
+      "source": "Net-Force — web exploit training challenge level 432 (net-force.nl catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T03:05:00.000Z"
+  "updated_at": "2026-07-19T04:05:00.000Z"
 }
