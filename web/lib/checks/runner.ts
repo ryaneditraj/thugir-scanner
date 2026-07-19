@@ -821,6 +821,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi12ExerciseEvidence",
   "clientSidePentesterlabApi13ExerciseEvidence",
   "clientSidePentesterlabApi14ExerciseEvidence",
+  "clientSidePentesterlabApi15ExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
@@ -1460,6 +1461,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/api-13",
     "/exercises/api_14",
     "/exercises/api-14",
+    "/exercises/api_15",
+    "/exercises/api-15",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1728,7 +1731,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/65/",
     "/playlevel/66/",
     "/playlevel/67/",
-    "/missions/application/54/",
+    "/playlevel/68/",
+    "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
     "/missions/application/65/",
@@ -5645,7 +5649,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level428/index.php",
         "http://www.net-force.nl/challenge/level429/index.php",
         "http://www.net-force.nl/challenge/level430/index.php",
-        "http://www.net-force.nl/challenge/level431/index.php"
+        "http://www.net-force.nl/challenge/level431/index.php",
+        "http://www.net-force.nl/challenge/level432/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
@@ -5752,9 +5757,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "https://sasanlabs.github.io/VulnerableApp/Why_VulnerableApp.html"
         ]
       : [];
+  const hackAdvisorPrioritySeeds = /labs\.hackadvisor\.io/i.test(home.finalUrl)
+    ? ["/challenges", "/en/challenges"].map((p) => new URL(p, home.finalUrl).toString())
+    : [];
+  const cyberDefendersPrioritySeeds = /cyberdefenders\.org/i.test(home.finalUrl)
+    ? ["/labs", "/blueteam-ctf-challenges", "/blueteam-ctf-challenges/"].map((p) =>
+        new URL(p, home.finalUrl).toString()
+      )
+    : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...hackAdvisorPrioritySeeds,
+      ...cyberDefendersPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,

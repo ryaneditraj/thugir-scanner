@@ -9611,6 +9611,47 @@ const clientSidePentesterlabApi14ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 15 password decryption exercise (pentesterlab.com/exercises/api_15)
+const CLIENT_PENTESTERLAB_API15_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 15 course title",
+    re: /API 15|PentesterLab:\s*API 15/i
+  },
+  {
+    label: "Leaked API call decryption lab description",
+    re: /leverage the leaked API call information to retrieve the password[\s\S]{0,200}admin@libcurl\.so[\s\S]{0,200}encryption method[\s\S]{0,120}decrypter/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 15"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]15/i
+  }
+];
+
+const clientSidePentesterlabApi15ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]15/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API15_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 15 exercise documents decrypting admin@libcurl.so password from leaked API call data"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -12712,6 +12753,10 @@ const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
   {
     label: "DFIR keywords",
     re: /DFIR|soc analyst.*blue team/i
+  },
+  {
+    label: "Blue team CTF challenge hub",
+    re: /Dive into Blue Team CTF Challenges|blue team ctf challenges|blueteam-ctf-challenges/i
   }
 ];
 
@@ -12868,6 +12913,10 @@ const CLIENT_HACKADVISOR_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "Browser-based CTF challenges",
     re: /browser-based[\s\S]{0,80}challenge|New challenges added regularly/i
+  },
+  {
+    label: "100+ web security challenge catalog",
+    re: /100\+ web security challenges|Practice XSS, SQL injection, SSRF, IDOR, RCE/i
   }
 ];
 
@@ -20501,6 +20550,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi12ExerciseEvidence,
   clientSidePentesterlabApi13ExerciseEvidence,
   clientSidePentesterlabApi14ExerciseEvidence,
+  clientSidePentesterlabApi15ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
