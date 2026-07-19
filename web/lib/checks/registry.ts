@@ -9447,6 +9447,88 @@ const clientSidePentesterlabXss09ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab XSS 10 cookie-theft exercise (pentesterlab.com/exercises/xss_10)
+const CLIENT_PENTESTERLAB_XSS10_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 10 course title",
+    re: /XSS 10|PentesterLab:\s*XSS 10/i
+  },
+  {
+    label: "Cookie theft via image tag lab description",
+    re: /retrieve a victim(?:&#39;|'s) cookie using JavaScript[\s\S]{0,200}image tag with the cookie value|send the cookie to your server or a service like webhook\.site/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 10"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]10/i
+  }
+];
+
+const clientSidePentesterlabXss10ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]10/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS10_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 10 exercise documents stealing victim cookies via JavaScript image-tag exfiltration (webhook.site oracle)"
+    }
+  };
+};
+
+// --- PentesterLab API 12 email-validation bypass exercise (pentesterlab.com/exercises/api_12)
+const CLIENT_PENTESTERLAB_API12_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 12 course title",
+    re: /API 12|PentesterLab:\s*API 12/i
+  },
+  {
+    label: "Admin email validation bypass lab description",
+    re: /register an account that will be interpreted by the application as an administrator account[\s\S]{0,200}bypassing email validation to gain elevated privileges/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 12"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]12/i
+  }
+];
+
+const clientSidePentesterlabApi12ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]12/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API12_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 12 exercise documents bypassing email validation to register an administrator account"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20334,10 +20416,12 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi07ExerciseEvidence,
   clientSidePentesterlabApi10ExerciseEvidence,
   clientSidePentesterlabApi11ExerciseEvidence,
+  clientSidePentesterlabApi12ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
   clientSidePentesterlabXss09ExerciseEvidence,
+  clientSidePentesterlabXss10ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,

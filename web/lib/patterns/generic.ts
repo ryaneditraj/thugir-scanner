@@ -3281,6 +3281,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-xss-10-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 10 cookie-theft exercise disclosed",
+    description:
+      "PentesterLab XSS 10 hosted exercise documents stealing a victim's cookie using JavaScript that writes an image tag with the cookie value for exfiltration to webhook.site.",
+    impactOneline:
+      "Public XSS exercise instance reveals cookie-theft via image-tag exfiltration patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss10ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use HttpOnly cookies and CSP in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Set HttpOnly and Secure flags on session cookies in production.",
+        "Deploy Content-Security-Policy to block inline script and unauthorized image exfiltration."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 10-style cookie-theft labs. Show how to gate labs behind auth and protect session cookies with HttpOnly flags and CSP in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-12-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 12 email-validation bypass exercise disclosed",
+    description:
+      "PentesterLab API 12 hosted exercise documents registering an administrator account by bypassing email validation to gain elevated privileges.",
+    impactOneline:
+      "Public API security exercise instance reveals email-validation bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi12ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize and strictly validate email addresses server-side.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate email domains with canonicalization before role assignment.",
+        "Never derive administrator privileges from client-controlled email fields."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 12-style email-validation bypass labs. Show how to gate labs behind auth and harden email validation in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
