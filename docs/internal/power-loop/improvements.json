@@ -4817,6 +4817,30 @@
       "slug": "hts-playlevel-71-application-67-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/71 Login Required + application/67 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings each); seeds added to htsPrioritySeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-30-31-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/30-31 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/30-31; domgo.at/cxss/example/31 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-73-application-70-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/73 Login Required + application/70 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (4 findings each); seeds added to htsPrioritySeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level436-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level436/index.php redirects to net-force.nl homepage; netForcePrioritySeeds adds level434-436; level436 findings 4 incl client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-22-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/api_22/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
     }
   ],
   "shipped": [
@@ -8479,6 +8503,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-71-application-67-seeds",
       "shipped_at": "2026-07-19T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-30-31-seeds",
+      "shipped_at": "2026-07-19T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-73-application-70-seeds",
+      "shipped_at": "2026-07-19T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level436-offline-seed",
+      "shipped_at": "2026-07-19T08:25:00.000Z"
     }
   ]
 }
