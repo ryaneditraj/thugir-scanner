@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-19T23:03:00.833Z",
+=======
+  "updated_at": "2026-07-19T23:05:00.000Z",
+>>>>>>> 62f584b (docs: log 3 discovery improvements (DomGoat 81-85, HTS 83/77, zen-demo-java))
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 1446,
   "total_findings": 7142,
   "critical_findings": 33,
@@ -24,6 +29,17 @@
   "discovery_findings": 5649,
   "improvements_shipped": 774,
   "last_run": "2026-07-19T23:03:00.833Z",
+=======
+  "total_sites_scanned": 1441,
+  "total_findings": 7118,
+  "critical_findings": 33,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1238,
+  "discovery_findings": 5632,
+  "improvements_shipped": 777,
+  "last_run": "2026-07-19T23:05:00.000Z",
+>>>>>>> 62f584b (docs: log 3 discovery improvements (DomGoat 81-85, HTS 83/77, zen-demo-java))
   "last_run_summary": {
     "hour_utc": "23:00",
     "benchmark": {
@@ -32,7 +48,11 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
+<<<<<<< HEAD
       "note": "Primary heroku 7 findings pages=6 probes=265; no benchmark misses",
+=======
+      "note": "Primary heroku pass1 7 findings 6/6 recall; no benchmark misses",
+>>>>>>> 62f584b (docs: log 3 discovery improvements (DomGoat 81-85, HTS 83/77, zen-demo-java))
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,6 +71,7 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 40,
@@ -76,6 +97,26 @@
       "juice-shop: sensitive_data via vibe-unauthenticated-api-routes not secret-resend",
       "dvs.vercel.app + zen-demo-java.fly.dev + domgo/66 + HTS playlevel/83 + net-force level203: queued at tail — pending drain",
       "HTS playlevel/84-85 + application/77: newly queued — pending drain"
+=======
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 17,
+      "focus": "DomGoat 81-85 tail + HTS playlevel/83 application/77 + net-force level203 + zen-demo-java lab nav crawl",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "domgo.at/cxss/example/81: 4 findings — unescape+eval hash DOM XSS (crawls 86-90 via progressive tail)",
+      "www.hackthissite.org/playlevel/83: 6 findings — login-gated playlevel hub evidence",
+      "net-force level203: 3 findings — applet3.class Let me in!!! login challenge",
+      "zen-demo-java.fly.dev: 4 findings — SQLi/SSRF/execute/read lab pages crawled from homepage nav"
+    ],
+    "learning_gaps": [
+      "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "damn-vulnerable-startup.fly.dev: DNS offline — dvs.vercel.app was wrong domain (Vietnamese IT company)",
+      "HTS playlevel/84+ application/78+: next queue drain batch",
+      "DomGoat cxss/example/86+: progressive tail continues from example/81 scan"
+>>>>>>> 62f584b (docs: log 3 discovery improvements (DomGoat 81-85, HTS 83/77, zen-demo-java))
     ]
   },
   "discovery_highlights": {
@@ -251,6 +292,7 @@
     "domgo.at/cxss/example/36": 4,
     "domgo.at/cxss/example/51": 4,
     "domgo.at/cxss/example/66": 4,
+    "domgo.at/cxss/example/81": 4,
     "php.testsparker.com": 5,
     "webgoat.org": 6,
     "cyberdefenders.org": 9,
@@ -267,11 +309,14 @@
     "domgo.at/cxss/example/33": 4,
     "www.hackthissite.org/playlevel/73": 4,
     "www.hackthissite.org/playlevel/77": 6,
+    "www.hackthissite.org/playlevel/83": 6,
     "www.hackthissite.org/missions/application/70": 4,
     "www.hackthissite.org/missions/application/71": 6,
     "www.net-force.nl/challenge/level436/index.php": 4,
     "www.net-force.nl/challenge/level437/index.php": 4,
     "www.net-force.nl/challenge/level201/index.php": 3,
+    "www.net-force.nl/challenge/level202/index.php": 3,
+    "www.net-force.nl/challenge/level203/index.php": 3,
     "vwad.owasp.org/app/grpc-goat": 5,
     "gitagent-securebot-app.vercel.app": 3,
     "sam.wizer-ctf.com": 5,
@@ -297,6 +342,6 @@
     "whoopspay.onrender.com": 5,
     "vwad.owasp.org/app/vulnerable-mcp-servers-lab": 4,
     "domgo.at/cxss/example/76": 4,
-    "www.net-force.nl/challenge/level202/index.php": 3
+    "zen-demo-java.fly.dev": 4
   }
 }

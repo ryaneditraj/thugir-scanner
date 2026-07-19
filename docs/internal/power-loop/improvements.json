@@ -5111,6 +5111,30 @@
       "slug": "hts-playlevel-82-application-76-net-force-level202-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/82 + application/76 + net-force level202; level202 GET returns <applet code=applet2.class> Decompile me login challenge; findings 2→3 with client-side-net-force-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-81-85-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cxss/example/81 unescape(location.hash)→eval+innerHTML msgboard sink; extractDomGoatCxssSeeds loop extended 80→85; domgo.at/cxss/example/81 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-83-application-77-net-force-level203-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/83 Login Required + application/77 login-gated hub; level203 GET returns <applet code=applet3.class> Let me in!!!; playlevel/83 findings 0→6 incl client-side-hts-playlevel-hub-evidence; level203 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-lab-nav-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage href=/pages/create|/pages/request|/pages/execute|/pages/read; extractZenDemoLabSeeds + zenDemoPrioritySeeds; zen-demo-java.fly.dev pages_crawled 1→5 findings 2→4 incl client-side-aikido-zen-demo-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvs.vercel.app",
+      "slug": "dvs-deploybro-queue-url-fix",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvs.vercel.app serves Vietnamese IT company CÔNG TY TNHH DVS VIỆT NAM — not 0xSV1/DVS DeployBro; queue entry removed; correct target is damn-vulnerable-startup.fly.dev (DNS offline Jul 2026)"
     }
   ],
   "shipped": [
@@ -8983,6 +9007,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-82-application-76-net-force-level202-seeds",
       "shipped_at": "2026-07-19T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-81-85-seeds",
+      "shipped_at": "2026-07-19T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-83-application-77-net-force-level203-seeds",
+      "shipped_at": "2026-07-19T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-lab-nav-seeds",
+      "shipped_at": "2026-07-19T23:05:00.000Z"
     }
   ]
 }
