@@ -11653,6 +11653,14 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Signed command execution form",
     re: /name\s*=\s*["']cmd["'][\s\S]{0,200}name\s*=\s*["']hash["']/i
+  },
+  {
+    label: "Java applet client-side login challenge",
+    re: /<applet[^>]+code=["'][^"']+\.class["']/i
+  },
+  {
+    label: "Sweet little applet training challenge",
+    re: /Sweet little applet|Login using this applet/i
   }
 ];
 
@@ -11737,7 +11745,10 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
         ? `Net-Force level ${level ?? "NN"} builds password via substring() in client JavaScript — credential oracle in page source`
         : /Right click disabled|JavaScript protection/i.test(corpus)
           ? `Net-Force level ${level ?? "NN"} uses trivial JavaScript protection (right-click disable / secret.html) — client-side auth bypass training lab`
-          : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
+          : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
+              /Sweet little applet|Login using this applet/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} ships a Java applet login gate — decompile applet1.class or reverse client-side credential check`
+            : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -16030,6 +16041,52 @@ const clientSideWebgoatEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP WebGoat is a deliberately insecure Java/Spring training application with guided security lessons"
+    }
+  };
+};
+
+// --- WhoopsPay educational fintech vulnerability lab (whoopspay.onrender.com) -----
+const CLIENT_WHOOPSPAY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WhoopsPay branding",
+    re: /WhoopsPay/i
+  },
+  {
+    label: "Postgraduate thesis vulnerability lab",
+    re: /postgraduate thesis on web application vulnerabilities|educational project developed as part of a postgraduate thesis/i
+  },
+  {
+    label: "Security vulnerabilities demonstrated panel",
+    re: /Security Vulnerabilities Demonstrated|intentional vulnerabilities/i
+  },
+  {
+    label: "XSS payloads in transaction descriptions",
+    re: /XSS payloads in transaction descriptions/i
+  },
+  {
+    label: "Educational admin panel disclaimer",
+    re: /administrative panel demonstrates security vulnerabilities for educational purposes|educational vulnerability demonstration platform/i
+  },
+  {
+    label: "Mock users with intentional flaws",
+    re: /mock users with intentional vulnerabilities|Cybersecurity Training System/i
+  }
+];
+
+const clientSideWhoopsPayEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WHOOPSPAY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/WhoopsPay|whoopspay/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WhoopsPay is an educational fintech SPA with intentional XSS, auth, and data-exposure flaws built for postgraduate cybersecurity training"
     }
   };
 };
@@ -21291,6 +21348,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOpenvaultLearnEvidence,
   clientSideOpenvaultCheatsheetEvidence,
   clientSideWebgoatEvidence,
+  clientSideWhoopsPayEvidence,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,

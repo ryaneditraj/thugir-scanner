@@ -5465,6 +5465,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-whoopspay-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay educational fintech vulnerability lab disclosed",
+    description:
+      "WhoopsPay is a postgraduate-thesis fintech SPA with intentional XSS, auth bypass, and data-exposure flaws in its admin panel and transaction flows.",
+    impactOneline:
+      "Public WhoopsPay demos document mock-user credential leaks and XSS payloads attackers can replay against real payment apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWhoopsPayEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WhoopsPay is intentional training — isolate lab deployments from production payment infrastructure.",
+      steps: [
+        "Run WhoopsPay only in isolated lab environments.",
+        "Never deploy mock-user credential stores or unencrypted card data in production.",
+        "Sanitize transaction descriptions server-side to block stored XSS."
+      ]
+    },
+    fixPrompt:
+      "We host a WhoopsPay-style educational fintech lab with intentional XSS and auth flaws. Show how to isolate the lab and harden admin panels for production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-maestro-agentic-ai-evidence",
     platform: "generic",
     category: "AI security",

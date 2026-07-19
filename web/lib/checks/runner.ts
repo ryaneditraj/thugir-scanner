@@ -397,10 +397,11 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
   let best = home;
   for (let attempt = 0; attempt < 5; attempt++) {
     const ready =
-      best.body.length > 1500 &&
       !RENDER_COLD_START_RE.test(best.body) &&
-      (/VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body) ||
-        (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body)));
+      (best.body.length > 1500 ||
+        /WhoopsPay|type="module"[^>]+src="\/assets\/index-/i.test(best.body) ||
+        /VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body)) &&
+      (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body));
     if (ready) break;
     await new Promise((r) => setTimeout(r, 4000));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
@@ -1288,7 +1289,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 70; n++) {
+  for (let n = 1; n <= 75; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1360,7 +1361,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/67",
     "/cxss/example/68",
     "/cxss/example/69",
-    "/cxss/example/70"
+    "/cxss/example/70",
+    "/cxss/example/71",
+    "/cxss/example/72",
+    "/cxss/example/73",
+    "/cxss/example/74",
+    "/cxss/example/75"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1870,9 +1876,11 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/78/",
     "/playlevel/79/",
     "/playlevel/80/",
+    "/playlevel/81/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
+    "/missions/application/75/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5853,7 +5861,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level434/index.php",
         "http://www.net-force.nl/challenge/level435/index.php",
         "http://www.net-force.nl/challenge/level436/index.php",
-        "http://www.net-force.nl/challenge/level437/index.php"
+        "http://www.net-force.nl/challenge/level437/index.php",
+        "http://www.net-force.nl/challenge/level201/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
