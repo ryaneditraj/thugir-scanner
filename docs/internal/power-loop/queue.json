@@ -5688,7 +5688,32 @@
       "url": "https://portswigger.net/web-security/cross-site-scripting/reflected/lab-html-context-nothing-encoded",
       "source": "PortSwigger Web Security Academy — reflected XSS lab landing (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://google-gruyere.appspot.com/start",
+      "source": "Google Gruyere web security codelab /start entry (geeksonsecurity vuln-web-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io/challenges",
+      "source": "HackAdvisor Labs — browser-based real-world bug report CTF challenge catalog (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cyberdefenders.org/blueteam-ctf-challenges",
+      "source": "CyberDefenders — blue-team CTF challenge hub landing (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/docs",
+      "source": "OWASP FinBot CTF — agentic AI vulnerability platform OpenAPI/docs surface (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-chatbot-demo.vercel.app/api/chat",
+      "source": "Quality-Max/vulnerable-chatbot-demo — intentionally vulnerable AI chatbot API endpoint (GitHub README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-18T23:03:00.000Z"
+  "updated_at": "2026-07-19T00:05:00.000Z"
 }
