@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T07:14:47.138Z",
+  "updated_at": "2026-07-19T07:17:25.141Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1291,
-  "total_findings": 6369,
+  "total_sites_scanned": 1299,
+  "total_findings": 6426,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1164,
-  "discovery_findings": 4993,
+  "discovery_urls_added": 1169,
+  "discovery_findings": 5050,
   "improvements_shipped": 729,
-  "last_run": "2026-07-19T07:14:47.138Z",
+  "last_run": "2026-07-19T07:17:25.141Z",
   "last_run_summary": {
-    "hour_utc": "06:00",
+    "hour_utc": "07:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages=6 probes=262)",
+      "note": "Heroku 503 cold-start wake ~11min; recall stable at 6/6 (6 findings, pages=6 probes=169); idor-sequential-ids slug absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,31 +51,24 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "urls_validated": 4,
-      "findings": 49,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
-      ],
-      "focus": "Queue drain: grpc-goat, hack-this-site-eta api-labs, vuln-expose, RedTiger L3, cyberdefenders, cve-2025-55182-demo, secureby.design; PentesterLab API 19, HTS playlevel/70, DomGoat cxss/28 validated; +8 new URLs queued (api_19/20, playlevel/71, cxss/28/29, application/65/67, Net-Force 434)",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 57,
+      "focus": "Queue drain: hack-this-site-eta OWASP A01/A03, chal1/chal5/chal7 Vercel labs, openvaultbank API routes, RedTiger L4; +5 new URLs queued (api_21, cxss/30, level435, web-fundamentals-graphql, cors-ii)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings, pages=6 probes=262) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/api-labs/: 15 findings — API security lab markers",
-      "cyberdefenders.org: 9 findings — blue-team challenge platform evidence",
-      "vwad.owasp.org/app/grpc-goat/: 5 findings — OWASP VWAD gRPC attack lab",
-      "secureby.design: 7 findings — cors-reflect-origin + postmessage-dom-xss + SKF lab evidence",
-      "pentesterlab.com/exercises/api_19: API 19 Go auth-bypass exercise evidence (0→4 findings)",
-      "hackthissite.org/playlevel/70: login-gated arcade hub evidence (6 findings)",
-      "domgo.at/cxss/example/28: unescape(hash)→innerHTML DOM XSS lab (4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings, pages=6 probes=169) — Heroku wake delay, no category gap",
+      "hack-this-site-eta.vercel.app/owasp/a01.html: 15 findings — OWASP A01 broken access control lab markers",
+      "hack-this-site-eta.vercel.app/owasp/a03.html: 15 findings — OWASP A03 injection lab markers",
+      "chal7.vercel.app: 6 findings — Vercel security challenge lab",
+      "openvaultbank.com/api/v1/admin: 5 findings — unauthenticated admin API route evidence",
+      "redtiger.labs.overthewire.org/level4.php: 3 findings — OverTheWire RedTiger web challenge"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
+      "juice-shop: idor-sequential-ids slug absent — idor covered via vibe-unauthenticated-api-routes only",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "Net-Force level433+ instances redirect to homepage — offline oracle only",
-      "PentesterLab api_20 + HTS playlevel/71 + DomGoat cxss/29 + application/65/67 queued at tail — pending drain"
+      "PentesterLab api_21 + DomGoat cxss/30 + Net-Force 435 + web-fundamentals-graphql + cors-ii queued at tail — pending drain"
     ]
   },
   "discovery_highlights": {
@@ -113,6 +106,11 @@
     "secure-bank-bay.vercel.app": 6,
     "owaspbased-lessons.vercel.app": 1,
     "hack-this-site-eta.vercel.app": 15,
+    "chal7.vercel.app": 6,
+    "chal1.vercel.app": 4,
+    "chal5.vercel.app": 4,
+    "openvaultbank.com": 5,
+    "redtiger.labs.overthewire.org": 3,
     "zero-health.vercel.app": 3,
     "csrf-xss-demo.vercel.app": 4,
     "ai-security-platform-iota.vercel.app": 3,
