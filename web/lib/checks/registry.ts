@@ -9923,6 +9923,92 @@ const clientSidePentesterlabApi20ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab CORS II sensitive-data exfiltration exercise (pentesterlab.com/exercises/cors-ii)
+const CLIENT_PENTESTERLAB_CORS_II_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CORS II course title",
+    re: /Cross-Origin Resource Sharing II|PentesterLab:\s*Cross-Origin Resource Sharing II/i
+  },
+  {
+    label: "Misconfigured CORS policy lab description",
+    re: /misconfigured Cross-Origin Resource Sharing \(CORS\) policy/i
+  },
+  {
+    label: "Sensitive API data exfiltration via malicious page",
+    re: /retrieve sensitive information from an API by tricking a user into visiting a malicious page/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Cross-Origin Resource Sharing II"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/cors[_-]ii/i
+  }
+];
+
+const clientSidePentesterlabCorsIiExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/cors[_-]ii/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_CORS_II_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab CORS II exercise documents exploiting misconfigured CORS to exfiltrate sensitive API data via a malicious page"
+    }
+  };
+};
+
+// --- PentesterLab Web Fundamentals GraphQL exercise (pentesterlab.com/exercises/web-fundamentals-graphql)
+const CLIENT_PENTESTERLAB_GRAPHQL_FUNDAMENTALS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web Fundamentals GraphQL course title",
+    re: /Web Fundamentals:\s*GraphQL|PentesterLab:\s*Web Fundamentals:\s*GraphQL/i
+  },
+  {
+    label: "GraphQL fundamentals lab description",
+    re: /PentesterLab(?:&#39;|'|')s exercise on Web Fundamentals:\s*GraphQL/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Web Fundamentals:\s*GraphQL"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/web-fundamentals-graphql/i
+  }
+];
+
+const clientSidePentesterlabGraphqlFundamentalsExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/web-fundamentals-graphql/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_GRAPHQL_FUNDAMENTALS_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Web Fundamentals GraphQL exercise documents GraphQL security training and hosted lab instance"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20913,6 +20999,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi18ExerciseEvidence,
   clientSidePentesterlabApi19ExerciseEvidence,
   clientSidePentesterlabApi20ExerciseEvidence,
+  clientSidePentesterlabCorsIiExerciseEvidence,
+  clientSidePentesterlabGraphqlFundamentalsExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
