@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 1234,
-  "total_findings": 6080,
+  "total_sites_scanned": 1242,
+  "total_findings": 6121,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1128,
-  "discovery_findings": 4775,
+  "discovery_urls_added": 1133,
+  "discovery_findings": 4816,
   "improvements_shipped": 717,
   "last_run": "2026-07-19T00:10:00.000Z",
   "last_run_summary": {
@@ -50,35 +50,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "PentesterLab XSS 10 cookie-theft + API 12 email-validation bypass; DomGoat cxss/23 + HTS playlevel/66 + Net-Force level430 seeds",
-      "queued_pending": [
-        "https://defendtheweb.net/playground/intro11",
-        "https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data",
-        "https://pentesterlab.com/exercises/autho_10/ (404 — rejected)"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 41,
+      "focus": "Hacksplaining supply-chain/protocol lessons + vAPI HTTP + web-pentest-playground; +5 new discovery URLs at queue tail",
+      "urls_added_list": [
+        "https://google-gruyere.appspot.com/start",
+        "https://labs.hackadvisor.io/challenges",
+        "https://cyberdefenders.org/blueteam-ctf-challenges",
+        "https://owasp-finbot-ctf.org/docs",
+        "https://vulnerable-chatbot-demo.vercel.app/api/chat"
       ],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"
-      ],
-      "improvements_shipped_this_run": 3
+      "skipped_48h": [
+        "https://juice-shop.herokuapp.com/ (benchmark scanned this hour)"
+      ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "pentesterlab.com/exercises/xss_10: cookie theft via image tag JSON-LD + lab description (0→4 findings)",
-      "pentesterlab.com/exercises/api_12: email-validation bypass for admin registration (0→4 findings)",
-      "domgo.at/cxss/example/23: location.hash→msgboard.innerHTML DOM XSS lab (0→4 findings)",
-      "www.hackthissite.org/playlevel/66: login-gated arcade hub evidence (0→6 findings)",
-      "www.net-force.nl/challenge/level430: offline challenge homepage redirect oracle (0→4 findings)"
+      "www.hacksplaining.com/lessons/dns-poisoning/start: 7 findings — supply-chain lesson markers",
+      "www.hacksplaining.com/lessons/email-spoofing/start: 7 findings — protocol attack lesson evidence",
+      "vapi.apisec.ai: 4 findings — OWASP API Top 10 HTTP mirror",
+      "web-pentest-playground.onrender.com: 3 findings — Render pentest training app",
+      "vwad.owasp.org/app/pixi/: 3 findings — OWASP VWAD Pixi lab entry"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "pentesterlab.com/exercises/autho_10: 404 — exercise not published yet",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "PortSwigger Academy labs require per-user ephemeral .web-security-academy.net instances — landing pages only",
-      "defendtheweb.net: platform on hiatus (goodbye page) — intro11 may 404",
-      "damn-vulnerable-startup.fly.dev: 403 from cloud egress"
+      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
+      "5 new discovery URLs queued at tail — pending drain next run",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
