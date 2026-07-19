@@ -4721,6 +4721,30 @@
       "slug": "cyberdefenders-blueteam-ctf-challenges-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: title Dive into Blue Team CTF Challenges + blue team ctf challenges keywords; cyberDefendersPrioritySeeds prepends /blueteam-ctf-challenges; cyberdefenders.org/blueteam-ctf-challenges findings 0→9 incl client-side-cyberdefenders-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-gin-juice-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD WebApplication author PortSwigger url https://ginandjuice.shop/ + CSRF/AngularJS tags; vwad.owasp.org/app/gin-juice-shop findings 0→4 incl client-side-vwad-gin-juice-evidence + linked ginandjuice.shop seed; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-16-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 16 + leverage an authentication issue in an API to gain access to sensitive information + Go source code review; pentesterlab.com/exercises/api_16 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-25-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/25 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/25; domgo.at/cxss/example/25 findings include domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-prompt-lab.vercel.app",
+      "slug": "client-side-ai-prompt-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: プロンプトチェックシート（全16個） + ChatGPTのAPIキーを入力 + Prompt Lab title; rule shipped — Vercel Security Checkpoint may block ThugirScanner UA from cloud egress; benchmark 6/6 maintained"
     }
   ],
   "shipped": [

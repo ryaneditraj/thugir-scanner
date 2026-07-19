@@ -2111,6 +2111,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-gin-juice-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Gin & Juice Shop scanner benchmark listing disclosed",
+    description:
+      "Gin & Juice Shop VWAD listing links PortSwigger scanner evaluation lab at ginandjuice.shop with CSRF, AngularJS, and React technology tags.",
+    impactOneline:
+      "Public VWAD registry advertises PortSwigger scanner benchmark apps with live demo URLs for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadGinJuiceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gin & Juice Shop is intentional scanner training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy Gin & Juice Shop only on isolated lab networks.",
+        "Require authentication when exposing scanner benchmark apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Gin & Juice Shop instance is listed in OWASP VWAD. Show how to isolate PortSwigger scanner evaluation labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sensitive-api-password-leakage",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -3407,6 +3433,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab API 15-style API-call decryption labs. Show how to gate labs behind auth and prevent reversible credential encryption in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-16-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 16 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 16 hosted exercise documents leveraging an API authentication issue to access sensitive information with Go source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi16ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 16-style authentication bypass labs. Show how to gate labs behind auth and enforce token validation on sensitive API routes in production.",
     version: 1,
     enabled: true
   },
@@ -8113,6 +8165,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host SkillAudit-style MCP skill scanning. Show how to gate skill installs and isolate agent credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ai-prompt-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Prompt Lab Japanese prompt-engineering checklist disclosed",
+    description:
+      "Prompt Lab (ai-prompt-lab.vercel.app) documents a 16-tip Japanese prompt checklist, ChatGPT API onboarding, and research-backed prompt-engineering guidance.",
+    impactOneline:
+      "Public prompt-engineering labs expose interactive LLM prompt tuning surfaces attackers can probe for injection and data-exfiltration weaknesses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiPromptLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Prompt engineering labs should not collect API keys client-side; gate LLM demos behind auth.",
+      steps: [
+        "Never store user API keys in browser localStorage without encryption.",
+        "Gate interactive LLM demos behind authentication.",
+        "Apply OWASP LLM Top 10 controls before publishing prompt-tuning UIs."
+      ]
+    },
+    fixPrompt:
+      "We host a Prompt Lab-style interactive prompt-engineering checklist. Show how to protect API keys and gate LLM demos behind auth.",
     version: 1,
     enabled: true
   },
