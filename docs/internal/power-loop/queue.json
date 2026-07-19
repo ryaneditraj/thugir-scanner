@@ -5988,7 +5988,32 @@
       "url": "https://mehdiaitsaid.github.io/owasp-top-10-labs/labs/insecure-design",
       "source": "mehdiaitsaid/owasp-top-10-labs — A04 insecure design interactive module (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/36",
+      "source": "Mario Heiderich domgo.at — DomGoat level 36 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/37",
+      "source": "Mario Heiderich domgo.at — DomGoat level 37 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/38",
+      "source": "Mario Heiderich domgo.at — DomGoat level 38 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/39",
+      "source": "Mario Heiderich domgo.at — DomGoat level 39 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/40",
+      "source": "Mario Heiderich domgo.at — DomGoat level 40 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T10:05:00.000Z"
+  "updated_at": "2026-07-19T11:36:00.000Z"
 }
