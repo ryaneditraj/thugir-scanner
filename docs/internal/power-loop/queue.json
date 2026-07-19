@@ -5838,7 +5838,42 @@
       "url": "http://www.net-force.nl/challenge/level433/index.php",
       "source": "Net-Force — web exploit training challenge level 433 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_19/",
+      "source": "PentesterLab — API 19 Go authentication bypass exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/28",
+      "source": "DomGoat — Client XSS Exercise-28 unescape(hash)→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/67/",
+      "source": "Hack This Site — application challenge 67 reverse-engineering mission hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/71/",
+      "source": "Hack This Site — playlevel arcade hub challenge 71 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentesterlab.com/exercises/api_20/",
+      "source": "PentesterLab — API 20 Go authentication bypass exercise (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/29",
+      "source": "DomGoat — Client XSS Exercise-29 location.hash→innerHTML sink (cxss catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level434/index.php",
+      "source": "Net-Force — web exploit training challenge level 434 (net-force.nl catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T05:06:00.000Z"
+  "updated_at": "2026-07-19T06:10:00.000Z"
 }
