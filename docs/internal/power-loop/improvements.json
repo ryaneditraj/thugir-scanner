@@ -4745,6 +4745,24 @@
       "slug": "client-side-ai-prompt-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: プロンプトチェックシート（全16個） + ChatGPTのAPIキーを入力 + Prompt Lab title; rule shipped — Vercel Security Checkpoint may block ThugirScanner UA from cloud egress; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-17-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 17 + leverage an authentication issue in an API to gain access to sensitive information + Go source code of the vulnerable code; pentesterlab.com/exercises/api_17 findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-26-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/26 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/26; domgo.at/cxss/example/26 findings include domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-68-application-66-queue-validation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/68 Login Required + application/66 login-gated mission hub; existing clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings each); seeds already in runner.ts; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8362,6 +8380,21 @@
       "source": "discovery:cyberdefenders.org",
       "slug": "cyberdefenders-blueteam-ctf-challenges-seeds",
       "shipped_at": "2026-07-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-17-exercise-evidence",
+      "shipped_at": "2026-07-19T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-26-seeds",
+      "shipped_at": "2026-07-19T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-68-application-66-queue-validation",
+      "shipped_at": "2026-07-19T04:10:00.000Z"
     }
   ]
 }

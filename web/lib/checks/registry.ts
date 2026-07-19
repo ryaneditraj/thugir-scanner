@@ -9743,6 +9743,51 @@ const clientSidePentesterlabApi16ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 17 authentication bypass exercise (pentesterlab.com/exercises/api_17)
+const CLIENT_PENTESTERLAB_API17_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 17 course title",
+    re: /API 17|PentesterLab:\s*API 17/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API to gain access to sensitive information/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains (?:some )?Go source code(?: of the vulnerable code)? to help in learning source code review/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 17"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]17/i
+  }
+];
+
+const clientSidePentesterlabApi17ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]17/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API17_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 17 exercise documents leveraging an API authentication issue to access sensitive information via Go source review"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20686,6 +20731,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi14ExerciseEvidence,
   clientSidePentesterlabApi15ExerciseEvidence,
   clientSidePentesterlabApi16ExerciseEvidence,
+  clientSidePentesterlabApi17ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
