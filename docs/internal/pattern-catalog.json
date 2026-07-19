@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-19T21:04:33.195Z",
-  "total": 475,
-  "uniqueSlugs": 473,
+  "generatedAt": "2026-07-19T22:04:37.516Z",
+  "total": 476,
+  "uniqueSlugs": 474,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 457,
+    "generic": 458,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 406,
+    "deep": 407,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "SSRF": 1,
     "Server-side request forgery": 5,
     "Sensitive data exposure": 5,
-    "AI security": 27,
+    "AI security": 28,
     "XSS": 1
   },
   "slugs": [
@@ -368,6 +368,7 @@
     "client-side-vwad-app-not-found-evidence",
     "client-side-vwad-bodgeit-evidence",
     "client-side-vwad-gin-juice-evidence",
+    "client-side-vwad-mcp-servers-lab-evidence",
     "client-side-vwad-mutillidae-evidence",
     "client-side-vwad-nodegoat-evidence",
     "client-side-vwad-pixi-evidence",
