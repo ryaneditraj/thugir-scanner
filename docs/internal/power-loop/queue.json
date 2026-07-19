@@ -5938,7 +5938,32 @@
       "url": "http://www.net-force.nl/challenge/level436/index.php",
       "source": "Net-Force — web exploit training challenge level 436 (net-force.nl catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/32",
+      "source": "DomGoat — DOM clobbering XSS training example 32 (domgo.at cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/33",
+      "source": "DomGoat — DOM clobbering XSS training example 33 (domgo.at cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/74/",
+      "source": "Hack This Site — playlevel arcade hub challenge 74 (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/71/",
+      "source": "Hack This Site — application challenge 71 reverse-engineering mission hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level437/index.php",
+      "source": "Net-Force — web exploit training challenge level 437 (net-force.nl catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T08:06:00.000Z"
+  "updated_at": "2026-07-19T09:05:00.000Z"
 }
