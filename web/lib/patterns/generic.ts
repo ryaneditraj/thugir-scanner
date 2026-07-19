@@ -3333,6 +3333,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-13-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 13 Unicode email bypass exercise disclosed",
+    description:
+      "PentesterLab API 13 hosted exercise documents registering an administrator account by using a Unicode-based bypass when @libcurl.so domain registration is blocked.",
+    impactOneline:
+      "Public API security exercise instance reveals Unicode email canonicalization bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi13ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize Unicode email addresses before domain checks.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Apply Unicode normalization (NFKC) before validating email domains.",
+        "Never derive administrator privileges from client-controlled email fields."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 13-style Unicode email bypass labs. Show how to gate labs behind auth and harden email canonicalization in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-14-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 14 leaked encrypted password exercise disclosed",
+    description:
+      "PentesterLab API 14 hosted exercise documents logging in as admin@libcurl.so by leveraging leaked API call data or encrypted password material.",
+    impactOneline:
+      "Public API security exercise instance reveals credential leakage and encrypted-password reuse patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi14ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never expose encrypted credentials in API responses.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Remove password hashes and encrypted secrets from API responses and logs.",
+        "Rotate credentials when API traffic or debug output is exposed."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 14-style leaked-credential labs. Show how to gate labs behind auth and prevent encrypted password leakage in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
