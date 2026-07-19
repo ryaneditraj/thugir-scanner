@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T01:05:00.000Z",
+  "updated_at": "2026-07-19T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1138,
   "discovery_findings": 4851,
-  "improvements_shipped": 717,
-  "last_run": "2026-07-19T01:05:00.000Z",
+  "improvements_shipped": 720,
+  "last_run": "2026-07-19T01:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
@@ -50,34 +50,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 35,
-      "focus": "TestSparker trio + Hack Yourself First + CookieJar + DVGA + FinBot demo; +5 new discovery URLs at queue tail",
-      "urls_added_list": [
-        "https://pentesterlab.com/exercises/xss_10/",
-        "https://pentesterlab.com/exercises/api_12/",
-        "https://www.hackthissite.org/playlevel/66/",
-        "https://domgo.at/cxss/example/23",
-        "http://www.net-force.nl/challenge/level430/index.php"
-      ],
-      "skipped_48h": [
-        "https://juice-shop.herokuapp.com/ (benchmark scanned this hour)"
-      ]
+      "urls_scanned": 4,
+      "findings": 18,
+      "focus": "PentesterLab API 13 Unicode email bypass + API 14 leaked encrypted password; DomGoat cxss/example/24 + HTS playlevel/67 + Net-Force level431 seeds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "hack-yourself-first.azurewebsites.net: 7 findings — Troy Hunt Supercar Showdown markers",
-      "php.testsparker.com: 6 findings — Invicti practice SQLi/XSS/LFI evidence",
-      "aspnet.testsparker.com: 6 findings — reflected XSS + sitemap sensitive paths",
-      "angular.testsparker.com: 5 findings — secret-aws-akid + hardcoded demo credentials",
-      "cyberdesserts.github.io/cookiejar-lab/demo: 4 findings — session hijack lab markers"
+      "pentesterlab.com/exercises/api_13: Unicode @libcurl.so admin registration bypass (0→4 findings)",
+      "pentesterlab.com/exercises/api_14: leaked encrypted password login lab (0→4 findings)",
+      "domgo.at/cxss/example/24: unescape hash DOM XSS + DomGoat lab evidence (0→4 findings)",
+      "www.hackthissite.org/playlevel/67: arcade hub + HTS platform evidence (0→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "5 new discovery URLs queued at tail (xss_10, api_12, playlevel/66, cxss/23, net-force 430) — pending drain",
-      "owasp-finbot-ctf-demo.onrender.com: 1 finding — agentic exploit chains need authenticated CTF namespace"
+      "labs.hackadvisor.io/challenges + cyberdefenders.org/blueteam-ctf-challenges queued — pending drain",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {

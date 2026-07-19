@@ -4685,6 +4685,24 @@
       "slug": "domgo-cxss-example-23-hts-66-64-netforce-430-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/23 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/66 arcade hub (0→6) + application/64 mission hub (0→6) + Net-Force level430 offline oracle (0→4); extractDomGoatCxssSeeds extended to example/23; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-13-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 13 + Unicode-based bypass for @libcurl.so admin registration; pentesterlab.com/exercises/api_13 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-14-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 14 + log in as admin@libcurl.so via leaked encrypted password/API call data; pentesterlab.com/exercises/api_14 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-24-hts-67-65-netforce-431-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/24 unescape(location.hash)→msgboard.innerHTML (0→4) + HTS playlevel/67 arcade hub (0→6) + application/65 mission hub + Net-Force level431 offline oracle; extractDomGoatCxssSeeds extended to example/24; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8272,6 +8290,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-cxss-example-23-hts-66-64-netforce-430-seeds",
       "shipped_at": "2026-07-19T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-13-exercise-evidence",
+      "shipped_at": "2026-07-19T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-14-exercise-evidence",
+      "shipped_at": "2026-07-19T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-24-hts-67-65-netforce-431-seeds",
+      "shipped_at": "2026-07-19T01:10:00.000Z"
     }
   ]
 }
