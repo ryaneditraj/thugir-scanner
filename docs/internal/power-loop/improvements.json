@@ -4913,6 +4913,24 @@
       "slug": "owasp-docusaurus-insecure-design-lab",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: /labs/insecure-design meta description ⚠️ This lab is not yet active — no runnable vulnerable content to detect"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-36-40-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/36 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–35→1–40; domgo.at/cxss/example/36 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "flask-vulnapp-render-warmup-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Render cold-start stub omitted VulnApp markers; warmupRenderHost retries + extractFlaskVulnappSeeds for /comments /login /register; web-security-practice-app.onrender.com findings 1→3 incl client-side-flask-vulnapp-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "post-login-sql-bypass-comments-redirect",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=' OR '1'='1'-- returns 302 Location /comments + Set-Cookie session; probePostLoginSqlBypass accepts non-login redirects with session cookie; web-security-practice-app findings 1→3 incl post-login-sql-bypass; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8620,6 +8638,21 @@
       "source": "discovery:www.net-force.nl",
       "slug": "net-force-level437-offline-seed",
       "shipped_at": "2026-07-19T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-36-40-seeds",
+      "shipped_at": "2026-07-19T12:00:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "flask-vulnapp-render-warmup-seeds",
+      "shipped_at": "2026-07-19T12:00:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "post-login-sql-bypass-comments-redirect",
+      "shipped_at": "2026-07-19T12:00:00.000Z"
     }
   ]
 }
