@@ -4865,6 +4865,24 @@
       "slug": "client-side-pentesterlab-api-21-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/api_21/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-33-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/33 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/33; domgo.at/cxss/example/33 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-71-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: application/71 Login Required login-gated mission hub; clientSideHtsLoginGatedMissionHubEvidence fires on direct scan (6 findings); seeds added to extractHackThisSiteMissionSeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level437-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level437/index.php 301 redirects to net-force.nl homepage; netForcePrioritySeeds adds level437; level437 findings 4 incl client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8557,6 +8575,21 @@
       "source": "discovery:pentesterlab.com",
       "slug": "client-side-pentesterlab-cors-ii-graphql-exercise-evidence",
       "shipped_at": "2026-07-19T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-33-seeds",
+      "shipped_at": "2026-07-19T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-71-seeds",
+      "shipped_at": "2026-07-19T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level437-offline-seed",
+      "shipped_at": "2026-07-19T10:10:00.000Z"
     }
   ]
 }
