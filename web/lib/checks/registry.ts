@@ -2052,7 +2052,7 @@ function extractPostSqlForms(html: string, origin: string): { action: string; fi
   return forms;
 }
 
-const POST_LOGIN_SQLI_PAYLOADS = ["' OR 1=1 -- ", "admin' -- ", "' OR ''='"];
+const POST_LOGIN_SQLI_PAYLOADS = ["' OR 1=1 -- ", "admin' -- ", "' OR ''='", "' OR '1'='1'--"];
 
 async function probePostLoginSqlBypass(ctx: RuleContext): Promise<RuleResult | null> {
   const forms = extractPostSqlForms(ctx.combined, ctx.origin);
@@ -2078,7 +2078,13 @@ async function probePostLoginSqlBypass(ctx: RuleContext): Promise<RuleResult | n
       });
       const loc = r.headers.location || "";
       const hasSession = r.setCookies.some((c) => /session=/i.test(c));
-      if (r.status >= 301 && r.status <= 303 && /dashboard|home|admin/i.test(loc) && hasSession) {
+      const loginBypassRedirect =
+        r.status >= 301 &&
+        r.status <= 303 &&
+        hasSession &&
+        loc.length > 0 &&
+        !/login|signin/i.test(loc);
+      if (loginBypassRedirect) {
         return {
           fired: true,
           confidence: 0.92,
