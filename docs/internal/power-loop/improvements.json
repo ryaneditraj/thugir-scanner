@@ -5093,6 +5093,24 @@
       "slug": "hts-playlevel-81-application-75-net-force-level201-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/81 + application/75 + net-force level201 applet challenge; net-force level201 GET returns <applet code=applet1.class> Sweet little applet; findings 2→3 with client-side-net-force-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-mcp-servers-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD at /app/vulnerable-mcp-servers-lab documents path traversal, indirect prompt injection, eval RCE, typosquatting + github.com/appsecco/vulnerable-mcp-servers-lab; vwad.owasp.org findings 3→4 with new slug; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-76-80-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cxss/example/76–80 return 200 with location.hash→innerHTML msgboard sink; extractDomGoatCxssSeeds loop extended 75→80; domgo.at/cxss/example/76 findings include dangerous-html-sinks; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-82-application-76-net-force-level202-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/82 + application/76 + net-force level202; level202 GET returns <applet code=applet2.class> Decompile me login challenge; findings 2→3 with client-side-net-force-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8950,6 +8968,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-81-application-75-net-force-level201-seeds",
       "shipped_at": "2026-07-19T21:45:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-mcp-servers-lab-evidence",
+      "shipped_at": "2026-07-19T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-76-80-seeds",
+      "shipped_at": "2026-07-19T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-82-application-76-net-force-level202-seeds",
+      "shipped_at": "2026-07-19T22:10:00.000Z"
     }
   ]
 }
