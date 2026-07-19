@@ -826,6 +826,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi17ExerciseEvidence",
   "clientSidePentesterlabApi18ExerciseEvidence",
   "clientSidePentesterlabApi19ExerciseEvidence",
+  "clientSidePentesterlabApi20ExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
@@ -1242,7 +1243,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 27; n++) {
+  for (let n = 1; n <= 29; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1272,7 +1273,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/25",
     "/cxss/example/26",
     "/cxss/example/27",
-    "/cxss/example/28"
+    "/cxss/example/28",
+    "/cxss/example/29"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1482,6 +1484,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/api-18",
     "/exercises/api_19",
     "/exercises/api-19",
+    "/exercises/api_20",
+    "/exercises/api-20",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1753,10 +1757,12 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/68/",
     "/playlevel/69/",
     "/playlevel/70/",
+    "/playlevel/71/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
     "/missions/application/65/",
+    "/missions/application/67/",
     "/missions/application/55/",
     "/missions/application/56/",
     "/missions/application/57/",

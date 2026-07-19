@@ -3541,6 +3541,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-20-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 20 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 20 hosted exercise documents leveraging an API authentication issue to access sensitive information with Go source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals Go API authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi20ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 20-style authentication bypass labs. Show how to gate labs behind auth and enforce Go API security review before production deploy.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
