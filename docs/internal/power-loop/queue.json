@@ -6263,7 +6263,27 @@
       "url": "https://vwad.owasp.org/app/vulnerable-mcp-servers-lab/",
       "source": "OWASP VWAD \u2014 Appsecco vulnerable MCP servers lab (prompt injection, tool poisoning, RCE oracles)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://dvs.vercel.app/",
+      "source": "0xSV1/DVS DeployBro \u2014 OWASP Top 10 (2025) + LLM Top 10 satirical SaaS lab (55 challenges, Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/66",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 66 postMessage\u2192eval DOM XSS (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/83/",
+      "source": "HackThisSite realistic mission playlevel 83 \u2014 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level203/index.php",
+      "source": "Net-Force.nl challenge level 203 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T21:35:00.000Z"
+  "updated_at": "2026-07-19T22:06:52.000Z"
 }
