@@ -1035,6 +1035,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadSecurityShepherdEvidence",
   "clientSideVwadMutillidaeEvidence",
   "clientSideVwadNodegoatEvidence",
+  "clientSideVwadMcpServersLabEvidence",
   "clientSideVwadVulnerableappEvidence",
   "clientSideVulnerableappDomXssEvidence",
   "clientSideSecLabPlaygroundEvidence",
@@ -1290,7 +1291,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 75; n++) {
+  for (let n = 1; n <= 80; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1367,7 +1368,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/72",
     "/cxss/example/73",
     "/cxss/example/74",
-    "/cxss/example/75"
+    "/cxss/example/75",
+    "/cxss/example/76",
+    "/cxss/example/77",
+    "/cxss/example/78",
+    "/cxss/example/79",
+    "/cxss/example/80"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1878,10 +1884,12 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/79/",
     "/playlevel/80/",
     "/playlevel/81/",
+    "/playlevel/82/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
     "/missions/application/75/",
+    "/missions/application/76/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5863,7 +5871,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level435/index.php",
         "http://www.net-force.nl/challenge/level436/index.php",
         "http://www.net-force.nl/challenge/level437/index.php",
-        "http://www.net-force.nl/challenge/level201/index.php"
+        "http://www.net-force.nl/challenge/level201/index.php",
+        "http://www.net-force.nl/challenge/level202/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(

@@ -21200,6 +21200,53 @@ const clientSideVwadNodegoatEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD Vulnerable MCP Servers Lab (Appsecco) listing ---------------------------
+const clientSideVwadMcpServersLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/vulnerable-mcp-servers-lab/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Vulnerable MCP Servers Lab VWAD listing",
+      re: /Vulnerable MCP Servers Lab[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Intentionally vulnerable MCP server collection",
+      re: /intentionally vulnerable MCP server implementations for security training/i
+    },
+    {
+      label: "Path traversal and unsandboxed MCP execution",
+      re: /path traversal[\s\S]{0,120}unsandboxed code execution/i
+    },
+    {
+      label: "Indirect prompt injection MCP lab",
+      re: /indirect prompt injection[\s\S]{0,80}(?:local and remote|remote)/i
+    },
+    {
+      label: "MCP eval and typosquatting risks",
+      re: /malicious code execution via eval|namespace typosquatting|secrets\/PII exposure/i
+    },
+    {
+      label: "Appsecco MCP lab repository",
+      re: /github\.com\/appsecco\/vulnerable-mcp-servers-lab/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VWAD Vulnerable MCP Servers Lab documents path traversal, prompt injection, eval RCE, typosquatting, and supply-chain risks in intentionally vulnerable MCP server training implementations"
+    }
+  };
+};
+
 const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OWASP_VWAD_RES) {
@@ -21650,6 +21697,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadSecurityShepherdEvidence,
   clientSideVwadMutillidaeEvidence,
   clientSideVwadNodegoatEvidence,
+  clientSideVwadMcpServersLabEvidence,
   clientSideVwadVulnerableappEvidence,
   clientSideVulnerableappDomXssEvidence,
   clientSideSecLabPlaygroundEvidence,
