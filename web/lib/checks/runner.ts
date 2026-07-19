@@ -1074,6 +1074,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
   "clientSideHacksplainingXmlBombLessonEvidence",
+  "clientSideHacksplainingPrototypePollutionLessonEvidence",
   "clientSideHacksplainingSubdomainSquattingLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
@@ -1286,7 +1287,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 65; n++) {
+  for (let n = 1; n <= 70; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1353,7 +1354,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/62",
     "/cxss/example/63",
     "/cxss/example/64",
-    "/cxss/example/65"
+    "/cxss/example/65",
+    "/cxss/example/66",
+    "/cxss/example/67",
+    "/cxss/example/68",
+    "/cxss/example/69",
+    "/cxss/example/70"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1859,6 +1865,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/74/",
     "/playlevel/75/",
     "/playlevel/76/",
+    "/playlevel/77/",
+    "/playlevel/78/",
     "/missions/application/72/",
     "/missions/application/66/",
     "/missions/application/63/",
@@ -5859,14 +5867,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     : [];
   const domgoCxssTailPrioritySeeds = (() => {
     const exampleM = /domgo\.at\/cxss\/example\/(\d+)\/?$/i.exec(home.finalUrl);
+    let nextStart = 61;
     if (exampleM) {
       const n = Number.parseInt(exampleM[1], 10);
       if (!Number.isFinite(n) || n < 55) return [] as string[];
+      nextStart = Math.floor(n / 5) * 5 + 6;
     } else if (!/domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)) {
       return [] as string[];
     }
     return Array.from({ length: 5 }, (_, i) =>
-      new URL(`/cxss/example/${61 + i}`, home.finalUrl).toString()
+      new URL(`/cxss/example/${nextStart + i}`, home.finalUrl).toString()
     );
   })();
   const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)

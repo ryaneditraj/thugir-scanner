@@ -5387,6 +5387,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Hacksplaining prototype pollution lesson disclosed",
+    description:
+      "Hacksplaining /lessons/prototype-pollution publishes an interactive exploit-then-fix walkthrough covering JavaScript __proto__ gadget chains that pollute Object.prototype.",
+    impactOneline:
+      "Public prototype pollution lesson pages document client-side prototype chain abuse patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingPrototypePollutionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining prototype pollution lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable prototype pollution lesson instances on private deployments.",
+        "Freeze Object.prototype and validate JSON merge inputs in production code.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style prototype pollution exploit-then-fix lessons. Show how to auth-gate live lesson instances and harden merge utilities.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -8997,6 +9023,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style subdomain squatting exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Hacksplaining prototype pollution lesson disclosed",
+    description:
+      "Hacksplaining /lessons/prototype-pollution publishes an interactive exploit-then-fix walkthrough covering JavaScript __proto__ gadget chains that pollute Object.prototype.",
+    impactOneline:
+      "Public prototype pollution lesson pages document client-side prototype chain abuse patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingPrototypePollutionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining prototype pollution lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable prototype pollution lesson instances on private deployments.",
+        "Freeze Object.prototype and validate JSON merge inputs in production code.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style prototype pollution exploit-then-fix lessons. Show how to auth-gate live lesson instances and harden merge utilities.",
     version: 1,
     enabled: true
   },
