@@ -1245,7 +1245,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 32; n++) {
+  for (let n = 1; n <= 33; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1279,7 +1279,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/29",
     "/cxss/example/30",
     "/cxss/example/31",
-    "/cxss/example/32"
+    "/cxss/example/32",
+    "/cxss/example/33"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1775,6 +1776,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/67/",
     "/missions/application/68/",
     "/missions/application/70/",
+    "/missions/application/71/",
     "/missions/application/55/",
     "/missions/application/56/",
     "/missions/application/57/",
@@ -5717,7 +5719,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level433/index.php",
         "http://www.net-force.nl/challenge/level434/index.php",
         "http://www.net-force.nl/challenge/level435/index.php",
-        "http://www.net-force.nl/challenge/level436/index.php"
+        "http://www.net-force.nl/challenge/level436/index.php",
+        "http://www.net-force.nl/challenge/level437/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
