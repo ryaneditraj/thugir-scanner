@@ -7415,6 +7415,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-api-labs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab API testing labs disclosed",
+    description:
+      "VulnLab Academy /api-labs/* modules document REST BOLA/IDOR order probing, mass-assignment admin routes, GraphQL introspection, and SOAP WSDL exposure for API security training.",
+    impactOneline:
+      "Public VulnLab API labs advertise unauthenticated BOLA, GraphQL introspection, and WSDL endpoints for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabApiLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "API testing labs are intentional training — isolate lab hubs from production API gateways.",
+      steps: [
+        "Run API security labs on isolated infrastructure with no production data.",
+        "Disable GraphQL introspection and require auth on admin list endpoints in production.",
+        "Block WSDL and schema downloads on public-facing services."
+      ]
+    },
+    fixPrompt:
+      "We host VulnLab-style REST/GraphQL/SOAP API testing labs. Show how to isolate them from production API gateways.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnerable-web-site-evidence",
     platform: "generic",
     category: "Broken access control",

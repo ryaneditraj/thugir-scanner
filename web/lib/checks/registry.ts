@@ -14364,6 +14364,22 @@ const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   {
     label: "DOM-based XSS innerHTML lab text",
     re: /DOM-based XSS[\s\S]{0,300}innerHTML/i
+  },
+  {
+    label: "Cryptographic Failures OWASP lab heading",
+    re: /Cryptographic Failures[\s\S]{0,400}(?:MD5|hardcoded keys|plaintext)/i
+  },
+  {
+    label: "Weak hash offline cracking scenario",
+    re: /unsalted MD5|Offline cracking of weak hashes/i
+  },
+  {
+    label: "Hardcoded key leakage scenario",
+    re: /hardcoded keys|Keys embedded in code/i
+  },
+  {
+    label: "Plaintext password database leak scenario",
+    re: /plaintext password database leak|Passwords were stored as plaintext/i
   }
 ];
 
@@ -18383,6 +18399,54 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
+const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "REST API BOLA/IDOR lab",
+    re: /API-002\s+BOLA\/IDOR|Orders API accepts any ID/i
+  },
+  {
+    label: "REST mass assignment admin probe",
+    re: /API-004\s+Mass Assignment|\/api\/admin\/users/i
+  },
+  {
+    label: "GraphQL introspection lab",
+    re: /GQL-001\s+Introspection Query|graphql-schema\.json/i
+  },
+  {
+    label: "GraphQL depth limit missing",
+    re: /GQL-004\s+Depth Limit Test|No query depth limit enforced/i
+  },
+  {
+    label: "SOAP WSDL exposure lab",
+    re: /SOAP-001\s+WSDL Finder|service\.wsdl/i
+  },
+  {
+    label: "API testing lab hub",
+    re: /API Testing Labs|REST API Targets|GraphQL Targets|SOAP Targets/i
+  }
+];
+
+const clientSideVulnlabApiLabsEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_API_LABS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app|\/api-labs\//i.test(corpus))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab /api-labs/* documents REST BOLA, GraphQL introspection, and SOAP WSDL exposure training targets"
+    }
+  };
+};
+
 function vulnlabOwaspModuleCorpus(ctx: RuleContext): string {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   return `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
@@ -21153,6 +21217,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA08IntegrityEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
+  clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
