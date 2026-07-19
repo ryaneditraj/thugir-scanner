@@ -382,6 +382,42 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   }
 }
 
+const RENDER_COLD_START_RE =
+  /Render is waking up|application is starting|please wait while we|service is currently unavailable/i;
+
+/** Render free-tier cold-start can return a stub page before gunicorn serves the Flask app. */
+async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
+  let host: string;
+  try {
+    host = new URL(home.finalUrl || targetUrl).hostname;
+  } catch {
+    return home;
+  }
+  if (!/\.onrender\.com$/i.test(host)) return home;
+  let best = home;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const ready =
+      best.body.length > 1500 &&
+      !RENDER_COLD_START_RE.test(best.body) &&
+      (/VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body) ||
+        (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body)));
+    if (ready) break;
+    await new Promise((r) => setTimeout(r, 4000));
+    const retried = await fetchDoc(best.finalUrl || targetUrl, {
+      timeoutMs: 45000,
+      maxBytes: 600_000
+    });
+    if (
+      retried.status >= 200 &&
+      retried.status < 500 &&
+      (retried.body.length > best.body.length || RENDER_COLD_START_RE.test(best.body))
+    ) {
+      best = retried;
+    }
+  }
+  return best;
+}
+
 /** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
 async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
   if (!isJuiceShopHost(targetUrl) && !isJuiceShopHost(home.finalUrl)) return home;
@@ -1246,7 +1282,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 35; n++) {
+  for (let n = 1; n <= 40; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1283,8 +1319,28 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/32",
     "/cxss/example/33",
     "/cxss/example/34",
-    "/cxss/example/35"
+    "/cxss/example/35",
+    "/cxss/example/36",
+    "/cxss/example/37",
+    "/cxss/example/38",
+    "/cxss/example/39",
+    "/cxss/example/40"
   ]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VulnApp Flask practice app (web-security-practice-app.onrender.com) — lab routes behind nav. */
+function extractFlaskVulnappSeeds(html: string, pageUrl: string): string[] {
+  if (!/VulnApp|web-security-practice-app|n00by3te\/web-security-practice-app/i.test(html))
+    return [];
+  const out = new Set<string>();
+  for (const path of ["/comments", "/login", "/register"]) {
     try {
       out.add(new URL(path, pageUrl).toString());
     } catch {
@@ -5426,6 +5482,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const redirected = await fetchDoc(stubRedirect, { timeoutMs: 12000, maxBytes: 600_000 });
     if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
   }
+  home = await warmupRenderHost(target.toString(), home);
   home = await warmupJuiceShopHome(target.toString(), home);
   const origin = target.origin;
   const crawlOrigin = new URL(home.finalUrl).origin;
@@ -5464,6 +5521,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
   const jekyllBlogPostSeeds = extractJekyllBlogPostSeeds(home.body, home.finalUrl);
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
+  const flaskVulnappSeeds = extractFlaskVulnappSeeds(home.body, home.finalUrl);
   const javaSecLabSeeds = extractJavaSecLabSeeds(home.body, home.finalUrl);
   const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
@@ -5886,6 +5944,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...jekyllSecurityDocSeeds,
       ...jekyllBlogPostSeeds,
       ...domGoatCxssSeeds,
+      ...flaskVulnappSeeds,
       ...javaSecLabSeeds,
       ...benstaffordXssSeeds,
       ...ctfHubSeeds,
