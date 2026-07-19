@@ -4763,6 +4763,24 @@
       "slug": "hts-playlevel-68-application-66-queue-validation",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/68 Login Required + application/66 login-gated mission hub; existing clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings each); seeds already in runner.ts; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-pixi-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MEAN stack web app with deliberately insecure APIs + Part of OWASP DevSlop + OpenAPI/Swagger; vwad.owasp.org/app/pixi findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-18-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 18 + leverage an authentication issue in an API + Go source code of the vulnerable code; pentesterlab.com/exercises/api_18 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-27-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/27 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/27; domgo.at/cxss/example/27 gains domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [

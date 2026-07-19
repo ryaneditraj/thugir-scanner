@@ -9788,6 +9788,51 @@ const clientSidePentesterlabApi17ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab API 18 authentication bypass exercise (pentesterlab.com/exercises/api_18)
+const CLIENT_PENTESTERLAB_API18_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 18 course title",
+    re: /API 18|PentesterLab:\s*API 18/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains the Go source code of the vulnerable code to help in learning Go security code review/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 18"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]18/i
+  }
+];
+
+const clientSidePentesterlabApi18ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]18/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API18_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 18 exercise documents leveraging an API authentication issue via Go security source code review"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20283,6 +20328,49 @@ const clientSideVwadGinJuiceEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD Pixi DevSlop MEAN stack insecure API lab listing ----------------------------
+const clientSideVwadPixiEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/pixi/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Pixi VWAD listing",
+      re: /Pixi[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "MEAN stack insecure API lab",
+      re: /MEAN stack web app with deliberately insecure APIs/i
+    },
+    {
+      label: "OWASP DevSlop project",
+      re: /Part of OWASP DevSlop|DevSlop\/Pixi/i
+    },
+    {
+      label: "OpenAPI and Swagger training surface",
+      re: /OpenAPI[\s\S]{0,40}Swagger|api-and-web-service-hacking-with-pixi/i
+    },
+    {
+      label: "API security demo keywords",
+      re: /useful for scanning and API security demos/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pixi VWAD listing documents OWASP DevSlop MEAN stack app with deliberately insecure OpenAPI endpoints for API security training"
+    }
+  };
+};
+
 // --- VWAD WackoPicko scanner benchmark app listing ------------------------------------
 const clientSideVwadWackopickoEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -20732,6 +20820,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi15ExerciseEvidence,
   clientSidePentesterlabApi16ExerciseEvidence,
   clientSidePentesterlabApi17ExerciseEvidence,
+  clientSidePentesterlabApi18ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
@@ -20911,6 +21000,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOwaspVwadEvidence,
   clientSideVwadAppNotFoundEvidence,
   clientSideVwadGinJuiceEvidence,
+  clientSideVwadPixiEvidence,
   clientSideVwadWackopickoEvidence,
   clientSideVwadBodgeitEvidence,
   clientSideVwadSecurityShepherdEvidence,

@@ -3489,6 +3489,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-api-18-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 18 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 18 hosted exercise documents leveraging an API authentication issue with Go security source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals Go API authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi18ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 18-style authentication bypass labs. Show how to gate labs behind auth and enforce Go API security review before production deploy.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",
@@ -10297,6 +10323,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DomGoat /cxss/sources page demos location.hash and postMessage sources. Show safe handling and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-pixi-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Pixi DevSlop insecure API lab disclosed",
+    description:
+      "Pixi VWAD listing documents OWASP DevSlop MEAN stack app with deliberately insecure OpenAPI endpoints for API security training.",
+    impactOneline:
+      "Public Pixi registry advertises insecure API training surface from OWASP DevSlop for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadPixiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Pixi instances isolated; VWAD listing is intentional but live deployments need monitoring.",
+      steps: [
+        "Deploy Pixi only on isolated lab networks or containers.",
+        "Require authentication when exposing DevSlop API labs publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Pixi instance is listed in OWASP VWAD. Show how to isolate DevSlop MEAN stack API labs from production.",
     version: 1,
     enabled: true
   },
