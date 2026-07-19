@@ -996,6 +996,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-owasp-educational-lab-stub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "OWASP Top 10 inactive lab stub publicly indexed",
+    description:
+      "An OWASP Top 10 lab module page is reachable but marked 'This lab is not yet active' — the stub still discloses planned vulnerable training routes and category scope.",
+    impactOneline:
+      "Publicly indexed inactive lab stubs reveal upcoming vulnerable module paths attackers can monitor for deployment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspEducationalLabStubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hide inactive OWASP lab stubs from public crawlers or require authentication.",
+      steps: [
+        "Return 404 or require auth for lab modules that are not yet active.",
+        "Use robots.txt to discourage indexing of placeholder lab routes.",
+        "Publish inactive modules only on authenticated staging environments."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Top 10 lab site exposes stub pages marked 'not yet active' under /labs/*. Show how to hide these from public indexing until modules are ready.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwt-none-evidence",
     platform: "generic",
     category: "Broken authentication",

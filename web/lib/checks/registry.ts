@@ -14557,6 +14557,61 @@ const clientSideOwaspTop10IntroHubEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- mehdiaitsaid OWASP Top 10 inactive lab stub pages (A05/A06/A08/A09 placeholders) ---
+const CLIENT_OWASP_STUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Inactive lab stub warning",
+    re: /This lab is not yet active/i
+  },
+  {
+    label: "Security Misconfiguration stub",
+    re: /Security Misconfiguration/i
+  },
+  {
+    label: "Vulnerable and Outdated Components stub",
+    re: /Vulnerable and Outdated Components/i
+  },
+  {
+    label: "Software and Data Integrity Failures stub",
+    re: /Software and Data Integrity Failures/i
+  },
+  {
+    label: "Logging and Monitoring Failures stub",
+    re: /Security Logging and Monitoring Failures|Logging and Monitoring Failures/i
+  },
+  {
+    label: "Insecure Design stub",
+    re: /Insecure Design/i
+  },
+  {
+    label: "Identification and Authentication Failures stub",
+    re: /Identification and Authentication Failures/i
+  }
+];
+
+const clientSideOwaspEducationalLabStubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(pageUrl)) return NEGATIVE;
+  if (/\/labs\/intro\/?$/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/labs\//i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_STUB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (!hits.some((h) => h.label === "Inactive lab stub warning") || hits.length < 2)
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      page: pageUrl,
+      markers: hits.slice(0, 4),
+      note: "OWASP Top 10 lab stub page is publicly indexed but marked not yet active — reveals planned vulnerable module routes"
+    }
+  };
+};
+
 // --- Client-side prototype pollution evidence (educational labs / unsafe merge) ---
 const clientSidePrototypePollutionEvidence: Rule = async (ctx) => {
   const markers: string[] = [];
@@ -21120,6 +21175,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
+  clientSideOwaspEducationalLabStubEvidence,
   clientSideOwaspTop10IntroHubEvidence,
   serverSideEvalEvidence,
   nextDataSensitiveKeys,
