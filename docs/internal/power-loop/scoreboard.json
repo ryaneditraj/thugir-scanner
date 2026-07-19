@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T01:10:00.000Z",
+  "updated_at": "2026-07-19T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1138,
   "discovery_findings": 4851,
-  "improvements_shipped": 720,
-  "last_run": "2026-07-19T01:10:00.000Z",
+  "improvements_shipped": 723,
+  "last_run": "2026-07-19T02:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -50,22 +50,21 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_scanned": 4,
-      "findings": 18,
-      "focus": "PentesterLab API 13 Unicode email bypass + API 14 leaked encrypted password; DomGoat cxss/example/24 + HTS playlevel/67 + Net-Force level431 seeds",
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "PentesterLab API 15 password decryption; HackAdvisor /challenges catalog seeds; CyberDefenders blueteam-ctf-challenges hub; HTS playlevel/68 + Net-Force level432 queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "pentesterlab.com/exercises/api_13: Unicode @libcurl.so admin registration bypass (0→4 findings)",
-      "pentesterlab.com/exercises/api_14: leaked encrypted password login lab (0→4 findings)",
-      "domgo.at/cxss/example/24: unescape hash DOM XSS + DomGoat lab evidence (0→4 findings)",
-      "www.hackthissite.org/playlevel/67: arcade hub + HTS platform evidence (0→6 findings)"
+      "pentesterlab.com/exercises/api_15: leaked API-call decryption lab (0→4 findings)",
+      "labs.hackadvisor.io/challenges: 100+ web security challenge catalog (0→7 findings)",
+      "cyberdefenders.org/blueteam-ctf-challenges: blue-team CTF hub (0→9 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "labs.hackadvisor.io/challenges + cyberdefenders.org/blueteam-ctf-challenges queued — pending drain",
+      "owasp-finbot-ctf.org/docs queued — agentic AI exploit chains require authenticated CTF namespace",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead"
     ]
   },
