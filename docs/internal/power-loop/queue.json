@@ -6113,7 +6113,32 @@
       "url": "https://domgo.at/cxss/example/55",
       "source": "Mario Heiderich domgo.at — DomGoat level 55 location.hash→innerHTML DOM XSS (cxss series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/",
+      "source": "Aikido Zen WAF playground — Python variant with SQLi/shell/SSRF/path-traversal + rate-limit/bot/LLM probes (fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.bugbountyhunter.com/training/",
+      "source": "BugBountyHunter zseano — free web vulnerability challenge hub (real bug bounty findings recreated)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/75/",
+      "source": "HackThisSite playlevel 75 — public web security challenge level",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/76/",
+      "source": "HackThisSite playlevel 76 — public web security challenge level",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/72/",
+      "source": "HackThisSite application mission 72 — public vulnerable web challenge",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T15:05:00.000Z"
+  "updated_at": "2026-07-19T16:05:00.000Z"
 }
