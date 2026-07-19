@@ -3567,6 +3567,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pentesterlab-cors-ii-exercise-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "PentesterLab CORS II sensitive-data exfiltration exercise disclosed",
+    description:
+      "PentesterLab CORS II hosted exercise documents exploiting a misconfigured CORS policy to retrieve sensitive API data via a malicious page.",
+    impactOneline:
+      "Public CORS misconfiguration exercise instance reveals sensitive-data exfiltration oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabCorsIiExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS origins to trusted domains; never reflect arbitrary Origin headers on sensitive API routes.",
+      steps: [
+        "Whitelist explicit trusted origins instead of wildcard or reflected Origin values.",
+        "Require authentication on sensitive API endpoints regardless of CORS policy.",
+        "Review CORS preflight and credential settings before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab CORS II-style labs. Show how to lock down CORS on sensitive APIs and avoid origin reflection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-graphql-fundamentals-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab Web Fundamentals GraphQL exercise disclosed",
+    description:
+      "PentesterLab Web Fundamentals GraphQL hosted exercise documents GraphQL security training and a public lab instance.",
+    impactOneline:
+      "Public GraphQL fundamentals exercise instance reveals API security training oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabGraphqlFundamentalsExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production; enforce auth and query depth limits on API endpoints.",
+      steps: [
+        "Turn off introspection on public GraphQL endpoints.",
+        "Require authentication before serving schema or sensitive queries.",
+        "Apply query depth/complexity limits and field-level authorization."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab GraphQL fundamentals-style labs. Show how to disable introspection and enforce auth on production GraphQL APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentesterlab-xss-mysql-exercise-evidence",
     platform: "generic",
     category: "Injection",

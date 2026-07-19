@@ -827,6 +827,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi18ExerciseEvidence",
   "clientSidePentesterlabApi19ExerciseEvidence",
   "clientSidePentesterlabApi20ExerciseEvidence",
+  "clientSidePentesterlabCorsIiExerciseEvidence",
+  "clientSidePentesterlabGraphqlFundamentalsExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
@@ -1243,7 +1245,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 29; n++) {
+  for (let n = 1; n <= 32; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1276,7 +1278,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/28",
     "/cxss/example/29",
     "/cxss/example/30",
-    "/cxss/example/31"
+    "/cxss/example/31",
+    "/cxss/example/32"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1488,6 +1491,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/api-19",
     "/exercises/api_20",
     "/exercises/api-20",
+    "/exercises/cors-ii",
+    "/exercises/cors_ii",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1762,11 +1767,14 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/71/",
     "/playlevel/72/",
     "/playlevel/73/",
+    "/playlevel/74/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
     "/missions/application/65/",
     "/missions/application/67/",
+    "/missions/application/68/",
+    "/missions/application/70/",
     "/missions/application/55/",
     "/missions/application/56/",
     "/missions/application/57/",
