@@ -6063,7 +6063,32 @@
       "url": "https://domgo.at/cxss/example/45",
       "source": "Mario Heiderich domgo.at — DomGoat level 45 location.hash→innerHTML DOM XSS (cxss series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/46",
+      "source": "Mario Heiderich domgo.at — DomGoat level 46 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/47",
+      "source": "Mario Heiderich domgo.at — DomGoat level 47 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/48",
+      "source": "Mario Heiderich domgo.at — DomGoat level 48 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/49",
+      "source": "Mario Heiderich domgo.at — DomGoat level 49 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/50",
+      "source": "Mario Heiderich domgo.at — DomGoat level 50 location.hash→innerHTML DOM XSS (cxss series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T13:10:00.000Z"
+  "updated_at": "2026-07-19T14:17:00.000Z"
 }
