@@ -962,6 +962,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
+  "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
   "clientSideOpenRedirectEvidence",
@@ -6377,7 +6378,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       .join("\n");
   }
 
-  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body), juiceShopBootstrap]
+  let whoopsPayBootstrap = "";
+  if (/whoopspay\.onrender\.com/i.test(home.finalUrl || target.toString())) {
+    const scriptSrc = home.body.match(/src=["'](\/assets\/index-[^"']+\.js)["']/i)?.[1];
+    if (scriptSrc) {
+      const bundleUrl = new URL(scriptSrc, home.finalUrl || target.toString()).toString();
+      let bundleDoc = await probe.get(bundleUrl, { maxBytes: 2_000_000, timeoutMs: 45000 });
+      for (let attempt = 0; attempt < 4; attempt++) {
+        if (/WhoopsPay|postgraduate thesis on web application vulnerabilities/i.test(bundleDoc.body))
+          break;
+        await new Promise((r) => setTimeout(r, 4000));
+        bundleDoc = await probe.get(bundleUrl, { maxBytes: 2_000_000, timeoutMs: 45000 });
+      }
+      if (bundleDoc.status >= 200 && bundleDoc.status < 500 && bundleDoc.body.length > 1000) {
+        whoopsPayBootstrap = bundleDoc.body;
+      }
+    }
+  }
+
+  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body), juiceShopBootstrap, whoopsPayBootstrap]
     .filter(Boolean)
     .join("\n");
   const detection = detectPlatform(home, combined);
