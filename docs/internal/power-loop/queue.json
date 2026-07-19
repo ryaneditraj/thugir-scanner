@@ -5885,6 +5885,11 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://www.hackthissite.org/playlevel/72/",
+      "source": "Hack This Site — playlevel arcade hub challenge 72 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://domgo.at/cxss/example/30",
       "source": "DomGoat — Client XSS Exercise-30 location.hash→innerHTML sink (cxss catalog)",
       "auth": "public_demo"
