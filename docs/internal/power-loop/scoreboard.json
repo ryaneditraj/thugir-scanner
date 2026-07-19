@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-19T04:04:42.049Z",
-=======
-  "updated_at": "2026-07-19T04:10:00.000Z",
->>>>>>> 8fc63e1 (engine: PentesterLab API 17 exercise detection rule)
+  "updated_at": "2026-07-19T05:05:38.589Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,33 +15,23 @@
       ]
     }
   },
-<<<<<<< HEAD
-  "total_sites_scanned": 1275,
-  "total_findings": 6278,
-=======
-  "total_sites_scanned": 1268,
-  "total_findings": 6248,
->>>>>>> 8fc63e1 (engine: PentesterLab API 17 exercise detection rule)
+  "total_sites_scanned": 1276,
+  "total_findings": 6285,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1152,
+  "discovery_urls_added": 1155,
   "discovery_findings": 4915,
-<<<<<<< HEAD
-  "improvements_shipped": 723,
-  "last_run": "2026-07-19T04:04:42.049Z",
-=======
-  "improvements_shipped": 730,
-  "last_run": "2026-07-19T04:10:00.000Z",
->>>>>>> 8fc63e1 (engine: PentesterLab API 17 exercise detection rule)
+  "improvements_shipped": 726,
+  "last_run": "2026-07-19T05:05:38.589Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings, pages=6 probes=267)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -64,52 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-<<<<<<< HEAD
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 30,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
-      ],
-      "focus": "Queue drain: GitAgent SecureBot, prompt-injection-playground, ai-security-demo, csrf-xss-demo, hacksec.in, webgoat.org, CVE-2025-55182 demo; +5 new URLs queued (api_15, playlevel/69, cxss/26, application/64, Net-Force 432)",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings, pages=6 probes=267) — no benchmark misses",
-      "webgoat.org: 7 findings including postmessage-dom-xss + client-side-webgoat-evidence",
-      "hacksec.in: 6 findings — password-protected WordPress limits per-lab depth",
-      "ai-security-demo.vercel.app: 4 findings including critical DB URL exposure",
-      "csrf-xss-demo.vercel.app: 4 findings — CSRF/XSS training markers"
-    ],
-    "learning_gaps": [
-      "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "hacksec.in: password-protected WordPress — per-lab routes unreachable without auth",
-      "HTS playlevel/69 + application/64 + PentesterLab api_15 queued at tail — pending drain",
-      "domgo.at/cxss/example/26: location.hash→innerHTML sink queued — pending drain"
-=======
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 20,
-      "focus": "PentesterLab API 17 exercise rule, DomGoat example/26 crawl seeds, HTS playlevel/68 + application/66 queue validation",
+      "urls_added": 3,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "VWAD Pixi DevSlop listing, PentesterLab API 18 exercise rule, DomGoat example/27 + HTS playlevel/69 seeds",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "pentesterlab.com/exercises/api_17: API authentication bypass Go source review lab (3→4 findings)",
-      "domgo.at/cxss/example/26: unescape(location.hash)→msgboard.innerHTML DOM XSS (4 findings incl domgo-unescape-hash-dom-xss-evidence)",
-      "www.hackthissite.org/playlevel/68: playlevel hub + login-gated evidence (6 findings)",
-      "www.hackthissite.org/missions/application/66: application mission hub evidence (6 findings)"
+      "vwad.owasp.org/app/pixi: MEAN stack insecure API + DevSlop markers (3→4 findings expected)",
+      "pentesterlab.com/exercises/api_18: Go API authentication bypass exercise (0→4 findings expected)",
+      "domgo.at/cxss/example/27: unescape(location.hash)→msgboard.innerHTML DOM XSS sink",
+      "www.hackthissite.org/playlevel/69: playlevel hub login-gated evidence via new seed"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "ai-prompt-lab.vercel.app: Vercel Security Checkpoint blocks ThugirScanner UA intermittently",
-      "capture-the-flag.labs.vercel.dev: Vercel DEPLOYMENT_NOT_FOUND — offline",
       "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
       "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud egress",
-      "hacksec.in: password-protected WordPress — per-lab routes unreachable without auth"
->>>>>>> 8fc63e1 (engine: PentesterLab API 17 exercise detection rule)
+      "hacksec.in: password-protected WordPress — per-lab routes unreachable without auth",
+      "net-force.nl/challenge/level432: offline oracle redirects to homepage"
     ]
   },
   "discovery_highlights": {
