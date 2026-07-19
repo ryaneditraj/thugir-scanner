@@ -14593,7 +14593,9 @@ const clientSideOwaspEducationalLabStubEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   if (!/mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(pageUrl)) return NEGATIVE;
   if (/\/labs\/intro\/?$/i.test(pageUrl)) return NEGATIVE;
-  if (!/\/labs\//i.test(pageUrl)) return NEGATIVE;
+  const onLabSubpage = /\/labs\/[^/]+/i.test(pageUrl);
+  const stubInCombined = /This lab is not yet active/i.test(ctx.combined);
+  if (!onLabSubpage && !stubInCombined) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OWASP_STUB_RES) {
     const m = ctx.combined.match(re);

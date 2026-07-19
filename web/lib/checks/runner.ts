@@ -5807,30 +5807,35 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level437/index.php"
       ]
     : [];
-  const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
+  const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
+    home.finalUrl
+  )
     ? [
-        new URL("/labs/intro", home.finalUrl).toString(),
-        new URL("/labs/injection/sql-injection", home.finalUrl).toString(),
-        new URL("/labs/injection/xss", home.finalUrl).toString(),
-        new URL("/labs/broken-access-control", home.finalUrl).toString(),
-        new URL("/labs/cryptographic-failures", home.finalUrl).toString(),
-        new URL("/labs/security-misconfiguration", home.finalUrl).toString(),
-        new URL("/labs/logging-monitoring-failures", home.finalUrl).toString(),
-        new URL("/labs/vulnerable-outdated-components", home.finalUrl).toString(),
-        new URL("/labs/software-data-integrity-failures", home.finalUrl).toString(),
-        new URL("/labs/insecure-design", home.finalUrl).toString(),
-        new URL("/labs/identification-authentication-failures", home.finalUrl).toString()
+        new URL("labs/intro", home.finalUrl).toString(),
+        new URL("labs/security-misconfiguration", home.finalUrl).toString(),
+        new URL("labs/logging-monitoring-failures", home.finalUrl).toString(),
+        new URL("labs/vulnerable-outdated-components", home.finalUrl).toString(),
+        new URL("labs/software-data-integrity-failures", home.finalUrl).toString(),
+        new URL("labs/insecure-design", home.finalUrl).toString(),
+        new URL("labs/identification-authentication-failures", home.finalUrl).toString()
       ]
-    : [];
+    : /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
+      ? [
+          new URL("labs/injection/sql-injection", home.finalUrl).toString(),
+          new URL("labs/injection/xss", home.finalUrl).toString(),
+          new URL("labs/broken-access-control", home.finalUrl).toString(),
+          new URL("labs/cryptographic-failures", home.finalUrl).toString()
+        ]
+      : [];
   const owaspTop10IntroHubPrioritySeeds =
     /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/labs\/intro/i.test(home.finalUrl)
       ? [
-          new URL("/labs/security-misconfiguration", home.finalUrl).toString(),
-          new URL("/labs/logging-monitoring-failures", home.finalUrl).toString(),
-          new URL("/labs/vulnerable-outdated-components", home.finalUrl).toString(),
-          new URL("/labs/software-data-integrity-failures", home.finalUrl).toString(),
-          new URL("/labs/insecure-design", home.finalUrl).toString(),
-          new URL("/labs/identification-authentication-failures", home.finalUrl).toString()
+          new URL("labs/security-misconfiguration", home.finalUrl).toString(),
+          new URL("labs/logging-monitoring-failures", home.finalUrl).toString(),
+          new URL("labs/vulnerable-outdated-components", home.finalUrl).toString(),
+          new URL("labs/software-data-integrity-failures", home.finalUrl).toString(),
+          new URL("labs/insecure-design", home.finalUrl).toString(),
+          new URL("labs/identification-authentication-failures", home.finalUrl).toString()
         ]
       : [];
   const domgoCxssIntroPrioritySeeds = /domgo\.at\/cxss\/intro/i.test(home.finalUrl)
