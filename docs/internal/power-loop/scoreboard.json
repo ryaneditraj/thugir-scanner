@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T11:38:55.371Z",
+  "updated_at": "2026-07-19T12:03:14.806Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1330,
-  "total_findings": 6580,
+  "total_sites_scanned": 1331,
+  "total_findings": 6587,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1184,
   "discovery_findings": 5168,
   "improvements_shipped": 741,
-  "last_run": "2026-07-19T11:38:55.371Z",
+  "last_run": "2026-07-19T12:03:14.806Z",
   "last_run_summary": {
     "hour_utc": "11:00",
     "benchmark": {
@@ -31,7 +31,9 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "pass1_gap": ["sqli"],
+      "pass1_gap": [
+        "sqli"
+      ],
       "note": "Pass1 degraded (6 findings gap=sqli); Heroku wake retry recovered sql-error-disclosure — final 6/6 (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
