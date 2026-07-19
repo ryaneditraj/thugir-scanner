@@ -1193,7 +1193,7 @@ function extractDocusaurusLabLinks(html: string, pageUrl: string): string[] {
     try {
       const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
-      if (DOCUSAURUS_LAB_SKIP.test(u.pathname)) continue;
+      if (DOCUSAURUS_LAB_SKIP.test(u.pathname) && !/owasp-top-10-labs/i.test(pageUrl)) continue;
       u.hash = "";
       out.add(u.toString());
     } catch {
@@ -1286,7 +1286,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 50; n++) {
+  for (let n = 1; n <= 55; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1338,7 +1338,12 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/47",
     "/cxss/example/48",
     "/cxss/example/49",
-    "/cxss/example/50"
+    "/cxss/example/50",
+    "/cxss/example/51",
+    "/cxss/example/52",
+    "/cxss/example/53",
+    "/cxss/example/54",
+    "/cxss/example/55"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -5802,23 +5807,35 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level437/index.php"
       ]
     : [];
-  const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
+  const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
+    home.finalUrl
+  )
     ? [
-        new URL("/labs/injection/sql-injection", home.finalUrl).toString(),
-        new URL("/labs/injection/xss", home.finalUrl).toString(),
-        new URL("/labs/broken-access-control", home.finalUrl).toString(),
-        new URL("/labs/cryptographic-failures", home.finalUrl).toString()
+        new URL("labs/intro", home.finalUrl).toString(),
+        new URL("labs/security-misconfiguration", home.finalUrl).toString(),
+        new URL("labs/logging-monitoring-failures", home.finalUrl).toString(),
+        new URL("labs/vulnerable-outdated-components", home.finalUrl).toString(),
+        new URL("labs/software-data-integrity-failures", home.finalUrl).toString(),
+        new URL("labs/insecure-design", home.finalUrl).toString(),
+        new URL("labs/identification-authentication-failures", home.finalUrl).toString()
       ]
-    : [];
+    : /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
+      ? [
+          new URL("labs/injection/sql-injection", home.finalUrl).toString(),
+          new URL("labs/injection/xss", home.finalUrl).toString(),
+          new URL("labs/broken-access-control", home.finalUrl).toString(),
+          new URL("labs/cryptographic-failures", home.finalUrl).toString()
+        ]
+      : [];
   const owaspTop10IntroHubPrioritySeeds =
     /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/labs\/intro/i.test(home.finalUrl)
       ? [
-          new URL("/labs/security-misconfiguration", home.finalUrl).toString(),
-          new URL("/labs/logging-monitoring-failures", home.finalUrl).toString(),
-          new URL("/labs/vulnerable-outdated-components", home.finalUrl).toString(),
-          new URL("/labs/software-data-integrity-failures", home.finalUrl).toString(),
-          new URL("/labs/insecure-design", home.finalUrl).toString(),
-          new URL("/labs/identification-authentication-failures", home.finalUrl).toString()
+          new URL("labs/security-misconfiguration", home.finalUrl).toString(),
+          new URL("labs/logging-monitoring-failures", home.finalUrl).toString(),
+          new URL("labs/vulnerable-outdated-components", home.finalUrl).toString(),
+          new URL("labs/software-data-integrity-failures", home.finalUrl).toString(),
+          new URL("labs/insecure-design", home.finalUrl).toString(),
+          new URL("labs/identification-authentication-failures", home.finalUrl).toString()
         ]
       : [];
   const domgoCxssIntroPrioritySeeds = /domgo\.at\/cxss\/intro/i.test(home.finalUrl)
@@ -5830,7 +5847,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const domgoCxssTailPrioritySeeds =
     /domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)
       ? Array.from({ length: 5 }, (_, i) =>
-          new URL(`/cxss/example/${46 + i}`, home.finalUrl).toString()
+          new URL(`/cxss/example/${51 + i}`, home.finalUrl).toString()
         )
       : [];
   const domgoCxssProgressiveTailSeeds = (() => {

@@ -4985,6 +4985,24 @@
       "slug": "client-side-owasp-educational-lab-stub-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: meta description ⚠️ This lab is not yet active on /labs/security-misconfiguration; clientSideOwaspEducationalLabStubEvidence; mehdiaitsaid A05 stub findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-51-55-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/51 let hash=location.hash→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–50→1–55 + domgoCxssTailPrioritySeeds 51–55; domgo.at/cxss/example/51 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-top10-root-stub-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: root scan used /labs/* absolute paths → wrong host path; fixed to relative labs/* + root-priority intro+A05-A09 stubs; mehdiaitsaid.github.io/owasp-top-10-labs/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-stub-evidence-combined-corpus",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideOwaspEducationalLabStubEvidence required /labs/ on home.finalUrl; now fires when combined corpus includes This lab is not yet active from crawled stub pages; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8752,6 +8770,21 @@
       "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
       "slug": "client-side-owasp-educational-lab-stub-evidence",
       "shipped_at": "2026-07-19T15:05:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-51-55-seeds",
+      "shipped_at": "2026-07-19T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-top10-root-stub-crawl-seeds",
+      "shipped_at": "2026-07-19T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-stub-evidence-combined-corpus",
+      "shipped_at": "2026-07-19T16:10:00.000Z"
     }
   ]
 }
