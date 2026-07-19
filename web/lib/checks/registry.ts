@@ -7421,8 +7421,10 @@ const domgoWebsocketDomXssEvidence: Rule = async (ctx) => {
 const domgoSinksCatalogDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/\/cxss\/sinks/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.home.body;
+  const onSinksPage = /\/cxss\/sinks/i.test(pageUrl);
+  const onIntroHub = /\/cxss\/intro/i.test(pageUrl);
+  if (!onSinksPage && !onIntroHub) return NEGATIVE;
+  const corpus = onSinksPage ? ctx.home.body : ctx.combined;
   const catalog =
     /Client XSS Sinks|Sinks that execute payload/i.test(corpus) &&
     /execPayload/i.test(corpus);
@@ -7445,8 +7447,10 @@ const domgoSinksCatalogDomXssEvidence: Rule = async (ctx) => {
 const domgoSourcesCatalogDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/\/cxss\/sources/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.home.body;
+  const onSourcesPage = /\/cxss\/sources/i.test(pageUrl);
+  const onIntroHub = /\/cxss\/intro/i.test(pageUrl);
+  if (!onSourcesPage && !onIntroHub) return NEGATIVE;
+  const corpus = onSourcesPage ? ctx.home.body : ctx.combined;
   const catalog =
     /Client XSS Sources|URL-based DOM Property Sources/i.test(corpus) &&
     /location\.(?:href|search|hash|pathname)/i.test(corpus);
@@ -7572,6 +7576,10 @@ const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Invicti ASP.NET administrator login",
     re: /\/administrator\/Login\.aspx/i
+  },
+  {
+    label: "ASP.NET administrator login visible password hint",
+    re: /Password[\s\S]{0,120}\(theturingtest\)/i
   }
 ];
 
@@ -14407,6 +14415,58 @@ const clientSideOwaspEducationalLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- mehdiaitsaid OWASP Top 10 intro hub (2021 category catalog) -------------------
+const CLIENT_OWASP_TOP10_INTRO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP Top 10 2021 edition heading",
+    re: /OWASP Top 10 \(2021 Edition\)/i
+  },
+  {
+    label: "Top 10 web application security risks list",
+    re: /most critical web application security risks/i
+  },
+  {
+    label: "Broken Access Control category description",
+    re: /Broken Access Control[\s\S]{0,200}authorization/i
+  },
+  {
+    label: "Security Misconfiguration category",
+    re: /Security Misconfiguration/i
+  },
+  {
+    label: "Logging and Monitoring Failures category",
+    re: /Security Logging and Monitoring Failures|insufficient logging/i
+  },
+  {
+    label: "Software and Data Integrity Failures category",
+    re: /Software and Data Integrity Failures/i
+  },
+  {
+    label: "Vulnerable and Outdated Components category",
+    re: /Vulnerable and Outdated Components/i
+  }
+];
+
+const clientSideOwaspTop10IntroHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/labs\/intro\/?$/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_TOP10_INTRO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 5 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 5),
+      note: "OWASP Top 10 intro hub documents 2021 category risk catalog (A01–A10) with hands-on lab navigation"
+    }
+  };
+};
+
 // --- Client-side prototype pollution evidence (educational labs / unsafe merge) ---
 const clientSidePrototypePollutionEvidence: Rule = async (ctx) => {
   const markers: string[] = [];
@@ -20970,6 +21030,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
+  clientSideOwaspTop10IntroHubEvidence,
   serverSideEvalEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
