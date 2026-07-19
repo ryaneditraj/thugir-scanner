@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T20:15:00.000Z",
+  "updated_at": "2026-07-19T20:34:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 1410,
-  "total_findings": 6941,
+  "total_sites_scanned": 1419,
+  "total_findings": 6994,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1224,
-  "discovery_findings": 5475,
+  "discovery_urls_added": 1229,
+  "discovery_findings": 5521,
   "improvements_shipped": 768,
-  "last_run": "2026-07-19T20:15:00.000Z",
+  "last_run": "2026-07-19T20:34:00.000Z",
   "last_run_summary": {
     "hour_utc": "20:00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — juice-shop-staging 7 findings 6/6 recall maintained after toxic-dependencies + HTS tail seed improvements",
+      "note": "Primary heroku pass1 gap=sensitive_data (6 findings); 12s wake retry restored 6/6 (7 findings) without staging fallback",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -47,27 +47,60 @@
             "misconfig"
           ]
         }
+      },
+      "pass_signals": {
+        "pass1": {
+          "findings": 6,
+          "gap": [
+            "sensitive_data"
+          ],
+          "pages": 6,
+          "probes": 63
+        },
+        "wake_retry": {
+          "findings": 6,
+          "note": "vibe-unauthenticated-api-routes restored sensitive_data on shallow crawl (pages=1 probes=231)"
+        }
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 19,
-      "focus": "Hacksplaining toxic-dependencies lesson drain + HTS playlevel/79-80 application/73-74 tail seeds",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 46,
+      "urls_added_list": [
+        "https://whoopspay.onrender.com/",
+        "https://domgo.at/cxss/example/64",
+        "https://www.hackthissite.org/playlevel/81/",
+        "https://www.hackthissite.org/missions/application/75/",
+        "http://www.net-force.nl/challenge/level201/index.php"
+      ],
+      "urls_scanned_list": [
+        "https://www.hacksplaining.com/lessons/unencrypted-communication/start",
+        "https://www.hacksplaining.com/lessons/xssi/start",
+        "https://ucu-owasp-ctf.vercel.app/",
+        "https://ogtamimi.github.io/OGT-Cyber-Game/",
+        "https://koadt.github.io/oss-oopssec-store/",
+        "https://ashimkoirala.github.io/HackLab/",
+        "https://vulnshop.vercel.app/",
+        "https://domgo.at/cxss/intro"
+      ],
+      "focus": "Hacksplaining unencrypted-communication + XSSI lesson drain; WhoopsPay + HTS playlevel/81 + application/75 + net-force level201 queued at tail",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "hacksplaining toxic-dependencies/start: client-side-hacksplaining-toxic-dependencies-lesson-evidence (2→7 findings)",
-      "hackthissite playlevel/79: client-side-hts-playlevel-hub-evidence (6 findings)",
-      "hackthissite application/73: client-side-hts-login-gated-mission-hub-evidence (6 findings)"
+      "juice-shop: benchmark recall 6/6 (7 findings) after pass1 sensitive_data gap + wake retry",
+      "koadt.github.io/oss-oopssec-store: Next.js middleware CVE + path-traversal + API Top 10 lab markers (8 findings)",
+      "ashimkoirala.github.io/HackLab: OWASP educational + DevSecOps microservices IDOR markers (7 findings)",
+      "hacksplaining unencrypted-communication/xssi: CSRF + reflected XSS lesson markers (6 findings each)",
+      "ucu-owasp-ctf.vercel.app: OWASP CTF hub + Firebase config exposure (5 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start can degrade to headers-only — staging fallback required",
-      "net-force.nl/challenge/level200: redirects to homepage (challenge offline)",
+      "juice-shop.herokuapp.com: Heroku cold-start misses sensitive_data on pass1 — wake retry recovered without staging this hour",
+      "secret-resend slug absent on all juice-shop passes (sensitive_data via vibe-unauthenticated-api-routes proxy)",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/81+ and application/75+ still queued at progressive tail"
+      "whoopspay + domgo/64 + HTS playlevel/81 + application/75 + net-force level201 queued at tail — pending drain",
+      "whoopspay.onrender.com: Render cold-start ~18s — may need extended fetch timeout on first probe"
     ]
   },
   "discovery_highlights": {
@@ -123,13 +156,13 @@
     "playground.fabraix.com": 2,
     "dvwa.vercel.app": 2,
     "vulnshop.vercel.app": 4,
-    "ashimkoirala.github.io/HackLab": 5,
+    "ashimkoirala.github.io/HackLab": 7,
     "vulnweb.netlify.app": 3,
     "web-pentest-playground.onrender.com": 3,
     "cyberdesserts.github.io/cookiejar-lab/demo": 3,
     "tempehs.github.io/The_Unsecure_PWA": 3,
     "yusufarbc.github.io/apigoat": 2,
-    "koadt.github.io/oss-oopssec-store": 6,
+    "koadt.github.io/oss-oopssec-store": 8,
     "dxx33.github.io/WebVulnsGuide": 6,
     "purushotham-muktha-dev-sec-ops-visu.vercel.app": 4,
     "lab.pentest-forge.com": 3,
@@ -281,6 +314,8 @@
     "www.hacksplaining.com/lessons/xml-bombs/start": 7,
     "www.hacksplaining.com/lessons/subdomain-squatting/start": 5,
     "www.hacksplaining.com/lessons/toxic-dependencies/start": 7,
+    "www.hacksplaining.com/lessons/unencrypted-communication/start": 6,
+    "www.hacksplaining.com/lessons/xssi/start": 6,
     "www.hackthissite.org/playlevel/79": 6,
     "www.hackthissite.org/missions/application/73": 6
   }

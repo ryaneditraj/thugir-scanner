@@ -6213,7 +6213,32 @@
       "url": "https://net-force.nl/challenge/level200/index.php",
       "source": "Net-Force.nl challenge level 200 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/",
+      "source": "khajdari/WhoopsPay \u2014 intentionally vulnerable financial app OWASP Top 10 + API Top 10 (Render homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/64",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 64 location.hash\u2192innerHTML DOM XSS (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/81/",
+      "source": "HackThisSite realistic mission playlevel 81 \u2014 advanced web exploitation training (mission writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/missions/application/75/",
+      "source": "HackThisSite application mission 75 \u2014 server-side logic / injection challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level201/index.php",
+      "source": "Net-Force.nl challenge level 201 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T19:48:00.000Z"
+  "updated_at": "2026-07-19T20:24:00.000Z"
 }
