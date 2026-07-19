@@ -5075,6 +5075,24 @@
       "slug": "hacksplaining-toxic-dependencies-lesson-step-crawl",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: toxic-dependencies/start had pages_crawled=1; hacksplainingToxicDependenciesPrioritySeeds + extractHacksplainingLessonSeeds step paths (log4j, supply-chain-attacks, heartbleed); enables lesson-specific slug on shallow scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "client-side-whoopspay-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle footerText postgraduate thesis on web application vulnerabilities + Security Vulnerabilities Demonstrated + XSS payloads in transaction descriptions; whoopspay.onrender.com findings 1→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-71-75-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cxss/example/71–75 return 200 DomGoat Client XSS exercises; extractDomGoatCxssSeeds loop extended 70→75; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-81-application-75-net-force-level201-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/81 + application/75 + net-force level201 applet challenge; net-force level201 GET returns <applet code=applet1.class> Sweet little applet; findings 2→3 with client-side-net-force-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8917,6 +8935,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "hacksplaining-toxic-dependencies-lesson-step-crawl",
       "shipped_at": "2026-07-19T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "client-side-whoopspay-evidence",
+      "shipped_at": "2026-07-19T21:45:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-71-75-seeds",
+      "shipped_at": "2026-07-19T21:45:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-81-application-75-net-force-level201-seeds",
+      "shipped_at": "2026-07-19T21:45:00.000Z"
     }
   ]
 }
