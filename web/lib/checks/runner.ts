@@ -822,6 +822,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabApi13ExerciseEvidence",
   "clientSidePentesterlabApi14ExerciseEvidence",
   "clientSidePentesterlabApi15ExerciseEvidence",
+  "clientSidePentesterlabApi16ExerciseEvidence",
   "clientSidePentesterlabXss06ExerciseEvidence",
   "clientSidePentesterlabXss07ExerciseEvidence",
   "clientSidePentesterlabXss08ExerciseEvidence",
@@ -979,6 +980,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideOwaspVwadEvidence",
   "clientSideVwadAppNotFoundEvidence",
   "clientSideVwadWackopickoEvidence",
+  "clientSideVwadGinJuiceEvidence",
   "clientSideVwadBodgeitEvidence",
   "clientSideVwadSecurityShepherdEvidence",
   "clientSideVwadMutillidaeEvidence",
@@ -988,6 +990,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
+  "clientSideAiPromptLabEvidence",
   "clientSideSecuredAiLabEvidence",
   "clientSideGitagentSecurebotEvidence",
   "clientSideAirtAcademyEvidence",
@@ -1261,7 +1264,8 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/21",
     "/cxss/example/22",
     "/cxss/example/23",
-    "/cxss/example/24"
+    "/cxss/example/24",
+    "/cxss/example/25"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1463,6 +1467,8 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/api-14",
     "/exercises/api_15",
     "/exercises/api-15",
+    "/exercises/api_16",
+    "/exercises/api-16",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -4037,6 +4043,29 @@ function extractVwadWrongsecretsLiveSeed(html: string, pageUrl: string): string[
   return [...out];
 }
 
+/** VWAD Gin & Juice Shop listing links PortSwigger scanner evaluation lab at ginandjuice.shop. */
+function extractVwadGinJuiceLiveSeed(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org\/app\/gin-juice-shop|Gin\s*&\s*Juice Shop/i.test(html)) return [];
+  const out = new Set<string>();
+  const jsonLdUrl = html.match(/"url"\s*:\s*"(https:\/\/ginandjuice\.shop\/+)"/i);
+  if (jsonLdUrl?.[1]) {
+    try {
+      out.add(new URL(jsonLdUrl[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const hrefMatch = html.match(/https?:\/\/ginandjuice\.shop\/?/i);
+  if (hrefMatch?.[0]) {
+    try {
+      out.add(new URL(hrefMatch[0]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** VulnForge attack-surface SPA (vulnforge.vercel.app) — seed login routes + main JS bundle. */
 function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnForge|vulnforge-backend|AI-Guided Web Attack Surface Explorer/i.test(html)) return [];
@@ -5458,6 +5487,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
+  const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -5747,6 +5777,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
       ? ["https://wrongsecrets.herokuapp.com/"]
       : [];
+  const vwadGinJuicePrioritySeeds =
+    /vwad\.owasp\.org\/app\/gin-juice-shop/i.test(home.finalUrl)
+      ? ["https://ginandjuice.shop/"]
+      : [];
   const vwadScannerBenchPrioritySeeds =
     /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store|owasp-vulnerableapp)/i.test(home.finalUrl)
       ? [
@@ -5775,6 +5809,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
+      ...vwadGinJuicePrioritySeeds,
+      ...vwadGinJuiceLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
       ...vwadWebgoatPrioritySeeds,

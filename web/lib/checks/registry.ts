@@ -5786,6 +5786,52 @@ const clientSideSecuredAiLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Prompt Lab Japanese prompt-engineering checklist (ai-prompt-lab.vercel.app) -----
+const CLIENT_AI_PROMPT_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Prompt Lab title",
+    re: /<title>Prompt Lab<\/title>|Header_text__[^"']+">Prompt Lab</i
+  },
+  {
+    label: "Japanese prompt checklist (16 tips)",
+    re: /プロンプトチェックシート（全16個）/
+  },
+  {
+    label: "Chain-of-thought prompt tip",
+    re: /思考プロセスを促す（チェーン・オブ・ソート）|ステップバイステップで問題を解いてください/
+  },
+  {
+    label: "Few-shot learning prompt tip",
+    re: /具体的な例を提供する（Few-shot学習）/
+  },
+  {
+    label: "ChatGPT API key onboarding modal",
+    re: /ChatGPTのAPIキーを入力|APIキーを入力してPrompt-Labを始めましょう/
+  },
+  {
+    label: "Prompt engineering research references",
+    re: /Large language models are human-level prompt engineers|Principled instructions are all you need/i
+  }
+];
+
+const clientSideAiPromptLabEvidence: Rule = async (ctx) => {
+  if (!/ai-prompt-lab\.vercel\.app|Prompt Lab/i.test(ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AI_PROMPT_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Prompt Lab documents interactive Japanese prompt-engineering checklist with ChatGPT API onboarding and research-backed tips"
+    }
+  };
+};
+
 // --- GitAgent SecureBot AI security scanner (gitagent-securebot-app.vercel.app) ------
 const CLIENT_GITAGENT_SECUREBOT_RES: { label: string; re: RegExp }[] = [
   {
@@ -9648,6 +9694,51 @@ const clientSidePentesterlabApi15ExerciseEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab API 15 exercise documents decrypting admin@libcurl.so password from leaked API call data"
+    }
+  };
+};
+
+// --- PentesterLab API 16 authentication bypass exercise (pentesterlab.com/exercises/api_16)
+const CLIENT_PENTESTERLAB_API16_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 16 course title",
+    re: /API 16|PentesterLab:\s*API 16/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API to gain access to sensitive information/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains some Go source code to help in learning source code review/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 16"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]16/i
+  }
+];
+
+const clientSidePentesterlabApi16ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]16/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API16_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 16 exercise documents leveraging an API authentication issue to access sensitive information via Go source review"
     }
   };
 };
@@ -20104,6 +20195,49 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+// --- VWAD Gin & Juice Shop PortSwigger scanner benchmark listing ----------------------
+const clientSideVwadGinJuiceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/gin-juice-shop/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Gin & Juice Shop VWAD listing",
+      re: /Gin\s*&\s*Juice Shop[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "PortSwigger scanner evaluation author",
+      re: /"author"\s*:\s*"PortSwigger"|Author<\/span>\s*PortSwigger/i
+    },
+    {
+      label: "Live ginandjuice.shop demo URL",
+      re: /"url"\s*:\s*"https:\/\/ginandjuice\.shop\/"/i
+    },
+    {
+      label: "Scanner benchmark technology tags",
+      re: /AngularJS[\s\S]{0,80}React[\s\S]{0,40}CSRF/i
+    },
+    {
+      label: "Hosted online vulnerability scanner lab",
+      re: /hosted always-online demo app with realistic technologies|vulnerability scanner to the test/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Gin & Juice Shop VWAD listing links PortSwigger scanner evaluation lab at ginandjuice.shop with CSRF, XSS, and SQLi oracles"
+    }
+  };
+};
+
 // --- VWAD WackoPicko scanner benchmark app listing ------------------------------------
 const clientSideVwadWackopickoEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -20551,6 +20685,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabApi13ExerciseEvidence,
   clientSidePentesterlabApi14ExerciseEvidence,
   clientSidePentesterlabApi15ExerciseEvidence,
+  clientSidePentesterlabApi16ExerciseEvidence,
   clientSidePentesterlabXss06ExerciseEvidence,
   clientSidePentesterlabXss07ExerciseEvidence,
   clientSidePentesterlabXss08ExerciseEvidence,
@@ -20729,6 +20864,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   clientSideVwadAppNotFoundEvidence,
+  clientSideVwadGinJuiceEvidence,
   clientSideVwadWackopickoEvidence,
   clientSideVwadBodgeitEvidence,
   clientSideVwadSecurityShepherdEvidence,
@@ -20739,6 +20875,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
+  clientSideAiPromptLabEvidence,
   clientSideSecuredAiLabEvidence,
   clientSideGitagentSecurebotEvidence,
   clientSideAirtAcademyEvidence,
