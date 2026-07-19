@@ -10977,6 +10977,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-mcp-servers-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP VWAD Vulnerable MCP Servers Lab disclosed",
+    description:
+      "OWASP VWAD Vulnerable MCP Servers Lab listing documents intentionally vulnerable MCP server implementations covering path traversal, unsandboxed code execution, indirect prompt injection, eval RCE, typosquatting, and supply-chain risks.",
+    impactOneline:
+      "Public VWAD MCP lab catalog exposes agentic AI attack surfaces (prompt injection, tool poisoning, RCE) for security training enumeration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadMcpServersLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Vulnerable MCP Servers Lab is intentional training — isolate MCP lab instances from production agent fleets.",
+      steps: [
+        "Deploy MCP security labs only on isolated networks with no production credentials.",
+        "Require authentication before exposing MCP tool endpoints publicly.",
+        "Monitor VWAD-linked MCP lab instances for unauthenticated scanner abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Vulnerable MCP Servers Lab is listed in OWASP VWAD. Show how to isolate MCP training servers from production agent infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hts-basic-mission-lab-evidence",
     platform: "generic",
     category: "Broken access control",
