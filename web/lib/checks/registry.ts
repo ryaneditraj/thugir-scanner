@@ -4375,6 +4375,52 @@ const CLIENT_HACKSPLAINING_SUBDOMAIN_SQUATTING_LESSON_RES: { label: string; re: 
   }
 ];
 
+// --- Hacksplaining toxic dependencies lesson (hacksplaining.com/lessons/toxic-dependencies) -------
+const CLIENT_HACKSPLAINING_TOXIC_DEPENDENCIES_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Toxic dependencies lesson URL",
+    re: /hacksplaining\.com\/lessons\/toxic-dependencies/i
+  },
+  {
+    label: "Toxic dependencies lesson title",
+    re: /Toxic Dependencies — Secure Coding Lesson/i
+  },
+  {
+    label: "Third-party library risk lesson meta description",
+    re: /Third-party libraries could be introducing vulnerabilities or malicious code/i
+  },
+  {
+    label: "Toxic dependencies lesson step nav",
+    re: /lessons\/toxic-dependencies\/(?:dependency-management|third-party-code|libraries-as-a-target|log4j|the-log4j-vulnerability|supply-chain-attacks|heartbleed|xcodeghost)/i
+  },
+  {
+    label: "Supply chain attack lesson description",
+    re: /supply[- ]chain attack|Log4j|XcodeGhost|Heartbleed|typosquat/i
+  }
+];
+
+const clientSideHacksplainingToxicDependenciesLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/toxic-dependencies/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_TOXIC_DEPENDENCIES_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/toxic-dependencies\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining toxic dependencies lesson documents supply-chain risks where third-party libraries introduce vulnerabilities (Log4j, Heartbleed, XcodeGhost)"
+    }
+  };
+};
+
 const clientSideHacksplainingSubdomainSquattingLessonEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const scanTarget = ctx.scanUrl || pageUrl;
@@ -21592,6 +21638,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingXmlBombLessonEvidence,
   clientSideHacksplainingPrototypePollutionLessonEvidence,
   clientSideHacksplainingSubdomainSquattingLessonEvidence,
+  clientSideHacksplainingToxicDependenciesLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
