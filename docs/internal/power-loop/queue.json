@@ -5895,6 +5895,11 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://www.hackthissite.org/missions/application/68/",
+      "source": "Hack This Site — application challenge 68 reverse-engineering mission hub",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://pentesterlab.com/exercises/web-fundamentals-graphql",
       "source": "PentesterLab — Web Fundamentals GraphQL exercise (Essential badge track)",
       "auth": "public_demo"
@@ -5905,5 +5910,5 @@
       "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-19T07:15:00.000Z"
+  "updated_at": "2026-07-19T07:18:00.000Z"
 }

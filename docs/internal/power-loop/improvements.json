@@ -4799,6 +4799,24 @@
       "slug": "domgo-cxss-example-28-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/28 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/28; domgo.at/cxss/example/28 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-20-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 20 + leverage an authentication issue in an API to gain access to sensitive information + Go source code; pentesterlab.com/exercises/api_20 findings 0→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-29-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/29 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/29; domgo.at/cxss/example/29 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-71-application-67-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/71 Login Required + application/67 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings each); seeds added to htsPrioritySeeds; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8446,6 +8464,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-cxss-example-28-seeds",
       "shipped_at": "2026-07-19T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-20-exercise-evidence",
+      "shipped_at": "2026-07-19T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-29-seeds",
+      "shipped_at": "2026-07-19T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-71-application-67-seeds",
+      "shipped_at": "2026-07-19T07:15:00.000Z"
     }
   ]
 }
