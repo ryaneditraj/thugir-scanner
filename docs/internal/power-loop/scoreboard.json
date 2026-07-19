@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-19T22:08:34.804295+00:00",
+  "updated_at": "2026-07-19T22:08:37.335540+00:00",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -23,7 +23,7 @@
   "discovery_urls_added": 1238,
   "discovery_findings": 5609,
   "improvements_shipped": 774,
-  "last_run": "2026-07-19T22:08:34.804295+00:00",
+  "last_run": "2026-07-19T22:08:37.335540+00:00",
   "last_run_summary": {
     "hour_utc": "22:00",
     "benchmark": {
