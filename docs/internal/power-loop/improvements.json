@@ -4949,6 +4949,24 @@
       "slug": "invicti-aspnet-password-hint",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /administrator/Login.aspx label Password (theturingtest) visible hint; CLIENT_INVICTI_PRACTICE_RES ASP.NET password hint marker; aspnet.testsparker.com/administrator/Login.aspx invicti evidence maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-41-45-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/41-45 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–40→1–45 + domgoCxssTailPrioritySeeds on /cxss/intro and /cxss/example; domgo.at/cxss/intro crawl now includes example/41; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-08-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: API 08 JSON-LD reset password URL leak + admin@libcurl.so login objective; pentesterlab.com/exercises/api_08/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-09-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: API 09 JSON-LD review API responses for information leak + admin@libcurl.so key objective; pentesterlab.com/exercises/api_09/ findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -8686,6 +8704,21 @@
       "source": "discovery:aspnet.testsparker.com",
       "slug": "invicti-aspnet-password-hint",
       "shipped_at": "2026-07-19T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-41-45-seeds",
+      "shipped_at": "2026-07-19T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-08-exercise-evidence",
+      "shipped_at": "2026-07-19T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-09-exercise-evidence",
+      "shipped_at": "2026-07-19T14:15:00.000Z"
     }
   ]
 }
