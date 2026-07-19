@@ -5041,6 +5041,14 @@ const CLIENT_AIKIDO_ZEN_DEMO_RES: { label: string; re: RegExp }[] = [
   {
     label: "User blocking header demo",
     re: /test_user_blocking|user blocking demo/i
+  },
+  {
+    label: "SQL injection pet creation lab",
+    re: /SQL Injection\s*\|\s*Create a new Pet|Malicious Pet.*sql injection/i
+  },
+  {
+    label: "SSRF fetch page lab",
+    re: /SSRF\s*\|\s*Fetch a page|local resources.*SSRF attack/i
   }
 ];
 
