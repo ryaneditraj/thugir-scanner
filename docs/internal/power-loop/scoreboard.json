@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-19T03:06:31.618Z",
-=======
   "updated_at": "2026-07-19T03:12:00.000Z",
->>>>>>> e1fb712 (engine: wire pattern catalog + log 4 discovery improvements (2026-07-19 UTC))
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,7 +15,6 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 1267,
   "total_findings": 6241,
   "critical_findings": 33,
@@ -27,19 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1147,
   "discovery_findings": 4915,
-  "improvements_shipped": 723,
-  "last_run": "2026-07-19T03:06:31.618Z",
-=======
-  "total_sites_scanned": 1263,
-  "total_findings": 6212,
-  "critical_findings": 33,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1142,
-  "discovery_findings": 4893,
   "improvements_shipped": 727,
   "last_run": "2026-07-19T03:12:00.000Z",
->>>>>>> e1fb712 (engine: wire pattern catalog + log 4 discovery improvements (2026-07-19 UTC))
   "last_run_summary": {
     "hour_utc": "03:00",
     "benchmark": {
@@ -66,49 +50,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 7,
       "findings": 34,
       "dns_failures": [
         "http://testhtml5.vulnweb.com/ (DNS NXDOMAIN — use testasp/rest.vulnweb.com)"
       ],
-      "focus": "Queue drain: GitAgent SecureBot, prompt-injection-playground, hacksec.in, webgoat.org, CVE-2025-55182 demo, secureby.design SKF labs, cyberscavengerhunt.com; +5 new URLs at tail",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings, pages=6 probes=262) — no benchmark misses",
-      "secureby.design: cors-reflect-origin + postmessage-dom-xss + exposed-source-maps (7 findings)",
-      "webgoat.org: postmessage-dom-xss + client-side-webgoat-evidence (6 findings)",
-      "hacksec.in: reflected-xss + robots-sensitive-paths + hacksec portal markers (6 findings)",
-      "cyberscavengerhunt.com: exposed-source-maps + recon lab evidence (6 findings)",
-      "gitagent-securebot-app.vercel.app: GitAgent autonomous repo scanner AI security lab (3 findings)"
-    ],
-    "learning_gaps": [
-      "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
-      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
-      "HTS playlevel/67-68 + PentesterLab api_13/api_14 + DomGoat cxss/24-25 + VWAD gin-juice-shop queued at tail — pending drain",
-      "hacksec.in: password-protected WordPress — per-lab routes unreachable without auth"
-=======
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 12,
-      "focus": "Queue drain: VWAD gin-juice-shop linked probe, PentesterLab API 16, DomGoat example/25, ai-prompt-lab prompt-engineering markers",
+      "focus": "Queue drain + engine improvements: VWAD gin-juice-shop linked probe, PentesterLab API 16, DomGoat example/25, ai-prompt-lab markers; GitAgent SecureBot, SKF labs, webgoat.org",
       "improvements_shipped_this_run": 4
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings, pages=6 probes=262) — no benchmark misses",
       "vwad.owasp.org/app/gin-juice-shop: PortSwigger scanner lab listing + ginandjuice.shop live seed (3→4 findings)",
       "pentesterlab.com/exercises/api_16: API authentication bypass Go source review lab (3→4 findings)",
-      "domgo.at/cxss/example/25: unescape(location.hash)→msgboard.innerHTML DOM XSS (4 findings incl domgo-unescape-hash-dom-xss-evidence)"
+      "domgo.at/cxss/example/25: unescape(location.hash)→msgboard.innerHTML DOM XSS (4 findings incl domgo-unescape-hash-dom-xss-evidence)",
+      "secureby.design: cors-reflect-origin + postmessage-dom-xss + exposed-source-maps (7 findings)",
+      "webgoat.org: postmessage-dom-xss + client-side-webgoat-evidence (6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
       "ai-prompt-lab.vercel.app: Vercel Security Checkpoint blocks ThugirScanner UA — prompt checklist markers unreachable from cloud scans intermittently",
-      "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud egress",
-      "HTS playlevel/68 + application/66 queued — seeds present, pending queue drain"
->>>>>>> e1fb712 (engine: wire pattern catalog + log 4 discovery improvements (2026-07-19 UTC))
+      "secret-resend slug absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes only",
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "HTS playlevel/68 + application/66 queued — seeds present, pending queue drain",
+      "hacksec.in: password-protected WordPress — per-lab routes unreachable without auth",
+      "www.root-me.org: Anubis bot-wall limits challenge marker reachability from cloud egress"
     ]
   },
   "discovery_highlights": {
@@ -274,8 +240,8 @@
     "www.hackthissite.org": 5,
     "domgo.at": 3,
     "php.testsparker.com": 5,
-    "hacksec.in": 6,
-    "webgoat.org": 6,
+    "hacksec.in": 5,
+    "webgoat.org": 5,
     "cyberdefenders.org": 8,
     "appsecmaster.net": 7,
     "hack-yourself-first.azurewebsites.net": 7,
