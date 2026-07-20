@@ -5267,6 +5267,24 @@
       "slug": "hts-playlevel-93-application-84-net-force-level209-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/93 Login Required hub + level209 301→homepage offline oracle; runner seeds playlevel/93 application/84-85 level209 + websec level14-16 crawl; playlevel/93 findings 0→6, level209 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-fibonacci-eval-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level16/source.php hash_hmac($flag,$t) + eval($t.$prime_test) + gcd(fib($n),fib($n+2)) relative-primes oracle; websec.fr/level16 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-timing-attack-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level17/source.php strcasecmp($_POST['flag'],$flag) + sleep_rand() jitter + UTF-16 charset header; websec.fr/level17 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-94-application-86-net-force-level210-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/94 + application/86 + net-force level210 offline oracle; runner seeds extended + websec crawl through level17; playlevel/94 findings 0→6, level210 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9254,6 +9272,21 @@
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-create-function-challenge-evidence",
       "shipped_at": "2026-07-20T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-fibonacci-eval-challenge-evidence",
+      "shipped_at": "2026-07-20T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-timing-attack-challenge-evidence",
+      "shipped_at": "2026-07-20T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-94-application-86-net-force-level210-seeds",
+      "shipped_at": "2026-07-20T07:10:00.000Z"
     }
   ]
 }
