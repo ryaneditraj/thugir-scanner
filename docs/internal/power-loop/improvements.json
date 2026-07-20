@@ -5326,7 +5326,7 @@
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-shell-exec-challenge-evidence",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: level26/source.php shell_exec(\$code) after blacklist + suhosin max_value_length=40 + /bin/sh title; websec.fr/level26 findings 2→4; benchmark juice-shop 6 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: level26/source.php shell_exec($code) after blacklist + suhosin max_value_length=40 + /bin/sh title; websec.fr/level26 findings 2→4; benchmark juice-shop 6 findings 6/6 maintained"
     },
     {
       "source": "discovery:websec.fr",
@@ -5338,19 +5338,19 @@
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-upload-include-challenge-evidence",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: level28/source.php md5_file(flag.php) + crc32 checksum == juggling + include(\$filename) upload RCE; websec.fr/level28 findings 2→5; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: level28/source.php md5_file(flag.php) + crc32 checksum == juggling + include($filename) upload RCE; websec.fr/level28 findings 2→5; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-php-unserialize-destruct-challenge-evidence",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: level30/source.php unserialize(\$_POST['payload']) + class B __destruct echoes \$flag + Something tragic exception; websec.fr/level30 gains destruct slug; benchmark juice-shop-staging 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: level30/source.php unserialize($_POST['payload']) + class B __destruct echoes $flag + Something tragic exception; websec.fr/level30 gains destruct slug; benchmark juice-shop-staging 6/6 maintained"
     },
     {
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-open-basedir-eval-challenge-evidence",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: level31/source.php open_basedir=/sandbox + eval(\$_GET['c']) sandbox escape; websec.fr/level31 gains open-basedir-eval slug; benchmark juice-shop-staging 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: level31/source.php open_basedir=/sandbox + eval($_GET['c']) sandbox escape; websec.fr/level31 gains open-basedir-eval slug; benchmark juice-shop-staging 6/6 maintained"
     },
     {
       "source": "discovery:www.hackthissite.org",
