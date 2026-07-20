@@ -5195,6 +5195,24 @@
       "slug": "phpfox4-demo-deploy",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET docker-phpfox4.onrender.com/index.php/ returns Not Found; phpfox4.fly.dev DNS NXDOMAIN — skip until demo is redeployed"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Insufficient encryption can make you vulnerable to monster-in-the-middle attacks + Unencrypted Communication — Secure Coding Lesson; hacksplaining.com/lessons/unencrypted-communication/start findings 6→7; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xssi-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta putting sensitive data in your JavaScript files an attacker is probably stealing + Cross-Site Script Inclusion lesson title; hacksplaining.com/lessons/xssi/start findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-file-upload-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level08/source.php include_once($uploadedFile) + IMAGETYPE_GIF fileToUpload GIF-only uploader; websec.fr/level08 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9127,6 +9145,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-86-net-force-206-seeds",
       "shipped_at": "2026-07-20T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+      "shipped_at": "2026-07-20T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xssi-lesson-evidence",
+      "shipped_at": "2026-07-20T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-file-upload-challenge-evidence",
+      "shipped_at": "2026-07-20T03:25:00.000Z"
     }
   ]
 }
