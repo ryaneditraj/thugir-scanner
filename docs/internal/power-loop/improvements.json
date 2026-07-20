@@ -5339,6 +5339,24 @@
       "slug": "client-side-websec-upload-include-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level28/source.php md5_file(flag.php) + crc32 checksum == juggling + include(\$filename) upload RCE; websec.fr/level28 findings 2→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-destruct-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level30/source.php unserialize(\$_POST['payload']) + class B __destruct echoes \$flag + Something tragic exception; websec.fr/level30 gains destruct slug; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-open-basedir-eval-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level31/source.php open_basedir=/sandbox + eval(\$_GET['c']) sandbox escape; websec.fr/level31 gains open-basedir-eval slug; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-98-net-force-level214-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HTS playlevel/98 arcade hub + net-force level214 redirect oracle seeds; crawl seeds extended; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9386,6 +9404,21 @@
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-upload-include-challenge-evidence",
       "shipped_at": "2026-07-20T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-destruct-challenge-evidence",
+      "shipped_at": "2026-07-20T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-open-basedir-eval-challenge-evidence",
+      "shipped_at": "2026-07-20T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-98-net-force-level214-seeds",
+      "shipped_at": "2026-07-20T12:15:00.000Z"
     }
   ]
 }
