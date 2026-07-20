@@ -5411,6 +5411,24 @@
       "slug": "vulnlab-idor-lab-priority-seed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: hackThisSiteEtaPrioritySeeds prepends /labs/idor.html for A01→IDOR lab crawl chain; a01.html pages_crawled includes idor.html; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a04-insecure-design-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a04.html A04-001 Business Logic Tester + Price and quantity can be manipulated client-side + Number(price.value)*Number(qty.value); hack-this-site-eta.vercel.app/owasp/a04.html findings 17→18; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a05-misconfig-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /owasp/a05.html A05-001 Security Headers Audit + A05-004 Backup File Finder /backup/config.old + A05-006 CORS Misconfiguration /api/cors; extractVulnLabAcademySeeds adds security-headers/clickjacking/cors labs; a05.html findings 17→18; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0722.intigriti.io",
+      "slug": "intigriti-archive-month-sqli-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge.php?month=2 returns blog posts but month=2' returns bare error text; probeArchiveMonthDifferentialSql + month in SQL_PROBE_PARAMS; challenge-0722.intigriti.io findings 1→2 incl sql-error-disclosure; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9518,6 +9536,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-idor-lab-priority-seed",
       "shipped_at": "2026-07-20T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a04-insecure-design-evidence",
+      "shipped_at": "2026-07-20T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-a05-misconfig-evidence",
+      "shipped_at": "2026-07-20T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0722.intigriti.io",
+      "slug": "intigriti-archive-month-sqli-probe",
+      "shipped_at": "2026-07-20T16:10:00.000Z"
     }
   ]
 }
