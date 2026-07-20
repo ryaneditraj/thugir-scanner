@@ -5153,6 +5153,24 @@
       "slug": "client-side-aevum-agent-consent-demo-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle sandbox/consent + tamper-evident sigchain + proposed_action workflow; demo.aevum.build findings 3→4; extractAevumDemoSeeds probes /openapi.json + /docs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:voidsec.github.io",
+      "slug": "client-side-voidsec-shopping-cart-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Shopping Cart Vulnerable Web App + pen-test and hack a web application + cross-site scripting, sql injection catalog; voidsec.github.io/shopping-cart findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-syntax-highlighted-source-regex",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level01/source.php doQuery&nbsp;($injection) + LevelOne&nbsp; class in Rouge-highlighted PHP; relaxed CLIENT_WEBSEC_CHALLENGE_RES + websecLevelPrioritySeeds; websec.fr/level01 findings 4→5 incl client-side-websec-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-79-net-force-level205-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/79/ Login Required hub + level205 Admin Area Applet5.class; extractHackThisSiteMissionSeeds adds application/79; netForcePrioritySeeds adds level205 + Admin Area applet note; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9055,6 +9073,21 @@
       "source": "discovery:demo.aevum.build",
       "slug": "client-side-aevum-agent-consent-demo-evidence",
       "shipped_at": "2026-07-20T00:30:00.000Z"
+    },
+    {
+      "source": "discovery:voidsec.github.io",
+      "slug": "client-side-voidsec-shopping-cart-evidence",
+      "shipped_at": "2026-07-20T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-syntax-highlighted-source-regex",
+      "shipped_at": "2026-07-20T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-79-net-force-level205-seeds",
+      "shipped_at": "2026-07-20T01:15:00.000Z"
     }
   ]
 }

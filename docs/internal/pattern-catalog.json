@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T00:28:18.083Z",
-  "total": 477,
-  "uniqueSlugs": 475,
+  "generatedAt": "2026-07-20T01:09:42.253Z",
+  "total": 478,
+  "uniqueSlugs": 476,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 459,
+    "generic": 460,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 408,
+    "deep": 409,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 142,
+    "Broken access control": 143,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -339,6 +339,7 @@
     "client-side-unsecure-pwa-evidence",
     "client-side-vapi-api-lab-evidence",
     "client-side-vaultapp-lab-evidence",
+    "client-side-voidsec-shopping-cart-evidence",
     "client-side-vuln-auth-portal-evidence",
     "client-side-vuln-expose-evidence",
     "client-side-vuln-expose-lab-module-evidence",

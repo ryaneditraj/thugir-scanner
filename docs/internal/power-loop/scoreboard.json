@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T01:04:25.996Z",
+  "updated_at": "2026-07-20T01:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 1464,
-  "total_findings": 7224,
+  "total_findings": 7227,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1253,
-  "discovery_findings": 5718,
-  "improvements_shipped": 780,
-  "last_run": "2026-07-20T01:04:25.996Z",
+  "discovery_findings": 5721,
+  "improvements_shipped": 783,
+  "last_run": "2026-07-20T01:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "01:00",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 7 findings 6/6 recall first pass — no benchmark misses",
+      "note": "Primary heroku 7 findings 6/6 recall — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,29 +51,30 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 32,
-      "focus": "OSS GitHub Pages + Vercel labs (Unsecure PWA, webexp05, duck-store); HTS playlevel/86+87 + WebSec level02/07 + net-force level205 queued",
-      "improvements_shipped_this_run": 0,
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 23,
+      "focus": "VoidSec shopping-cart lab, WebSec.fr level01 source regex, HTS application/79 + Net-Force level205 queue drain",
+      "improvements_shipped_this_run": 3,
       "queued_pending": [
-        "http://voidsec.github.io/shopping-cart/",
-        "https://websec.fr/level01/",
         "https://phpfox4.fly.dev/",
-        "https://docker-phpfox4.onrender.com/index.php/"
+        "https://docker-phpfox4.onrender.com/index.php/",
+        "https://websec.fr/level02/",
+        "https://www.hackthissite.org/playlevel/86/"
       ]
     },
     "notable_findings": [
-      "juice-shop: benchmark recall 6/6 (7 findings, pages=6 probes=265) — no benchmark misses",
-      "webexp05.vercel.app: 7 findings — SQLi/XSS/JWT-none/path-traversal CTF hub",
-      "duck-store.escape.tech: 7 findings — IDOR + secret-openai + unauthenticated API routes",
-      "dvaib.com: 4 findings — Damn Vulnerable AI Bot training surface",
-      "tempehs.github.io/The_Unsecure_PWA: 3 findings — educational PWA lab markers"
+      "juice-shop: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "voidsec.github.io/shopping-cart: 3 findings — VoidSec hack-lab XSS/SQLi catalog evidence (2→3)",
+      "websec.fr/level01: 5 findings — syntax-highlighted doQuery source + websec challenge evidence (4→5)",
+      "www.hackthissite.org/missions/application/79: 6 findings — login-gated application mission hub",
+      "www.net-force.nl/challenge/level205: 3 findings — Admin Area Applet5.class auth-bypass drill"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "voidsec shopping-cart + WebSec.fr level01/06 + phpFox4 demos queued at tail — pending drain",
-      "HTS playlevel/86+87 + net-force level205 + WebSec level02/07 newly queued"
+      "voidsec Shopping Cart live XAMPP instance not hosted on GitHub Pages — landing page only",
+      "HTS playlevel/86+87 + WebSec level02/07 + phpFox4 demos queued at tail",
+      "WebSec.fr level02+ queued after level01 source.php regex fix"
     ]
   },
   "discovery_highlights": {
@@ -219,6 +220,7 @@
     "cybersec-demo.vercel.app": 3,
     "ctb-pi.vercel.app": 5,
     "websec.fr": 3,
+    "websec.fr/level01": 5,
     "ogtamimi.github.io/OGT-Cyber-Game": 5,
     "akbarbashakm.github.io/frontend-security-examples": 5,
     "everdan0075.github.io/DevSecOps-Hacking-Lab": 7,
@@ -267,13 +269,20 @@
     "www.hackthissite.org/playlevel/73": 4,
     "www.hackthissite.org/playlevel/77": 6,
     "www.hackthissite.org/playlevel/83": 6,
+    "www.hackthissite.org/playlevel/84": 6,
+    "www.hackthissite.org/playlevel/85": 6,
     "www.hackthissite.org/missions/application/70": 4,
     "www.hackthissite.org/missions/application/71": 6,
+    "www.hackthissite.org/missions/application/78": 6,
+    "www.hackthissite.org/missions/application/79": 6,
     "www.net-force.nl/challenge/level436/index.php": 4,
     "www.net-force.nl/challenge/level437/index.php": 4,
     "www.net-force.nl/challenge/level201/index.php": 3,
     "www.net-force.nl/challenge/level202/index.php": 3,
     "www.net-force.nl/challenge/level203/index.php": 3,
+    "www.net-force.nl/challenge/level204/index.php": 3,
+    "www.net-force.nl/challenge/level205/index.php": 3,
+    "voidsec.github.io/shopping-cart": 3,
     "vwad.owasp.org/app/grpc-goat": 5,
     "gitagent-securebot-app.vercel.app": 3,
     "sam.wizer-ctf.com": 5,
