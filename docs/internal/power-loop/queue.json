@@ -6663,7 +6663,32 @@
       "url": "https://vuln-scanner-rho.vercel.app/",
       "source": "sumit-jr/vuln-scanner \u2014 educational vuln scanner frontend with live demo target form (Vercel README)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://challenge-0126.intigriti.io/",
+      "source": "Intigriti January 2026 CRYPTIGRITI \u2014 postMessage XS-leak + CORS + XSS monthly CTF (Bugology)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0226.intigriti.io/",
+      "source": "Intigriti February 2026 InkDrop \u2014 client-side XSS monthly CTF (Bugology)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1025.intigriti.io/",
+      "source": "Intigriti October 2025 Shoppix \u2014 stored XSS e-commerce monthly CTF (Bugology)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level04/",
+      "source": "WebSec.fr level04 \u2014 French public web security challenge platform (gap fill levels 04-05)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level05/",
+      "source": "WebSec.fr level05 \u2014 French public web security challenge platform (gap fill levels 04-05)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T16:00:37.000Z"
+  "updated_at": "2026-07-20T17:05:00.000Z"
 }
