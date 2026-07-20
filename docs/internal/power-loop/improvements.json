@@ -5375,6 +5375,24 @@
       "slug": "client-side-intigriti-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Intigriti April challenge landing + /challenge Northstar Notes DOMPurify search-results innerHTML + extractIntigritiChallengeSeeds; challenge-0426.intigriti.io findings 6→7; challenge-0125.intigriti.io findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-idor-live-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/orders/1001 returns {\"user\":\"alice\",\"order\":{...}} without auth; idorObjectAccess extended user/order/requestedId JSON markers + concat fetch /api/orders/ + VulnLab 1001/1002 seeds; hack-this-site-eta.vercel.app/owasp/a01.html findings 2→13 incl idor-sequential-ids; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-idor-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/idor.html No authorization checks + fetch(\"/api/orders/\"+id) + /api/validate/idor; clientSideVulnlabIdorLabEvidence rule wired; a01.html crawl includes idor.html; findings 2→13; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-admin-path-discovery",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: A01-002 notice /admin/console|/admin/users; extractAdminHtmlProbePaths probes corpus-discovered admin routes; a01.html gains unauthenticated-admin-endpoint; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9452,6 +9470,21 @@
       "source": "discovery:challenge-0426.intigriti.io",
       "slug": "client-side-intigriti-challenge-evidence",
       "shipped_at": "2026-07-20T13:40:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-idor-live-probe",
+      "shipped_at": "2026-07-20T14:35:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-idor-lab-evidence",
+      "shipped_at": "2026-07-20T14:35:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-admin-path-discovery",
+      "shipped_at": "2026-07-20T14:35:00.000Z"
     }
   ]
 }
