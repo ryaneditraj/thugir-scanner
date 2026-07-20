@@ -12893,6 +12893,142 @@ const clientSideIntigritiJanuaryXssFilterBypassEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti June 2025 RCE challenge (challenge-0625.intigriti.io/notes) ------------
+const CLIENT_INTIGRITI_JUNE_RCE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "June RCE challenge host",
+    re: /challenge-0625\.intigriti\.io|Intigriti(?:'s)?\s+June\s+challenge/i
+  },
+  {
+    label: "RCE on server without sandbox",
+    re: /leverage an RCE on the server without sandbox/i
+  },
+  {
+    label: "Vue v-html note content sink",
+    re: /v-html\s*=\s*["']note\.content["']|note-content["'][^>]*v-html/i
+  },
+  {
+    label: "Chromedriver bot visit endpoint",
+    re: /startBot\s*\(|\/api\/visit|Enter URL to report/i
+  },
+  {
+    label: "Notes app challenge server",
+    re: /\/notes|challenge server|My Notes App/i
+  }
+];
+
+const clientSideIntigritiJuneRceChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JUNE_RCE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0625|June challenge/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti June 2025 challenge documents Vue v-html stored XSS plus chromedriver /api/visit bot for RCE chain training"
+    }
+  };
+};
+
+// --- Intigriti November 2022 Secure Vault iframe XSS (challenge-1122.intigriti.io) --
+const CLIENT_INTIGRITI_SECURE_VAULT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Secure Vault title",
+    re: /Secure Vault/i
+  },
+  {
+    label: "iframe arbitrary javascript challenge",
+    re: /execute arbitrary javascript on the iFramed page/i
+  },
+  {
+    label: "admin bot url endpoint",
+    re: /admin\?url=|api\.challenge-\d{4}\.intigriti\.io\/admin/i
+  },
+  {
+    label: "JWT localStorage session",
+    re: /localStorage\s*\[\s*['"]jwt['"]\s*\]|localStorage\.jwt|Bearer \$\{jwt\}/i
+  },
+  {
+    label: "iframe note reference sink",
+    re: /frame\.src\s*=\s*reference|addNote\(uuid,\s*title,\s*reference\)/i
+  },
+  {
+    label: "November XSS challenge host",
+    re: /challenge-1122\.intigriti\.io/i
+  }
+];
+
+const clientSideIntigritiSecureVaultXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_SECURE_VAULT_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1122|Secure Vault/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti November 2022 Secure Vault challenge documents iframe XSS with admin?url= bot and JWT-authenticated note references"
+    }
+  };
+};
+
+// --- Intigriti December 2023 Smarty SSTI challenge (challenge-1223.intigriti.io) ----
+const CLIENT_INTIGRITI_SMARTY_SSTI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Smarty template version disclosed",
+    re: /Smarty Version:\s*[\d.]+|Smarty Pants/i
+  },
+  {
+    label: "Regex filter bypass SSTI lab",
+    re: /beat my regex filter first|Template:\s*<\/label>/i
+  },
+  {
+    label: "challenge.php template form",
+    re: /challenge\.php|name\s*=\s*["']data["']/i
+  },
+  {
+    label: "December challenge host",
+    re: /challenge-1223\.intigriti\.io|Intigriti(?:'s)?\s+December\s+challenge/i
+  },
+  {
+    label: "INTIGRITI flag format",
+    re: /flag format is INTIGRITI|INTIGRITI\{[^}]+\}/i
+  }
+];
+
+const clientSideIntigritiSmartySstiChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_SMARTY_SSTI_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1223|Smarty/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti December 2023 Smarty Pants challenge documents server-side template injection via challenge.php data parameter"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -23217,6 +23353,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiChallengeEvidence,
   clientSideIntigritiRaceConditionChallengeEvidence,
   clientSideIntigritiJanuaryXssFilterBypassEvidence,
+  clientSideIntigritiJuneRceChallengeEvidence,
+  clientSideIntigritiSecureVaultXssEvidence,
+  clientSideIntigritiSmartySstiChallengeEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,

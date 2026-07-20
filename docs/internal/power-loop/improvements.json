@@ -5483,6 +5483,30 @@
       "slug": "wizer-ctf-idor-task-manager-probe",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users {\"user_ids\":[1]} and POST /api/tasks {\"user_id\":1} return 200 JSON arrays without auth; chal11.vercel.app findings 0→5 incl wizer-ctf-idor-task-manager-probe; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0625.intigriti.io",
+      "slug": "intigriti-iframe-challenge-seed-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractIntigritiChallengeSeeds now parses iframe src (/notes, /challenge, /challenge.php) + api.challenge-NNNN.intigriti.io; removed BarSpacer 404 path pollution; challenge-0625 pages 6→2 (/notes); challenge-1122 crawls api subdomain; challenge-1223 crawls challenge.php; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0625.intigriti.io",
+      "slug": "client-side-intigriti-june-rce-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /notes v-html=note.content + startBot POST /api/visit + leverage an RCE on the server without sandbox; challenge-0625.intigriti.io findings 3→4 incl client-side-intigriti-june-rce-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1122.intigriti.io",
+      "slug": "client-side-intigriti-secure-vault-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api.challenge-1122.intigriti.io Secure Vault + frame.src=reference + admin?url= bot + localStorage jwt; challenge-1122.intigriti.io findings 2→3 incl client-side-intigriti-secure-vault-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1223.intigriti.io",
+      "slug": "client-side-intigriti-smarty-ssti-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge.php Smarty Version: 4.3.4 + beat my regex filter first + name=data template form; challenge-1223.intigriti.io findings 3→4 incl client-side-intigriti-smarty-ssti-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9650,6 +9674,26 @@
       "source": "discovery:chal11.vercel.app",
       "slug": "wizer-ctf-idor-task-manager-probe",
       "shipped_at": "2026-07-20T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0625.intigriti.io",
+      "slug": "intigriti-iframe-challenge-seed-fix",
+      "shipped_at": "2026-07-20T20:30:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0625.intigriti.io",
+      "slug": "client-side-intigriti-june-rce-challenge-evidence",
+      "shipped_at": "2026-07-20T20:30:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1122.intigriti.io",
+      "slug": "client-side-intigriti-secure-vault-xss-evidence",
+      "shipped_at": "2026-07-20T20:30:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1223.intigriti.io",
+      "slug": "client-side-intigriti-smarty-ssti-challenge-evidence",
+      "shipped_at": "2026-07-20T20:30:00.000Z"
     }
   ]
 }
