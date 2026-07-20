@@ -6303,7 +6303,32 @@
       "url": "https://www.hackthissite.org/playlevel/85/",
       "source": "HackThisSite realistic mission playlevel 85 \u2014 advanced web exploitation training",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://voidsec.github.io/shopping-cart/",
+      "source": "voidsec/shopping-cart \u2014 classic intentionally vulnerable e-commerce hack-lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://websec.fr/level01/",
+      "source": "WebSec.fr \u2014 babysteps SQLi/XSS challenge level01 (French public CTF platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level06/",
+      "source": "WebSec.fr \u2014 bonus web exploit challenge level06 (complements root hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://phpfox4.fly.dev/",
+      "source": "zackees/docker-phpFox4 \u2014 intentionally vulnerable phpFox4 Fly.io demo deploy",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://docker-phpfox4.onrender.com/index.php/",
+      "source": "zackees/docker-phpFox4 \u2014 phpFox4 vulnerable CMS Render demo (README live link)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-19T23:01:00.000Z"
+  "updated_at": "2026-07-20T00:24:00.000Z"
 }
