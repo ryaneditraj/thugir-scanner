@@ -8379,15 +8379,15 @@ const CLIENT_WEBSEC_FIBONACCI_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[
   },
   {
     label: "HMAC validation on textpad payload",
-    re: /hash_hmac\s*\(\s*['"]md5['"]\s*,\s*\$flag\s*,\s*\$t\s*\)|in_array\s*\(\s*\$hmac/i
+    re: /hash_hmac(?:&nbsp;|\s)*\([\s\S]{0,120}md5[\s\S]{0,80}\$flag[\s\S]{0,80}\$t|in_array(?:&nbsp;|\s)*\([\s\S]{0,40}\$hmac/i
   },
   {
     label: "eval concatenates attacker textpad with prime test",
-    re: /eval\s*\(\s*\$t\s*\.\s*\$prime_test\s*\)|\$prime_test\s*=\s*['"][\s\S]{0,120}fib\s*\(\s*\$n\s*\)/i
+    re: /eval(?:&nbsp;|\s)*\([\s\S]{0,80}\$t[\s\S]{0,80}\$prime_test|\$prime_test(?:&nbsp;|\s)*=[\s\S]{0,160}fib(?:&nbsp;|\s)*\([\s\S]{0,40}\$n/i
   },
   {
     label: "gcd relative-primes Fibonacci oracle",
-    re: /gcd\s*\(\s*fib\s*\(\s*\$n\s*\)\s*,\s*fib\s*\(\s*\$n\s*\+\s*2\s*\)|relative\s+primes/i
+    re: /gcd(?:&nbsp;|\s)*\([\s\S]{0,80}fib(?:&nbsp;|\s)*\([\s\S]{0,40}\$n[\s\S]{0,80}fib(?:&nbsp;|\s)*\([\s\S]{0,40}\$n[\s\S]{0,40}\+[\s\S]{0,40}2|relative(?:&nbsp;|\s)+primes/i
   }
 ];
 
