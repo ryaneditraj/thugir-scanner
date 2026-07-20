@@ -394,8 +394,11 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
     return home;
   }
   if (!/\.onrender\.com$/i.test(host)) return home;
+  const isVulnApp = /web-security-practice-app\.onrender\.com/i.test(host);
+  const maxAttempts = isVulnApp ? 8 : 5;
+  const delayMs = isVulnApp ? 5000 : 4000;
   let best = home;
-  for (let attempt = 0; attempt < 5; attempt++) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const ready =
       !RENDER_COLD_START_RE.test(best.body) &&
       (best.body.length > 1500 ||
@@ -403,7 +406,7 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
         /VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body)) &&
       (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body));
     if (ready) break;
-    await new Promise((r) => setTimeout(r, 4000));
+    await new Promise((r) => setTimeout(r, delayMs));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
       timeoutMs: 45000,
       maxBytes: 600_000
@@ -912,6 +915,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideDragSecurityFlawsEvidence",
   "clientSideDragSecurityFlawsLabModuleEvidence",
   "clientSideWizerCtfEvidence",
+  "clientSideWizerCtfStoredDomXssEvidence",
+  "clientSideIntigritiChallengeEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1448,9 +1453,39 @@ function extractAevumDemoSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Intigriti monthly XSS challenges (challenge-NNNN.intigriti.io) — seed /challenge app route. */
+function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/challenge-\d{4}\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/challenge", "/js/app.js", "/challenge.html"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["'](\/challenge[^"'#?]*)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** VulnApp Flask practice app (web-security-practice-app.onrender.com) — lab routes behind nav. */
 function extractFlaskVulnappSeeds(html: string, pageUrl: string): string[] {
-  if (!/VulnApp|web-security-practice-app|n00by3te\/web-security-practice-app/i.test(html))
+  if (
+    !/VulnApp|web-security-practice-app|n00by3e\/web-security-practice-app/i.test(html) &&
+    !/web-security-practice-app\.onrender\.com/i.test(pageUrl)
+  )
     return [];
   const out = new Set<string>();
   for (const path of ["/comments", "/login", "/register"]) {
@@ -5691,6 +5726,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const jekyllBlogPostSeeds = extractJekyllBlogPostSeeds(home.body, home.finalUrl);
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
   const flaskVulnappSeeds = extractFlaskVulnappSeeds(home.body, home.finalUrl);
+  const intigritiChallengeSeeds = extractIntigritiChallengeSeeds(home.body, home.finalUrl);
   const javaSecLabSeeds = extractJavaSecLabSeeds(home.body, home.finalUrl);
   const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
@@ -6119,6 +6155,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "https://github.com/WebGoat/WebGoat"
         ]
       : [];
+  const flaskVulnappOnrenderPrioritySeeds =
+    /web-security-practice-app\.onrender\.com/i.test(home.finalUrl)
+      ? ["/comments", "/login", "/register"].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
   const hackThisSiteEtaAuthHubPrioritySeeds =
     /hack-this-site-eta\.vercel\.app\/auth\/?$/i.test(home.finalUrl)
       ? [
@@ -6206,6 +6246,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ...new Set([
       ...hackAdvisorPrioritySeeds,
       ...cyberDefendersPrioritySeeds,
+      ...flaskVulnappOnrenderPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,
@@ -6248,6 +6289,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...jekyllBlogPostSeeds,
       ...domGoatCxssSeeds,
       ...flaskVulnappSeeds,
+      ...intigritiChallengeSeeds,
       ...javaSecLabSeeds,
       ...benstaffordXssSeeds,
       ...ctfHubSeeds,

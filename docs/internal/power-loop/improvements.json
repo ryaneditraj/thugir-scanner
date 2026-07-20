@@ -5357,6 +5357,24 @@
       "slug": "hts-playlevel-98-net-force-level214-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: HTS playlevel/98 arcade hub + net-force level214 redirect oracle seeds; crawl seeds extended; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "render-vulnapp-extended-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 12:33 scan returned 1 finding during Render cold-start; warmupRenderHost extended 8×5s for web-security-practice-app + flaskVulnappOnrenderPrioritySeeds always seed /comments /login /register; web-security-practice-app findings 1→3 incl post-login-sql-bypass + client-side-flask-vulnapp-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chal10.vercel.app",
+      "slug": "client-side-wizer-ctf-stored-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: index chunk fetch ../api/getMessages + getElementById('message').innerHTML=e[0].message; chal10.vercel.app findings 4→5 incl client-side-wizer-ctf-stored-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0426.intigriti.io",
+      "slug": "client-side-intigriti-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Intigriti April challenge landing + /challenge Northstar Notes DOMPurify search-results innerHTML + extractIntigritiChallengeSeeds; challenge-0426.intigriti.io findings 6→7; challenge-0125.intigriti.io findings 1→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9419,6 +9437,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-98-net-force-level214-seeds",
       "shipped_at": "2026-07-20T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "render-vulnapp-extended-warmup",
+      "shipped_at": "2026-07-20T13:40:00.000Z"
+    },
+    {
+      "source": "discovery:chal10.vercel.app",
+      "slug": "client-side-wizer-ctf-stored-dom-xss-evidence",
+      "shipped_at": "2026-07-20T13:40:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0426.intigriti.io",
+      "slug": "client-side-intigriti-challenge-evidence",
+      "shipped_at": "2026-07-20T13:40:00.000Z"
     }
   ]
 }

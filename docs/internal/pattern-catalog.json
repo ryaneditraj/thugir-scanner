@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T12:01:42.286Z",
-  "total": 499,
-  "uniqueSlugs": 497,
+  "generatedAt": "2026-07-20T13:07:47.803Z",
+  "total": 501,
+  "uniqueSlugs": 499,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 481,
+    "generic": 483,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 430,
+    "deep": 432,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 42,
     "Broken authentication": 38,
     "Injection": 100,
-    "Cross-site scripting": 58,
+    "Cross-site scripting": 60,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -182,6 +182,7 @@
     "client-side-immersive-labs-evidence",
     "client-side-insaits-evidence",
     "client-side-intercode-evidence",
+    "client-side-intigriti-challenge-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-ist-edu-vuln-portal-evidence",
@@ -412,6 +413,7 @@
     "client-side-wechall-evidence",
     "client-side-whoopspay-evidence",
     "client-side-wizer-ctf-evidence",
+    "client-side-wizer-ctf-stored-dom-xss-evidence",
     "client-side-wrongsecrets-challenge-evidence",
     "client-side-wrongsecrets-evidence",
     "client-side-xor-auth-evidence",
