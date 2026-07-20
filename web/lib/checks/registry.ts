@@ -7982,7 +7982,7 @@ const CLIENT_WEBSEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "WebSec level challenge title",
-    re: /#WebSec Level|Level(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)\s*<small>/i
+    re: /#WebSec Level|Level(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Eleven)\s*<small>/i
   },
   {
     label: "WebSec user ID lookup form",
@@ -8111,6 +8111,90 @@ const clientSideWebsecChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr publishes syntax-highlighted PHP source for SQLi/XSS challenge levels — injection flaws documented in /levelNN/source.php"
+    }
+  };
+};
+
+// --- WebSec.fr magic-hash file downloader (level10) ----------------------------------
+const CLIENT_WEBSEC_MAGIC_HASH_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Ten file downloader title",
+    re: /#WebSec\s+Level\s+Ten|LevelTen(?:&nbsp;|\s)*<small>\s*-\s*Awesome\s+File\s+Downloader/i
+  },
+  {
+    label: "Secret hash file download form",
+    re: /name\s*=\s*["']hash["']|Secret\s+hash|name\s*=\s*["']f["']/
+  },
+  {
+    label: "MD5 flag sandwich hash gate",
+    re: /substr\s*\(\s*md5\s*\(\s*\$flag[\s\S]{0,160}\$flag/i
+  },
+  {
+    label: "show_source arbitrary file read",
+    re: /show_source\s*\(\s*\$file\s*\)/
+  },
+  {
+    label: "flag.php include or download target",
+    re: /flag\.php|include\s+["']flag\.php["']/
+  }
+];
+
+const clientSideWebsecMagicHashChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_MAGIC_HASH_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTen|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level10 documents MD5 magic-hash file downloader — substr(md5($flag.$file.$flag)) gate before show_source($file) arbitrary read"
+    }
+  };
+};
+
+// --- WebSec.fr blacklist SQLi with alias bypass (level11) ----------------------------
+const CLIENT_WEBSEC_BLACKLIST_SQLI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Eleven challenge title",
+    re: /#WebSec\s+Level\s+Eleven|LevelEleven/
+  },
+  {
+    label: "Blacklist SQL filter challenge scope",
+    re: /super-efficient-blacklist-based|No more nasty.*UNION.*JOIN/i
+  },
+  {
+    label: "sanitize stripos blacklist gate",
+    re: /function\s+sanitize[\s\S]{0,240}\$blacklist[\s\S]{0,160}stripos/i
+  },
+  {
+    label: "Dynamic table name SQL concat",
+    re: /SELECT\s+id,username\s+FROM\s+['"]\s*\.\s*\$table/i
+  },
+  {
+    label: "Superhero costume table selector",
+    re: /name\s*=\s*["']table["']|With costume|Without costume/i
+  }
+];
+
+const clientSideWebsecBlacklistSqliChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_BLACKLIST_SQLI_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelEleven|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level11 documents blacklist SQLi filter on table alias — stripos blocks UNION/JOIN but $table is concatenated into SELECT"
     }
   };
 };
@@ -21759,6 +21843,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecChallengeEvidence,
   clientSideWebsecCryptoChallengeEvidence,
   clientSideWebsecFileUploadChallengeEvidence,
+  clientSideWebsecMagicHashChallengeEvidence,
+  clientSideWebsecBlacklistSqliChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
