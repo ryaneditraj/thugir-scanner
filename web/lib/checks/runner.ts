@@ -917,6 +917,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideDragSecurityFlawsLabModuleEvidence",
   "clientSideWizerCtfEvidence",
   "clientSideWizerCtfStoredDomXssEvidence",
+  "clientSideWizerCtfDomClobberingEvidence",
+  "wizerCtfIdorTaskManagerProbe",
   "clientSideIntigritiChallengeEvidence",
   "clientSideIntigritiRaceConditionChallengeEvidence",
   "clientSideIntigritiJanuaryXssFilterBypassEvidence",
