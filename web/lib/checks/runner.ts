@@ -825,6 +825,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecBlacklistSqliChallengeEvidence",
   "clientSideWebsecClassInstantiationChallengeEvidence",
   "clientSideWebsecSqliPrivilegeChallengeEvidence",
+  "clientSideWebsecRestrictedPhpExecChallengeEvidence",
+  "clientSideWebsecCreateFunctionChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
@@ -1536,7 +1538,7 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     /websec challenges/i.test(html) ||
     /web security challenges from the people of websec/i.test(html)
   ) {
-    for (let n = 1; n <= 13; n++) {
+    for (let n = 1; n <= 16; n++) {
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
         out.add(new URL(`/${slug}/`, origin).toString());
@@ -1946,6 +1948,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/90/",
     "/playlevel/91/",
     "/playlevel/92/",
+    "/playlevel/93/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
@@ -1959,6 +1962,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/82/",
     "/missions/application/83/",
     "/missions/application/84/",
+    "/missions/application/85/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5947,7 +5951,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level205/index.php",
         "http://www.net-force.nl/challenge/level206/index.php",
         "http://www.net-force.nl/challenge/level207/index.php",
-        "http://www.net-force.nl/challenge/level208/index.php"
+        "http://www.net-force.nl/challenge/level208/index.php",
+        "http://www.net-force.nl/challenge/level209/index.php"
       ]
     : [];
   const websecLevelPrioritySeeds = (() => {

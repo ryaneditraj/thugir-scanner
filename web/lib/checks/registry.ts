@@ -8283,6 +8283,90 @@ const clientSideWebsecSqliPrivilegeChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr restricted PHP code execution (level14) ---------------------------------
+const CLIENT_WEBSEC_RESTRICTED_PHP_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Fourteen challenge title",
+    re: /#WebSec\s+Level\s*Fourteen|Level\s+Fourteen(?:&nbsp;|\s)*<small>\s*-\s*Securely Execute Code/i
+  },
+  {
+    label: "PHP function whitelist challenge scope",
+    re: /only allow[\s\S]{0,120}<mark>echo<\/mark>[\s\S]{0,120}<mark>strncmp<\/mark>|echo,\s*print,\s*strlen,\s*strcmp,\s*strncmp/i
+  },
+  {
+    label: "25 character code length limit",
+    re: /limited to\s*<code>\s*25\s*<\/code>|substr[\s\S]{0,80}\$code[\s\S]{0,40},\s*0\s*,\s*25|maxlength\s*=\s*25/i
+  },
+  {
+    label: "POST code execution form",
+    re: /name\s*=\s*["']code["'][\s\S]{0,200}Execute!/i
+  },
+  {
+    label: "preg_match whitelist before eval sink",
+    re: /preg_match[\s\S]{0,200}strcmp|preg_match[\s\S]{0,200}strncmp|eval\s*\(\s*\$code/i
+  }
+];
+
+const clientSideWebsecRestrictedPhpExecChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_RESTRICTED_PHP_EXEC_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Fourteen|#WebSec|Securely Execute Code/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level14 documents restricted PHP sandbox — 25-char limit with strcmp/strncmp whitelist bypass before eval($code)"
+    }
+  };
+};
+
+// --- WebSec.fr create_function code injection (level15) --------------------------------
+const CLIENT_WEBSEC_CREATE_FUNCTION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Fifteen challenge title",
+    re: /#WebSec\s+Level\s+Fifteen|LevelFifteen(?:&nbsp;|\s)*<small>\s*Arbitrary code non-execution/i
+  },
+  {
+    label: "Arbitrary code non-execution challenge scope",
+    re: /provide us some PHP code, but we won't execute it|Arbitrary code non-execution/i
+  },
+  {
+    label: "create_function sink with POST body",
+    re: /create_function\s*\(\s*['"]\$flag['"]\s*,\s*\$_POST\s*\[\s*['"]c['"]\s*\]/i
+  },
+  {
+    label: "Exit after declaration checkbox",
+    re: /Exit after declaration|name\s*=\s*["']q["'][\s\S]{0,120}value\s*=\s*["']1["']/i
+  },
+  {
+    label: "POST c parameter code form",
+    re: /name\s*=\s*["']c["'][\s\S]{0,200}placeholder\s*=\s*["']echo\s+1337/i
+  }
+];
+
+const clientSideWebsecCreateFunctionChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CREATE_FUNCTION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelFifteen|#WebSec|Arbitrary code non-execution/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level15 documents create_function('$flag', $_POST['c']) — attacker code compiled even when fun($flag) call is commented out"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -21931,6 +22015,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecBlacklistSqliChallengeEvidence,
   clientSideWebsecClassInstantiationChallengeEvidence,
   clientSideWebsecSqliPrivilegeChallengeEvidence,
+  clientSideWebsecRestrictedPhpExecChallengeEvidence,
+  clientSideWebsecCreateFunctionChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
