@@ -6378,7 +6378,32 @@
       "url": "http://www.net-force.nl/challenge/level206/index.php",
       "source": "Net-Force.nl challenge level 206 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level10/",
+      "source": "WebSec.fr \u2014 PHP magic-hash / type-juggling challenge level10 (writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level11/",
+      "source": "WebSec.fr \u2014 SQLi column-alias bypass (AS blacklisted) challenge level11 (writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/89/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 89 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/90/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 90 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level207/index.php",
+      "source": "Net-Force.nl challenge level 207 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T02:06:00.000Z"
+  "updated_at": "2026-07-20T03:25:00.000Z"
 }
