@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T17:10:00.000Z",
+  "updated_at": "2026-07-20T18:08:52.513Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1586,
-  "total_findings": 7929,
+  "total_sites_scanned": 1594,
+  "total_findings": 7969,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1320,
-  "discovery_findings": 6346,
+  "discovery_urls_added": 1325,
+  "discovery_findings": 6379,
   "improvements_shipped": 827,
-  "last_run": "2026-07-20T17:10:00.000Z",
+  "last_run": "2026-07-20T18:08:52.513Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -50,23 +50,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+      "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 27,
-      "focus": "WebSec level34 dynamic function call + Intigriti 0424 race-condition + DomGoat cxss 86-96 seeds",
-      "improvements_shipped_this_run": 3
+      "findings": 33,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS dead — use testasp/rest.vulnweb.com)"
+      ],
+      "queued_pending": [
+        "https://challenge-0825.intigriti.io/",
+        "https://challenge-0925.intigriti.io/",
+        "https://challenge-1125.intigriti.io/",
+        "https://challenge-0325.intigriti.io/",
+        "https://challenge-0724.intigriti.io/"
+      ],
+      "focus": "Intigriti gap-fill (0825 SSRF/RCE, 0925 shell, 1125 JWT+SSTI, 0325 XS-leak, 0724 memo XSS) + queue drain (wizer-ctf, chal vercel, openvaultbank API, hackthissite basic)"
     },
     "notable_findings": [
-      "websec.fr/level34: 5→6 findings (+client-side-websec-dynamic-function-call-challenge-evidence)",
-      "challenge-0424.intigriti.io: 2→3 findings (+client-side-intigriti-race-condition-challenge-evidence)",
-      "domgo.at/cxss/example/96: crawl seeds extended through /96 (4 findings incl unescape hash sink)",
-      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings, first pass no wake retry)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings, first pass no wake retry)",
+      "chal7.vercel.app: 6 findings incl sql-error-disclosure + dangerous-html-sinks",
+      "openvaultbank.com/api/v1/users: 5 findings incl client-side-api-security-lab-evidence (lovable platform)",
+      "www.hackthissite.org/missions/basic/: 6 findings incl client-side-hackthissite-mission-challenge-evidence",
+      "wizer-ctf.com: 4 findings incl dangerous-html-sinks"
     ],
     "learning_gaps": [
       "secret-resend slug still absent on juice-shop — sensitive_data covered via vibe-unauthenticated-api-routes proxy",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "websec.fr/level32: PHP index returns No input file specified — challenge offline",
       "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "defendtheweb.net/playground/intro12: GitHub Pages 404 — playground series offline"
+      "Intigriti 0825/0925/1125/0325/0724 queued at tail — pending drain next run",
+      "chal1/chal5/chal8 vercel: shallow XSS/header findings only — deeper SSRF/SSTI chains need authenticated flows"
     ]
   },
   "discovery_highlights": {
@@ -260,7 +271,6 @@
     "hack-this-site-eta.vercel.app/api-labs": 15,
     "hack-this-site-eta.vercel.app/owasp/a03.html": 15,
     "hack-this-site-eta.vercel.app/owasp/a01.html": 18,
-    "hack-this-site-eta.vercel.app/owasp/a06.html": 18,
     "hack-this-site-eta.vercel.app/owasp/a07.html": 16,
     "hack-this-site-eta.vercel.app/owasp/a08.html": 16,
     "hack-this-site-eta.vercel.app/labs": 15,

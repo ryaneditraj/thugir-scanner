@@ -6688,7 +6688,32 @@
       "url": "https://websec.fr/level05/",
       "source": "WebSec.fr level05 \u2014 French public web security challenge platform (gap fill levels 04-05)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0825.intigriti.io/",
+      "source": "Intigriti August 2025 CatFlix \u2014 Next.js middleware SSRF to Jenkins RCE (Bugology 0825)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0925.intigriti.io/",
+      "source": "Intigriti September 2025 monthly CTF \u2014 shell/RCE challenge (Bugology 0925)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1125.intigriti.io/",
+      "source": "Intigriti November 2025 AquaCommerce \u2014 JWT alg:none + Jinja2 SSTI chain (Bugology 1125)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0325.intigriti.io/",
+      "source": "Intigriti March 2025 Leaky Flagment \u2014 client-side XS-leak monthly CTF (Bugology 0325)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0724.intigriti.io/",
+      "source": "Intigriti July 2024 Memo Sharing \u2014 stored XSS monthly CTF (Bugology 0724)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T17:05:00.000Z"
+  "updated_at": "2026-07-20T18:05:00.000Z"
 }
