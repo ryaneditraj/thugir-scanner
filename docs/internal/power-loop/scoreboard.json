@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T19:15:00.000Z",
+  "updated_at": "2026-07-20T19:48:41.444Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1598,
-  "total_findings": 7991,
+  "total_sites_scanned": 1604,
+  "total_findings": 8027,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1325,
-  "discovery_findings": 6391,
+  "discovery_urls_added": 1330,
+  "discovery_findings": 6423,
   "improvements_shipped": 833,
-  "last_run": "2026-07-20T19:15:00.000Z",
+  "last_run": "2026-07-20T19:48:41.444Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary juice-shop.herokuapp.com returned 503 — staging oracle 7 findings, recall 6/6 maintained",
+      "note": "6/6 recall after Heroku cold-start wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data; final retry merged to 7 findings pages=6 probes=265)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,22 +50,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_scanned": 3,
-      "findings": 16,
-      "focus": "RedTiger level9 CMDi + Wizer chal14 DOM clobber + chal11 IDOR live probe",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 44,
+      "focus": "Intigriti archive queue (0625 RCE, 1122/1023/0124/1223 XSS) + queue drain (chal10-15, openvaultbank admin, maz4lhacks, vuln-expose)",
+      "skipped_48h": [
+        "https://web-security-practice-app.onrender.com/",
+        "https://challenge-0426.intigriti.io/",
+        "https://challenge-0125.intigriti.io/"
+      ]
     },
     "notable_findings": [
-      "redtiger.labs.overthewire.org/level9.php: 3→5 findings (+redtiger-command-injection-evidence via !`sh` HTML comment)",
-      "chal14.vercel.app: 5→6 findings (+client-side-wizer-ctf-dom-clobbering-evidence transferBalance/innerHTML)",
-      "chal11.vercel.app: 0→5 findings (+wizer-ctf-idor-task-manager-probe POST /api/users + /api/tasks)",
-      "juice-shop-staging: benchmark recall 6/6 maintained (7 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 after cold-start wake retries (7 findings)",
+      "vuln-expose.vercel.app: 7 findings incl sql-error-disclosure + vibe-hardcoded-demo-credentials",
+      "shiny-computing-machine.vercel.app: 7 findings incl client-side-xss-evidence",
+      "openvaultbank.com/api/v1/admin: 5 findings API lab admin route",
+      "chal15.vercel.app: 6 findings incl sql-error-disclosure"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: primary Heroku deploy returning 503 — use staging fallback",
+      "juice-shop Heroku cold-start: pass1 probes=93 pages=1 only misconfig — 12s+25s wake retries required for 6/6",
+      "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "chal11.vercel.app: API returns empty arrays — live data may require session setup",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
+      "Intigriti archive URLs (0625/1122/1023/0124/1223) queued at tail — pending drain"
     ]
   },
   "discovery_highlights": {
