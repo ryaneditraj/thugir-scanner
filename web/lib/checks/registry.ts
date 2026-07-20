@@ -8451,6 +8451,90 @@ const clientSideWebsecTimingAttackChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr PHP unserialize cookie gadget (level18) ----------------------------------
+const CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Eighteen challenge title",
+    re: /#WebSec\s+Level\s+Eighteen|Level\s+Eighteen(?:&nbsp;|\s)*<small>\s*-\s*json_decode is for the weak/i
+  },
+  {
+    label: "Serialized object cookie challenge prompt",
+    re: /serialized object before|give it back please|json_decode is for the weak/i
+  },
+  {
+    label: "setcookie serialize stdClass gadget",
+    re: /setcookie(?:&nbsp;|\s)*\([\s\S]{0,80}['"]obj['"][\s\S]{0,120}serialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$obj/i
+  },
+  {
+    label: "Cookie unserialize hash_equals flag sink",
+    re: /unserialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$obj[\s\S]{0,120}hash_equals(?:&nbsp;|\s)*\([\s\S]{0,80}\$unserialized_obj[\s\S]{0,40}->(?:&nbsp;|\s)*input/i
+  },
+  {
+    label: "Attacker-controlled obj cookie assignment",
+    re: /\$_COOKIE(?:&nbsp;|\s)*\[[\s\S]{0,20}['"]obj['"][\s\S]{0,40}\]\s*=[\s\S]{0,40}\$obj|setcookie(?:&nbsp;|\s)*\([\s\S]{0,40}['"]obj['"][\s\S]{0,40}\$_POST/i
+  }
+];
+
+const clientSideWebsecPhpUnserializeCookieChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Eighteen|#WebSec|json_decode is for the weak/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level18 documents unserialize($_COOKIE['obj']) with hash_equals flag oracle — attacker-controlled serialized cookie gadget"
+    }
+  };
+};
+
+// --- WebSec.fr PHP unserialize filter bypass (level20) --------------------------------
+const CLIENT_WEBSEC_PHP_UNSERIALIZE_FILTER_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Twenty challenge title",
+    re: /#WebSec\s+Level\s+Twenty|Level\s+Twenty[\s\S]{0,80}unserialize/i
+  },
+  {
+    label: "Flag class __destruct gadget",
+    re: /class(?:&nbsp;|\s)+Flag[\s\S]{0,120}__destruct(?:&nbsp;|\s)*\([\s\S]{0,80}echo(?:&nbsp;|\s)*\$flag/i
+  },
+  {
+    label: "sanitize preg_match unserialize filter",
+    re: /function(?:&nbsp;|\s)+sanitize[\s\S]{0,200}preg_match[\s\S]{0,120}unserialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$data/i
+  },
+  {
+    label: "i0n1c bypass comment reference",
+    re: /i0n1c(?:&nbsp;|\s)*'s(?:&nbsp;|\s)+bypass|exploit-db\.com\/exploits\/22547/i
+  },
+  {
+    label: "Cookie data unserialize sink",
+    re: /\$_COOKIE(?:&nbsp;|\s)*\[[\s\S]{0,20}['"]data['"][\s\S]{0,80}\][\s\S]{0,120}sanitize|unserialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$data/i
+  }
+];
+
+const clientSideWebsecPhpUnserializeFilterChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_FILTER_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Twenty|#WebSec|sanitize/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level20 documents sanitize() preg_match filters before unserialize($_COOKIE['data']) — Flag __destruct POP chain bypass"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -22103,6 +22187,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecCreateFunctionChallengeEvidence,
   clientSideWebsecFibonacciEvalChallengeEvidence,
   clientSideWebsecTimingAttackChallengeEvidence,
+  clientSideWebsecPhpUnserializeCookieChallengeEvidence,
+  clientSideWebsecPhpUnserializeFilterChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,

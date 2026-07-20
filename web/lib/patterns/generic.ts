@@ -2527,6 +2527,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP unserialize cookie gadget lab disclosed",
+    description:
+      "WebSec.fr level18 stores serialize(stdClass) in an obj cookie then unserialize($_COOKIE['obj']) — attacker-controlled serialized objects bypass hash_equals flag check.",
+    impactOneline:
+      "Public challenge source documents PHP object injection via cookie unserialize with hash_equals oracle on attacker-controlled properties.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeCookieChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize labs offline; never unserialize attacker-controlled cookies in production.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace PHP serialize/unserialize with JSON and signed tokens; ban unserialize on user input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level18 lab exposes unserialize($_COOKIE['obj']) after setcookie(serialize($obj)). Show how to retire public labs and eliminate unserialize sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-php-unserialize-filter-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP unserialize filter bypass lab disclosed",
+    description:
+      "WebSec.fr level20 applies preg_match filters in sanitize() before unserialize($_COOKIE['data']) — Flag class __destruct still enables POP gadget chains.",
+    impactOneline:
+      "Public challenge source documents weak unserialize allowlists bypassable via crafted serialized objects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeFilterChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize filter-bypass labs offline; never rely on regex filters before unserialize.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate unserialize on cookies/POST bodies; use JSON with strict schema validation."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level20 lab exposes sanitize() preg_match gates before unserialize with Flag __destruct. Show how to retire public labs and ban unserialize.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
