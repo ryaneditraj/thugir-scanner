@@ -4406,9 +4406,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "RedTiger command-injection login challenge disclosed",
     description:
-      "RedTiger Hackit level10 exposes a password-only POST login that evaluates backtick shell metacharacters — HTML comments leak the command-injection payload oracle.",
+      "RedTiger Hackit level9–10 expose password-only POST logins that evaluate backtick shell metacharacters — HTML comments leak the command-injection payload oracle.",
     impactOneline:
-      "Public RedTiger level10 page documents OS command injection via login password field for scanner calibration.",
+      "Public RedTiger level9/10 pages document OS command injection via login password field for scanner calibration.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "redtigerCommandInjectionEvidence" },
     tierRequired: "deep",
@@ -4604,6 +4604,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Wizer-style messages lab uses innerHTML for stored content. Show safe rendering patterns for user-generated messages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-wizer-ctf-dom-clobbering-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Wizer CTF DOM clobbering points-transfer challenge disclosed",
+    description:
+      "Wizer CTF #14 Points Management guards transfers with window.transferBalance but renders yourAvatar via innerHTML — DOM clobbering overrides the guard and calls /api/transferPoints.",
+    impactOneline:
+      "Public Wizer chal14 challenge documents DOM clobbering via avatar innerHTML that bypasses transferBalance authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWizerCtfDomClobberingEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Wizer CTF labs are intentional training — never rely on window globals or innerHTML for authorization in production.",
+      steps: [
+        "Run Wizer CTF challenges only on isolated training infrastructure.",
+        "Enforce transfer authorization server-side instead of window.transferBalance client guards.",
+        "Use textContent for avatar rendering; avoid innerHTML with attacker-controlled query params."
+      ]
+    },
+    fixPrompt:
+      "Our Wizer-style points lab uses window.transferBalance and innerHTML for avatars. Show how to prevent DOM clobbering bypasses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wizer-ctf-idor-task-manager-probe",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Wizer CTF Task Manager IDOR API exposed without auth",
+    description:
+      "Wizer CTF #11 Task Manager exposes POST /api/users and /api/tasks without authorization — sequential user_id enumeration enables cross-user task access.",
+    impactOneline:
+      "Public Wizer chal11 challenge returns unauthenticated JSON from /api/users and /api/tasks — IDOR training surface for sequential ID probing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wizerCtfIdorTaskManagerProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Wizer CTF labs are intentional training — enforce object-level authorization on every API route in production.",
+      steps: [
+        "Run Wizer CTF challenges only on isolated training infrastructure.",
+        "Verify the authenticated user owns the requested user_id before returning tasks.",
+        "Use non-enumerable IDs and server-side authorization checks on all object reads."
+      ]
+    },
+    fixPrompt:
+      "Our Wizer-style task manager exposes /api/users and /api/tasks without auth checks. Show proper IDOR prevention patterns.",
     version: 1,
     enabled: true
   },

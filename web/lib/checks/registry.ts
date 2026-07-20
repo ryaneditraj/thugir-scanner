@@ -12190,25 +12190,27 @@ const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- RedTiger level10 backtick command-injection login challenge --------------------
+// --- RedTiger level9/10 backtick command-injection login challenge ------------------
 const redtigerCommandInjectionEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   const corpus = `${ctx.home.body}\n${pageUrl}\n${ctx.combined}`;
-  if (!/level10\.php/i.test(corpus)) return NEGATIVE;
+  const levelMatch = corpus.match(/level(9|10)\.php/i);
+  if (!levelMatch) return NEGATIVE;
+  const levelNum = levelMatch[1];
   const backtickShell =
     /!`sh[\s\S]{0,60}\/dev\/tcp\/[0-9.]+\/[0-9]+/i.test(corpus) ||
     /<!--[\s\S]{0,120}!`sh/i.test(corpus);
-  const level10Login =
-    /name="level10login"/i.test(corpus) &&
+  const levelLogin =
+    new RegExp(`name="level${levelNum}login"`, "i").test(corpus) &&
     /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,400}?name="password"/i.test(corpus);
-  if (!backtickShell || !level10Login) return NEGATIVE;
+  if (!backtickShell || !levelLogin) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.9,
     evidence: {
-      levelPath: "level10.php",
-      note: "RedTiger level10 documents backtick command-injection login bypass via password field — HTML comment leaks `!`sh` shell payload oracle"
+      levelPath: `level${levelNum}.php`,
+      note: `RedTiger level${levelNum} documents backtick command-injection login bypass via password field — HTML comment leaks \`!\`sh\` shell payload oracle`
     }
   };
 };
@@ -12664,6 +12666,93 @@ const clientSideWizerCtfStoredDomXssEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Wizer Messages App CTF fetches stored messages via /api/getMessages and writes message HTML with innerHTML"
+    }
+  };
+};
+
+// --- Wizer CTF #14 Points Management DOM clobbering (chal14.vercel.app) -------------
+const CLIENT_WIZER_DOM_CLOBBER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "transferBalance window guard",
+    re: /window\.transferBalance/
+  },
+  {
+    label: "transferPoints API call",
+    re: /api\/transferPoints|transferPoints/
+  },
+  {
+    label: "avatar innerHTML sink",
+    re: /getElementById\(["']avatar["']\)\.innerHTML/
+  },
+  {
+    label: "yourAvatar query param",
+    re: /yourAvatar|yourName/
+  },
+  {
+    label: "points transfer query args",
+    re: /transferTo|pointsToTransfer/
+  },
+  {
+    label: "Wizer chal14 host",
+    re: /chal14[\w-]*\.vercel\.app/i
+  }
+];
+
+const clientSideWizerCtfDomClobberingEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WIZER_DOM_CLOBBER_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/wizer|chal\d+[\w-]*\.vercel\.app|transferBalance|transferPoints/i.test(corpus))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Wizer Points Management CTF guards transfers with window.transferBalance but writes yourAvatar to innerHTML — DOM clobbering can override the guard and call /api/transferPoints"
+    }
+  };
+};
+
+// --- Wizer CTF #11 Task Manager IDOR live probe (chal11.vercel.app) -----------------
+const wizerCtfIdorTaskManagerProbe: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/chal11[\w-]*\.vercel\.app/i.test(pageUrl) && !/chal11[\w-]*\.vercel\.app/i.test(ctx.origin))
+    return NEGATIVE;
+  const usersUrl = new URL("/api/users", ctx.origin).toString();
+  const tasksUrl = new URL("/api/tasks", ctx.origin).toString();
+  const usersDoc = await fetchDoc(usersUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_ids: [1] }),
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  if (usersDoc.status < 200 || usersDoc.status >= 300) return NEGATIVE;
+  if (!/^\s*\[/.test(usersDoc.body.trim())) return NEGATIVE;
+  const tasksDoc = await fetchDoc(tasksUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: 1 }),
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  if (tasksDoc.status < 200 || tasksDoc.status >= 300) return NEGATIVE;
+  if (!/^\s*\[/.test(tasksDoc.body.trim())) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      usersUrl,
+      tasksUrl,
+      usersSample: usersDoc.body.slice(0, 80).trim(),
+      tasksSample: tasksDoc.body.slice(0, 80).trim(),
+      note: "Wizer Task Manager CTF exposes POST /api/users and /api/tasks without authorization — sequential user_id enumeration enables IDOR"
     }
   };
 };
@@ -23123,6 +23212,8 @@ export const RULES: Record<string, Rule> = {
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
   clientSideWizerCtfStoredDomXssEvidence,
+  clientSideWizerCtfDomClobberingEvidence,
+  wizerCtfIdorTaskManagerProbe,
   clientSideIntigritiChallengeEvidence,
   clientSideIntigritiRaceConditionChallengeEvidence,
   clientSideIntigritiJanuaryXssFilterBypassEvidence,
