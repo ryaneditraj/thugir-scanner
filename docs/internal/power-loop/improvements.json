@@ -5429,6 +5429,24 @@
       "slug": "intigriti-archive-month-sqli-probe",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge.php?month=2 returns blog posts but month=2' returns bare error text; probeArchiveMonthDifferentialSql + month in SQL_PROBE_PARAMS; challenge-0722.intigriti.io findings 1→2 incl sql-error-disclosure; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-dynamic-function-call-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level34/source.php strcmp sha256 gate + $name() dynamic call to readflag(); websec.fr/level34 findings 5→6; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0424.intigriti.io",
+      "slug": "client-side-intigriti-race-condition-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: welcome.html Test Your Race Condition + BarSpacer admin:debug@ game link + code.zip debug leak; extractIntigritiChallengeSeeds extended; challenge-0424.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-86-96-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractDomGoatCxssSeeds loop extended 85→96; domgo.at/cxss/example/96 crawl includes unescape(hash) innerHTML sink; findings 4 on example/96; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9550,7 +9568,22 @@
     {
       "source": "discovery:challenge-0722.intigriti.io",
       "slug": "intigriti-archive-month-sqli-probe",
-      "shipped_at": "2026-07-20T16:10:00.000Z"
+      "shipped_at": "2026-07-20T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-dynamic-function-call-challenge-evidence",
+      "shipped_at": "2026-07-20T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0424.intigriti.io",
+      "slug": "client-side-intigriti-race-condition-challenge-evidence",
+      "shipped_at": "2026-07-20T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-86-96-seeds",
+      "shipped_at": "2026-07-20T17:10:00.000Z"
     }
   ]
 }

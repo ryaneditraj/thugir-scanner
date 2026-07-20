@@ -8950,23 +8950,23 @@ const clientSideWebsecOpenBasedirEvalChallengeEvidence: Rule = async (ctx) => {
 const CLIENT_WEBSEC_DYNAMIC_FUNCTION_CALL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "WebSec Level Thirty-four title",
-    re: /Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)+four|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)+four|please guess the flag/i
+    re: /LevelThirty(?:&nbsp;|\s)+four|Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)+four|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)+four|please guess the flag/i
   },
   {
     label: "POST name function parameter",
-    re: /\$_POST[\s\S]{0,80}['"]name['"][\s\S]{0,80}function|placeholder="Function"/i
+    re: /placeholder="Function"|name="name"[\s\S]{0,80}placeholder="Function"/i
   },
   {
     label: "Dynamic function invocation",
-    re: /\$name\s*\(\s*\)|function\s+readflag\s*\(\s*\)/i
+    re: /\$name[\s\S]{0,80}\(\s*\)|function[\s\S]{0,40}readflag[\s\S]{0,40}\(\s*\)/i
   },
   {
     label: "strcmp sha256 password hash gate",
-    re: /strcmp[\s\S]{0,120}hash[\s\S]{0,40}sha256[\s\S]{0,120}\$password[\s\S]{0,120}\$flag/i
+    re: /strcmp[\s\S]{0,300}sha256[\s\S]{0,300}\$password[\s\S]{0,120}\$flag/i
   },
   {
     label: "Conditional readflag definition",
-    re: /function\s+readflag[\s\S]{0,120}echo[\s\S]{0,40}\$flag/i
+    re: /function[\s\S]{0,80}readflag[\s\S]{0,200}\$flag/i
   }
 ];
 
@@ -8977,7 +8977,7 @@ const clientSideWebsecDynamicFunctionCallChallengeEvidence: Rule = async (ctx) =
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  if (!/websec\.fr|Level34|Thirty-four|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (!/websec\.fr|Level34|LevelThirty|Thirty-four|#WebSec/i.test(ctx.combined)) return NEGATIVE;
   if (/Level31|Thirty-one|open_basedir/i.test(ctx.combined) && !/Level34|Thirty-four/i.test(ctx.combined)) {
     return NEGATIVE;
   }
