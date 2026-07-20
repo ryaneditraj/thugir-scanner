@@ -6613,7 +6613,32 @@
       "url": "https://domgo.at/cxss/example/96",
       "source": "DomGoat \u2014 client-side XSS lab example 96 (cxss challenge series)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0722.intigriti.io/challenge/challenge.php",
+      "source": "Intigriti July 2022 challenge \u2014 Awesome Kitty Blog SQL injection training (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0424.intigriti.io/challenge",
+      "source": "Intigriti April 2024 challenge \u2014 BarSpacer race-condition gaming lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0525.intigriti.io/",
+      "source": "Intigriti May 2025 challenge \u2014 iframe XSS sandbox lab (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1224.intigriti.io/",
+      "source": "Intigriti December 2024 challenge \u2014 public XSS CTF (Bug Bytes #219)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1225.intigriti.io/",
+      "source": "Intigriti December 2025 CTF \u2014 multi-subdomain XS-leak/postMessage chain (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T13:45:00.000Z"
+  "updated_at": "2026-07-20T15:00:16.000Z"
 }
