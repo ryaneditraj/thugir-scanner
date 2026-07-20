@@ -5285,6 +5285,24 @@
       "slug": "hts-playlevel-94-application-86-net-force-level210-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/94 + application/86 + net-force level210 offline oracle; runner seeds extended + websec crawl through level17; playlevel/94 findings 0→6, level210 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-cookie-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level18/source.php setcookie(serialize($obj)) + unserialize($_COOKIE['obj']) + hash_equals input/flag oracle; websec.fr/level18 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-filter-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level20/source.php sanitize() preg_match filters + Flag __destruct POP + i0n1c bypass comment; websec.fr/level20 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-95-application-87-net-force-level211-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner seeds playlevel/95 + application/87 + net-force level211; playlevel/95 hub evidence during HTS maintenance; level211 301→homepage offline oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9287,6 +9305,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-94-application-86-net-force-level210-seeds",
       "shipped_at": "2026-07-20T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-cookie-challenge-evidence",
+      "shipped_at": "2026-07-20T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-filter-challenge-evidence",
+      "shipped_at": "2026-07-20T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-95-application-87-net-force-level211-seeds",
+      "shipped_at": "2026-07-20T08:10:00.000Z"
     }
   ]
 }
