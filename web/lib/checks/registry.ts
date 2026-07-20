@@ -4421,6 +4421,98 @@ const clientSideHacksplainingToxicDependenciesLessonEvidence: Rule = async (ctx)
   };
 };
 
+// --- Hacksplaining unencrypted communication lesson (hacksplaining.com/lessons/unencrypted-communication) -------
+const CLIENT_HACKSPLAINING_UNENCRYPTED_COMMUNICATION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Unencrypted communication lesson URL",
+    re: /hacksplaining\.com\/lessons\/unencrypted-communication/i
+  },
+  {
+    label: "Unencrypted communication lesson title",
+    re: /Unencrypted Communication — Secure Coding Lesson/i
+  },
+  {
+    label: "MITM lesson meta description",
+    re: /Insufficient encryption can make you vulnerable to monster-in-the-middle attacks/i
+  },
+  {
+    label: "Unencrypted communication lesson step nav",
+    re: /lessons\/unencrypted-communication\/(?:checking-the-code|a-real-world-example|finish)/i
+  },
+  {
+    label: "Cleartext transport attack description",
+    re: /unencrypted|cleartext|man-in-the-middle|monster-in-the-middle/i
+  }
+];
+
+const clientSideHacksplainingUnencryptedCommunicationLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/unencrypted-communication/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_UNENCRYPTED_COMMUNICATION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/unencrypted-communication\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining unencrypted communication lesson documents exploit-then-fix chains where insufficient transport encryption enables monster-in-the-middle credential theft"
+    }
+  };
+};
+
+// --- Hacksplaining XSSI lesson (hacksplaining.com/lessons/xssi) -----------------------
+const CLIENT_HACKSPLAINING_XSSI_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSSI lesson URL",
+    re: /hacksplaining\.com\/lessons\/xssi/i
+  },
+  {
+    label: "XSSI lesson title",
+    re: /Cross-Site Script Inclusion — Secure Coding Lesson/i
+  },
+  {
+    label: "Sensitive JS data lesson meta description",
+    re: /putting sensitive data in your JavaScript files an attacker is probably stealing/i
+  },
+  {
+    label: "XSSI lesson step nav",
+    re: /lessons\/xssi\/(?:checking-the-code|a-real-world-example|finish)/i
+  },
+  {
+    label: "Cross-site script inclusion attack description",
+    re: /cross-site script inclusion|script inclusion|sensitive data.*JavaScript/i
+  }
+];
+
+const clientSideHacksplainingXssiLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/xssi/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_XSSI_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/xssi\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining XSSI lesson documents exploit-then-fix chains where sensitive data embedded in JavaScript enables cross-site script inclusion attacks"
+    }
+  };
+};
+
 const clientSideHacksplainingSubdomainSquattingLessonEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const scanTarget = ctx.scanUrl || pageUrl;
@@ -7960,6 +8052,48 @@ const clientSideWebsecCryptoChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr ChaChaCha level documents password_hash/password_verify with sha1 type-juggling — hash collision auth bypass training lab"
+    }
+  };
+};
+
+// --- WebSec.fr file upload / LFI challenges (level08 GIF include_once) ---------------
+const CLIENT_WEBSEC_FILE_UPLOAD_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Eight file upload challenge title",
+    re: /#WebSec\s+Level\s+Eight|Level\s+Eight\s*<small>\s*-\s*Bypass Security Features/i
+  },
+  {
+    label: "GIF-only image uploader scope",
+    re: /image-dumper service.*only allows.*GIF|Select image \(\.gif only\)/i
+  },
+  {
+    label: "include_once uploaded file sink",
+    re: /include_once\s*\(\s*\$uploadedFile\s*\)|include_once\s*\(\s*\$uploadedFile/i
+  },
+  {
+    label: "Weak GIF validation bypass markers",
+    re: /IMAGETYPE_GIF|exif_imagetype|getimagesize[\s\S]{0,80}fileToUpload/i
+  },
+  {
+    label: "Uploaded file path under /uploads",
+    re: /\/uploads['"]\s*,\s*sha1\s*\(\s*\$_FILES/i
+  }
+];
+
+const clientSideWebsecFileUploadChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_FILE_UPLOAD_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Eight|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level08 documents GIF upload validation bypass leading to include_once on attacker-controlled files under /uploads"
     }
   };
 };
@@ -21624,6 +21758,7 @@ export const RULES: Record<string, Rule> = {
   clientSideGinAndJuiceScannerLabEvidence,
   clientSideWebsecChallengeEvidence,
   clientSideWebsecCryptoChallengeEvidence,
+  clientSideWebsecFileUploadChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
@@ -21909,6 +22044,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingPrototypePollutionLessonEvidence,
   clientSideHacksplainingSubdomainSquattingLessonEvidence,
   clientSideHacksplainingToxicDependenciesLessonEvidence,
+  clientSideHacksplainingUnencryptedCommunicationLessonEvidence,
+  clientSideHacksplainingXssiLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,

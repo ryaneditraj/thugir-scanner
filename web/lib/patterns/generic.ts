@@ -2293,6 +2293,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-file-upload-challenge-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "WebSec.fr file upload LFI lab disclosed",
+    description:
+      "WebSec.fr level08 publishes GIF upload validation source with include_once($uploadedFile) — local file inclusion via weak image-type checks.",
+    impactOneline:
+      "Public challenge source documents upload validation bypass leading to arbitrary file inclusion under /uploads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecFileUploadChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host file-upload LFI labs offline; never include user-uploaded paths in production.",
+      steps: [
+        "Move WebSec-style upload labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Store uploads outside web root and never include uploaded file paths."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level08 lab exposes include_once($uploadedFile) after weak GIF checks. Show how to retire public source disclosure and harden upload handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -5409,6 +5435,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style toxic dependencies exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining unencrypted communication lesson disclosed",
+    description:
+      "Hacksplaining /lessons/unencrypted-communication publishes an interactive exploit-then-fix walkthrough covering insufficient transport encryption and monster-in-the-middle credential theft.",
+    impactOneline:
+      "Public unencrypted communication lesson pages document cleartext transport attack patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingUnencryptedCommunicationLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining unencrypted communication lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable unencrypted communication lesson instances on private deployments.",
+        "Enforce HTTPS and HSTS on all production endpoints — never copy Hacksplaining cleartext transport handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style unencrypted communication exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-xssi-lesson-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Hacksplaining cross-site script inclusion lesson disclosed",
+    description:
+      "Hacksplaining /lessons/xssi publishes an interactive exploit-then-fix walkthrough covering sensitive data embedded in JavaScript and cross-site script inclusion attacks.",
+    impactOneline:
+      "Public XSSI lesson pages document sensitive-JS-data leakage patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingXssiLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining XSSI lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable XSSI lesson instances on private deployments.",
+        "Never embed secrets or PII in client-side JavaScript in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style XSSI exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
     version: 1,
     enabled: true
   },
