@@ -5135,6 +5135,24 @@
       "slug": "dvs-deploybro-queue-url-fix",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: dvs.vercel.app serves Vietnamese IT company CÔNG TY TNHH DVS VIỆT NAM — not 0xSV1/DVS DeployBro; queue entry removed; correct target is damn-vulnerable-startup.fly.dev (DNS offline Jul 2026)"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-84-application-78-mission-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/84/ Login Required + /missions/application/78/ login-gated hub; extractHackThisSiteMissionSeeds extended; playlevel/84 findings 0→6, application/78 findings 0→6; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level204-applet-encoding-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level204 GET returns Net-Force Challenge - 204 + Simple encoding + applet4.class Decompile it; netForcePrioritySeeds + applet decompile note; level204 findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "client-side-aevum-agent-consent-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle sandbox/consent + tamper-evident sigchain + proposed_action workflow; demo.aevum.build findings 3→4; extractAevumDemoSeeds probes /openapi.json + /docs; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9022,6 +9040,21 @@
       "source": "discovery:zen-demo-java.fly.dev",
       "slug": "zen-demo-java-lab-nav-seeds",
       "shipped_at": "2026-07-19T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-84-application-78-mission-seeds",
+      "shipped_at": "2026-07-20T00:30:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level204-applet-encoding-seed",
+      "shipped_at": "2026-07-20T00:30:00.000Z"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "client-side-aevum-agent-consent-demo-evidence",
+      "shipped_at": "2026-07-20T00:30:00.000Z"
     }
   ]
 }

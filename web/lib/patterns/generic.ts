@@ -9885,6 +9885,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-aevum-agent-consent-demo-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Aevum agent consent-ledger demo disclosed",
+    description:
+      "Aevum demo.aevum.build documents a governed context kernel for AI agents with sandbox/consent approval, execute under consent tokens, and tamper-evident sigchain audit trails.",
+    impactOneline:
+      "Public Aevum consent demos expose agent-governance API flows attackers study for bypassing human-in-the-loop approval.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAevumAgentConsentDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Aevum demos are intentional — authenticate consent and sigchain APIs in production agent platforms.",
+      steps: [
+        "Require mutual TLS or signed tokens on all agent consent endpoints.",
+        "Bind execute actions to short-lived consent tokens with principal scoping.",
+        "Protect sigchain inspection APIs from unauthenticated enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host an Aevum-style agent consent-ledger demo. Show how to secure consent approval and sigchain APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-attp-agent-trust-evidence",
     platform: "generic",
     category: "AI security",

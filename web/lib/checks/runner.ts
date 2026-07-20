@@ -1116,6 +1116,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
   "clientSideAikidoZenDemoEvidence",
+  "clientSideAevumAgentConsentDemoEvidence",
   "clientSideAttpAgentTrustEvidence",
   "clientSideBugzapPromptDefenseEvidence",
   "clientSideRedlockxPromptFirewallEvidence",
@@ -1403,6 +1404,21 @@ function extractZenDemoLabSeeds(html: string, pageUrl: string): string[] {
       if (u.origin !== pageOrigin) continue;
       u.hash = "";
       out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Aevum consent-ledger demo (demo.aevum.build) — FastAPI sandbox/consent + sigchain API. */
+function extractAevumDemoSeeds(html: string, pageUrl: string): string[] {
+  if (!/demo\.aevum\.build|governed context kernel|Black Box for AI Agents/i.test(`${html}\n${pageUrl}`))
+    return [];
+  const out = new Set<string>();
+  for (const path of ["/openapi.json", "/docs", "/redoc"]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -1912,12 +1928,15 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/81/",
     "/playlevel/82/",
     "/playlevel/83/",
+    "/playlevel/84/",
+    "/playlevel/85/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
     "/missions/application/75/",
     "/missions/application/76/",
     "/missions/application/77/",
+    "/missions/application/78/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5901,7 +5920,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level437/index.php",
         "http://www.net-force.nl/challenge/level201/index.php",
         "http://www.net-force.nl/challenge/level202/index.php",
-        "http://www.net-force.nl/challenge/level203/index.php"
+        "http://www.net-force.nl/challenge/level203/index.php",
+        "http://www.net-force.nl/challenge/level204/index.php"
       ]
     : [];
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
@@ -5956,6 +5976,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     );
   })();
   const zenDemoLabNavSeeds = extractZenDemoLabSeeds(home.body, home.finalUrl);
+  const aevumDemoSeeds = extractAevumDemoSeeds(home.body, home.finalUrl);
   const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)
     ? [
         new URL("/pages/create", home.finalUrl).toString(),
@@ -6111,6 +6132,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...domgoCxssProgressiveTailSeeds,
       ...zenDemoLabNavSeeds,
       ...zenDemoPrioritySeeds,
+      ...aevumDemoSeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,

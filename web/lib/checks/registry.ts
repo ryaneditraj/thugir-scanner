@@ -5162,6 +5162,49 @@ const clientSideAikidoZenDemoEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Aevum consent-ledger agent demo (demo.aevum.build) ------------------------------
+const CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Aevum Black Box branding",
+    re: /Aevum\s*[—-]\s*The Black Box for AI Agents|governed context kernel for AI agents/i
+  },
+  {
+    label: "Sandbox consent API flow",
+    re: /\/sandbox\/consent|consent_token|human approves or denies/i
+  },
+  {
+    label: "Tamper-evident sigchain",
+    re: /\/sandbox\/sigchain|tamper-evident sigchain|sigchain_head/i
+  },
+  {
+    label: "Agent proposed_action workflow",
+    re: /proposed_action|Request.*Consent.*Execute.*Sigchain/i
+  },
+  {
+    label: "Consent-ledger demo host",
+    re: /demo\.aevum\.build|aevum\.build/i
+  }
+];
+
+const clientSideAevumAgentConsentDemoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/demo\.aevum\.build|governed context kernel|Black Box for AI Agents/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : hits.length >= 3 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Aevum consent-ledger demo documents governed agent actions with human consent approval and tamper-evident sigchain audit trail"
+    }
+  };
+};
+
 // --- ATTP Agent Trust Transport Protocol demo (attp-live.fly.dev) --------------------
 const CLIENT_ATTP_AGENT_TRUST_RES: { label: string; re: RegExp }[] = [
   {
@@ -11746,6 +11789,9 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
         : /Right click disabled|JavaScript protection/i.test(corpus)
           ? `Net-Force level ${level ?? "NN"} uses trivial JavaScript protection (right-click disable / secret.html) — client-side auth bypass training lab`
           : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
+              /Decompile it|Simple encoding/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} Simple encoding challenge ships a Java applet — decompile applet.class to recover password`
+            : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
               /Sweet little applet|Login using this applet/i.test(corpus)
             ? `Net-Force level ${level ?? "NN"} ships a Java applet login gate — decompile applet1.class or reverse client-side credential check`
             : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
@@ -21778,6 +21824,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWafWorkshopEvidence,
   clientSideBugforgeLabEvidence,
   clientSideAikidoZenDemoEvidence,
+  clientSideAevumAgentConsentDemoEvidence,
   clientSideAttpAgentTrustEvidence,
   clientSideBugzapPromptDefenseEvidence,
   clientSideRedlockxPromptFirewallEvidence,
