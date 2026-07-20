@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T15:10:00.000Z",
+  "updated_at": "2026-07-20T16:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1570,
-  "total_findings": 7861,
+  "total_sites_scanned": 1578,
+  "total_findings": 7895,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1310,
-  "discovery_findings": 6292,
+  "discovery_urls_added": 1315,
+  "discovery_findings": 6319,
   "improvements_shipped": 821,
-  "last_run": "2026-07-20T15:10:00.000Z",
+  "last_run": "2026-07-20T16:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — recall stable at 6/6 (6 findings on primary heroku after wake retry)",
+      "note": "No benchmark category misses — first-pass full recall on primary Heroku (7 findings, pages=6 probes=265)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,18 +50,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "VulnLab verbose 404 admin live probe + Intigriti welcome modal innerHTML sink + IDOR lab priority seed",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 27,
+      "skipped_48h": 1,
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (DNS unreachable — recurring vulnweb dead host)"
+      ],
+      "focus": "Intigriti 0326/0526/0626 monthly CTF queue seed + defendtheweb intro12 + vuln-scanner demo",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "hack-this-site-eta.vercel.app/owasp/a01.html: 2→11 findings (+client-side-vulnlab-verbose-404-evidence, +idor-sequential-ids, +unauthenticated-admin-endpoint)",
-      "challenge-0125.intigriti.io: 2→3 findings (+dangerous-html-sinks from /challenge modalText.innerHTML)",
-      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings, first pass, no wake retry needed)",
+      "ai-security-demo.vercel.app: stack-database-url-in-bundle critical (DB URL in client bundle)",
+      "csrf-xss-demo.vercel.app: dom-eval-xss + vibe-hardcoded-demo-credentials",
+      "websegura.radwarelatam.com/mutillidae: exposed-config-backup critical + html-comment-credential-disclosure",
+      "sam.wizer-ctf.com: dangerous-html-sinks + client-side-wizer-ctf-evidence (5 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku cold-start can degrade finding count before wake retry",
+      "secret-resend slug still absent on juice-shop — sensitive_data covered via vibe-unauthenticated-api-routes proxy",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner"
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
+      "hacking-lab.com: marketing portal only — challenge instances require authenticated lab start"
     ]
   },
   "discovery_highlights": {
