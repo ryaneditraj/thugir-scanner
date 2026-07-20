@@ -6588,7 +6588,32 @@
       "url": "https://challenge-0125.intigriti.io/",
       "source": "Intigriti January 2025 XSS challenge \u2014 URL parser vs XSS() filter bypass lab",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level32/",
+      "source": "WebSec.fr \u2014 level32 XSS/filter bypass challenge (gap between level31 and level33 in queue)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level34/",
+      "source": "WebSec.fr \u2014 level34 PHP challenge (web search; public training benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/76",
+      "source": "DomGoat \u2014 client-side XSS lab example 76 (cxss challenge series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/91",
+      "source": "DomGoat \u2014 client-side XSS lab example 91 (cxss challenge series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/96",
+      "source": "DomGoat \u2014 client-side XSS lab example 96 (cxss challenge series)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T12:35:00.000Z"
+  "updated_at": "2026-07-20T13:45:00.000Z"
 }

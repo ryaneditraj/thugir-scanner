@@ -1,176 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-19T10:03:12.709Z",
-      "url": "https://hack-this-site-eta.vercel.app/owasp/a01.html",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 15,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.84,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-vulnlab-verbose-404-evidence",
-          "title": "VulnLab verbose 404 credential leak disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-vulnlab-academy-evidence",
-          "title": "VulnLab Academy pentest training platform disclosed",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vulnlab-a01-access-evidence",
-          "title": "VulnLab A01 broken access control lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-a03-injection-evidence",
-          "title": "VulnLab A03 injection lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 285,
-      "status": "ok",
-      "scanned_at": "2026-07-19T10:03:12.709Z"
-    },
-    {
-      "run_id": "2026-07-19T10:03:16.340Z",
-      "url": "https://ai-prompt-lab.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "secret-openai",
-          "title": "OpenAI API key exposed in client bundle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-prompt-lab-evidence",
-          "title": "Prompt Lab Japanese prompt-engineering checklist disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 306,
-      "status": "ok",
-      "scanned_at": "2026-07-19T10:03:16.340Z"
-    },
-    {
       "run_id": "2026-07-19T10:03:26.267Z",
       "url": "https://prompt-injection-playground.vercel.app/",
       "auth": "public_demo",
@@ -820,7 +650,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -1494,7 +1324,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -1551,7 +1381,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -2475,7 +2305,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -3107,7 +2937,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -7885,7 +7715,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -8496,7 +8326,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -8709,7 +8539,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9042,7 +8872,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-20T10:26:17.525Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-20T10:26:27.541Z",
@@ -9161,7 +8991,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9308,7 +9138,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-20T11:11:42.988Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach testhtml5.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-07-20T11:11:53.050Z",
@@ -10193,6 +10023,115 @@
       "probes_run": 283,
       "status": "ok",
       "scanned_at": "2026-07-20T12:34:39.390Z"
+    },
+    {
+      "run_id": "2026-07-20T13:23:33.154Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 82,
+      "status": "ok",
+      "scanned_at": "2026-07-20T13:23:33.154Z"
+    },
+    {
+      "run_id": "2026-07-20T13:39:45.811Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 260,
+      "status": "ok",
+      "scanned_at": "2026-07-20T13:39:45.811Z"
     }
   ],
   "teacher_delta_runs": [
@@ -10202,7 +10141,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=169)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=169)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Shallow crawl pages_crawled=1 despite full category recall; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-15T23:16:00.000Z"
@@ -10213,7 +10152,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=259)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Full crawl pages_crawled=6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T00:12:00.000Z"
@@ -10224,7 +10163,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=235)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=235)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Shallow crawl pages_crawled=1 despite full category recall; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T01:06:00.000Z"
@@ -10235,7 +10174,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=233)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=233)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Full crawl pages_crawled=6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T04:06:00.000Z"
@@ -10246,7 +10185,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=259)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Full crawl pages_crawled=6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T06:06:00.000Z"
@@ -10257,7 +10196,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 5 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=166)",
+      "benchmark_status": "ok — 5 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=166)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Shallow crawl pages_crawled=1 despite full category recall; missed slugs idor-sequential-ids + permissive-cors (categories still hit via vibe-unauthenticated-api-routes + missing-security-headers).",
       "scanned_at": "2026-07-16T07:06:00.000Z"
@@ -10268,7 +10207,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 2 findings gap=xss,sqli,auth_bypass,sensitive_data pages_crawled=1; final: pages_crawled=6 probes=259)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 2 findings gap=xss,sqli,auth_bypass,sensitive_data pages_crawled=1; final: pages_crawled=6 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only idor+misconfig before wake retry merged to 6/6.",
       "scanned_at": "2026-07-16T08:33:53.000Z"
@@ -10279,7 +10218,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 2 findings gap=sqli,idor,auth_bypass,sensitive_data pages_crawled=1; pass2: 4 findings; final: pages_crawled=6 probes=260)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 2 findings gap=sqli,idor,auth_bypass,sensitive_data pages_crawled=1; pass2: 4 findings; final: pages_crawled=6 probes=260)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only misconfig+xss before wake retry merged to 6/6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T10:37:40.000Z"
@@ -10290,7 +10229,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 6 findings gap=sensitive_data pages_crawled=6 probes=123; pass2: 2 findings pages_crawled=1; pass3: 6 findings pages_crawled=1 probes=235)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku after Heroku wake retries (pass1: 6 findings gap=sensitive_data pages_crawled=6 probes=123; pass2: 2 findings pages_crawled=1; pass3: 6 findings pages_crawled=1 probes=235)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data only; pass2 Heroku regression (2 findings pages_crawled=1); sensitive_data recovered via vibe-unauthenticated-api-routes merge; secret-resend slug absent.",
       "scanned_at": "2026-07-16T11:37:44.000Z"
@@ -10301,9 +10240,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=260)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=260)",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. Full crawl on first pass \u2014 no Heroku cold-start degradation; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
+      "notes": "No teacher tools available to diff against local scanner findings. Full crawl on first pass — no Heroku cold-start degradation; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T13:05:00.000Z"
     },
     {
@@ -10312,7 +10251,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=260)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku (no gap; pages_crawled=6 probes=260)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Benchmark stable 6/6 on first pass; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T14:05:00.000Z"
@@ -10323,7 +10262,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku after wake retry (pass1: 5 findings gap=sensitive_data pages_crawled=1 probes=224; pass2: 4 findings pages_crawled=1 probes=186; merged 6/6)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku after wake retry (pass1: 5 findings gap=sensitive_data pages_crawled=1 probes=224; pass2: 4 findings pages_crawled=1 probes=186; merged 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data only; sensitive_data recovered via vibe-unauthenticated-api-routes merge; secret-resend slug absent.",
       "scanned_at": "2026-07-16T16:18:30.000Z"
@@ -10334,7 +10273,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku after wake retry (pass1: 5 findings gap=sensitive_data pages_crawled=1 probes=173; pass2: 4 findings; pass3: 5 findings; merged 6/6)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku after wake retry (pass1: 5 findings gap=sensitive_data pages_crawled=1 probes=173; pass2: 4 findings; pass3: 5 findings; merged 6/6)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data before Heroku wake retries; sensitive_data via vibe-unauthenticated-api-routes; secret-resend slug absent.",
       "scanned_at": "2026-07-16T18:32:36.000Z"
@@ -10345,7 +10284,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=234)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=234)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T19:13:30.000Z"
@@ -10356,7 +10295,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=235)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku (no gap; pages_crawled=1 probes=235)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-16T20:10:00.000Z"
@@ -10367,7 +10306,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "primary heroku 3/6 recall (gap=sqli,idor,sensitive_data; pages=1 probes=117\u00d73 passes); staging fallback 7 findings 6/6",
+      "benchmark_status": "primary heroku 3/6 recall (gap=sqli,idor,sensitive_data; pages=1 probes=117×3 passes); staging fallback 7 findings 6/6",
       "teacher_delta": [],
       "notes": "No teacher tools available. Primary juice-shop.herokuapp.com missed sqli/idor/sensitive_data on all 3 Heroku wake passes; juice-shop-staging.herokuapp.com fallback restored 6/6. Learning gap: primary oracle cold-start regression vs staging.",
       "scanned_at": "2026-07-16T21:02:00.000Z"
@@ -10378,7 +10317,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall via staging fallback (primary heroku pass1 5/6 gap=sensitive_data; pass3 4/6 gap=idor,sensitive_data pages=1 probes=141\u2192167\u219254; staging pages=6 probes=237)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall via staging fallback (primary heroku pass1 5/6 gap=sensitive_data; pass3 4/6 gap=idor,sensitive_data pages=1 probes=141→167→54; staging pages=6 probes=237)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Primary juice-shop.herokuapp.com never hit sensitive_data; idor dropped on wake pass3. Staging fallback restored 6/6.",
       "scanned_at": "2026-07-16T22:02:00.000Z"
@@ -10389,9 +10328,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after 3 Heroku wake retries (pass1\u20132: 5 findings gap=sensitive_data pages=1 probes=159; pass3: 6 findings adds vibe-unauthenticated-api-routes probes=166)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after 3 Heroku wake retries (pass1–2: 5 findings gap=sensitive_data pages=1 probes=159; pass3: 6 findings adds vibe-unauthenticated-api-routes probes=166)",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1\u20132 gap=sensitive_data only before final wake retry; secret-resend slug absent.",
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1–2 gap=sensitive_data only before final wake retry; secret-resend slug absent.",
       "scanned_at": "2026-07-17T01:38:45.000Z"
     },
     {
@@ -10400,7 +10339,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=204; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=204; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T03:12:50.000Z"
@@ -10411,7 +10350,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=100; pass2: 6 findings pages=1 probes=225)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=100; pass2: 6 findings pages=1 probes=225)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data only before wake retry; sensitive_data via vibe-unauthenticated-api-routes; secret-resend slug absent.",
       "scanned_at": "2026-07-17T06:22:03.000Z"
@@ -10422,7 +10361,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=226; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=226; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T07:10:00.000Z"
@@ -10433,7 +10372,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 2 findings gap=xss,sqli,auth_bypass pages=1 probes=63; pass2: 7 findings pages=6 probes=259)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 2 findings gap=xss,sqli,auth_bypass pages=1 probes=63; pass2: 7 findings pages=6 probes=259)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 gap=xss,sqli,auth_bypass (only misconfig+sensitive_data via vibe-unauthenticated-api-routes); pass2 retry restored 6/6. secret-resend slug absent.",
       "scanned_at": "2026-07-17T11:25:00.000Z"
@@ -10444,7 +10383,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=225; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=225; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T12:08:00.000Z"
@@ -10455,7 +10394,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sqli pages=1 probes=127; pass2: 7 findings pages=6 probes=97)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sqli pages=1 probes=127; pass2: 7 findings pages=6 probes=97)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 gap=sqli only (idor/auth_bypass/xss/sensitive_data present); pass2 retry restored sql-error-disclosure. secret-resend slug absent.",
       "scanned_at": "2026-07-17T13:26:00.000Z"
@@ -10466,7 +10405,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 3 findings gap=sqli,auth_bypass pages=1 probes=128; pass2: 7 findings pages=6 probes=260)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 3 findings gap=sqli,auth_bypass pages=1 probes=128; pass2: 7 findings pages=6 probes=260)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 gap=sqli,auth_bypass before wake retry; pass2 restored sql-error-disclosure + unauthenticated-admin-endpoint. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T14:18:03.000Z"
@@ -10477,7 +10416,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=235; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=235; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T15:05:32.111Z"
@@ -10488,7 +10427,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T16:00:56.659Z"
@@ -10499,7 +10438,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=225; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=225; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T17:10:26.318Z"
@@ -10519,7 +10458,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 gap=sensitive_data only; final wake retry restored vibe-unauthenticated-api-routes.",
       "scanned_at": "2026-07-17T20:34:15.000Z"
@@ -10530,7 +10469,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=257; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=257; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T22:08:24.587Z"
@@ -10541,7 +10480,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-17T23:05:00.000Z"
@@ -10552,7 +10491,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=234; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=234; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-18T00:12:00.000Z"
@@ -10563,7 +10502,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-18T01:05:00.000Z"
@@ -10574,7 +10513,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=259; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-18T02:05:00.000Z"
@@ -10585,7 +10524,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=262; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=262; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. idor-sequential-ids slug present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T09:05:00.000Z"
@@ -10596,7 +10535,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=262; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=262; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. idor-sequential-ids slug present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T10:05:00.000Z"
@@ -10607,7 +10546,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retries (pass1: 6 findings gap=sqli; final merge recovered sql-error-disclosure)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retries (pass1: 6 findings gap=sqli; final merge recovered sql-error-disclosure)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sqli only; Heroku wake retry restored sql-error-disclosure. idor-sequential-ids slug present; secret-resend slug absent.",
       "scanned_at": "2026-07-19T11:05:00.000Z"
@@ -10618,7 +10557,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=262; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=262; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T12:05:00.000Z"
@@ -10629,7 +10568,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=231; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=231; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Shallow crawl (1 page) still hit all 6 oracle categories; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T13:05:00.000Z"
@@ -10640,7 +10579,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sqli; pass2: 7 findings pages=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sqli; pass2: 7 findings pages=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sqli only; Heroku wake retry restored sql-error-disclosure + idor-sequential-ids. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T14:17:00.000Z"
@@ -10651,7 +10590,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); idor-sequential-ids + sql-error-disclosure present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T15:05:00.000Z"
@@ -10662,7 +10601,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=231; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=231; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Shallow crawl (1 page) still hit all 6 oracle categories; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T16:05:00.000Z"
@@ -10673,7 +10612,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=263; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=263; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); idor-sequential-ids + sql-error-disclosure present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T17:05:00.000Z"
@@ -10684,7 +10623,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retries + staging fallback (pass1: 6 findings gap=sensitive_data; final oracle: juice-shop-staging.herokuapp.com)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retries + staging fallback (pass1: 6 findings gap=sensitive_data; final oracle: juice-shop-staging.herokuapp.com)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: primary heroku pass1 gap=sensitive_data (6 findings); wake retries degraded to 1 finding; staging fallback restored 7 findings 6/6. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-19T19:05:00.000Z"
@@ -10695,7 +10634,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sensitive_data pages=6 probes=63; retry: vibe-unauthenticated-api-routes restored sensitive_data)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sensitive_data pages=6 probes=63; retry: vibe-unauthenticated-api-routes restored sensitive_data)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sensitive_data only; 12s wake retry merged vibe-unauthenticated-api-routes for 6/6 recall without staging fallback. secret-resend slug absent.",
       "scanned_at": "2026-07-19T20:22:43.056Z"
@@ -10715,7 +10654,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after Heroku wake retry (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=0; retry: 6 findings pages=1 probes=241; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retry (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=0; retry: 6 findings pages=1 probes=241; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only missing-security-headers (Heroku asleep, probes_run=0); 12s wake retry restored full 6/6 recall. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-20T00:23:51.407Z"
@@ -10726,7 +10665,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); idor-sequential-ids + sql-error-disclosure present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-20T01:05:00.000Z"
@@ -10745,7 +10684,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=237; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=237; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl; idor-sequential-ids + sql-error-disclosure present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-20T03:24:00.000Z"
@@ -10756,7 +10695,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall with deeper crawl (6 pages); idor-sequential-ids + sql-error-disclosure present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-20T04:05:00.000Z"
@@ -10767,7 +10706,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 5 findings, 6/6 recall after Heroku wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1; pass2: 1 finding; pass3: 5 findings pages=1 probes=172)",
+      "benchmark_status": "ok — 5 findings, 6/6 recall after Heroku wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1; pass2: 1 finding; pass3: 5 findings pages=1 probes=172)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1+pass2 only misconfig before final wake retry merged to 6/6; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-20T08:56:00.000Z"
@@ -10778,7 +10717,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=idor,sensitive_data pages=6 probes=165; retry: 6 findings pages=1 probes=172; merged=7)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=idor,sensitive_data pages=6 probes=165; retry: 6 findings pages=1 probes=172; merged=7)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=idor,sensitive_data; 12s wake retry merged idor-sequential-ids + vibe-unauthenticated-api-routes for 6/6 recall. secret-resend slug absent.",
       "scanned_at": "2026-07-20T10:24:42.552Z"
@@ -10789,7 +10728,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after Heroku wake retry (pass1: 3 findings gap=sqli,auth_bypass,sensitive_data pages=1 probes=49; retry merged to 6 findings pages=1 probes=166)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retry (pass1: 3 findings gap=sqli,auth_bypass,sensitive_data pages=1 probes=49; retry merged to 6 findings pages=1 probes=166)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sqli,auth_bypass,sensitive_data; 12s retry recovered full 6/6 recall.",
       "scanned_at": "2026-07-20T12:32:08.653Z"
