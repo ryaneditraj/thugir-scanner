@@ -13029,6 +13029,142 @@ const clientSideIntigritiSmartySstiChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti July 2025 IRC DOMPurify iframe bypass (challenge-0725.intigriti.io) ----
+const CLIENT_INTIGRITI_JULY_IRC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "July IRC challenge host",
+    re: /challenge-0725\.intigriti\.io|Intigriti(?:'s)?\s+July\s+challenge/i
+  },
+  {
+    label: "Instant Realtime Communication IRC lab",
+    re: /Instant Realtime Communication|Join or Create a Channel/i
+  },
+  {
+    label: "Socket.io IRC channel chat",
+    re: /socket\.io\/socket\.io\.js|socket\.emit\(["']join_channel/i
+  },
+  {
+    label: "DOMPurify iframe tag allowlist sink",
+    re: /DOMPurify\.sanitize\([\s\S]{0,120}ADD_TAGS:\s*\[["']iframe["']\]/i
+  },
+  {
+    label: "innerHTML reparse after message append",
+    re: /document\.body\.innerHTML\s*=\s*document\.body\.innerHTML/i
+  },
+  {
+    label: "IRC source code download",
+    re: /irc\.zip|Review the source code/i
+  }
+];
+
+const clientSideIntigritiJulyIrcChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JULY_IRC_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0725|IRC/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti July 2025 IRC challenge documents socket.io chat with DOMPurify iframe allowlist bypass and innerHTML reparse sink"
+    }
+  };
+};
+
+// --- Intigriti May 2024 PhpSpreadsheet formula injection (challenge-0524.intigriti.io) -
+const CLIENT_INTIGRITI_MAY_SPREADSHEET_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "May challenge host",
+    re: /challenge-0524\.intigriti\.io|Intigriti(?:'s)?\s+May\s+challenge/i
+  },
+  {
+    label: "Quadratic equation solver lab",
+    re: /Quadratic Equation Solver|Ax\s*<sup>\s*2\s*<\/sup>\s*\+\s*Bx/i
+  },
+  {
+    label: "PhpSpreadsheet calculateFormula",
+    re: /PhpOffice\\PhpSpreadsheet\\Calculation\\Calculation|calculateFormula\s*\(/i
+  },
+  {
+    label: "alert(document.domain) challenge rule",
+    re: /alert\(document\.domain\)|Execute arbitrary JavaScript/i
+  },
+  {
+    label: "View Source challenge.php link",
+    re: /challenge\.php\?source=challenge\.php|View Source/i
+  }
+];
+
+const clientSideIntigritiMaySpreadsheetFormulaEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MAY_SPREADSHEET_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0524|PhpSpreadsheet|Quadratic/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti May 2024 challenge documents PhpSpreadsheet calculateFormula injection via quadratic equation coefficient POST fields"
+    }
+  };
+};
+
+// --- Intigriti March 2024 eval XSS challenge (challenge-0324.intigriti.io) ------------
+const CLIENT_INTIGRITI_MARCH_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "March XSS challenge host",
+    re: /challenge-0324\.intigriti\.io|Intigriti(?:'s)?\s+March\s+XSS\s+challenge/i
+  },
+  {
+    label: "alert(1337) challenge goal",
+    re: /alert\(1337\)|execute an alert\(1337\)/i
+  },
+  {
+    label: "runCmdToken eval gadget",
+    re: /function\s+runCmdToken[\s\S]{0,200}eval\s*\(\s*cmd\s*\)/i
+  },
+  {
+    label: "Contact info setName URL params",
+    re: /setName|setContact|setValue|runContactInfo|handleInputName/i
+  },
+  {
+    label: "challenge/index.html iframe lab",
+    re: /challenge\/index\.html|Set Contact Info/i
+  }
+];
+
+const clientSideIntigritiMarchEvalXssChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MARCH_EVAL_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0324|alert\(1337\)/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti March 2024 XSS challenge documents eval(cmd) gadget chain via MD5 token/name contact lab at challenge/index.html"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -23356,6 +23492,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiJuneRceChallengeEvidence,
   clientSideIntigritiSecureVaultXssEvidence,
   clientSideIntigritiSmartySstiChallengeEvidence,
+  clientSideIntigritiJulyIrcChallengeEvidence,
+  clientSideIntigritiMaySpreadsheetFormulaEvidence,
+  clientSideIntigritiMarchEvalXssChallengeEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,

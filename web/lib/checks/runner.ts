@@ -1496,7 +1496,7 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
   }
 
   const linkRe =
-    /href\s*=\s*["']((?:https?:\/\/[^"']+|\/)?(?:notes|challenge(?:\.php)?|challenge\/[^"'#?]*)[^"'#?]*)["']/gi;
+    /href\s*=\s*["']((?:https?:\/\/[^"']+|\/)?(?:notes|challenge(?:\.php)?|challenge\/[^"'#?]*|login|home|report)[^"'#?]*)["']/gi;
   while ((m = linkRe.exec(html))) {
     try {
       const raw = m[1];
@@ -1530,6 +1530,26 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
       out.add(new URL("/challenge/challenge.php", pageUrl).toString());
     } catch {
       /* ignore */
+    }
+  }
+
+  if (/Instant Realtime Communication|irc\.zip|socket\.io\/socket\.io\.js/i.test(html)) {
+    for (const p of ["/login.js", "/chat.js", "/purify.js", "/bot"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/SafeNotes|secure place to create, store, and share notes/i.test(html)) {
+    for (const p of ["/home", "/login", "/report", "/create"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
 

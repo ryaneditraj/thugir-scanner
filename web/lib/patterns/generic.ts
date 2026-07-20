@@ -4816,6 +4816,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-july-irc-challenge-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti July IRC DOMPurify bypass challenge disclosed",
+    description:
+      "Intigriti challenge-0725.intigriti.io hosts a socket.io IRC lab with DOMPurify iframe allowlist and innerHTML reparse sinks for XSS training.",
+    impactOneline:
+      "Public July 2025 challenge documents DOMPurify ADD_TAGS iframe bypass plus document.body.innerHTML reparse after chat messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJulyIrcChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never allow iframe tags through DOMPurify; avoid re-parsing entire body innerHTML after sanitization.",
+      steps: [
+        "Use textContent for chat messages instead of DOMPurify DOM fragments.",
+        "Do not reassign document.body.innerHTML after dynamic message append.",
+        "Host IRC XSS training labs on contest-only infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti IRC challenges with DOMPurify iframe allowlists. Show safe chat rendering without innerHTML reparse.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-may-spreadsheet-formula-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Intigriti May PhpSpreadsheet formula injection challenge disclosed",
+    description:
+      "Intigriti challenge-0524.intigriti.io hosts a quadratic equation solver that passes user input into PhpSpreadsheet Calculation::calculateFormula.",
+    impactOneline:
+      "Public May 2024 challenge documents spreadsheet formula injection via POST coefficient fields with exposed PHP source.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMaySpreadsheetFormulaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into spreadsheet formula evaluators; validate numeric coefficients strictly.",
+      steps: [
+        "Cast POST coefficients to floats before any formula construction.",
+        "Avoid PhpSpreadsheet calculateFormula on strings containing user input.",
+        "Host formula-injection training labs on isolated contest infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti spreadsheet challenges with calculateFormula on user POST fields. Show safe numeric validation before formula evaluation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-march-eval-xss-challenge-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti March eval XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0324.intigriti.io documents an alert(1337) goal with runCmdToken eval(cmd) gadget chain via MD5 token contact lab.",
+    impactOneline:
+      "Public March 2024 challenge teaches DOM XSS via eval after MD5 token/name contact parameter manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMarchEvalXssChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never use eval on user-influenced strings; replace with safe dispatch tables.",
+      steps: [
+        "Remove eval(cmd) gadgets from contact/token lab scripts.",
+        "Validate setName/setToken URL parameters before object property assignment.",
+        "Host Intigriti eval XSS challenges on contest-only infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti March eval XSS challenges with runCmdToken MD5 gadgets. Show safe contact-form handling without eval.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
