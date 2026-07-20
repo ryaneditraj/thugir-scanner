@@ -1730,6 +1730,70 @@ function extractAspSqlProbePaths(text: string): string[] {
   return [...paths].slice(0, 5);
 }
 
+function extractArchiveMonthProbePaths(text: string, pageUrl: string): { path: string; param: string; value: string }[] {
+  const out: { path: string; param: string; value: string }[] = [];
+  const seen = new Set<string>();
+  const hrefRe = /href\s*=\s*["']\?month=(\d+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = hrefRe.exec(text))) {
+    const key = `month:${m[1]}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    try {
+      out.push({ path: new URL(pageUrl).pathname, param: "month", value: m[1] });
+    } catch {
+      /* ignore */
+    }
+  }
+  try {
+    const u = new URL(pageUrl);
+    const month = u.searchParams.get("month");
+    if (month && /^\d+$/.test(month)) {
+      const key = `month:${month}`;
+      if (!seen.has(key)) out.push({ path: u.pathname, param: "month", value: month });
+    }
+  } catch {
+    /* ignore */
+  }
+  return out.slice(0, 3);
+}
+
+async function probeArchiveMonthDifferentialSql(
+  ctx: RuleContext
+): Promise<{ fired: true; confidence: number; evidence: Record<string, unknown> } | null> {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const probes = extractArchiveMonthProbePaths(ctx.combined, pageUrl);
+  if (!probes.length) return null;
+  for (const { path, param, value } of probes) {
+    const baseline = new URL(path, ctx.origin);
+    baseline.searchParams.set(param, value);
+    const evil = new URL(path, ctx.origin);
+    evil.searchParams.set(param, `${value}'`);
+    const docs = await ctx.probe.getMany([baseline.toString(), evil.toString()], { maxBytes: 12_288 }, 2);
+    const baseDoc = docs.get(baseline.toString());
+    const evilDoc = docs.get(evil.toString());
+    if (!baseDoc || !evilDoc) continue;
+    if (baseDoc.status < 200 || baseDoc.status >= 400) continue;
+    if (evilDoc.status < 200 || evilDoc.status >= 500) continue;
+    const baseErr = /\berror\b/i.test(baseDoc.body);
+    const evilErr = /\berror\b/i.test(evilDoc.body);
+    if (evilErr && !baseErr) {
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          url: evil.toString(),
+          baselineStatus: baseDoc.status,
+          injectionStatus: evilDoc.status,
+          snippet: evilDoc.body.slice(0, 240).trim(),
+          note: "archive month parameter tolerated but quote returns error text — SQL injection likely (Intigriti/blog archive)"
+        }
+      };
+    }
+  }
+  return null;
+}
+
 async function probeAspDifferentialSql(
   ctx: RuleContext,
   paths: string[]
@@ -1781,7 +1845,7 @@ function extractSearchEndpoints(text: string): string[] {
   return [...paths].slice(0, 8);
 }
 
-const SQL_PROBE_PARAMS = ["q", "query", "search", "id", "tfSearch", "cat"];
+const SQL_PROBE_PARAMS = ["q", "query", "search", "id", "tfSearch", "cat", "month"];
 const SQL_API_SEARCH_PATHS = ["/api/products", "/api/search", "/api/items", "/api/users"];
 const JSON_AUTH_SQL_PATHS = ["/api/portal", "/api/auth/login", "/api/login", "/api/authenticate"];
 const JSON_SQLI_BODIES = [
@@ -2014,6 +2078,9 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
       };
     }
   }
+
+  const archiveMonthHit = await probeArchiveMonthDifferentialSql(ctx);
+  if (archiveMonthHit) return archiveMonthHit;
 
   const aspPaths = [...new Set([...extractAspSqlProbePaths(ctx.combined), ...SQL_ASP_FALLBACK_PATHS])];
   const aspHit = await probeAspDifferentialSql(ctx, aspPaths);
@@ -20212,6 +20279,96 @@ const clientSideVulnlabA03InjectionEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy A04 insecure design (hack-this-site-eta.vercel.app/owasp/a04.html) -
+const CLIENT_VULNLAB_A04_INSECURE_DESIGN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A04 insecure design module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a04/i
+  },
+  {
+    label: "A04 module path oracle",
+    re: /\/owasp\/a04\.html/i
+  },
+  {
+    label: "A04 insecure design module",
+    re: /A04[\s-]+Insecure Design/i
+  },
+  {
+    label: "A04 business logic tester lab",
+    re: /A04-001 Business Logic Tester|Price and quantity can be manipulated client-side/i
+  },
+  {
+    label: "Client-side order total calculation",
+    re: /logic-output|Order total:\s*\$|Number\(price\.value\)\s*\*\s*Number\(qty\.value\)/i
+  }
+];
+
+const clientSideVulnlabA04InsecureDesignEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A04_INSECURE_DESIGN_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A04 lab documents client-side price/quantity manipulation without server-side validation"
+    }
+  };
+};
+
+// --- VulnLab Academy A05 security misconfiguration (hack-this-site-eta.vercel.app/owasp/a05.html) -
+const CLIENT_VULNLAB_A05_MISCONFIG_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A05 security misconfiguration module URL",
+    re: /hack-this-site-eta\.vercel\.app\/owasp\/a05/i
+  },
+  {
+    label: "A05 module path oracle",
+    re: /\/owasp\/a05\.html/i
+  },
+  {
+    label: "A05 security misconfiguration module",
+    re: /A05[\s-]+Security Misconfiguration|A05[\s-]+Misconfig/i
+  },
+  {
+    label: "A05 security headers audit lab",
+    re: /A05-001 Security Headers Audit|No CSP, no HSTS, no X-Frame-Options/i
+  },
+  {
+    label: "A05 backup file finder lab",
+    re: /A05-004 Backup File Finder|\/backup\/config\.old|Exposed backup directory/i
+  },
+  {
+    label: "A05 CORS misconfiguration lab",
+    re: /A05-006 CORS Misconfiguration|Wildcard origin with credentials|\/api\/cors/i
+  }
+];
+
+const clientSideVulnlabA05MisconfigEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_A05_MISCONFIG_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab A05 lab documents missing security headers, exposed backup files, and wildcard CORS with credentials"
+    }
+  };
+};
+
 // --- VulnLab Academy A06 vulnerable components (hack-this-site-eta.vercel.app/owasp/a06.html) -
 const CLIENT_VULNLAB_A06_COMPONENTS_RES: { label: string; re: RegExp }[] = [
   {
@@ -22908,6 +23065,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabIdorLabEvidence,
   clientSideVulnlabA02CryptoEvidence,
   clientSideVulnlabA03InjectionEvidence,
+  clientSideVulnlabA04InsecureDesignEvidence,
+  clientSideVulnlabA05MisconfigEvidence,
   clientSideVulnlabA06ComponentsEvidence,
   clientSideVulnlabA07AuthEvidence,
   clientSideVulnlabAuthSessionLabEvidence,

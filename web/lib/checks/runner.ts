@@ -1460,7 +1460,7 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
     return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/challenge", "/js/app.js", "/challenge.html"]) {
+  for (const p of ["/challenge", "/challenge/challenge.php", "/js/app.js", "/challenge.html"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -3663,6 +3663,10 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
     "/labs/sqli-error.html",
     "/labs/idor.html",
     "/labs/secret-scanner.html",
+    "/labs/security-headers.html",
+    "/labs/clickjacking.html",
+    "/labs/cors.html",
+    "/backup/",
     "/admin/"
   ]) {
     try {

@@ -8196,6 +8196,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-a04-insecure-design-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab A04 insecure design lab disclosed",
+    description:
+      "VulnLab Academy A04 module documents client-side business logic flaws where price and quantity are trusted without server validation.",
+    impactOneline:
+      "Public A04 insecure-design labs advertise client-side checkout totals attackers can manipulate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA04InsecureDesignEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate business rules server-side; never trust client-calculated prices.",
+      steps: [
+        "Recalculate order totals on the server using authoritative price tables.",
+        "Reject negative quantities and out-of-range discounts at the API layer.",
+        "Add server-side audit logs for price manipulation attempts."
+      ]
+    },
+    fixPrompt:
+      "Our A04 business logic lab trusts client-side price*quantity. Show secure server-side total validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-a05-misconfig-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab A05 security misconfiguration lab disclosed",
+    description:
+      "VulnLab Academy A05 module documents missing security headers, exposed /backup/ files, and wildcard CORS with credentials.",
+    impactOneline:
+      "Public A05 misconfig labs advertise header gaps, backup directory leaks, and permissive CORS for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabA05MisconfigEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden headers, block backup exposure, and restrict CORS origins.",
+      steps: [
+        "Enable CSP, HSTS, and X-Frame-Options on all production responses.",
+        "Remove or firewall /backup/ and *.old config files from public paths.",
+        "Never combine Access-Control-Allow-Origin: * with Allow-Credentials."
+      ]
+    },
+    fixPrompt:
+      "Our A05 misconfig lab exposes /backup/config.old and wildcard CORS. Show secure header and CORS configuration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-a09-logging-evidence",
     platform: "generic",
     category: "Information disclosure",
