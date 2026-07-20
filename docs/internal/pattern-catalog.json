@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T18:44:44.752Z",
-  "total": 508,
-  "uniqueSlugs": 506,
+  "generatedAt": "2026-07-20T19:08:58.523Z",
+  "total": 510,
+  "uniqueSlugs": 508,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 490,
+    "generic": 492,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 439,
+    "deep": 441,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 145,
+    "Broken access control": 146,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 44,
     "Broken authentication": 38,
     "Injection": 101,
-    "Cross-site scripting": 62,
+    "Cross-site scripting": 63,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -419,6 +419,7 @@
     "client-side-webvulnsguide-xxe-lab-evidence",
     "client-side-wechall-evidence",
     "client-side-whoopspay-evidence",
+    "client-side-wizer-ctf-dom-clobbering-evidence",
     "client-side-wizer-ctf-evidence",
     "client-side-wizer-ctf-stored-dom-xss-evidence",
     "client-side-wrongsecrets-challenge-evidence",
@@ -542,7 +543,8 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
-    "windsurf-public-env-leak"
+    "windsurf-public-env-leak",
+    "wizer-ctf-idor-task-manager-probe"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."
 }

