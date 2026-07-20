@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T08:02:39.270Z",
-  "total": 492,
-  "uniqueSlugs": 490,
+  "generatedAt": "2026-07-20T10:25:22.793Z",
+  "total": 494,
+  "uniqueSlugs": 492,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 474,
+    "generic": 476,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 423,
+    "deep": 425,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 35,
     "Security misconfiguration": 41,
-    "Broken authentication": 37,
-    "Injection": 95,
+    "Broken authentication": 38,
+    "Injection": 96,
     "Cross-site scripting": 58,
     "general": 18,
     "SSRF": 1,
@@ -392,6 +392,8 @@
     "client-side-websec-fibonacci-eval-challenge-evidence",
     "client-side-websec-file-upload-challenge-evidence",
     "client-side-websec-magic-hash-challenge-evidence",
+    "client-side-websec-oop-restricted-eval-challenge-evidence",
+    "client-side-websec-php-aes-session-challenge-evidence",
     "client-side-websec-php-unserialize-cookie-challenge-evidence",
     "client-side-websec-php-unserialize-filter-challenge-evidence",
     "client-side-websec-restricted-php-exec-challenge-evidence",
