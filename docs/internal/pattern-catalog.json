@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-19T23:03:51.006Z",
-  "total": 476,
-  "uniqueSlugs": 474,
+  "generatedAt": "2026-07-20T00:28:18.083Z",
+  "total": 477,
+  "uniqueSlugs": 475,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 458,
+    "generic": 459,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 407,
+    "deep": 408,
     "continuous": 0
   },
   "byCategory": {
@@ -33,12 +33,13 @@
     "SSRF": 1,
     "Server-side request forgery": 5,
     "Sensitive data exposure": 5,
-    "AI security": 28,
+    "AI security": 29,
     "XSS": 1
   },
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
     "client-side-ai-prompt-lab-evidence",
