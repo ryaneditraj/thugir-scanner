@@ -7890,7 +7890,7 @@ const CLIENT_WEBSEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "WebSec level challenge title",
-    re: /#WebSec Level|LevelOne\s*<small>|LevelTwo\s*<small>/i
+    re: /#WebSec Level|Level(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)\s*<small>/i
   },
   {
     label: "WebSec user ID lookup form",
@@ -7905,14 +7905,64 @@ const CLIENT_WEBSEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
     re: /doQuery(?:&nbsp;|\s)*\([\s\S]{0,80}\$injection/i
   },
   {
+    label: "WebSec blacklist SQLi filter challenge",
+    re: /super-efficient-blacklist-based|sanitize\s*\(\s*\$injection\s*\)/i
+  },
+  {
     label: "WebSec LevelOne challenge class",
-    re: /class\s+Level(?:One|Two|Three)|LevelOne&nbsp;|LevelTwo&nbsp;/i
+    re: /class\s+Level\w+|Level(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)(?:&nbsp;|\s)/i
   },
   {
     label: "WebSec highlighted SQL concat in source.php",
-    re: /SELECT(?:&nbsp;|\s)+id,username(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users/i
+    re: /SELECT(?:&nbsp;|\s)+id,(?:username|login)(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users/i
+  },
+  {
+    label: "WebSec inline SQL concat with injection variable",
+    re: /WHERE\s+id\s*=\s*['"]\s*\.\s*\$injection/i
   }
 ];
+
+// --- WebSec.fr crypto/hash collision challenges (level03 ChaChaCha) ----------------
+const CLIENT_WEBSEC_CRYPTO_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec ChaChaCha challenge title",
+    re: /#WebSec\s+ChaChaCha|ChaChaCha\s*<small>\s*time to find a collision on sha1/i
+  },
+  {
+    label: "SHA-1 collision training scope",
+    re: /collision on sha1|sha1\s*\(\s*\$flag/i
+  },
+  {
+    label: "password_hash password_verify gate",
+    re: /password_hash[\s\S]{0,120}password_verify/i
+  },
+  {
+    label: "PHP type-juggling fa1se bypass marker",
+    re: /sha1\s*\([^)]*,\s*fa1se\s*\)|password_hash\s*\(\s*sha1/i
+  },
+  {
+    label: "flag.php include in challenge source",
+    re: /include\s+["']flag\.php["']|contains the \$flag variable/i
+  }
+];
+
+const clientSideWebsecCryptoChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CRYPTO_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|ChaChaCha|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr ChaChaCha level documents password_hash/password_verify with sha1 type-juggling — hash collision auth bypass training lab"
+    }
+  };
+};
 
 const clientSideWebsecChallengeEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -11762,6 +11812,10 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Java applet admin area challenge",
     re: /Admin Area[\s\S]{0,160}<applet[^>]+code=["'][^"']+\.class["']/i
+  },
+  {
+    label: "Net-Force superuser applet challenge",
+    re: /Superuser ownage|netforcechallenge\.Challenge\.class/i
   }
 ];
 
@@ -11855,6 +11909,8 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
             : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
               /Sweet little applet|Login using this applet/i.test(corpus)
             ? `Net-Force level ${level ?? "NN"} ships a Java applet login gate — decompile applet1.class or reverse client-side credential check`
+            : /Superuser ownage|netforcechallenge\.Challenge\.class/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} Superuser ownage challenge ships netforcechallenge.Challenge Java applet — decompile to recover superuser password`
             : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
   return {
     fired: true,
@@ -21567,6 +21623,7 @@ export const RULES: Record<string, Rule> = {
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
   clientSideWebsecChallengeEvidence,
+  clientSideWebsecCryptoChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,

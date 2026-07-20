@@ -819,6 +819,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
   "clientSideWebsecChallengeEvidence",
+  "clientSideWebsecCryptoChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
@@ -1931,6 +1932,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/83/",
     "/playlevel/84/",
     "/playlevel/85/",
+    "/playlevel/86/",
+    "/playlevel/87/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
@@ -1939,6 +1942,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/77/",
     "/missions/application/78/",
     "/missions/application/79/",
+    "/missions/application/80/",
+    "/missions/application/81/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5924,7 +5929,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level202/index.php",
         "http://www.net-force.nl/challenge/level203/index.php",
         "http://www.net-force.nl/challenge/level204/index.php",
-        "http://www.net-force.nl/challenge/level205/index.php"
+        "http://www.net-force.nl/challenge/level205/index.php",
+        "http://www.net-force.nl/challenge/level206/index.php",
+        "http://www.net-force.nl/challenge/level207/index.php"
       ]
     : [];
   const websecLevelPrioritySeeds = (() => {
