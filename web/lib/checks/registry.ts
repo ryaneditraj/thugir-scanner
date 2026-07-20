@@ -8367,6 +8367,90 @@ const clientSideWebsecCreateFunctionChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr Fibonacci eval code injection (level16) ----------------------------------
+const CLIENT_WEBSEC_FIBONACCI_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Sixteen challenge title",
+    re: /#WebSec\s+Level\s+Sixteen|Level\s+Sixteen(?:&nbsp;|\s)*<small>\s*-\s*It'?s just a[\s\S]{0,80}Fibonacci/i
+  },
+  {
+    label: "Fibonacci calculator trusted-code challenge",
+    re: /Fibonacci(?:&nbsp;|\s)+(?:number\s+)?calculator|only run trusted code|Fibonacci copy\/paste/i
+  },
+  {
+    label: "HMAC validation on textpad payload",
+    re: /hash_hmac\s*\(\s*['"]md5['"]\s*,\s*\$flag\s*,\s*\$t\s*\)|in_array\s*\(\s*\$hmac/i
+  },
+  {
+    label: "eval concatenates attacker textpad with prime test",
+    re: /eval\s*\(\s*\$t\s*\.\s*\$prime_test\s*\)|\$prime_test\s*=\s*['"][\s\S]{0,120}fib\s*\(\s*\$n\s*\)/i
+  },
+  {
+    label: "gcd relative-primes Fibonacci oracle",
+    re: /gcd\s*\(\s*fib\s*\(\s*\$n\s*\)\s*,\s*fib\s*\(\s*\$n\s*\+\s*2\s*\)|relative\s+primes/i
+  }
+];
+
+const clientSideWebsecFibonacciEvalChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_FIBONACCI_EVAL_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Sixteen|#WebSec|Fibonacci/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level16 documents eval($t . $prime_test) after HMAC gate — attacker-controlled Fibonacci textpad bypasses trusted-code check"
+    }
+  };
+};
+
+// --- WebSec.fr timing-attack flag guessing (level17) ------------------------------------
+const CLIENT_WEBSEC_TIMING_ATTACK_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Seventeen challenge title",
+    re: /#WebSec\s+Level\s+Seventeen|Level\s+Seventeen(?:&nbsp;|\s)*<small>\s*-\s*Guessing is fun/i
+  },
+  {
+    label: "Flag guess form challenge",
+    re: /Can you guess the flag|placeholder\s*=\s*['"]Guessed flag['"]|name\s*=\s*['"]flag['"]/i
+  },
+  {
+    label: "Randomized sleep anti-timing comment",
+    re: /sleep_rand\s*\(|timing-attack impractical|openssl_random_pseudo_bytes/i
+  },
+  {
+    label: "strcasecmp flag comparison sink",
+    re: /strcasecmp\s*\(\s*\$_POST\s*\[\s*['"]flag['"]\s*\]\s*,\s*\$flag\s*\)/i
+  },
+  {
+    label: "UTF-16 charset misdirection header",
+    re: /charset=UTF-16|content-type.*charset=UTF-16/i
+  }
+];
+
+const clientSideWebsecTimingAttackChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_TIMING_ATTACK_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Seventeen|#WebSec|Guessing is fun/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level17 documents strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter — timing side-channel flag oracle despite UTF-16 charset trick"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -22017,6 +22101,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecSqliPrivilegeChallengeEvidence,
   clientSideWebsecRestrictedPhpExecChallengeEvidence,
   clientSideWebsecCreateFunctionChallengeEvidence,
+  clientSideWebsecFibonacciEvalChallengeEvidence,
+  clientSideWebsecTimingAttackChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
