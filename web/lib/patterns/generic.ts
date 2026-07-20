@@ -2710,6 +2710,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-php-unserialize-destruct-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP unserialize __destruct lab disclosed",
+    description:
+      "WebSec.fr level30 unserializes attacker POST payload into class B whose __destruct echoes $flag after ob_start — exception handler triggers destructor gadget chain training.",
+    impactOneline:
+      "Public challenge source documents unserialize-to-__destruct PHP object injection with tragic exception flow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeDestructChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host deserialization labs offline; never unserialize untrusted input in production.",
+      steps: [
+        "Move WebSec-style unserialize labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban unserialize on user input; use JSON with strict schemas instead."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level30 lab exposes unserialize($_POST['payload']) into class B __destruct. Show how to retire public labs and eliminate unsafe deserialization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-open-basedir-eval-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr open_basedir sandbox eval lab disclosed",
+    description:
+      "WebSec.fr level31 sets open_basedir=/sandbox then eval($_GET['c']) — PHP sandbox escape and arbitrary code execution training to read ./flag.php.",
+    impactOneline:
+      "Public challenge source documents eval on user input inside open_basedir-restricted PHP sandbox.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecOpenBasedirEvalChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP eval labs offline; never eval user-controlled code even behind open_basedir.",
+      steps: [
+        "Move WebSec-style sandbox-escape labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate eval/create_function on any user input; open_basedir is not a sandbox boundary."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level31 lab exposes eval($_GET['c']) with open_basedir=/sandbox. Show how to retire public labs and ban eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
