@@ -1418,6 +1418,36 @@ const springActuatorExposed: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- Alibaba Druid monitor exposed (read-only GET) -----------------------------
+// Java/Spring apps often leave /druid/index.html and /druid/basic.json reachable.
+const DRUID_PROBE_PATHS = ["/druid/index.html", "/druid/basic.json", "/druid/sql.json"];
+
+const druidMonitorExposed: Rule = async (ctx) => {
+  const urls = DRUID_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const body = r.body.trim();
+    const isBasicJson =
+      /"ResultCode"\s*:\s*1/.test(body) &&
+      /"Content"\s*:\s*\{/.test(body) &&
+      /"Version"\s*:/.test(body);
+    const isDruidHtml =
+      /Druid Stat Index|druid\.index/i.test(body) && /DruidVersion|basic\.json/i.test(body);
+    if (!isBasicJson && !isDruidHtml) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url,
+        snippet: body.slice(0, 200).trim(),
+        note: "Alibaba Druid database monitor reachable without authentication — JDBC drivers and JVM metadata exposed"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- IDOR: unauthenticated read by sequential numeric ID (active GET probe) ---
 // Positive proof when /resource/1 returns record JSON without an auth challenge.
 const IDOR_FALLBACK_PATHS = [
@@ -2022,7 +2052,7 @@ function extractPostSqlForms(html: string, origin: string): { action: string; fi
   return forms;
 }
 
-const POST_LOGIN_SQLI_PAYLOADS = ["' OR 1=1 -- ", "admin' -- ", "' OR ''='"];
+const POST_LOGIN_SQLI_PAYLOADS = ["' OR 1=1 -- ", "admin' -- ", "' OR ''='", "' OR '1'='1'--"];
 
 async function probePostLoginSqlBypass(ctx: RuleContext): Promise<RuleResult | null> {
   const forms = extractPostSqlForms(ctx.combined, ctx.origin);
@@ -2048,7 +2078,13 @@ async function probePostLoginSqlBypass(ctx: RuleContext): Promise<RuleResult | n
       });
       const loc = r.headers.location || "";
       const hasSession = r.setCookies.some((c) => /session=/i.test(c));
-      if (r.status >= 301 && r.status <= 303 && /dashboard|home|admin/i.test(loc) && hasSession) {
+      const loginBypassRedirect =
+        r.status >= 301 &&
+        r.status <= 303 &&
+        hasSession &&
+        loc.length > 0 &&
+        !/login|signin/i.test(loc);
+      if (loginBypassRedirect) {
         return {
           fired: true,
           confidence: 0.92,
@@ -4269,6 +4305,52 @@ const clientSideHacksplainingXmlBombLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hacksplaining prototype pollution lesson (hacksplaining.com/lessons/prototype-pollution) -------
+const CLIENT_HACKSPLAINING_PROTOTYPE_POLLUTION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Prototype pollution lesson URL",
+    re: /hacksplaining\.com\/lessons\/prototype-pollution/i
+  },
+  {
+    label: "Prototype pollution lesson title",
+    re: /Prototype Pollution — Secure Coding Lesson/i
+  },
+  {
+    label: "Prototype pollution lesson meta description",
+    re: /access and modify prototype objects in JavaScript/i
+  },
+  {
+    label: "Prototype pollution lesson step nav",
+    re: /lessons\/prototype-pollution\/(?:prototypes|the-power-of-prototypes|prototype-pollution|checking-the-code)/i
+  },
+  {
+    label: "Prototype pollution attack description",
+    re: /pollute (?:the )?Object\.prototype|prototype chain|__proto__/i
+  }
+];
+
+const clientSideHacksplainingPrototypePollutionLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/prototype-pollution/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_PROTOTYPE_POLLUTION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/prototype-pollution\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining prototype pollution lesson documents exploit-then-fix chains where attacker-controlled __proto__ keys pollute Object.prototype and alter application logic"
+    }
+  };
+};
+
 // --- Hacksplaining subdomain squatting lesson (hacksplaining.com/lessons/subdomain-squatting) -------
 const CLIENT_HACKSPLAINING_SUBDOMAIN_SQUATTING_LESSON_RES: { label: string; re: RegExp }[] = [
   {
@@ -4292,6 +4374,144 @@ const CLIENT_HACKSPLAINING_SUBDOMAIN_SQUATTING_LESSON_RES: { label: string; re: 
     re: /dangling subdomain|subdomain takeover|typosquat/i
   }
 ];
+
+// --- Hacksplaining toxic dependencies lesson (hacksplaining.com/lessons/toxic-dependencies) -------
+const CLIENT_HACKSPLAINING_TOXIC_DEPENDENCIES_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Toxic dependencies lesson URL",
+    re: /hacksplaining\.com\/lessons\/toxic-dependencies/i
+  },
+  {
+    label: "Toxic dependencies lesson title",
+    re: /Toxic Dependencies — Secure Coding Lesson/i
+  },
+  {
+    label: "Third-party library risk lesson meta description",
+    re: /Third-party libraries could be introducing vulnerabilities or malicious code/i
+  },
+  {
+    label: "Toxic dependencies lesson step nav",
+    re: /lessons\/toxic-dependencies\/(?:dependency-management|third-party-code|libraries-as-a-target|log4j|the-log4j-vulnerability|supply-chain-attacks|heartbleed|xcodeghost)/i
+  },
+  {
+    label: "Supply chain attack lesson description",
+    re: /supply[- ]chain attack|Log4j|XcodeGhost|Heartbleed|typosquat/i
+  }
+];
+
+const clientSideHacksplainingToxicDependenciesLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/toxic-dependencies/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_TOXIC_DEPENDENCIES_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/toxic-dependencies\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining toxic dependencies lesson documents supply-chain risks where third-party libraries introduce vulnerabilities (Log4j, Heartbleed, XcodeGhost)"
+    }
+  };
+};
+
+// --- Hacksplaining unencrypted communication lesson (hacksplaining.com/lessons/unencrypted-communication) -------
+const CLIENT_HACKSPLAINING_UNENCRYPTED_COMMUNICATION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Unencrypted communication lesson URL",
+    re: /hacksplaining\.com\/lessons\/unencrypted-communication/i
+  },
+  {
+    label: "Unencrypted communication lesson title",
+    re: /Unencrypted Communication — Secure Coding Lesson/i
+  },
+  {
+    label: "MITM lesson meta description",
+    re: /Insufficient encryption can make you vulnerable to monster-in-the-middle attacks/i
+  },
+  {
+    label: "Unencrypted communication lesson step nav",
+    re: /lessons\/unencrypted-communication\/(?:checking-the-code|a-real-world-example|finish)/i
+  },
+  {
+    label: "Cleartext transport attack description",
+    re: /unencrypted|cleartext|man-in-the-middle|monster-in-the-middle/i
+  }
+];
+
+const clientSideHacksplainingUnencryptedCommunicationLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/unencrypted-communication/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_UNENCRYPTED_COMMUNICATION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/unencrypted-communication\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining unencrypted communication lesson documents exploit-then-fix chains where insufficient transport encryption enables monster-in-the-middle credential theft"
+    }
+  };
+};
+
+// --- Hacksplaining XSSI lesson (hacksplaining.com/lessons/xssi) -----------------------
+const CLIENT_HACKSPLAINING_XSSI_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSSI lesson URL",
+    re: /hacksplaining\.com\/lessons\/xssi/i
+  },
+  {
+    label: "XSSI lesson title",
+    re: /Cross-Site Script Inclusion — Secure Coding Lesson/i
+  },
+  {
+    label: "Sensitive JS data lesson meta description",
+    re: /putting sensitive data in your JavaScript files an attacker is probably stealing/i
+  },
+  {
+    label: "XSSI lesson step nav",
+    re: /lessons\/xssi\/(?:checking-the-code|a-real-world-example|finish)/i
+  },
+  {
+    label: "Cross-site script inclusion attack description",
+    re: /cross-site script inclusion|script inclusion|sensitive data.*JavaScript/i
+  }
+];
+
+const clientSideHacksplainingXssiLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const scanTarget = ctx.scanUrl || pageUrl;
+  if (!/hacksplaining\.com\/lessons\/xssi/i.test(scanTarget)) return NEGATIVE;
+  const corpus = `${ctx.home.body || ""}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_XSSI_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/xssi\/start/i.test(scanTarget);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining XSSI lesson documents exploit-then-fix chains where sensitive data embedded in JavaScript enables cross-site script inclusion attacks"
+    }
+  };
+};
 
 const clientSideHacksplainingSubdomainSquattingLessonEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -4357,6 +4577,52 @@ const clientSideOopssecStoreEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OopsSec Store roadmap documents 35 CTF flags across 11 chapters covering OWASP Top 10 flaws in a Next.js e-commerce SPA"
+    }
+  };
+};
+
+// --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
+const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VoidSec Shopping Cart branding",
+    re: /Shopping Cart is a free, open source web application|title>Shopping Cart</i
+  },
+  {
+    label: "Vulnerable Web App tagline",
+    re: /Vulnerable Web App/i
+  },
+  {
+    label: "Pen-test and hack web application scope",
+    re: /pen-test and hack a web application/i
+  },
+  {
+    label: "Multi-vulnerability hack-lab catalog",
+    re: /dozens of vulnerabilities providing an easy-to-use web hacking environment/i
+  },
+  {
+    label: "XSS SQLi auth-bypass training scope",
+    re: /cross-site scripting, sql injection, response-splitting, html injection, javascript injection, clickjacking/i
+  },
+  {
+    label: "VoidSec GitHub shopping-cart repo link",
+    re: /github\.com\/VoidSec\/shopping-cart/i
+  }
+];
+
+const clientSideVoidsecShoppingCartEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VOIDSEC_SHOPPING_CART_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VoidSec\/shopping-cart|voidsec\.github\.io\/shopping-cart/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VoidSec Shopping Cart GitHub Pages landing documents XSS, SQLi, auth bypass, and clickjacking targets in an intentionally vulnerable e-commerce hack-lab"
     }
   };
 };
@@ -5005,6 +5271,14 @@ const CLIENT_AIKIDO_ZEN_DEMO_RES: { label: string; re: RegExp }[] = [
   {
     label: "User blocking header demo",
     re: /test_user_blocking|user blocking demo/i
+  },
+  {
+    label: "SQL injection pet creation lab",
+    re: /SQL Injection\s*\|\s*Create a new Pet|Malicious Pet.*sql injection/i
+  },
+  {
+    label: "SSRF fetch page lab",
+    re: /SSRF\s*\|\s*Fetch a page|local resources.*SSRF attack/i
   }
 ];
 
@@ -5022,6 +5296,49 @@ const clientSideAikidoZenDemoEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Aikido Zen live demo exercises rate limiting, bot blocking, user blocking, LLM proxying, and attack-wave .env probing"
+    }
+  };
+};
+
+// --- Aevum consent-ledger agent demo (demo.aevum.build) ------------------------------
+const CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Aevum Black Box branding",
+    re: /Aevum\s*[—-]\s*The Black Box for AI Agents|governed context kernel for AI agents/i
+  },
+  {
+    label: "Sandbox consent API flow",
+    re: /\/sandbox\/consent|consent_token|human approves or denies/i
+  },
+  {
+    label: "Tamper-evident sigchain",
+    re: /\/sandbox\/sigchain|tamper-evident sigchain|sigchain_head/i
+  },
+  {
+    label: "Agent proposed_action workflow",
+    re: /proposed_action|Request.*Consent.*Execute.*Sigchain/i
+  },
+  {
+    label: "Consent-ledger demo host",
+    re: /demo\.aevum\.build|aevum\.build/i
+  }
+];
+
+const clientSideAevumAgentConsentDemoEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/demo\.aevum\.build|governed context kernel|Black Box for AI Agents/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : hits.length >= 3 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Aevum consent-ledger demo documents governed agent actions with human consent approval and tamper-evident sigchain audit trail"
     }
   };
 };
@@ -5752,6 +6069,52 @@ const clientSideSecuredAiLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "SecuredAI Lab documents OWASP ASI agent goal hijacking, tool misuse, and privilege abuse with interactive attack demos"
+    }
+  };
+};
+
+// --- Prompt Lab Japanese prompt-engineering checklist (ai-prompt-lab.vercel.app) -----
+const CLIENT_AI_PROMPT_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Prompt Lab title",
+    re: /<title>Prompt Lab<\/title>|Header_text__[^"']+">Prompt Lab</i
+  },
+  {
+    label: "Japanese prompt checklist (16 tips)",
+    re: /プロンプトチェックシート（全16個）/
+  },
+  {
+    label: "Chain-of-thought prompt tip",
+    re: /思考プロセスを促す（チェーン・オブ・ソート）|ステップバイステップで問題を解いてください/
+  },
+  {
+    label: "Few-shot learning prompt tip",
+    re: /具体的な例を提供する（Few-shot学習）/
+  },
+  {
+    label: "ChatGPT API key onboarding modal",
+    re: /ChatGPTのAPIキーを入力|APIキーを入力してPrompt-Labを始めましょう/
+  },
+  {
+    label: "Prompt engineering research references",
+    re: /Large language models are human-level prompt engineers|Principled instructions are all you need/i
+  }
+];
+
+const clientSideAiPromptLabEvidence: Rule = async (ctx) => {
+  if (!/ai-prompt-lab\.vercel\.app|Prompt Lab/i.test(ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AI_PROMPT_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Prompt Lab documents interactive Japanese prompt-engineering checklist with ChatGPT API onboarding and research-backed tips"
     }
   };
 };
@@ -7166,7 +7529,7 @@ const domgoReferrerDomXssEvidence: Rule = async (ctx) => {
   };
 };
 
-// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (example/1) --------
+// --- DomGoat location.hash → msgboard.innerHTML DOM XSS exercises (plain hash, no unescape) --------
 const domgoHashDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -7175,16 +7538,45 @@ const domgoHashDomXssEvidence: Rule = async (ctx) => {
   const hashSource = /location\.hash/i.test(corpus);
   const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
   const referrerVuln = /let\s+rfr\s*=\s*document\.referrer/i.test(corpus);
+  const unescapeHash = /unescape\s*\(\s*hash\.substr/i.test(corpus);
   const sanitizationBypass =
-    /unescape\s*\(\s*hash\.substr/i.test(corpus) && /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+    unescapeHash && /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
   const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
-  if (!hashSource || !sink || referrerVuln || sanitizationBypass || windowNameCombo) return NEGATIVE;
+  if (!hashSource || !sink || referrerVuln || unescapeHash || sanitizationBypass || windowNameCombo)
+    return NEGATIVE;
   return {
     fired: true,
     confidence: 0.88,
     evidence: {
       page: pageUrl,
       note: "DomGoat exercise assigns location.hash to msgboard.innerHTML — hash-fragment DOM XSS lab"
+    }
+  };
+};
+
+// --- DomGoat unescape(location.hash) → msgboard.innerHTML DOM XSS exercises (example/1,14,15) ---
+const domgoUnescapeHashDomXssEvidence: Rule = async (ctx) => {
+  if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/cxss\/(?:example|intro)/i.test(pageUrl) && !/\/cxss\/example\/\d+/i.test(ctx.combined))
+    return NEGATIVE;
+  const matchUnescape = (corpus: string): string | null => {
+    const unescapeHash =
+      /unescape\s*\(\s*hash\.substr/i.test(corpus) && /location\.hash/i.test(corpus);
+    const weakSanitize = /\.replace\s*\(\s*\/<\s*\/g/i.test(corpus);
+    const windowNameCombo = /window\.name/i.test(corpus) && /location\.hash/i.test(corpus);
+    const sink = /getElementById\(["']msgboard["']\)\.innerHTML/i.test(corpus);
+    if (!unescapeHash || !sink || weakSanitize || windowNameCombo) return null;
+    return corpus.match(/\/cxss\/example\/\d+/i)?.[0] ?? "example";
+  };
+  const examplePath = matchUnescape(ctx.home.body) ?? matchUnescape(ctx.combined);
+  if (!examplePath) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      page: /\/cxss\/example\/\d+/i.test(pageUrl) ? pageUrl : `${ctx.origin}${examplePath}`,
+      note: "DomGoat exercise unescapes location.hash via unescape() before msgboard.innerHTML — URL-encoded fragment DOM XSS lab"
     }
   };
 };
@@ -7315,8 +7707,10 @@ const domgoWebsocketDomXssEvidence: Rule = async (ctx) => {
 const domgoSinksCatalogDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/\/cxss\/sinks/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.home.body;
+  const onSinksPage = /\/cxss\/sinks/i.test(pageUrl);
+  const onIntroHub = /\/cxss\/intro/i.test(pageUrl);
+  if (!onSinksPage && !onIntroHub) return NEGATIVE;
+  const corpus = onSinksPage ? ctx.home.body : ctx.combined;
   const catalog =
     /Client XSS Sinks|Sinks that execute payload/i.test(corpus) &&
     /execPayload/i.test(corpus);
@@ -7339,8 +7733,10 @@ const domgoSinksCatalogDomXssEvidence: Rule = async (ctx) => {
 const domgoSourcesCatalogDomXssEvidence: Rule = async (ctx) => {
   if (!/domgo\.at$/i.test(new URL(ctx.origin).hostname)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/\/cxss\/sources/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.home.body;
+  const onSourcesPage = /\/cxss\/sources/i.test(pageUrl);
+  const onIntroHub = /\/cxss\/intro/i.test(pageUrl);
+  if (!onSourcesPage && !onIntroHub) return NEGATIVE;
+  const corpus = onSourcesPage ? ctx.home.body : ctx.combined;
   const catalog =
     /Client XSS Sources|URL-based DOM Property Sources/i.test(corpus) &&
     /location\.(?:href|search|hash|pathname)/i.test(corpus);
@@ -7466,6 +7862,10 @@ const CLIENT_INVICTI_PRACTICE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Invicti ASP.NET administrator login",
     re: /\/administrator\/Login\.aspx/i
+  },
+  {
+    label: "ASP.NET administrator login visible password hint",
+    re: /Password[\s\S]{0,120}\(theturingtest\)/i
   }
 ];
 
@@ -7581,22 +7981,122 @@ const CLIENT_WEBSEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
     re: /<option[^>]*>\s*level\d+\s*<\/option>/i
   },
   {
+    label: "WebSec level challenge title",
+    re: /#WebSec Level|Level(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Eleven)\s*<small>/i
+  },
+  {
+    label: "WebSec user ID lookup form",
+    re: /Enter the user ID|name\s*=\s*["']user_id["']/i
+  },
+  {
     label: "WebSec anti_csrf.php gate",
     re: /anti_csrf\.php/i
   },
   {
     label: "WebSec doQuery injection sink",
-    re: /doQuery\s*\(\s*\$injection\s*\)/i
+    re: /doQuery(?:&nbsp;|\s)*\([\s\S]{0,80}\$injection/i
+  },
+  {
+    label: "WebSec blacklist SQLi filter challenge",
+    re: /super-efficient-blacklist-based|sanitize\s*\(\s*\$injection\s*\)/i
   },
   {
     label: "WebSec LevelOne challenge class",
-    re: /class\s+Level(?:One|Two|Three)/i
+    re: /class\s+Level\w+|Level(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)(?:&nbsp;|\s)/i
   },
   {
     label: "WebSec highlighted SQL concat in source.php",
-    re: /SELECT(?:&nbsp;|\s)+id,username(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users/i
+    re: /SELECT(?:&nbsp;|\s)+id,(?:username|login)(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users/i
+  },
+  {
+    label: "WebSec inline SQL concat with injection variable",
+    re: /WHERE\s+id\s*=\s*['"]\s*\.\s*\$injection/i
   }
 ];
+
+// --- WebSec.fr crypto/hash collision challenges (level03 ChaChaCha) ----------------
+const CLIENT_WEBSEC_CRYPTO_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec ChaChaCha challenge title",
+    re: /#WebSec\s+ChaChaCha|ChaChaCha\s*<small>\s*time to find a collision on sha1/i
+  },
+  {
+    label: "SHA-1 collision training scope",
+    re: /collision on sha1|sha1\s*\(\s*\$flag/i
+  },
+  {
+    label: "password_hash password_verify gate",
+    re: /password_hash[\s\S]{0,120}password_verify/i
+  },
+  {
+    label: "PHP type-juggling fa1se bypass marker",
+    re: /sha1\s*\([^)]*,\s*fa1se\s*\)|password_hash\s*\(\s*sha1/i
+  },
+  {
+    label: "flag.php include in challenge source",
+    re: /include\s+["']flag\.php["']|contains the \$flag variable/i
+  }
+];
+
+const clientSideWebsecCryptoChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CRYPTO_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|ChaChaCha|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr ChaChaCha level documents password_hash/password_verify with sha1 type-juggling — hash collision auth bypass training lab"
+    }
+  };
+};
+
+// --- WebSec.fr file upload / LFI challenges (level08 GIF include_once) ---------------
+const CLIENT_WEBSEC_FILE_UPLOAD_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Eight file upload challenge title",
+    re: /#WebSec\s+Level\s+Eight|Level\s+Eight\s*<small>\s*-\s*Bypass Security Features/i
+  },
+  {
+    label: "GIF-only image uploader scope",
+    re: /image-dumper service.*only allows.*GIF|Select image \(\.gif only\)/i
+  },
+  {
+    label: "include_once uploaded file sink",
+    re: /include_once\s*\(\s*\$uploadedFile\s*\)|include_once\s*\(\s*\$uploadedFile/i
+  },
+  {
+    label: "Weak GIF validation bypass markers",
+    re: /IMAGETYPE_GIF|exif_imagetype|getimagesize[\s\S]{0,80}fileToUpload/i
+  },
+  {
+    label: "Uploaded file path under /uploads",
+    re: /\/uploads['"]\s*,\s*sha1\s*\(\s*\$_FILES/i
+  }
+];
+
+const clientSideWebsecFileUploadChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_FILE_UPLOAD_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Eight|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level08 documents GIF upload validation bypass leading to include_once on attacker-controlled files under /uploads"
+    }
+  };
+};
 
 const clientSideWebsecChallengeEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -7611,6 +8111,728 @@ const clientSideWebsecChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr publishes syntax-highlighted PHP source for SQLi/XSS challenge levels — injection flaws documented in /levelNN/source.php"
+    }
+  };
+};
+
+// --- WebSec.fr magic-hash file downloader (level10) ----------------------------------
+const CLIENT_WEBSEC_MAGIC_HASH_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Ten file downloader title",
+    re: /#WebSec\s+Level\s+Ten|LevelTen(?:&nbsp;|\s)*<small>\s*-\s*Awesome\s+File\s+Downloader/i
+  },
+  {
+    label: "Secret hash file download form",
+    re: /name\s*=\s*["']hash["']|Secret\s+hash|name\s*=\s*["']f["']/
+  },
+  {
+    label: "MD5 flag sandwich hash gate",
+    re: /substr\s*\(\s*md5\s*\(\s*\$flag[\s\S]{0,160}\$flag/i
+  },
+  {
+    label: "show_source arbitrary file read",
+    re: /show_source\s*\(\s*\$file\s*\)/
+  },
+  {
+    label: "flag.php include or download target",
+    re: /flag\.php|include\s+["']flag\.php["']/
+  }
+];
+
+const clientSideWebsecMagicHashChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_MAGIC_HASH_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTen|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level10 documents MD5 magic-hash file downloader — substr(md5($flag.$file.$flag)) gate before show_source($file) arbitrary read"
+    }
+  };
+};
+
+// --- WebSec.fr blacklist SQLi with alias bypass (level11) ----------------------------
+const CLIENT_WEBSEC_BLACKLIST_SQLI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Eleven challenge title",
+    re: /#WebSec\s+Level\s+Eleven|LevelEleven/
+  },
+  {
+    label: "Blacklist SQL filter challenge scope",
+    re: /super-efficient-blacklist-based|No more nasty.*UNION.*JOIN/i
+  },
+  {
+    label: "sanitize stripos blacklist gate",
+    re: /function\s+sanitize[\s\S]{0,240}\$blacklist[\s\S]{0,160}stripos/i
+  },
+  {
+    label: "Dynamic table name SQL concat",
+    re: /SELECT\s+id,username\s+FROM\s+['"]\s*\.\s*\$table/i
+  },
+  {
+    label: "Superhero costume table selector",
+    re: /name\s*=\s*["']table["']|With costume|Without costume/i
+  }
+];
+
+const clientSideWebsecBlacklistSqliChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_BLACKLIST_SQLI_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelEleven|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level11 documents blacklist SQLi filter on table alias — stripos blocks UNION/JOIN but $table is concatenated into SELECT"
+    }
+  };
+};
+
+// --- WebSec.fr arbitrary PHP class instantiation (level12) ---------------------------
+const CLIENT_WEBSEC_CLASS_INSTANTIATION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Twelve challenge title",
+    re: /#WebSec\s+Level\s+Twelve|LevelTwelve(?:&nbsp;|\s)*<small>\s*-\s*This time, it's different/i
+  },
+  {
+    label: "Arbitrary class instantiation scope",
+    re: /instanciate a class of your choice|two arbitrary parameters/i
+  },
+  {
+    label: "Partial iterator class blacklist",
+    re: /splfileobject|globiterator|filesystemiterator|directoryiterator/i
+  },
+  {
+    label: "POST class/param1/param2 instantiation form",
+    re: /name\s*=\s*["']class["'][\s\S]{0,240}name\s*=\s*["']param1["'][\s\S]{0,240}name\s*=\s*["']param2["']/i
+  },
+  {
+    label: "echo new class sink",
+    re: /echo[\s\S]{0,40}<span[^>]*>new<\/span>|echo\s+new\s+\$class/i
+  }
+];
+
+const clientSideWebsecClassInstantiationChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CLASS_INSTANTIATION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTwelve|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level12 documents arbitrary PHP class instantiation — partial iterator blacklist but echo new $class($param1, $param2) remains exploitable"
+    }
+  };
+};
+
+// --- WebSec.fr SQLi privilege disclosure (level13) -------------------------------------
+const CLIENT_WEBSEC_SQLI_PRIVILEGE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Thirteen privilege challenge title",
+    re: /#WebSec\s+Level\s+Thirteen|LevelThirteen(?:&nbsp;|\s)*<small>\s*-\s*A privilege offer/i
+  },
+  {
+    label: "Privilege lookup ids parameter",
+    re: /Ids to display|name\s*=\s*['"]ids['"]/
+  },
+  {
+    label: "user_privileges column lookup",
+    re: /SELECT[\s\S]{0,120}user_privileges[\s\S]{0,120}FROM[\s\S]{0,40}users/i
+  },
+  {
+    label: "Injectable ids IN clause",
+    re: /\$_GET\s*\[\s*['"]ids['"]\s*\]|user_id\s+IN\s*\(/i
+  },
+  {
+    label: "Admin flag stored in user_password",
+    re: /INSERT\s+INTO\s+users\s+VALUES\s*\(\s*0\s*,\s*['"]admin['"][\s\S]{0,80}\$flag/i
+  }
+];
+
+const clientSideWebsecSqliPrivilegeChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_SQLI_PRIVILEGE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelThirteen|#WebSec|privilege offer/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level13 documents SQLi in privilege lookup — injectable ids IN clause leaks admin flag from user_password column"
+    }
+  };
+};
+
+// --- WebSec.fr restricted PHP code execution (level14) ---------------------------------
+const CLIENT_WEBSEC_RESTRICTED_PHP_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Fourteen challenge title",
+    re: /#WebSec\s+Level\s*Fourteen|Level\s+Fourteen(?:&nbsp;|\s)*<small>\s*-\s*Securely Execute Code/i
+  },
+  {
+    label: "PHP function whitelist challenge scope",
+    re: /only allow[\s\S]{0,120}<mark>echo<\/mark>[\s\S]{0,120}<mark>strncmp<\/mark>|echo,\s*print,\s*strlen,\s*strcmp,\s*strncmp/i
+  },
+  {
+    label: "25 character code length limit",
+    re: /limited to\s*<code>\s*25\s*<\/code>|substr[\s\S]{0,80}\$code[\s\S]{0,40},\s*0\s*,\s*25|maxlength\s*=\s*25/i
+  },
+  {
+    label: "POST code execution form",
+    re: /name\s*=\s*["']code["'][\s\S]{0,200}Execute!/i
+  },
+  {
+    label: "preg_match whitelist before eval sink",
+    re: /preg_match[\s\S]{0,200}strcmp|preg_match[\s\S]{0,200}strncmp|eval\s*\(\s*\$code/i
+  }
+];
+
+const clientSideWebsecRestrictedPhpExecChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_RESTRICTED_PHP_EXEC_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Fourteen|#WebSec|Securely Execute Code/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level14 documents restricted PHP sandbox — 25-char limit with strcmp/strncmp whitelist bypass before eval($code)"
+    }
+  };
+};
+
+// --- WebSec.fr create_function code injection (level15) --------------------------------
+const CLIENT_WEBSEC_CREATE_FUNCTION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Fifteen challenge title",
+    re: /#WebSec\s+Level\s+Fifteen|LevelFifteen(?:&nbsp;|\s)*<small>\s*Arbitrary code non-execution/i
+  },
+  {
+    label: "Arbitrary code non-execution challenge scope",
+    re: /provide us some PHP code, but we won't execute it|Arbitrary code non-execution/i
+  },
+  {
+    label: "create_function sink with POST body",
+    re: /create_function\s*\(\s*['"]\$flag['"]\s*,\s*\$_POST\s*\[\s*['"]c['"]\s*\]/i
+  },
+  {
+    label: "Exit after declaration checkbox",
+    re: /Exit after declaration|name\s*=\s*["']q["'][\s\S]{0,120}value\s*=\s*["']1["']/i
+  },
+  {
+    label: "POST c parameter code form",
+    re: /name\s*=\s*["']c["'][\s\S]{0,200}placeholder\s*=\s*["']echo\s+1337/i
+  }
+];
+
+const clientSideWebsecCreateFunctionChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CREATE_FUNCTION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelFifteen|#WebSec|Arbitrary code non-execution/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level15 documents create_function('$flag', $_POST['c']) — attacker code compiled even when fun($flag) call is commented out"
+    }
+  };
+};
+
+// --- WebSec.fr Fibonacci eval code injection (level16) ----------------------------------
+const CLIENT_WEBSEC_FIBONACCI_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Sixteen challenge title",
+    re: /#WebSec\s+Level\s+Sixteen|Level\s+Sixteen(?:&nbsp;|\s)*<small>\s*-\s*It'?s just a[\s\S]{0,80}Fibonacci/i
+  },
+  {
+    label: "Fibonacci calculator trusted-code challenge",
+    re: /Fibonacci(?:&nbsp;|\s)+(?:number\s+)?calculator|only run trusted code|Fibonacci copy\/paste/i
+  },
+  {
+    label: "HMAC validation on textpad payload",
+    re: /hash_hmac(?:&nbsp;|\s)*\([\s\S]{0,120}md5[\s\S]{0,80}\$flag[\s\S]{0,80}\$t|in_array(?:&nbsp;|\s)*\([\s\S]{0,40}\$hmac/i
+  },
+  {
+    label: "eval concatenates attacker textpad with prime test",
+    re: /eval(?:&nbsp;|\s)*\([\s\S]{0,80}\$t[\s\S]{0,80}\$prime_test|\$prime_test(?:&nbsp;|\s)*=[\s\S]{0,160}fib(?:&nbsp;|\s)*\([\s\S]{0,40}\$n/i
+  },
+  {
+    label: "gcd relative-primes Fibonacci oracle",
+    re: /gcd(?:&nbsp;|\s)*\([\s\S]{0,80}fib(?:&nbsp;|\s)*\([\s\S]{0,40}\$n[\s\S]{0,80}fib(?:&nbsp;|\s)*\([\s\S]{0,40}\$n[\s\S]{0,40}\+[\s\S]{0,40}2|relative(?:&nbsp;|\s)+primes/i
+  }
+];
+
+const clientSideWebsecFibonacciEvalChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_FIBONACCI_EVAL_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Sixteen|#WebSec|Fibonacci/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level16 documents eval($t . $prime_test) after HMAC gate — attacker-controlled Fibonacci textpad bypasses trusted-code check"
+    }
+  };
+};
+
+// --- WebSec.fr timing-attack flag guessing (level17) ------------------------------------
+const CLIENT_WEBSEC_TIMING_ATTACK_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Seventeen challenge title",
+    re: /#WebSec\s+Level\s+Seventeen|Level\s+Seventeen(?:&nbsp;|\s)*<small>\s*-\s*Guessing is fun/i
+  },
+  {
+    label: "Flag guess form challenge",
+    re: /Can you guess the flag|placeholder\s*=\s*['"]Guessed flag['"]|name\s*=\s*['"]flag['"]/i
+  },
+  {
+    label: "Randomized sleep anti-timing comment",
+    re: /sleep_rand\s*\(|timing-attack impractical|openssl_random_pseudo_bytes/i
+  },
+  {
+    label: "strcasecmp flag comparison sink",
+    re: /strcasecmp\s*\(\s*\$_POST\s*\[\s*['"]flag['"]\s*\]\s*,\s*\$flag\s*\)/i
+  },
+  {
+    label: "UTF-16 charset misdirection header",
+    re: /charset=UTF-16|content-type.*charset=UTF-16/i
+  }
+];
+
+const clientSideWebsecTimingAttackChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_TIMING_ATTACK_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Seventeen|#WebSec|Guessing is fun/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level17 documents strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter — timing side-channel flag oracle despite UTF-16 charset trick"
+    }
+  };
+};
+
+// --- WebSec.fr PHP unserialize cookie gadget (level18) ----------------------------------
+const CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Eighteen challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Eighteen|json_decode(?:&nbsp;|\s)+is(?:&nbsp;|\s)+for(?:&nbsp;|\s)+the(?:&nbsp;|\s)+weak/i
+  },
+  {
+    label: "Serialized object cookie challenge prompt",
+    re: /serialized(?:&nbsp;|\s)+object(?:&nbsp;|\s)+before|give(?:&nbsp;|\s)+it(?:&nbsp;|\s)+back(?:&nbsp;|\s)+please/i
+  },
+  {
+    label: "serialize stdClass cookie gadget",
+    re: /serialize[\s\S]{0,160}\$obj/i
+  },
+  {
+    label: "Cookie unserialize sink",
+    re: /unserialize[\s\S]{0,120}\$obj/i
+  },
+  {
+    label: "hash_equals flag oracle on unserialized input",
+    re: /hash_equals[\s\S]{0,160}\$unserialized_obj[\s\S]{0,120}->[\s\S]{0,40}input/i
+  },
+  {
+    label: "obj cookie parameter",
+    re: /\$_COOKIE[\s\S]{0,80}['"]obj['"]|setcookie[\s\S]{0,120}['"]obj['"][\s\S]{0,120}\$_POST/i
+  }
+];
+
+const clientSideWebsecPhpUnserializeCookieChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level(?:&nbsp;|\s)+Eighteen|#WebSec|json_decode(?:&nbsp;|\s)+is(?:&nbsp;|\s)+for(?:&nbsp;|\s)+the(?:&nbsp;|\s)+weak/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level18 documents unserialize($_COOKIE['obj']) with hash_equals flag oracle — attacker-controlled serialized cookie gadget"
+    }
+  };
+};
+
+// --- WebSec.fr PHP unserialize filter bypass (level20) --------------------------------
+const CLIENT_WEBSEC_PHP_UNSERIALIZE_FILTER_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Twenty challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Twenty|function\.unserialize\.php/i
+  },
+  {
+    label: "Flag class __destruct gadget",
+    re: /class[\s\S]{0,120}Flag[\s\S]{0,320}__destruct/i
+  },
+  {
+    label: "Flag echoed from destructor",
+    re: /__destruct[\s\S]{0,240}echo[\s\S]{0,80}\$flag/i
+  },
+  {
+    label: "sanitize preg_match unserialize filter",
+    re: /sanitize[\s\S]{0,900}preg_match[\s\S]{0,900}unserialize/i
+  },
+  {
+    label: "i0n1c bypass comment reference",
+    re: /i0n1c(?:&nbsp;|\s)*'s(?:&nbsp;|\s)+bypass|exploit-db\.com\/exploits\/22547/i
+  },
+  {
+    label: "data cookie unserialize sink",
+    re: /\$_COOKIE[\s\S]{0,80}['"]data['"]|unserialize[\s\S]{0,120}\$data/i
+  }
+];
+
+const clientSideWebsecPhpUnserializeFilterChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_FILTER_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level(?:&nbsp;|\s)+Twenty|#WebSec|sanitize/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level20 documents sanitize() preg_match filters before unserialize($_COOKIE['data']) — Flag __destruct POP chain bypass"
+    }
+  };
+};
+
+// --- WebSec.fr PHP AES session cookie + admin filter bypass (level21) -------------------
+const CLIENT_WEBSEC_PHP_AES_SESSION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec LevelTwentyOne challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+LevelTwentyOne|LevelTwentyOne(?:&nbsp;|\s)*<small>(?:&nbsp;|\s)*-[\s\S]{0,40}PatPat/i
+  },
+  {
+    label: "Admin letters registration filter",
+    re: /not(?:&nbsp;|\s)+allowed(?:&nbsp;|\s)+to(?:&nbsp;|\s)+register[\s\S]{0,120}\[admin\]|preg_match[\s\S]{0,120}\(a\|d\|m\|i\|n\)/i
+  },
+  {
+    label: "mcrypt AES session cookie encryption",
+    re: /mcrypt_encrypt[\s\S]{0,200}MCRYPT_RIJNDAEL_128[\s\S]{0,200}setcookie[\s\S]{0,80}session|create_cookies[\s\S]{0,200}mcrypt_encrypt/i
+  },
+  {
+    label: "Session auth decrypt oracle",
+    re: /function[\s\S]{0,40}auth[\s\S]{0,200}mcrypt_decrypt[\s\S]{0,200}\$aes_key|auth\([\s\S]{0,120}\$_COOKIE[\s\S]{0,80}session/i
+  },
+  {
+    label: "SQLi in verify_credentials string concat",
+    re: /verify_credentials[\s\S]{0,400}SELECT[\s\S]{0,120}username='[\s\S]{0,40}\$username[\s\S]{0,80}password='[\s\S]{0,40}\$password/i
+  },
+  {
+    label: "source1/source2 session and crypto disclosure links",
+    re: /source1\.php[\s\S]{0,120}session[\s\S]{0,120}source2\.php|sessions(?:&nbsp;|\s)+management[\s\S]{0,80}crypto/i
+  }
+];
+
+const clientSideWebsecPhpAesSessionChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_AES_SESSION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTwentyOne|#WebSec|PatPat|mcrypt_encrypt/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level21 documents mcrypt AES session cookies with weak admin registration filter and SQLi in verify_credentials — forge session to escalate to admin"
+    }
+  };
+};
+
+// --- WebSec.fr OOP restricted PHP eval (level22) --------------------------------------
+const CLIENT_WEBSEC_OOP_RESTRICTED_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level22 OOP-FTW challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level22|Level(?:&nbsp;|\s)+TwentyTwo(?:&nbsp;|\s)*<small>(?:&nbsp;|\s)*-[\s\S]{0,40}OOP-FTW/i
+  },
+  {
+    label: "21 character code length restriction",
+    re: /only(?:&nbsp;|\s)+<code>21<\/code>(?:&nbsp;|\s)+chars(?:&nbsp;|\s)+allowed|substr[\s\S]{0,80}\$_GET[\s\S]{0,40}code[\s\S]{0,40}0[\s\S]{0,20}21/i
+  },
+  {
+    label: "OOP class A flag parts constructor",
+    re: /class[\s\S]{0,40}A[\s\S]{0,200}__construct[\s\S]{0,200}\$pub[\s\S]{0,80}\$pro[\s\S]{0,80}\$pri|file_containing_the_flag_parts/i
+  },
+  {
+    label: "Blacklist whitelist strcmp strncmp removed",
+    re: /get_defined_functions[\s\S]{0,400}unset[\s\S]{0,80}strcmp[\s\S]{0,200}strncmp|funcs_extra[\s\S]{0,120}eval/i
+  },
+  {
+    label: "preg_match blacklist before eval sink",
+    re: /preg_match[\s\S]{0,200}\$blacklisted[\s\S]{0,200}\$code[\s\S]{0,200}eval[\s\S]{0,80}\$code/i
+  }
+];
+
+const clientSideWebsecOopRestrictedEvalChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_OOP_RESTRICTED_EVAL_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level22|TwentyTwo|OOP-FTW|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level22 documents 21-char restricted PHP eval with OOP class A flag parts and strcmp/strncmp removed from function blacklist"
+    }
+  };
+};
+
+// --- WebSec.fr shell_exec blacklist bypass (level26) ----------------------------------
+const CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level TwentySix /bin/sh title",
+    re: /Level(?:&nbsp;|\s)+TwentySix|#WebSec(?:&nbsp;|\s)+Level26|\/bin\/sh(?:&nbsp;|\s)+is(?:&nbsp;|\s)+the(?:&nbsp;|\s)+new/i
+  },
+  {
+    label: "suhosin max_value_length 40 protection",
+    re: /max_value_length[\s\S]{0,120}suhosin|set(?:&nbsp;|\s)+it(?:&nbsp;|\s)+to(?:&nbsp;|\s)+<code>40<\/code>/i
+  },
+  {
+    label: "shell_exec on POST code input",
+    re: /shell_exec(?:&nbsp;|\s)+\(\s*\$code[\s\S]{0,80}2>&1/i
+  },
+  {
+    label: "Character blacklist before shell_exec",
+    re: /special_characters[\s\S]{0,200}words_filter[\s\S]{0,200}functions[\s\S]{0,200}blacklist/i
+  },
+  {
+    label: "40-char command input maxlength",
+    re: /name\s*=\s*["']code["'][\s\S]{0,120}maxlength\s*=\s*40/i
+  }
+];
+
+const clientSideWebsecShellExecChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level26|TwentySix|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level26 documents shell_exec on 40-char POST code after blacklist filter — /bin/sh command injection training lab"
+    }
+  };
+};
+
+// --- WebSec.fr Acunetix aspect instrumentation backdoor (level27) ---------------------
+const CLIENT_WEBSEC_ASPECT_INSTRUMENTATION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level TwentySeven title",
+    re: /LevelTwentySeven|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+TwentySeven|Kwack Kwack Kwack your sensors/i
+  },
+  {
+    label: "acu_phpaspect.php include",
+    re: /include(?:&nbsp;|\s)+["']acu_phpaspect\.php["']|acu_phpaspect\.php/i
+  },
+  {
+    label: "HTTP_ACUNETIX_ASPECT header gate",
+    re: /HTTP_ACUNETIX_ASPECT|ACUNETIX_ASPECT_PASSWORD/i
+  },
+  {
+    label: "Instrumenting production code challenge",
+    re: /Instrumenting[\s\S]{0,80}production[\s\S]{0,80}code[\s\S]{0,80}great idea|source2\.php/i
+  }
+];
+
+const clientSideWebsecAspectInstrumentationChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_ASPECT_INSTRUMENTATION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/websec\.fr|Level27|TwentySeven|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level27 documents Acunetix aspect instrumentation backdoor via HTTP_ACUNETIX_ASPECT header and acu_phpaspect.php"
+    }
+  };
+};
+
+// --- WebSec.fr upload include type-juggling (level28) ---------------------------------
+const CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level TwentyEight title",
+    re: /Level(?:&nbsp;|\s)+TwentyEight|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+28|Please(?:&nbsp;|\s)+be(?:&nbsp;|\s)+our(?:&nbsp;|\s)+guess/i
+  },
+  {
+    label: "flag_file upload handler",
+    re: /name\s*=\s*['"]flag_file['"]|flag_file['"][\s\S]{0,160}tmp_name/i
+  },
+  {
+    label: "md5_file compare before include",
+    re: /md5_file[\s\S]{0,200}md5_file[\s\S]{0,80}flag\.php/i
+  },
+  {
+    label: "crc32 checksum type juggling gate",
+    re: /checksum['"][\s\S]{0,120}crc32[\s\S]{0,80}checksum/i
+  },
+  {
+    label: "include uploaded PHP file",
+    re: /include[\s\S]{0,40}\$filename[\s\S]{0,20}\)/i
+  }
+];
+
+const clientSideWebsecUploadIncludeChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level28|TwentyEight|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level28 documents flag.php upload with md5_file equality and crc32 type-juggling before include($filename) RCE"
+    }
+  };
+};
+
+// --- WebSec.fr unserialize __destruct gadget (level30) --------------------------------
+const CLIENT_WEBSEC_PHP_UNSERIALIZE_DESTRUCT_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Thirty title",
+    re: /Level(?:&nbsp;|\s)+Thirtee|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i
+  },
+  {
+    label: "__destruct echoes flag",
+    re: /function[\s\S]{0,40}__destruct[\s\S]{0,160}echo[\s\S]{0,40}\$flag/i
+  },
+  {
+    label: "unserialize POST payload",
+    re: /unserialize[\s\S]{0,120}\$_POST[\s\S]{0,40}['"]payload['"]/i
+  },
+  {
+    label: "Something tragic exception flow",
+    re: /Something(?:&nbsp;|\s)+tragic(?:&nbsp;|\s)+happened|Something(?:&nbsp;|\s)+tragic(?:&nbsp;|\s)+is(?:&nbsp;|\s)+going(?:&nbsp;|\s)+to(?:&nbsp;|\s)+happen/i
+  },
+  {
+    label: "Serialized class B payload hint",
+    re: /O:1:"B":0:\{\}|class(?:&nbsp;|\s)+B[\s\S]{0,80}__destruct/i
+  }
+];
+
+const clientSideWebsecPhpUnserializeDestructChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_DESTRUCT_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level30|Thirtee|destruct\.|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (/Thirty-one|Level31/i.test(ctx.combined) && !/Level30|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i.test(ctx.combined)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level30 documents unserialize($_POST['payload']) into class B __destruct that echoes $flag after tragic exception"
+    }
+  };
+};
+
+// --- WebSec.fr open_basedir sandbox eval (level31) ------------------------------------
+const CLIENT_WEBSEC_OPEN_BASEDIR_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Thirty-one title",
+    re: /Level(?:&nbsp;|\s)+Thirty-one|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Thirty-one|web browsers have sandboxes/i
+  },
+  {
+    label: "open_basedir sandbox",
+    re: /open_basedir[\s\S]{0,200}\/sandbox|chdir[\s\S]{0,200}\/sandbox/i
+  },
+  {
+    label: "eval GET c parameter",
+    re: /eval[\s\S]{0,200}\$_GET[\s\S]{0,120}['"]c['"]/i
+  },
+  {
+    label: "read flag.php challenge",
+    re: /read[\s\S]{0,120}flag\.php|Can you read the[\s\S]{0,120}flag\.php/i
+  }
+];
+
+const clientSideWebsecOpenBasedirEvalChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_OPEN_BASEDIR_EVAL_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level31|Thirty-one|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level31 documents open_basedir=/sandbox with eval($_GET['c']) sandbox-escape training to read ./flag.php"
     }
   };
 };
@@ -7798,6 +9020,48 @@ const clientSidePentesterlabWebForPentesterEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PentesterLab Web for Pentester course documents foundational web vuln identification and exploitation labs"
+    }
+  };
+};
+
+// --- PentesterLab Web for Pentester II free course (pentesterlab.com/exercises/web-for-pentester-II)
+const CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_II_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web for Pentester II course title",
+    re: /Web for Pentester II(?:\s+Free Exercise)?/i
+  },
+  {
+    label: "Auth bypass and SQLi challenge set",
+    re: /bypass authentication and exploit SQL vulnerabilities/i
+  },
+  {
+    label: "CAPTCHA and authorization flaw labs",
+    re: /CAPTCHA weaknesses, authorization flaws, mass-assignment attacks/i
+  },
+  {
+    label: "MongoDB injection course module",
+    re: /randomness issues, and MongoDB injections/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course(?:Instance)?"[\s\S]{0,240}"name"\s*:\s*"Web for Pentester II"/i
+  }
+];
+
+const clientSidePentesterlabWebForPentesterIiEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_WEB_FOR_PENTESTER_II_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Web for Pentester II documents auth bypass, SQLi, CAPTCHA, authorization, mass-assignment, and NoSQL injection labs"
     }
   };
 };
@@ -8704,6 +9968,1259 @@ const clientSidePentesterlabXss03ExerciseEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- PentesterLab XSS 04 script-tag filter bypass exercise (pentesterlab.com/exercises/xss_04)
+const CLIENT_PENTESTERLAB_XSS04_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 04 course title",
+    re: /XSS 04|PentesterLab:\s*XSS 04/i
+  },
+  {
+    label: "Script-word filter bypass lab description",
+    re: /bypass a filter that blocks the word ["']script["'][\s\S]{0,200}alternative HTML tags and attributes|without using the ["']script["'] tag/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 04"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]04/i
+  }
+];
+
+const clientSidePentesterlabXss04ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]04/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS04_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 04 exercise documents reflected XSS filter bypass by blocking script tag while allowing alternative HTML event handlers"
+    }
+  };
+};
+
+// --- PentesterLab API 01 BOLA exercise (pentesterlab.com/exercises/api_01)
+const CLIENT_PENTESTERLAB_API01_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 01 course title",
+    re: /API 01|PentesterLab:\s*API 01/i
+  },
+  {
+    label: "Admin secret BOLA lab description",
+    re: /access the key stored as a secret in the admin(?:'|&#x27;)s account|find the vulnerability that allows you to access the key stored as a secret/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 01"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]01/i
+  }
+];
+
+const clientSidePentesterlabApi01ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]01/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API01_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 01 exercise documents BOLA — accessing admin account secrets via broken object-level authorization"
+    }
+  };
+};
+
+// --- PentesterLab XSS 05 alert-word filter bypass exercise (pentesterlab.com/exercises/xss_05)
+const CLIENT_PENTESTERLAB_XSS05_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 05 course title",
+    re: /XSS 05|PentesterLab:\s*XSS 05/i
+  },
+  {
+    label: "Alert-word filter bypass lab description",
+    re: /bypass a filter that stops the execution of PHP code when the word ["']alert["'] is detected|trigger an alert box without directly using the word ["']alert["']/i
+  },
+  {
+    label: "eval and String.fromCharCode bypass technique",
+    re: /JavaScript(?:&#x27;|')s\s+<code>eval<\/code>[\s\S]{0,120}<code>String\.fromCharCode\(\)<\/code>|eval[\s\S]{0,80}String\.fromCharCode/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 05"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]05/i
+  }
+];
+
+const clientSidePentesterlabXss05ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]05/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS05_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 05 exercise documents reflected XSS filter bypass when alert is blacklisted via eval and String.fromCharCode"
+    }
+  };
+};
+
+// --- PentesterLab API 02 BOLA exercise (pentesterlab.com/exercises/api_02)
+const CLIENT_PENTESTERLAB_API02_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 02 course title",
+    re: /API 02|PentesterLab:\s*API 02/i
+  },
+  {
+    label: "Admin secret key BOLA lab description",
+    re: /access a secret key stored by the user admin@libcurl\.so|identify a vulnerability that allows you to access a secret key/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 02"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]02/i
+  }
+];
+
+const clientSidePentesterlabApi02ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]02/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API02_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 02 exercise documents BOLA — accessing admin@libcurl.so secret key via broken object-level authorization"
+    }
+  };
+};
+
+// --- PentesterLab API 03 JWT weak-signature exercise (pentesterlab.com/exercises/api_03)
+const CLIENT_PENTESTERLAB_API03_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 03 course title",
+    re: /API 03|PentesterLab:\s*API 03/i
+  },
+  {
+    label: "JWT weak signature lab description",
+    re: /exploiting the JWT token(?:&#x27;|')s weak signature|retrieve it by exploiting the JWT token(?:&#x27;|')s weak signature/i
+  },
+  {
+    label: "Admin secret JWT lab objective",
+    re: /access the key stored as a secret in the admin(?:'|&#x27;)s account/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 03"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]03/i
+  }
+];
+
+const clientSidePentesterlabApi03ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]03/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API03_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 03 exercise documents JWT weak-signature forgery to access admin account secrets"
+    }
+  };
+};
+
+// --- PentesterLab API 04 hidden Angular endpoint exercise (pentesterlab.com/exercises/api_04)
+const CLIENT_PENTESTERLAB_API04_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 04 course title",
+    re: /API 04|PentesterLab:\s*API 04/i
+  },
+  {
+    label: "Hidden Angular endpoint lab description",
+    re: /find a hidden endpoint by leveraging the Angular application name|review the JavaScript of the page to find a hidden endpoint/i
+  },
+  {
+    label: "Angular framework tag",
+    re: />\s*Angular\s*</i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 04"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]04/i
+  }
+];
+
+const clientSidePentesterlabApi04ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]04/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API04_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 04 exercise documents discovering a hidden API endpoint via Angular application name in client JavaScript"
+    }
+  };
+};
+
+// --- PentesterLab API 05 hidden compressed-JS endpoint exercise (pentesterlab.com/exercises/api_05)
+const CLIENT_PENTESTERLAB_API05_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 05 course title",
+    re: /API 05|PentesterLab:\s*API 05/i
+  },
+  {
+    label: "Compressed JavaScript hidden endpoint lab description",
+    re: /review the JavaScript of the page to find a hidden endpoint[\s\S]{0,120}compressed[\s\S]{0,80}beautifier/i
+  },
+  {
+    label: "Inspect JavaScript for unused endpoints",
+    re: /inspect JavaScript code to identify unused endpoints/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 05"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]05/i
+  }
+];
+
+const clientSidePentesterlabApi05ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]05/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API05_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 05 exercise documents discovering a hidden API endpoint in minified/compressed client JavaScript"
+    }
+  };
+};
+
+// --- PentesterLab API 06 CSRF + compressed-JS hidden endpoint exercise (pentesterlab.com/exercises/api_06)
+const CLIENT_PENTESTERLAB_API06_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 06 course title",
+    re: /API 06|PentesterLab:\s*API 06/i
+  },
+  {
+    label: "CSRF-protected compressed JavaScript hidden endpoint lab",
+    re: /find a hidden endpoint[\s\S]{0,200}compressed[\s\S]{0,120}CSRF protection/i
+  },
+  {
+    label: "CSRF headers and cookies requirement",
+    re: /handle CSRF protection by using appropriate headers and cookies/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 06"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]06/i
+  }
+];
+
+const clientSidePentesterlabApi06ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]06/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API06_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 06 exercise documents discovering a CSRF-protected hidden API endpoint in compressed client JavaScript"
+    }
+  };
+};
+
+// --- PentesterLab API 07 Angular ng-app information leak exercise (pentesterlab.com/exercises/api_07)
+const CLIENT_PENTESTERLAB_API07_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 07 course title",
+    re: /API 07|PentesterLab:\s*API 07/i
+  },
+  {
+    label: "Angular ng-app information leak lab description",
+    re: /find an information leak[\s\S]{0,160}Angular application[\s\S]{0,80}ng-app/i
+  },
+  {
+    label: "ng-app HTML attribute reference",
+    re: /ng-app/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 07"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]07/i
+  }
+];
+
+const clientSidePentesterlabApi07ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]07/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API07_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 07 exercise documents discovering an information leak by reviewing client JavaScript with Angular ng-app metadata"
+    }
+  };
+};
+
+// --- PentesterLab API 08 reset-password URL leak exercise (pentesterlab.com/exercises/api_08)
+const CLIENT_PENTESTERLAB_API08_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 08 course title",
+    re: /API 08|PentesterLab:\s*API 08/i
+  },
+  {
+    label: "Reset password URL leak lab description",
+    re: /reset password functionality[\s\S]{0,200}URL leak[\s\S]{0,120}admin@libcurl\.so/i
+  },
+  {
+    label: "Admin libcurl login objective",
+    re: /log in as admin@libcurl\.so[\s\S]{0,200}challenge key/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 08"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]08/i
+  }
+];
+
+const clientSidePentesterlabApi08ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]08/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API08_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 08 exercise documents reset-password URL leak enabling admin@libcurl.so account takeover"
+    }
+  };
+};
+
+// --- PentesterLab API 09 API response information leak exercise (pentesterlab.com/exercises/api_09)
+const CLIENT_PENTESTERLAB_API09_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 09 course title",
+    re: /API 09|PentesterLab:\s*API 09/i
+  },
+  {
+    label: "API response information leak lab description",
+    re: /review the requests and responses from various API endpoints[\s\S]{0,200}information leak[\s\S]{0,120}admin@libcurl\.so/i
+  },
+  {
+    label: "Admin libcurl login objective",
+    re: /log in as admin@libcurl\.so[\s\S]{0,160}obtain the key/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 09"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]09/i
+  }
+];
+
+const clientSidePentesterlabApi09ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]09/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API09_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 09 exercise documents API response information leak enabling admin@libcurl.so login"
+    }
+  };
+};
+
+// --- PentesterLab API 10 email-filter bypass exercise (pentesterlab.com/exercises/api_10)
+const CLIENT_PENTESTERLAB_API10_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 10 course title",
+    re: /API 10|PentesterLab:\s*API 10/i
+  },
+  {
+    label: "Admin email filter bypass lab description",
+    re: /register an account that the application interprets as an administrator account[\s\S]{0,200}bypassing filters on email addresses/i
+  },
+  {
+    label: "libcurl.so email oracle",
+    re: /@libcurl\.so/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 10"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]10/i
+  }
+];
+
+const clientSidePentesterlabApi10ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]10/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API10_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 10 exercise documents bypassing email filters to register an administrator account (@libcurl.so oracle)"
+    }
+  };
+};
+
+// --- PentesterLab API 11 email-filter bypass exercise (pentesterlab.com/exercises/api_11)
+const CLIENT_PENTESTERLAB_API11_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 11 course title",
+    re: /API 11|PentesterLab:\s*API 11/i
+  },
+  {
+    label: "Admin email filter bypass lab description",
+    re: /register an account that will be interpreted by the application as an administrator account[\s\S]{0,200}@libcurl\.so/i
+  },
+  {
+    label: "libcurl.so email oracle",
+    re: /@libcurl\.so/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 11"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]11/i
+  }
+];
+
+const clientSidePentesterlabApi11ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]11/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API11_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 11 exercise documents bypassing email filters to register an administrator account (@libcurl.so oracle)"
+    }
+  };
+};
+
+// --- PentesterLab XSS 06 script-tag injection exercise (pentesterlab.com/exercises/xss_06)
+const CLIENT_PENTESTERLAB_XSS06_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 06 course title",
+    re: /XSS 06|PentesterLab:\s*XSS 06/i
+  },
+  {
+    label: "Script-tag injection lab description",
+    re: /injecting JavaScript code within a pre-existing script tag|create an alert box with your unique identifier \(UUID\)/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 06"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]06/i
+  }
+];
+
+const clientSidePentesterlabXss06ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]06/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS06_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 06 exercise documents reflected XSS via JavaScript injection inside an existing script tag"
+    }
+  };
+};
+
+// --- PentesterLab XSS 07 HTML-encoded script-tag injection exercise (pentesterlab.com/exercises/xss_07)
+const CLIENT_PENTESTERLAB_XSS07_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 07 course title",
+    re: /XSS 07|PentesterLab:\s*XSS 07/i
+  },
+  {
+    label: "HTML-encoded script-tag injection lab description",
+    re: /special characters are HTML-encoded[\s\S]{0,120}inject JavaScript code into a script tag|inject JavaScript code into a script tag to trigger an alert box with your unique identifier/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 07"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]07/i
+  }
+];
+
+const clientSidePentesterlabXss07ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]07/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS07_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 07 exercise documents reflected XSS via script-tag injection when special characters are HTML-encoded"
+    }
+  };
+};
+
+// --- PentesterLab XSS 08 PHP_SELF path injection exercise (pentesterlab.com/exercises/xss_08)
+const CLIENT_PENTESTERLAB_XSS08_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 08 course title",
+    re: /XSS 08|PentesterLab:\s*XSS 08/i
+  },
+  {
+    label: "PHP_SELF path injection lab description",
+    re: /trusting user-provided paths in the\s*(?:<code>)?\$_SERVER\[['"]PHP_SELF['"]\](?:<\/code>)?|improper handling of this variable can allow attackers to inject malicious payloads/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 08"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]08/i
+  }
+];
+
+const clientSidePentesterlabXss08ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]08/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS08_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 08 exercise documents reflected XSS via trusting user-provided paths in PHP $_SERVER['PHP_SELF']"
+    }
+  };
+};
+
+// --- PentesterLab XSS 09 DOM anchor injection exercise (pentesterlab.com/exercises/xss_09)
+const CLIENT_PENTESTERLAB_XSS09_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 09 course title",
+    re: /XSS 09|PentesterLab:\s*XSS 09/i
+  },
+  {
+    label: "DOM anchor hash injection lab description",
+    re: /DOM-based XSS vulnerability where the JavaScript code uses the URL's anchor portion|URL's anchor portion to dynamically write content into the page without proper escaping/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 09"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]09/i
+  }
+];
+
+const clientSidePentesterlabXss09ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]09/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS09_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 09 exercise documents DOM-based XSS via URL anchor/hash written into the page without escaping"
+    }
+  };
+};
+
+// --- PentesterLab XSS 10 cookie-theft exercise (pentesterlab.com/exercises/xss_10)
+const CLIENT_PENTESTERLAB_XSS10_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS 10 course title",
+    re: /XSS 10|PentesterLab:\s*XSS 10/i
+  },
+  {
+    label: "Cookie theft via image tag lab description",
+    re: /retrieve a victim(?:&#39;|'s) cookie using JavaScript[\s\S]{0,200}image tag with the cookie value|send the cookie to your server or a service like webhook\.site/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"XSS 10"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/xss[_-]10/i
+  }
+];
+
+const clientSidePentesterlabXss10ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/xss[_-]10/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_XSS10_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab XSS 10 exercise documents stealing victim cookies via JavaScript image-tag exfiltration (webhook.site oracle)"
+    }
+  };
+};
+
+// --- PentesterLab API 12 email-validation bypass exercise (pentesterlab.com/exercises/api_12)
+const CLIENT_PENTESTERLAB_API12_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 12 course title",
+    re: /API 12|PentesterLab:\s*API 12/i
+  },
+  {
+    label: "Admin email validation bypass lab description",
+    re: /register an account that will be interpreted by the application as an administrator account[\s\S]{0,200}bypassing email validation to gain elevated privileges/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 12"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]12/i
+  }
+];
+
+const clientSidePentesterlabApi12ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]12/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API12_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 12 exercise documents bypassing email validation to register an administrator account"
+    }
+  };
+};
+
+// --- PentesterLab API 13 Unicode email bypass exercise (pentesterlab.com/exercises/api_13)
+const CLIENT_PENTESTERLAB_API13_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 13 course title",
+    re: /API 13|PentesterLab:\s*API 13/i
+  },
+  {
+    label: "Unicode email domain bypass lab description",
+    re: /register an account that will be interpreted by the application as an administrator account[\s\S]{0,240}@libcurl\.so[\s\S]{0,120}Unicode-based bypass/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 13"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]13/i
+  }
+];
+
+const clientSidePentesterlabApi13ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]13/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API13_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 13 exercise documents Unicode-based email bypass to register an administrator @libcurl.so account"
+    }
+  };
+};
+
+// --- PentesterLab API 14 leaked encrypted password exercise (pentesterlab.com/exercises/api_14)
+const CLIENT_PENTESTERLAB_API14_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 14 course title",
+    re: /API 14|PentesterLab:\s*API 14/i
+  },
+  {
+    label: "Leaked encrypted password login lab description",
+    re: /log in as the user admin@libcurl\.so[\s\S]{0,200}leaked API call information|leaked encrypted password to gain access/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 14"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]14/i
+  }
+];
+
+const clientSidePentesterlabApi14ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]14/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API14_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 14 exercise documents logging in as admin@libcurl.so via leaked encrypted password or API call data"
+    }
+  };
+};
+
+// --- PentesterLab API 15 password decryption exercise (pentesterlab.com/exercises/api_15)
+const CLIENT_PENTESTERLAB_API15_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 15 course title",
+    re: /API 15|PentesterLab:\s*API 15/i
+  },
+  {
+    label: "Leaked API call decryption lab description",
+    re: /leverage the leaked API call information to retrieve the password[\s\S]{0,200}admin@libcurl\.so[\s\S]{0,200}encryption method[\s\S]{0,120}decrypter/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 15"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]15/i
+  }
+];
+
+const clientSidePentesterlabApi15ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]15/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API15_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 15 exercise documents decrypting admin@libcurl.so password from leaked API call data"
+    }
+  };
+};
+
+// --- PentesterLab API 16 authentication bypass exercise (pentesterlab.com/exercises/api_16)
+const CLIENT_PENTESTERLAB_API16_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 16 course title",
+    re: /API 16|PentesterLab:\s*API 16/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API to gain access to sensitive information/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains some Go source code to help in learning source code review/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 16"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]16/i
+  }
+];
+
+const clientSidePentesterlabApi16ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]16/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API16_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 16 exercise documents leveraging an API authentication issue to access sensitive information via Go source review"
+    }
+  };
+};
+
+// --- PentesterLab API 17 authentication bypass exercise (pentesterlab.com/exercises/api_17)
+const CLIENT_PENTESTERLAB_API17_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 17 course title",
+    re: /API 17|PentesterLab:\s*API 17/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API to gain access to sensitive information/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains (?:some )?Go source code(?: of the vulnerable code)? to help in learning source code review/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 17"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]17/i
+  }
+];
+
+const clientSidePentesterlabApi17ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]17/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API17_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 17 exercise documents leveraging an API authentication issue to access sensitive information via Go source review"
+    }
+  };
+};
+
+// --- PentesterLab API 18 authentication bypass exercise (pentesterlab.com/exercises/api_18)
+const CLIENT_PENTESTERLAB_API18_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 18 course title",
+    re: /API 18|PentesterLab:\s*API 18/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains the Go source code of the vulnerable code to help in learning Go security code review/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 18"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]18/i
+  }
+];
+
+const clientSidePentesterlabApi18ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]18/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API18_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 18 exercise documents leveraging an API authentication issue via Go security source code review"
+    }
+  };
+};
+
+// --- PentesterLab API 19 authentication bypass exercise (pentesterlab.com/exercises/api_19)
+const CLIENT_PENTESTERLAB_API19_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 19 course title",
+    re: /API 19|PentesterLab:\s*API 19/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an application to gain access to sensitive information/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains the Go source code of the vulnerable code/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 19"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]19/i
+  }
+];
+
+const clientSidePentesterlabApi19ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]19/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API19_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 19 exercise documents leveraging an API authentication issue to access sensitive information via Go source review"
+    }
+  };
+};
+
+// --- PentesterLab API 20 authentication bypass exercise (pentesterlab.com/exercises/api_20)
+const CLIENT_PENTESTERLAB_API20_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API 20 course title",
+    re: /API 20|PentesterLab:\s*API 20/i
+  },
+  {
+    label: "API authentication issue lab description",
+    re: /leverage an authentication issue in an API to gain access to sensitive information/i
+  },
+  {
+    label: "Go source code review training",
+    re: /contains the Go source code of the vulnerable code/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"API 20"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/api[_-]20/i
+  }
+];
+
+const clientSidePentesterlabApi20ExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/api[_-]20/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_API20_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab API 20 exercise documents leveraging an API authentication issue to access sensitive information via Go source review"
+    }
+  };
+};
+
+// --- PentesterLab CORS II sensitive-data exfiltration exercise (pentesterlab.com/exercises/cors-ii)
+const CLIENT_PENTESTERLAB_CORS_II_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CORS II course title",
+    re: /Cross-Origin Resource Sharing II|PentesterLab:\s*Cross-Origin Resource Sharing II/i
+  },
+  {
+    label: "Misconfigured CORS policy lab description",
+    re: /misconfigured Cross-Origin Resource Sharing \(CORS\) policy/i
+  },
+  {
+    label: "Sensitive API data exfiltration via malicious page",
+    re: /retrieve sensitive information from an API by tricking a user into visiting a malicious page/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Cross-Origin Resource Sharing II"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/cors[_-]ii/i
+  }
+];
+
+const clientSidePentesterlabCorsIiExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/cors[_-]ii/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_CORS_II_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab CORS II exercise documents exploiting misconfigured CORS to exfiltrate sensitive API data via a malicious page"
+    }
+  };
+};
+
+// --- PentesterLab Web Fundamentals GraphQL exercise (pentesterlab.com/exercises/web-fundamentals-graphql)
+const CLIENT_PENTESTERLAB_GRAPHQL_FUNDAMENTALS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web Fundamentals GraphQL course title",
+    re: /Web Fundamentals:\s*GraphQL|PentesterLab:\s*Web Fundamentals:\s*GraphQL/i
+  },
+  {
+    label: "GraphQL fundamentals lab description",
+    re: /PentesterLab(?:&#39;|'|')s exercise on Web Fundamentals:\s*GraphQL/i
+  },
+  {
+    label: "Course JSON-LD schema",
+    re: /"@type"\s*:\s*"Course"[\s\S]{0,200}"name"\s*:\s*"Web Fundamentals:\s*GraphQL"/i
+  },
+  {
+    label: "Hosted exercise instance path",
+    re: /\/exercises\/web-fundamentals-graphql/i
+  }
+];
+
+const clientSidePentesterlabGraphqlFundamentalsExerciseEvidence: Rule = async (ctx) => {
+  if (!/pentesterlab\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/\/exercises\/web-fundamentals-graphql/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTESTERLAB_GRAPHQL_FUNDAMENTALS_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentesterLab Web Fundamentals GraphQL exercise documents GraphQL security training and hosted lab instance"
+    }
+  };
+};
+
 // --- PentesterLab XSS and MySQL FILE exercise (pentesterlab.com/exercises/xss-and-mysql-file)
 const CLIENT_PENTESTERLAB_XSS_MYSQL_EXERCISE_RES: { label: string; re: RegExp }[] = [
   {
@@ -9193,6 +11710,50 @@ const clientSideJuicesecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- JavaSecLab comprehensive Java vulnerability platform (whgojp/JavaSecLab) ----
+const CLIENT_JAVASECLAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JavaSecLab platform title",
+    re: /JavaSecLab|JavaSeclab平台登录/i
+  },
+  {
+    label: "Comprehensive Java vulnerability platform",
+    re: /综合型Java漏洞平台|Java vulnerability platform/i
+  },
+  {
+    label: "SpringBoot + SpringSecurity stack",
+    re: /SpringBoot\+SpringSecurity\+MyBatis|SpringBoot\s*\+\s*SpringSecurity/i
+  },
+  {
+    label: "GitHub whgojp/JavaSecLab reference",
+    re: /github\.com\/whgojp\/JavaSecLab|whgojp\/JavaSecLab/i
+  },
+  {
+    label: "Audit SINK point and vulnerability scenarios",
+    re: /审计SINK点|漏洞场景|vulnerability scenarios/i
+  }
+];
+
+const clientSideJavaSecLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JAVASECLAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/JavaSecLab|JavaSeclab/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "JavaSecLab documents comprehensive Java vulnerability scenarios with audit SINK points — Spring Boot training platform"
+    }
+  };
+};
+
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
 const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -9338,25 +11899,44 @@ const clientSideRedtigerHackitEvidence: Rule = async (ctx) => {
   };
 };
 
+function findRedTigerClassicLoginEvidence(
+  corpus: string
+): { table: string; levelPath: string } | null {
+  const tableRe = /Tablename:\s*(level(\d+)_users)/gi;
+  let best: { table: string; levelPath: string; levelNum: number } | null = null;
+  let m: RegExpExecArray | null;
+  while ((m = tableRe.exec(corpus))) {
+    const levelNum = Number.parseInt(m[2], 10);
+    const table = m[1];
+    const slice = corpus.slice(m.index, m.index + 1800);
+    if (/name="level\d+login"/i.test(slice)) continue;
+    const formBlock = slice.match(
+      /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,700}?name="user"[\s\S]{0,400}?name="password"/i
+    );
+    if (!formBlock) continue;
+    if (!best || levelNum < best.levelNum) {
+      best = { table, levelPath: `level${levelNum}.php`, levelNum };
+    }
+  }
+  return best ? { table: best.table, levelPath: best.levelPath } : null;
+}
+
 // --- RedTiger classic SQLi login (username + password POST on level1/2) ----------------
 const redtigerClassicLoginSqlEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const pageCorpus = `${ctx.home.body}\n${pageUrl}`;
-  if (/name="level\d+login"/i.test(pageCorpus)) return NEGATIVE;
-  const table = pageCorpus.match(/Tablename:\s*(level\d+_users)/i)?.[1];
-  const formBlock = pageCorpus.match(
-    /<form[^>]*method\s*=\s*["']post["'][^>]*>[\s\S]{0,700}?name="user"[\s\S]{0,400}?name="password"/i
-  );
-  if (!table || !formBlock) return NEGATIVE;
-  const levelPath = pageUrl.match(/level\d+\.php/i)?.[0];
+  const homeCorpus = `${ctx.home.body}\n${pageUrl}`;
+  const hit =
+    findRedTigerClassicLoginEvidence(homeCorpus) ??
+    findRedTigerClassicLoginEvidence(ctx.combined);
+  if (!hit) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.88,
     evidence: {
-      table,
-      levelPath,
-      note: `RedTiger ${levelPath ?? "level"} exposes classic SQL injection login drill via POST user+password (${table})`
+      table: hit.table,
+      levelPath: hit.levelPath,
+      note: `RedTiger ${hit.levelPath} exposes classic SQL injection login drill via POST user+password (${hit.table})`
     }
   };
 };
@@ -9392,7 +11972,7 @@ const redtigerBlindLoginFormEvidence: Rule = async (ctx) => {
 const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const corpus = `${ctx.home.body}\n${pageUrl}\n${ctx.combined}`;
   if (!/special1\.php/i.test(corpus)) return NEGATIVE;
   const smsChallenge = /send me an SMS|mobile number/i.test(corpus);
   const solutionForm = /name="solution"[\s\S]{0,250}name="name"/i.test(corpus);
@@ -9411,8 +11991,8 @@ const redtigerSpecialChallengeEvidence: Rule = async (ctx) => {
 const redtigerCommandInjectionEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
-  if (!/level10\.php/i.test(pageUrl)) return NEGATIVE;
-  const corpus = `${ctx.home.body}\n${pageUrl}`;
+  const corpus = `${ctx.home.body}\n${pageUrl}\n${ctx.combined}`;
+  if (!/level10\.php/i.test(corpus)) return NEGATIVE;
   const backtickShell =
     /!`sh[\s\S]{0,60}\/dev\/tcp\/[0-9.]+\/[0-9]+/i.test(corpus) ||
     /<!--[\s\S]{0,120}!`sh/i.test(corpus);
@@ -9623,6 +12203,142 @@ const clientSideVulnExposeLabModuleEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       module: pageUrl.match(/\/(?:sqli|xss|idor|cmdi|network-tools)(?:\/[^/?#]*)?/)?.[0],
+      note: spec.note
+    }
+  };
+};
+
+// --- drag-security-flaws Remix vulnerability education hub (drag-security-flaws.vercel.app)
+const CLIENT_DRAG_SECURITY_FLAWS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Security Flaws hub title",
+    re: /Web Security Vulnerabilities|Security Flaws/i
+  },
+  {
+    label: "Educational vulnerability catalog tagline",
+    re: /Explore common security flaws and learn how to protect your applications/i
+  },
+  {
+    label: "Frontend security module nav",
+    re: /href\s*=\s*["']\/security\/(?:xss|csrf|idor|clickjacking)["']/i
+  },
+  {
+    label: "Backend security module nav",
+    re: /href\s*=\s*["']\/security\/(?:sqlInjection|ssrf|injection)["']/i
+  },
+  {
+    label: "Remix drag-security-flaws host",
+    re: /drag-security-flaws\.vercel\.app/i
+  }
+];
+
+const clientSideDragSecurityFlawsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/drag-security-flaws\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DRAG_SECURITY_FLAWS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "drag-security-flaws publishes Remix educational modules for XSS, CSRF, IDOR, SQLi, SSRF, and clickjacking vulnerability classes"
+    }
+  };
+};
+
+const DRAG_SECURITY_FLAWS_MODULE_SPECS: {
+  pathRe: RegExp;
+  markers: { label: string; re: RegExp }[];
+  note: string;
+}[] = [
+  {
+    pathRe: /\/security\/xss(?:\/|$|\?)/i,
+    markers: [
+      { label: "XSS module title", re: /Cross-Site Scripting \(XSS\)/i },
+      { label: "Stored XSS lesson", re: /Stored XSS:/i },
+      { label: "Reflected XSS lesson", re: /Reflected XSS:/i },
+      { label: "DOM-based XSS lesson", re: /DOM-Based XSS:/i }
+    ],
+    note: "drag-security-flaws /security/xss module documents stored, reflected, and DOM-based XSS attack classes"
+  },
+  {
+    pathRe: /\/security\/idor(?:\/|$|\?)/i,
+    markers: [
+      { label: "IDOR module title", re: /Insecure Direct Object References \(IDOR\)/i },
+      { label: "Object reference exposure lesson", re: /Object Reference Exposure:/i },
+      { label: "Authorization bypass lesson", re: /Lack of Authorization:/i },
+      { label: "Profile enumeration example", re: /profile\?userId=\d+/i }
+    ],
+    note: "drag-security-flaws /security/idor module documents predictable object reference IDOR scenarios"
+  },
+  {
+    pathRe: /\/security\/csrf(?:\/|$|\?)/i,
+    markers: [
+      { label: "CSRF module title", re: /Cross-Site Request Forgery \(CSRF\)/i },
+      {
+        label: "CSRF attack mechanics",
+        re: /forged request|state-changing request|malicious request|unauthorized action/i
+      },
+      { label: "Anti-CSRF token lesson", re: /CSRF token|anti-CSRF|SameSite cookie/i }
+    ],
+    note: "drag-security-flaws /security/csrf module documents cross-site request forgery attack mechanics and mitigations"
+  },
+  {
+    pathRe: /\/security\/(?:sqlInjection|injection)(?:\/|$|\?)/i,
+    markers: [
+      { label: "SQL injection module title", re: /SQL Injection|Injection Attacks/i },
+      { label: "String concatenation risk", re: /string concatenation|unsanitized input/i },
+      { label: "Parameterized query lesson", re: /parameterized quer|prepared statement/i }
+    ],
+    note: "drag-security-flaws SQL injection module documents concatenation-based injection and parameterized query defenses"
+  },
+  {
+    pathRe: /\/security\/ssrf(?:\/|$|\?)/i,
+    markers: [
+      { label: "SSRF module title", re: /Server-Side Request Forgery \(SSRF\)|SSRF/i },
+      { label: "Internal network fetch risk", re: /internal (?:network|service|metadata)|fetch.*URL/i },
+      { label: "URL validation lesson", re: /validate.*URL|allowlist|blocklist/i }
+    ],
+    note: "drag-security-flaws /security/ssrf module documents server-side URL fetch abuse and validation mitigations"
+  },
+  {
+    pathRe: /\/security\/clickjacking(?:\/|$|\?)/i,
+    markers: [
+      { label: "Clickjacking module title", re: /Clickjacking/i },
+      { label: "Iframe overlay attack", re: /iframe|transparent overlay|UI redress/i },
+      { label: "X-Frame-Options lesson", re: /X-Frame-Options|frame-ancestors|CSP/i }
+    ],
+    note: "drag-security-flaws /security/clickjacking module documents UI redress attacks and frame-busting defenses"
+  }
+];
+
+const clientSideDragSecurityFlawsLabModuleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  const hostCorpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/drag-security-flaws\.vercel\.app/i.test(hostCorpus)) return NEGATIVE;
+
+  const spec = DRAG_SECURITY_FLAWS_MODULE_SPECS.find((s) => s.pathRe.test(pageUrl));
+  if (!spec) return NEGATIVE;
+
+  const pageCorpus = `${ctx.home.body}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = pageCorpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      module: pageUrl.match(/\/security\/[^/?#]+/)?.[0],
       note: spec.note
     }
   };
@@ -9940,6 +12656,22 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Signed command execution form",
     re: /name\s*=\s*["']cmd["'][\s\S]{0,200}name\s*=\s*["']hash["']/i
+  },
+  {
+    label: "Java applet client-side login challenge",
+    re: /<applet[^>]+code=["'][^"']+\.class["']/i
+  },
+  {
+    label: "Sweet little applet training challenge",
+    re: /Sweet little applet|Login using this applet/i
+  },
+  {
+    label: "Java applet admin area challenge",
+    re: /Admin Area[\s\S]{0,160}<applet[^>]+code=["'][^"']+\.class["']/i
+  },
+  {
+    label: "Net-Force superuser applet challenge",
+    re: /Superuser ownage|netforcechallenge\.Challenge\.class/i
   }
 ];
 
@@ -10024,7 +12756,18 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
         ? `Net-Force level ${level ?? "NN"} builds password via substring() in client JavaScript — credential oracle in page source`
         : /Right click disabled|JavaScript protection/i.test(corpus)
           ? `Net-Force level ${level ?? "NN"} uses trivial JavaScript protection (right-click disable / secret.html) — client-side auth bypass training lab`
-          : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
+          : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
+              /Decompile it|Simple encoding/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} Simple encoding challenge ships a Java applet — decompile applet.class to recover password`
+            : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
+              /Admin Area/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} Admin Area challenge ships a Java applet gate — decompile Applet5.class or reverse client-side credential check`
+            : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
+              /Sweet little applet|Login using this applet/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} ships a Java applet login gate — decompile applet1.class or reverse client-side credential check`
+            : /Superuser ownage|netforcechallenge\.Challenge\.class/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} Superuser ownage challenge ships netforcechallenge.Challenge Java applet — decompile to recover superuser password`
+            : `Net-Force level ${level ?? "NN"} challenge instance documents client-side authentication bypass drill`;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -10911,6 +13654,9 @@ const clientSideHackThisSiteRealisticMissionEvidence: Rule = async (ctx) => {
 const HTS_AUTH_GATE_RE =
   /Login Required|You must be logged in to use this page|require_auth/i;
 
+const HTS_MAINTENANCE_RE =
+  /Offline for Maintenance|temporarily offline for maintenance|htscdn\.org\/images\/maintenance/i;
+
 const HTS_MISSION_NOT_FOUND_RE =
   /requested URL \/missions\/[a-z]+\/\d+\/? was not found|not found on this server/i;
 
@@ -10968,7 +13714,8 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
   const corpus = `${ctx.home.body}\n${pageUrl}`;
   const missionMissing = HTS_MISSION_NOT_FOUND_RE.test(corpus);
   const authGated = HTS_AUTH_GATE_RE.test(corpus);
-  if (!authGated && !missionMissing) return NEGATIVE;
+  const maintenance = HTS_MAINTENANCE_RE.test(corpus);
+  if (!authGated && !missionMissing && !maintenance) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   const missionPath =
     category === "missions-stego" ? "stego" : hub.kind === "standard" ? category : hub.playSegment;
@@ -10983,14 +13730,22 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
       re: pathRe
     },
     {
-      label: missionMissing
-        ? "HTS mission instance not deployed (404)"
-        : "Login required for mission access",
-      re: missionMissing ? HTS_MISSION_NOT_FOUND_RE : HTS_AUTH_GATE_RE
+      label: maintenance
+        ? "HTS nightly maintenance window"
+        : missionMissing
+          ? "HTS mission instance not deployed (404)"
+          : "Login required for mission access",
+      re: maintenance
+        ? HTS_MAINTENANCE_RE
+        : missionMissing
+          ? HTS_MISSION_NOT_FOUND_RE
+          : HTS_AUTH_GATE_RE
     },
     {
       label: "HTS ethical hacking training ground",
-      re: /HackThisSite\.org is a free, safe and legal training ground/i
+      re: maintenance
+        ? /HackThisSite\.org|hackthissite\.org/i
+        : /HackThisSite\.org is a free, safe and legal training ground/i
     },
     {
       label: "Mission challenge nav category",
@@ -11002,9 +13757,11 @@ const clientSideHtsLoginGatedMissionHubEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  const note = missionMissing
-    ? `HTS ${category} mission instance URL is indexed but returns 404 — documents wargame challenge slot not yet deployed on this node`
-    : (HTS_LOGIN_GATED_MISSION_NOTES[category] ?? `HTS ${category} mission hub is login-gated`);
+  const note = maintenance
+    ? `HTS ${category} mission hub is offline for nightly maintenance — challenge content unreachable until backup window completes`
+    : missionMissing
+      ? `HTS ${category} mission instance URL is indexed but returns 404 — documents wargame challenge slot not yet deployed on this node`
+      : (HTS_LOGIN_GATED_MISSION_NOTES[category] ?? `HTS ${category} mission hub is login-gated`);
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.9 : 0.87,
@@ -11220,7 +13977,9 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   if (!/hackthissite\.org\/playlevel(?:\/\d+)?\/?/i.test(pageUrl)) return NEGATIVE;
   const corpus = `${ctx.home.body}\n${pageUrl}`;
-  if (!HTS_AUTH_GATE_RE.test(corpus)) return NEGATIVE;
+  const maintenance = HTS_MAINTENANCE_RE.test(corpus);
+  const authGated = HTS_AUTH_GATE_RE.test(corpus);
+  if (!authGated && !maintenance) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   const checks: { label: string; re: RegExp }[] = [
     {
@@ -11228,12 +13987,14 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
       re: /\/playlevel(?:\/\d+)?\/?/i
     },
     {
-      label: "Login required for arcade access",
-      re: HTS_AUTH_GATE_RE
+      label: maintenance ? "HTS nightly maintenance window" : "Login required for arcade access",
+      re: maintenance ? HTS_MAINTENANCE_RE : HTS_AUTH_GATE_RE
     },
     {
       label: "HTS ethical hacking training ground",
-      re: /HackThisSite\.org is a free, safe and legal training ground/i
+      re: maintenance
+        ? /HackThisSite\.org|hackthissite\.org/i
+        : /HackThisSite\.org is a free, safe and legal training ground/i
     },
     {
       label: "Arcade wargame challenge nav",
@@ -11250,7 +14011,9 @@ const clientSideHtsPlaylevelHubEvidence: Rule = async (ctx) => {
     confidence: hits.length >= 4 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "HTS playlevel arcade hub is login-gated — documents browser-based wargame challenge levels behind authenticated access"
+      note: maintenance
+        ? "HTS playlevel arcade hub is offline for nightly maintenance — challenge content unreachable until backup window completes"
+        : "HTS playlevel arcade hub is login-gated — documents browser-based wargame challenge levels behind authenticated access"
     }
   };
 };
@@ -11605,6 +14368,10 @@ const CLIENT_CYBERDEFENDERS_RES: { label: string; re: RegExp }[] = [
   {
     label: "DFIR keywords",
     re: /DFIR|soc analyst.*blue team/i
+  },
+  {
+    label: "Blue team CTF challenge hub",
+    re: /Dive into Blue Team CTF Challenges|blue team ctf challenges|blueteam-ctf-challenges/i
   }
 ];
 
@@ -11761,6 +14528,10 @@ const CLIENT_HACKADVISOR_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "Browser-based CTF challenges",
     re: /browser-based[\s\S]{0,80}challenge|New challenges added regularly/i
+  },
+  {
+    label: "100+ web security challenge catalog",
+    re: /100\+ web security challenges|Practice XSS, SQL injection, SSRF, IDOR, RCE/i
   }
 ];
 
@@ -11818,6 +14589,54 @@ const clientSideAgenticAiCtfEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP FinBot CTF documents agentic AI exploit chains — prompt injection and tool abuse against FinBot agents"
+    }
+  };
+};
+
+// --- QualityMax vulnerable chatbot demo (vulnerable-chatbot-demo.vercel.app) -------
+const CLIENT_VULNERABLE_CHATBOT_DEMO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Intentionally vulnerable chatbot banner",
+    re: /This chatbot is INTENTIONALLY VULNERABLE|intentionally broken for testing/i
+  },
+  {
+    label: "ShopBot customer support demo",
+    re: /ShopBot|FakeStore\.com Customer Support/i
+  },
+  {
+    label: "QualityMax agent safety scan CTA",
+    re: /QualityMax Agent Safety Scan|agent-safety-scan/i
+  },
+  {
+    label: "Chat API endpoint",
+    re: /\/api\/chat/i
+  },
+  {
+    label: "System prompt probe hint",
+    re: /What is your system prompt\?|adversarial attacks/i
+  }
+];
+
+const clientSideVulnerableChatbotDemoEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (
+    !/vulnerable-chatbot-demo\.vercel\.app/i.test(pageUrl) &&
+    !/Quality-Max\/vulnerable-chatbot-demo/i.test(ctx.combined)
+  ) {
+    return NEGATIVE;
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNERABLE_CHATBOT_DEMO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "QualityMax ShopBot demo documents an intentionally vulnerable /api/chat endpoint for agent safety scanning and prompt-injection red-teaming"
     }
   };
 };
@@ -12791,6 +15610,34 @@ const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   {
     label: "SQL injection prism tutorial with mysqli_prepare contrast",
     re: /mysqli_prepare\(\)|PDO::prepare\(\)/
+  },
+  {
+    label: "Docusaurus SQL injection tutorial overview",
+    re: /untrusted input in an SQL query without proper validation|Union-based:\s*use\s*`?UNION SELECT`?/i
+  },
+  {
+    label: "Stored XSS forum comments lab",
+    re: /exploit the comments field to perform stored XSS|Stored \(Persistent\) XSS[\s\S]{0,200}comments/i
+  },
+  {
+    label: "DOM-based XSS innerHTML lab text",
+    re: /DOM-based XSS[\s\S]{0,300}innerHTML/i
+  },
+  {
+    label: "Cryptographic Failures OWASP lab heading",
+    re: /Cryptographic Failures[\s\S]{0,400}(?:MD5|hardcoded keys|plaintext)/i
+  },
+  {
+    label: "Weak hash offline cracking scenario",
+    re: /unsalted MD5|Offline cracking of weak hashes/i
+  },
+  {
+    label: "Hardcoded key leakage scenario",
+    re: /hardcoded keys|Keys embedded in code/i
+  },
+  {
+    label: "Plaintext password database leak scenario",
+    re: /plaintext password database leak|Passwords were stored as plaintext/i
   }
 ];
 
@@ -12808,6 +15655,115 @@ const clientSideOwaspEducationalLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 5),
       note: "crawled OWASP Top 10 educational lab pages document injectable SQL, IDOR, or access-control flaws"
+    }
+  };
+};
+
+// --- mehdiaitsaid OWASP Top 10 intro hub (2021 category catalog) -------------------
+const CLIENT_OWASP_TOP10_INTRO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP Top 10 2021 edition heading",
+    re: /OWASP Top 10 \(2021 Edition\)/i
+  },
+  {
+    label: "Top 10 web application security risks list",
+    re: /most critical web application security risks/i
+  },
+  {
+    label: "Broken Access Control category description",
+    re: /Broken Access Control[\s\S]{0,200}authorization/i
+  },
+  {
+    label: "Security Misconfiguration category",
+    re: /Security Misconfiguration/i
+  },
+  {
+    label: "Logging and Monitoring Failures category",
+    re: /Security Logging and Monitoring Failures|insufficient logging/i
+  },
+  {
+    label: "Software and Data Integrity Failures category",
+    re: /Software and Data Integrity Failures/i
+  },
+  {
+    label: "Vulnerable and Outdated Components category",
+    re: /Vulnerable and Outdated Components/i
+  }
+];
+
+const clientSideOwaspTop10IntroHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/labs\/intro\/?$/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_TOP10_INTRO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 5 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 5),
+      note: "OWASP Top 10 intro hub documents 2021 category risk catalog (A01–A10) with hands-on lab navigation"
+    }
+  };
+};
+
+// --- mehdiaitsaid OWASP Top 10 inactive lab stub pages (A05/A06/A08/A09 placeholders) ---
+const CLIENT_OWASP_STUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Inactive lab stub warning",
+    re: /This lab is not yet active/i
+  },
+  {
+    label: "Security Misconfiguration stub",
+    re: /Security Misconfiguration/i
+  },
+  {
+    label: "Vulnerable and Outdated Components stub",
+    re: /Vulnerable and Outdated Components/i
+  },
+  {
+    label: "Software and Data Integrity Failures stub",
+    re: /Software and Data Integrity Failures/i
+  },
+  {
+    label: "Logging and Monitoring Failures stub",
+    re: /Security Logging and Monitoring Failures|Logging and Monitoring Failures/i
+  },
+  {
+    label: "Insecure Design stub",
+    re: /Insecure Design/i
+  },
+  {
+    label: "Identification and Authentication Failures stub",
+    re: /Identification and Authentication Failures/i
+  }
+];
+
+const clientSideOwaspEducationalLabStubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(pageUrl)) return NEGATIVE;
+  if (/\/labs\/intro\/?$/i.test(pageUrl)) return NEGATIVE;
+  const onLabSubpage = /\/labs\/[^/]+/i.test(pageUrl);
+  const stubInCombined = /This lab is not yet active/i.test(ctx.combined);
+  if (!onLabSubpage && !stubInCombined) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OWASP_STUB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (!hits.some((h) => h.label === "Inactive lab stub warning") || hits.length < 2)
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      page: pageUrl,
+      markers: hits.slice(0, 4),
+      note: "OWASP Top 10 lab stub page is publicly indexed but marked not yet active — reveals planned vulnerable module routes"
     }
   };
 };
@@ -14104,6 +17060,52 @@ const clientSideWebgoatEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP WebGoat is a deliberately insecure Java/Spring training application with guided security lessons"
+    }
+  };
+};
+
+// --- WhoopsPay educational fintech vulnerability lab (whoopspay.onrender.com) -----
+const CLIENT_WHOOPSPAY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WhoopsPay branding",
+    re: /WhoopsPay/i
+  },
+  {
+    label: "Postgraduate thesis vulnerability lab",
+    re: /postgraduate thesis on web application vulnerabilities|educational project developed as part of a postgraduate thesis/i
+  },
+  {
+    label: "Security vulnerabilities demonstrated panel",
+    re: /Security Vulnerabilities Demonstrated|intentional vulnerabilities/i
+  },
+  {
+    label: "XSS payloads in transaction descriptions",
+    re: /XSS payloads in transaction descriptions/i
+  },
+  {
+    label: "Educational admin panel disclaimer",
+    re: /administrative panel demonstrates security vulnerabilities for educational purposes|educational vulnerability demonstration platform/i
+  },
+  {
+    label: "Mock users with intentional flaws",
+    re: /mock users with intentional vulnerabilities|Cybersecurity Training System/i
+  }
+];
+
+const clientSideWhoopsPayEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WHOOPSPAY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/WhoopsPay|whoopspay/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WhoopsPay is an educational fintech SPA with intentional XSS, auth, and data-exposure flaws built for postgraduate cybersecurity training"
     }
   };
 };
@@ -16810,6 +19812,54 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
+const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "REST API BOLA/IDOR lab",
+    re: /API-002\s+BOLA\/IDOR|Orders API accepts any ID/i
+  },
+  {
+    label: "REST mass assignment admin probe",
+    re: /API-004\s+Mass Assignment|\/api\/admin\/users/i
+  },
+  {
+    label: "GraphQL introspection lab",
+    re: /GQL-001\s+Introspection Query|graphql-schema\.json/i
+  },
+  {
+    label: "GraphQL depth limit missing",
+    re: /GQL-004\s+Depth Limit Test|No query depth limit enforced/i
+  },
+  {
+    label: "SOAP WSDL exposure lab",
+    re: /SOAP-001\s+WSDL Finder|service\.wsdl/i
+  },
+  {
+    label: "API testing lab hub",
+    re: /API Testing Labs|REST API Targets|GraphQL Targets|SOAP Targets/i
+  }
+];
+
+const clientSideVulnlabApiLabsEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_API_LABS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app|\/api-labs\//i.test(corpus))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab /api-labs/* documents REST BOLA, GraphQL introspection, and SOAP WSDL exposure training targets"
+    }
+  };
+};
+
 function vulnlabOwaspModuleCorpus(ctx: RuleContext): string {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   return `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
@@ -18888,6 +21938,92 @@ const CLIENT_OWASP_VWAD_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+// --- VWAD Gin & Juice Shop PortSwigger scanner benchmark listing ----------------------
+const clientSideVwadGinJuiceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/gin-juice-shop/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Gin & Juice Shop VWAD listing",
+      re: /Gin\s*&\s*Juice Shop[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "PortSwigger scanner evaluation author",
+      re: /"author"\s*:\s*"PortSwigger"|Author<\/span>\s*PortSwigger/i
+    },
+    {
+      label: "Live ginandjuice.shop demo URL",
+      re: /"url"\s*:\s*"https:\/\/ginandjuice\.shop\/"/i
+    },
+    {
+      label: "Scanner benchmark technology tags",
+      re: /AngularJS[\s\S]{0,80}React[\s\S]{0,40}CSRF/i
+    },
+    {
+      label: "Hosted online vulnerability scanner lab",
+      re: /hosted always-online demo app with realistic technologies|vulnerability scanner to the test/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Gin & Juice Shop VWAD listing links PortSwigger scanner evaluation lab at ginandjuice.shop with CSRF, XSS, and SQLi oracles"
+    }
+  };
+};
+
+// --- VWAD Pixi DevSlop MEAN stack insecure API lab listing ----------------------------
+const clientSideVwadPixiEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/pixi/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Pixi VWAD listing",
+      re: /Pixi[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "MEAN stack insecure API lab",
+      re: /MEAN stack web app with deliberately insecure APIs/i
+    },
+    {
+      label: "OWASP DevSlop project",
+      re: /Part of OWASP DevSlop|DevSlop\/Pixi/i
+    },
+    {
+      label: "OpenAPI and Swagger training surface",
+      re: /OpenAPI[\s\S]{0,40}Swagger|api-and-web-service-hacking-with-pixi/i
+    },
+    {
+      label: "API security demo keywords",
+      re: /useful for scanning and API security demos/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pixi VWAD listing documents OWASP DevSlop MEAN stack app with deliberately insecure OpenAPI endpoints for API security training"
+    }
+  };
+};
+
 // --- VWAD WackoPicko scanner benchmark app listing ------------------------------------
 const clientSideVwadWackopickoEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -19083,6 +22219,53 @@ const clientSideVwadNodegoatEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD Vulnerable MCP Servers Lab (Appsecco) listing ---------------------------
+const clientSideVwadMcpServersLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/vulnerable-mcp-servers-lab/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Vulnerable MCP Servers Lab VWAD listing",
+      re: /Vulnerable MCP Servers Lab[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Intentionally vulnerable MCP server collection",
+      re: /intentionally vulnerable MCP server implementations for security training/i
+    },
+    {
+      label: "Path traversal and unsandboxed MCP execution",
+      re: /path traversal[\s\S]{0,120}unsandboxed code execution/i
+    },
+    {
+      label: "Indirect prompt injection MCP lab",
+      re: /indirect prompt injection[\s\S]{0,80}(?:local and remote|remote)/i
+    },
+    {
+      label: "MCP eval and typosquatting risks",
+      re: /malicious code execution via eval|namespace typosquatting|secrets\/PII exposure/i
+    },
+    {
+      label: "Appsecco MCP lab repository",
+      re: /github\.com\/appsecco\/vulnerable-mcp-servers-lab/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VWAD Vulnerable MCP Servers Lab documents path traversal, prompt injection, eval RCE, typosquatting, and supply-chain risks in intentionally vulnerable MCP server training implementations"
+    }
+  };
+};
+
 const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OWASP_VWAD_RES) {
@@ -19231,6 +22414,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOpenvaultLearnEvidence,
   clientSideOpenvaultCheatsheetEvidence,
   clientSideWebgoatEvidence,
+  clientSideWhoopsPayEvidence,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,
@@ -19241,6 +22425,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
+  clientSideOwaspEducationalLabStubEvidence,
+  clientSideOwaspTop10IntroHubEvidence,
   serverSideEvalEvidence,
   nextDataSensitiveKeys,
   unauthenticatedApiRoutes,
@@ -19254,6 +22440,7 @@ export const RULES: Record<string, Rule> = {
   domEvalXss,
   postMessageDomXssEvidence,
   springActuatorExposed,
+  druidMonitorExposed,
   idorObjectAccess,
   hiddenPromptInjection,
   clientSidePromptInjectionEvidence,
@@ -19278,6 +22465,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,
+  domgoUnescapeHashDomXssEvidence,
   domgoHashSanitizationBypassDomXssEvidence,
   domgoWindowNameDomXssEvidence,
   domgoPostMessageDomXssEvidence,
@@ -19291,10 +22479,30 @@ export const RULES: Record<string, Rule> = {
   clientSideInvictiPracticeSiteEvidence,
   clientSideGinAndJuiceScannerLabEvidence,
   clientSideWebsecChallengeEvidence,
+  clientSideWebsecCryptoChallengeEvidence,
+  clientSideWebsecFileUploadChallengeEvidence,
+  clientSideWebsecMagicHashChallengeEvidence,
+  clientSideWebsecBlacklistSqliChallengeEvidence,
+  clientSideWebsecClassInstantiationChallengeEvidence,
+  clientSideWebsecSqliPrivilegeChallengeEvidence,
+  clientSideWebsecRestrictedPhpExecChallengeEvidence,
+  clientSideWebsecCreateFunctionChallengeEvidence,
+  clientSideWebsecFibonacciEvalChallengeEvidence,
+  clientSideWebsecTimingAttackChallengeEvidence,
+  clientSideWebsecPhpUnserializeCookieChallengeEvidence,
+  clientSideWebsecPhpUnserializeFilterChallengeEvidence,
+  clientSideWebsecPhpAesSessionChallengeEvidence,
+  clientSideWebsecOopRestrictedEvalChallengeEvidence,
+  clientSideWebsecShellExecChallengeEvidence,
+  clientSideWebsecAspectInstrumentationChallengeEvidence,
+  clientSideWebsecUploadIncludeChallengeEvidence,
+  clientSideWebsecPhpUnserializeDestructChallengeEvidence,
+  clientSideWebsecOpenBasedirEvalChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
   clientSidePentesterlabWebForPentesterEvidence,
+  clientSidePentesterlabWebForPentesterIiEvidence,
   clientSidePentesterlabSqliExerciseEvidence,
   clientSidePentesterlabSqli02ExerciseEvidence,
   clientSidePentesterlabSqli03ExerciseEvidence,
@@ -19317,6 +22525,35 @@ export const RULES: Record<string, Rule> = {
   clientSidePentesterlabAutho06ExerciseEvidence,
   clientSidePentesterlabXss02ExerciseEvidence,
   clientSidePentesterlabXss03ExerciseEvidence,
+  clientSidePentesterlabXss04ExerciseEvidence,
+  clientSidePentesterlabXss05ExerciseEvidence,
+  clientSidePentesterlabApi01ExerciseEvidence,
+  clientSidePentesterlabApi02ExerciseEvidence,
+  clientSidePentesterlabApi03ExerciseEvidence,
+  clientSidePentesterlabApi04ExerciseEvidence,
+  clientSidePentesterlabApi05ExerciseEvidence,
+  clientSidePentesterlabApi06ExerciseEvidence,
+  clientSidePentesterlabApi07ExerciseEvidence,
+  clientSidePentesterlabApi08ExerciseEvidence,
+  clientSidePentesterlabApi09ExerciseEvidence,
+  clientSidePentesterlabApi10ExerciseEvidence,
+  clientSidePentesterlabApi11ExerciseEvidence,
+  clientSidePentesterlabApi12ExerciseEvidence,
+  clientSidePentesterlabApi13ExerciseEvidence,
+  clientSidePentesterlabApi14ExerciseEvidence,
+  clientSidePentesterlabApi15ExerciseEvidence,
+  clientSidePentesterlabApi16ExerciseEvidence,
+  clientSidePentesterlabApi17ExerciseEvidence,
+  clientSidePentesterlabApi18ExerciseEvidence,
+  clientSidePentesterlabApi19ExerciseEvidence,
+  clientSidePentesterlabApi20ExerciseEvidence,
+  clientSidePentesterlabCorsIiExerciseEvidence,
+  clientSidePentesterlabGraphqlFundamentalsExerciseEvidence,
+  clientSidePentesterlabXss06ExerciseEvidence,
+  clientSidePentesterlabXss07ExerciseEvidence,
+  clientSidePentesterlabXss08ExerciseEvidence,
+  clientSidePentesterlabXss09ExerciseEvidence,
+  clientSidePentesterlabXss10ExerciseEvidence,
   clientSidePentesterlabXssMysqlExerciseEvidence,
   clientSideKontraApplicationSecurityEvidence,
   clientSideDefhawkPracticeLabEvidence,
@@ -19326,6 +22563,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBlueTeamLabsEvidence,
   clientSideJuiceShopProjectEvidence,
   clientSideJuicesecLabEvidence,
+  clientSideJavaSecLabEvidence,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
@@ -19335,6 +22573,8 @@ export const RULES: Record<string, Rule> = {
   redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
   clientSideVulnExposeLabModuleEvidence,
+  clientSideDragSecurityFlawsEvidence,
+  clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
@@ -19381,6 +22621,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSectrainerEvidence,
   clientSideHackAdvisorLabEvidence,
   clientSideAgenticAiCtfEvidence,
+  clientSideVulnerableChatbotDemoEvidence,
   clientSideWrongSecretsEvidence,
   clientSideWrongSecretsChallengeEvidence,
   clientSideMaestroAgenticAiEvidence,
@@ -19460,6 +22701,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA08IntegrityEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
+  clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
@@ -19486,16 +22728,20 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSupplyChainEvidence,
   clientSideOwaspVwadEvidence,
   clientSideVwadAppNotFoundEvidence,
+  clientSideVwadGinJuiceEvidence,
+  clientSideVwadPixiEvidence,
   clientSideVwadWackopickoEvidence,
   clientSideVwadBodgeitEvidence,
   clientSideVwadSecurityShepherdEvidence,
   clientSideVwadMutillidaeEvidence,
   clientSideVwadNodegoatEvidence,
+  clientSideVwadMcpServersLabEvidence,
   clientSideVwadVulnerableappEvidence,
   clientSideVulnerableappDomXssEvidence,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
+  clientSideAiPromptLabEvidence,
   clientSideSecuredAiLabEvidence,
   clientSideGitagentSecurebotEvidence,
   clientSideAirtAcademyEvidence,
@@ -19534,8 +22780,13 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingFileUploadLessonEvidence,
   clientSideHacksplainingCommandExecutionLessonEvidence,
   clientSideHacksplainingXmlBombLessonEvidence,
+  clientSideHacksplainingPrototypePollutionLessonEvidence,
   clientSideHacksplainingSubdomainSquattingLessonEvidence,
+  clientSideHacksplainingToxicDependenciesLessonEvidence,
+  clientSideHacksplainingUnencryptedCommunicationLessonEvidence,
+  clientSideHacksplainingXssiLessonEvidence,
   clientSideOopssecStoreEvidence,
+  clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
   clientSideUnsecurePwaEvidence,
@@ -19568,6 +22819,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWafWorkshopEvidence,
   clientSideBugforgeLabEvidence,
   clientSideAikidoZenDemoEvidence,
+  clientSideAevumAgentConsentDemoEvidence,
   clientSideAttpAgentTrustEvidence,
   clientSideBugzapPromptDefenseEvidence,
   clientSideRedlockxPromptFirewallEvidence,
@@ -19621,6 +22873,7 @@ export const FREE_RULES = new Set([
   "dangerousHtmlSinks",
   "domEvalXss",
   "springActuatorExposed",
+  "druidMonitorExposed",
   "hiddenPromptInjection",
   "ssrfEndpointProbe",
   "http403BypassProbe"

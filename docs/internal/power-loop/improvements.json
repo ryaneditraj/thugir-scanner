@@ -4187,6 +4187,1176 @@
       "slug": "client-side-pentesterlab-ssti-03-exercise-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_03/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-44-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/44/ Login Required gate + HTS training ground meta; playlevel/44 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-43-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/43/ Login Required gate + application mission nav; application/43 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level412-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level412/index.php redirects to net-force.nl homepage; level412 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-44-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_44/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-04-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_04/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-45-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/45/ Login Required gate + HTS training ground meta; playlevel/45 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-44-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/44/ Login Required gate + application mission nav; application/44 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level413-414-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level413/index.php and level414 redirect to net-force.nl homepage; level413 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-45-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_45/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-05-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_05/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-46-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/46/ Login Required gate + HTS training ground meta; playlevel/46 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-45-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/45/ Login Required gate + application mission nav; application/45 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level415-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level415/index.php redirects to net-force.nl homepage; level415 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-46-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_46/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-06-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_06/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-49-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/49/ Login Required gate + HTS training ground meta; playlevel/49 findings 0→6 via client-side-hts-playlevel-hub-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-48-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/48/ Login Required gate + application mission nav; application/48 findings 0→6 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level416-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level416/index.php 301 redirects to net-force.nl homepage; level416 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-47-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_47/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-07-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_07/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-maintenance-window-detection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/50 + application/49 return Offline for Maintenance during 8:00 UTC backup window; HTS_MAINTENANCE_RE extends playlevel + mission hub rules; playlevel/50 0→4, application/49 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-50-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/50/ maintenance gate + HTS title; playlevel/50 findings 0→4 via client-side-hts-playlevel-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-49-mission-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/49/ maintenance gate; application/49 findings 0→4 via client-side-hts-login-gated-mission-hub-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level417-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level417/index.php 301 redirects to net-force.nl homepage; level417 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-48-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_48/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-08-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_08/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub HTML Web Security Vulnerabilities + /security/xss|csrf|idor nav; drag-security-flaws.vercel.app findings 5→6+ with hub slug when reachable; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /security/xss Cross-Site Scripting (XSS) + Stored/Reflected/DOM lessons; /security/idor Insecure Direct Object References + profile?userId=123; module pages gain lab-module slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-51-application-50-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/51/ login-gated arcade hub (0→6 findings) + /missions/application/50/ mission hub (0→6 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level418-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level418/index.php 301 redirects to net-force.nl homepage; level418 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-49-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_49/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-09-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_09/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-csrf-module-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /security/csrf publishes malicious request + unauthorized actions + CSRF token Remix lesson; CSRF module markers extended; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-sqli-queue-path-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /security/sqli 404; /security/sqlInjection 200 with SQL Injection + parameterized queries lesson; queue URL corrected; sqlInjection scan 4 findings incl lab-module slug"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-52-application-51-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/52 Login Required arcade hub (0→6 findings) + /missions/application/51 login-gated mission hub (0→6 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level419-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level419/index.php redirects to net-force.nl homepage; level419 findings 0→4 via client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-http-50-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/http_50/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-ssti-10-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/ssti_10/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-13-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/13 location.hash→unescape→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–13; domgo.at/cxss/example/13 findings 0→4 (+domgo-hash-dom-xss-evidence); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-ii-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD CourseInstance Web for Pentester II + bypass authentication/CAPTCHA/MongoDB injection description; pentesterlab.com/exercises/web-for-pentester-II findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-54-netforce-421-queue-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/54 Login Required hub (0→6) + level421 homepage redirect (0→4 offline oracle) + mehdiaitsaid sql-injection priority seeds (0→6 owasp-educational-lab); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-14-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/14 location.hash→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–16; domgo.at/cxss/example/14 findings 0→4 (+domgo-hash-dom-xss-evidence); benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-55-application-54-netforce-422-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/55 Login Required hub (0→6) + application/54 login-gated mission hub (0→6) + level422 homepage redirect (0→4 offline oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-04-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 04 + bypass filter that blocks script word + alternative HTML tags; pentesterlab.com/exercises/xss_04 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-01-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 01 + access the key stored as a secret in the admin's account BOLA description; pentesterlab.com/exercises/api_01 findings 3→4 (+client-side-pentesterlab-api-01-exercise-evidence); benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "mehdiaitsaid-owasp-xss-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: stored XSS comments field + DOM-based XSS innerHTML tutorial markers in CLIENT_OWASP_EDU_RES; mehdiaitsaid.github.io/owasp-top-10-labs/labs/injection/xss findings 5→6 (+client-side-owasp-educational-lab-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-56-application-55-netforce-423-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/56 Login Required hub (6 findings) + application/55 login-gated mission hub (6 findings) + level423 homepage redirect offline oracle (4 findings); runner priority seeds extended; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-iii-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/web-for-pentester-III returns PentesterLab 404 — course not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-unescape-hash-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/15 unescape(hash.substr(1))→msgboard.innerHTML; domgo.at/cxss/example/15 findings 0→4 (+domgo-unescape-hash-dom-xss-evidence); benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-05-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 05 + bypass filter when word alert detected via eval and String.fromCharCode; pentesterlab.com/exercises/xss_05 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-02-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 02 + access secret key stored by admin@libcurl.so BOLA description; pentesterlab.com/exercises/api_02 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "druid-monitor-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /druid/basic.json returns {\"ResultCode\":1,\"Content\":{\"Version\":\"1.2.16\"...}}; /druid/index.html Druid Stat Index HTML; whgojp.top/login findings 2→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "client-side-javaseclab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JavaSeclab平台登录 + 综合型Java漏洞平台 + SpringBoot+SpringSecurity+MyBatis + github.com/whgojp/JavaSecLab; whgojp.top/login findings 2→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "reach-target-protocol-scoring",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: https://whgojp.top/login returns 404 len=0; reachTarget now prefers caller protocol + scores 2xx body over empty 404; http://whgojp.top/login combined 0→602646 enabling druid+javaseclab rules; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-03-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 03 + exploiting the JWT token's weak signature + admin secret objective; pentesterlab.com/exercises/api_03 findings 0→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-17-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/17 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/17; domgo.at/cxss/example/17 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-57-application-56-netforce-424-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/57 Login Required hub (0→6) + application/56 login-gated mission hub (0→6) + level424 homepage redirect offline oracle (0→4); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-04-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 04 + hidden endpoint via Angular application name + Angular tag; pentesterlab.com/exercises/api_04 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-18-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/18 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/18; domgo.at/cxss/example/18 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-59-application-57-netforce-425-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/59 Login Required hub (0→6) + application/57 login-gated mission hub (0→6) + level425 homepage redirect offline oracle (0→4); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-19-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/19 unescape(hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/19; domgo.at/cxss/example/19 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-05-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 05 + hidden endpoint in compressed JavaScript + beautifier hint; pentesterlab.com/exercises/api_05 findings 0→4; XSS 06 script-tag injection JSON-LD + pentesterlab.com/exercises/xss_06 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-60-application-58-netforce-426-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/60 Login Required hub (0→6) + application/58 login-gated mission hub (0→6) + level426 homepage redirect offline oracle (0→4); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-07-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 07 + find an information leak via Angular ng-app + ng-app attribute hint; pentesterlab.com/exercises/api_07 findings 0→4; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-06-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 06 + CSRF protection headers/cookies + compressed JavaScript beautifier hidden endpoint; pentesterlab.com/exercises/api_06 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-61-application-59-netforce-427-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/61 Login Required hub (0→6) + application/59 login-gated mission hub (0→6) + level427 homepage redirect offline oracle; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-07-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 07 + special characters are HTML-encoded + inject JavaScript code into a script tag; pentesterlab.com/exercises/xss_07 findings 0→4 incl client-side-pentesterlab-xss-07-exercise-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-20-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/20 unescape(hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/20; domgo.at/cxss/example/20 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level428-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level428/index.php redirects to homepage; client-side-net-force-offline-challenge-evidence fires level=428; net-force level428 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-08-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 08 + trusting user-provided paths in $_SERVER['PHP_SELF']; pentesterlab.com/exercises/xss_08 findings 0→4 incl client-side-pentesterlab-xss-08-exercise-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-63-application-61-netforce-429-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/63 login-gated arcade hub (0→6) + application/61 login-gated mission hub (0→6); benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level429-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level429/index.php redirects to homepage; client-side-net-force-offline-challenge-evidence fires level=429; net-force level429 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-09-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /exercises/autho_09/ returns 404 — exercise not published yet; no implementable detection signal"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-10-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 10 + register administrator by bypassing email filters + @libcurl.so oracle; pentesterlab.com/exercises/api_10 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-chatbot-demo.vercel.app",
+      "slug": "client-side-vulnerable-chatbot-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: INTENTIONALLY VULNERABLE ShopBot + QualityMax Agent Safety Scan + POST /api/chat; vulnerable-chatbot-demo.vercel.app findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-21-hts-64-62-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/21 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/64 arcade hub (0→6) + application/62 mission hub (0→6); extractDomGoatCxssSeeds extended to example/21; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-autho-10-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /exercises/autho_10/ returns 404 — exercise not published yet; no implementable detection signal"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-09-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 09 + DOM-based XSS via URL anchor portion without escaping; pentesterlab.com/exercises/xss_09 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-11-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 11 + register administrator bypassing @libcurl.so email filter; pentesterlab.com/exercises/api_11 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-22-hts-65-63-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/22 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/65 arcade hub (0→6) + application/63 mission hub (0→6); extractDomGoatCxssSeeds extended to example/22; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-10-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course XSS 10 + retrieve victim cookie via image tag with cookie value (webhook.site oracle); pentesterlab.com/exercises/xss_10 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-12-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 12 + bypass email validation to register administrator account; pentesterlab.com/exercises/api_12 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-23-hts-66-64-netforce-430-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/23 location.hash→msgboard.innerHTML (0→4) + HTS playlevel/66 arcade hub (0→6) + application/64 mission hub (0→6) + Net-Force level430 offline oracle (0→4); extractDomGoatCxssSeeds extended to example/23; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-13-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 13 + Unicode-based bypass for @libcurl.so admin registration; pentesterlab.com/exercises/api_13 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-14-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 14 + log in as admin@libcurl.so via leaked encrypted password/API call data; pentesterlab.com/exercises/api_14 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-24-hts-67-65-netforce-431-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/24 unescape(location.hash)→msgboard.innerHTML (0→4) + HTS playlevel/67 arcade hub (0→6) + application/65 mission hub + Net-Force level431 offline oracle; extractDomGoatCxssSeeds extended to example/24; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-15-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 15 + leverage leaked API call information to retrieve admin@libcurl.so password via encryption-method audit + decrypter; pentesterlab.com/exercises/api_15 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "hackadvisor-challenges-catalog-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta 100+ web security challenges + Practice XSS, SQL injection, SSRF, IDOR, RCE; hackAdvisorPrioritySeeds prepends /challenges; labs.hackadvisor.io/challenges findings 0→7 incl client-side-hackadvisor-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "cyberdefenders-blueteam-ctf-challenges-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: title Dive into Blue Team CTF Challenges + blue team ctf challenges keywords; cyberDefendersPrioritySeeds prepends /blueteam-ctf-challenges; cyberdefenders.org/blueteam-ctf-challenges findings 0→9 incl client-side-cyberdefenders-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-gin-juice-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD WebApplication author PortSwigger url https://ginandjuice.shop/ + CSRF/AngularJS tags; vwad.owasp.org/app/gin-juice-shop findings 0→4 incl client-side-vwad-gin-juice-evidence + linked ginandjuice.shop seed; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-16-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 16 + leverage an authentication issue in an API to gain access to sensitive information + Go source code review; pentesterlab.com/exercises/api_16 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-25-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/25 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/25; domgo.at/cxss/example/25 findings include domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-prompt-lab.vercel.app",
+      "slug": "client-side-ai-prompt-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: プロンプトチェックシート（全16個） + ChatGPTのAPIキーを入力 + Prompt Lab title; rule shipped — Vercel Security Checkpoint may block ThugirScanner UA from cloud egress; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-17-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 17 + leverage an authentication issue in an API to gain access to sensitive information + Go source code of the vulnerable code; pentesterlab.com/exercises/api_17 findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-26-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/26 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/26; domgo.at/cxss/example/26 findings include domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-68-application-66-queue-validation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/68 Login Required + application/66 login-gated mission hub; existing clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings each); seeds already in runner.ts; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-pixi-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MEAN stack web app with deliberately insecure APIs + Part of OWASP DevSlop + OpenAPI/Swagger; vwad.owasp.org/app/pixi findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-18-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 18 + leverage an authentication issue in an API + Go source code of the vulnerable code; pentesterlab.com/exercises/api_18 findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-27-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/27 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/27; domgo.at/cxss/example/27 gains domgo-unescape-hash-dom-xss-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-19-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 19 + leverage an authentication issue in an application to gain access to sensitive information + Go source code of the vulnerable code; pentesterlab.com/exercises/api_19 findings 0→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-70-queue-validation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/70 Login Required + HTS ethical hacking training ground; clientSideHtsPlaylevelHubEvidence fires on direct scan (6 findings); seed added to htsPrioritySeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-28-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/28 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/28; domgo.at/cxss/example/28 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-20-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD Course API 20 + leverage an authentication issue in an API to gain access to sensitive information + Go source code; pentesterlab.com/exercises/api_20 findings 0→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-29-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/29 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/29; domgo.at/cxss/example/29 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-71-application-67-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/71 Login Required + application/67 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings each); seeds added to htsPrioritySeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-30-31-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/30-31 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/30-31; domgo.at/cxss/example/31 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-73-application-70-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/73 Login Required + application/70 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (4 findings each); seeds added to htsPrioritySeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level436-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level436/index.php redirects to net-force.nl homepage; netForcePrioritySeeds adds level434-436; level436 findings 4 incl client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-22-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/api_22/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-32-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/32 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/32; domgo.at/cxss/example/32 gains domgo-unescape-hash-dom-xss-evidence (4 findings); benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-74-application-68-70-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/74 Login Required + application/68 login-gated mission hub; htsPrioritySeeds adds playlevel/74, application/68, application/70; direct scan 6 findings each; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-cors-ii-graphql-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: cors-ii JSON-LD Cross-Origin Resource Sharing II + misconfigured CORS policy description; web-fundamentals-graphql Course Web Fundamentals: GraphQL; pentesterlab.com/exercises/cors-ii findings 3→4, web-fundamentals-graphql 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-21-exercise-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /exercises/api_21/ returns PentesterLab 404 — exercise not deployed; skip until page is live"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-33-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/33 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/33; domgo.at/cxss/example/33 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-71-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: application/71 Login Required login-gated mission hub; clientSideHtsLoginGatedMissionHubEvidence fires on direct scan (6 findings); seeds added to extractHackThisSiteMissionSeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level437-offline-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/level437/index.php 301 redirects to net-force.nl homepage; netForcePrioritySeeds adds level437; level437 findings 4 incl client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-34-35-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/34-35 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended to example/35; domgo.at/cxss/example/34 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-api-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api-labs/rest.html API-002 BOLA/IDOR + API-004 Mass Assignment + GQL-001 introspection markers; clientSideVulnlabApiLabsEvidence + api-labs subpage seeds; api-labs/rest.html findings 1→17 incl client-side-vulnlab-api-labs-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-docusaurus-crypto-failures-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/cryptographic-failures documents MD5/SHA-1 weak hashes + hardcoded keys + plaintext password leak scenarios; CLIENT_OWASP_EDU_RES crypto markers + priority seed; findings 3→6 incl client-side-owasp-educational-lab-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-docusaurus-auth-failures-lab",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/identification-authentication-failures meta description ⚠️ This lab is not yet active — no runnable vulnerable content to detect"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-docusaurus-insecure-design-lab",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/insecure-design meta description ⚠️ This lab is not yet active — no runnable vulnerable content to detect"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-36-40-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/36 unescape(location.hash)→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–35→1–40; domgo.at/cxss/example/36 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "flask-vulnapp-render-warmup-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Render cold-start stub omitted VulnApp markers; warmupRenderHost retries + extractFlaskVulnappSeeds for /comments /login /register; web-security-practice-app.onrender.com findings 1→3 incl client-side-flask-vulnapp-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "post-login-sql-bypass-comments-redirect",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=' OR '1'='1'-- returns 302 Location /comments + Set-Cookie session; probePostLoginSqlBypass accepts non-login redirects with session cookie; web-security-practice-app findings 1→3 incl post-login-sql-bypass; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-intro-catalog-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: domgoCxssIntroPrioritySeeds + domgoSinks/SourcesCatalog rules accept /cxss/intro combined corpus; domgo.at/cxss/intro findings 3→5 incl domgo-sinks-catalog + domgo-sources-catalog; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-top10-intro-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OWASP Top 10 (2021 Edition) category catalog + owaspTop10IntroHubPrioritySeeds for A04-A09 stubs; mehdiaitsaid.github.io/owasp-top-10-labs/labs/intro findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:aspnet.testsparker.com",
+      "slug": "invicti-aspnet-password-hint",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /administrator/Login.aspx label Password (theturingtest) visible hint; CLIENT_INVICTI_PRACTICE_RES ASP.NET password hint marker; aspnet.testsparker.com/administrator/Login.aspx invicti evidence maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-41-45-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/41-45 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–40→1–45 + domgoCxssTailPrioritySeeds on /cxss/intro and /cxss/example; domgo.at/cxss/intro crawl now includes example/41; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-08-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: API 08 JSON-LD reset password URL leak + admin@libcurl.so login objective; pentesterlab.com/exercises/api_08/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-09-exercise-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: API 09 JSON-LD review API responses for information leak + admin@libcurl.so key objective; pentesterlab.com/exercises/api_09/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-46-50-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/46 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–45→1–50 + domgoCxssTailPrioritySeeds 46–50; domgo.at/cxss/example/46 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-progressive-tail-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: domgoCxssProgressiveTailSeeds from /cxss/example/N seeds N+1..N+5 (cap 200); enables incremental drain of 200+ DomGoat exercises without hardcoding each batch; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-educational-lab-stub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta description ⚠️ This lab is not yet active on /labs/security-misconfiguration; clientSideOwaspEducationalLabStubEvidence; mehdiaitsaid A05 stub findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-51-55-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/51 let hash=location.hash→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–50→1–55 + domgoCxssTailPrioritySeeds 51–55; domgo.at/cxss/example/51 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-top10-root-stub-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: root scan used /labs/* absolute paths → wrong host path; fixed to relative labs/* + root-priority intro+A05-A09 stubs; mehdiaitsaid.github.io/owasp-top-10-labs/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-stub-evidence-combined-corpus",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideOwaspEducationalLabStubEvidence required /labs/ on home.finalUrl; now fires when combined corpus includes This lab is not yet active from crawled stub pages; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-56-60-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/56 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–55→1–60 + domgoCxssTailPrioritySeeds 56–60; domgo.at/cxss/example/56 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-75-76-application-72-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/75 Login Required + application/72 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence fire on direct scan (6 findings playlevel/75); seeds added to extractHackThisSiteMissionSeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-python.fly.dev",
+      "slug": "zen-demo-python-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Zen by Aikido SQL Injection | Create a new Pet + SSRF | Fetch a page lab pages; zenDemoPrioritySeeds for /pages/create|/request + CLIENT_AIKIDO_ZEN_DEMO_RES SQL/SSRF markers; zen-demo-python.fly.dev findings 0→3; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-classic-login",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level5.php crawl includes level1.php with Tablename: level1_users + POST user/password; redtigerClassicLoginSqlEvidence now scans combined corpus; redtiger.labs.overthewire.org/level5.php findings 3→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-command-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level10.php HTML comment !`sh`/dev/tcp backtick payload crawled from level5 hub; redtigerCommandInjectionEvidence uses combined corpus; level5.php gains redtiger-command-injection-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-61-65-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/61-65 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–60→1–65 + domgoCxssTailPrioritySeeds 61–65 from intro/example/55+; domgo.at/cxss/example/57 direct scan 4 findings incl domgo-unescape-hash-dom-xss-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-66-70-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cxss/example/66 unescape(location.hash.substr(1))→msgboard.innerHTML; extractDomGoatCxssSeeds extended 1–65→1–70 + dynamic domgoCxssTailPrioritySeeds (floor(n/5)*5+6); domgo.at/cxss/example/66 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-77-78-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/77 Login Required + clientSideHtsPlaylevelHubEvidence; seeds /playlevel/77/ + /playlevel/78/ added to extractHackThisSiteMissionSeeds; www.hackthissite.org/playlevel/77/ direct scan 6 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta If an attacker can access and modify prototype objects in JavaScript + Prototype Pollution — Secure Coding Lesson; www.hacksplaining.com/lessons/prototype-pollution/start findings 0→5 incl new slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Third-party libraries could be introducing vulnerabilities or malicious code + lesson step nav log4j/supply-chain-attacks/heartbleed; www.hacksplaining.com/lessons/toxic-dependencies/start findings 2→7; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-79-80-application-73-74-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/79 Login Required + application/73 login-gated mission hub; clientSideHtsPlaylevelHubEvidence + clientSideHtsLoginGatedMissionHubEvidence on direct scan (6 findings each); seeds added to extractHackThisSiteMissionSeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "hacksplaining-toxic-dependencies-lesson-step-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: toxic-dependencies/start had pages_crawled=1; hacksplainingToxicDependenciesPrioritySeeds + extractHacksplainingLessonSeeds step paths (log4j, supply-chain-attacks, heartbleed); enables lesson-specific slug on shallow scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "client-side-whoopspay-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle footerText postgraduate thesis on web application vulnerabilities + Security Vulnerabilities Demonstrated + XSS payloads in transaction descriptions; whoopspay.onrender.com findings 1→5; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-71-75-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cxss/example/71–75 return 200 DomGoat Client XSS exercises; extractDomGoatCxssSeeds loop extended 70→75; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-81-application-75-net-force-level201-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/81 + application/75 + net-force level201 applet challenge; net-force level201 GET returns <applet code=applet1.class> Sweet little applet; findings 2→3 with client-side-net-force-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-mcp-servers-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JSON-LD at /app/vulnerable-mcp-servers-lab documents path traversal, indirect prompt injection, eval RCE, typosquatting + github.com/appsecco/vulnerable-mcp-servers-lab; vwad.owasp.org findings 3→4 with new slug; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-76-80-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cxss/example/76–80 return 200 with location.hash→innerHTML msgboard sink; extractDomGoatCxssSeeds loop extended 75→80; domgo.at/cxss/example/76 findings include dangerous-html-sinks; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-82-application-76-net-force-level202-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/82 + application/76 + net-force level202; level202 GET returns <applet code=applet2.class> Decompile me login challenge; findings 2→3 with client-side-net-force-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-81-85-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cxss/example/81 unescape(location.hash)→eval+innerHTML msgboard sink; extractDomGoatCxssSeeds loop extended 80→85; domgo.at/cxss/example/81 findings 0→4 incl domgo-unescape-hash-dom-xss-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-83-application-77-net-force-level203-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/83 Login Required + application/77 login-gated hub; level203 GET returns <applet code=applet3.class> Let me in!!!; playlevel/83 findings 0→6 incl client-side-hts-playlevel-hub-evidence; level203 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-lab-nav-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage href=/pages/create|/pages/request|/pages/execute|/pages/read; extractZenDemoLabSeeds + zenDemoPrioritySeeds; zen-demo-java.fly.dev pages_crawled 1→5 findings 2→4 incl client-side-aikido-zen-demo-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvs.vercel.app",
+      "slug": "dvs-deploybro-queue-url-fix",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvs.vercel.app serves Vietnamese IT company CÔNG TY TNHH DVS VIỆT NAM — not 0xSV1/DVS DeployBro; queue entry removed; correct target is damn-vulnerable-startup.fly.dev (DNS offline Jul 2026)"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-84-application-78-mission-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /playlevel/84/ Login Required + /missions/application/78/ login-gated hub; extractHackThisSiteMissionSeeds extended; playlevel/84 findings 0→6, application/78 findings 0→6; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level204-applet-encoding-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level204 GET returns Net-Force Challenge - 204 + Simple encoding + applet4.class Decompile it; netForcePrioritySeeds + applet decompile note; level204 findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "client-side-aevum-agent-consent-demo-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle sandbox/consent + tamper-evident sigchain + proposed_action workflow; demo.aevum.build findings 3→4; extractAevumDemoSeeds probes /openapi.json + /docs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:voidsec.github.io",
+      "slug": "client-side-voidsec-shopping-cart-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Shopping Cart Vulnerable Web App + pen-test and hack a web application + cross-site scripting, sql injection catalog; voidsec.github.io/shopping-cart findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-syntax-highlighted-source-regex",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level01/source.php doQuery&nbsp;($injection) + LevelOne&nbsp; class in Rouge-highlighted PHP; relaxed CLIENT_WEBSEC_CHALLENGE_RES + websecLevelPrioritySeeds; websec.fr/level01 findings 4→5 incl client-side-websec-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-79-net-force-level205-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/79/ Login Required hub + level205 Admin Area Applet5.class; extractHackThisSiteMissionSeeds adds application/79; netForcePrioritySeeds adds level205 + Admin Area applet note; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-crypto-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level03/source.php password_hash(sha1($_POST['c'], fa1se)) + password_verify collision gate; websec.fr/level03 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-extended-level-seven-patterns",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level07/source.php sanitize($injection) blacklist + SELECT id,login FROM users WHERE id= concat; CLIENT_WEBSEC_CHALLENGE_RES extended for LevelSeven+; websec.fr/level07 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-86-net-force-206-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/86 Login Required hub + net-force level206 Superuser ownage netforcechallenge.Challenge.class applet; runner seeds playlevel/86-87 application/80-81 level206-207; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:docker-phpfox4.onrender.com",
+      "slug": "phpfox4-demo-deploy",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET docker-phpfox4.onrender.com/index.php/ returns Not Found; phpfox4.fly.dev DNS NXDOMAIN — skip until demo is redeployed"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Insufficient encryption can make you vulnerable to monster-in-the-middle attacks + Unencrypted Communication — Secure Coding Lesson; hacksplaining.com/lessons/unencrypted-communication/start findings 6→7; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xssi-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta putting sensitive data in your JavaScript files an attacker is probably stealing + Cross-Site Script Inclusion lesson title; hacksplaining.com/lessons/xssi/start findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-file-upload-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level08/source.php include_once($uploadedFile) + IMAGETYPE_GIF fileToUpload GIF-only uploader; websec.fr/level08 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-magic-hash-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level10/source.php substr(md5($flag.$file.$flag),0,8) hash gate + show_source($file) arbitrary read; websec.fr/level10 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-blacklist-sqli-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level11/source.php stripos blacklist on $table + SELECT id,username FROM $table WHERE id=$id; websec.fr/level11 findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-88-90-application-82-net-force-level207-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/89 Login Required hub + level207 301→homepage offline oracle; runner seeds playlevel/88-90 application/81-82; playlevel/89 findings 0→6, level207 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-class-instantiation-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level12 POST echo new $class($param1,$param2) + splfileobject/globiterator blacklist; websec.fr/level12 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-sqli-privilege-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level13/source.php SELECT user_privileges FROM users WHERE user_id IN ($ids) + admin flag in user_password; websec.fr/level13 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-91-92-application-83-net-force-level208-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/91-92 Login Required hub + level208 301→homepage offline oracle; runner seeds playlevel/91-92 application/83-84 level208; playlevel/91 findings 0→6, level208 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-restricted-php-exec-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level14/source.php preg_match whitelist on echo/print/strlen/strcmp/strncmp + substr($code,0,25) + eval($code); websec.fr/level14 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-create-function-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level15/source.php create_function('$flag', $_POST['c']) + Exit after declaration checkbox; websec.fr/level15 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-93-application-84-net-force-level209-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/93 Login Required hub + level209 301→homepage offline oracle; runner seeds playlevel/93 application/84-85 level209 + websec level14-16 crawl; playlevel/93 findings 0→6, level209 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-fibonacci-eval-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level16/source.php hash_hmac($flag,$t) + eval($t.$prime_test) + gcd(fib($n),fib($n+2)) relative-primes oracle; websec.fr/level16 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-timing-attack-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level17/source.php strcasecmp($_POST['flag'],$flag) + sleep_rand() jitter + UTF-16 charset header; websec.fr/level17 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-94-application-86-net-force-level210-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue tail playlevel/94 + application/86 + net-force level210 offline oracle; runner seeds extended + websec crawl through level17; playlevel/94 findings 0→6, level210 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-cookie-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level18/source.php setcookie(serialize($obj)) + unserialize($_COOKIE['obj']) + hash_equals input/flag oracle; websec.fr/level18 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-filter-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level20/source.php sanitize() preg_match filters + Flag __destruct POP + i0n1c bypass comment; websec.fr/level20 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-95-application-87-net-force-level211-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner seeds playlevel/95 + application/87 + net-force level211; playlevel/95 hub evidence during HTS maintenance; level211 301→homepage offline oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-aes-session-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level21/source.php LevelTwentyOne + preg_match (a|d|m|i|n) admin filter + mcrypt_encrypt session cookie + verify_credentials SQL concat; websec.fr/level21 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-oop-restricted-eval-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level22/source.php OOP-FTW + substr($_GET['code'],0,21) + strcmp/strncmp removed from blacklist + eval($code); websec.fr/level22 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level21-22-crawl-deep-rules",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebsecChallengeSeeds extended to level22 + source1/source2.php; wired unserialize/aes/oop WebSec rules into DEEP_RULES; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-shell-exec-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level26/source.php shell_exec(\$code) after blacklist + suhosin max_value_length=40 + /bin/sh title; websec.fr/level26 findings 2→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-aspect-instrumentation-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level27/source.php acu_phpaspect.php + HTTP_ACUNETIX_ASPECT header gate + source2.php instrumentation; websec.fr/level27 findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-upload-include-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level28/source.php md5_file(flag.php) + crc32 checksum == juggling + include(\$filename) upload RCE; websec.fr/level28 findings 2→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-destruct-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level30/source.php unserialize(\$_POST['payload']) + class B __destruct echoes \$flag + Something tragic exception; websec.fr/level30 gains destruct slug; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-open-basedir-eval-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level31/source.php open_basedir=/sandbox + eval(\$_GET['c']) sandbox escape; websec.fr/level31 gains open-basedir-eval slug; benchmark juice-shop-staging 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-98-net-force-level214-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HTS playlevel/98 arcade hub + net-force level214 redirect oracle seeds; crawl seeds extended; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -7449,6 +8619,806 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-application-42-mission-seed",
       "shipped_at": "2026-07-18T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-44-mission-seed",
+      "shipped_at": "2026-07-18T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-43-mission-seed",
+      "shipped_at": "2026-07-18T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level412-offline-seed",
+      "shipped_at": "2026-07-18T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-45-mission-seed",
+      "shipped_at": "2026-07-18T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-44-mission-seed",
+      "shipped_at": "2026-07-18T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level413-414-offline-seed",
+      "shipped_at": "2026-07-18T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-46-mission-seed",
+      "shipped_at": "2026-07-18T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-45-mission-seed",
+      "shipped_at": "2026-07-18T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level415-offline-seed",
+      "shipped_at": "2026-07-18T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-49-mission-seed",
+      "shipped_at": "2026-07-18T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-48-mission-seed",
+      "shipped_at": "2026-07-18T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level416-offline-seed",
+      "shipped_at": "2026-07-18T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-maintenance-window-detection",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-50-mission-seed",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-49-mission-seed",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level417-offline-seed",
+      "shipped_at": "2026-07-18T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-evidence",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "client-side-drag-security-flaws-lab-module-evidence",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-51-application-50-seeds",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level418-offline-seed",
+      "shipped_at": "2026-07-18T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-csrf-module-markers",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:drag-security-flaws.vercel.app",
+      "slug": "drag-security-sqli-queue-path-fix",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-52-application-51-seeds",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level419-offline-seed",
+      "shipped_at": "2026-07-18T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-13-seed",
+      "shipped_at": "2026-07-18T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-web-for-pentester-ii-evidence",
+      "shipped_at": "2026-07-18T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-54-netforce-421-queue-seeds",
+      "shipped_at": "2026-07-18T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-14-seed",
+      "shipped_at": "2026-07-18T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-55-application-54-netforce-422-seeds",
+      "shipped_at": "2026-07-18T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-01-exercise-evidence",
+      "shipped_at": "2026-07-18T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "mehdiaitsaid-owasp-xss-lab-markers",
+      "shipped_at": "2026-07-18T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-56-application-55-netforce-423-seeds",
+      "shipped_at": "2026-07-18T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-unescape-hash-dom-xss-evidence",
+      "shipped_at": "2026-07-18T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-05-exercise-evidence",
+      "shipped_at": "2026-07-18T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-02-exercise-evidence",
+      "shipped_at": "2026-07-18T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "druid-monitor-exposed",
+      "shipped_at": "2026-07-18T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "client-side-javaseclab-evidence",
+      "shipped_at": "2026-07-18T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "reach-target-protocol-scoring",
+      "shipped_at": "2026-07-18T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-03-exercise-evidence",
+      "shipped_at": "2026-07-18T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-17-seed",
+      "shipped_at": "2026-07-18T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-57-application-56-netforce-424-seeds",
+      "shipped_at": "2026-07-18T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-04-exercise-evidence",
+      "shipped_at": "2026-07-18T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-18-seed",
+      "shipped_at": "2026-07-18T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-59-application-57-netforce-425-seeds",
+      "shipped_at": "2026-07-18T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-19-seed",
+      "shipped_at": "2026-07-18T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-05-exercise-evidence",
+      "shipped_at": "2026-07-18T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-60-application-58-netforce-426-seeds",
+      "shipped_at": "2026-07-18T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-07-exercise-evidence",
+      "shipped_at": "2026-07-18T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-06-exercise-evidence",
+      "shipped_at": "2026-07-18T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-61-application-59-netforce-427-seeds",
+      "shipped_at": "2026-07-18T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-07-exercise-evidence",
+      "shipped_at": "2026-07-18T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-20-seed",
+      "shipped_at": "2026-07-18T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level428-offline-seed",
+      "shipped_at": "2026-07-18T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-08-exercise-evidence",
+      "shipped_at": "2026-07-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-63-application-61-netforce-429-seeds",
+      "shipped_at": "2026-07-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level429-offline-seed",
+      "shipped_at": "2026-07-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-10-exercise-evidence",
+      "shipped_at": "2026-07-18T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-chatbot-demo.vercel.app",
+      "slug": "client-side-vulnerable-chatbot-demo-evidence",
+      "shipped_at": "2026-07-18T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-21-hts-64-62-seeds",
+      "shipped_at": "2026-07-18T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-09-exercise-evidence",
+      "shipped_at": "2026-07-18T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-11-exercise-evidence",
+      "shipped_at": "2026-07-18T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-22-hts-65-63-seeds",
+      "shipped_at": "2026-07-18T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-xss-10-exercise-evidence",
+      "shipped_at": "2026-07-19T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-12-exercise-evidence",
+      "shipped_at": "2026-07-19T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-23-hts-66-64-netforce-430-seeds",
+      "shipped_at": "2026-07-19T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-13-exercise-evidence",
+      "shipped_at": "2026-07-19T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-14-exercise-evidence",
+      "shipped_at": "2026-07-19T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-24-hts-67-65-netforce-431-seeds",
+      "shipped_at": "2026-07-19T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-15-exercise-evidence",
+      "shipped_at": "2026-07-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "hackadvisor-challenges-catalog-seeds",
+      "shipped_at": "2026-07-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:cyberdefenders.org",
+      "slug": "cyberdefenders-blueteam-ctf-challenges-seeds",
+      "shipped_at": "2026-07-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-17-exercise-evidence",
+      "shipped_at": "2026-07-19T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-26-seeds",
+      "shipped_at": "2026-07-19T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-68-application-66-queue-validation",
+      "shipped_at": "2026-07-19T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-19-exercise-evidence",
+      "shipped_at": "2026-07-19T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-70-queue-validation",
+      "shipped_at": "2026-07-19T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-28-seeds",
+      "shipped_at": "2026-07-19T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-20-exercise-evidence",
+      "shipped_at": "2026-07-19T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-29-seeds",
+      "shipped_at": "2026-07-19T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-71-application-67-seeds",
+      "shipped_at": "2026-07-19T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-30-31-seeds",
+      "shipped_at": "2026-07-19T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-73-application-70-seeds",
+      "shipped_at": "2026-07-19T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level436-offline-seed",
+      "shipped_at": "2026-07-19T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-32-seeds",
+      "shipped_at": "2026-07-19T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-74-application-68-70-seeds",
+      "shipped_at": "2026-07-19T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-cors-ii-graphql-exercise-evidence",
+      "shipped_at": "2026-07-19T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-33-seeds",
+      "shipped_at": "2026-07-19T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-71-seeds",
+      "shipped_at": "2026-07-19T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level437-offline-seed",
+      "shipped_at": "2026-07-19T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-36-40-seeds",
+      "shipped_at": "2026-07-19T12:00:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "flask-vulnapp-render-warmup-seeds",
+      "shipped_at": "2026-07-19T12:00:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "post-login-sql-bypass-comments-redirect",
+      "shipped_at": "2026-07-19T12:00:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-intro-catalog-seeds",
+      "shipped_at": "2026-07-19T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-top10-intro-hub-evidence",
+      "shipped_at": "2026-07-19T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:aspnet.testsparker.com",
+      "slug": "invicti-aspnet-password-hint",
+      "shipped_at": "2026-07-19T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-41-45-seeds",
+      "shipped_at": "2026-07-19T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-08-exercise-evidence",
+      "shipped_at": "2026-07-19T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentesterlab.com",
+      "slug": "client-side-pentesterlab-api-09-exercise-evidence",
+      "shipped_at": "2026-07-19T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-46-50-seeds",
+      "shipped_at": "2026-07-19T15:05:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-progressive-tail-seeds",
+      "shipped_at": "2026-07-19T15:05:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "client-side-owasp-educational-lab-stub-evidence",
+      "shipped_at": "2026-07-19T15:05:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-51-55-seeds",
+      "shipped_at": "2026-07-19T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-top10-root-stub-crawl-seeds",
+      "shipped_at": "2026-07-19T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:mehdiaitsaid.github.io/owasp-top-10-labs",
+      "slug": "owasp-stub-evidence-combined-corpus",
+      "shipped_at": "2026-07-19T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-56-60-seeds",
+      "shipped_at": "2026-07-19T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-75-76-application-72-seeds",
+      "shipped_at": "2026-07-19T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-python.fly.dev",
+      "slug": "zen-demo-python-lab-seeds",
+      "shipped_at": "2026-07-19T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-classic-login",
+      "shipped_at": "2026-07-19T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-combined-corpus-command-injection",
+      "shipped_at": "2026-07-19T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-61-65-seeds",
+      "shipped_at": "2026-07-19T18:12:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-66-70-seeds",
+      "shipped_at": "2026-07-19T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-77-78-seeds",
+      "shipped_at": "2026-07-19T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+      "shipped_at": "2026-07-19T19:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+      "shipped_at": "2026-07-19T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-79-80-application-73-74-seeds",
+      "shipped_at": "2026-07-19T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "hacksplaining-toxic-dependencies-lesson-step-crawl",
+      "shipped_at": "2026-07-19T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "client-side-whoopspay-evidence",
+      "shipped_at": "2026-07-19T21:45:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-71-75-seeds",
+      "shipped_at": "2026-07-19T21:45:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-81-application-75-net-force-level201-seeds",
+      "shipped_at": "2026-07-19T21:45:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "client-side-vwad-mcp-servers-lab-evidence",
+      "shipped_at": "2026-07-19T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-76-80-seeds",
+      "shipped_at": "2026-07-19T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-82-application-76-net-force-level202-seeds",
+      "shipped_at": "2026-07-19T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:domgo.at",
+      "slug": "domgo-cxss-example-81-85-seeds",
+      "shipped_at": "2026-07-19T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-83-application-77-net-force-level203-seeds",
+      "shipped_at": "2026-07-19T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-lab-nav-seeds",
+      "shipped_at": "2026-07-19T23:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-84-application-78-mission-seeds",
+      "shipped_at": "2026-07-20T00:30:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "net-force-level204-applet-encoding-seed",
+      "shipped_at": "2026-07-20T00:30:00.000Z"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "client-side-aevum-agent-consent-demo-evidence",
+      "shipped_at": "2026-07-20T00:30:00.000Z"
+    },
+    {
+      "source": "discovery:voidsec.github.io",
+      "slug": "client-side-voidsec-shopping-cart-evidence",
+      "shipped_at": "2026-07-20T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-syntax-highlighted-source-regex",
+      "shipped_at": "2026-07-20T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-application-79-net-force-level205-seeds",
+      "shipped_at": "2026-07-20T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-crypto-challenge-evidence",
+      "shipped_at": "2026-07-20T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-extended-level-seven-patterns",
+      "shipped_at": "2026-07-20T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-86-net-force-206-seeds",
+      "shipped_at": "2026-07-20T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+      "shipped_at": "2026-07-20T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-xssi-lesson-evidence",
+      "shipped_at": "2026-07-20T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-file-upload-challenge-evidence",
+      "shipped_at": "2026-07-20T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-magic-hash-challenge-evidence",
+      "shipped_at": "2026-07-20T04:05:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-blacklist-sqli-challenge-evidence",
+      "shipped_at": "2026-07-20T04:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-88-90-application-82-net-force-level207-seeds",
+      "shipped_at": "2026-07-20T04:05:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-class-instantiation-challenge-evidence",
+      "shipped_at": "2026-07-20T05:05:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-sqli-privilege-challenge-evidence",
+      "shipped_at": "2026-07-20T05:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-93-application-84-net-force-level209-seeds",
+      "shipped_at": "2026-07-20T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-restricted-php-exec-challenge-evidence",
+      "shipped_at": "2026-07-20T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-create-function-challenge-evidence",
+      "shipped_at": "2026-07-20T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-fibonacci-eval-challenge-evidence",
+      "shipped_at": "2026-07-20T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-timing-attack-challenge-evidence",
+      "shipped_at": "2026-07-20T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-94-application-86-net-force-level210-seeds",
+      "shipped_at": "2026-07-20T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-cookie-challenge-evidence",
+      "shipped_at": "2026-07-20T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-filter-challenge-evidence",
+      "shipped_at": "2026-07-20T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-95-application-87-net-force-level211-seeds",
+      "shipped_at": "2026-07-20T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-aes-session-challenge-evidence",
+      "shipped_at": "2026-07-20T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-oop-restricted-eval-challenge-evidence",
+      "shipped_at": "2026-07-20T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level21-22-crawl-deep-rules",
+      "shipped_at": "2026-07-20T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-shell-exec-challenge-evidence",
+      "shipped_at": "2026-07-20T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-aspect-instrumentation-challenge-evidence",
+      "shipped_at": "2026-07-20T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-upload-include-challenge-evidence",
+      "shipped_at": "2026-07-20T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-destruct-challenge-evidence",
+      "shipped_at": "2026-07-20T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-open-basedir-eval-challenge-evidence",
+      "shipped_at": "2026-07-20T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-98-net-force-level214-seeds",
+      "shipped_at": "2026-07-20T12:15:00.000Z"
     }
   ]
 }
