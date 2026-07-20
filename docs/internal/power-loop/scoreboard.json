@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T00:30:00.000Z",
+  "updated_at": "2026-07-20T01:04:25.996Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 1455,
-  "total_findings": 7185,
+  "total_sites_scanned": 1464,
+  "total_findings": 7224,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1248,
-  "discovery_findings": 5686,
+  "discovery_urls_added": 1253,
+  "discovery_findings": 5718,
   "improvements_shipped": 780,
-  "last_run": "2026-07-20T00:30:00.000Z",
+  "last_run": "2026-07-20T01:04:25.996Z",
   "last_run_summary": {
-    "hour_utc": "00:00",
+    "hour_utc": "01:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 7 findings 6/6 recall; no benchmark misses",
+      "note": "Primary heroku 7 findings 6/6 recall first pass — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,30 +51,29 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 19,
-      "focus": "HTS playlevel/84 + application/78 seeds, Net-Force level204 applet encoding, Aevum consent-ledger demo",
-      "improvements_shipped_this_run": 3,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 32,
+      "focus": "OSS GitHub Pages + Vercel labs (Unsecure PWA, webexp05, duck-store); HTS playlevel/86+87 + WebSec level02/07 + net-force level205 queued",
+      "improvements_shipped_this_run": 0,
       "queued_pending": [
-        "https://www.hackthissite.org/playlevel/85/",
-        "http://www.net-force.nl/challenge/level205/index.php",
         "http://voidsec.github.io/shopping-cart/",
-        "https://websec.fr/level01/"
+        "https://websec.fr/level01/",
+        "https://phpfox4.fly.dev/",
+        "https://docker-phpfox4.onrender.com/index.php/"
       ]
     },
     "notable_findings": [
-      "juice-shop: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "www.hackthissite.org/playlevel/84: 6 findings — login-gated playlevel hub evidence",
-      "www.hackthissite.org/missions/application/78: 6 findings — login-gated application mission hub",
-      "net-force level204: 3 findings — Simple encoding applet4.class decompile challenge",
-      "demo.aevum.build: 4 findings — Aevum consent-ledger + sigchain agent governance demo"
+      "juice-shop: benchmark recall 6/6 (7 findings, pages=6 probes=265) — no benchmark misses",
+      "webexp05.vercel.app: 7 findings — SQLi/XSS/JWT-none/path-traversal CTF hub",
+      "duck-store.escape.tech: 7 findings — IDOR + secret-openai + unauthenticated API routes",
+      "dvaib.com: 4 findings — Damn Vulnerable AI Bot training surface",
+      "tempehs.github.io/The_Unsecure_PWA: 3 findings — educational PWA lab markers"
     ],
     "learning_gaps": [
-      "juice-shop Heroku cold-start: pass1 returned only missing-security-headers with probes_run=0 — wake retry required",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/85 + net-force level205: next queue drain batch",
-      "voidsec shopping-cart + WebSec.fr levels + phpFox4 demos queued at tail"
+      "voidsec shopping-cart + WebSec.fr level01/06 + phpFox4 demos queued at tail — pending drain",
+      "HTS playlevel/86+87 + net-force level205 + WebSec level02/07 newly queued"
     ]
   },
   "discovery_highlights": {
