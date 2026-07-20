@@ -5507,6 +5507,24 @@
       "slug": "client-side-intigriti-smarty-ssti-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge.php Smarty Version: 4.3.4 + beat my regex filter first + name=data template form; challenge-1223.intigriti.io findings 3→4 incl client-side-intigriti-smarty-ssti-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0725.intigriti.io",
+      "slug": "client-side-intigriti-july-irc-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chat.js DOMPurify.sanitize ADD_TAGS iframe + document.body.innerHTML reparse + socket.io IRC lab; challenge-0725.intigriti.io findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0524.intigriti.io",
+      "slug": "client-side-intigriti-may-spreadsheet-formula-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge.php PhpSpreadsheet Calculation::calculateFormula on POST A/B/C + alert(document.domain) rules; challenge-0524.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0324.intigriti.io",
+      "slug": "client-side-intigriti-march-eval-xss-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge/index.html runCmdToken eval(cmd) + alert(1337) goal + setName URL params; challenge-0324.intigriti.io findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9694,6 +9712,21 @@
       "source": "discovery:challenge-1223.intigriti.io",
       "slug": "client-side-intigriti-smarty-ssti-challenge-evidence",
       "shipped_at": "2026-07-20T20:30:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0725.intigriti.io",
+      "slug": "client-side-intigriti-july-irc-challenge-evidence",
+      "shipped_at": "2026-07-20T21:35:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0524.intigriti.io",
+      "slug": "client-side-intigriti-may-spreadsheet-formula-evidence",
+      "shipped_at": "2026-07-20T21:35:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0324.intigriti.io",
+      "slug": "client-side-intigriti-march-eval-xss-challenge-evidence",
+      "shipped_at": "2026-07-20T21:35:00.000Z"
     }
   ]
 }
