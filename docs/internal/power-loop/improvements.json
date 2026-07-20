@@ -5213,6 +5213,24 @@
       "slug": "client-side-websec-file-upload-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level08/source.php include_once($uploadedFile) + IMAGETYPE_GIF fileToUpload GIF-only uploader; websec.fr/level08 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-magic-hash-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level10/source.php substr(md5($flag.$file.$flag),0,8) hash gate + show_source($file) arbitrary read; websec.fr/level10 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-blacklist-sqli-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level11/source.php stripos blacklist on $table + SELECT id,username FROM $table WHERE id=$id; websec.fr/level11 findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-88-90-application-82-net-force-level207-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/89 Login Required hub + level207 301→homepage offline oracle; runner seeds playlevel/88-90 application/81-82; playlevel/89 findings 0→6, level207 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9160,6 +9178,21 @@
       "source": "discovery:websec.fr",
       "slug": "client-side-websec-file-upload-challenge-evidence",
       "shipped_at": "2026-07-20T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-magic-hash-challenge-evidence",
+      "shipped_at": "2026-07-20T04:05:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-blacklist-sqli-challenge-evidence",
+      "shipped_at": "2026-07-20T04:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-88-90-application-82-net-force-level207-seeds",
+      "shipped_at": "2026-07-20T04:05:00.000Z"
     }
   ]
 }
