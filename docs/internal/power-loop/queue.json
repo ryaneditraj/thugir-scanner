@@ -6528,7 +6528,32 @@
       "url": "http://www.net-force.nl/challenge/level212/index.php",
       "source": "Net-Force.nl challenge level 212 — web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level26/",
+      "source": "WebSec.fr level 26 — bonus-category PHP web exploit training challenge (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level27/",
+      "source": "WebSec.fr level 27 — bonus-category convoluted vulnerability wargame puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level28/",
+      "source": "WebSec.fr level 28 — babysteps PHP web exploit training puzzle (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/97/",
+      "source": "Hack This Site — playlevel arcade mission 97 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level213/index.php",
+      "source": "Net-Force.nl challenge level 213 — web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T09:16:49.527Z"
+  "updated_at": "2026-07-20T10:25:00.000Z"
 }
