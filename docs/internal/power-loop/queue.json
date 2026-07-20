@@ -6738,7 +6738,32 @@
       "url": "https://challenge-1223.intigriti.io/",
       "source": "Intigriti December 2023 Smartypants Revenge \u2014 XSS monthly CTF (Hackademy archive)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0725.intigriti.io/",
+      "source": "Intigriti July 2025 XSS challenge by J0R1AN \u2014 HTML serialization escape bypass (Bugology 0725)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0524.intigriti.io/",
+      "source": "Intigriti May 2024 Quadratic Equation Solver \u2014 alert(document.domain) XSS (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0824.intigriti.io/",
+      "source": "Intigriti August 2024 Defcon challenge by CryptoCat \u2014 XSS/CTF flag retrieval (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0324.intigriti.io/",
+      "source": "Intigriti March 2024 Contact Form \u2014 alert(1337) XSS by LooseSecurity (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0224.intigriti.io/",
+      "source": "Intigriti February 2024 Love Letter \u2014 admin letter XSS by GoatSniff (Hackademy archive)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T19:05:00.000Z"
+  "updated_at": "2026-07-20T20:50:00.000Z"
 }
