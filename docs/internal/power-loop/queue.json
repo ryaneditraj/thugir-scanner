@@ -6328,7 +6328,32 @@
       "url": "https://docker-phpfox4.onrender.com/index.php/",
       "source": "zackees/docker-phpFox4 \u2014 phpFox4 vulnerable CMS Render demo (README live link)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/86/",
+      "source": "HackThisSite realistic mission playlevel 86 \u2014 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level205/index.php",
+      "source": "Net-Force.nl challenge level 205 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level02/",
+      "source": "WebSec.fr \u2014 babysteps SQLi/XSS challenge level02 (French public CTF platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level07/",
+      "source": "WebSec.fr \u2014 intermediate web exploit challenge level07",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/87/",
+      "source": "HackThisSite realistic mission playlevel 87 \u2014 advanced web exploitation training",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T00:24:00.000Z"
+  "updated_at": "2026-07-20T01:05:00.000Z"
 }
