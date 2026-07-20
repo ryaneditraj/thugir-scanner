@@ -5447,6 +5447,24 @@
       "slug": "domgo-cxss-example-86-96-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractDomGoatCxssSeeds loop extended 85→96; domgo.at/cxss/example/96 crawl includes unescape(hash) innerHTML sink; findings 4 on example/96; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "client-side-flask-vulnapp-stored-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /comments returns <!-- INTENTIONAL VULNERABILITY: XSS - No HTML escaping --> + comment-text divs; clientSideFlaskVulnappStoredXssEvidence rule; web-security-practice-app.onrender.com findings 3→4 when /comments crawled; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0125.intigriti.io",
+      "slug": "client-side-intigriti-january-xss-filter-bypass-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: function XSS() blocks only < > in query/hash before modalText.innerHTML = Welcome, ${text}!; challenge-0125.intigriti.io findings 3→4 incl client-side-intigriti-january-xss-filter-bypass-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0722.intigriti.io",
+      "slug": "intigriti-archive-challenge-php-crawl-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractArchiveMonthProbePaths now targets /challenge/challenge.php + intigritiArchiveChallengePrioritySeeds; challenge-0722.intigriti.io findings 2→3 incl sql-error-disclosure with challenge.php in pages_crawled; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9584,6 +9602,21 @@
       "source": "discovery:domgo.at",
       "slug": "domgo-cxss-example-86-96-seeds",
       "shipped_at": "2026-07-20T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "client-side-flask-vulnapp-stored-xss-evidence",
+      "shipped_at": "2026-07-20T18:45:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0125.intigriti.io",
+      "slug": "client-side-intigriti-january-xss-filter-bypass-evidence",
+      "shipped_at": "2026-07-20T18:45:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0722.intigriti.io",
+      "slug": "intigriti-archive-challenge-php-crawl-fix",
+      "shipped_at": "2026-07-20T18:45:00.000Z"
     }
   ]
 }
