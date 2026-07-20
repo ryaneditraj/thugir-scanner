@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T19:08:58.523Z",
-  "total": 510,
-  "uniqueSlugs": 508,
+  "generatedAt": "2026-07-20T20:06:03.163Z",
+  "total": 513,
+  "uniqueSlugs": 511,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 492,
+    "generic": 495,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 441,
+    "deep": 444,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 38,
-    "Injection": 101,
-    "Cross-site scripting": 63,
+    "Injection": 103,
+    "Cross-site scripting": 64,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -185,7 +185,10 @@
     "client-side-intercode-evidence",
     "client-side-intigriti-challenge-evidence",
     "client-side-intigriti-january-xss-filter-bypass-evidence",
+    "client-side-intigriti-june-rce-challenge-evidence",
     "client-side-intigriti-race-condition-challenge-evidence",
+    "client-side-intigriti-secure-vault-xss-evidence",
+    "client-side-intigriti-smarty-ssti-challenge-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-ist-edu-vuln-portal-evidence",

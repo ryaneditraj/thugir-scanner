@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T19:48:41.444Z",
+  "updated_at": "2026-07-20T20:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1330,
   "discovery_findings": 6423,
-  "improvements_shipped": 833,
-  "last_run": "2026-07-20T19:48:41.444Z",
+  "improvements_shipped": 837,
+  "last_run": "2026-07-20T20:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "6/6 recall after Heroku cold-start wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data; final retry merged to 7 findings pages=6 probes=265)",
+      "note": "No benchmark misses — juice-shop-staging 7 findings 6/6 after Intigriti archive improvements",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,28 +50,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 44,
-      "focus": "Intigriti archive queue (0625 RCE, 1122/1023/0124/1223 XSS) + queue drain (chal10-15, openvaultbank admin, maz4lhacks, vuln-expose)",
-      "skipped_48h": [
-        "https://web-security-practice-app.onrender.com/",
-        "https://challenge-0426.intigriti.io/",
-        "https://challenge-0125.intigriti.io/"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 20,
+      "focus": "Intigriti archive queue drain (0625 RCE, 1122 Secure Vault, 1023/0124/1223 XSS/SSTI)",
+      "skipped_48h": []
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 after cold-start wake retries (7 findings)",
-      "vuln-expose.vercel.app: 7 findings incl sql-error-disclosure + vibe-hardcoded-demo-credentials",
-      "shiny-computing-machine.vercel.app: 7 findings incl client-side-xss-evidence",
-      "openvaultbank.com/api/v1/admin: 5 findings API lab admin route",
-      "chal15.vercel.app: 6 findings incl sql-error-disclosure"
+      "challenge-0625.intigriti.io: iframe seed fix crawls /notes; findings 3→4 incl june-rce-challenge-evidence",
+      "challenge-1122.intigriti.io: api.challenge subdomain crawl; findings 2→3 incl secure-vault-xss-evidence",
+      "challenge-1223.intigriti.io: challenge.php crawl; findings 3→4 incl smarty-ssti-challenge-evidence",
+      "challenge-1023.intigriti.io: /challenge innerHTML sink; 5 findings maintained with correct crawl",
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) maintained"
     ],
     "learning_gaps": [
-      "juice-shop Heroku cold-start: pass1 probes=93 pages=1 only misconfig — 12s+25s wake retries required for 6/6",
-      "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
+      "juice-shop Heroku cold-start: primary heroku can require 12s+25s wake retries for 6/6",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "Intigriti archive URLs (0625/1122/1023/0124/1223) queued at tail — pending drain"
+      "Intigriti 0625/1122/1023/0124/1223 archive URLs now drained from queue tail"
     ]
   },
   "discovery_highlights": {

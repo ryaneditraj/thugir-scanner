@@ -4738,6 +4738,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-june-rce-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Intigriti June RCE challenge disclosed",
+    description:
+      "Intigriti challenge-0625.intigriti.io hosts a Vue notes app with v-html stored XSS and a chromedriver /api/visit bot for RCE chain training.",
+    impactOneline:
+      "Public June 2025 challenge documents v-html note sinks plus server-side bot visitation for XSS-to-RCE exploitation labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJuneRceChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti RCE challenges are intentional training — isolate bot infrastructure and never use v-html on user notes.",
+      steps: [
+        "Replace v-html note rendering with textContent or a strict HTML sanitizer.",
+        "Run chromedriver/admin bots in isolated sandboxes with no filesystem access.",
+        "Host contest challenges on dedicated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti June RCE challenges with v-html note sinks and chromedriver bots. Show secure note rendering and bot sandboxing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-secure-vault-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti Secure Vault iframe XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1122.intigriti.io hosts Secure Vault with iframe note references, JWT localStorage auth, and an admin?url= bot endpoint.",
+    impactOneline:
+      "Public November 2022 challenge documents iframe XSS plus admin URL visitation for flag theft training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiSecureVaultXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never load user-controlled URLs in iframes; validate admin bot targets and protect JWT sessions.",
+      steps: [
+        "Sanitize note reference URLs before assigning iframe src.",
+        "Store JWTs in HttpOnly cookies instead of localStorage.",
+        "Rate-limit and authenticate admin bot visitation endpoints."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Secure Vault challenges with iframe note references and admin?url= bots. Show iframe URL validation and secure session storage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-smarty-ssti-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Intigriti Smarty SSTI challenge disclosed",
+    description:
+      "Intigriti challenge-1223.intigriti.io hosts the Smarty Pants template lab with regex-filtered SSTI via challenge.php data parameter.",
+    impactOneline:
+      "Public December 2023 challenge documents server-side template injection past regex filters on Smarty 4.x.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiSmartySstiChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines; use logic-less templates and strict allowlists.",
+      steps: [
+        "Avoid Smarty/Twig/Jinja evaluation of raw user template text.",
+        "Replace regex blacklists with context-aware output encoding.",
+        "Host SSTI training labs on isolated contest infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Smarty SSTI challenges with regex-filtered template forms. Show safe templating without user-controlled evaluation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
