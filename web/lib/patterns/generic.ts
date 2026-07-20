@@ -2475,6 +2475,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-fibonacci-eval-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr Fibonacci eval code injection lab disclosed",
+    description:
+      "WebSec.fr level16 validates HMAC of attacker textpad then eval($t . $prime_test) — Fibonacci copy/paste trusted-code gate bypasses via crafted prime_test closure.",
+    impactOneline:
+      "Public challenge source documents eval sink that concatenates attacker PHP with relative-primes oracle after weak HMAC allowlist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecFibonacciEvalChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host Fibonacci eval labs offline; never eval user-supplied PHP in production.",
+      steps: [
+        "Move WebSec-style code-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban eval and dynamic includes; use sandboxed interpreters with no filesystem access."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level16 lab exposes eval($t . $prime_test) after hash_hmac allowlist on Fibonacci textpad. Show how to retire public labs and eliminate eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-timing-attack-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr timing-attack flag guessing lab disclosed",
+    description:
+      "WebSec.fr level17 compares guessed flags via strcasecmp with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel still leaks flag bytes.",
+    impactOneline:
+      "Public challenge source documents strcmp-based secret check with randomized delay that remains vulnerable to statistical timing analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecTimingAttackChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host timing-attack labs offline; use constant-time comparisons for secrets in production.",
+      steps: [
+        "Move WebSec-style timing labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace strcasecmp/== secret checks with hash_equals or constant-time MAC verification."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level17 lab exposes strcasecmp($_POST['flag'], $flag) with sleep_rand() and UTF-16 charset header. Show how to retire public source disclosure and use constant-time comparisons.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
