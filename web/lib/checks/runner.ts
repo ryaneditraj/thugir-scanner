@@ -836,6 +836,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecShellExecChallengeEvidence",
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
   "clientSideWebsecUploadIncludeChallengeEvidence",
+  "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
+  "clientSideWebsecOpenBasedirEvalChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",

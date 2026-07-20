@@ -8758,7 +8758,7 @@ const clientSideWebsecUploadIncludeChallengeEvidence: Rule = async (ctx) => {
 const CLIENT_WEBSEC_PHP_UNSERIALIZE_DESTRUCT_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "WebSec Level Thirty title",
-    re: /Level(?:&nbsp;|\s)+Thirt(?:y|ee)|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i
+    re: /Level(?:&nbsp;|\s)+Thirtee|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i
   },
   {
     label: "__destruct echoes flag",
@@ -8785,7 +8785,10 @@ const clientSideWebsecPhpUnserializeDestructChallengeEvidence: Rule = async (ctx
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  if (!/websec\.fr|Level30|Thirty|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (!/websec\.fr|Level30|Thirtee|destruct\.|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (/Thirty-one|Level31/i.test(ctx.combined) && !/Level30|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i.test(ctx.combined)) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.92 : 0.89,
@@ -8804,15 +8807,15 @@ const CLIENT_WEBSEC_OPEN_BASEDIR_EVAL_CHALLENGE_RES: { label: string; re: RegExp
   },
   {
     label: "open_basedir sandbox",
-    re: /open_basedir[\s\S]{0,60}['"]\/sandbox['"]|chdir[\s\S]{0,60}['"]\/sandbox['"]/i
+    re: /open_basedir[\s\S]{0,200}\/sandbox|chdir[\s\S]{0,200}\/sandbox/i
   },
   {
     label: "eval GET c parameter",
-    re: /eval[\s\S]{0,60}\$_GET[\s\S]{0,40}['"]c['"]/i
+    re: /eval[\s\S]{0,200}\$_GET[\s\S]{0,120}['"]c['"]/i
   },
   {
     label: "read flag.php challenge",
-    re: /read[\s\S]{0,80}flag\.php|Can you read the[\s\S]{0,80}flag\.php/i
+    re: /read[\s\S]{0,120}flag\.php|Can you read the[\s\S]{0,120}flag\.php/i
   }
 ];
 
