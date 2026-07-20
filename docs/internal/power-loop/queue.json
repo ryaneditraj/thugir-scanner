@@ -5098,7 +5098,32 @@
       "url": "https://pentesterlab.com/exercises/ssti_04/",
       "source": "PentesterLab — Server-Side Template Injection 04 Freemarker RCE exercise (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0426.intigriti.io/",
+      "source": "Intigriti April 2026 Northstar Notes — stored XSS + CSP bypass monthly CTF challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0125.intigriti.io/",
+      "source": "Intigriti January 2025 XSS challenge — URL parser vs XSS() filter bypass lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level31/",
+      "source": "WebSec.fr — SQL injection training challenge level 31 (French public wargame platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/45/",
+      "source": "Hack This Site — playlevel arcade hub challenge 45 (missions catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level413/index.php",
+      "source": "Net-Force — web exploit training challenge level 413 (exploits catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-18T02:05:00.000Z"
+  "updated_at": "2026-07-20T12:35:00.000Z"
 }
