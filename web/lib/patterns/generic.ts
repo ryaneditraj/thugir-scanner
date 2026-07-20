@@ -2579,6 +2579,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-php-aes-session-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP AES session forgery lab disclosed",
+    description:
+      "WebSec.fr level21 encrypts user/pass in an AES session cookie via mcrypt while blocking admin registration with a weak letter filter — verify_credentials also builds SQL with string concatenation.",
+    impactOneline:
+      "Public challenge source documents forgeable AES session cookies and SQL injection in credential verification.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpAesSessionChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host AES session labs offline; use signed server-side sessions and parameterized queries in production.",
+      steps: [
+        "Move WebSec-style crypto labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace mcrypt cookie sessions with HMAC-signed tokens or server-side session stores.",
+        "Use prepared statements — never concatenate usernames into SQL."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level21 lab exposes mcrypt session cookies and SQL concatenation in verify_credentials. Show how to retire public labs and use secure sessions plus parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-oop-restricted-eval-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr OOP restricted PHP eval lab disclosed",
+    description:
+      "WebSec.fr level22 limits attacker code to 21 characters then eval() after a blacklist — strcmp/strncmp are removed from the denylist and class A exposes flag parts via OOP properties.",
+    impactOneline:
+      "Public challenge source documents short-input PHP eval sandbox bypassable via allowed string-compare functions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecOopRestrictedEvalChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP eval labs offline; never eval user-controlled code in production.",
+      steps: [
+        "Move WebSec-style code-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate eval/create_function on any user input; use safe expression parsers if needed."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level22 lab exposes 21-char eval with OOP class A and strcmp removed from blacklist. Show how to retire public labs and ban eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",

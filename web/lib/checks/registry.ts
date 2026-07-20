@@ -8544,6 +8544,94 @@ const clientSideWebsecPhpUnserializeFilterChallengeEvidence: Rule = async (ctx) 
   };
 };
 
+// --- WebSec.fr PHP AES session cookie + admin filter bypass (level21) -------------------
+const CLIENT_WEBSEC_PHP_AES_SESSION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec LevelTwentyOne challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+LevelTwentyOne|LevelTwentyOne(?:&nbsp;|\s)*<small>(?:&nbsp;|\s)*-[\s\S]{0,40}PatPat/i
+  },
+  {
+    label: "Admin letters registration filter",
+    re: /not(?:&nbsp;|\s)+allowed(?:&nbsp;|\s)+to(?:&nbsp;|\s)+register[\s\S]{0,120}\[admin\]|preg_match[\s\S]{0,120}\(a\|d\|m\|i\|n\)/i
+  },
+  {
+    label: "mcrypt AES session cookie encryption",
+    re: /mcrypt_encrypt[\s\S]{0,200}MCRYPT_RIJNDAEL_128[\s\S]{0,200}setcookie[\s\S]{0,80}session|create_cookies[\s\S]{0,200}mcrypt_encrypt/i
+  },
+  {
+    label: "Session auth decrypt oracle",
+    re: /function[\s\S]{0,40}auth[\s\S]{0,200}mcrypt_decrypt[\s\S]{0,200}\$aes_key|auth\([\s\S]{0,120}\$_COOKIE[\s\S]{0,80}session/i
+  },
+  {
+    label: "SQLi in verify_credentials string concat",
+    re: /verify_credentials[\s\S]{0,400}SELECT[\s\S]{0,120}username='[\s\S]{0,40}\$username[\s\S]{0,80}password='[\s\S]{0,40}\$password/i
+  },
+  {
+    label: "source1/source2 session and crypto disclosure links",
+    re: /source1\.php[\s\S]{0,120}session[\s\S]{0,120}source2\.php|sessions(?:&nbsp;|\s)+management[\s\S]{0,80}crypto/i
+  }
+];
+
+const clientSideWebsecPhpAesSessionChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_AES_SESSION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTwentyOne|#WebSec|PatPat|mcrypt_encrypt/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level21 documents mcrypt AES session cookies with weak admin registration filter and SQLi in verify_credentials — forge session to escalate to admin"
+    }
+  };
+};
+
+// --- WebSec.fr OOP restricted PHP eval (level22) --------------------------------------
+const CLIENT_WEBSEC_OOP_RESTRICTED_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level22 OOP-FTW challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level22|Level(?:&nbsp;|\s)+TwentyTwo(?:&nbsp;|\s)*<small>(?:&nbsp;|\s)*-[\s\S]{0,40}OOP-FTW/i
+  },
+  {
+    label: "21 character code length restriction",
+    re: /only(?:&nbsp;|\s)+<code>21<\/code>(?:&nbsp;|\s)+chars(?:&nbsp;|\s)+allowed|substr[\s\S]{0,80}\$_GET[\s\S]{0,40}code[\s\S]{0,40}0[\s\S]{0,20}21/i
+  },
+  {
+    label: "OOP class A flag parts constructor",
+    re: /class[\s\S]{0,40}A[\s\S]{0,200}__construct[\s\S]{0,200}\$pub[\s\S]{0,80}\$pro[\s\S]{0,80}\$pri|file_containing_the_flag_parts/i
+  },
+  {
+    label: "Blacklist whitelist strcmp strncmp removed",
+    re: /get_defined_functions[\s\S]{0,400}unset[\s\S]{0,80}strcmp[\s\S]{0,200}strncmp|funcs_extra[\s\S]{0,120}eval/i
+  },
+  {
+    label: "preg_match blacklist before eval sink",
+    re: /preg_match[\s\S]{0,200}\$blacklisted[\s\S]{0,200}\$code[\s\S]{0,200}eval[\s\S]{0,80}\$code/i
+  }
+];
+
+const clientSideWebsecOopRestrictedEvalChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_OOP_RESTRICTED_EVAL_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level22|TwentyTwo|OOP-FTW|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level22 documents 21-char restricted PHP eval with OOP class A flag parts and strcmp/strncmp removed from function blacklist"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -22198,6 +22286,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecTimingAttackChallengeEvidence,
   clientSideWebsecPhpUnserializeCookieChallengeEvidence,
   clientSideWebsecPhpUnserializeFilterChallengeEvidence,
+  clientSideWebsecPhpAesSessionChallengeEvidence,
+  clientSideWebsecOopRestrictedEvalChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
