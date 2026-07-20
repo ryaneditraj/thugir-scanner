@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T04:03:23.960Z",
-  "total": 484,
-  "uniqueSlugs": 482,
+  "generatedAt": "2026-07-20T05:03:57.326Z",
+  "total": 486,
+  "uniqueSlugs": 484,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 466,
+    "generic": 468,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 415,
+    "deep": 417,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 35,
     "Security misconfiguration": 41,
     "Broken authentication": 36,
-    "Injection": 88,
+    "Injection": 90,
     "Cross-site scripting": 58,
     "general": 18,
     "SSRF": 1,
@@ -386,9 +386,11 @@
     "client-side-webhacking-kr-evidence",
     "client-side-websec-blacklist-sqli-challenge-evidence",
     "client-side-websec-challenge-evidence",
+    "client-side-websec-class-instantiation-challenge-evidence",
     "client-side-websec-crypto-challenge-evidence",
     "client-side-websec-file-upload-challenge-evidence",
     "client-side-websec-magic-hash-challenge-evidence",
+    "client-side-websec-sqli-privilege-challenge-evidence",
     "client-side-webvuln-runner-evidence",
     "client-side-webvulnsguide-cors-lab-evidence",
     "client-side-webvulnsguide-ssrf-lab-evidence",
