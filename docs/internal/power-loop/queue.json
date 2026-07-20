@@ -6763,7 +6763,32 @@
       "url": "https://challenge-0224.intigriti.io/",
       "source": "Intigriti February 2024 Love Letter \u2014 admin letter XSS by GoatSniff (Hackademy archive)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://santacloud.intigriti.io/",
+      "source": "Intigriti SantaCloud CTF Dec 2025 bonus \u2014 IDOR + leaked credentials Laravel portal (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0923.intigriti.io/",
+      "source": "Intigriti September 2023 Secure Database \u2014 monthly CTF (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0623.intigriti.io/",
+      "source": "Intigriti June 2023 Protocapture \u2014 monthly CTF (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0723.intigriti.io/",
+      "source": "Intigriti July 2023 Video-to-Audio Converter \u2014 monthly CTF (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0823.intigriti.io/",
+      "source": "Intigriti August 2023 Pure Functional Math Calculator \u2014 monthly CTF (Bugology archive)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T20:50:00.000Z"
+  "updated_at": "2026-07-20T21:40:00.000Z"
 }
