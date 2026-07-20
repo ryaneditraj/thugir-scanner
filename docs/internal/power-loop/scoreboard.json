@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T15:01:49.995Z",
+  "updated_at": "2026-07-20T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,22 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1310,
   "discovery_findings": 6292,
-  "improvements_shipped": 815,
-  "last_run": "2026-07-20T15:01:49.995Z",
+  "improvements_shipped": 821,
+  "last_run": "2026-07-20T15:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "first_pass_recall": "3/6",
-      "first_pass_gap": [
-        "xss",
-        "idor",
-        "sensitive_data"
-      ],
-      "note": "Heroku cold-start pass1 gap=xss,idor,sensitive_data (3 findings pages=1 probes=16); pass2 gap=xss,sqli,sensitive_data; pass3 gap=sqli,idor,auth_bypass; staging fallback merged 7 findings 6/6 (pages=6 probes=247)",
+      "note": "No benchmark category misses — recall stable at 6/6 (6 findings on primary heroku after wake retry)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,27 +50,18 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 25,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (unreachable — DNS/connect failure)"
-      ],
-      "focus": "Queue drain: prompt-injection/ai-security/csrf-xss/idor Vercel labs, Wizer CTF, Mutillidae, Hacking-Lab; +5 Intigriti challenges queued at tail",
-      "skipped_48h": []
+      "focus": "VulnLab verbose 404 admin live probe + Intigriti welcome modal innerHTML sink + IDOR lab priority seed",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary Heroku 3/6 after 3 wake retries — staging fallback required for 6/6",
-      "juice-shop-staging.herokuapp.com: 7 findings 6/6 recall (dangerous-html-sinks + sql-error-disclosure + idor-sequential-ids)",
-      "ai-security-demo.vercel.app: critical stack-database-url-in-bundle + prompt-injection evidence (4 findings)",
-      "csrf-xss-demo.vercel.app: dom-eval-xss + hardcoded demo credentials (4 findings)",
-      "sam.wizer-ctf.com: Wizer developer CTF + dangerous-html-sinks (5 findings)",
-      "websegura.radwarelatam.com/mutillidae: exposed-config-backup critical (3 findings)"
+      "hack-this-site-eta.vercel.app/owasp/a01.html: 2→11 findings (+client-side-vulnlab-verbose-404-evidence, +idor-sequential-ids, +unauthenticated-admin-endpoint)",
+      "challenge-0125.intigriti.io: 2→3 findings (+dangerous-html-sinks from /challenge modalText.innerHTML)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (6 findings)"
     ],
     "learning_gaps": [
-      "juice-shop Heroku cold-start: primary oracle unstable across 3 retries (probes=16-94 pages=1); never reached 6/6 without staging fallback",
+      "juice-shop.herokuapp.com: Heroku cold-start can degrade finding count before wake retry",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "websec level32/34 + domgo cxss 76/91/96 queued at tail — pending drain"
+      "owasp-finbot-ctf-demo.onrender.com: service suspended by owner"
     ]
   },
   "discovery_highlights": {
@@ -298,7 +283,7 @@
     "sam.wizer-ctf.com": 5,
     "hacking-lab.com": 3,
     "hack-this-site-eta.vercel.app/owasp/a03.html": 14,
-    "hack-this-site-eta.vercel.app/owasp/a01.html": 2,
+    "hack-this-site-eta.vercel.app/owasp/a01.html": 11,
     "web-security-practice-app.onrender.com": 3,
     "pentesterlab.com/exercises/api_08": 4,
     "pentesterlab.com/exercises/api_09": 4,
@@ -355,7 +340,7 @@
     "hack-this-site-eta.vercel.app/owasp/a07.html": 17,
     "hack-this-site-eta.vercel.app/owasp/a08.html": 16,
     "challenge-0426.intigriti.io": 7,
-    "challenge-0125.intigriti.io": 2,
+    "challenge-0125.intigriti.io": 3,
     "hack-this-site-eta.vercel.app/labs/": 15,
     "hack-this-site-eta.vercel.app/auth/": 17,
     "hack-this-site-eta.vercel.app/api-labs/": 14
