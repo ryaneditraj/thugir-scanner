@@ -4972,6 +4972,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-october-notes-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti October Secure Notes XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1022.intigriti.io hosts the Secure Notes app with Arg.parse query params and a note-content XSS capture goal.",
+    impactOneline:
+      "Public October 2022 challenge documents Arg.js parameter parsing and note-stealing XSS training on /challenge/begin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiOctoberNotesXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti notes challenges are intentional training — isolate contest apps and sanitize query parameters.",
+      steps: [
+        "Host Secure Notes-style labs on contest-only infrastructure.",
+        "Never pass location.search directly into DOM sinks via Arg.parse.",
+        "Encode user-controlled note content before rendering."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti October Secure Notes challenges with Arg.parse query gadgets. Show safe note rendering and parameter validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-january-friends-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Intigriti January Friends Search SQLi challenge disclosed",
+    description:
+      "Intigriti challenge-0123.intigriti.io hosts the Friends Search Engine with /api/friends?q= SQL injection and password-as-flag capture rules.",
+    impactOneline:
+      "Public January 2023 challenge documents injectable friend lookup API and INTIGRITI{.*} flag format.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJanuaryFriendsSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti SQLi challenges are intentional training — use parameterized queries on search APIs.",
+      steps: [
+        "Parameterize /api/friends search queries.",
+        "Never concatenate user input into SQL strings.",
+        "Host Intigriti challenges on contest-only infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti January Friends Search challenges with /api/friends?q= SQLi. Show parameterized search APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-october-halloween-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti October Halloween strict-dynamic XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1021.intigriti.io hosts the BOOOOOOO! Halloween lab with unsafe-eval strict-dynamic CSP and ?xss= script gadget.",
+    impactOneline:
+      "Public October 2021 challenge documents CSP bypass via searchParams.get('xss') script injection at challenge/challenge.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiOctoberHalloweenXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti CSP bypass challenges are intentional training — never pipe URL params into script nodes.",
+      steps: [
+        "Host Halloween CSP labs on contest-only infrastructure.",
+        "Avoid createTextNode/appendChild script gadgets from query parameters.",
+        "Use nonce-only script-src without unsafe-eval in production."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Halloween CSP bypass challenges with ?xss= script gadgets. Show safe CSP and URL parameter handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
