@@ -8455,23 +8455,27 @@ const clientSideWebsecTimingAttackChallengeEvidence: Rule = async (ctx) => {
 const CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "WebSec Level Eighteen challenge title",
-    re: /#WebSec\s+Level\s+Eighteen|Level\s+Eighteen(?:&nbsp;|\s)*<small>\s*-\s*json_decode is for the weak/i
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Eighteen|json_decode(?:&nbsp;|\s)+is(?:&nbsp;|\s)+for(?:&nbsp;|\s)+the(?:&nbsp;|\s)+weak/i
   },
   {
     label: "Serialized object cookie challenge prompt",
-    re: /serialized object before|give it back please|json_decode is for the weak/i
+    re: /serialized(?:&nbsp;|\s)+object(?:&nbsp;|\s)+before|give(?:&nbsp;|\s)+it(?:&nbsp;|\s)+back(?:&nbsp;|\s)+please/i
   },
   {
-    label: "setcookie serialize stdClass gadget",
-    re: /setcookie(?:&nbsp;|\s)*\([\s\S]{0,80}['"]obj['"][\s\S]{0,120}serialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$obj/i
+    label: "serialize stdClass cookie gadget",
+    re: /serialize[\s\S]{0,160}\$obj/i
   },
   {
-    label: "Cookie unserialize hash_equals flag sink",
-    re: /unserialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$obj[\s\S]{0,120}hash_equals(?:&nbsp;|\s)*\([\s\S]{0,80}\$unserialized_obj[\s\S]{0,40}->(?:&nbsp;|\s)*input/i
+    label: "Cookie unserialize sink",
+    re: /unserialize[\s\S]{0,120}\$obj/i
   },
   {
-    label: "Attacker-controlled obj cookie assignment",
-    re: /\$_COOKIE(?:&nbsp;|\s)*\[[\s\S]{0,20}['"]obj['"][\s\S]{0,40}\]\s*=[\s\S]{0,40}\$obj|setcookie(?:&nbsp;|\s)*\([\s\S]{0,40}['"]obj['"][\s\S]{0,40}\$_POST/i
+    label: "hash_equals flag oracle on unserialized input",
+    re: /hash_equals[\s\S]{0,160}\$unserialized_obj[\s\S]{0,120}->[\s\S]{0,40}input/i
+  },
+  {
+    label: "obj cookie parameter",
+    re: /\$_COOKIE[\s\S]{0,80}['"]obj['"]|setcookie[\s\S]{0,120}['"]obj['"][\s\S]{0,120}\$_POST/i
   }
 ];
 
@@ -8482,7 +8486,8 @@ const clientSideWebsecPhpUnserializeCookieChallengeEvidence: Rule = async (ctx) 
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  if (!/websec\.fr|Level\s+Eighteen|#WebSec|json_decode is for the weak/i.test(ctx.combined)) return NEGATIVE;
+  if (!/websec\.fr|Level(?:&nbsp;|\s)+Eighteen|#WebSec|json_decode(?:&nbsp;|\s)+is(?:&nbsp;|\s)+for(?:&nbsp;|\s)+the(?:&nbsp;|\s)+weak/i.test(ctx.combined))
+    return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.92 : 0.89,
@@ -8497,23 +8502,27 @@ const clientSideWebsecPhpUnserializeCookieChallengeEvidence: Rule = async (ctx) 
 const CLIENT_WEBSEC_PHP_UNSERIALIZE_FILTER_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "WebSec Level Twenty challenge title",
-    re: /#WebSec\s+Level\s+Twenty|Level\s+Twenty[\s\S]{0,80}unserialize/i
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Twenty|function\.unserialize\.php/i
   },
   {
     label: "Flag class __destruct gadget",
-    re: /class(?:&nbsp;|\s)+Flag[\s\S]{0,120}__destruct(?:&nbsp;|\s)*\([\s\S]{0,80}echo(?:&nbsp;|\s)*\$flag/i
+    re: /class[\s\S]{0,120}Flag[\s\S]{0,320}__destruct/i
+  },
+  {
+    label: "Flag echoed from destructor",
+    re: /__destruct[\s\S]{0,240}echo[\s\S]{0,80}\$flag/i
   },
   {
     label: "sanitize preg_match unserialize filter",
-    re: /function(?:&nbsp;|\s)+sanitize[\s\S]{0,200}preg_match[\s\S]{0,120}unserialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$data/i
+    re: /sanitize[\s\S]{0,900}preg_match[\s\S]{0,900}unserialize/i
   },
   {
     label: "i0n1c bypass comment reference",
     re: /i0n1c(?:&nbsp;|\s)*'s(?:&nbsp;|\s)+bypass|exploit-db\.com\/exploits\/22547/i
   },
   {
-    label: "Cookie data unserialize sink",
-    re: /\$_COOKIE(?:&nbsp;|\s)*\[[\s\S]{0,20}['"]data['"][\s\S]{0,80}\][\s\S]{0,120}sanitize|unserialize(?:&nbsp;|\s)*\([\s\S]{0,40}\$data/i
+    label: "data cookie unserialize sink",
+    re: /\$_COOKIE[\s\S]{0,80}['"]data['"]|unserialize[\s\S]{0,120}\$data/i
   }
 ];
 
@@ -8524,7 +8533,7 @@ const clientSideWebsecPhpUnserializeFilterChallengeEvidence: Rule = async (ctx) 
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  if (!/websec\.fr|Level\s+Twenty|#WebSec|sanitize/i.test(ctx.combined)) return NEGATIVE;
+  if (!/websec\.fr|Level(?:&nbsp;|\s)+Twenty|#WebSec|sanitize/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.92 : 0.89,
