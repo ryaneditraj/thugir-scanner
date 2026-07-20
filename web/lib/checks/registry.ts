@@ -8716,23 +8716,23 @@ const clientSideWebsecAspectInstrumentationChallengeEvidence: Rule = async (ctx)
 const CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "WebSec Level TwentyEight title",
-    re: /Level(?:&nbsp;|\s)+TwentyEight|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+28|Please be our guess/i
+    re: /Level(?:&nbsp;|\s)+TwentyEight|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+28|Please(?:&nbsp;|\s)+be(?:&nbsp;|\s)+our(?:&nbsp;|\s)+guess/i
   },
   {
     label: "flag_file upload handler",
-    re: /name\s*=\s*['"]flag_file['"]|flag_file['"][\s\S]{0,120}tmp_name/i
+    re: /name\s*=\s*['"]flag_file['"]|flag_file['"][\s\S]{0,160}tmp_name/i
   },
   {
     label: "md5_file compare before include",
-    re: /md5_file(?:&nbsp;|\s)+\(\s*\$filename[\s\S]{0,120}md5_file(?:&nbsp;|\s)+\(\s*['"]flag\.php['"]/i
+    re: /md5_file[\s\S]{0,200}md5_file[\s\S]{0,80}flag\.php/i
   },
   {
     label: "crc32 checksum type juggling gate",
-    re: /\$_POST(?:&nbsp;|\s)+\[(?:&nbsp;|\s)*['"]checksum['"][\s\S]{0,80}crc32(?:&nbsp;|\s)+\(/i
+    re: /checksum['"][\s\S]{0,120}crc32[\s\S]{0,80}checksum/i
   },
   {
     label: "include uploaded PHP file",
-    re: /include(?:&nbsp;|\s)+\(\s*\$filename\s*\)/i
+    re: /include[\s\S]{0,40}\$filename[\s\S]{0,20}\)/i
   }
 ];
 

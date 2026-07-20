@@ -5321,6 +5321,24 @@
       "slug": "websec-level21-22-crawl-deep-rules",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebsecChallengeSeeds extended to level22 + source1/source2.php; wired unserialize/aes/oop WebSec rules into DEEP_RULES; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-shell-exec-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level26/source.php shell_exec(\$code) after blacklist + suhosin max_value_length=40 + /bin/sh title; websec.fr/level26 findings 2→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-aspect-instrumentation-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level27/source.php acu_phpaspect.php + HTTP_ACUNETIX_ASPECT header gate + source2.php instrumentation; websec.fr/level27 findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-upload-include-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level28/source.php md5_file(flag.php) + crc32 checksum == juggling + include(\$filename) upload RCE; websec.fr/level28 findings 2→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9353,6 +9371,21 @@
       "source": "discovery:websec.fr",
       "slug": "websec-level21-22-crawl-deep-rules",
       "shipped_at": "2026-07-20T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-shell-exec-challenge-evidence",
+      "shipped_at": "2026-07-20T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-aspect-instrumentation-challenge-evidence",
+      "shipped_at": "2026-07-20T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-upload-include-challenge-evidence",
+      "shipped_at": "2026-07-20T11:10:00.000Z"
     }
   ]
 }
