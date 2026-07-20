@@ -5525,6 +5525,24 @@
       "slug": "client-side-intigriti-march-eval-xss-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge/index.html runCmdToken eval(cmd) + alert(1337) goal + setName URL params; challenge-0324.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0923.intigriti.io",
+      "slug": "client-side-intigriti-september-sqli-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge.php?showsource=1 exposes prepare(SELECT id,name,email FROM users WHERE id<=$max); live probe max=10' returns H4ckerzzzz oracle; challenge-0923.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0623.intigriti.io",
+      "slug": "client-side-intigriti-june-sethtml-xss-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge/index.html modalContent.setHTML(name,{sanitizer:new Sanitizer}) + alert(document.cookie) goal + Flag=flag{XSS} cookie; challenge-0623.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:santacloud.intigriti.io",
+      "slug": "client-side-intigriti-santacloud-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /home SantaCloud Supply Chain Portal + fetch('/api/login') JSON auth + INTIGRITI flag format; extractIntigritiChallengeSeeds extended for santacloud.intigriti.io; santacloud.intigriti.io findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9727,6 +9745,21 @@
       "source": "discovery:challenge-0324.intigriti.io",
       "slug": "client-side-intigriti-march-eval-xss-challenge-evidence",
       "shipped_at": "2026-07-20T21:35:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0923.intigriti.io",
+      "slug": "client-side-intigriti-september-sqli-challenge-evidence",
+      "shipped_at": "2026-07-20T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0623.intigriti.io",
+      "slug": "client-side-intigriti-june-sethtml-xss-challenge-evidence",
+      "shipped_at": "2026-07-20T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:santacloud.intigriti.io",
+      "slug": "client-side-intigriti-santacloud-ctf-evidence",
+      "shipped_at": "2026-07-20T22:10:00.000Z"
     }
   ]
 }

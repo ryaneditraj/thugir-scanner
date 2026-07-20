@@ -13165,6 +13165,168 @@ const clientSideIntigritiMarchEvalXssChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti September 2023 SQLi challenge (challenge-0923.intigriti.io) ----------
+async function probeIntigritiMaxParamSqli(
+  ctx: RuleContext
+): Promise<{ fired: true; confidence: number; evidence: Record<string, unknown> } | null> {
+  const origin = ctx.origin;
+  if (!/challenge-0923\.intigriti\.io/i.test(origin)) return null;
+  const baseline = new URL("/challenge.php", origin);
+  baseline.searchParams.set("max", "10");
+  const evil = new URL("/challenge.php", origin);
+  evil.searchParams.set("max", "10'");
+  const docs = await ctx.probe.getMany([baseline.toString(), evil.toString()], { maxBytes: 8192 }, 2);
+  const baseDoc = docs.get(baseline.toString());
+  const evilDoc = docs.get(evil.toString());
+  if (!baseDoc || !evilDoc) return null;
+  if (baseDoc.status < 200 || baseDoc.status >= 400) return null;
+  const baseTable = /<table[\s\S]*<\/table>/i.test(baseDoc.body);
+  const evilShort = evilDoc.body.length < 200 && !/<table/i.test(evilDoc.body);
+  if (baseTable && evilShort && /H4ckerzzzz|BROKEN QUERY|error/i.test(evilDoc.body)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: evil.toString(),
+        baselineSnippet: baseDoc.body.slice(0, 160).trim(),
+        injectionSnippet: evilDoc.body.slice(0, 160).trim(),
+        note: "challenge.php max query parameter injectable — baseline returns user table but quote payload returns short error/success oracle"
+      }
+    };
+  }
+  return null;
+}
+
+const CLIENT_INTIGRITI_SEPTEMBER_SQLI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "September challenge host",
+    re: /challenge-0923\.intigriti\.io|Intigriti(?:'s)?\s+September\s+challenge/i
+  },
+  {
+    label: "showsource PHP disclosure",
+    re: /showsource=1|highlight_file\(__FILE__\)/i
+  },
+  {
+    label: "Injectable max in SELECT",
+    re: /prepare\(["']SELECT id,\s*name,\s*email FROM users WHERE id<=?\$max/i
+  },
+  {
+    label: "Users table PHP lab",
+    re: /<h2>Users<\/h2>|Utenti/i
+  }
+];
+
+const clientSideIntigritiSeptemberSqliChallengeEvidence: Rule = async (ctx) => {
+  const probeHit = await probeIntigritiMaxParamSqli(ctx);
+  if (probeHit) return probeHit;
+
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_SEPTEMBER_SQLI_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0923|SELECT id,\s*name,\s*email/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti September 2023 challenge documents PHP user listing with showsource and injectable max parameter in SELECT query"
+    }
+  };
+};
+
+// --- Intigriti June 2023 setHTML XSS challenge (challenge-0623.intigriti.io) -----------
+const CLIENT_INTIGRITI_JUNE_SETHTML_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "June 2023 XSS challenge",
+    re: /challenge-0623\.intigriti\.io|Intigriti(?:'s)?\s+June\s+XSS\s+challenge/i
+  },
+  {
+    label: "alert(document.cookie) goal",
+    re: /alert\(document\.cookie\)/i
+  },
+  {
+    label: "setHTML Sanitizer sink",
+    re: /modalContent\.setHTML\([\s\S]{0,120}sanitizer:\s*new\s+Sanitizer/i
+  },
+  {
+    label: "Flag cookie in challenge",
+    re: /document\.cookie\s*=\s*['"]Flag=flag\{XSS\}/i
+  },
+  {
+    label: "Name query param welcome modal",
+    re: /\?name=\$\{encodeURIComponent\(name\)\}|window\.params\s*=\s*\$\.deparam/i
+  }
+];
+
+const clientSideIntigritiJuneSethtmlXssChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JUNE_SETHTML_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0623|setHTML/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti June 2023 XSS challenge documents modalContent.setHTML with Sanitizer bypass and alert(document.cookie) capture goal"
+    }
+  };
+};
+
+// --- Intigriti SantaCloud CTF (santacloud.intigriti.io) ------------------------------
+const CLIENT_INTIGRITI_SANTACLOUD_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SantaCloud CTF title",
+    re: /SantaCloud CTF|santacloud\.intigriti\.io/i
+  },
+  {
+    label: "Supply Chain Portal",
+    re: /SantaCloud\s*-\s*Supply Chain Portal|Enterprise Supply Chain Management/i
+  },
+  {
+    label: "Fetch api/login auth",
+    re: /fetch\(['"]\/api\/login['"]/
+  },
+  {
+    label: "INTIGRITI flag format",
+    re: /flag in the format\s*<code>INTIGRITI|INTIGRITI\{[^}]+\}/i
+  },
+  {
+    label: "Challenge server link",
+    re: /challenge server|Repeat your attack against/i
+  }
+];
+
+const clientSideIntigritiSantacloudCtfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_SANTACLOUD_CTF_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/santacloud\.intigriti\.io|SantaCloud/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti SantaCloud CTF documents supply-chain portal with /api/login JSON auth and INTIGRITI flag capture rules"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -23495,6 +23657,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiJulyIrcChallengeEvidence,
   clientSideIntigritiMaySpreadsheetFormulaEvidence,
   clientSideIntigritiMarchEvalXssChallengeEvidence,
+  clientSideIntigritiSeptemberSqliChallengeEvidence,
+  clientSideIntigritiJuneSethtmlXssChallengeEvidence,
+  clientSideIntigritiSantacloudCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
