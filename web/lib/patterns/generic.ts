@@ -4556,6 +4556,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-wizer-ctf-stored-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Wizer CTF stored DOM XSS via getMessages API",
+    description:
+      "Wizer CTF #10 Messages App fetches stored messages from /api/getMessages and renders message HTML with innerHTML without sanitization.",
+    impactOneline:
+      "Public Wizer chal10 challenge documents a stored DOM XSS sink attackers use to calibrate scanners against message-ID labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWizerCtfStoredDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Wizer CTF labs are intentional training — never copy innerHTML message rendering into production.",
+      steps: [
+        "Run Wizer CTF challenges only on isolated training infrastructure.",
+        "Use textContent or DOMPurify when rendering stored user messages.",
+        "Do not fetch and render arbitrary message HTML in production dashboards."
+      ]
+    },
+    fixPrompt:
+      "Our Wizer-style messages lab uses innerHTML for stored content. Show safe rendering patterns for user-generated messages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-challenge-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Intigriti monthly browser XSS challenge disclosed",
+    description:
+      "Intigriti challenge-NNNN.intigriti.io hosts monthly DOM/reflective XSS challenges with FLAG capture rules and /challenge app routes.",
+    impactOneline:
+      "Public Intigriti challenge pages document browser XSS training surfaces with innerHTML sinks and rich-content note apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti challenges are intentional XSS training — gate challenge apps behind the contest window only.",
+      steps: [
+        "Host Intigriti-style challenges on isolated contest infrastructure.",
+        "Encode or sanitize user input before writing to innerHTML in production apps.",
+        "Do not copy challenge innerHTML/modal patterns into production welcome flows."
+      ]
+    },
+    fixPrompt:
+      "We run Intigriti-style XSS challenges with innerHTML sinks. Show how to harden modal rendering and note search UIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

@@ -12425,6 +12425,98 @@ const clientSideWizerCtfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Wizer CTF #10 Messages App stored DOM XSS (chal10.vercel.app) -------------------
+const CLIENT_WIZER_STORED_DOM_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Wizer getMessages API fetch",
+    re: /api\/getMessages|getMessages[\s\S]{0,80}messageIds/i
+  },
+  {
+    label: "Stored message innerHTML sink",
+    re: /getElementById\(["']message["']\)\.innerHTML\s*=\s*e\[0\]\.message|\.innerHTML\s*=\s*e\[0\]\.message/i
+  },
+  {
+    label: "Message ID query param loader",
+    re: /messageId.*useRouter\(\)|messageIds:\s*\[t\]/i
+  },
+  {
+    label: "Wizer chal10 host",
+    re: /chal10[\w-]*\.vercel\.app/i
+  }
+];
+
+const clientSideWizerCtfStoredDomXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WIZER_STORED_DOM_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/wizer|chal\d+[\w-]*\.vercel\.app|getMessages|innerHTML/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Wizer Messages App CTF fetches stored messages via /api/getMessages and writes message HTML with innerHTML"
+    }
+  };
+};
+
+// --- Intigriti monthly XSS challenges (challenge-NNNN.intigriti.io) -------------------
+const CLIENT_INTIGRITI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Intigriti monthly challenge landing",
+    re: /Intigriti(?:'s)?\s+(?:April|January|February|March|May|June|July|August|September|October|November|December)\s+challenge/i
+  },
+  {
+    label: "Find the FLAG swag rules",
+    re: /Find the FLAG and win Intigriti swag|Pop an alert and win Intigriti swag/i
+  },
+  {
+    label: "Intigriti challenge host",
+    re: /challenge-\d{4}\.intigriti\.io/i
+  },
+  {
+    label: "Challenge /challenge route",
+    re: /href="\/challenge"|\/challenge\?text=/i
+  },
+  {
+    label: "DOM XSS innerHTML welcome modal",
+    re: /modalText\.innerHTML\s*=\s*[`']Welcome,\s*\$\{text\}/i
+  },
+  {
+    label: "Northstar Notes rich content lab",
+    re: /Northstar Notes|Rich formatting is supported for pasted content/i
+  },
+  {
+    label: "DOMPurify XSS challenge search sink",
+    re: /DOMPurify\.sanitize|getElementById\(['"]search-results['"]\)[\s\S]{0,80}innerHTML/i
+  }
+];
+
+const clientSideIntigritiChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/intigriti\.io|Intigriti challenge|challenge-\d{4}/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti monthly XSS challenge documents DOM sinks, /challenge routes, and FLAG capture rules for browser-based exploitation labs"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -22576,6 +22668,8 @@ export const RULES: Record<string, Rule> = {
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
+  clientSideWizerCtfStoredDomXssEvidence,
+  clientSideIntigritiChallengeEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
