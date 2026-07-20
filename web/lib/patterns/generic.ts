@@ -5465,6 +5465,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-voidsec-shopping-cart-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "VoidSec Shopping Cart vulnerable e-commerce hack-lab disclosed",
+    description:
+      "VoidSec Shopping Cart GitHub Pages landing documents an intentionally vulnerable e-commerce web app with XSS, SQLi, auth bypass, clickjacking, and response-splitting training targets.",
+    impactOneline:
+      "Public VoidSec Shopping Cart docs advertise dozens of injectable flaws attackers use to tune scanners against real e-commerce apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVoidsecShoppingCartEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VoidSec Shopping Cart is intentional training — host only in isolated lab environments.",
+      steps: [
+        "Deploy Shopping Cart on local XAMPP or Docker instances, not public GitHub Pages marketing alone.",
+        "Gate live vulnerable instances behind VPN-only access.",
+        "Do not copy Shopping Cart vulnerability patterns into production e-commerce code."
+      ]
+    },
+    fixPrompt:
+      "We host a VoidSec Shopping Cart-style vulnerable e-commerce lab. Show how to isolate the hack-lab from production traffic and retire public marketing pages that document injectable endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-whoopspay-evidence",
     platform: "generic",
     category: "Broken access control",

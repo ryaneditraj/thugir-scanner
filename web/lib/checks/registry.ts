@@ -4489,6 +4489,52 @@ const clientSideOopssecStoreEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
+const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VoidSec Shopping Cart branding",
+    re: /Shopping Cart is a free, open source web application|title>Shopping Cart</i
+  },
+  {
+    label: "Vulnerable Web App tagline",
+    re: /Vulnerable Web App/i
+  },
+  {
+    label: "Pen-test and hack web application scope",
+    re: /pen-test and hack a web application/i
+  },
+  {
+    label: "Multi-vulnerability hack-lab catalog",
+    re: /dozens of vulnerabilities providing an easy-to-use web hacking environment/i
+  },
+  {
+    label: "XSS SQLi auth-bypass training scope",
+    re: /cross-site scripting, sql injection, response-splitting, html injection, javascript injection, clickjacking/i
+  },
+  {
+    label: "VoidSec GitHub shopping-cart repo link",
+    re: /github\.com\/VoidSec\/shopping-cart/i
+  }
+];
+
+const clientSideVoidsecShoppingCartEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VOIDSEC_SHOPPING_CART_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/VoidSec\/shopping-cart|voidsec\.github\.io\/shopping-cart/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VoidSec Shopping Cart GitHub Pages landing documents XSS, SQLi, auth bypass, and clickjacking targets in an intentionally vulnerable e-commerce hack-lab"
+    }
+  };
+};
+
 // --- PortSwigger Web Security Academy (portswigger.net/web-security) ----------------
 const CLIENT_PORTSWIGGER_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -7843,16 +7889,24 @@ const CLIENT_WEBSEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
     re: /<option[^>]*>\s*level\d+\s*<\/option>/i
   },
   {
+    label: "WebSec level challenge title",
+    re: /#WebSec Level|LevelOne\s*<small>|LevelTwo\s*<small>/i
+  },
+  {
+    label: "WebSec user ID lookup form",
+    re: /Enter the user ID|name\s*=\s*["']user_id["']/i
+  },
+  {
     label: "WebSec anti_csrf.php gate",
     re: /anti_csrf\.php/i
   },
   {
     label: "WebSec doQuery injection sink",
-    re: /doQuery\s*\(\s*\$injection\s*\)/i
+    re: /doQuery(?:&nbsp;|\s)*\([\s\S]{0,80}\$injection/i
   },
   {
     label: "WebSec LevelOne challenge class",
-    re: /class\s+Level(?:One|Two|Three)/i
+    re: /class\s+Level(?:One|Two|Three)|LevelOne&nbsp;|LevelTwo&nbsp;/i
   },
   {
     label: "WebSec highlighted SQL concat in source.php",
@@ -11704,6 +11758,10 @@ const CLIENT_NET_FORCE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Sweet little applet training challenge",
     re: /Sweet little applet|Login using this applet/i
+  },
+  {
+    label: "Java applet admin area challenge",
+    re: /Admin Area[\s\S]{0,160}<applet[^>]+code=["'][^"']+\.class["']/i
   }
 ];
 
@@ -11791,6 +11849,9 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
           : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
               /Decompile it|Simple encoding/i.test(corpus)
             ? `Net-Force level ${level ?? "NN"} Simple encoding challenge ships a Java applet — decompile applet.class to recover password`
+            : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
+              /Admin Area/i.test(corpus)
+            ? `Net-Force level ${level ?? "NN"} Admin Area challenge ships a Java applet gate — decompile Applet5.class or reverse client-side credential check`
             : /<applet[^>]+code=["'][^"']+\.class["']/i.test(corpus) &&
               /Sweet little applet|Login using this applet/i.test(corpus)
             ? `Net-Force level ${level ?? "NN"} ships a Java applet login gate — decompile applet1.class or reverse client-side credential check`
@@ -21792,6 +21853,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingSubdomainSquattingLessonEvidence,
   clientSideHacksplainingToxicDependenciesLessonEvidence,
   clientSideOopssecStoreEvidence,
+  clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
   clientSideUnsecurePwaEvidence,

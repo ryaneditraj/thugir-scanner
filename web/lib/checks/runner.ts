@@ -962,6 +962,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
+  "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
@@ -1937,6 +1938,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/76/",
     "/missions/application/77/",
     "/missions/application/78/",
+    "/missions/application/79/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5921,9 +5923,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level201/index.php",
         "http://www.net-force.nl/challenge/level202/index.php",
         "http://www.net-force.nl/challenge/level203/index.php",
-        "http://www.net-force.nl/challenge/level204/index.php"
+        "http://www.net-force.nl/challenge/level204/index.php",
+        "http://www.net-force.nl/challenge/level205/index.php"
       ]
     : [];
+  const websecLevelPrioritySeeds = (() => {
+    const m = /websec\.fr\/(level\d+)\/?/i.exec(home.finalUrl);
+    if (!m) return [] as string[];
+    const slug = m[1];
+    try {
+      return [
+        new URL(`/${slug}/source.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/`, home.finalUrl).toString()
+      ];
+    } catch {
+      return [] as string[];
+    }
+  })();
   const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
     home.finalUrl
   )
@@ -6139,6 +6155,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...redTigerPrioritySeeds,
       ...hacksplainingToxicDependenciesPrioritySeeds,
       ...netForcePrioritySeeds,
+      ...websecLevelPrioritySeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
