@@ -2371,6 +2371,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-class-instantiation-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr arbitrary PHP class instantiation lab disclosed",
+    description:
+      "WebSec.fr level12 lets attackers POST arbitrary class names with two parameters — blacklist blocks splfileobject/globiterator but other wrappers remain exploitable.",
+    impactOneline:
+      "Public challenge documents unsafe dynamic class instantiation that can lead to file read or RCE via PHP object wrappers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecClassInstantiationChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host object-injection labs offline; never instantiate attacker-controlled class names in production.",
+      steps: [
+        "Move WebSec-style object injection labs to VPN-only environments.",
+        "Remove public challenge pages from internet-facing hosts.",
+        "Use allowlisted factories instead of echo new $class with user input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level12 lab exposes echo new $class($param1, $param2) with a partial iterator blacklist. Show how to retire public labs and block dynamic class instantiation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-sqli-privilege-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr SQLi privilege disclosure lab disclosed",
+    description:
+      "WebSec.fr level13 publishes SQLite privilege lookup with injectable ids IN clause — admin row stores flag in user_password column.",
+    impactOneline:
+      "Public challenge source documents SQL injection in privilege lookup that leaks admin credentials via UNION or subquery bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecSqliPrivilegeChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host SQLi privilege labs offline; use parameterized queries and never store secrets in queryable columns.",
+      steps: [
+        "Move WebSec-style SQLi labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Bind id lists as integers and use prepared statements for all lookups."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level13 lab exposes SELECT user_privileges FROM users WHERE user_id IN ($ids) with string-concat ids. Show how to retire public source disclosure and fix SQLi.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
