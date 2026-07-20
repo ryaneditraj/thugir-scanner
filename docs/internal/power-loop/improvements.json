@@ -5249,6 +5249,24 @@
       "slug": "hts-playlevel-91-92-application-83-net-force-level208-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/91-92 Login Required hub + level208 301→homepage offline oracle; runner seeds playlevel/91-92 application/83-84 level208; playlevel/91 findings 0→6, level208 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-restricted-php-exec-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level14/source.php preg_match whitelist on echo/print/strlen/strcmp/strncmp + substr($code,0,25) + eval($code); websec.fr/level14 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-create-function-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level15/source.php create_function('$flag', $_POST['c']) + Exit after declaration checkbox; websec.fr/level15 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-93-application-84-net-force-level209-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/93 Login Required hub + level209 301→homepage offline oracle; runner seeds playlevel/93 application/84-85 level209 + websec level14-16 crawl; playlevel/93 findings 0→6, level209 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9224,8 +9242,18 @@
     },
     {
       "source": "discovery:www.hackthissite.org",
-      "slug": "hts-playlevel-91-92-application-83-net-force-level208-seeds",
-      "shipped_at": "2026-07-20T05:05:00.000Z"
+      "slug": "hts-playlevel-93-application-84-net-force-level209-seeds",
+      "shipped_at": "2026-07-20T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-restricted-php-exec-challenge-evidence",
+      "shipped_at": "2026-07-20T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-create-function-challenge-evidence",
+      "shipped_at": "2026-07-20T06:10:00.000Z"
     }
   ]
 }
