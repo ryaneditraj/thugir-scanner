@@ -1733,24 +1733,33 @@ function extractAspSqlProbePaths(text: string): string[] {
 function extractArchiveMonthProbePaths(text: string, pageUrl: string): { path: string; param: string; value: string }[] {
   const out: { path: string; param: string; value: string }[] = [];
   const seen = new Set<string>();
+  const pathCandidates = new Set<string>();
+  try {
+    pathCandidates.add(new URL(pageUrl).pathname);
+  } catch {
+    /* ignore */
+  }
+  if (/challenge\/challenge\.php|href\s*=\s*["']\?month=\d+["']/i.test(text)) {
+    pathCandidates.add("/challenge/challenge.php");
+  }
   const hrefRe = /href\s*=\s*["']\?month=(\d+)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = hrefRe.exec(text))) {
-    const key = `month:${m[1]}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    try {
-      out.push({ path: new URL(pageUrl).pathname, param: "month", value: m[1] });
-    } catch {
-      /* ignore */
+    for (const path of pathCandidates) {
+      const key = `${path}:month:${m[1]}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ path, param: "month", value: m[1] });
     }
   }
   try {
     const u = new URL(pageUrl);
     const month = u.searchParams.get("month");
     if (month && /^\d+$/.test(month)) {
-      const key = `month:${month}`;
-      if (!seen.has(key)) out.push({ path: u.pathname, param: "month", value: month });
+      for (const path of pathCandidates) {
+        const key = `${path}:month:${month}`;
+        if (!seen.has(key)) out.push({ path, param: "month", value: month });
+      }
     }
   } catch {
     /* ignore */
@@ -6131,6 +6140,46 @@ const clientSideFlaskVulnappEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "VulnApp Flask practice app documents intentional SQL injection on login/register and stored XSS in the comment system"
+    }
+  };
+};
+
+// --- VulnApp stored XSS HTML comment (web-security-practice-app.onrender.com/comments) --
+const CLIENT_FLASK_VULNAPP_STORED_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Intentional XSS HTML comment marker",
+    re: /INTENTIONAL VULNERABILITY:\s*XSS[\s\S]{0,40}No HTML escaping/i
+  },
+  {
+    label: "Comment system without escaping",
+    re: /comment-text|comment system with XSS vulnerabilities|Comment system with XSS/i
+  },
+  {
+    label: "VulnApp comments route",
+    re: /\/comments|Comments - Vulnerable Web App/i
+  }
+];
+
+const clientSideFlaskVulnappStoredXssEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FLASK_VULNAPP_STORED_XSS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (
+    !/VulnApp|web-security-practice-app|n00by3e\/web-security-practice-app|Comments - Vulnerable Web App/i.test(
+      ctx.combined
+    ) &&
+    !/web-security-practice-app\.onrender\.com/i.test(ctx.origin)
+  )
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.some((h) => h.label.includes("INTENTIONAL")) ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "VulnApp /comments renders user input without HTML escaping — stored XSS training surface documented in HTML comment"
     }
   };
 };
@@ -12711,6 +12760,46 @@ const clientSideIntigritiRaceConditionChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Intigriti April 2024 BarSpacer challenge documents race-condition gaming lab with admin:debug basic-auth links and optional code.zip leak"
+    }
+  };
+};
+
+// --- Intigriti January 2025 XSS filter bypass (challenge-0125.intigriti.io/challenge) --
+const CLIENT_INTIGRITI_JANUARY_XSS_FILTER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "January challenge host",
+    re: /challenge-0125\.intigriti\.io|Intigriti(?:'s)?\s+January\s+challenge/i
+  },
+  {
+    label: "XSS filter only blocks angle brackets in query/hash",
+    re: /function\s+XSS\s*\(\)[\s\S]{0,200}decodeURIComponent\(window\.location\.(?:search|hash)\)[\s\S]{0,120}includes\(['"]<['"]\)/i
+  },
+  {
+    label: "Welcome modal innerHTML sink",
+    re: /modalText\.innerHTML\s*=\s*[`']Welcome,\s*\$\{text\}/i
+  },
+  {
+    label: "Redirect to /challenge?text= on submit",
+    re: /window\.location\.href\s*=\s*[`']\/challenge\?text=\$\{text\}/i
+  }
+];
+
+const clientSideIntigritiJanuaryXssFilterBypassEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JANUARY_XSS_FILTER_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0125|January Challenge/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti January 2025 challenge documents XSS() filter bypass (query/hash angle-bracket check only) before modalText.innerHTML welcome sink"
     }
   };
 };
@@ -23036,6 +23125,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWizerCtfStoredDomXssEvidence,
   clientSideIntigritiChallengeEvidence,
   clientSideIntigritiRaceConditionChallengeEvidence,
+  clientSideIntigritiJanuaryXssFilterBypassEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
@@ -23269,6 +23359,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePcPartsStoreLabEvidence,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
+  clientSideFlaskVulnappStoredXssEvidence,
   clientSideGrpcGoatLabEvidence,
   clientSideWebvulnRunnerEvidence,
   clientSideFrontendXssDemoEvidence,
