@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T02:15:11.759Z",
-  "total": 479,
-  "uniqueSlugs": 477,
+  "generatedAt": "2026-07-20T03:27:03.180Z",
+  "total": 482,
+  "uniqueSlugs": 480,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 461,
+    "generic": 464,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 410,
+    "deep": 413,
     "continuous": 0
   },
   "byCategory": {
@@ -24,8 +24,8 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 34,
-    "Security misconfiguration": 39,
+    "Information disclosure": 35,
+    "Security misconfiguration": 41,
     "Broken authentication": 35,
     "Injection": 87,
     "Cross-site scripting": 58,
@@ -163,10 +163,12 @@
     "client-side-hacksplaining-ssrf-lesson-evidence",
     "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
     "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+    "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
     "client-side-hacksplaining-xml-bomb-lesson-evidence",
     "client-side-hacksplaining-xss-dom-lesson-evidence",
     "client-side-hacksplaining-xss-reflected-lesson-evidence",
     "client-side-hacksplaining-xss-stored-lesson-evidence",
+    "client-side-hacksplaining-xssi-lesson-evidence",
     "client-side-hackthebox-academy-evidence",
     "client-side-hackthebox-evidence",
     "client-side-hackthissite-evidence",
@@ -384,6 +386,7 @@
     "client-side-webhacking-kr-evidence",
     "client-side-websec-challenge-evidence",
     "client-side-websec-crypto-challenge-evidence",
+    "client-side-websec-file-upload-challenge-evidence",
     "client-side-webvuln-runner-evidence",
     "client-side-webvulnsguide-cors-lab-evidence",
     "client-side-webvulnsguide-ssrf-lab-evidence",
