@@ -2423,6 +2423,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-restricted-php-exec-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr restricted PHP code execution lab disclosed",
+    description:
+      "WebSec.fr level14 publishes a 25-character PHP sandbox with function whitelist — preg_match blocks eval but strcmp/strncmp bypass enables arbitrary code execution.",
+    impactOneline:
+      "Public challenge source documents weak PHP sandbox that evals attacker input after incomplete function blacklist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecRestrictedPhpExecChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP sandbox labs offline; never eval user-supplied code in production.",
+      steps: [
+        "Move WebSec-style code-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never eval or include attacker-controlled PHP snippets — use isolated interpreters with no filesystem access."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level14 lab exposes eval($code) after preg_match whitelist on echo/print/strlen/strcmp/strncmp with 25-char limit. Show how to retire public labs and eliminate eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-create-function-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr create_function code injection lab disclosed",
+    description:
+      "WebSec.fr level15 passes attacker POST body into create_function — PHP compiles attacker code even when fun($flag) is commented out.",
+    impactOneline:
+      "Public challenge source documents create_function sink that compiles arbitrary PHP from user input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecCreateFunctionChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host create_function labs offline; remove deprecated dynamic function constructors from production.",
+      steps: [
+        "Move WebSec-style code-injection labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban create_function and eval; use static callbacks and sandboxed runtimes instead."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level15 lab exposes create_function('$flag', $_POST['c']) with optional die() after declaration. Show how to retire public source disclosure and remove create_function sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
