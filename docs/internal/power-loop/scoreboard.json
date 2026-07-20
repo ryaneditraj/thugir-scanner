@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T18:08:52.513Z",
+  "updated_at": "2026-07-20T18:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1594,
-  "total_findings": 7969,
+  "total_sites_scanned": 1595,
+  "total_findings": 7976,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1325,
   "discovery_findings": 6379,
-  "improvements_shipped": 827,
-  "last_run": "2026-07-20T18:08:52.513Z",
+  "improvements_shipped": 830,
+  "last_run": "2026-07-20T18:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark category misses — recall stable at 6/6 (7 findings, pages=6 probes=265 first pass)",
+      "note": "No benchmark category misses — recall stable at 6/6 (7 findings, first pass)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,34 +50,22 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 33,
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (DNS dead — use testasp/rest.vulnweb.com)"
-      ],
-      "queued_pending": [
-        "https://challenge-0825.intigriti.io/",
-        "https://challenge-0925.intigriti.io/",
-        "https://challenge-1125.intigriti.io/",
-        "https://challenge-0325.intigriti.io/",
-        "https://challenge-0724.intigriti.io/"
-      ],
-      "focus": "Intigriti gap-fill (0825 SSRF/RCE, 0925 shell, 1125 JWT+SSTI, 0325 XS-leak, 0724 memo XSS) + queue drain (wizer-ctf, chal vercel, openvaultbank API, hackthissite basic)"
+      "urls_scanned": 3,
+      "findings": 8,
+      "focus": "VulnApp stored XSS + Intigriti Jan XSS filter bypass + Jul archive challenge.php crawl fix",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings, first pass no wake retry)",
-      "chal7.vercel.app: 6 findings incl sql-error-disclosure + dangerous-html-sinks",
-      "openvaultbank.com/api/v1/users: 5 findings incl client-side-api-security-lab-evidence (lovable platform)",
-      "www.hackthissite.org/missions/basic/: 6 findings incl client-side-hackthissite-mission-challenge-evidence",
-      "wizer-ctf.com: 4 findings incl dangerous-html-sinks"
+      "web-security-practice-app.onrender.com: 3→4 findings (+client-side-flask-vulnapp-stored-xss-evidence when /comments crawled)",
+      "challenge-0125.intigriti.io: 3→4 findings (+client-side-intigriti-january-xss-filter-bypass-evidence)",
+      "challenge-0722.intigriti.io: 2→3 findings (+sql-error-disclosure via /challenge/challenge.php month probe)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 maintained (7 findings)"
     ],
     "learning_gaps": [
       "secret-resend slug still absent on juice-shop — sensitive_data covered via vibe-unauthenticated-api-routes proxy",
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead",
-      "Intigriti 0825/0925/1125/0325/0724 queued at tail — pending drain next run",
-      "chal1/chal5/chal8 vercel: shallow XSS/header findings only — deeper SSRF/SSTI chains need authenticated flows"
+      "web-security-practice-app.onrender.com: Render cold-start can regress to 1 finding before /comments warmup",
+      "testhtml5.vulnweb.com: DNS dead — use testasp/rest.vulnweb.com instead"
     ]
   },
   "discovery_highlights": {
@@ -296,7 +284,7 @@
     "chal8.vercel.app": 4,
     "hackerfire.com": 3,
     "www.hackthissite.org/playlevel/33": 6,
-    "web-security-practice-app.onrender.com": 1,
+    "web-security-practice-app.onrender.com": 4,
     "pentesterlab.com/exercises/autho_01": 3,
     "pentesterlab.com/exercises/xss-and-mysql-file": 4,
     "www.hackthissite.org/playlevel/34": 6,
@@ -358,8 +346,8 @@
     "www.hackthissite.org/playlevel/43": 6,
     "www.hackthissite.org/missions/application/42": 6,
     "www.net-force.nl/challenge/level411/index.php": 4,
-    "challenge-0722.intigriti.io": 2,
+    "challenge-0722.intigriti.io": 3,
     "challenge-0424.intigriti.io": 3,
-    "challenge-0125.intigriti.io": 3
+    "challenge-0125.intigriti.io": 4
   }
 }
