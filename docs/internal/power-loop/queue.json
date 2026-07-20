@@ -6428,7 +6428,32 @@
       "url": "http://www.net-force.nl/challenge/level208/index.php",
       "source": "Net-Force.nl challenge level 208 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level14/",
+      "source": "WebSec.fr level 14 \u2014 PHP 25-byte RCE blacklist bypass / Finfo flag disclosure challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level15/",
+      "source": "WebSec.fr level 15 \u2014 create_function code injection / eval RCE training puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level16/",
+      "source": "WebSec.fr level 16 \u2014 PHP sandbox escape / restricted execution challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/93/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 93 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level209/index.php",
+      "source": "Net-Force.nl challenge level 209 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T04:05:00.000Z"
+  "updated_at": "2026-07-20T05:05:00.000Z"
 }
