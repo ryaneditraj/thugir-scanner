@@ -829,6 +829,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecCreateFunctionChallengeEvidence",
   "clientSideWebsecFibonacciEvalChallengeEvidence",
   "clientSideWebsecTimingAttackChallengeEvidence",
+  "clientSideWebsecPhpUnserializeCookieChallengeEvidence",
+  "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
+  "clientSideWebsecPhpAesSessionChallengeEvidence",
+  "clientSideWebsecOopRestrictedEvalChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
@@ -1530,6 +1534,8 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     try {
       out.add(new URL(`/${m[1]}/`, origin).toString());
       out.add(new URL(`/${m[1]}/source.php`, origin).toString());
+      out.add(new URL(`/${m[1]}/source1.php`, origin).toString());
+      out.add(new URL(`/${m[1]}/source2.php`, origin).toString());
     } catch {
       /* ignore */
     }
@@ -1540,12 +1546,14 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     /websec challenges/i.test(html) ||
     /web security challenges from the people of websec/i.test(html)
   ) {
-    for (let n = 1; n <= 20; n++) {
+    for (let n = 1; n <= 22; n++) {
       if (n === 19) continue;
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
         out.add(new URL(`/${slug}/`, origin).toString());
         out.add(new URL(`/${slug}/source.php`, origin).toString());
+        out.add(new URL(`/${slug}/source1.php`, origin).toString());
+        out.add(new URL(`/${slug}/source2.php`, origin).toString());
       } catch {
         /* ignore */
       }
