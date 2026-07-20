@@ -930,6 +930,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiMarchEvalXssChallengeEvidence",
   "clientSideIntigritiSeptemberSqliChallengeEvidence",
   "clientSideIntigritiJuneSethtmlXssChallengeEvidence",
+  "clientSideIntigritiOctoberNotesXssEvidence",
+  "clientSideIntigritiJanuaryFriendsSqliEvidence",
+  "clientSideIntigritiOctoberHalloweenXssEvidence",
   "clientSideIntigritiSantacloudCtfEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -1502,7 +1505,7 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
   }
 
   const linkRe =
-    /href\s*=\s*["']((?:https?:\/\/[^"']+|\/)?(?:notes|challenge(?:\.php)?|challenge\/[^"'#?]*|login|home|report)[^"'#?]*)["']/gi;
+    /href\s*=\s*["']((?:https?:\/\/[^"']+|\/)?(?:notes|challenge(?:\.html|\.php)?|challenge\/[^"'#?]*|login(?:\.html|\.php)?|home|report|editor\.html)[^"'#?]*)["']/gi;
   while ((m = linkRe.exec(html))) {
     try {
       const raw = m[1];
@@ -1589,6 +1592,44 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/SantaCloud CTF|santacloud\.intigriti\.io/i.test(html)) {
     for (const p of ["/home", "/login", "/register", "/latest-flags"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Secure Notes Application|0xGodson\/notes-app|alert the contents of a note/i.test(html)) {
+    for (const p of ["/challenge/begin", "/challenge/app.js", "/challenge/auth"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Friends Search Engine|JacquesPhil|password is the flag/i.test(html)) {
+    for (const p of ["/challenge.html", "/editor.html", "/login.html", "/api/friends?q=test"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/BOOOOOOO!|HALLOWEEN HAS TAKEN OVER|I USE \?html= TO CONVEY/i.test(html)) {
+    try {
+      out.add(new URL("/challenge/challenge.php", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/Business Card Generator|source\.zip/i.test(html)) {
+    for (const p of ["/challenge/login.php", "/challenge/source.zip"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {

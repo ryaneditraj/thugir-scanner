@@ -5543,6 +5543,24 @@
       "slug": "client-side-intigriti-santacloud-ctf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /home SantaCloud Supply Chain Portal + fetch('/api/login') JSON auth + INTIGRITI flag format; extractIntigritiChallengeSeeds extended for santacloud.intigriti.io; santacloud.intigriti.io findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1022.intigriti.io",
+      "slug": "client-side-intigriti-october-notes-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Secure Notes Application + Arg.parse(location.search) in app.js + alert note contents goal; extractIntigritiChallengeSeeds seeds /challenge/app.js; challenge-1022.intigriti.io findings 3→4; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0123.intigriti.io",
+      "slug": "client-side-intigriti-january-friends-sqli-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Friends Search Engine /api/friends?q= concat + password is the flag + INTIGRITI{.*} format in challenge.html; challenge-0123.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1021.intigriti.io",
+      "slug": "client-side-intigriti-october-halloween-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BOOOOOOO! + unsafe-eval strict-dynamic CSP + searchParams.get('xss') createTextNode script gadget at challenge/challenge.php; challenge-1021.intigriti.io findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9760,6 +9778,21 @@
       "source": "discovery:santacloud.intigriti.io",
       "slug": "client-side-intigriti-santacloud-ctf-evidence",
       "shipped_at": "2026-07-20T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1022.intigriti.io",
+      "slug": "client-side-intigriti-october-notes-xss-evidence",
+      "shipped_at": "2026-07-20T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0123.intigriti.io",
+      "slug": "client-side-intigriti-january-friends-sqli-evidence",
+      "shipped_at": "2026-07-20T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1021.intigriti.io",
+      "slug": "client-side-intigriti-october-halloween-xss-evidence",
+      "shipped_at": "2026-07-20T23:10:00.000Z"
     }
   ]
 }

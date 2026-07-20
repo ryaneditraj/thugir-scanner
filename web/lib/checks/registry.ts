@@ -13283,6 +13283,138 @@ const clientSideIntigritiJuneSethtmlXssChallengeEvidence: Rule = async (ctx) => 
   };
 };
 
+// --- Intigriti October 2022 Secure Notes XSS (challenge-1022.intigriti.io) -----------
+const CLIENT_INTIGRITI_OCTOBER_NOTES_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "October 2022 notes challenge host",
+    re: /challenge-1022\.intigriti\.io|Intigriti(?:'s)?\s+October\s+XSS\s+challenge/i
+  },
+  {
+    label: "Secure Notes Application login",
+    re: /Secure Notes Application|noteico\.png/i
+  },
+  {
+    label: "Arg.parse location.search gadget",
+    re: /arg-1\.4\.js|Arg\.parse\s*\(\s*location\.search\s*\)/i
+  },
+  {
+    label: "alert note contents challenge goal",
+    re: /alert the contents of a note|contents of a note of the victim/i
+  },
+  {
+    label: "0xGodson notes-app open source",
+    re: /0xGodson\/notes-app|Object\.whoami\.markdown/i
+  }
+];
+
+const clientSideIntigritiOctoberNotesXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_OCTOBER_NOTES_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1022|Secure Notes/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti October 2022 challenge documents Secure Notes app with Arg.parse query params and note-content XSS capture goal"
+    }
+  };
+};
+
+// --- Intigriti January 2023 Friends Search SQLi (challenge-0123.intigriti.io) --------
+const CLIENT_INTIGRITI_JANUARY_FRIENDS_SQLI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "January 2023 challenge host",
+    re: /challenge-0123\.intigriti\.io|Intigriti(?:'s)?\s+January\s+challenge/i
+  },
+  {
+    label: "Friends Search Engine lab",
+    re: /Friends Search Engine|JacquesPhil/i
+  },
+  {
+    label: "password is the flag marker",
+    re: /password is the flag|steal an Intigriti employee's password/i
+  },
+  {
+    label: "injectable /api/friends search",
+    re: /\/api\/friends\?q=|getElementById\(['"]search['"]\)\.value/i
+  },
+  {
+    label: "INTIGRITI flag format",
+    re: /flag format is INTIGRITI|INTIGRITI\{[^}]+\}/i
+  }
+];
+
+const clientSideIntigritiJanuaryFriendsSqliEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JANUARY_FRIENDS_SQLI_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0123|Friends Search/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti January 2023 challenge documents Friends Search Engine with /api/friends?q= SQL injection and password-as-flag capture goal"
+    }
+  };
+};
+
+// --- Intigriti October 2021 Halloween strict-dynamic XSS (challenge-1021.intigriti.io) -
+const CLIENT_INTIGRITI_OCTOBER_HALLOWEEN_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "October 2021 Halloween challenge host",
+    re: /challenge-1021\.intigriti\.io|Intigriti(?:'s)?\s+October\s+XSS\s+challenge/i
+  },
+  {
+    label: "BOOOOOOO Halloween title",
+    re: /BOOOOOOO!|HALLOWEEN HAS TAKEN OVER/i
+  },
+  {
+    label: "unsafe-eval strict-dynamic CSP",
+    re: /script-src\s+['"]unsafe-eval['"]\s+['"]strict-dynamic['"]/i
+  },
+  {
+    label: "xss searchParam script gadget",
+    re: /searchParams\.get\(['"]xss['"]\)|createTextNode\s*\(\s*e\s*\)[\s\S]{0,80}appendChild\s*\(\s*s\s*\)/i
+  },
+  {
+    label: "?html= message channel",
+    re: /I USE \?html= TO CONVEY|POP AN XSS/i
+  }
+];
+
+const clientSideIntigritiOctoberHalloweenXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_OCTOBER_HALLOWEEN_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1021|BOOOOOOO/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti October 2021 Halloween challenge documents strict-dynamic CSP bypass via ?xss= searchParam script gadget at challenge/challenge.php"
+    }
+  };
+};
+
 // --- Intigriti SantaCloud CTF (santacloud.intigriti.io) ------------------------------
 const CLIENT_INTIGRITI_SANTACLOUD_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -23659,6 +23791,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiMarchEvalXssChallengeEvidence,
   clientSideIntigritiSeptemberSqliChallengeEvidence,
   clientSideIntigritiJuneSethtmlXssChallengeEvidence,
+  clientSideIntigritiOctoberNotesXssEvidence,
+  clientSideIntigritiJanuaryFriendsSqliEvidence,
+  clientSideIntigritiOctoberHalloweenXssEvidence,
   clientSideIntigritiSantacloudCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
