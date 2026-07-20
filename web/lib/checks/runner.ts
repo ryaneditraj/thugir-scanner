@@ -6184,6 +6184,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/backup/", home.finalUrl).toString(),
           new URL("/recon/", home.finalUrl).toString(),
           new URL("/labs/", home.finalUrl).toString(),
+          new URL("/labs/idor.html", home.finalUrl).toString(),
           new URL("/auth/", home.finalUrl).toString(),
           new URL("/auth/login.html", home.finalUrl).toString(),
           new URL("/auth/jwt.html", home.finalUrl).toString(),

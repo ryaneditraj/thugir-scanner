@@ -2521,6 +2521,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   {
     label: "Jekyll Rouge URLSearchParams location.search innerHTML sink",
     re: /URLSearchParams[\s\S]{0,500}location[\s\S]{0,120}search[\s\S]{0,500}innerHTML[\s\S]{0,96}=/i
+  },
+  {
+    label: "Intigriti welcome modal innerHTML DOM XSS",
+    re: /modalText\.innerHTML\s*=\s*[`']Welcome,\s*\$\{text\}/i
+  },
+  {
+    label: "getElementById modalText innerHTML welcome template",
+    re: /getElementById\(['"]modalText['"]\)[\s\S]{0,120}\.innerHTML\s*=\s*[`']/
   }
 ];
 const SINK_SYMBOL_RE = /bypassSecurityTrustHtml|dangerouslySetInnerHTML|\.innerHTML/;
@@ -12925,7 +12933,39 @@ const CLIENT_VULNLAB_VERBOSE_404_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+const VULNLAB_VERBOSE_404_BODY_MARKERS =
+  /Verbose Error|DB_PASS\s*=\s*passw0rd!|StackTrace:\s*at\s+[\w.]+\(/i;
+
 const clientSideVulnlabVerbose404Evidence: Rule = async (ctx) => {
+  const isVulnLab =
+    /VulnLab Academy|Pentest Toolkit|hack-this-site-eta\.vercel\.app/i.test(ctx.combined) ||
+    /hack-this-site-eta\.vercel\.app/i.test(ctx.origin);
+
+  if (isVulnLab) {
+    const adminPaths = extractAdminHtmlProbePaths(ctx.combined);
+    const probePaths = [...new Set([...adminPaths, "/admin/users", "/admin/console"])].slice(0, 4);
+    for (const p of probePaths) {
+      const url = new URL(p, ctx.origin).toString();
+      const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+      if (doc.status < 200 || doc.status >= 600) continue;
+      if (!VULNLAB_VERBOSE_404_BODY_MARKERS.test(doc.body)) continue;
+      const snippet =
+        doc.body.match(/DB_PASS[^\n<]{0,40}/)?.[0] ||
+        doc.body.match(/StackTrace:[^\n<]{0,100}/)?.[0] ||
+        doc.body.slice(0, 120).trim();
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url,
+          status: doc.status,
+          snippet,
+          note: "VulnLab admin path returned verbose 404 leaking DB_PASS and stack trace — sensitive data in error responses"
+        }
+      };
+    }
+  }
+
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_VULNLAB_VERBOSE_404_RES) {
     const m = ctx.combined.match(re);

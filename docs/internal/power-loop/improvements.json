@@ -5393,6 +5393,24 @@
       "slug": "vulnlab-admin-path-discovery",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: A01-002 notice /admin/console|/admin/users; extractAdminHtmlProbePaths probes corpus-discovered admin routes; a01.html gains unauthenticated-admin-endpoint; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-verbose-404-admin-live-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/users returns 404 HTML with DB_PASS=passw0rd! + StackTrace: at FileReader.read; clientSideVulnlabVerbose404Evidence live-probes extractAdminHtmlProbePaths; hack-this-site-eta.vercel.app/owasp/a01.html findings 2→11 incl client-side-vulnlab-verbose-404-evidence; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0125.intigriti.io",
+      "slug": "intigriti-welcome-modal-innerhtml-sink",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge modalText.innerHTML = `Welcome, ${text}!` inline script; DANGEROUS_SINK_RES extended; challenge-0125.intigriti.io findings 2→3 incl dangerous-html-sinks; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-idor-lab-priority-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hackThisSiteEtaPrioritySeeds prepends /labs/idor.html for A01→IDOR lab crawl chain; a01.html pages_crawled includes idor.html; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9485,6 +9503,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-admin-path-discovery",
       "shipped_at": "2026-07-20T14:35:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-verbose-404-admin-live-probe",
+      "shipped_at": "2026-07-20T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0125.intigriti.io",
+      "slug": "intigriti-welcome-modal-innerhtml-sink",
+      "shipped_at": "2026-07-20T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-idor-lab-priority-seed",
+      "shipped_at": "2026-07-20T15:10:00.000Z"
     }
   ]
 }
