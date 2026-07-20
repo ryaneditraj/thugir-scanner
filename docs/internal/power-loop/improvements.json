@@ -5231,6 +5231,24 @@
       "slug": "hts-playlevel-88-90-application-82-net-force-level207-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: playlevel/89 Login Required hub + level207 301→homepage offline oracle; runner seeds playlevel/88-90 application/81-82; playlevel/89 findings 0→6, level207 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-class-instantiation-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level12 POST echo new $class($param1,$param2) + splfileobject/globiterator blacklist; websec.fr/level12 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-sqli-privilege-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level13/source.php SELECT user_privileges FROM users WHERE user_id IN ($ids) + admin flag in user_password; websec.fr/level13 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-91-92-application-83-net-force-level208-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/91-92 Login Required hub + level208 301→homepage offline oracle; runner seeds playlevel/91-92 application/83-84 level208; playlevel/91 findings 0→6, level208 gains client-side-net-force-offline-challenge-evidence; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9193,6 +9211,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-88-90-application-82-net-force-level207-seeds",
       "shipped_at": "2026-07-20T04:05:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-class-instantiation-challenge-evidence",
+      "shipped_at": "2026-07-20T05:05:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-sqli-privilege-challenge-evidence",
+      "shipped_at": "2026-07-20T05:05:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-91-92-application-83-net-force-level208-seeds",
+      "shipped_at": "2026-07-20T05:05:00.000Z"
     }
   ]
 }
