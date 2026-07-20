@@ -919,6 +919,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWizerCtfStoredDomXssEvidence",
   "clientSideIntigritiChallengeEvidence",
   "clientSideIntigritiRaceConditionChallengeEvidence",
+  "clientSideIntigritiJanuaryXssFilterBypassEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1129,6 +1130,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePcPartsStoreLabEvidence",
   "clientSideBreakTheFlaskEvidence",
   "clientSideFlaskVulnappEvidence",
+  "clientSideFlaskVulnappStoredXssEvidence",
   "clientSideGrpcGoatLabEvidence",
   "clientSideWebvulnRunnerEvidence",
   "clientSideFrontendXssDemoEvidence",
@@ -1478,8 +1480,8 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of [
-    "/challenge",
     "/challenge/challenge.php",
+    "/challenge",
     "/challenge/welcome.html",
     "/challenge/docs.html",
     "/challenge/game_barspacer.html",
@@ -1494,11 +1496,12 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
       /* ignore */
     }
   }
-  const linkRe = /href\s*=\s*["'](\/challenge[^"'#?]*)["']/gi;
+  const linkRe = /href\s*=\s*["']((?:\/)?challenge[^"'#?]*)["']/gi;
   let m: RegExpExecArray | null;
   while ((m = linkRe.exec(html))) {
     try {
-      out.add(new URL(m[1], pageUrl).toString());
+      const path = m[1].startsWith("/") ? m[1] : `/${m[1]}`;
+      out.add(new URL(path, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -5757,6 +5760,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
   const flaskVulnappSeeds = extractFlaskVulnappSeeds(home.body, home.finalUrl);
   const intigritiChallengeSeeds = extractIntigritiChallengeSeeds(home.body, home.finalUrl);
+  const intigritiArchiveChallengePrioritySeeds =
+    /challenge-\d{4}\.intigriti\.io/i.test(home.finalUrl) &&
+    /challenge\/challenge\.php|Awesome kitty blog|archive month|Pop an alert and win|Find the XSS/i.test(
+      home.body
+    )
+      ? [new URL("/challenge/challenge.php", home.finalUrl).toString()]
+      : [];
   const javaSecLabSeeds = extractJavaSecLabSeeds(home.body, home.finalUrl);
   const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
@@ -6280,6 +6290,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
       ...hackAdvisorPrioritySeeds,
+      ...intigritiArchiveChallengePrioritySeeds,
       ...cyberDefendersPrioritySeeds,
       ...flaskVulnappOnrenderPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,

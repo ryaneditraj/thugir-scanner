@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T17:14:11.778Z",
-  "total": 506,
-  "uniqueSlugs": 504,
+  "generatedAt": "2026-07-20T18:44:44.752Z",
+  "total": 508,
+  "uniqueSlugs": 506,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 488,
+    "generic": 490,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 437,
+    "deep": 439,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 44,
     "Broken authentication": 38,
     "Injection": 101,
-    "Cross-site scripting": 60,
+    "Cross-site scripting": 62,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -123,6 +123,7 @@
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
     "client-side-flask-vulnapp-evidence",
+    "client-side-flask-vulnapp-stored-xss-evidence",
     "client-side-frontend-xss-demo-evidence",
     "client-side-fvb-lab-evidence",
     "client-side-gandalf-evidence",
@@ -183,6 +184,7 @@
     "client-side-insaits-evidence",
     "client-side-intercode-evidence",
     "client-side-intigriti-challenge-evidence",
+    "client-side-intigriti-january-xss-filter-bypass-evidence",
     "client-side-intigriti-race-condition-challenge-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",

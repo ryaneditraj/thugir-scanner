@@ -4660,6 +4660,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-january-xss-filter-bypass-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti January XSS filter bypass challenge disclosed",
+    description:
+      "Intigriti challenge-0125.intigriti.io documents an XSS() filter that only blocks angle brackets in query/hash before modalText.innerHTML renders the welcome message.",
+    impactOneline:
+      "Public January 2025 challenge teaches DOM XSS filter bypass via hash/query encoding before innerHTML sink.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJanuaryXssFilterBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign untrusted input to innerHTML; use textContent and strict allowlist filters.",
+      steps: [
+        "Replace innerHTML welcome sinks with textContent.",
+        "Validate and encode all URL parameters before DOM insertion.",
+        "Host Intigriti challenges on contest-only infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti January XSS challenges with weak angle-bracket filters before innerHTML sinks. Show secure modal rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -10402,6 +10428,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host VulnApp-style Flask training apps. Show how to fix SQLi on login forms and stored XSS in comment systems.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-flask-vulnapp-stored-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnApp stored XSS in unescaped comment HTML",
+    description:
+      "VulnApp /comments page documents intentional stored XSS via an HTML comment marking that comment text is rendered without escaping.",
+    impactOneline:
+      "Public VulnApp comment systems expose stored XSS training surfaces documented inline in HTML source.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFlaskVulnappStoredXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all user-controlled comment output; VulnApp is intentional training only.",
+      steps: [
+        "Use Jinja2 autoescape or explicit HTML encoding in comment templates.",
+        "Sanitize stored comment HTML before rendering.",
+        "Run VulnApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnApp /comments page has stored XSS from unescaped user HTML. Show how to fix the Flask/Jinja template.",
     version: 1,
     enabled: true
   },
