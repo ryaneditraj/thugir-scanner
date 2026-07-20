@@ -1475,13 +1475,30 @@ function extractIdorProbePaths(text: string): string[] {
     paths.add(`${base}/1`);
     if (/\/users/i.test(base)) paths.add(`${base}/1001`);
   }
+  const concatRe = /fetch\(\s*["'`](\/api\/[a-z0-9_/-]+)["'`]\s*\+/gi;
+  while ((m = concatRe.exec(text))) {
+    const base = m[1].replace(/\/+$/, "");
+    paths.add(`${base}/1`);
+    if (/\/orders/i.test(base)) {
+      paths.add(`${base}/1001`);
+      paths.add(`${base}/1002`);
+    }
+  }
+  const exampleOrderRe = /\/api\/orders\/(\d{3,5})/gi;
+  while ((m = exampleOrderRe.exec(text))) {
+    paths.add(`/api/orders/${m[1]}`);
+  }
   const baseRe = /["'`](\/rest\/[a-z][a-z0-9_-]{2,30})["'`]/gi;
   while ((m = baseRe.exec(text))) {
     const base = m[1];
     if (base.includes("admin") || base.endsWith("search")) continue;
     paths.add(`${base}/1`);
   }
-  return [...paths].slice(0, 5);
+  if (/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app/i.test(text)) {
+    paths.add("/api/orders/1001");
+    paths.add("/api/orders/1002");
+  }
+  return [...paths].slice(0, 8);
 }
 
 const JUICE_SHOP_HOST_RE = /juice-shop|owasp-juice|\.juice\.shop$/i;
@@ -1545,7 +1562,7 @@ const idorObjectAccess: Rule = async (ctx) => {
     if (/"(?:config|application|settings|admin)"\s*:/.test(r.body.slice(0, 300))) continue;
     const hasRecord =
       /"status"\s*:\s*"success"/i.test(r.body) ||
-      /"orderId"|"userId"|"user_id"|"username"|"email"\s*:|"data"\s*:\s*\[\s*\{|"Books"\s*:\s*\[/.test(
+      /"orderId"|"userId"|"user_id"|"username"|"email"\s*:|"user"\s*:|"requestedId"\s*:|"order"\s*:\s*\{|"data"\s*:\s*\[\s*\{|"Books"\s*:\s*\[/.test(
         r.body
       );
     if (!hasRecord) continue;
@@ -2236,6 +2253,20 @@ const ADMIN_PROBE_PATHS = [
   "/admin/application-configuration"
 ];
 const ADMIN_HTML_LOGIN_PATHS = ["/admin", "/admin/"];
+
+function extractAdminHtmlProbePaths(text: string): string[] {
+  const paths = new Set<string>();
+  const monoRe = /\/admin\/[a-z][a-z0-9_-]{2,30}/gi;
+  let m: RegExpExecArray | null;
+  while ((m = monoRe.exec(text))) {
+    paths.add(m[0].replace(/\/+$/, ""));
+  }
+  if (/Admin endpoints are exposed without auth|\/admin\/console/i.test(text)) {
+    paths.add("/admin/console");
+    paths.add("/admin/users");
+  }
+  return [...paths].slice(0, 6);
+}
 const ADMIN_JSON_MARKERS = /"(?:config|admin|application|settings|server)"\s*:/;
 const ADMIN_HTML_LOGIN_MARKERS =
   /(?:Admin Panel|Admin Login|administrator access|Secure administrator)/i;
@@ -2311,7 +2342,10 @@ const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   }
   if (jsonHit) return jsonHit;
 
-  const htmlUrls = ADMIN_HTML_LOGIN_PATHS.map((p) => new URL(p, ctx.origin).toString());
+  const discoveredAdminPaths = extractAdminHtmlProbePaths(ctx.combined);
+  const htmlUrls = [...new Set([...ADMIN_HTML_LOGIN_PATHS, ...discoveredAdminPaths])]
+    .map((p) => new URL(p, ctx.origin).toString())
+    .slice(0, 8);
   const htmlDocs = await ctx.probe.getMany(htmlUrls, { maxBytes: 8192 }, 2);
   for (const [url, r] of htmlDocs) {
     if (r.status < 200 || r.status >= 300) continue;
@@ -20004,6 +20038,50 @@ const clientSideVulnlabA01AccessEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy IDOR hands-on lab (hack-this-site-eta.vercel.app/labs/idor.html) -
+const CLIENT_VULNLAB_IDOR_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "IDOR lab order lookup",
+    re: /A01-001 IDOR Scanner|Order Lookup/i
+  },
+  {
+    label: "No authorization checks on order fetch",
+    re: /No authorization checks[\s\S]{0,80}Change the order id/i
+  },
+  {
+    label: "fetch /api/orders concat id",
+    re: /fetch\(\s*["']\/api\/orders\/["']\s*\+/
+  },
+  {
+    label: "IDOR validation endpoint",
+    re: /\/api\/validate\/idor\?orderId=/i
+  },
+  {
+    label: "loadOrder helper probes sequential order id",
+    re: /function loadOrder\(\)|\/api\/orders\/"\s*\+/
+  }
+];
+
+const clientSideVulnlabIdorLabEvidence: Rule = async (ctx) => {
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_IDOR_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app|\/labs\/idor/i.test(corpus))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab IDOR lab fetches /api/orders/{id} without authorization and exposes /api/validate/idor checker"
+    }
+  };
+};
+
 // --- VulnLab Academy A02 cryptographic failures (hack-this-site-eta.vercel.app/owasp/a02.html) -
 const CLIENT_VULNLAB_A02_CRYPTO_RES: { label: string; re: RegExp }[] = [
   {
@@ -22787,6 +22865,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDamnVulnerableBankEvidence,
   clientSideVulnlabAcademyEvidence,
   clientSideVulnlabA01AccessEvidence,
+  clientSideVulnlabIdorLabEvidence,
   clientSideVulnlabA02CryptoEvidence,
   clientSideVulnlabA03InjectionEvidence,
   clientSideVulnlabA06ComponentsEvidence,

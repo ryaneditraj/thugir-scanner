@@ -8118,6 +8118,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-idor-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab IDOR hands-on lab disclosed",
+    description:
+      "VulnLab Academy /labs/idor.html fetches /api/orders/{id} without authorization checks and exposes an /api/validate/idor endpoint.",
+    impactOneline:
+      "Public IDOR training labs document unauthenticated order lookup APIs for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabIdorLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every object lookup against the authenticated user session.",
+      steps: [
+        "Reject cross-user order ID access server-side.",
+        "Remove public validation endpoints that leak exploit success signals.",
+        "Use opaque non-sequential identifiers for sensitive records."
+      ]
+    },
+    fixPrompt:
+      "Our IDOR lab fetches /api/orders/{id} without auth. Show secure object-level authorization patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-a02-crypto-evidence",
     platform: "generic",
     category: "Sensitive data exposure",
