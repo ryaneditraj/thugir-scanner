@@ -6403,7 +6403,32 @@
       "url": "http://www.net-force.nl/challenge/level207/index.php",
       "source": "Net-Force.nl challenge level 207 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level12/",
+      "source": "WebSec.fr level 12 \u2014 PHP arbitrary class instantiation / insecure deserialization challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level13/",
+      "source": "WebSec.fr level 13 \u2014 privilege enumeration / IDOR training puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/91/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 91 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/92/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 92 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level208/index.php",
+      "source": "Net-Force.nl challenge level 208 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T03:25:00.000Z"
+  "updated_at": "2026-07-20T04:05:00.000Z"
 }
