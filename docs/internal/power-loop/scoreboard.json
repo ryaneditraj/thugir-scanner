@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T22:13:32.763Z",
+  "updated_at": "2026-07-20T23:06:09.951Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1631,
-  "total_findings": 8161,
+  "total_sites_scanned": 1640,
+  "total_findings": 8204,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1345,
-  "discovery_findings": 6538,
+  "discovery_urls_added": 1350,
+  "discovery_findings": 6574,
   "improvements_shipped": 843,
-  "last_run": "2026-07-20T22:13:32.763Z",
+  "last_run": "2026-07-20T23:06:09.951Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "First-pass full recall on primary Heroku (pages_crawled=1 probes=187; no gap). secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
+      "note": "First-pass full recall on primary Heroku (pages_crawled=6 probes=265; no gap). secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,29 +52,35 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 33,
-      "focus": "Intigriti 2021-2023 archive gap-fill (1022/0922/0123/1021/0822) + queue drain (bugbountyhunter chal9-12, oss-oopssec roadmap, vwad webgoat, redtiger level8-9)",
+      "findings": 36,
+      "focus": "Intigriti 2022-2023 archive gap-fill (0622/1222/0223/0422/0222) + queue drain (cybersec-demo, ctb-pi, vuln-portal, urban-vampi, hiddeninvestigations, acuart, websec.fr, vulnbank)",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
         "https://challenge-1022.intigriti.io/",
         "https://challenge-0922.intigriti.io/",
         "https://challenge-0123.intigriti.io/",
         "https://challenge-1021.intigriti.io/",
-        "https://challenge-0822.intigriti.io/"
+        "https://challenge-0822.intigriti.io/",
+        "https://challenge-0622.intigriti.io/",
+        "https://challenge-1222.intigriti.io/",
+        "https://challenge-0223.intigriti.io/",
+        "https://challenge-0422.intigriti.io/",
+        "https://challenge-0222.intigriti.io/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 first pass (6 findings pages=1 probes=187) — no benchmark misses",
-      "koadt.github.io/oss-oopssec-store/roadmap: 6 findings (OWASP Top 10 CTF roadmap markers)",
-      "vwad.owasp.org/app/webgoat: 6 findings (OWASP VWAD WebGoat oracle metadata)",
-      "redtiger.labs.overthewire.org level9.php: 5 findings (file upload / inclusion wargame)",
-      "redtiger.labs.overthewire.org level8.php: 4 findings (UPDATE-clause SQLi wargame)",
-      "bugbountyhunter.com challenge?id=9-12: 3 findings each (XSS/CSRF/redirect lab markers)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 first pass (7 findings pages=6 probes=265) — no benchmark misses",
+      "websec.fr: 6 findings (French web security challenge platform markers)",
+      "vulnbank.org: 6 findings (intentionally vulnerable banking demo)",
+      "ctb-pi.vercel.app: 6 findings (CTF platform evidence)",
+      "urban-vampi-production.up.railway.app: 6 findings (VAmPI API security lab deploy)",
+      "cybersec-demo.vercel.app: 4 findings (OWASP demo markers)"
     ],
     "learning_gaps": [
       "secret-resend slug still absent on juice-shop primary — sensitive_data relies on vibe-unauthenticated-api-routes proxy",
-      "Intigriti 1022/0922/0123/1021/0822 archives queued at tail — pending next drain",
-      "bugbountytraining.com challenge endpoints return 404 — live labs moved or offline"
+      "Intigriti 1022/0922/0123/1021/0822 + 0622/1222/0223/0422/0222 archives queued at tail — pending drain",
+      "hiddeninvestigations.net: react2shell lab is Docker-only (shallow crawl markers only)",
+      "vuln-portal.vercel.app: low signal (2 findings) — may need authenticated routes"
     ]
   },
   "discovery_highlights": {
