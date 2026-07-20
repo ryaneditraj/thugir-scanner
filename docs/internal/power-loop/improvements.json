@@ -5171,6 +5171,30 @@
       "slug": "hts-application-79-net-force-level205-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /missions/application/79/ Login Required hub + level205 Admin Area Applet5.class; extractHackThisSiteMissionSeeds adds application/79; netForcePrioritySeeds adds level205 + Admin Area applet note; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-crypto-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level03/source.php password_hash(sha1($_POST['c'], fa1se)) + password_verify collision gate; websec.fr/level03 findings 2→3; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-extended-level-seven-patterns",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level07/source.php sanitize($injection) blacklist + SELECT id,login FROM users WHERE id= concat; CLIENT_WEBSEC_CHALLENGE_RES extended for LevelSeven+; websec.fr/level07 findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-86-net-force-206-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playlevel/86 Login Required hub + net-force level206 Superuser ownage netforcechallenge.Challenge.class applet; runner seeds playlevel/86-87 application/80-81 level206-207; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:docker-phpfox4.onrender.com",
+      "slug": "phpfox4-demo-deploy",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET docker-phpfox4.onrender.com/index.php/ returns Not Found; phpfox4.fly.dev DNS NXDOMAIN — skip until demo is redeployed"
     }
   ],
   "shipped": [
@@ -9088,6 +9112,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-application-79-net-force-level205-seeds",
       "shipped_at": "2026-07-20T01:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-crypto-challenge-evidence",
+      "shipped_at": "2026-07-20T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-extended-level-seven-patterns",
+      "shipped_at": "2026-07-20T02:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.hackthissite.org",
+      "slug": "hts-playlevel-86-net-force-206-seeds",
+      "shipped_at": "2026-07-20T02:20:00.000Z"
     }
   ]
 }

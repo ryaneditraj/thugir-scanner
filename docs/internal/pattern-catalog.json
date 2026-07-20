@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T01:09:42.253Z",
-  "total": 478,
-  "uniqueSlugs": 476,
+  "generatedAt": "2026-07-20T02:15:11.759Z",
+  "total": 479,
+  "uniqueSlugs": 477,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 460,
+    "generic": 461,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 409,
+    "deep": 410,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 34,
     "Security misconfiguration": 39,
-    "Broken authentication": 34,
+    "Broken authentication": 35,
     "Injection": 87,
     "Cross-site scripting": 58,
     "general": 18,
@@ -383,6 +383,7 @@
     "client-side-webgoat-evidence",
     "client-side-webhacking-kr-evidence",
     "client-side-websec-challenge-evidence",
+    "client-side-websec-crypto-challenge-evidence",
     "client-side-webvuln-runner-evidence",
     "client-side-webvulnsguide-cors-lab-evidence",
     "client-side-webvulnsguide-ssrf-lab-evidence",

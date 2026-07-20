@@ -2267,6 +2267,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-crypto-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr ChaChaCha hash-collision auth bypass lab disclosed",
+    description:
+      "WebSec.fr level03 ChaChaCha publishes password_hash/password_verify source with sha1 type-juggling (fa1se) — hash collision training lab.",
+    impactOneline:
+      "Public challenge source documents weak password verification that accepts sha1 collisions and PHP type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecCryptoChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host crypto collision labs offline; never use password_verify on attacker-controlled sha1 inputs in production.",
+      steps: [
+        "Move WebSec ChaChaCha-style labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Use constant-time comparison on raw secrets, not nested hash(type-juggle) chains."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr ChaChaCha lab exposes password_hash(sha1(input, fa1se)) source. Show how to retire public source disclosure and fix type-juggling in password gates.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
