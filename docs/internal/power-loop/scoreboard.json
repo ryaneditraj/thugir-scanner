@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T10:24:42.423Z",
+  "updated_at": "2026-07-20T10:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,128 +15,82 @@
       ]
     }
   },
-  "total_sites_scanned": 1528,
-  "total_findings": 7594,
-  "critical_findings": 33,
+  "total_sites_scanned": 1535,
+  "total_findings": 7629,
+  "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1288,
-  "discovery_findings": 6052,
+  "discovery_urls_added": 1293,
+  "discovery_findings": 6087,
   "improvements_shipped": 803,
-  "last_run": "2026-07-20T10:24:42.423Z",
+  "last_run": "2026-07-20T10:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 5,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
       "cold_start_signal": {
         "pass1": {
-          "findings": 1,
-          "gap": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
-          ],
-          "pages_crawled": 1
-        },
-        "pass2": {
-          "findings": 1,
-          "gap": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data"
-          ],
-          "pages_crawled": 1
-        },
-        "pass3": {
           "findings": 5,
+          "gap": ["idor", "sensitive_data"],
+          "pages_crawled": 6,
+          "probes_run": 165
+        },
+        "retry": {
+          "findings": 6,
           "pages_crawled": 1,
           "probes_run": 172
         }
       },
-      "note": "Heroku cold-start: pass1+pass2 only misconfig; final wake retry 5 findings 6/6 recall",
+      "note": "Heroku cold-start: pass1 gap=idor,sensitive_data; 12s wake retry merged to 7 findings 6/6 recall",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 54,
+      "urls_scanned": 7,
+      "findings": 35,
       "skipped_48h": [],
-      "focus": "WebSec level23-25 file-upload/RCE; HTS playlevel/96; Net-Force level212 seeds",
+      "dns_failures": ["http://testhtml5.vulnweb.com/ (unreachable)"],
+      "focus": "WebSec bonus level26-28; HTS playlevel/97; Net-Force level213 seeds",
       "validated_urls": [
-        "https://websec.fr/level23/",
-        "https://websec.fr/level24/",
-        "https://websec.fr/level25/",
-        "https://www.hackthissite.org/playlevel/96/",
-        "http://www.net-force.nl/challenge/level212/index.php"
+        "https://websec.fr/level26/",
+        "https://websec.fr/level27/",
+        "https://websec.fr/level28/",
+        "https://www.hackthissite.org/playlevel/97/",
+        "http://www.net-force.nl/challenge/level213/index.php"
       ],
       "scanned_urls": [
-        {
-          "url": "http://demo.testfire.net/",
-          "findings": 6
-        },
-        {
-          "url": "http://zero.webappsecurity.com/",
-          "findings": 5
-        },
-        {
-          "url": "https://labs.hackadvisor.io/",
-          "findings": 7
-        },
-        {
-          "url": "https://sixhackacademy.com/",
-          "findings": 3
-        },
-        {
-          "url": "https://wrongsecrets.herokuapp.com/",
-          "findings": 6
-        },
-        {
-          "url": "https://owasp-finbot-ctf.org/",
-          "findings": 5
-        },
-        {
-          "url": "https://bwapp.hakhub.net/",
-          "findings": 7
-        },
-        {
-          "url": "https://brokencrystals.com/",
-          "findings": 15
-        }
+        {"url": "https://ginandjuice.shop/", "findings": 6},
+        {"url": "https://maestro-agentic-ai-security-demo-mon.netlify.app/", "findings": 4},
+        {"url": "https://reef-mcp-registry.vercel.app/", "findings": 6},
+        {"url": "https://platform.sixhackacademy.com/", "findings": 3},
+        {"url": "https://cve-2025-55182-demo.vercel.app/", "findings": 3},
+        {"url": "https://secureby.design/", "findings": 7},
+        {"url": "https://cyberscavengerhunt.com/", "findings": 6}
       ]
     },
     "notable_findings": [
-      "juice-shop: 6/6 recall after Heroku wake retries — cold-start pass1+pass2 only misconfig (1 finding each)",
-      "discovery queue drain: 8 URLs 54 findings (brokencrystals 15, hackadvisor 7, bwapp 7)",
-      "websec.fr level23-25 + HTS playlevel/96 + net-force level212 queued at tail"
+      "juice-shop: benchmark recall 6/6 (7 findings) — pass1 gap=idor,sensitive_data before wake retry",
+      "reef-mcp-registry.vercel.app: OpenAI + Twilio secrets in client bundle + MCP supply-chain demo (6 findings)",
+      "maestro-agentic-ai-security-demo: agentic AI SQLi oracle + database URL in bundle (4 findings, 1 critical)",
+      "secureby.design: SKF labs + postMessage DOM XSS evidence (7 findings)",
+      "ginandjuice.shop: SQLi + reflected XSS + open redirect oracles (6 findings)"
     ],
     "learning_gaps": [
-      "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "juice-shop Heroku cold-start: 2 passes with only missing-security-headers before wake retry",
-      "secret-resend slug absent — sensitive_data via vibe-unauthenticated-api-routes only",
-      "websec level23-25 + HTS playlevel/96 + net-force level212 pending drain from queue tail"
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com instead",
+      "secret-resend slug still absent on juice-shop (sensitive_data via vibe-unauthenticated-api-routes)",
+      "websec level26-28 + HTS playlevel/97 + net-force level213 queued at tail — pending drain"
     ]
   },
   "discovery_highlights": {
@@ -152,7 +106,7 @@
     "juice-shop-staging.herokuapp.com": 7,
     "demo.owasp-juice.shop": 7,
     "vapi.apisec.ai": 4,
-    "ginandjuice.shop": 3,
+    "ginandjuice.shop": 6,
     "bwapp.hakhub.net": 7,
     "public-firing-range.appspot.com": 3,
     "google-gruyere.appspot.com": 3,
@@ -391,6 +345,11 @@
     "websec.fr/level17": 3,
     "www.hackthissite.org/playlevel/94": 6,
     "www.net-force.nl/challenge/level210/index.php": 4,
-    "www.hackthissite.org/playlevel/95": 6
+    "www.hackthissite.org/playlevel/95": 6,
+    "reef-mcp-registry.vercel.app": 6,
+    "maestro-agentic-ai-security-demo-mon.netlify.app": 4,
+    "secureby.design": 7,
+    "cyberscavengerhunt.com": 6,
+    "platform.sixhackacademy.com": 3
   }
 }
