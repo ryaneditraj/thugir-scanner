@@ -928,6 +928,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiJulyIrcChallengeEvidence",
   "clientSideIntigritiMaySpreadsheetFormulaEvidence",
   "clientSideIntigritiMarchEvalXssChallengeEvidence",
+  "clientSideIntigritiSeptemberSqliChallengeEvidence",
+  "clientSideIntigritiJuneSethtmlXssChallengeEvidence",
+  "clientSideIntigritiSantacloudCtfEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1480,7 +1483,7 @@ function extractAevumDemoSeeds(html: string, pageUrl: string): string[] {
 /** Intigriti monthly challenges — seed iframe src (/notes, /challenge, /challenge.php) and linked app routes. */
 function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[] {
   if (
-    !/challenge-\d{4}\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag|Test Your Race Condition!/i.test(
+    !/challenge-\d{4}\.intigriti\.io|santacloud\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag|Test Your Race Condition!/i.test(
       html
     )
   )
@@ -1547,7 +1550,45 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
   }
 
   if (/SafeNotes|secure place to create, store, and share notes/i.test(html)) {
-    for (const p of ["/home", "/login", "/report", "/create"]) {
+    for (const p of ["/home", "/login", "/report", "/create", "/view"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/August \(Defcon\) Challenge|<iframe[^>]+src=["']\/home["']/i.test(html)) {
+    for (const p of ["/home", "/create", "/report", "/view", "/login"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Video Audio Extractor|Extract audio from your video files/i.test(html)) {
+    for (const p of ["/upload", "/challenge"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/September challenge|challenge\.php/i.test(html)) {
+    try {
+      out.add(new URL("/challenge.php?showsource=1", pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (/SantaCloud CTF|santacloud\.intigriti\.io/i.test(html)) {
+    for (const p of ["/home", "/login", "/register", "/latest-flags"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {

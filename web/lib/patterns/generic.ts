@@ -4894,6 +4894,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-september-sqli-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Intigriti September SQLi challenge disclosed",
+    description:
+      "Intigriti challenge-0923.intigriti.io hosts a PHP user listing with showsource disclosure and injectable max parameter in a SELECT query.",
+    impactOneline:
+      "Public Intigriti September challenge pages document SQL injection training via challenge.php max query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiSeptemberSqliChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti SQLi challenges are intentional training — use parameterized queries and disable showsource in production.",
+      steps: [
+        "Bind max as an integer parameter instead of interpolating into SQL strings.",
+        "Remove highlight_file/showsource from public challenge deployments.",
+        "Host Intigriti SQLi labs on contest-only infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti September SQLi challenges with injectable max in SELECT. Show parameterized queries and remove showsource.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-june-sethtml-xss-challenge-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti June setHTML XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0623.intigriti.io documents modalContent.setHTML with Sanitizer bypass and alert(document.cookie) XSS capture goal.",
+    impactOneline:
+      "Public Intigriti June 2023 challenge pages document DOM XSS via setHTML welcome modal on name query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJuneSethtmlXssChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti XSS challenges are intentional training — avoid setHTML on user-controlled name parameters.",
+      steps: [
+        "Render welcome text with textContent instead of setHTML.",
+        "Treat Sanitizer as defense-in-depth only — validate and encode user input.",
+        "Host Intigriti XSS labs on contest-only infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti June setHTML XSS challenges with Sanitizer bypass on name param. Show safe modal rendering without setHTML.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-santacloud-ctf-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Intigriti SantaCloud CTF disclosed",
+    description:
+      "Intigriti santacloud.intigriti.io hosts the SantaCloud supply-chain CTF with /api/login JSON auth and INTIGRITI flag capture rules.",
+    impactOneline:
+      "Public SantaCloud CTF pages document enterprise portal auth flows and flag submission requirements for web exploitation labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiSantacloudCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SantaCloud CTF is intentional training — isolate contest infrastructure and rotate demo credentials.",
+      steps: [
+        "Gate SantaCloud challenge apps behind the contest window only.",
+        "Never reuse CTF /api/login patterns in production portals.",
+        "Rate-limit unauthenticated login attempts on public demos."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti SantaCloud CTF with /api/login JSON auth. Show secure portal authentication and contest isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
