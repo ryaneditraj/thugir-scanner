@@ -382,6 +382,43 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   }
 }
 
+const RENDER_COLD_START_RE =
+  /Render is waking up|application is starting|please wait while we|service is currently unavailable/i;
+
+/** Render free-tier cold-start can return a stub page before gunicorn serves the Flask app. */
+async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
+  let host: string;
+  try {
+    host = new URL(home.finalUrl || targetUrl).hostname;
+  } catch {
+    return home;
+  }
+  if (!/\.onrender\.com$/i.test(host)) return home;
+  let best = home;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const ready =
+      !RENDER_COLD_START_RE.test(best.body) &&
+      (best.body.length > 1500 ||
+        /WhoopsPay|type="module"[^>]+src="\/assets\/index-/i.test(best.body) ||
+        /VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body)) &&
+      (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body));
+    if (ready) break;
+    await new Promise((r) => setTimeout(r, 4000));
+    const retried = await fetchDoc(best.finalUrl || targetUrl, {
+      timeoutMs: 45000,
+      maxBytes: 600_000
+    });
+    if (
+      retried.status >= 200 &&
+      retried.status < 500 &&
+      (retried.body.length > best.body.length || RENDER_COLD_START_RE.test(best.body))
+    ) {
+      best = retried;
+    }
+  }
+  return best;
+}
+
 /** Heroku cold-start often serves Application Error HTML — retry before bundle/API probes. */
 async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise<FetchedDoc> {
   if (!isJuiceShopHost(targetUrl) && !isJuiceShopHost(home.finalUrl)) return home;
@@ -409,33 +446,67 @@ async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise
   return best;
 }
 
-async function reachTarget(target: URL, _rawInput: string): Promise<FetchedDoc> {
+async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
   const apexHost = target.hostname.replace(/^www\./i, "");
   const hadWww = target.hostname.toLowerCase().startsWith("www.");
 
   const hosts = hadWww ? [target.hostname, apexHost] : [apexHost, `www.${apexHost}`];
   // Legacy training benchmarks (demo.testfire.net, zero.webappsecurity.com) are http-only — always
   // fall back to http when https DNS/TLS fails even if the user pasted an https:// URL.
-  const protocols = ["https:", "http:"];
+  let protocols = ["https:", "http:"];
+  try {
+    const inputProto = new URL(rawInput).protocol;
+    if (inputProto === "http:" || inputProto === "https:") {
+      protocols = [inputProto, ...protocols.filter((p) => p !== inputProto)];
+    }
+  } catch {
+    /* ignore */
+  }
 
-  // Interleave so we prefer https on both hosts before dropping to http.
+  const reachScore = (doc: FetchedDoc): number => {
+    if (doc.status === 0) return -1;
+    if (doc.status >= 200 && doc.status < 300) return 1000 + Math.min(doc.body.length, 5000);
+    if (doc.status === 401 || doc.status === 403) return 500 + Math.min(doc.body.length, 2000);
+    if (doc.status === 404 && doc.body.length < 256) return 1;
+    return 50 + Math.min(doc.body.length, 1000);
+  };
+
+  // Interleave so we prefer https on both hosts before dropping to http (unless caller specified http).
   const candidates: Array<{ protocol: string; hostname: string }> = [];
   for (const protocol of protocols) {
     for (const hostname of hosts) candidates.push({ protocol, hostname });
   }
 
-  let last: FetchedDoc | null = null;
+  let best: FetchedDoc | null = null;
+  let bestScore = -1;
   for (let i = 0; i < candidates.length; i++) {
     const c = candidates[i];
-    target.protocol = c.protocol;
-    target.hostname = c.hostname;
-    // Give the primary attempt the full timeout; keep fallbacks short so the total stays well
-    // under the function's 60s budget even if several variants hang.
-    const doc = await fetchDoc(target.toString(), { timeoutMs: i === 0 ? 15000 : 7000 });
-    if (doc.status !== 0) return doc;
-    last = doc;
+    const candidateUrl = new URL(target.toString());
+    candidateUrl.protocol = c.protocol;
+    candidateUrl.hostname = c.hostname;
+    const doc = await fetchDoc(candidateUrl.toString(), { timeoutMs: i === 0 ? 15000 : 7000 });
+    if (doc.status === 0) continue;
+    const score = reachScore(doc);
+    if (score > bestScore) {
+      best = doc;
+      bestScore = score;
+      target.protocol = c.protocol;
+      target.hostname = c.hostname;
+    }
+    if (score >= 1000) return doc;
   }
-  return last as FetchedDoc;
+  if (best) return best;
+  return {
+    url: target.toString(),
+    finalUrl: target.toString(),
+    status: 0,
+    ok: false,
+    headers: {},
+    setCookies: [],
+    body: "",
+    truncated: false,
+    error: "no response"
+  };
 }
 
 function reachFailureMessage(target: URL, reason?: string): string {
@@ -685,6 +756,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePrototypePollutionEvidence",
   "clientSideJwtNoneEvidence",
   "clientSideOwaspEducationalLabEvidence",
+  "clientSideOwaspEducationalLabStubEvidence",
+  "clientSideOwaspTop10IntroHubEvidence",
   "serverSideEvalEvidence",
   "clientSidePromptInjectionEvidence",
   "pentestForgeLinkedLabProbe",
@@ -727,6 +800,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideDomGoatLabEvidence",
   "domgoReferrerDomXssEvidence",
   "domgoHashDomXssEvidence",
+  "domgoUnescapeHashDomXssEvidence",
   "domgoHashSanitizationBypassDomXssEvidence",
   "domgoWindowNameDomXssEvidence",
   "domgoPostMessageDomXssEvidence",
@@ -745,10 +819,30 @@ const DEEP_RULES = new Set<string>([
   "clientSideInvictiPracticeSiteEvidence",
   "clientSideGinAndJuiceScannerLabEvidence",
   "clientSideWebsecChallengeEvidence",
+  "clientSideWebsecCryptoChallengeEvidence",
+  "clientSideWebsecFileUploadChallengeEvidence",
+  "clientSideWebsecMagicHashChallengeEvidence",
+  "clientSideWebsecBlacklistSqliChallengeEvidence",
+  "clientSideWebsecClassInstantiationChallengeEvidence",
+  "clientSideWebsecSqliPrivilegeChallengeEvidence",
+  "clientSideWebsecRestrictedPhpExecChallengeEvidence",
+  "clientSideWebsecCreateFunctionChallengeEvidence",
+  "clientSideWebsecFibonacciEvalChallengeEvidence",
+  "clientSideWebsecTimingAttackChallengeEvidence",
+  "clientSideWebsecPhpUnserializeCookieChallengeEvidence",
+  "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
+  "clientSideWebsecPhpAesSessionChallengeEvidence",
+  "clientSideWebsecOopRestrictedEvalChallengeEvidence",
+  "clientSideWebsecShellExecChallengeEvidence",
+  "clientSideWebsecAspectInstrumentationChallengeEvidence",
+  "clientSideWebsecUploadIncludeChallengeEvidence",
+  "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
+  "clientSideWebsecOpenBasedirEvalChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
   "clientSidePentesterlabWebForPentesterEvidence",
+  "clientSidePentesterlabWebForPentesterIiEvidence",
   "clientSidePentesterlabSqliExerciseEvidence",
   "clientSidePentesterlabSqli02ExerciseEvidence",
   "clientSidePentesterlabSqli03ExerciseEvidence",
@@ -771,6 +865,35 @@ const DEEP_RULES = new Set<string>([
   "clientSidePentesterlabAutho06ExerciseEvidence",
   "clientSidePentesterlabXss02ExerciseEvidence",
   "clientSidePentesterlabXss03ExerciseEvidence",
+  "clientSidePentesterlabXss04ExerciseEvidence",
+  "clientSidePentesterlabXss05ExerciseEvidence",
+  "clientSidePentesterlabApi01ExerciseEvidence",
+  "clientSidePentesterlabApi02ExerciseEvidence",
+  "clientSidePentesterlabApi03ExerciseEvidence",
+  "clientSidePentesterlabApi04ExerciseEvidence",
+  "clientSidePentesterlabApi05ExerciseEvidence",
+  "clientSidePentesterlabApi06ExerciseEvidence",
+  "clientSidePentesterlabApi07ExerciseEvidence",
+  "clientSidePentesterlabApi08ExerciseEvidence",
+  "clientSidePentesterlabApi09ExerciseEvidence",
+  "clientSidePentesterlabApi10ExerciseEvidence",
+  "clientSidePentesterlabApi11ExerciseEvidence",
+  "clientSidePentesterlabApi12ExerciseEvidence",
+  "clientSidePentesterlabApi13ExerciseEvidence",
+  "clientSidePentesterlabApi14ExerciseEvidence",
+  "clientSidePentesterlabApi15ExerciseEvidence",
+  "clientSidePentesterlabApi16ExerciseEvidence",
+  "clientSidePentesterlabApi17ExerciseEvidence",
+  "clientSidePentesterlabApi18ExerciseEvidence",
+  "clientSidePentesterlabApi19ExerciseEvidence",
+  "clientSidePentesterlabApi20ExerciseEvidence",
+  "clientSidePentesterlabCorsIiExerciseEvidence",
+  "clientSidePentesterlabGraphqlFundamentalsExerciseEvidence",
+  "clientSidePentesterlabXss06ExerciseEvidence",
+  "clientSidePentesterlabXss07ExerciseEvidence",
+  "clientSidePentesterlabXss08ExerciseEvidence",
+  "clientSidePentesterlabXss09ExerciseEvidence",
+  "clientSidePentesterlabXss10ExerciseEvidence",
   "clientSidePentesterlabXssMysqlExerciseEvidence",
   "clientSideOverthewireNatasRefererEvidence",
   "clientSideKontraApplicationSecurityEvidence",
@@ -786,6 +909,8 @@ const DEEP_RULES = new Set<string>([
   "htsYuppersSearchSqliProbe",
   "clientSideVulnExposeEvidence",
   "clientSideVulnExposeLabModuleEvidence",
+  "clientSideDragSecurityFlawsEvidence",
+  "clientSideDragSecurityFlawsLabModuleEvidence",
   "clientSideWizerCtfEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -817,6 +942,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSectrainerEvidence",
   "clientSideHackAdvisorLabEvidence",
   "clientSideAgenticAiCtfEvidence",
+  "clientSideVulnerableChatbotDemoEvidence",
   "clientSideWrongSecretsEvidence",
   "clientSideWrongSecretsChallengeEvidence",
   "clientSideMaestroAgenticAiEvidence",
@@ -832,6 +958,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideBlueTeamLabsEvidence",
   "clientSideJuiceShopProjectEvidence",
   "clientSideJuicesecLabEvidence",
+  "clientSideJavaSecLabEvidence",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
   "clientSideMutillidaeEvidence",
@@ -854,6 +981,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
+  "clientSideVoidsecShoppingCartEvidence",
+  "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
   "clientSideOpenRedirectEvidence",
@@ -894,6 +1023,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabA09LoggingEvidence",
   "clientSideVulnlabVerbose404Evidence",
   "clientSideVulnlabA10SsrfEvidence",
+  "clientSideVulnlabApiLabsEvidence",
   "clientSideVulnerableWebSiteEvidence",
   "clientSideNivaraSecurityEvidence",
   "clientSideEksGoatEvidence",
@@ -919,15 +1049,19 @@ const DEEP_RULES = new Set<string>([
   "clientSideOwaspVwadEvidence",
   "clientSideVwadAppNotFoundEvidence",
   "clientSideVwadWackopickoEvidence",
+  "clientSideVwadGinJuiceEvidence",
+  "clientSideVwadPixiEvidence",
   "clientSideVwadBodgeitEvidence",
   "clientSideVwadSecurityShepherdEvidence",
   "clientSideVwadMutillidaeEvidence",
   "clientSideVwadNodegoatEvidence",
+  "clientSideVwadMcpServersLabEvidence",
   "clientSideVwadVulnerableappEvidence",
   "clientSideVulnerableappDomXssEvidence",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
+  "clientSideAiPromptLabEvidence",
   "clientSideSecuredAiLabEvidence",
   "clientSideGitagentSecurebotEvidence",
   "clientSideAirtAcademyEvidence",
@@ -963,7 +1097,11 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
   "clientSideHacksplainingXmlBombLessonEvidence",
+  "clientSideHacksplainingPrototypePollutionLessonEvidence",
   "clientSideHacksplainingSubdomainSquattingLessonEvidence",
+  "clientSideHacksplainingToxicDependenciesLessonEvidence",
+  "clientSideHacksplainingUnencryptedCommunicationLessonEvidence",
+  "clientSideHacksplainingXssiLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
   "clientSideUnsecurePwaEvidence",
@@ -1000,6 +1138,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
   "clientSideAikidoZenDemoEvidence",
+  "clientSideAevumAgentConsentDemoEvidence",
   "clientSideAttpAgentTrustEvidence",
   "clientSideBugzapPromptDefenseEvidence",
   "clientSideRedlockxPromptFirewallEvidence",
@@ -1082,7 +1221,7 @@ function extractDocusaurusLabLinks(html: string, pageUrl: string): string[] {
     try {
       const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
-      if (DOCUSAURUS_LAB_SKIP.test(u.pathname)) continue;
+      if (DOCUSAURUS_LAB_SKIP.test(u.pathname) && !/owasp-top-10-labs/i.test(pageUrl)) continue;
       u.hash = "";
       out.add(u.toString());
     } catch {
@@ -1175,7 +1314,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 11; n++) {
+  for (let n = 1; n <= 85; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1188,8 +1327,147 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/10",
     "/cxss/example/1",
     "/cxss/example/2",
-    "/cxss/example/3"
+    "/cxss/example/3",
+    "/cxss/example/12",
+    "/cxss/example/13",
+    "/cxss/example/14",
+    "/cxss/example/15",
+    "/cxss/example/16",
+    "/cxss/example/17",
+    "/cxss/example/18",
+    "/cxss/example/19",
+    "/cxss/example/20",
+    "/cxss/example/21",
+    "/cxss/example/22",
+    "/cxss/example/23",
+    "/cxss/example/24",
+    "/cxss/example/25",
+    "/cxss/example/26",
+    "/cxss/example/27",
+    "/cxss/example/28",
+    "/cxss/example/29",
+    "/cxss/example/30",
+    "/cxss/example/31",
+    "/cxss/example/32",
+    "/cxss/example/33",
+    "/cxss/example/34",
+    "/cxss/example/35",
+    "/cxss/example/36",
+    "/cxss/example/37",
+    "/cxss/example/38",
+    "/cxss/example/39",
+    "/cxss/example/40",
+    "/cxss/example/41",
+    "/cxss/example/42",
+    "/cxss/example/43",
+    "/cxss/example/44",
+    "/cxss/example/45",
+    "/cxss/example/46",
+    "/cxss/example/47",
+    "/cxss/example/48",
+    "/cxss/example/49",
+    "/cxss/example/50",
+    "/cxss/example/51",
+    "/cxss/example/52",
+    "/cxss/example/53",
+    "/cxss/example/54",
+    "/cxss/example/55",
+    "/cxss/example/56",
+    "/cxss/example/57",
+    "/cxss/example/58",
+    "/cxss/example/59",
+    "/cxss/example/60",
+    "/cxss/example/61",
+    "/cxss/example/62",
+    "/cxss/example/63",
+    "/cxss/example/64",
+    "/cxss/example/65",
+    "/cxss/example/66",
+    "/cxss/example/67",
+    "/cxss/example/68",
+    "/cxss/example/69",
+    "/cxss/example/70",
+    "/cxss/example/71",
+    "/cxss/example/72",
+    "/cxss/example/73",
+    "/cxss/example/74",
+    "/cxss/example/75",
+    "/cxss/example/76",
+    "/cxss/example/77",
+    "/cxss/example/78",
+    "/cxss/example/79",
+    "/cxss/example/80",
+    "/cxss/example/81",
+    "/cxss/example/82",
+    "/cxss/example/83",
+    "/cxss/example/84",
+    "/cxss/example/85"
   ]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Aikido Zen demo (zen-demo-*.fly.dev) — SQLi/SSRF lab pages linked from homepage nav. */
+const ZEN_DEMO_LAB_LINK_RE = /href\s*=\s*["'](\/pages\/[^"']+)["']/gi;
+
+function extractZenDemoLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(pageUrl)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  let m: RegExpExecArray | null;
+  while ((m = ZEN_DEMO_LAB_LINK_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Aevum consent-ledger demo (demo.aevum.build) — FastAPI sandbox/consent + sigchain API. */
+function extractAevumDemoSeeds(html: string, pageUrl: string): string[] {
+  if (!/demo\.aevum\.build|governed context kernel|Black Box for AI Agents/i.test(`${html}\n${pageUrl}`))
+    return [];
+  const out = new Set<string>();
+  for (const path of ["/openapi.json", "/docs", "/redoc"]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VulnApp Flask practice app (web-security-practice-app.onrender.com) — lab routes behind nav. */
+function extractFlaskVulnappSeeds(html: string, pageUrl: string): string[] {
+  if (!/VulnApp|web-security-practice-app|n00by3te\/web-security-practice-app/i.test(html))
+    return [];
+  const out = new Set<string>();
+  for (const path of ["/comments", "/login", "/register"]) {
+    try {
+      out.add(new URL(path, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** JavaSecLab (whgojp/JavaSecLab) — public demo exposes Druid monitor and vulnerability labs. */
+function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
+  if (!/JavaSecLab|JavaSeclab|whgojp\/JavaSecLab|综合型Java漏洞平台/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const path of ["/druid/index.html", "/druid/basic.json", "/druid/sql.json", "/login"]) {
     try {
       out.add(new URL(path, pageUrl).toString());
     } catch {
@@ -1261,6 +1539,8 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     try {
       out.add(new URL(`/${m[1]}/`, origin).toString());
       out.add(new URL(`/${m[1]}/source.php`, origin).toString());
+      out.add(new URL(`/${m[1]}/source1.php`, origin).toString());
+      out.add(new URL(`/${m[1]}/source2.php`, origin).toString());
     } catch {
       /* ignore */
     }
@@ -1271,11 +1551,14 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     /websec challenges/i.test(html) ||
     /web security challenges from the people of websec/i.test(html)
   ) {
-    for (let n = 1; n <= 12; n++) {
+    for (let n = 1; n <= 31; n++) {
+      if (n === 19) continue;
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
         out.add(new URL(`/${slug}/`, origin).toString());
         out.add(new URL(`/${slug}/source.php`, origin).toString());
+        out.add(new URL(`/${slug}/source1.php`, origin).toString());
+        out.add(new URL(`/${slug}/source2.php`, origin).toString());
       } catch {
         /* ignore */
       }
@@ -1312,6 +1595,16 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/xss-02",
     "/exercises/xss_03",
     "/exercises/xss-03",
+    "/exercises/xss_04",
+    "/exercises/xss-04",
+    "/exercises/xss_05",
+    "/exercises/xss-05",
+    "/exercises/api_01",
+    "/exercises/api-01",
+    "/exercises/api_02",
+    "/exercises/api-02",
+    "/exercises/api_03",
+    "/exercises/api-03",
     "/exercises/autho_03",
     "/exercises/autho-03",
     "/exercises/sqli_04",
@@ -1336,6 +1629,48 @@ function extractPentesterLabExerciseSeeds(html: string, origin: string): string[
     "/exercises/autho-05",
     "/exercises/autho_06",
     "/exercises/autho-06",
+    "/exercises/api_04",
+    "/exercises/api-04",
+    "/exercises/api_05",
+    "/exercises/api-05",
+    "/exercises/api_06",
+    "/exercises/api-06",
+    "/exercises/api_07",
+    "/exercises/api-07",
+    "/exercises/xss_06",
+    "/exercises/xss-06",
+    "/exercises/xss_07",
+    "/exercises/xss-07",
+    "/exercises/xss_08",
+    "/exercises/xss-08",
+    "/exercises/xss_09",
+    "/exercises/xss-09",
+    "/exercises/api_10",
+    "/exercises/api-10",
+    "/exercises/api_11",
+    "/exercises/api-11",
+    "/exercises/xss_10",
+    "/exercises/xss-10",
+    "/exercises/api_12",
+    "/exercises/api-12",
+    "/exercises/api_13",
+    "/exercises/api-13",
+    "/exercises/api_14",
+    "/exercises/api-14",
+    "/exercises/api_15",
+    "/exercises/api-15",
+    "/exercises/api_16",
+    "/exercises/api-16",
+    "/exercises/api_17",
+    "/exercises/api-17",
+    "/exercises/api_18",
+    "/exercises/api-18",
+    "/exercises/api_19",
+    "/exercises/api-19",
+    "/exercises/api_20",
+    "/exercises/api-20",
+    "/exercises/cors-ii",
+    "/exercises/cors_ii",
     "/exercises/web-fundamentals-cors",
     "/exercises/web-fundamentals-graphql",
     "/exercises/web-fundamentals-sessions",
@@ -1584,9 +1919,102 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/41/",
     "/playlevel/42/",
     "/playlevel/43/",
+    "/playlevel/44/",
+    "/playlevel/45/",
+    "/playlevel/46/",
+    "/playlevel/49/",
+    "/playlevel/50/",
+    "/playlevel/51/",
+    "/playlevel/52/",
+    "/playlevel/53/",
+    "/playlevel/54/",
+    "/playlevel/55/",
+    "/playlevel/56/",
+    "/playlevel/57/",
+    "/playlevel/59/",
+    "/playlevel/60/",
+    "/playlevel/61/",
+    "/playlevel/63/",
+    "/playlevel/64/",
+    "/playlevel/65/",
+    "/playlevel/66/",
+    "/playlevel/67/",
+    "/playlevel/68/",
+    "/playlevel/69/",
+    "/playlevel/70/",
+    "/playlevel/71/",
+    "/playlevel/72/",
+    "/playlevel/73/",
+    "/playlevel/74/",
+    "/playlevel/75/",
+    "/playlevel/76/",
+    "/playlevel/77/",
+    "/playlevel/78/",
+    "/playlevel/79/",
+    "/playlevel/80/",
+    "/playlevel/81/",
+    "/playlevel/82/",
+    "/playlevel/83/",
+    "/playlevel/84/",
+    "/playlevel/85/",
+    "/playlevel/86/",
+    "/playlevel/87/",
+    "/playlevel/88/",
+    "/playlevel/89/",
+    "/playlevel/90/",
+    "/playlevel/91/",
+    "/playlevel/92/",
+    "/playlevel/93/",
+    "/playlevel/94/",
+    "/playlevel/95/",
+    "/playlevel/96/",
+    "/playlevel/97/",
+    "/playlevel/98/",
+    "/missions/application/72/",
+    "/missions/application/73/",
+    "/missions/application/74/",
+    "/missions/application/75/",
+    "/missions/application/76/",
+    "/missions/application/77/",
+    "/missions/application/78/",
+    "/missions/application/79/",
+    "/missions/application/80/",
+    "/missions/application/81/",
+    "/missions/application/82/",
+    "/missions/application/83/",
+    "/missions/application/84/",
+    "/missions/application/85/",
+    "/missions/application/86/",
+    "/missions/application/87/",
+    "/missions/application/88/",
+    "/missions/application/89/",
+    "/missions/application/66/",
+    "/missions/application/63/",
+    "/missions/application/64/",
+    "/missions/application/65/",
+    "/missions/application/67/",
+    "/missions/application/68/",
+    "/missions/application/70/",
+    "/missions/application/71/",
+    "/missions/application/55/",
+    "/missions/application/56/",
+    "/missions/application/57/",
+    "/missions/application/58/",
+    "/missions/application/59/",
+    "/missions/application/61/",
+    "/missions/application/62/",
     "/missions/application/40/",
     "/missions/application/41/",
     "/missions/application/42/",
+    "/missions/application/43/",
+    "/missions/application/44/",
+    "/missions/application/45/",
+    "/missions/application/48/",
+    "/missions/application/49/",
+    "/missions/application/50/",
+    "/missions/application/51/",
+    "/missions/application/52/",
+    "/missions/application/53/",
     "/missions/javascript/9/",
     "/missions/javascript/10/",
     "/missions/javascript/11/",
@@ -2687,6 +3115,15 @@ function extractHacksplainingLessonSeeds(html: string, pageUrl: string): string[
     "/lessons/xml-bombs/start",
     "/lessons/subdomain-squatting/start",
     "/lessons/toxic-dependencies/start",
+    "/lessons/toxic-dependencies/dependency-management",
+    "/lessons/toxic-dependencies/third-party-code",
+    "/lessons/toxic-dependencies/libraries-as-a-target",
+    "/lessons/toxic-dependencies/log4j",
+    "/lessons/toxic-dependencies/the-log4j-vulnerability",
+    "/lessons/toxic-dependencies/supply-chain-attacks",
+    "/lessons/toxic-dependencies/heartbleed",
+    "/lessons/toxic-dependencies/xcodeghost",
+    "/lessons/toxic-dependencies/finish",
     "/lessons/unencrypted-communication/start",
     "/lessons/xssi/start",
     "/lessons/dns-poisoning/start",
@@ -3182,6 +3619,10 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
   for (const p of [
     "/home/",
     "/owasp/",
+    "/api-labs/",
+    "/api-labs/rest.html",
+    "/api-labs/graphql.html",
+    "/api-labs/soap.html",
     "/labs/xss-reflected.html",
     "/labs/sqli-error.html",
     "/labs/idor.html",
@@ -3500,6 +3941,32 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
 }
 
 /** VulnSite (vuln-expose.vercel.app) — seed explicit SQLi/XSS/IDOR/CMDi lab routes from homepage. */
+/** drag-security-flaws — Remix vulnerability education hub with /security/* module pages. */
+function extractDragSecurityFlawsSeeds(html: string, pageUrl: string): string[] {
+  if (!/drag-security-flaws\.vercel\.app|Web Security Vulnerabilities|security flaws and learn how to protect/i.test(html))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/security/xss",
+    "/security/csrf",
+    "/security/idor",
+    "/security/sqlInjection",
+    "/security/ssrf",
+    "/security/clickjacking",
+    "/security/injection"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnSite|vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(html)) return [];
   const out = new Set<string>();
@@ -3836,6 +4303,29 @@ function extractVwadWrongsecretsLiveSeed(html: string, pageUrl: string): string[
   if (urlMatch?.[0]) {
     try {
       out.add(new URL(urlMatch[0]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** VWAD Gin & Juice Shop listing links PortSwigger scanner evaluation lab at ginandjuice.shop. */
+function extractVwadGinJuiceLiveSeed(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org\/app\/gin-juice-shop|Gin\s*&\s*Juice Shop/i.test(html)) return [];
+  const out = new Set<string>();
+  const jsonLdUrl = html.match(/"url"\s*:\s*"(https:\/\/ginandjuice\.shop\/+)"/i);
+  if (jsonLdUrl?.[1]) {
+    try {
+      out.add(new URL(jsonLdUrl[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const hrefMatch = html.match(/https?:\/\/ginandjuice\.shop\/?/i);
+  if (hrefMatch?.[0]) {
+    try {
+      out.add(new URL(hrefMatch[0]).toString());
     } catch {
       /* ignore */
     }
@@ -5161,6 +5651,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const redirected = await fetchDoc(stubRedirect, { timeoutMs: 12000, maxBytes: 600_000 });
     if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
   }
+  home = await warmupRenderHost(target.toString(), home);
   home = await warmupJuiceShopHome(target.toString(), home);
   const origin = target.origin;
   const crawlOrigin = new URL(home.finalUrl).origin;
@@ -5199,6 +5690,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const jekyllSecurityDocSeeds = extractJekyllSecurityDocLinks(home.body, home.finalUrl);
   const jekyllBlogPostSeeds = extractJekyllBlogPostSeeds(home.body, home.finalUrl);
   const domGoatCxssSeeds = extractDomGoatCxssSeeds(home.body, home.finalUrl);
+  const flaskVulnappSeeds = extractFlaskVulnappSeeds(home.body, home.finalUrl);
+  const javaSecLabSeeds = extractJavaSecLabSeeds(home.body, home.finalUrl);
   const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
@@ -5235,6 +5728,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const redTigerSeeds = extractRedTigerHackitSeeds(home.body, origin);
   const wizerCtfSeeds = extractWizerCtfSeeds(home.body, home.finalUrl);
   const vulnExposeSeeds = extractVulnExposeSeeds(home.body, home.finalUrl);
+  const dragSecurityFlawsSeeds = extractDragSecurityFlawsSeeds(home.body, home.finalUrl);
   const vulnPortalAuthSeeds = extractVulnPortalAuthSeeds(home.body, home.finalUrl);
   const picoctfCylabSeeds = extractPicoctfCylabSeeds(home.body, home.finalUrl);
   const bugBountyHunterSeeds = extractBugBountyHunterChallengeSeeds(home.body, home.finalUrl);
@@ -5262,6 +5756,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
+  const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -5394,6 +5889,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "/cookiejar-lab/cookiejar-lab/docs/security-notes.html"
         ].map((p) => new URL(p, home.finalUrl).toString())
       : [];
+  const hacksplainingToxicDependenciesPrioritySeeds =
+    /hacksplaining\.com\/lessons\/toxic-dependencies/i.test(home.finalUrl)
+      ? [
+          "/lessons/toxic-dependencies/dependency-management",
+          "/lessons/toxic-dependencies/third-party-code",
+          "/lessons/toxic-dependencies/libraries-as-a-target",
+          "/lessons/toxic-dependencies/log4j",
+          "/lessons/toxic-dependencies/the-log4j-vulnerability",
+          "/lessons/toxic-dependencies/supply-chain-attacks",
+          "/lessons/toxic-dependencies/heartbleed",
+          "/lessons/toxic-dependencies/xcodeghost",
+          "/lessons/toxic-dependencies/finish"
+        ].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
   const ginAndJuicePrioritySeeds =
     /ginandjuice\.shop|Gin & Juice Shop|vulnerability scanner to the test/i.test(home.body) ||
     /ginandjuice\.shop/i.test(home.finalUrl)
@@ -5433,9 +5942,153 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level408/index.php",
         "http://www.net-force.nl/challenge/level409/index.php",
         "http://www.net-force.nl/challenge/level410/index.php",
-        "http://www.net-force.nl/challenge/level411/index.php"
+        "http://www.net-force.nl/challenge/level411/index.php",
+        "http://www.net-force.nl/challenge/level412/index.php",
+        "http://www.net-force.nl/challenge/level413/index.php",
+        "http://www.net-force.nl/challenge/level414/index.php",
+        "http://www.net-force.nl/challenge/level415/index.php",
+        "http://www.net-force.nl/challenge/level416/index.php",
+        "http://www.net-force.nl/challenge/level417/index.php",
+        "http://www.net-force.nl/challenge/level418/index.php",
+        "http://www.net-force.nl/challenge/level419/index.php",
+        "http://www.net-force.nl/challenge/level420/index.php",
+        "http://www.net-force.nl/challenge/level421/index.php",
+        "http://www.net-force.nl/challenge/level422/index.php",
+        "http://www.net-force.nl/challenge/level423/index.php",
+        "http://www.net-force.nl/challenge/level424/index.php",
+        "http://www.net-force.nl/challenge/level425/index.php",
+        "http://www.net-force.nl/challenge/level426/index.php",
+        "http://www.net-force.nl/challenge/level427/index.php",
+        "http://www.net-force.nl/challenge/level428/index.php",
+        "http://www.net-force.nl/challenge/level429/index.php",
+        "http://www.net-force.nl/challenge/level430/index.php",
+        "http://www.net-force.nl/challenge/level431/index.php",
+        "http://www.net-force.nl/challenge/level432/index.php",
+        "http://www.net-force.nl/challenge/level433/index.php",
+        "http://www.net-force.nl/challenge/level434/index.php",
+        "http://www.net-force.nl/challenge/level435/index.php",
+        "http://www.net-force.nl/challenge/level436/index.php",
+        "http://www.net-force.nl/challenge/level437/index.php",
+        "http://www.net-force.nl/challenge/level201/index.php",
+        "http://www.net-force.nl/challenge/level202/index.php",
+        "http://www.net-force.nl/challenge/level203/index.php",
+        "http://www.net-force.nl/challenge/level204/index.php",
+        "http://www.net-force.nl/challenge/level205/index.php",
+        "http://www.net-force.nl/challenge/level206/index.php",
+        "http://www.net-force.nl/challenge/level207/index.php",
+        "http://www.net-force.nl/challenge/level208/index.php",
+        "http://www.net-force.nl/challenge/level209/index.php",
+        "http://www.net-force.nl/challenge/level210/index.php",
+        "http://www.net-force.nl/challenge/level211/index.php",
+        "http://www.net-force.nl/challenge/level212/index.php",
+        "http://www.net-force.nl/challenge/level213/index.php",
+        "http://www.net-force.nl/challenge/level214/index.php"
       ]
     : [];
+  const websecBonusLevelSeeds = /websec\.fr/i.test(home.finalUrl)
+    ? [
+        "https://websec.fr/level26/",
+        "https://websec.fr/level26/source.php",
+        "https://websec.fr/level27/",
+        "https://websec.fr/level27/source.php",
+        "https://websec.fr/level27/source2.php",
+        "https://websec.fr/level28/",
+        "https://websec.fr/level28/source.php",
+        "https://websec.fr/level30/",
+        "https://websec.fr/level30/source.php",
+        "https://websec.fr/level31/",
+        "https://websec.fr/level31/source.php"
+      ]
+    : [];
+  const websecLevelPrioritySeeds = (() => {
+    const m = /websec\.fr\/(level\d+)\/?/i.exec(home.finalUrl);
+    if (!m) return [] as string[];
+    const slug = m[1];
+    try {
+      return [
+        new URL(`/${slug}/source.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/`, home.finalUrl).toString()
+      ];
+    } catch {
+      return [] as string[];
+    }
+  })();
+  const owaspTop10LabsPrioritySeeds = /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/?$/i.test(
+    home.finalUrl
+  )
+    ? [
+        new URL("labs/intro", home.finalUrl).toString(),
+        new URL("labs/security-misconfiguration", home.finalUrl).toString(),
+        new URL("labs/logging-monitoring-failures", home.finalUrl).toString(),
+        new URL("labs/vulnerable-outdated-components", home.finalUrl).toString(),
+        new URL("labs/software-data-integrity-failures", home.finalUrl).toString(),
+        new URL("labs/insecure-design", home.finalUrl).toString(),
+        new URL("labs/identification-authentication-failures", home.finalUrl).toString()
+      ]
+    : /mehdiaitsaid\.github\.io\/owasp-top-10-labs/i.test(home.finalUrl)
+      ? [
+          new URL("labs/injection/sql-injection", home.finalUrl).toString(),
+          new URL("labs/injection/xss", home.finalUrl).toString(),
+          new URL("labs/broken-access-control", home.finalUrl).toString(),
+          new URL("labs/cryptographic-failures", home.finalUrl).toString()
+        ]
+      : [];
+  const owaspTop10IntroHubPrioritySeeds =
+    /mehdiaitsaid\.github\.io\/owasp-top-10-labs\/labs\/intro/i.test(home.finalUrl)
+      ? [
+          new URL("labs/security-misconfiguration", home.finalUrl).toString(),
+          new URL("labs/logging-monitoring-failures", home.finalUrl).toString(),
+          new URL("labs/vulnerable-outdated-components", home.finalUrl).toString(),
+          new URL("labs/software-data-integrity-failures", home.finalUrl).toString(),
+          new URL("labs/insecure-design", home.finalUrl).toString(),
+          new URL("labs/identification-authentication-failures", home.finalUrl).toString()
+        ]
+      : [];
+  const domgoCxssIntroPrioritySeeds = /domgo\.at\/cxss\/intro/i.test(home.finalUrl)
+    ? [
+        new URL("/cxss/sources/somevalue?param1=paramvalue#hashvalue", home.finalUrl).toString(),
+        new URL("/cxss/sinks", home.finalUrl).toString()
+      ]
+    : [];
+  const domgoCxssTailPrioritySeeds = (() => {
+    const exampleM = /domgo\.at\/cxss\/example\/(\d+)\/?$/i.exec(home.finalUrl);
+    let nextStart = 61;
+    if (exampleM) {
+      const n = Number.parseInt(exampleM[1], 10);
+      if (!Number.isFinite(n) || n < 55) return [] as string[];
+      nextStart = Math.floor(n / 5) * 5 + 6;
+    } else if (!/domgo\.at\/cxss\/(?:intro|example)\/?$/i.test(home.finalUrl)) {
+      return [] as string[];
+    }
+    return Array.from({ length: 5 }, (_, i) =>
+      new URL(`/cxss/example/${nextStart + i}`, home.finalUrl).toString()
+    );
+  })();
+  const zenDemoLabNavSeeds = extractZenDemoLabSeeds(home.body, home.finalUrl);
+  const aevumDemoSeeds = extractAevumDemoSeeds(home.body, home.finalUrl);
+  const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)
+    ? [
+        new URL("/pages/create", home.finalUrl).toString(),
+        new URL("/pages/request", home.finalUrl).toString()
+      ]
+    : [];
+  const domgoCxssProgressiveTailSeeds = (() => {
+    const m = /domgo\.at\/cxss\/example\/(\d+)\/?$/i.exec(home.finalUrl);
+    if (!m) return [] as string[];
+    const current = Number.parseInt(m[1], 10);
+    if (!Number.isFinite(current) || current < 1) return [];
+    const out: string[] = [];
+    for (let offset = 1; offset <= 5; offset++) {
+      const next = current + offset;
+      if (next > 200) break;
+      try {
+        out.push(new URL(`/cxss/example/${next}`, home.finalUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+    return out;
+  })();
   const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
     ? [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
@@ -5496,6 +6149,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/auth/session.html", home.finalUrl).toString(),
           new URL("/auth/reset.html", home.finalUrl).toString(),
           new URL("/api-labs/", home.finalUrl).toString(),
+          new URL("/api-labs/rest.html", home.finalUrl).toString(),
+          new URL("/api-labs/graphql.html", home.finalUrl).toString(),
+          new URL("/api-labs/soap.html", home.finalUrl).toString(),
           new URL("/owasp/a01.html", home.finalUrl).toString(),
           new URL("/owasp/a02.html", home.finalUrl).toString(),
           new URL("/owasp/a03.html", home.finalUrl).toString(),
@@ -5523,6 +6179,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
       ? ["https://wrongsecrets.herokuapp.com/"]
       : [];
+  const vwadGinJuicePrioritySeeds =
+    /vwad\.owasp\.org\/app\/gin-juice-shop/i.test(home.finalUrl)
+      ? ["https://ginandjuice.shop/"]
+      : [];
   const vwadScannerBenchPrioritySeeds =
     /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store|owasp-vulnerableapp)/i.test(home.finalUrl)
       ? [
@@ -5533,20 +6193,43 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "https://sasanlabs.github.io/VulnerableApp/Why_VulnerableApp.html"
         ]
       : [];
+  const hackAdvisorPrioritySeeds = /labs\.hackadvisor\.io/i.test(home.finalUrl)
+    ? ["/challenges", "/en/challenges"].map((p) => new URL(p, home.finalUrl).toString())
+    : [];
+  const cyberDefendersPrioritySeeds = /cyberdefenders\.org/i.test(home.finalUrl)
+    ? ["/labs", "/blueteam-ctf-challenges", "/blueteam-ctf-challenges/"].map((p) =>
+        new URL(p, home.finalUrl).toString()
+      )
+    : [];
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...hackAdvisorPrioritySeeds,
+      ...cyberDefendersPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
+      ...vwadGinJuicePrioritySeeds,
+      ...vwadGinJuiceLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
+      ...owaspTop10LabsPrioritySeeds,
+      ...owaspTop10IntroHubPrioritySeeds,
+      ...domgoCxssIntroPrioritySeeds,
+      ...domgoCxssTailPrioritySeeds,
+      ...domgoCxssProgressiveTailSeeds,
+      ...zenDemoLabNavSeeds,
+      ...zenDemoPrioritySeeds,
+      ...aevumDemoSeeds,
       ...vwadWebgoatPrioritySeeds,
       ...vwadScannerBenchPrioritySeeds,
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
+      ...hacksplainingToxicDependenciesPrioritySeeds,
       ...netForcePrioritySeeds,
+      ...websecLevelPrioritySeeds,
+      ...websecBonusLevelSeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,
@@ -5564,6 +6247,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...jekyllSecurityDocSeeds,
       ...jekyllBlogPostSeeds,
       ...domGoatCxssSeeds,
+      ...flaskVulnappSeeds,
+      ...javaSecLabSeeds,
       ...benstaffordXssSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
@@ -5600,6 +6285,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...redTigerSeeds,
       ...wizerCtfSeeds,
       ...vulnExposeSeeds,
+      ...dragSecurityFlawsSeeds,
       ...vulnPortalAuthSeeds,
       ...bugBountyHunterSeeds,
       ...picoctfCylabSeeds,
@@ -5845,7 +6531,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       .join("\n");
   }
 
-  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body), juiceShopBootstrap]
+  let whoopsPayBootstrap = "";
+  if (/whoopspay\.onrender\.com/i.test(home.finalUrl || target.toString())) {
+    const scriptSrc = home.body.match(/src=["'](\/assets\/index-[^"']+\.js)["']/i)?.[1];
+    if (scriptSrc) {
+      const bundleUrl = new URL(scriptSrc, home.finalUrl || target.toString()).toString();
+      let bundleDoc = await probe.get(bundleUrl, { maxBytes: 2_000_000, timeoutMs: 45000 });
+      for (let attempt = 0; attempt < 4; attempt++) {
+        if (/WhoopsPay|postgraduate thesis on web application vulnerabilities/i.test(bundleDoc.body))
+          break;
+        await new Promise((r) => setTimeout(r, 4000));
+        bundleDoc = await probe.get(bundleUrl, { maxBytes: 2_000_000, timeoutMs: 45000 });
+      }
+      if (bundleDoc.status >= 200 && bundleDoc.status < 500 && bundleDoc.body.length > 1000) {
+        whoopsPayBootstrap = bundleDoc.body;
+      }
+    }
+  }
+
+  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body), juiceShopBootstrap, whoopsPayBootstrap]
     .filter(Boolean)
     .join("\n");
   const detection = detectPlatform(home, combined);

@@ -970,6 +970,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-owasp-top10-intro-hub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "OWASP Top 10 intro hub documents 2021 risk category catalog",
+    description:
+      "The OWASP Top 10 labs intro page lists all 2021 web application security risk categories (Broken Access Control through Logging and Monitoring Failures) with hands-on lab navigation.",
+    impactOneline:
+      "Public OWASP Top 10 training hubs map every risk category to reachable lab modules — useful recon for attackers targeting educational vulnerable apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspTop10IntroHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host OWASP lab hubs on isolated domains; gate inactive modules from public enumeration.",
+      steps: [
+        "Keep OWASP Top 10 lab navigation on a dedicated training domain, not production apps.",
+        "Require authentication before linking to hands-on vulnerable lab modules.",
+        "Mark inactive lab modules as unavailable instead of exposing stub routes."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Top 10 intro hub lists all 2021 risk categories with links to lab modules. Show how to isolate the training site and hide inactive lab stubs from public crawlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-owasp-educational-lab-stub-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "OWASP Top 10 inactive lab stub publicly indexed",
+    description:
+      "An OWASP Top 10 lab module page is reachable but marked 'This lab is not yet active' — the stub still discloses planned vulnerable training routes and category scope.",
+    impactOneline:
+      "Publicly indexed inactive lab stubs reveal upcoming vulnerable module paths attackers can monitor for deployment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOwaspEducationalLabStubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hide inactive OWASP lab stubs from public crawlers or require authentication.",
+      steps: [
+        "Return 404 or require auth for lab modules that are not yet active.",
+        "Use robots.txt to discourage indexing of placeholder lab routes.",
+        "Publish inactive modules only on authenticated staging environments."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Top 10 lab site exposes stub pages marked 'not yet active' under /labs/*. Show how to hide these from public indexing until modules are ready.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwt-none-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -1696,6 +1748,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "druid-monitor-exposed",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Alibaba Druid database monitor exposed",
+    description:
+      "Alibaba Druid monitoring endpoints (/druid/index.html, /druid/basic.json) respond without authentication. Attackers can read JDBC driver names, JVM version, classpath, and SQL execution statistics.",
+    impactOneline: "Database connection pool monitor is publicly reachable — JDBC and JVM metadata may leak.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "druidMonitorExposed" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Restrict Druid monitor to internal networks and require authentication in production.",
+      steps: [
+        "Set druid.stat-view-servlet.login-username and login-password in production.",
+        "Block /druid/* from the public internet via firewall or reverse proxy.",
+        "Disable Druid stat servlet when not needed for operations."
+      ]
+    },
+    fixPrompt:
+      "My Spring Boot app exposes /druid/index.html and /druid/basic.json publicly. Lock down the Druid stat servlet with authentication, block public access, and show me the application.properties changes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-javaseclab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "JavaSecLab comprehensive Java vulnerability platform disclosed",
+    description:
+      "JavaSecLab (whgojp/JavaSecLab) documents comprehensive Java vulnerability scenarios with audit SINK points, fix code, and traffic analysis across Spring Boot, MyBatis, and Thymeleaf stacks.",
+    impactOneline:
+      "Public JavaSecLab demo confirms deliberate Java vulnerability training surface including exposed Druid monitor.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJavaSecLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deploy vulnerability training platforms to production; auth-gate lab instances.",
+      steps: [
+        "Restrict JavaSecLab and similar platforms to internal networks.",
+        "Disable exposed Druid monitor endpoints in production Spring apps.",
+        "Do not copy JavaSecLab vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We mirror JavaSecLab's public demo. Show how to auth-gate vulnerability training platforms and disable exposed Druid monitors on Spring Boot deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "hidden-prompt-injection",
     platform: "generic",
     category: "AI security",
@@ -2060,6 +2163,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-gin-juice-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Gin & Juice Shop scanner benchmark listing disclosed",
+    description:
+      "Gin & Juice Shop VWAD listing links PortSwigger scanner evaluation lab at ginandjuice.shop with CSRF, AngularJS, and React technology tags.",
+    impactOneline:
+      "Public VWAD registry advertises PortSwigger scanner benchmark apps with live demo URLs for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadGinJuiceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gin & Juice Shop is intentional scanner training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy Gin & Juice Shop only on isolated lab networks.",
+        "Require authentication when exposing scanner benchmark apps publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Gin & Juice Shop instance is listed in OWASP VWAD. Show how to isolate PortSwigger scanner evaluation labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sensitive-api-password-leakage",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -2134,6 +2263,501 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WebSec.fr-style challenge site exposes doQuery($injection) source at /level01/source.php. Show how to retire public source disclosure and move labs offline.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-crypto-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr ChaChaCha hash-collision auth bypass lab disclosed",
+    description:
+      "WebSec.fr level03 ChaChaCha publishes password_hash/password_verify source with sha1 type-juggling (fa1se) — hash collision training lab.",
+    impactOneline:
+      "Public challenge source documents weak password verification that accepts sha1 collisions and PHP type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecCryptoChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host crypto collision labs offline; never use password_verify on attacker-controlled sha1 inputs in production.",
+      steps: [
+        "Move WebSec ChaChaCha-style labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Use constant-time comparison on raw secrets, not nested hash(type-juggle) chains."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr ChaChaCha lab exposes password_hash(sha1(input, fa1se)) source. Show how to retire public source disclosure and fix type-juggling in password gates.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-file-upload-challenge-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "WebSec.fr file upload LFI lab disclosed",
+    description:
+      "WebSec.fr level08 publishes GIF upload validation source with include_once($uploadedFile) — local file inclusion via weak image-type checks.",
+    impactOneline:
+      "Public challenge source documents upload validation bypass leading to arbitrary file inclusion under /uploads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecFileUploadChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host file-upload LFI labs offline; never include user-uploaded paths in production.",
+      steps: [
+        "Move WebSec-style upload labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Store uploads outside web root and never include uploaded file paths."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level08 lab exposes include_once($uploadedFile) after weak GIF checks. Show how to retire public source disclosure and harden upload handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-magic-hash-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr magic-hash file downloader lab disclosed",
+    description:
+      "WebSec.fr level10 publishes MD5 magic-hash gate with show_source($file) — predictable substr(md5($flag.$file.$flag)) before arbitrary file read.",
+    impactOneline:
+      "Public challenge source documents weak hash verification that leaks flag.php via show_source when hash collisions are found.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecMagicHashChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host magic-hash labs offline; never gate file reads with truncated MD5 of attacker-controlled inputs.",
+      steps: [
+        "Move WebSec-style hash collision labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Use HMAC with server-side secrets instead of MD5 substring comparisons on user input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level10 lab exposes substr(md5($flag.$file.$flag)) before show_source($file). Show how to retire public source disclosure and fix hash-gated file reads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-blacklist-sqli-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr blacklist SQLi filter bypass lab disclosed",
+    description:
+      "WebSec.fr level11 publishes stripos blacklist blocking UNION/JOIN on table alias — SELECT id,username FROM $table WHERE id = $id remains injectable.",
+    impactOneline:
+      "Public challenge source documents blacklist SQLi filter that blocks keywords but concatenates attacker-controlled table names.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecBlacklistSqliChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host blacklist SQLi labs offline; use parameterized queries and allowlisted table names in production.",
+      steps: [
+        "Move WebSec-style SQLi labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace blacklist filters with prepared statements and enum-validated table identifiers."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level11 lab exposes stripos blacklist on $table with dynamic SELECT concat. Show how to retire public source disclosure and fix SQLi filters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-class-instantiation-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr arbitrary PHP class instantiation lab disclosed",
+    description:
+      "WebSec.fr level12 lets attackers POST arbitrary class names with two parameters — blacklist blocks splfileobject/globiterator but other wrappers remain exploitable.",
+    impactOneline:
+      "Public challenge documents unsafe dynamic class instantiation that can lead to file read or RCE via PHP object wrappers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecClassInstantiationChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host object-injection labs offline; never instantiate attacker-controlled class names in production.",
+      steps: [
+        "Move WebSec-style object injection labs to VPN-only environments.",
+        "Remove public challenge pages from internet-facing hosts.",
+        "Use allowlisted factories instead of echo new $class with user input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level12 lab exposes echo new $class($param1, $param2) with a partial iterator blacklist. Show how to retire public labs and block dynamic class instantiation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-sqli-privilege-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr SQLi privilege disclosure lab disclosed",
+    description:
+      "WebSec.fr level13 publishes SQLite privilege lookup with injectable ids IN clause — admin row stores flag in user_password column.",
+    impactOneline:
+      "Public challenge source documents SQL injection in privilege lookup that leaks admin credentials via UNION or subquery bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecSqliPrivilegeChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host SQLi privilege labs offline; use parameterized queries and never store secrets in queryable columns.",
+      steps: [
+        "Move WebSec-style SQLi labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Bind id lists as integers and use prepared statements for all lookups."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level13 lab exposes SELECT user_privileges FROM users WHERE user_id IN ($ids) with string-concat ids. Show how to retire public source disclosure and fix SQLi.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-restricted-php-exec-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr restricted PHP code execution lab disclosed",
+    description:
+      "WebSec.fr level14 publishes a 25-character PHP sandbox with function whitelist — preg_match blocks eval but strcmp/strncmp bypass enables arbitrary code execution.",
+    impactOneline:
+      "Public challenge source documents weak PHP sandbox that evals attacker input after incomplete function blacklist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecRestrictedPhpExecChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP sandbox labs offline; never eval user-supplied code in production.",
+      steps: [
+        "Move WebSec-style code-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never eval or include attacker-controlled PHP snippets — use isolated interpreters with no filesystem access."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level14 lab exposes eval($code) after preg_match whitelist on echo/print/strlen/strcmp/strncmp with 25-char limit. Show how to retire public labs and eliminate eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-create-function-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr create_function code injection lab disclosed",
+    description:
+      "WebSec.fr level15 passes attacker POST body into create_function — PHP compiles attacker code even when fun($flag) is commented out.",
+    impactOneline:
+      "Public challenge source documents create_function sink that compiles arbitrary PHP from user input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecCreateFunctionChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host create_function labs offline; remove deprecated dynamic function constructors from production.",
+      steps: [
+        "Move WebSec-style code-injection labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban create_function and eval; use static callbacks and sandboxed runtimes instead."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level15 lab exposes create_function('$flag', $_POST['c']) with optional die() after declaration. Show how to retire public source disclosure and remove create_function sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-fibonacci-eval-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr Fibonacci eval code injection lab disclosed",
+    description:
+      "WebSec.fr level16 validates HMAC of attacker textpad then eval($t . $prime_test) — Fibonacci copy/paste trusted-code gate bypasses via crafted prime_test closure.",
+    impactOneline:
+      "Public challenge source documents eval sink that concatenates attacker PHP with relative-primes oracle after weak HMAC allowlist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecFibonacciEvalChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host Fibonacci eval labs offline; never eval user-supplied PHP in production.",
+      steps: [
+        "Move WebSec-style code-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban eval and dynamic includes; use sandboxed interpreters with no filesystem access."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level16 lab exposes eval($t . $prime_test) after hash_hmac allowlist on Fibonacci textpad. Show how to retire public labs and eliminate eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-timing-attack-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr timing-attack flag guessing lab disclosed",
+    description:
+      "WebSec.fr level17 compares guessed flags via strcasecmp with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel still leaks flag bytes.",
+    impactOneline:
+      "Public challenge source documents strcmp-based secret check with randomized delay that remains vulnerable to statistical timing analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecTimingAttackChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host timing-attack labs offline; use constant-time comparisons for secrets in production.",
+      steps: [
+        "Move WebSec-style timing labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace strcasecmp/== secret checks with hash_equals or constant-time MAC verification."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level17 lab exposes strcasecmp($_POST['flag'], $flag) with sleep_rand() and UTF-16 charset header. Show how to retire public source disclosure and use constant-time comparisons.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP unserialize cookie gadget lab disclosed",
+    description:
+      "WebSec.fr level18 stores serialize(stdClass) in an obj cookie then unserialize($_COOKIE['obj']) — attacker-controlled serialized objects bypass hash_equals flag check.",
+    impactOneline:
+      "Public challenge source documents PHP object injection via cookie unserialize with hash_equals oracle on attacker-controlled properties.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeCookieChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize labs offline; never unserialize attacker-controlled cookies in production.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace PHP serialize/unserialize with JSON and signed tokens; ban unserialize on user input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level18 lab exposes unserialize($_COOKIE['obj']) after setcookie(serialize($obj)). Show how to retire public labs and eliminate unserialize sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-php-unserialize-filter-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP unserialize filter bypass lab disclosed",
+    description:
+      "WebSec.fr level20 applies preg_match filters in sanitize() before unserialize($_COOKIE['data']) — Flag class __destruct still enables POP gadget chains.",
+    impactOneline:
+      "Public challenge source documents weak unserialize allowlists bypassable via crafted serialized objects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeFilterChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize filter-bypass labs offline; never rely on regex filters before unserialize.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate unserialize on cookies/POST bodies; use JSON with strict schema validation."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level20 lab exposes sanitize() preg_match gates before unserialize with Flag __destruct. Show how to retire public labs and ban unserialize.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-php-aes-session-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP AES session forgery lab disclosed",
+    description:
+      "WebSec.fr level21 encrypts user/pass in an AES session cookie via mcrypt while blocking admin registration with a weak letter filter — verify_credentials also builds SQL with string concatenation.",
+    impactOneline:
+      "Public challenge source documents forgeable AES session cookies and SQL injection in credential verification.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpAesSessionChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host AES session labs offline; use signed server-side sessions and parameterized queries in production.",
+      steps: [
+        "Move WebSec-style crypto labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace mcrypt cookie sessions with HMAC-signed tokens or server-side session stores.",
+        "Use prepared statements — never concatenate usernames into SQL."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level21 lab exposes mcrypt session cookies and SQL concatenation in verify_credentials. Show how to retire public labs and use secure sessions plus parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-oop-restricted-eval-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr OOP restricted PHP eval lab disclosed",
+    description:
+      "WebSec.fr level22 limits attacker code to 21 characters then eval() after a blacklist — strcmp/strncmp are removed from the denylist and class A exposes flag parts via OOP properties.",
+    impactOneline:
+      "Public challenge source documents short-input PHP eval sandbox bypassable via allowed string-compare functions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecOopRestrictedEvalChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP eval labs offline; never eval user-controlled code in production.",
+      steps: [
+        "Move WebSec-style code-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate eval/create_function on any user input; use safe expression parsers if needed."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level22 lab exposes 21-char eval with OOP class A and strcmp removed from blacklist. Show how to retire public labs and ban eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-shell-exec-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr shell_exec blacklist bypass lab disclosed",
+    description:
+      "WebSec.fr level26 runs shell_exec on 40-char POST code after character/word/function blacklist filtering — /bin/sh command injection training with suhosin max_value_length=40.",
+    impactOneline:
+      "Public challenge source documents blacklist-bypassable shell_exec on attacker-controlled command input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecShellExecChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host shell injection labs offline; never pass user input to shell_exec in production.",
+      steps: [
+        "Move WebSec-style command-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate shell_exec/system/passthru on any user-controlled input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level26 lab exposes shell_exec($code) behind a blacklist filter. Show how to retire public labs and ban shell invocation sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-aspect-instrumentation-challenge-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "WebSec.fr Acunetix aspect instrumentation backdoor disclosed",
+    description:
+      "WebSec.fr level27 includes acu_phpaspect.php that enables debugging when HTTP_ACUNETIX_ASPECT and HTTP_ACUNETIX_ASPECT_PASSWORD headers match — hidden instrumentation backdoor in production code.",
+    impactOneline:
+      "Public challenge source documents Acunetix-style aspect header backdoor left in instrumented PHP.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecAspectInstrumentationChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove instrumentation backdoors before production deploy; never ship debug headers to prod.",
+      steps: [
+        "Strip Acunetix/sensor instrumentation from production builds.",
+        "Move WebSec-style instrumentation labs to VPN-only environments.",
+        "Audit for HTTP_* debug headers that bypass authentication."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level27 lab exposes acu_phpaspect.php with HTTP_ACUNETIX_ASPECT header gate. Show how to remove instrumentation backdoors from production deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-upload-include-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr upload include type-juggling lab disclosed",
+    description:
+      "WebSec.fr level28 uploads flag_file to tmp/md5(IP).php, compares md5_file hashes, then include($filename) when crc32 checksum passes loose == comparison — PHP type-juggling RCE.",
+    impactOneline:
+      "Public challenge source documents upload-to-include RCE gated by md5_file and crc32 type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecUploadIncludeChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host upload-RCE labs offline; never include user-uploaded PHP files in production.",
+      steps: [
+        "Move WebSec-style upload labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Store uploads outside web root and never include uploaded paths; use strict === comparisons."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level28 lab exposes include($filename) after md5_file and crc32 == juggling. Show how to retire public labs and harden upload handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-php-unserialize-destruct-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP unserialize __destruct lab disclosed",
+    description:
+      "WebSec.fr level30 unserializes attacker POST payload into class B whose __destruct echoes $flag after ob_start — exception handler triggers destructor gadget chain training.",
+    impactOneline:
+      "Public challenge source documents unserialize-to-__destruct PHP object injection with tragic exception flow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeDestructChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host deserialization labs offline; never unserialize untrusted input in production.",
+      steps: [
+        "Move WebSec-style unserialize labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban unserialize on user input; use JSON with strict schemas instead."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level30 lab exposes unserialize($_POST['payload']) into class B __destruct. Show how to retire public labs and eliminate unsafe deserialization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-open-basedir-eval-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr open_basedir sandbox eval lab disclosed",
+    description:
+      "WebSec.fr level31 sets open_basedir=/sandbox then eval($_GET['c']) — PHP sandbox escape and arbitrary code execution training to read ./flag.php.",
+    impactOneline:
+      "Public challenge source documents eval on user input inside open_basedir-restricted PHP sandbox.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecOpenBasedirEvalChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP eval labs offline; never eval user-controlled code even behind open_basedir.",
+      steps: [
+        "Move WebSec-style sandbox-escape labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate eval/create_function on any user input; open_basedir is not a sandbox boundary."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level31 lab exposes eval($_GET['c']) with open_basedir=/sandbox. Show how to retire public labs and ban eval sinks.",
     version: 1,
     enabled: true
   },
@@ -2238,6 +2862,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab Web for Pentester-style exercises. Show how to gate labs behind auth and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-web-for-pentester-ii-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab Web for Pentester II course disclosed",
+    description:
+      "PentesterLab Web for Pentester II documents auth bypass, SQLi, CAPTCHA weaknesses, authorization flaws, mass-assignment, and MongoDB injection labs.",
+    impactOneline:
+      "Public Web for Pentester II curriculum reveals advanced web app pentest challenge taxonomy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabWebForPentesterIiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never reuse lab code in production apps.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Isolate exercise infrastructure from production networks.",
+        "Monitor outbound traffic from lab containers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab Web for Pentester II-style exercises. Show how to gate labs behind auth and isolate them from production.",
     version: 1,
     enabled: true
   },
@@ -2810,6 +3460,760 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host PentesterLab XSS 03-style non-recursive filter labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-04-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 04 script-tag filter exercise disclosed",
+    description:
+      "PentesterLab XSS 04 hosted exercise documents reflected XSS filter bypass when the word script is blocked but alternative HTML tags and event attributes still execute JavaScript.",
+    impactOneline:
+      "Public XSS exercise instance reveals script-word blacklist evasion patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss04ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Replace keyword blacklists with allowlist-based sanitizers and CSP."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 04-style script-tag filter labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-05-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 05 alert-filter exercise disclosed",
+    description:
+      "PentesterLab XSS 05 hosted exercise documents reflected XSS filter bypass when the word alert is blacklisted using eval and String.fromCharCode.",
+    impactOneline:
+      "Public XSS exercise instance reveals alert-word blacklist evasion patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss05ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Replace keyword blacklists with allowlist-based sanitizers and CSP."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 05-style alert-filter labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-01-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 01 BOLA exercise disclosed",
+    description:
+      "PentesterLab API 01 hosted exercise documents broken object-level authorization where attackers access secrets stored in an admin account via predictable API identifiers.",
+    impactOneline:
+      "Public API security exercise instance reveals BOLA/IDOR patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi01ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce object-level authorization on every API route.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate the authenticated principal owns the requested object on every API call.",
+        "Avoid exposing admin secrets via enumerable user or account identifiers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 01-style BOLA labs. Show how to gate labs behind auth and enforce per-object authorization in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-02-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 02 BOLA exercise disclosed",
+    description:
+      "PentesterLab API 02 hosted exercise documents broken object-level authorization where attackers access a secret key stored by admin@libcurl.so.",
+    impactOneline:
+      "Public API security exercise instance reveals BOLA/IDOR patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi02ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce object-level authorization on every API route.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate the authenticated principal owns the requested object on every API call.",
+        "Avoid exposing admin secrets via enumerable user or account identifiers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 02-style BOLA labs. Show how to gate labs behind auth and enforce per-object authorization in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-03-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 03 JWT weak-signature exercise disclosed",
+    description:
+      "PentesterLab API 03 hosted exercise documents JWT weak-signature forgery where attackers retrieve admin account secrets by exploiting unsigned or weakly signed tokens.",
+    impactOneline:
+      "Public API security exercise instance reveals JWT signature bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi03ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce strong JWT signature algorithms in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Reject JWT alg:none and enforce HMAC/RSA with strong secrets.",
+        "Validate issuer, audience, and expiry on every API request."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 03-style JWT weak-signature labs. Show how to gate labs behind auth and enforce RS256/HS256 with strong secrets in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-04-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 04 hidden Angular endpoint exercise disclosed",
+    description:
+      "PentesterLab API 04 hosted exercise documents discovering a hidden API endpoint by reviewing client JavaScript and leveraging the Angular application name in the HTML page.",
+    impactOneline:
+      "Public API security exercise instance reveals hidden-endpoint enumeration via Angular app metadata for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi04ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; avoid exposing hidden API routes via client-side framework metadata.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Do not embed undocumented API paths in client JavaScript bundles.",
+        "Enumerate and protect all API routes server-side regardless of client-side obscurity."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 04-style hidden-endpoint labs. Show how to gate labs behind auth and remove undocumented API routes from client bundles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-05-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 05 compressed-JS hidden endpoint exercise disclosed",
+    description:
+      "PentesterLab API 05 hosted exercise documents discovering a hidden API endpoint by reviewing minified/compressed client JavaScript with a beautifier.",
+    impactOneline:
+      "Public API security exercise instance reveals hidden-endpoint enumeration via obfuscated client bundles for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi05ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; avoid exposing hidden API routes in client JavaScript regardless of minification.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Do not embed undocumented API paths in client JavaScript bundles.",
+        "Enumerate and protect all API routes server-side regardless of client-side obscurity."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 05-style hidden-endpoint labs with minified JS. Show how to gate labs behind auth and remove undocumented API routes from client bundles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-06-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 06 CSRF-protected hidden endpoint exercise disclosed",
+    description:
+      "PentesterLab API 06 hosted exercise documents discovering a hidden API endpoint in compressed client JavaScript while handling CSRF protection via headers and cookies.",
+    impactOneline:
+      "Public API security exercise instance reveals CSRF-gated hidden-endpoint enumeration via obfuscated client bundles for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi06ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce CSRF tokens and avoid exposing hidden API routes in client JavaScript.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Do not embed undocumented API paths in client JavaScript bundles.",
+        "Validate CSRF tokens server-side on all state-changing API requests."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 06-style CSRF-protected hidden-endpoint labs. Show how to gate labs behind auth and remove undocumented API routes from client bundles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-07-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab API 07 Angular ng-app information leak exercise disclosed",
+    description:
+      "PentesterLab API 07 hosted exercise documents finding an information leak by reviewing client JavaScript and using the Angular application name from the ng-app HTML attribute.",
+    impactOneline:
+      "Public API security exercise instance reveals Angular metadata information-leak patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi07ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; avoid leaking sensitive metadata via client-side framework attributes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Remove sensitive configuration from client-side JavaScript and HTML attributes.",
+        "Audit Angular ng-app and module metadata for information disclosure in production builds."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 07-style Angular information-leak labs. Show how to gate labs behind auth and strip framework metadata from production client bundles.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-08-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab API 08 reset-password URL leak exercise disclosed",
+    description:
+      "PentesterLab API 08 hosted exercise documents uncovering a reset-password URL leak that enables logging in as admin@libcurl.so and retrieving the challenge key.",
+    impactOneline:
+      "Public API security exercise instance reveals password-reset URL leak patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi08ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never expose reset tokens in API responses.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Deliver password-reset links out-of-band only; never echo reset URLs in JSON responses.",
+        "Audit reset-password flows for information disclosure to unauthenticated callers."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 08-style reset-password URL leak labs. Show how to gate labs behind auth and prevent reset links from leaking via API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-09-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab API 09 response information leak exercise disclosed",
+    description:
+      "PentesterLab API 09 hosted exercise documents reviewing API endpoint responses to find an information leak that enables admin@libcurl.so login.",
+    impactOneline:
+      "Public API security exercise instance reveals excessive API response disclosure patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi09ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; minimize sensitive data in API responses.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Redact internal identifiers and privileged account hints from API responses.",
+        "Audit list/detail endpoints for excessive data exposure (OWASP API3:2023)."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 09-style API response leak labs. Show how to gate labs behind auth and redact sensitive fields from JSON responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-10-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 10 email-filter bypass exercise disclosed",
+    description:
+      "PentesterLab API 10 hosted exercise documents registering an administrator account by bypassing email filters that block @libcurl.so addresses.",
+    impactOneline:
+      "Public API security exercise instance reveals email-validation bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi10ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize and strictly validate email addresses server-side.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate email domains with canonicalization before role assignment.",
+        "Never derive administrator privileges from substring checks in email local-parts."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 10-style email-filter bypass labs. Show how to gate labs behind auth and harden email validation in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-11-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 11 email-filter bypass exercise disclosed",
+    description:
+      "PentesterLab API 11 hosted exercise documents registering an administrator account by bypassing email filters that block direct @libcurl.so registration.",
+    impactOneline:
+      "Public API security exercise instance reveals email-validation bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi11ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize and strictly validate email addresses server-side.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate email domains with canonicalization before role assignment.",
+        "Never derive administrator privileges from substring checks in email local-parts."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 11-style email-filter bypass labs. Show how to gate labs behind auth and harden email validation in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-06-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 06 script-tag injection exercise disclosed",
+    description:
+      "PentesterLab XSS 06 hosted exercise documents reflected XSS by injecting JavaScript inside a pre-existing script tag to trigger an alert with a UUID.",
+    impactOneline:
+      "Public XSS exercise instance reveals script-context injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss06ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Avoid reflecting user input inside script blocks without strict validation."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 06-style script-tag injection labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-07-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 07 HTML-encoded script-tag injection exercise disclosed",
+    description:
+      "PentesterLab XSS 07 hosted exercise documents reflected XSS where special characters are HTML-encoded and the attacker must inject JavaScript inside a script tag.",
+    impactOneline:
+      "Public XSS exercise instance reveals HTML-encoded script-context injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss07ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use context-aware output encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Avoid reflecting user input inside script blocks without strict validation."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 07-style HTML-encoded script-tag injection labs. Show how to gate labs behind auth and encode user output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-08-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 08 PHP_SELF path injection exercise disclosed",
+    description:
+      "PentesterLab XSS 08 hosted exercise documents reflected XSS caused by trusting user-provided paths in the PHP $_SERVER['PHP_SELF'] variable.",
+    impactOneline:
+      "Public XSS exercise instance reveals PHP_SELF path-injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss08ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never echo PHP_SELF or REQUEST_URI without encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "HTML-encode all user-controlled output in production templates.",
+        "Avoid reflecting PHP_SELF, REQUEST_URI, or path segments without strict validation."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 08-style PHP_SELF path-injection labs. Show how to gate labs behind auth and avoid echoing server path variables in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-09-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 09 DOM anchor injection exercise disclosed",
+    description:
+      "PentesterLab XSS 09 hosted exercise documents DOM-based XSS where JavaScript reads the URL anchor/hash and writes it into the page without escaping.",
+    impactOneline:
+      "Public XSS exercise instance reveals DOM hash/anchor injection patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss09ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never assign location.hash to innerHTML without encoding in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use textContent instead of innerHTML for hash-derived content in production.",
+        "Sanitize or encode all client-side DOM writes from URL fragments."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 09-style DOM anchor injection labs. Show how to gate labs behind auth and avoid writing location.hash to HTML sinks in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-xss-10-exercise-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentesterLab XSS 10 cookie-theft exercise disclosed",
+    description:
+      "PentesterLab XSS 10 hosted exercise documents stealing a victim's cookie using JavaScript that writes an image tag with the cookie value for exfiltration to webhook.site.",
+    impactOneline:
+      "Public XSS exercise instance reveals cookie-theft via image-tag exfiltration patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabXss10ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use HttpOnly cookies and CSP in production.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Set HttpOnly and Secure flags on session cookies in production.",
+        "Deploy Content-Security-Policy to block inline script and unauthorized image exfiltration."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab XSS 10-style cookie-theft labs. Show how to gate labs behind auth and protect session cookies with HttpOnly flags and CSP in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-12-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 12 email-validation bypass exercise disclosed",
+    description:
+      "PentesterLab API 12 hosted exercise documents registering an administrator account by bypassing email validation to gain elevated privileges.",
+    impactOneline:
+      "Public API security exercise instance reveals email-validation bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi12ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize and strictly validate email addresses server-side.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate email domains with canonicalization before role assignment.",
+        "Never derive administrator privileges from client-controlled email fields."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 12-style email-validation bypass labs. Show how to gate labs behind auth and harden email validation in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-13-exercise-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentesterLab API 13 Unicode email bypass exercise disclosed",
+    description:
+      "PentesterLab API 13 hosted exercise documents registering an administrator account by using a Unicode-based bypass when @libcurl.so domain registration is blocked.",
+    impactOneline:
+      "Public API security exercise instance reveals Unicode email canonicalization bypass patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi13ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; normalize Unicode email addresses before domain checks.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Apply Unicode normalization (NFKC) before validating email domains.",
+        "Never derive administrator privileges from client-controlled email fields."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 13-style Unicode email bypass labs. Show how to gate labs behind auth and harden email canonicalization in production registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-14-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 14 leaked encrypted password exercise disclosed",
+    description:
+      "PentesterLab API 14 hosted exercise documents logging in as admin@libcurl.so by leveraging leaked API call data or encrypted password material.",
+    impactOneline:
+      "Public API security exercise instance reveals credential leakage and encrypted-password reuse patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi14ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; never expose encrypted credentials in API responses.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Remove password hashes and encrypted secrets from API responses and logs.",
+        "Rotate credentials when API traffic or debug output is exposed."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 14-style leaked-credential labs. Show how to gate labs behind auth and prevent encrypted password leakage in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-15-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 15 password decryption exercise disclosed",
+    description:
+      "PentesterLab API 15 hosted exercise documents retrieving admin@libcurl.so credentials by decrypting leaked API call data after auditing the encryption method.",
+    impactOneline:
+      "Public API security exercise instance reveals reversible encryption and API-call leakage patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi15ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; use strong encryption and never leak API call payloads.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Use industry-standard password hashing instead of reversible encryption.",
+        "Strip sensitive fields from API responses and debug traces."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 15-style API-call decryption labs. Show how to gate labs behind auth and prevent reversible credential encryption in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-16-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 16 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 16 hosted exercise documents leveraging an API authentication issue to access sensitive information with Go source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi16ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 16-style authentication bypass labs. Show how to gate labs behind auth and enforce token validation on sensitive API routes in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-17-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 17 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 17 hosted exercise documents leveraging an API authentication issue to access sensitive information with Go source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi17ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 17-style authentication bypass labs. Show how to gate labs behind auth and enforce token validation on sensitive API routes in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-18-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 18 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 18 hosted exercise documents leveraging an API authentication issue with Go security source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals Go API authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi18ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 18-style authentication bypass labs. Show how to gate labs behind auth and enforce Go API security review before production deploy.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-19-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 19 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 19 hosted exercise documents leveraging an API authentication issue in an application to access sensitive information with Go source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals Go API authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi19ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 19-style authentication bypass labs. Show how to gate labs behind auth and enforce Go API security review before production deploy.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-api-20-exercise-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PentesterLab API 20 authentication bypass exercise disclosed",
+    description:
+      "PentesterLab API 20 hosted exercise documents leveraging an API authentication issue to access sensitive information with Go source code review training.",
+    impactOneline:
+      "Public API security exercise instance reveals Go API authentication-bypass oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabApi20ExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate exercise VMs behind paid accounts; enforce authentication on all sensitive API routes.",
+      steps: [
+        "Require authentication before serving injectable exercise instances.",
+        "Validate JWT/session tokens server-side on every sensitive API endpoint.",
+        "Review Go API handlers for authentication bypass before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab API 20-style authentication bypass labs. Show how to gate labs behind auth and enforce Go API security review before production deploy.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-cors-ii-exercise-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "PentesterLab CORS II sensitive-data exfiltration exercise disclosed",
+    description:
+      "PentesterLab CORS II hosted exercise documents exploiting a misconfigured CORS policy to retrieve sensitive API data via a malicious page.",
+    impactOneline:
+      "Public CORS misconfiguration exercise instance reveals sensitive-data exfiltration oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabCorsIiExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS origins to trusted domains; never reflect arbitrary Origin headers on sensitive API routes.",
+      steps: [
+        "Whitelist explicit trusted origins instead of wildcard or reflected Origin values.",
+        "Require authentication on sensitive API endpoints regardless of CORS policy.",
+        "Review CORS preflight and credential settings before production deploy."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab CORS II-style labs. Show how to lock down CORS on sensitive APIs and avoid origin reflection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentesterlab-graphql-fundamentals-exercise-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "PentesterLab Web Fundamentals GraphQL exercise disclosed",
+    description:
+      "PentesterLab Web Fundamentals GraphQL hosted exercise documents GraphQL security training and a public lab instance.",
+    impactOneline:
+      "Public GraphQL fundamentals exercise instance reveals API security training oracle for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentesterlabGraphqlFundamentalsExerciseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production; enforce auth and query depth limits on API endpoints.",
+      steps: [
+        "Turn off introspection on public GraphQL endpoints.",
+        "Require authentication before serving schema or sensitive queries.",
+        "Apply query depth/complexity limits and field-level authorization."
+      ]
+    },
+    fixPrompt:
+      "We host PentesterLab GraphQL fundamentals-style labs. Show how to disable introspection and enforce auth on production GraphQL APIs.",
     version: 1,
     enabled: true
   },
@@ -3984,6 +5388,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnerable-chatbot-demo-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Intentionally vulnerable AI chatbot demo disclosed",
+    description:
+      "QualityMax ShopBot demo advertises an intentionally vulnerable /api/chat endpoint for agent safety scanning, system-prompt extraction, and adversarial attack testing.",
+    impactOneline:
+      "Public vulnerable chatbot demos expose prompt-injection and tool-abuse patterns transferable to production LLM customer-support bots.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnerableChatbotDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate agent-safety demo bots from production; never ship intentionally vulnerable chat endpoints.",
+      steps: [
+        "Remove /api/chat demos from public internet or gate behind authentication.",
+        "Harden system prompts against extraction and instruction override.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "We host a ShopBot-style intentionally vulnerable chatbot at /api/chat. Show how to isolate agent demos and harden production chatbot endpoints against prompt injection.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-security-writeup-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4426,6 +5856,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Hacksplaining toxic dependencies lesson disclosed",
+    description:
+      "Hacksplaining /lessons/toxic-dependencies publishes an interactive exploit-then-fix walkthrough covering supply-chain risks from third-party libraries (Log4j, Heartbleed, XcodeGhost).",
+    impactOneline:
+      "Public toxic dependencies lesson pages document supply-chain vulnerability patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingToxicDependenciesLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining toxic dependencies lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable supply-chain lesson instances on private deployments.",
+        "Pin and audit third-party dependencies with SBOM tooling in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style toxic dependencies exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Hacksplaining unencrypted communication lesson disclosed",
+    description:
+      "Hacksplaining /lessons/unencrypted-communication publishes an interactive exploit-then-fix walkthrough covering insufficient transport encryption and monster-in-the-middle credential theft.",
+    impactOneline:
+      "Public unencrypted communication lesson pages document cleartext transport attack patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingUnencryptedCommunicationLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining unencrypted communication lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable unencrypted communication lesson instances on private deployments.",
+        "Enforce HTTPS and HSTS on all production endpoints — never copy Hacksplaining cleartext transport handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style unencrypted communication exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-xssi-lesson-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Hacksplaining cross-site script inclusion lesson disclosed",
+    description:
+      "Hacksplaining /lessons/xssi publishes an interactive exploit-then-fix walkthrough covering sensitive data embedded in JavaScript and cross-site script inclusion attacks.",
+    impactOneline:
+      "Public XSSI lesson pages document sensitive-JS-data leakage patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingXssiLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining XSSI lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable XSSI lesson instances on private deployments.",
+        "Never embed secrets or PII in client-side JavaScript in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style XSSI exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
     platform: "generic",
     category: "Security misconfiguration",
@@ -4452,6 +5960,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Hacksplaining prototype pollution lesson disclosed",
+    description:
+      "Hacksplaining /lessons/prototype-pollution publishes an interactive exploit-then-fix walkthrough covering JavaScript __proto__ gadget chains that pollute Object.prototype.",
+    impactOneline:
+      "Public prototype pollution lesson pages document client-side prototype chain abuse patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingPrototypePollutionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining prototype pollution lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable prototype pollution lesson instances on private deployments.",
+        "Freeze Object.prototype and validate JSON merge inputs in production code.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style prototype pollution exploit-then-fix lessons. Show how to auth-gate live lesson instances and harden merge utilities.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-store-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -4474,6 +6008,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host an OopsSec Store-style vulnerable e-commerce CTF. Show how to isolate lab instances and gate walkthrough content from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-voidsec-shopping-cart-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "VoidSec Shopping Cart vulnerable e-commerce hack-lab disclosed",
+    description:
+      "VoidSec Shopping Cart GitHub Pages landing documents an intentionally vulnerable e-commerce web app with XSS, SQLi, auth bypass, clickjacking, and response-splitting training targets.",
+    impactOneline:
+      "Public VoidSec Shopping Cart docs advertise dozens of injectable flaws attackers use to tune scanners against real e-commerce apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVoidsecShoppingCartEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VoidSec Shopping Cart is intentional training — host only in isolated lab environments.",
+      steps: [
+        "Deploy Shopping Cart on local XAMPP or Docker instances, not public GitHub Pages marketing alone.",
+        "Gate live vulnerable instances behind VPN-only access.",
+        "Do not copy Shopping Cart vulnerability patterns into production e-commerce code."
+      ]
+    },
+    fixPrompt:
+      "We host a VoidSec Shopping Cart-style vulnerable e-commerce lab. Show how to isolate the hack-lab from production traffic and retire public marketing pages that document injectable endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-whoopspay-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay educational fintech vulnerability lab disclosed",
+    description:
+      "WhoopsPay is a postgraduate-thesis fintech SPA with intentional XSS, auth bypass, and data-exposure flaws in its admin panel and transaction flows.",
+    impactOneline:
+      "Public WhoopsPay demos document mock-user credential leaks and XSS payloads attackers can replay against real payment apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWhoopsPayEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WhoopsPay is intentional training — isolate lab deployments from production payment infrastructure.",
+      steps: [
+        "Run WhoopsPay only in isolated lab environments.",
+        "Never deploy mock-user credential stores or unencrypted card data in production.",
+        "Sanitize transaction descriptions server-side to block stored XSS."
+      ]
+    },
+    fixPrompt:
+      "We host a WhoopsPay-style educational fintech lab with intentional XSS and auth flaws. Show how to isolate the lab and harden admin panels for production.",
     version: 1,
     enabled: true
   },
@@ -6584,6 +8170,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-api-labs-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab API testing labs disclosed",
+    description:
+      "VulnLab Academy /api-labs/* modules document REST BOLA/IDOR order probing, mass-assignment admin routes, GraphQL introspection, and SOAP WSDL exposure for API security training.",
+    impactOneline:
+      "Public VulnLab API labs advertise unauthenticated BOLA, GraphQL introspection, and WSDL endpoints for scanner validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabApiLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "API testing labs are intentional training — isolate lab hubs from production API gateways.",
+      steps: [
+        "Run API security labs on isolated infrastructure with no production data.",
+        "Disable GraphQL introspection and require auth on admin list endpoints in production.",
+        "Block WSDL and schema downloads on public-facing services."
+      ]
+    },
+    fixPrompt:
+      "We host VulnLab-style REST/GraphQL/SOAP API testing labs. Show how to isolate them from production API gateways.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnerable-web-site-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -7494,6 +9106,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ai-prompt-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Prompt Lab Japanese prompt-engineering checklist disclosed",
+    description:
+      "Prompt Lab (ai-prompt-lab.vercel.app) documents a 16-tip Japanese prompt checklist, ChatGPT API onboarding, and research-backed prompt-engineering guidance.",
+    impactOneline:
+      "Public prompt-engineering labs expose interactive LLM prompt tuning surfaces attackers can probe for injection and data-exfiltration weaknesses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiPromptLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Prompt engineering labs should not collect API keys client-side; gate LLM demos behind auth.",
+      steps: [
+        "Never store user API keys in browser localStorage without encryption.",
+        "Gate interactive LLM demos behind authentication.",
+        "Apply OWASP LLM Top 10 controls before publishing prompt-tuning UIs."
+      ]
+    },
+    fixPrompt:
+      "We host a Prompt Lab-style interactive prompt-engineering checklist. Show how to protect API keys and gate LLM demos behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-secured-ai-lab-evidence",
     platform: "generic",
     category: "AI security",
@@ -8010,6 +9648,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style subdomain squatting exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-prototype-pollution-lesson-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Hacksplaining prototype pollution lesson disclosed",
+    description:
+      "Hacksplaining /lessons/prototype-pollution publishes an interactive exploit-then-fix walkthrough covering JavaScript __proto__ gadget chains that pollute Object.prototype.",
+    impactOneline:
+      "Public prototype pollution lesson pages document client-side prototype chain abuse patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingPrototypePollutionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining prototype pollution lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable prototype pollution lesson instances on private deployments.",
+        "Freeze Object.prototype and validate JSON merge inputs in production code.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style prototype pollution exploit-then-fix lessons. Show how to auth-gate live lesson instances and harden merge utilities.",
     version: 1,
     enabled: true
   },
@@ -8794,6 +10458,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-aevum-agent-consent-demo-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Aevum agent consent-ledger demo disclosed",
+    description:
+      "Aevum demo.aevum.build documents a governed context kernel for AI agents with sandbox/consent approval, execute under consent tokens, and tamper-evident sigchain audit trails.",
+    impactOneline:
+      "Public Aevum consent demos expose agent-governance API flows attackers study for bypassing human-in-the-loop approval.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAevumAgentConsentDemoEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Aevum demos are intentional — authenticate consent and sigchain APIs in production agent platforms.",
+      steps: [
+        "Require mutual TLS or signed tokens on all agent consent endpoints.",
+        "Bind execute actions to short-lived consent tokens with principal scoping.",
+        "Protect sigchain inspection APIs from unauthenticated enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host an Aevum-style agent consent-ledger demo. Show how to secure consent approval and sigchain APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-attp-agent-trust-evidence",
     platform: "generic",
     category: "AI security",
@@ -9262,6 +10952,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "domgo-unescape-hash-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DomGoat unescape(hash) DOM XSS exercise disclosed",
+    description:
+      "DomGoat /cxss/example pages unescape location.hash fragments via unescape() before msgboard.innerHTML — deliberate URL-encoded hash DOM XSS labs.",
+    impactOneline:
+      "unescape(location.hash) into innerHTML enables DOM XSS when attackers craft percent-encoded malicious URL fragments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "domgoUnescapeHashDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unescape and render location.hash into innerHTML; use textContent or strict sanitization.",
+      steps: [
+        "Use textContent instead of innerHTML for hash-derived strings.",
+        "Reject or encode percent-encoded payloads before DOM insertion.",
+        "Host DomGoat-style labs on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DomGoat exercise unescapes location.hash then writes to msgboard.innerHTML. Show safe textContent alternatives.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "domgo-postmessage-dom-xss-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -9544,6 +11260,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DomGoat /cxss/sources page demos location.hash and postMessage sources. Show safe handling and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vwad-pixi-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Pixi DevSlop insecure API lab disclosed",
+    description:
+      "Pixi VWAD listing documents OWASP DevSlop MEAN stack app with deliberately insecure OpenAPI endpoints for API security training.",
+    impactOneline:
+      "Public Pixi registry advertises insecure API training surface from OWASP DevSlop for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadPixiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Pixi instances isolated; VWAD listing is intentional but live deployments need monitoring.",
+      steps: [
+        "Deploy Pixi only on isolated lab networks or containers.",
+        "Require authentication when exposing DevSlop API labs publicly.",
+        "Monitor VWAD-linked instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Pixi instance is listed in OWASP VWAD. Show how to isolate DevSlop MEAN stack API labs from production.",
     version: 1,
     enabled: true
   },
@@ -9834,6 +11576,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-mcp-servers-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP VWAD Vulnerable MCP Servers Lab disclosed",
+    description:
+      "OWASP VWAD Vulnerable MCP Servers Lab listing documents intentionally vulnerable MCP server implementations covering path traversal, unsandboxed code execution, indirect prompt injection, eval RCE, typosquatting, and supply-chain risks.",
+    impactOneline:
+      "Public VWAD MCP lab catalog exposes agentic AI attack surfaces (prompt injection, tool poisoning, RCE) for security training enumeration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadMcpServersLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Vulnerable MCP Servers Lab is intentional training — isolate MCP lab instances from production agent fleets.",
+      steps: [
+        "Deploy MCP security labs only on isolated networks with no production credentials.",
+        "Require authentication before exposing MCP tool endpoints publicly.",
+        "Monitor VWAD-linked MCP lab instances for unauthenticated scanner abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Vulnerable MCP Servers Lab is listed in OWASP VWAD. Show how to isolate MCP training servers from production agent infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hts-basic-mission-lab-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -9908,6 +11676,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnScope-style scanner demo tests live URLs for SQLi and XSS. Show how to gate the scan API and restrict targets to authorized lab hosts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-drag-security-flaws-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "drag-security-flaws Remix vulnerability education hub disclosed",
+    description:
+      "drag-security-flaws.vercel.app is a Remix educational site cataloging XSS, CSRF, IDOR, SQL injection, SSRF, and clickjacking modules under /security/* routes.",
+    impactOneline:
+      "Public drag-security-flaws hub documents hands-on web vulnerability lesson modules for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDragSecurityFlawsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "drag-security-flaws is intentional training — isolate lesson deployments from production apps.",
+      steps: [
+        "Run drag-security-flaws modules only on isolated training infrastructure.",
+        "Do not copy lesson vulnerability patterns into production code.",
+        "Gate interactive exploit demos behind authenticated training accounts."
+      ]
+    },
+    fixPrompt:
+      "We host drag-security-flaws-style vulnerability lesson hubs. Show how to isolate Remix training modules from production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-drag-security-flaws-lab-module-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "drag-security-flaws hands-on vulnerability lesson module disclosed",
+    description:
+      "drag-security-flaws /security/* module pages publish XSS (stored/reflected/DOM), IDOR, CSRF, SQL injection, SSRF, and clickjacking lesson content with attack mechanics and mitigation guidance.",
+    impactOneline:
+      "Public drag-security-flaws lesson modules accelerate attacker training on common OWASP vulnerability classes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDragSecurityFlawsLabModuleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "drag-security-flaws lesson modules are intentional training — never copy attack patterns to production.",
+      steps: [
+        "Run drag-security-flaws XSS/IDOR/CSRF modules only on isolated training infrastructure.",
+        "Use parameterized queries and output encoding in production auth and comment flows.",
+        "Implement CSRF tokens and frame-busting headers on state-changing production endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host drag-security-flaws XSS and IDOR lesson modules. Show how to isolate educational attack walkthroughs from production user data flows.",
     version: 1,
     enabled: true
   }
