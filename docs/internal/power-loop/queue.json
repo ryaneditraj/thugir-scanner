@@ -6638,7 +6638,32 @@
       "url": "https://challenge-1225.intigriti.io/",
       "source": "Intigriti December 2025 CTF \u2014 multi-subdomain XS-leak/postMessage chain (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0326.intigriti.io/",
+      "source": "Intigriti March 2026 CTF \u2014 DOM clobbering + CSP bypass XSS (Bugology monthly challenge)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0526.intigriti.io/",
+      "source": "Intigriti May 2026 Pixel Pioneers \u2014 stored XSS via DOMPurify/DOM clobbering (Bugology)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0626.intigriti.io/",
+      "source": "Intigriti June 2026 Inside Job \u2014 CSP + DOM-based XSS monthly CTF (Bugology)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/playground/intro12",
+      "source": "DefendTheWeb \u2014 playground intro12 client-side security challenge (playground series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-scanner-rho.vercel.app/",
+      "source": "sumit-jr/vuln-scanner \u2014 educational vuln scanner frontend with live demo target form (Vercel README)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-20T15:00:16.000Z"
+  "updated_at": "2026-07-20T16:00:37.000Z"
 }
