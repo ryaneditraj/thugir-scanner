@@ -1549,7 +1549,7 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     /websec challenges/i.test(html) ||
     /web security challenges from the people of websec/i.test(html)
   ) {
-    for (let n = 1; n <= 22; n++) {
+    for (let n = 1; n <= 31; n++) {
       if (n === 19) continue;
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
@@ -1967,6 +1967,7 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/95/",
     "/playlevel/96/",
     "/playlevel/97/",
+    "/playlevel/98/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
@@ -5978,7 +5979,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level210/index.php",
         "http://www.net-force.nl/challenge/level211/index.php",
         "http://www.net-force.nl/challenge/level212/index.php",
-        "http://www.net-force.nl/challenge/level213/index.php"
+        "http://www.net-force.nl/challenge/level213/index.php",
+        "http://www.net-force.nl/challenge/level214/index.php"
       ]
     : [];
   const websecBonusLevelSeeds = /websec\.fr/i.test(home.finalUrl)
@@ -5989,7 +5991,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://websec.fr/level27/source.php",
         "https://websec.fr/level27/source2.php",
         "https://websec.fr/level28/",
-        "https://websec.fr/level28/source.php"
+        "https://websec.fr/level28/source.php",
+        "https://websec.fr/level30/",
+        "https://websec.fr/level30/source.php",
+        "https://websec.fr/level31/",
+        "https://websec.fr/level31/source.php"
       ]
     : [];
   const websecLevelPrioritySeeds = (() => {
