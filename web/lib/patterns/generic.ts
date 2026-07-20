@@ -2319,6 +2319,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-magic-hash-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr magic-hash file downloader lab disclosed",
+    description:
+      "WebSec.fr level10 publishes MD5 magic-hash gate with show_source($file) — predictable substr(md5($flag.$file.$flag)) before arbitrary file read.",
+    impactOneline:
+      "Public challenge source documents weak hash verification that leaks flag.php via show_source when hash collisions are found.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecMagicHashChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host magic-hash labs offline; never gate file reads with truncated MD5 of attacker-controlled inputs.",
+      steps: [
+        "Move WebSec-style hash collision labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Use HMAC with server-side secrets instead of MD5 substring comparisons on user input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level10 lab exposes substr(md5($flag.$file.$flag)) before show_source($file). Show how to retire public source disclosure and fix hash-gated file reads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-blacklist-sqli-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr blacklist SQLi filter bypass lab disclosed",
+    description:
+      "WebSec.fr level11 publishes stripos blacklist blocking UNION/JOIN on table alias — SELECT id,username FROM $table WHERE id = $id remains injectable.",
+    impactOneline:
+      "Public challenge source documents blacklist SQLi filter that blocks keywords but concatenates attacker-controlled table names.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecBlacklistSqliChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host blacklist SQLi labs offline; use parameterized queries and allowlisted table names in production.",
+      steps: [
+        "Move WebSec-style SQLi labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace blacklist filters with prepared statements and enum-validated table identifiers."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level11 lab exposes stripos blacklist on $table with dynamic SELECT concat. Show how to retire public source disclosure and fix SQLi filters.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
