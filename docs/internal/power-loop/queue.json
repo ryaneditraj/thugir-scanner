@@ -6453,7 +6453,32 @@
       "url": "http://www.net-force.nl/challenge/level209/index.php",
       "source": "Net-Force.nl challenge level 209 \u2014 web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level17/",
+      "source": "WebSec.fr level 17 \u2014 PHP strcasecmp type-juggling / loose comparison auth bypass challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level18/",
+      "source": "WebSec.fr level 18 \u2014 PHP sandbox / restricted execution training puzzle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/94/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 94 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level210/index.php",
+      "source": "Net-Force.nl challenge level 210 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level19/",
+      "source": "WebSec.fr level 19 \u2014 PHP deserialization / object injection training challenge",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T05:05:00.000Z"
+  "updated_at": "2026-07-20T06:05:00.000Z"
 }
