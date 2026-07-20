@@ -6713,7 +6713,32 @@
       "url": "https://challenge-0724.intigriti.io/",
       "source": "Intigriti July 2024 Memo Sharing \u2014 stored XSS monthly CTF (Bugology 0724)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0625.intigriti.io/",
+      "source": "Intigriti June 2025 RCE challenge \u2014 Chromedriver CSRF to RCE via XSS (Bugology 0625)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1122.intigriti.io/",
+      "source": "Intigriti November 2022 Secure Vault \u2014 iframe XSS + admin API flag theft (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1023.intigriti.io/",
+      "source": "Intigriti October 2023 Pseudonym Generator \u2014 XSS flag retrieval (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0124.intigriti.io/",
+      "source": "Intigriti January 2024 Repo Woes \u2014 XSS monthly CTF (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1223.intigriti.io/",
+      "source": "Intigriti December 2023 Smartypants Revenge \u2014 XSS monthly CTF (Hackademy archive)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T18:05:00.000Z"
+  "updated_at": "2026-07-20T19:05:00.000Z"
 }
