@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T20:06:03.163Z",
-  "total": 513,
-  "uniqueSlugs": 511,
+  "generatedAt": "2026-07-20T21:03:46.012Z",
+  "total": 516,
+  "uniqueSlugs": 514,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 495,
+    "generic": 498,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 444,
+    "deep": 447,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 38,
-    "Injection": 103,
-    "Cross-site scripting": 64,
+    "Injection": 104,
+    "Cross-site scripting": 66,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -185,7 +185,10 @@
     "client-side-intercode-evidence",
     "client-side-intigriti-challenge-evidence",
     "client-side-intigriti-january-xss-filter-bypass-evidence",
+    "client-side-intigriti-july-irc-challenge-evidence",
     "client-side-intigriti-june-rce-challenge-evidence",
+    "client-side-intigriti-march-eval-xss-challenge-evidence",
+    "client-side-intigriti-may-spreadsheet-formula-evidence",
     "client-side-intigriti-race-condition-challenge-evidence",
     "client-side-intigriti-secure-vault-xss-evidence",
     "client-side-intigriti-smarty-ssti-challenge-evidence",
