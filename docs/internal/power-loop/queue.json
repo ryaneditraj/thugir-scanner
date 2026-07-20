@@ -6553,7 +6553,32 @@
       "url": "http://www.net-force.nl/challenge/level213/index.php",
       "source": "Net-Force.nl challenge level 213 — web exploit training puzzle (net-force catalog)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level30/",
+      "source": "WebSec.fr level 30 — medium-rated PHP web exploit training puzzle (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level31/",
+      "source": "WebSec.fr level 31 — medium-rated PHP filter bypass / RCE training challenge (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level33/",
+      "source": "WebSec.fr level 33 — medium-rated PHP web exploit training puzzle (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/98/",
+      "source": "Hack This Site — playlevel arcade mission 98 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level214/index.php",
+      "source": "Net-Force.nl challenge level 214 — web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T10:25:00.000Z"
+  "updated_at": "2026-07-20T11:05:00.000Z"
 }
