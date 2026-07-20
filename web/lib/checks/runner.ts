@@ -833,6 +833,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
   "clientSideWebsecPhpAesSessionChallengeEvidence",
   "clientSideWebsecOopRestrictedEvalChallengeEvidence",
+  "clientSideWebsecShellExecChallengeEvidence",
+  "clientSideWebsecAspectInstrumentationChallengeEvidence",
+  "clientSideWebsecUploadIncludeChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
@@ -1962,6 +1965,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/playlevel/93/",
     "/playlevel/94/",
     "/playlevel/95/",
+    "/playlevel/96/",
+    "/playlevel/97/",
     "/missions/application/72/",
     "/missions/application/73/",
     "/missions/application/74/",
@@ -1978,6 +1983,8 @@ function extractHackThisSiteMissionSeeds(html: string, origin: string): string[]
     "/missions/application/85/",
     "/missions/application/86/",
     "/missions/application/87/",
+    "/missions/application/88/",
+    "/missions/application/89/",
     "/missions/application/66/",
     "/missions/application/63/",
     "/missions/application/64/",
@@ -5969,7 +5976,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://www.net-force.nl/challenge/level208/index.php",
         "http://www.net-force.nl/challenge/level209/index.php",
         "http://www.net-force.nl/challenge/level210/index.php",
-        "http://www.net-force.nl/challenge/level211/index.php"
+        "http://www.net-force.nl/challenge/level211/index.php",
+        "http://www.net-force.nl/challenge/level212/index.php",
+        "http://www.net-force.nl/challenge/level213/index.php"
+      ]
+    : [];
+  const websecBonusLevelSeeds = /websec\.fr/i.test(home.finalUrl)
+    ? [
+        "https://websec.fr/level26/",
+        "https://websec.fr/level26/source.php",
+        "https://websec.fr/level27/",
+        "https://websec.fr/level27/source.php",
+        "https://websec.fr/level27/source2.php",
+        "https://websec.fr/level28/",
+        "https://websec.fr/level28/source.php"
       ]
     : [];
   const websecLevelPrioritySeeds = (() => {
@@ -6201,6 +6221,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hacksplainingToxicDependenciesPrioritySeeds,
       ...netForcePrioritySeeds,
       ...websecLevelPrioritySeeds,
+      ...websecBonusLevelSeeds,
       ...ginAndJuicePrioritySeeds,
       ...cookiejarLabPrioritySeeds,
       ...ctfHubPrioritySeeds,

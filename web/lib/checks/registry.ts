@@ -8632,6 +8632,128 @@ const clientSideWebsecOopRestrictedEvalChallengeEvidence: Rule = async (ctx) => 
   };
 };
 
+// --- WebSec.fr shell_exec blacklist bypass (level26) ----------------------------------
+const CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level TwentySix /bin/sh title",
+    re: /Level(?:&nbsp;|\s)+TwentySix|#WebSec(?:&nbsp;|\s)+Level26|\/bin\/sh(?:&nbsp;|\s)+is(?:&nbsp;|\s)+the(?:&nbsp;|\s)+new/i
+  },
+  {
+    label: "suhosin max_value_length 40 protection",
+    re: /max_value_length[\s\S]{0,120}suhosin|set(?:&nbsp;|\s)+it(?:&nbsp;|\s)+to(?:&nbsp;|\s)+<code>40<\/code>/i
+  },
+  {
+    label: "shell_exec on POST code input",
+    re: /shell_exec(?:&nbsp;|\s)+\(\s*\$code[\s\S]{0,80}2>&1/i
+  },
+  {
+    label: "Character blacklist before shell_exec",
+    re: /special_characters[\s\S]{0,200}words_filter[\s\S]{0,200}functions[\s\S]{0,200}blacklist/i
+  },
+  {
+    label: "40-char command input maxlength",
+    re: /name\s*=\s*["']code["'][\s\S]{0,120}maxlength\s*=\s*40/i
+  }
+];
+
+const clientSideWebsecShellExecChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level26|TwentySix|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level26 documents shell_exec on 40-char POST code after blacklist filter — /bin/sh command injection training lab"
+    }
+  };
+};
+
+// --- WebSec.fr Acunetix aspect instrumentation backdoor (level27) ---------------------
+const CLIENT_WEBSEC_ASPECT_INSTRUMENTATION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level TwentySeven title",
+    re: /LevelTwentySeven|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+TwentySeven|Kwack Kwack Kwack your sensors/i
+  },
+  {
+    label: "acu_phpaspect.php include",
+    re: /include(?:&nbsp;|\s)+["']acu_phpaspect\.php["']|acu_phpaspect\.php/i
+  },
+  {
+    label: "HTTP_ACUNETIX_ASPECT header gate",
+    re: /HTTP_ACUNETIX_ASPECT|ACUNETIX_ASPECT_PASSWORD/i
+  },
+  {
+    label: "Instrumenting production code challenge",
+    re: /Instrumenting[\s\S]{0,80}production[\s\S]{0,80}code[\s\S]{0,80}great idea|source2\.php/i
+  }
+];
+
+const clientSideWebsecAspectInstrumentationChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_ASPECT_INSTRUMENTATION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/websec\.fr|Level27|TwentySeven|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level27 documents Acunetix aspect instrumentation backdoor via HTTP_ACUNETIX_ASPECT header and acu_phpaspect.php"
+    }
+  };
+};
+
+// --- WebSec.fr upload include type-juggling (level28) ---------------------------------
+const CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level TwentyEight title",
+    re: /Level(?:&nbsp;|\s)+TwentyEight|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+28|Please be our guess/i
+  },
+  {
+    label: "flag_file upload handler",
+    re: /name\s*=\s*['"]flag_file['"]|flag_file['"][\s\S]{0,120}tmp_name/i
+  },
+  {
+    label: "md5_file compare before include",
+    re: /md5_file(?:&nbsp;|\s)+\(\s*\$filename[\s\S]{0,120}md5_file(?:&nbsp;|\s)+\(\s*['"]flag\.php['"]/i
+  },
+  {
+    label: "crc32 checksum type juggling gate",
+    re: /\$_POST(?:&nbsp;|\s)+\[(?:&nbsp;|\s)*['"]checksum['"][\s\S]{0,80}crc32(?:&nbsp;|\s)+\(/i
+  },
+  {
+    label: "include uploaded PHP file",
+    re: /include(?:&nbsp;|\s)+\(\s*\$filename\s*\)/i
+  }
+];
+
+const clientSideWebsecUploadIncludeChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level28|TwentyEight|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level28 documents flag.php upload with md5_file equality and crc32 type-juggling before include($filename) RCE"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -22288,6 +22410,9 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecPhpUnserializeFilterChallengeEvidence,
   clientSideWebsecPhpAesSessionChallengeEvidence,
   clientSideWebsecOopRestrictedEvalChallengeEvidence,
+  clientSideWebsecShellExecChallengeEvidence,
+  clientSideWebsecAspectInstrumentationChallengeEvidence,
+  clientSideWebsecUploadIncludeChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
