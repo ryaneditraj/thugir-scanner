@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T05:01:41.395Z",
+  "updated_at": "2026-07-20T05:07:16.744Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1492,
-  "total_findings": 7362,
+  "total_sites_scanned": 1500,
+  "total_findings": 7411,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1268,
-  "discovery_findings": 5830,
+  "discovery_urls_added": 1273,
+  "discovery_findings": 5879,
   "improvements_shipped": 792,
-  "last_run": "2026-07-20T05:01:41.395Z",
+  "last_run": "2026-07-20T05:07:16.744Z",
   "last_run_summary": {
-    "hour_utc": "04:00",
+    "hour_utc": "05:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -51,30 +51,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 17,
-      "focus": "WebSec level10 magic-hash + level11 blacklist SQLi; HTS playlevel/88-90 seeds; Net-Force level207 offline oracle",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 49,
+      "focus": "Platform landing pages (hacksec, webgoat, cyberdefenders, appsecmaster) + classic banking benchmarks (testfire, zero) + HackAdvisor labs",
       "validated_urls": [
-        "https://websec.fr/level10/",
-        "https://websec.fr/level11/",
-        "https://www.hackthissite.org/playlevel/89/",
-        "http://www.net-force.nl/challenge/level207/index.php"
+        "https://websec.fr/level14/",
+        "https://websec.fr/level15/",
+        "https://websec.fr/level16/",
+        "https://www.hackthissite.org/playlevel/93/",
+        "http://www.net-force.nl/challenge/level209/index.php"
       ],
-      "improvements_shipped_this_run": 3
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "websec.fr/level10: client-side-websec-magic-hash-challenge-evidence (2→3 findings)",
-      "websec.fr/level11: client-side-websec-blacklist-sqli-challenge-evidence (2→4 findings)",
-      "hackthissite.org/playlevel/89: playlevel hub + HTS platform evidence (0→6 findings)",
-      "net-force.nl/challenge/level207: offline redirect oracle (4 findings incl offline-challenge slug)"
+      "cyberdefenders.org: secret-openai + vibe-unauthenticated-api-routes (9 findings)",
+      "appsecmaster.net: client-side-react-rsc-cve-evidence + API lab hub (8 findings)",
+      "demo.testfire.net: unauthenticated-admin-endpoint + reflected-xss-query-param (6 findings)",
+      "hacksec.in: reflected-xss-query-param + password-gated lab portal evidence (6 findings)",
+      "labs.hackadvisor.io: HackAdvisor CTF lab markers + reflected XSS (7 findings)"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "HTS playlevel/89-90 challenge content login-gated — hub markers only from cloud scans",
-      "Net-Force level207 decommissioned (301→homepage) — offline oracle only",
-      "WebSec level12/13 + HTS playlevel/91-92 + Net-Force level208 queued at tail"
+      "516-hackers-vuln-playground: GitHub Pages 404 — deploy offline (2 findings headers-only)",
+      "hacksec.in: per-lab routes password-gated — landing markers only from cloud",
+      "websec level14-16 + HTS playlevel/93 + Net-Force level209 queued at tail — pending drain"
     ]
   },
   "discovery_highlights": {
@@ -313,6 +315,7 @@
     "websec.fr/level10": 3,
     "websec.fr/level11": 4,
     "www.hackthissite.org/playlevel/89": 6,
-    "www.net-force.nl/challenge/level207/index.php": 4
+    "www.net-force.nl/challenge/level207/index.php": 4,
+    "hacksec.in": 6
   }
 }
