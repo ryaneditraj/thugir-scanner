@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T02:05:53.059Z",
+  "updated_at": "2026-07-20T02:08:39.862Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 1465,
-  "total_findings": 7233,
+  "total_sites_scanned": 1473,
+  "total_findings": 7276,
   "critical_findings": 33,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1253,
-  "discovery_findings": 5721,
+  "discovery_urls_added": 1258,
+  "discovery_findings": 5764,
   "improvements_shipped": 783,
-  "last_run": "2026-07-20T02:05:53.059Z",
+  "last_run": "2026-07-20T02:08:39.862Z",
   "last_run_summary": {
-    "hour_utc": "01:00",
+    "hour_utc": "02:00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary heroku 7 findings 6/6 recall — no benchmark misses",
+      "note": "Primary heroku 6 findings 6/6 recall — no benchmark misses (pages=1 probes=231)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,30 +51,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 5,
-      "findings": 23,
-      "focus": "VoidSec shopping-cart lab, WebSec.fr level01 source regex, HTS application/79 + Net-Force level205 queue drain",
-      "improvements_shipped_this_run": 3,
-      "queued_pending": [
-        "https://phpfox4.fly.dev/",
-        "https://docker-phpfox4.onrender.com/index.php/",
-        "https://websec.fr/level02/",
-        "https://www.hackthissite.org/playlevel/86/"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 43,
+      "focus": "OWASP VWAD Pixi, Hacksplaining lesson labs, vAPI + Pentest-Ground queue drain",
+      "new_urls": [
+        "https://websec.fr/level03/",
+        "https://websec.fr/level08/",
+        "https://websec.fr/level09/",
+        "https://www.hackthissite.org/playlevel/88/",
+        "http://www.net-force.nl/challenge/level206/index.php"
+      ],
+      "scanned_urls": [
+        "https://vwad.owasp.org/app/pixi/",
+        "https://www.hacksplaining.com/lessons/dns-poisoning/start",
+        "https://www.hacksplaining.com/lessons/downgrade-attacks/start",
+        "https://www.hacksplaining.com/lessons/email-spoofing/start",
+        "https://www.hacksplaining.com/lessons/malvertising/start",
+        "https://www.hacksplaining.com/lessons/ssl-stripping/start",
+        "http://vapi.apisec.ai/",
+        "https://pentest-ground.com:4280/"
       ]
     },
     "notable_findings": [
-      "juice-shop: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "voidsec.github.io/shopping-cart: 3 findings — VoidSec hack-lab XSS/SQLi catalog evidence (2→3)",
-      "websec.fr/level01: 5 findings — syntax-highlighted doQuery source + websec challenge evidence (4→5)",
-      "www.hackthissite.org/missions/application/79: 6 findings — login-gated application mission hub",
-      "www.net-force.nl/challenge/level205: 3 findings — Admin Area Applet5.class auth-bypass drill"
+      "juice-shop: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "vwad.owasp.org/app/pixi: 4 findings — OWASP VWAD Pixi vulnerable app demo",
+      "hacksplaining.com lessons: 30 findings across 5 interactive security lesson labs",
+      "vapi.apisec.ai: 4 findings — OWASP API Top 10 exercise lab",
+      "pentest-ground.com:4280: 5 findings — hosted DVWA SQLi/XSS/LFI lab"
     ],
     "learning_gaps": [
       "teacher_delta: nuclei/engine unavailable for diff-based learning",
-      "voidsec Shopping Cart live XAMPP instance not hosted on GitHub Pages — landing page only",
-      "HTS playlevel/86+87 + WebSec level02/07 + phpFox4 demos queued at tail",
-      "WebSec.fr level02+ queued after level01 source.php regex fix"
+      "juice-shop cold-start: pages_crawled=1 vs typical 6 — recall still 6/6 via probes",
+      "WebSec level03/08/09 + HTS playlevel/88 + Net-Force level206 queued at tail"
     ]
   },
   "discovery_highlights": {
@@ -89,7 +98,7 @@
     "wrongsecrets.herokuapp.com": 4,
     "juice-shop-staging.herokuapp.com": 7,
     "demo.owasp-juice.shop": 7,
-    "vapi.apisec.ai": 3,
+    "vapi.apisec.ai": 4,
     "ginandjuice.shop": 3,
     "bwapp.hakhub.net": 6,
     "public-firing-range.appspot.com": 3,
@@ -260,7 +269,7 @@
     "angular.testsparker.com": 5,
     "516-hackers.github.io": 2,
     "owasp-finbot-ctf.org": 3,
-    "vwad.owasp.org": 9,
+    "vwad.owasp.org": 4,
     "vuln-expose.vercel.app": 7,
     "maz4lhacks.vercel.app": 5,
     "domgo.at/cxss/example/31": 4,
@@ -308,6 +317,7 @@
     "whoopspay.onrender.com": 5,
     "vwad.owasp.org/app/vulnerable-mcp-servers-lab": 4,
     "domgo.at/cxss/example/76": 4,
-    "zen-demo-java.fly.dev": 4
+    "zen-demo-java.fly.dev": 4,
+    "www.hacksplaining.com": 30
   }
 }

@@ -6353,7 +6353,32 @@
       "url": "https://www.hackthissite.org/playlevel/87/",
       "source": "HackThisSite realistic mission playlevel 87 \u2014 advanced web exploitation training",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level03/",
+      "source": "WebSec.fr \u2014 medium difficulty SQLi/SSRF challenge level03 (French public CTF platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level08/",
+      "source": "WebSec.fr \u2014 easy XSS/filter-bypass challenge level08 (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level09/",
+      "source": "WebSec.fr \u2014 medium SSRF/deserialization challenge level09 (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/playlevel/88/",
+      "source": "Hack This Site \u2014 playlevel arcade mission 88 advanced web exploitation training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://www.net-force.nl/challenge/level206/index.php",
+      "source": "Net-Force.nl challenge level 206 \u2014 web exploit training puzzle (net-force catalog)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T01:05:00.000Z"
+  "updated_at": "2026-07-20T02:06:00.000Z"
 }
