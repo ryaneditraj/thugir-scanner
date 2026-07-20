@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T07:05:20.104Z",
-  "total": 490,
-  "uniqueSlugs": 488,
+  "generatedAt": "2026-07-20T08:02:39.270Z",
+  "total": 492,
+  "uniqueSlugs": 490,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 472,
+    "generic": 474,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 421,
+    "deep": 423,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 35,
     "Security misconfiguration": 41,
     "Broken authentication": 37,
-    "Injection": 93,
+    "Injection": 95,
     "Cross-site scripting": 58,
     "general": 18,
     "SSRF": 1,
@@ -392,6 +392,8 @@
     "client-side-websec-fibonacci-eval-challenge-evidence",
     "client-side-websec-file-upload-challenge-evidence",
     "client-side-websec-magic-hash-challenge-evidence",
+    "client-side-websec-php-unserialize-cookie-challenge-evidence",
+    "client-side-websec-php-unserialize-filter-challenge-evidence",
     "client-side-websec-restricted-php-exec-challenge-evidence",
     "client-side-websec-sqli-privilege-challenge-evidence",
     "client-side-websec-timing-attack-challenge-evidence",
