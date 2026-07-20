@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-20T16:06:08.325Z",
-  "total": 504,
-  "uniqueSlugs": 502,
+  "generatedAt": "2026-07-20T17:14:11.778Z",
+  "total": 506,
+  "uniqueSlugs": 504,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 486,
+    "generic": 488,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 435,
+    "deep": 437,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 144,
+    "Broken access control": 145,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 38,
-    "Injection": 100,
+    "Injection": 101,
     "Cross-site scripting": 60,
     "general": 18,
     "SSRF": 1,
@@ -183,6 +183,7 @@
     "client-side-insaits-evidence",
     "client-side-intercode-evidence",
     "client-side-intigriti-challenge-evidence",
+    "client-side-intigriti-race-condition-challenge-evidence",
     "client-side-invicti-practice-site-evidence",
     "client-side-ironwasp-evidence",
     "client-side-ist-edu-vuln-portal-evidence",
@@ -394,6 +395,7 @@
     "client-side-websec-class-instantiation-challenge-evidence",
     "client-side-websec-create-function-challenge-evidence",
     "client-side-websec-crypto-challenge-evidence",
+    "client-side-websec-dynamic-function-call-challenge-evidence",
     "client-side-websec-fibonacci-eval-challenge-evidence",
     "client-side-websec-file-upload-challenge-evidence",
     "client-side-websec-magic-hash-challenge-evidence",
