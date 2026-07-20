@@ -5303,6 +5303,24 @@
       "slug": "hts-playlevel-95-application-87-net-force-level211-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner seeds playlevel/95 + application/87 + net-force level211; playlevel/95 hub evidence during HTS maintenance; level211 301→homepage offline oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-aes-session-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level21/source.php LevelTwentyOne + preg_match (a|d|m|i|n) admin filter + mcrypt_encrypt session cookie + verify_credentials SQL concat; websec.fr/level21 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-oop-restricted-eval-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level22/source.php OOP-FTW + substr($_GET['code'],0,21) + strcmp/strncmp removed from blacklist + eval($code); websec.fr/level22 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level21-22-crawl-deep-rules",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebsecChallengeSeeds extended to level22 + source1/source2.php; wired unserialize/aes/oop WebSec rules into DEEP_RULES; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9320,6 +9338,21 @@
       "source": "discovery:www.hackthissite.org",
       "slug": "hts-playlevel-95-application-87-net-force-level211-seeds",
       "shipped_at": "2026-07-20T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-aes-session-challenge-evidence",
+      "shipped_at": "2026-07-20T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-oop-restricted-eval-challenge-evidence",
+      "shipped_at": "2026-07-20T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level21-22-crawl-deep-rules",
+      "shipped_at": "2026-07-20T09:25:00.000Z"
     }
   ]
 }
