@@ -2762,6 +2762,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-dynamic-function-call-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr dynamic function call lab disclosed",
+    description:
+      "WebSec.fr level34 gates readflag() behind strcmp hash match then invokes attacker-controlled $name() from POST — PHP variable function call training.",
+    impactOneline:
+      "Public challenge source documents dynamic function invocation after password hash gate to reach flag disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecDynamicFunctionCallChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP variable-function labs offline; never call user-controlled function names.",
+      steps: [
+        "Move WebSec-style dynamic call labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Whitelist callable functions instead of invoking $_POST['name'] dynamically."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level34 lab exposes $name() after a strcmp hash gate. Show how to retire public labs and ban dynamic function calls on user input.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sixhack-ctf-lab-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -4604,6 +4630,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We run Intigriti-style XSS challenges with innerHTML sinks. Show how to harden modal rendering and note search UIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-race-condition-challenge-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Intigriti BarSpacer race-condition challenge disclosed",
+    description:
+      "Intigriti challenge-0424.intigriti.io hosts the BarSpacer gaming lab with admin:debug basic-auth links, race-condition scoring, and optional code.zip leak via debug=true.",
+    impactOneline:
+      "Public April 2024 challenge documents race-condition exploitation training with embedded basic-auth game URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiRaceConditionChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti race challenges are intentional training — isolate game backends and rotate debug credentials.",
+      steps: [
+        "Host BarSpacer-style game labs on contest-only infrastructure.",
+        "Never embed admin:debug credentials in client-side JavaScript.",
+        "Disable debug code.zip endpoints on public challenge hosts."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti BarSpacer race-condition challenges with admin:debug links in JS. Show how to isolate game APIs and remove debug credential leaks.",
     version: 1,
     enabled: true
   },

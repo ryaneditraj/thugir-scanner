@@ -841,6 +841,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecUploadIncludeChallengeEvidence",
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
   "clientSideWebsecOpenBasedirEvalChallengeEvidence",
+  "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
   "clientSidePentesterLabEvidence",
@@ -917,6 +918,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWizerCtfEvidence",
   "clientSideWizerCtfStoredDomXssEvidence",
   "clientSideIntigritiChallengeEvidence",
+  "clientSideIntigritiRaceConditionChallengeEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1320,7 +1322,7 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
       /* ignore */
     }
   }
-  for (let n = 1; n <= 85; n++) {
+  for (let n = 1; n <= 96; n++) {
     try {
       out.add(new URL(`/cxss/example/${n}`, pageUrl).toString());
     } catch {
@@ -1407,7 +1409,18 @@ function extractDomGoatCxssSeeds(html: string, pageUrl: string): string[] {
     "/cxss/example/82",
     "/cxss/example/83",
     "/cxss/example/84",
-    "/cxss/example/85"
+    "/cxss/example/85",
+    "/cxss/example/86",
+    "/cxss/example/87",
+    "/cxss/example/88",
+    "/cxss/example/89",
+    "/cxss/example/90",
+    "/cxss/example/91",
+    "/cxss/example/92",
+    "/cxss/example/93",
+    "/cxss/example/94",
+    "/cxss/example/95",
+    "/cxss/example/96"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -1456,11 +1469,23 @@ function extractAevumDemoSeeds(html: string, pageUrl: string): string[] {
 
 /** Intigriti monthly XSS challenges (challenge-NNNN.intigriti.io) — seed /challenge app route. */
 function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[] {
-  if (!/challenge-\d{4}\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag/i.test(html))
+  if (
+    !/challenge-\d{4}\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag|Test Your Race Condition!/i.test(
+      html
+    )
+  )
     return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/challenge", "/challenge/challenge.php", "/js/app.js", "/challenge.html"]) {
+  for (const p of [
+    "/challenge",
+    "/challenge/challenge.php",
+    "/challenge/welcome.html",
+    "/challenge/docs.html",
+    "/challenge/game_barspacer.html",
+    "/js/app.js",
+    "/challenge.html"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -6038,7 +6063,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://websec.fr/level30/",
         "https://websec.fr/level30/source.php",
         "https://websec.fr/level31/",
-        "https://websec.fr/level31/source.php"
+        "https://websec.fr/level31/source.php",
+        "https://websec.fr/level32/",
+        "https://websec.fr/level32/source.php",
+        "https://websec.fr/level34/",
+        "https://websec.fr/level34/source.php"
       ]
     : [];
   const websecLevelPrioritySeeds = (() => {

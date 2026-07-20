@@ -8946,6 +8946,51 @@ const clientSideWebsecOpenBasedirEvalChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr dynamic function call (level34) ----------------------------------------
+const CLIENT_WEBSEC_DYNAMIC_FUNCTION_CALL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Thirty-four title",
+    re: /Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)+four|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)+four|please guess the flag/i
+  },
+  {
+    label: "POST name function parameter",
+    re: /\$_POST[\s\S]{0,80}['"]name['"][\s\S]{0,80}function|placeholder="Function"/i
+  },
+  {
+    label: "Dynamic function invocation",
+    re: /\$name\s*\(\s*\)|function\s+readflag\s*\(\s*\)/i
+  },
+  {
+    label: "strcmp sha256 password hash gate",
+    re: /strcmp[\s\S]{0,120}hash[\s\S]{0,40}sha256[\s\S]{0,120}\$password[\s\S]{0,120}\$flag/i
+  },
+  {
+    label: "Conditional readflag definition",
+    re: /function\s+readflag[\s\S]{0,120}echo[\s\S]{0,40}\$flag/i
+  }
+];
+
+const clientSideWebsecDynamicFunctionCallChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_DYNAMIC_FUNCTION_CALL_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level34|Thirty-four|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (/Level31|Thirty-one|open_basedir/i.test(ctx.combined) && !/Level34|Thirty-four/i.test(ctx.combined)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level34 documents strcmp hash gate plus dynamic $name() invocation to reach readflag() after password match"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -12622,6 +12667,50 @@ const clientSideIntigritiChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Intigriti monthly XSS challenge documents DOM sinks, /challenge routes, and FLAG capture rules for browser-based exploitation labs"
+    }
+  };
+};
+
+// --- Intigriti April 2024 BarSpacer race-condition challenge ------------------------
+const CLIENT_INTIGRITI_RACE_CONDITION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Test Your Race Condition title",
+    re: /Test Your Race Condition!/i
+  },
+  {
+    label: "BarSpacer gaming lab",
+    re: /BarSpacer|game_barspacer\.html/i
+  },
+  {
+    label: "admin:debug basic-auth game link",
+    re: /admin:debug@challenge-\d{4}\.intigriti\.io|admin:debug@['"]\s*\+\s*location\.host/i
+  },
+  {
+    label: "Race-condition debug code.zip leak",
+    re: /debug=true|code\.zip|Get our server side code here/i
+  },
+  {
+    label: "Intigriti challenge-0424 host",
+    re: /challenge-0424\.intigriti\.io/i
+  }
+];
+
+const clientSideIntigritiRaceConditionChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_RACE_CONDITION_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0424|Test Your Race Condition/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti April 2024 BarSpacer challenge documents race-condition gaming lab with admin:debug basic-auth links and optional code.zip leak"
     }
   };
 };
@@ -22865,6 +22954,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecUploadIncludeChallengeEvidence,
   clientSideWebsecPhpUnserializeDestructChallengeEvidence,
   clientSideWebsecOpenBasedirEvalChallengeEvidence,
+  clientSideWebsecDynamicFunctionCallChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
@@ -22945,6 +23035,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWizerCtfEvidence,
   clientSideWizerCtfStoredDomXssEvidence,
   clientSideIntigritiChallengeEvidence,
+  clientSideIntigritiRaceConditionChallengeEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
