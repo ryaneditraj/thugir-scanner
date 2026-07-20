@@ -8199,6 +8199,90 @@ const clientSideWebsecBlacklistSqliChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr arbitrary PHP class instantiation (level12) ---------------------------
+const CLIENT_WEBSEC_CLASS_INSTANTIATION_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Twelve challenge title",
+    re: /#WebSec\s+Level\s+Twelve|LevelTwelve(?:&nbsp;|\s)*<small>\s*-\s*This time, it's different/i
+  },
+  {
+    label: "Arbitrary class instantiation scope",
+    re: /instanciate a class of your choice|two arbitrary parameters/i
+  },
+  {
+    label: "Partial iterator class blacklist",
+    re: /splfileobject|globiterator|filesystemiterator|directoryiterator/i
+  },
+  {
+    label: "POST class/param1/param2 instantiation form",
+    re: /name\s*=\s*["']class["'][\s\S]{0,240}name\s*=\s*["']param1["'][\s\S]{0,240}name\s*=\s*["']param2["']/i
+  },
+  {
+    label: "echo new class sink",
+    re: /echo[\s\S]{0,40}<span[^>]*>new<\/span>|echo\s+new\s+\$class/i
+  }
+];
+
+const clientSideWebsecClassInstantiationChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CLASS_INSTANTIATION_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTwelve|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level12 documents arbitrary PHP class instantiation — partial iterator blacklist but echo new $class($param1, $param2) remains exploitable"
+    }
+  };
+};
+
+// --- WebSec.fr SQLi privilege disclosure (level13) -------------------------------------
+const CLIENT_WEBSEC_SQLI_PRIVILEGE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Thirteen privilege challenge title",
+    re: /#WebSec\s+Level\s+Thirteen|LevelThirteen(?:&nbsp;|\s)*<small>\s*-\s*A privilege offer/i
+  },
+  {
+    label: "Privilege lookup ids parameter",
+    re: /Ids to display|name\s*=\s*['"]ids['"]/
+  },
+  {
+    label: "user_privileges column lookup",
+    re: /SELECT[\s\S]{0,120}user_privileges[\s\S]{0,120}FROM[\s\S]{0,40}users/i
+  },
+  {
+    label: "Injectable ids IN clause",
+    re: /\$_GET\s*\[\s*['"]ids['"]\s*\]|user_id\s+IN\s*\(/i
+  },
+  {
+    label: "Admin flag stored in user_password",
+    re: /INSERT\s+INTO\s+users\s+VALUES\s*\(\s*0\s*,\s*['"]admin['"][\s\S]{0,80}\$flag/i
+  }
+];
+
+const clientSideWebsecSqliPrivilegeChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_SQLI_PRIVILEGE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelThirteen|#WebSec|privilege offer/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level13 documents SQLi in privilege lookup — injectable ids IN clause leaks admin flag from user_password column"
+    }
+  };
+};
+
 // --- SixHack Academy free CTF Labs (platform.sixhackacademy.com) ----------------
 const CLIENT_SIXHACK_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -21845,6 +21929,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecFileUploadChallengeEvidence,
   clientSideWebsecMagicHashChallengeEvidence,
   clientSideWebsecBlacklistSqliChallengeEvidence,
+  clientSideWebsecClassInstantiationChallengeEvidence,
+  clientSideWebsecSqliPrivilegeChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
   clientSidePentesterLabEvidence,
