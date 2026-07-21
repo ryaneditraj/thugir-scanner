@@ -6938,7 +6938,32 @@
       "url": "https://challenge-0221.intigriti.io/",
       "source": "Intigriti February 2021 monthly XSS CTF \u2014 early Hackademy archive",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/playground/intro14",
+      "source": "DefendTheWeb \u2014 playground intro14 client-side security challenge (playground series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/playground/intro15",
+      "source": "DefendTheWeb \u2014 playground intro15 client-side security challenge (playground series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/playground/intro16",
+      "source": "DefendTheWeb \u2014 playground intro16 client-side security challenge (playground series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/67",
+      "source": "DOM Clobbering XSS (CXSS) training lab \u2014 Mario Heiderich domgo.at example 67 (Awesome-Vulnerable-Labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/68",
+      "source": "DOM Clobbering XSS (CXSS) training lab \u2014 Mario Heiderich domgo.at example 68 (Awesome-Vulnerable-Labs)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T03:05:00.000Z"
+  "updated_at": "2026-07-21T04:05:00.000Z"
 }
