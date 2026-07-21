@@ -956,6 +956,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackHealthInfoExposureEvidence",
   "clientSideHackHealthJwtEvidence",
   "clientSideHackHealthErrorMessagesEvidence",
+  "clientSideHackHealthCorsEvidence",
+  "clientSideHackHealthHardcodedCredEvidence",
+  "clientSideHackHealthSsrfEvidence",
   "clientSideIntigritiMarchLeakyFlagmentEvidence",
   "clientSideIntigritiJanuaryIframeReactXssEvidence",
   "clientSideIntigritiJuneLeakyJarEvidence",
@@ -6766,7 +6769,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/cybersecurity/a01/informationExposure", home.finalUrl).toString(),
           new URL("/cybersecurity/a02/jwt", home.finalUrl).toString(),
           new URL("/cybersecurity/a03/sqlInjection", home.finalUrl).toString(),
-          new URL("/cybersecurity/a04/errorMessages", home.finalUrl).toString()
+          new URL("/cybersecurity/a04/errorMessages", home.finalUrl).toString(),
+          new URL("/cybersecurity/a05/cors", home.finalUrl).toString(),
+          new URL("/cybersecurity/a07/hardcodedCred", home.finalUrl).toString(),
+          new URL("/cybersecurity/a10/ssrf", home.finalUrl).toString()
         ]
       : [];
   const seclabPlaygroundPrioritySeeds =
