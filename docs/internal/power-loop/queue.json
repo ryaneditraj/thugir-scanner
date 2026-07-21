@@ -6863,7 +6863,32 @@
       "url": "https://challenge-0522.intigriti.io/",
       "source": "Intigriti May 2022 Pollution \u2014 WAF + prototype pollution XSS by PiyushThePal (Bugology archive)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0323.intigriti.io/",
+      "source": "Intigriti March 2023 Incomplete Secure Notes \u2014 XSS/CORS/CSP flag theft (Bugology 0323)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0423.intigriti.io/",
+      "source": "Intigriti April 2023 We Like to Sell Bricks \u2014 type juggling + LFI + command injection RCE (Bugology 0423)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0523.intigriti.io/",
+      "source": "Intigriti May 2023 E.C.M.A review \u2014 Reflect API XSS + WAF bypass (Bugology 0523)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0521.intigriti.io/",
+      "source": "Intigriti May 2021 Math Robot \u2014 captcha filter bypass XSS (Intigriti Hackademy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0322.intigriti.io/",
+      "source": "Intigriti March 2022 Hashing \u2014 CSRF/CSP/PHP overflow XSS by BrunoModificato (Bugology 0322)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T00:16:00.000Z"
+  "updated_at": "2026-07-21T01:25:00.000Z"
 }
