@@ -2293,6 +2293,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hack-health-vul-packages-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "HackHealth A06 vulnerable packages lab disclosed",
+    description:
+      "HackHealth Nextra A06 module at /cybersecurity/a06/vulPackages documents CWE-1035 components with known vulnerabilities and Snyk static analysis of nth-check/webpack packages.",
+    impactOneline:
+      "Public A06 vulnerable-packages walkthrough on a Vercel deploy teaches dependency scanning gaps against a live npm supply chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthVulPackagesEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run SCA in CI and pin/update vulnerable dependencies; gate attack tutorials behind local-only hosting.",
+      steps: [
+        "Integrate Snyk or Dependabot to block known-vulnerable package versions in CI.",
+        "Update transitive dependencies when parent packages lag on security fixes.",
+        "Host HackHealth A06 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A06 tutorial documents CWE-1035 vulnerable npm packages on a public deploy. Show SCA tooling and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-integrity-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "HackHealth A08 software integrity failures lab disclosed",
+    description:
+      "HackHealth Nextra A08 module at /cybersecurity/a08/integrityVerification documents CWE-494 download of code without integrity checks on package auto-updates.",
+    impactOneline:
+      "Public A08 integrity walkthrough on a Vercel deploy teaches supply-chain tampering via missing SRI and update verification.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthIntegrityEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify package integrity with lockfiles, checksums, and signed releases; gate attack tutorials behind local-only hosting.",
+      steps: [
+        "Use npm ci with lockfile checksum verification in CI/CD pipelines.",
+        "Enable Subresource Integrity (SRI) for third-party scripts and enforce signed package releases.",
+        "Host HackHealth A08 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A08 tutorial documents CWE-494 missing integrity verification on a public deploy. Show lockfile/SRI controls and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-logger-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "HackHealth A09 security logging failures lab disclosed",
+    description:
+      "HackHealth Nextra A09 module at /cybersecurity/a09/logger documents CWE-778 insufficient logging when failed login attempts and brute-force attacks go undetected.",
+    impactOneline:
+      "Public A09 logging walkthrough on a Vercel deploy teaches monitoring gaps that hide credential-stuffing attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthLoggerEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log security-critical events and alert on repeated auth failures; gate attack tutorials behind local-only hosting.",
+      steps: [
+        "Implement structured logging for failed logins, privilege changes, and input validation errors.",
+        "Ship logs to a SIEM and alert on brute-force or credential-stuffing patterns.",
+        "Host HackHealth A09 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A09 tutorial documents CWE-778 insufficient security logging on a public deploy. Show winston/pino logging and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openapi-debug-password-exposure",
     platform: "generic",
     category: "Sensitive data exposure",

@@ -8185,6 +8185,142 @@ const clientSideHackHealthSsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HackHealth A06 vulnerable packages tutorial (a06/vulPackages) -------------
+const CLIENT_HACK_HEALTH_VUL_PACKAGES_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A06 vulnerable packages module title",
+    re: /HH tutorial - Vulnerable Packages|Vulnerable Packages<\/title>/i
+  },
+  {
+    label: "A06:2021 Vulnerable and Outdated Components heading",
+    re: /A06:2021[\s\S]{0,40}Vulnerable and Outdated Components/i
+  },
+  {
+    label: "CWE-1035 components with known vulnerabilities",
+    re: /CWE-1035[\s\S]{0,120}Using Components with Known Vulnerabilities/i
+  },
+  {
+    label: "Snyk static analysis walkthrough",
+    re: /Snyk static tool analysis|snyk test/i
+  },
+  {
+    label: "HackHealth vulPackages route",
+    re: /\/cybersecurity\/a06\/vulPackages/i
+  }
+];
+
+const clientSideHackHealthVulPackagesEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_VUL_PACKAGES_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-1035|Vulnerable Packages|snyk/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A06 tutorial documents CWE-1035 vulnerable npm packages via Snyk static analysis"
+    }
+  };
+};
+
+// --- HackHealth A08 integrity verification tutorial (a08/integrityVerification) -
+const CLIENT_HACK_HEALTH_INTEGRITY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A08 integrity verification module title",
+    re: /HH tutorial - Lack of integrity verification|Lack of integrity verification<\/title>/i
+  },
+  {
+    label: "A08:2021 Software and Data Integrity Failures heading",
+    re: /A08:2021[\s\S]{0,40}Software and Data Integrity Failures/i
+  },
+  {
+    label: "CWE-494 download without integrity check",
+    re: /CWE-494[\s\S]{0,120}Download of Code Without Integrity Check/i
+  },
+  {
+    label: "Auto-update without integrity verification",
+    re: /auto-update of packages is made without sufficient integrity verification|does not verify the integrity of the source/i
+  },
+  {
+    label: "HackHealth integrityVerification route",
+    re: /\/cybersecurity\/a08\/integrityVerification/i
+  }
+];
+
+const clientSideHackHealthIntegrityEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_INTEGRITY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-494|integrity verification|Software and Data Integrity/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A08 tutorial documents CWE-494 lack of software integrity verification on package updates"
+    }
+  };
+};
+
+// --- HackHealth A09 security logging tutorial (a09/logger) ---------------------
+const CLIENT_HACK_HEALTH_LOGGER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A09 security logging module title",
+    re: /HH tutorial - Security logging|Security logging<\/title>/i
+  },
+  {
+    label: "A09:2021 Security Logging and Monitoring Failures heading",
+    re: /A09:2021[\s\S]{0,40}Security Logging and Monitoring Failures/i
+  },
+  {
+    label: "CWE-778 insufficient logging",
+    re: /CWE-778[\s\S]{0,120}Insufficient Logging/i
+  },
+  {
+    label: "Failed login attempts not logged",
+    re: /security-critical events are not logged properly|no logging in place to detect such an attack/i
+  },
+  {
+    label: "HackHealth logger route",
+    re: /\/cybersecurity\/a09\/logger/i
+  }
+];
+
+const clientSideHackHealthLoggerEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_LOGGER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-778|Security logging|Insufficient Logging/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A09 tutorial documents CWE-778 insufficient security logging for failed login attempts"
+    }
+  };
+};
+
 // --- DomGoat DOM XSS learning platform (domgo.at/cxss) -------------------------
 const CLIENT_DOM_GOAT_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -25733,6 +25869,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackHealthCorsEvidence,
   clientSideHackHealthHardcodedCredEvidence,
   clientSideHackHealthSsrfEvidence,
+  clientSideHackHealthVulPackagesEvidence,
+  clientSideHackHealthIntegrityEvidence,
+  clientSideHackHealthLoggerEvidence,
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,

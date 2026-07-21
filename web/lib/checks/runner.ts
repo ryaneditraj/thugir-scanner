@@ -959,6 +959,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackHealthCorsEvidence",
   "clientSideHackHealthHardcodedCredEvidence",
   "clientSideHackHealthSsrfEvidence",
+  "clientSideHackHealthVulPackagesEvidence",
+  "clientSideHackHealthIntegrityEvidence",
+  "clientSideHackHealthLoggerEvidence",
   "clientSideIntigritiMarchLeakyFlagmentEvidence",
   "clientSideIntigritiJanuaryIframeReactXssEvidence",
   "clientSideIntigritiJuneLeakyJarEvidence",
@@ -6771,7 +6774,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/cybersecurity/a03/sqlInjection", home.finalUrl).toString(),
           new URL("/cybersecurity/a04/errorMessages", home.finalUrl).toString(),
           new URL("/cybersecurity/a05/cors", home.finalUrl).toString(),
+          new URL("/cybersecurity/a06/vulPackages", home.finalUrl).toString(),
           new URL("/cybersecurity/a07/hardcodedCred", home.finalUrl).toString(),
+          new URL("/cybersecurity/a08/integrityVerification", home.finalUrl).toString(),
+          new URL("/cybersecurity/a09/logger", home.finalUrl).toString(),
           new URL("/cybersecurity/a10/ssrf", home.finalUrl).toString()
         ]
       : [];
