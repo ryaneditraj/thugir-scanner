@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T20:20:01.827Z",
+  "updated_at": "2026-07-21T20:39:57.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1440,
   "discovery_findings": 7196,
-  "improvements_shipped": 888,
-  "last_run": "2026-07-21T20:20:01.828Z",
+  "improvements_shipped": 891,
+  "last_run": "2026-07-21T20:39:57.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -36,7 +36,7 @@
       "gap": [],
       "primary_gap": [],
       "pass1_gap": [],
-      "note": "First-pass 7 findings 6/6 recall on primary Heroku (pages=6 probes=172; no wake retries needed)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings on juice-shop-staging); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,30 +53,25 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 28,
-      "focus": "Queue drain: wizer-ctf, chal1/5/7/8 vercel, openvaultbank API, pentesteracademylab; +5 URLs (yogsec XSS lab1/lab5, intigriti 0326/0426 challenge.html, oopssec race-condition walkthrough)",
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (unreachable — DNS/host dead)"
-      ],
-      "skipped_48h": "queue head URLs within 48h window skipped automatically"
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 27,
+      "focus": "HackHealth A05 CORS, A07 hardcoded credentials, A10 SSRF module evidence rules",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6/6 recall first pass — 7 findings pages=6 probes=172",
-      "chal7.vercel.app: postmessage-dom-xss-evidence + dangerous-html-sinks",
-      "openvaultbank.com/api/v1/users: client-side-api-security-lab-evidence + openvault-learn-evidence",
-      "wizer-ctf.com + chal1/5/8.vercel.app: Wizer developer security CTF markers",
-      "pentesteracademylab.appspot.com: Pentester Academy Lab challenge hub evidence"
+      "hack-health-tutorial a05/cors: CWE-942 permissive CORS lab (3→9 findings)",
+      "hack-health-tutorial a07/hardcodedCred: CWE-798 DB_PASSWORD=postgres lab (3→9 findings)",
+      "hack-health-tutorial a10/ssrf: CWE-918 SSRF walkthrough (3→9 findings)",
+      "juice-shop-staging benchmark: 6/6 recall maintained (7 findings)"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "hack-health A01-A10 modules at queue tail — not yet drained",
-      "testhtml5.vulnweb.com: host unreachable from cloud",
-      "new intigriti/yogsec/oopssec URLs appended at queue tail — pending drain"
+      "hack-health A06 vulPackages, A08 integrityVerification, A09 logger — queued, not yet drained",
+      "testhtml5.vulnweb.com: host unreachable from cloud"
     ]
   },
   "discovery_highlights": {

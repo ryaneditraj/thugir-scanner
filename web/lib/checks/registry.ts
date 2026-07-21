@@ -8050,6 +8050,141 @@ const clientSideHackHealthErrorMessagesEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HackHealth A05 CORS misconfiguration tutorial (a05/cors) ------------------
+const CLIENT_HACK_HEALTH_CORS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A05 CORS module title",
+    re: /HH tutorial - CORS|CORS<\/title>/i
+  },
+  {
+    label: "A05:2021 Security Misconfiguration heading",
+    re: /A05:2021[\s\S]{0,40}Security Misconfiguration/i
+  },
+  {
+    label: "CWE-942 permissive CORS whitelist",
+    re: /CWE-942[\s\S]{0,120}Overly Permissive Cross-domain Whitelist/i
+  },
+  {
+    label: "Access-Control-Allow-Origin walkthrough",
+    re: /Access-Control-Allow-Origin|Cross-Origin Resource Sharing/i
+  },
+  {
+    label: "HackHealth cors route",
+    re: /\/cybersecurity\/a05\/cors/i
+  }
+];
+
+const clientSideHackHealthCorsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_CORS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-942|CORS|Access-Control/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A05 tutorial documents CWE-942 permissive CORS and missing Access-Control-Allow-Origin headers"
+    }
+  };
+};
+
+// --- HackHealth A07 hard-coded credentials tutorial (a07/hardcodedCred) --------
+const CLIENT_HACK_HEALTH_HARDCODED_CRED_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A07 hard-coded credentials module title",
+    re: /HH tutorial - Use of Hard-coded Credentials|Use of Hard-coded Credentials<\/title>/i
+  },
+  {
+    label: "A07:2021 Identification and Authentication Failures heading",
+    re: /A07:2021[\s\S]{0,60}Identification and Authentication Failures/i
+  },
+  {
+    label: "CWE-798 hard-coded credentials",
+    re: /CWE-798[\s\S]{0,120}Use of Hard-coded Credentials/i
+  },
+  {
+    label: "Default DB_PASSWORD in dbServer.ts",
+    re: /DB_PASSWORD\s*=\s*postgres|dbServer\.ts/i
+  },
+  {
+    label: "HackHealth hardcodedCred route",
+    re: /\/cybersecurity\/a07\/hardcodedCred/i
+  }
+];
+
+const clientSideHackHealthHardcodedCredEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_HARDCODED_CRED_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-798|hard[\s-]?coded|DB_PASSWORD/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A07 tutorial documents CWE-798 hard-coded database credentials in dbServer.ts"
+    }
+  };
+};
+
+// --- HackHealth A10 SSRF tutorial (a10/ssrf) -----------------------------------
+const CLIENT_HACK_HEALTH_SSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A10 SSRF module title",
+    re: /HH tutorial - Server Side Request Forgery \(SSRF\)|Server Side Request Forgery \(SSRF\)<\/title>/i
+  },
+  {
+    label: "A10:2021 Server-Side Request Forgery heading",
+    re: /A10:2021[\s\S]{0,40}Server-Side Request Forgery/i
+  },
+  {
+    label: "CWE-918 server-side request forgery",
+    re: /CWE-918[\s\S]{0,120}Server Side Request Forgery/i
+  },
+  {
+    label: "SSRF attack walkthrough",
+    re: /SSRF \(Server-Side Request Forgery\)|web application fetches a remote resource/i
+  },
+  {
+    label: "HackHealth ssrf route",
+    re: /\/cybersecurity\/a10\/ssrf/i
+  }
+];
+
+const clientSideHackHealthSsrfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_SSRF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-918|SSRF|Server[\s-]?Side Request Forgery/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A10 tutorial documents CWE-918 server-side request forgery via attacker-controlled URL fetch"
+    }
+  };
+};
+
 // --- DomGoat DOM XSS learning platform (domgo.at/cxss) -------------------------
 const CLIENT_DOM_GOAT_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -25595,6 +25730,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackHealthInfoExposureEvidence,
   clientSideHackHealthJwtEvidence,
   clientSideHackHealthErrorMessagesEvidence,
+  clientSideHackHealthCorsEvidence,
+  clientSideHackHealthHardcodedCredEvidence,
+  clientSideHackHealthSsrfEvidence,
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,

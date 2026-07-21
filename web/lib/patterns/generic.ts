@@ -2215,6 +2215,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hack-health-cors-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "HackHealth A05 permissive CORS lab disclosed",
+    description:
+      "HackHealth Nextra A05 module at /cybersecurity/a05/cors documents CWE-942 overly permissive Cross-Origin Resource Sharing and missing Access-Control-Allow-Origin headers.",
+    impactOneline:
+      "Public A05 CORS walkthrough on a Vercel deploy teaches cross-origin data theft via misconfigured Access-Control headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthCorsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS to trusted origins; never use wildcard Access-Control-Allow-Origin with credentials.",
+      steps: [
+        "Whitelist specific origins instead of * in Access-Control-Allow-Origin.",
+        "Avoid reflecting arbitrary Origin headers without validation.",
+        "Host HackHealth A05 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A05 CORS tutorial documents CWE-942 permissive cross-origin policies on a public deploy. Show strict origin whitelisting and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-hardcoded-cred-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "HackHealth A07 hard-coded credentials lab disclosed",
+    description:
+      "HackHealth Nextra A07 module at /cybersecurity/a07/hardcodedCred documents CWE-798 hard-coded database credentials (DB_PASSWORD = postgres) in dbServer.ts.",
+    impactOneline:
+      "Public A07 hard-coded credential walkthrough exposes default DB passwords attackers can replay against the live deploy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthHardcodedCredEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Load credentials from environment variables or a secrets manager; never commit defaults to source.",
+      steps: [
+        "Replace hard-coded DB_PASSWORD with process.env.DB_PASSWORD.",
+        "Run Snyk or similar SAST in CI to block committed secrets.",
+        "Host HackHealth A07 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A07 tutorial documents CWE-798 hard-coded DB credentials on a public deploy. Show environment-variable loading and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-ssrf-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "HackHealth A10 SSRF lab disclosed",
+    description:
+      "HackHealth Nextra A10 module at /cybersecurity/a10/ssrf documents CWE-918 server-side request forgery when a web app fetches attacker-controlled URLs.",
+    impactOneline:
+      "Public A10 SSRF walkthrough on a Vercel deploy teaches internal network probing via server-side fetch endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthSsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and block SSRF-prone URL fetch endpoints; deny private IP ranges and metadata hosts.",
+      steps: [
+        "Allowlist outbound fetch destinations instead of accepting arbitrary URLs.",
+        "Block 169.254.169.254, localhost, and RFC1918 ranges in server-side HTTP clients.",
+        "Host HackHealth A10 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A10 SSRF tutorial documents CWE-918 server-side request forgery on a public deploy. Show URL validation, egress filtering, and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openapi-debug-password-exposure",
     platform: "generic",
     category: "Sensitive data exposure",
