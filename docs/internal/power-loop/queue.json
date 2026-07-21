@@ -7288,7 +7288,32 @@
       "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
       "source": "kOaDT/oss-oopssec-store \u2014 race-condition TOCTOU coupon abuse walkthrough with vulnerable code oracle",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/",
+      "source": "the0x-pwn/lab-xss \u2014 10-challenge reflected/DOM/filter-bypass XSS training dashboard (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-2/",
+      "source": "the0x-pwn/lab-xss \u2014 template-literal reflected XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-8/",
+      "source": "the0x-pwn/lab-xss \u2014 href-attribute reflected XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab10.html",
+      "source": "yogsec/xss-labs \u2014 filter-bypass XSS lab module (correct labs/ path)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab20.html",
+      "source": "yogsec/xss-labs \u2014 advanced DOM XSS lab module (correct labs/ path)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T20:13:00.000Z"
+  "updated_at": "2026-07-21T21:10:00.000Z"
 }
