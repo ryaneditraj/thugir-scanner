@@ -1,163 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-20T02:07:19.212Z",
-      "url": "https://www.hacksplaining.com/lessons/email-spoofing/start",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-hacksplaining-email-spoofing-lesson-evidence",
-          "title": "Hacksplaining email spoofing lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-hacksplaining-evidence",
-          "title": "Hacksplaining interactive OWASP secure-coding lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-hacksplaining-csrf-lesson-evidence",
-          "title": "Hacksplaining CSRF lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-hacksplaining-xss-reflected-lesson-evidence",
-          "title": "Hacksplaining reflected XSS lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 279,
-      "status": "ok",
-      "scanned_at": "2026-07-20T02:07:19.212Z"
-    },
-    {
-      "run_id": "2026-07-20T02:07:27.961Z",
-      "url": "https://www.hacksplaining.com/lessons/malvertising/start",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-hacksplaining-malvertising-lesson-evidence",
-          "title": "Hacksplaining malvertising lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-hacksplaining-evidence",
-          "title": "Hacksplaining interactive OWASP secure-coding lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-hacksplaining-csrf-lesson-evidence",
-          "title": "Hacksplaining CSRF lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-hacksplaining-xss-reflected-lesson-evidence",
-          "title": "Hacksplaining reflected XSS lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 306,
-      "status": "ok",
-      "scanned_at": "2026-07-20T02:07:27.961Z"
-    },
-    {
-      "run_id": "2026-07-20T02:07:32.084Z",
-      "url": "https://www.hacksplaining.com/lessons/ssl-stripping/start",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-hacksplaining-ssl-stripping-lesson-evidence",
-          "title": "Hacksplaining SSL stripping lesson disclosed",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-hacksplaining-evidence",
-          "title": "Hacksplaining interactive OWASP secure-coding lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 298,
-      "status": "ok",
-      "scanned_at": "2026-07-20T02:07:32.084Z"
-    },
-    {
       "run_id": "2026-07-20T02:07:32.852Z",
       "url": "http://vapi.apisec.ai/",
       "auth": "public_demo",
@@ -10376,6 +10219,117 @@
       "probes_run": 265,
       "status": "ok",
       "scanned_at": "2026-07-21T06:04:40.637Z"
+    },
+    {
+      "run_id": "2026-07-21T07:03:04.822Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 2,
+      "status": "ok",
+      "scanned_at": "2026-07-21T07:03:04.822Z"
+    },
+    {
+      "run_id": "2026-07-21T07:24:54.254Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 31,
+      "status": "ok",
+      "scanned_at": "2026-07-21T07:24:54.254Z"
+    },
+    {
+      "run_id": "2026-07-21T07:45:55.365Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 22,
+      "status": "ok",
+      "scanned_at": "2026-07-21T07:45:55.365Z"
     }
   ],
   "teacher_delta_runs": [
@@ -10921,6 +10875,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 05 UTC run: stable 6/6 recall; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T05:06:26.897Z"
+    },
+    {
+      "run_id": "2026-07-21T08:02:53.464Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=2; pass2: 3 findings gap=xss,sqli,sensitive_data pages=1 probes=31; final retry merged to 6 findings pages=1 probes=22)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only misconfig while Heroku asleep (probes=2); 12s retry added idor+auth_bypass; 25s final wake retry restored sql-error-disclosure+dangerous-html-sinks+vibe-unauthenticated-api-routes for 6/6 recall. secret-resend slug absent.",
+      "scanned_at": "2026-07-21T08:02:53.464Z"
     }
   ]
 }
