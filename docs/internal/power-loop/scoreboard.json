@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T19:22:25.744Z",
+  "updated_at": "2026-07-21T19:24:28.646Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1783,
-  "total_findings": 9009,
+  "total_sites_scanned": 1790,
+  "total_findings": 9041,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1430,
-  "discovery_findings": 7136,
+  "discovery_urls_added": 1435,
+  "discovery_findings": 7168,
   "improvements_shipped": 885,
-  "last_run": "2026-07-21T19:22:25.744Z",
+  "last_run": "2026-07-21T19:24:28.646Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -35,7 +35,8 @@
       "primary_recall": "6/6",
       "gap": [],
       "primary_gap": [],
-      "note": "First-pass full recall on primary Heroku (pages=6 probes=265; no staging fallback needed)",
+      "pass1_gap": ["sqli", "auth_bypass"],
+      "note": "Cold-start pass1 gap=sqli,auth_bypass (5 findings pages=6 probes=67); 12s wake retry restored 7 findings 6/6 (pages=6 probes=265)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,42 +56,28 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 43,
-      "focus": "Queue drain: hack-this-site labs/auth/api-labs + OWASP A01/A03 modules, VWAD grpc-goat, gitagent-securebot, ai-prompt-lab; +5 URLs (hack-health A01 infoExposure, A02 JWT, A03 SQLi, A04 errorMessages, A07 hardcodedCred)",
-      "improvements_shipped_this_run": 3,
-      "urls_queued_not_scanned": [
-        "https://domgo.at/cxss/example/117",
-        "https://domgo.at/cxss/example/118",
-        "https://domgo.at/cxss/example/119",
-        "https://domgo.at/cxss/example/120",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce",
-        "https://demo-of-cve-2025-55182-saas.vercel.app/",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a01/informationExposure",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a02/jwt",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a03/sqlInjection",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a04/errorMessages",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a07/hardcodedCred"
-      ]
+      "urls_scanned": 7,
+      "findings": 32,
+      "focus": "Queue drain: prompt-injection-playground, ai-security-demo, csrf-xss-demo, idor-website, sam.wizer-ctf, secureby.design, cyberscavengerhunt; +5 URLs (hack-health A05 CORS, A06 vulPackages, A08 integrityVerification, A09 logger, A10 SSRF)",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ (unreachable — DNS/host dead)"
+      ],
+      "skipped_48h": "queue head URLs within 48h window skipped automatically"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — stable first-pass on primary Heroku",
-      "hack-this-site-eta.vercel.app/auth/: 18 findings — JWT/session labs + IDOR/SQLi/XSS bundle evidence",
-      "hack-this-site-eta.vercel.app/labs/: 7 findings — hands-on vuln lab hub with reflected XSS + IDOR",
-      "vwad.owasp.org/app/grpc-goat/: 5 findings — gRPC Goat lab + hardcoded demo credentials",
-      "ai-prompt-lab.vercel.app/: 5 findings — exposed OpenAI API key in client bundle",
-      "hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce: A01 brute-force + CWE-307 lab evidence",
-      "benchmark cold-start: idorObjectAccess reads primed track-order JSON from bootstrap combined",
-      "benchmark cold-start: juiceShopBootstrap SQL-only wake when admin/IDOR precede search route"
+      "juice-shop.herokuapp.com: 6/6 recall after wake retry — pass1 missed sqli+auth_bypass",
+      "ai-security-demo.vercel.app: critical stack-database-url-in-bundle + prompt-injection evidence",
+      "csrf-xss-demo.vercel.app: dom-eval-xss + hardcoded demo credentials",
+      "secureby.design: cors-reflect-origin + postmessage-dom-xss + SKF lab evidence",
+      "sam.wizer-ctf.com: Wizer developer security CTF + dangerous-html-sinks",
+      "cyberscavengerhunt.com: robots-sensitive-paths + sitemap-sensitive-paths"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "hack-health-tutorial OWASP modules at queue tail — not yet drained this run",
-      "demo-of-cve-2025-55182-saas.vercel.app: React2Shell demo still undrained at queue tail",
-      "domgo.at cxss/117-120 return Exercise-1 placeholder — not unique labs",
-      "vwad.owasp.org/app/voice-goat/: Docker-only deploy returns 404 from cloud",
-      "web-pentest-playground.onrender.com: service suspended"
+      "hack-health A05/A06/A08/A09/A10 modules at queue tail — not yet drained",
+      "testhtml5.vulnweb.com: host unreachable from cloud",
+      "domgo.at cxss/117-120 return Exercise-1 placeholder — not unique labs"
     ]
   },
   "discovery_highlights": {
