@@ -7138,7 +7138,32 @@
       "url": "https://domgo.at/cxss/example/110",
       "source": "Mario Heiderich domgo.at \u2014 DomGoat level 110 DOM XSS hash sink exercise (cxss series continuation)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/intro",
+      "source": "Hack Health tutorial \u2014 OWASP Top 10 lesson entry path (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://cyberdesserts.github.io/cookiejar-lab/demo/index.html",
+      "source": "cyberdesserts/cookiejar-lab \u2014 no-setup browser cookie-hijack walkthrough (GitHub Pages demo index)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/reflect",
+      "source": "dkyazzentwatwa/hack-this-site \u2014 reflected XSS validation API endpoint (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/sql",
+      "source": "dkyazzentwatwa/hack-this-site \u2014 SQLi error validation API endpoint (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/111",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 111 DOM XSS hash sink exercise (cxss series continuation)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T13:05:00.000Z"
+  "updated_at": "2026-07-21T14:05:00.000Z"
 }
