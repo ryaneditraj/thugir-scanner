@@ -7088,7 +7088,32 @@
       "url": "https://domgo.at/cxss/example/101",
       "source": "Mario Heiderich domgo.at \u2014 DomGoat level 101 DOM XSS sink exercise (cxss series continuation)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://demo-of-cve-2025-55182-saas.vercel.app/",
+      "source": "javaarchive/CVE-2025-55182-saas \u2014 intentionally vulnerable Next.js RSC CVE PoC lab (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/102",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 102 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/103",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 103 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/104",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 104 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/105",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 105 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T11:06:03.000Z"
+  "updated_at": "2026-07-21T12:06:00.000Z"
 }
