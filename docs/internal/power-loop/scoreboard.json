@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T00:18:29.394Z",
+  "updated_at": "2026-07-21T01:26:32.223Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1648,
-  "total_findings": 8236,
+  "total_sites_scanned": 1657,
+  "total_findings": 8285,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1355,
-  "discovery_findings": 6606,
+  "discovery_urls_added": 1360,
+  "discovery_findings": 6649,
   "improvements_shipped": 849,
-  "last_run": "2026-07-21T00:18:29.394Z",
+  "last_run": "2026-07-21T01:26:32.223Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall with idor-sequential-ids slug (pages=1 probes=241)",
+      "note": "Heroku cold-start pass1 gap=idor,sensitive_data (4 findings pages=1 probes=165); 12s wake retry restored 6/6 (pages=1 probes=172)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,30 +51,34 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
+      "urls_scanned": 8,
       "findings": 43,
-      "focus": "Intigriti 2021-2022 archive gap-fill (0821/1121/1220/1221/0522) + prior 0822/0922/0622 scans + queue drain (cybersec-demo, ctb-pi, vuln-portal, urban-vampi, hiddeninvestigations, acuart, websec.fr, vulnbank)",
+      "focus": "Intigriti 2021-2023 archive gap-fill (0323/0423/0523/0521/0322) + queue drain (RedTiger OTW, Hacksplaining lessons, CookieJar, DVWA Vercel)",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
         "https://challenge-0821.intigriti.io/",
         "https://challenge-1121.intigriti.io/",
         "https://challenge-1220.intigriti.io/",
         "https://challenge-1221.intigriti.io/",
-        "https://challenge-0522.intigriti.io/"
+        "https://challenge-0522.intigriti.io/",
+        "https://challenge-0323.intigriti.io/",
+        "https://challenge-0423.intigriti.io/",
+        "https://challenge-0523.intigriti.io/",
+        "https://challenge-0521.intigriti.io/",
+        "https://challenge-0322.intigriti.io/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — idor-sequential-ids recovered",
-      "challenge-0822.intigriti.io: Business Card Generator DOMPurify hash modal (3 findings)",
-      "challenge-0922.intigriti.io: Magic 8 Ball postMessage/eval chain (5 findings)",
-      "ctb-pi.vercel.app: North Star AGI CTF + Supabase markers (6 findings)",
-      "urban-vampi-production.up.railway.app: OWASP API Top 10 VAmPI (6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku wake retry (pass1 gap=idor,sensitive_data)",
+      "redtiger.labs.overthewire.org/level10.php: command-injection + blind SQLi login markers (5 findings)",
+      "hacksplaining.com/lessons/command-execution: command execution + CSRF lesson evidence (7 findings)",
+      "cyberdesserts.github.io/cookiejar-lab: session hijack/token replay training lab (4 findings)",
+      "dvwa.vercel.app: client-side SQLi + XSS evidence (4 findings)"
     ],
     "learning_gaps": [
       "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
-      "Intigriti 0821/1121/1220/1221/0522 archives queued at tail — pending drain",
-      "challenge-1222/0223/0422/0222 Intigriti archives — challenge/index.php 404 on some hosts",
-      "hiddeninvestigations.net: react2shell lab is Docker-only (shallow crawl markers only)",
+      "Heroku cold-start: pass1 missed idor+sensitive_data before built-in 12s retry",
+      "Intigriti 0821-0522 + new 0323/0423/0523/0521/0322 archives queued at tail — pending drain",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent"
     ]
   },
