@@ -5128,6 +5128,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-november-vue-search-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti November Vue search XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1121.intigriti.io hosts a Vue OWASP search lab with addJS dynamic script loading and ?s= searchParam filter gadgets.",
+    impactOneline:
+      "Public November 2021 challenge documents Vue addJS/vueDevtools injection chain at challenge/index.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiNovemberVueSearchXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Vue search challenges are intentional training — never load user-controlled script URLs.",
+      steps: [
+        "Host November Vue labs on contest-only infrastructure.",
+        "Block dynamic script injection via addJS-style loaders in production.",
+        "Encode search parameters reflected in Vue tile filters."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti November Vue search XSS challenges with addJS loaders. Show safe script loading and encoded search reflection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-december-christmas-cracker-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti December Christmas cracker XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1221.intigriti.io hosts a Christmas cracker lab with unescaped payload reflection in punchline and xmas.js iframe gadgets.",
+    impactOneline:
+      "Public December 2021 challenge documents payload= reflection at challenge/index.php?payload=.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiDecemberChristmasCrackerXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti cracker challenges are intentional training — encode reflected payload parameters.",
+      steps: [
+        "Host December cracker labs on contest-only infrastructure.",
+        "HTML-encode user input before writing to punchline/result elements.",
+        "Avoid reflecting GET payload parameters into iframe challenge pages."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Christmas cracker XSS challenges with unescaped payload reflection. Show encoded output and safe iframe isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-may-filterxss-innerhtml-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti May filterXSS innerHTML challenge disclosed",
+    description:
+      "Intigriti challenge-0522.intigriti.io hosts a filterXSS bypass lab with pages[pl] innerHTML sink and jQuery queryObject location parsing.",
+    impactOneline:
+      "Public May 2022 challenge documents filterXSS + innerHTML gadget chain at challenge/challenge.html.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMayFilterxssInnerhtmlEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti filterXSS challenges are intentional training — do not trust client-side sanitizers alone.",
+      steps: [
+        "Host May filterXSS labs on contest-only infrastructure.",
+        "Avoid innerHTML sinks fed from location.search even behind filterXSS.",
+        "Use textContent or framework-safe rendering for user-controlled page content."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti filterXSS innerHTML challenges with queryObject gadgets. Show safe rendering without innerHTML + filterXSS bypass.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

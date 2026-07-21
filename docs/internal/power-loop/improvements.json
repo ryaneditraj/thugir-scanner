@@ -5579,6 +5579,24 @@
       "slug": "client-side-intigriti-june-choice-message-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: What do you like? select + ?choice= redirect gadget + choice=alert hidden message form at challenge/index.php; challenge-0622.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1121.intigriti.io",
+      "slug": "client-side-intigriti-november-vue-search-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: addJS(src,cb) + searchParams.get('s') Vue filter + vueDevtools addJS gadget at challenge/index.php; challenge-1121.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1221.intigriti.io",
+      "slug": "client-side-intigriti-december-christmas-cracker-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Christmas cracker payload= form + unescaped punchline Result reflection + xmas.js at challenge/index.php?payload=; challenge-1221.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0522.intigriti.io",
+      "slug": "client-side-intigriti-may-filterxss-innerhtml-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: innerHTML=pages['4']+filterXSS(pages[pl]) + queryObject(location.search) at challenge/challenge.html; challenge-0522.intigriti.io findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9826,6 +9844,21 @@
       "source": "discovery:challenge-0622.intigriti.io",
       "slug": "client-side-intigriti-june-choice-message-xss-evidence",
       "shipped_at": "2026-07-21T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1121.intigriti.io",
+      "slug": "client-side-intigriti-november-vue-search-xss-evidence",
+      "shipped_at": "2026-07-21T01:35:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1221.intigriti.io",
+      "slug": "client-side-intigriti-december-christmas-cracker-xss-evidence",
+      "shipped_at": "2026-07-21T01:35:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0522.intigriti.io",
+      "slug": "client-side-intigriti-may-filterxss-innerhtml-evidence",
+      "shipped_at": "2026-07-21T01:35:00.000Z"
     }
   ]
 }

@@ -13587,6 +13587,138 @@ const clientSideIntigritiSantacloudCtfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti November 2021 Vue search XSS (challenge-1121.intigriti.io) -------------
+const CLIENT_INTIGRITI_NOVEMBER_VUE_SEARCH_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "November 2021 Vue challenge host",
+    re: /challenge-1121\.intigriti\.io|Intigriti(?:'s)?\s+November\s+XSS\s+challenge/i
+  },
+  {
+    label: "Dynamic addJS script loader",
+    re: /function\s+addJS\s*\(\s*src\s*,\s*cb\s*\)|addJS\(vueDevtools,\s*window\.initVUE\)/i
+  },
+  {
+    label: "Vue search param s filter gadget",
+    re: /searchParams\.get\(['"]s['"]\)|You searched for/i
+  },
+  {
+    label: "Vue custom delimiters v-{{",
+    re: /delimiters\s*=\s*\[\s*['"]v-\{\{['"]/i
+  },
+  {
+    label: "OWASP Top 10 Vue tile filter",
+    re: /A03:2021-Injection|Broken Access Control/i
+  }
+];
+
+const clientSideIntigritiNovemberVueSearchXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_NOVEMBER_VUE_SEARCH_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1121|addJS/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti November 2021 challenge documents Vue OWASP search lab with addJS dynamic script loading and ?s= searchParam filter gadgets at challenge/index.php"
+    }
+  };
+};
+
+// --- Intigriti December 2021 Christmas cracker XSS (challenge-1221.intigriti.io) ----
+const CLIENT_INTIGRITI_DECEMBER_CRACKER_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "December 2021 cracker challenge host",
+    re: /challenge-1221\.intigriti\.io|Intigriti(?:'s)?\s+December\s+XSS\s+challenge/i
+  },
+  {
+    label: "Christmas cracker payload form",
+    re: /name=["']payload["']|Enter Payload|Merry\s*<br>\s*Christmas/i
+  },
+  {
+    label: "Unescaped punchline Result reflection",
+    re: /id=["']punchline["'][\s\S]{0,80}Result:|punchline["']>Result:/i
+  },
+  {
+    label: "xmas.js cracker click handler",
+    re: /xmas\.js|crackerWrapper|Click the cracker to pull it apart/i
+  },
+  {
+    label: "iframe arbitrary javascript challenge",
+    re: /execute arbitrary javascript on the iFramed page|alert\(document\.domain\)/i
+  }
+];
+
+const clientSideIntigritiDecemberChristmasCrackerXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_DECEMBER_CRACKER_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1221|crackerWrapper|payload/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti December 2021 challenge documents Christmas cracker XSS with unescaped payload reflection in punchline and xmas.js iframe lab at challenge/index.php"
+    }
+  };
+};
+
+// --- Intigriti May 2022 filterXSS innerHTML XSS (challenge-0522.intigriti.io) ---------
+const CLIENT_INTIGRITI_MAY_FILTERXSS_INNERHTML_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "May 2022 filterXSS challenge host",
+    re: /challenge-0522\.intigriti\.io|Intigriti(?:'s)?\s+May\s+XSS\s+challenge/i
+  },
+  {
+    label: "filterXSS innerHTML pages gadget",
+    re: /innerHTML\s*=\s*pages\[['"]4['"]\]\s*\+\s*filterXSS\(pages\[pl\]\)/i
+  },
+  {
+    label: "jQuery queryObject location parser",
+    re: /queryObject\(location\.search|jQuery\.query\s*=\s*new function/i
+  },
+  {
+    label: "js-xss library loaded",
+    re: /js-xss\/[\d.]+\/xss\.min\.js|filterXSS\s*\(/i
+  },
+  {
+    label: "challenge/challenge.html iframe lab",
+    re: /challenge\/challenge\.html|execute arbitrary javascript on the iFramed page/i
+  }
+];
+
+const clientSideIntigritiMayFilterxssInnerhtmlEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MAY_FILTERXSS_INNERHTML_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0522|filterXSS/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti May 2022 challenge documents filterXSS bypass via pages[pl] innerHTML sink and jQuery queryObject location parsing at challenge/challenge.html"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -23926,6 +24058,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiSeptemberMagic8BallXssEvidence,
   clientSideIntigritiJuneChoiceMessageXssEvidence,
   clientSideIntigritiSantacloudCtfEvidence,
+  clientSideIntigritiNovemberVueSearchXssEvidence,
+  clientSideIntigritiDecemberChristmasCrackerXssEvidence,
+  clientSideIntigritiMayFilterxssInnerhtmlEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,

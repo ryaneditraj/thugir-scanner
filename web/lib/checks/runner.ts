@@ -937,6 +937,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiSeptemberMagic8BallXssEvidence",
   "clientSideIntigritiJuneChoiceMessageXssEvidence",
   "clientSideIntigritiSantacloudCtfEvidence",
+  "clientSideIntigritiNovemberVueSearchXssEvidence",
+  "clientSideIntigritiDecemberChristmasCrackerXssEvidence",
+  "clientSideIntigritiMayFilterxssInnerhtmlEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1666,6 +1669,51 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/SantaCloud CTF|santacloud\.intigriti\.io/i.test(html)) {
     for (const p of ["/home", "/login", "/register", "/latest-flags"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-1121\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/index.php?s=", "/challenge/vuejs.php"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-1221\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/index.php?payload=", "/challenge/xmas.js"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0522\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/challenge.html", "/challenge/challenge.html?page=1"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/execute arbitrary javascript on the iFramed page/i.test(html)) {
+    for (const p of [
+      "/challenge/index.php",
+      "/challenge/index.php?s=",
+      "/challenge/index.php?payload=",
+      "/challenge/challenge.html"
+    ]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {
