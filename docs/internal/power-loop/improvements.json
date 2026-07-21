@@ -5705,6 +5705,24 @@
       "slug": "client-side-intigriti-august-catflix-rce-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CatFlix AI landing leverage an RCE on the server without sandbox + /source.zip + /challenge iframe; challenge-0825.intigriti.io findings 3→6 incl august-catflix-rce slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-oop-garbage-collector-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level04 LevelFour garbage collector + leet_hax0r unserialize cookie + source1.php SELECT username FROM users WHERE id=; websec.fr/level04/ findings 7→8; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-spellchecker-xss-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level05 LevelFive spellshaker wordchecker + reporting an XSS comment + preg_replace sink in source.php; websec.fr/level05/ findings 6→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0126.intigriti.io",
+      "slug": "client-side-intigriti-january-cryptigriti-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CRYPTIGRITI DeFi + /home.html + /security.html flag capture + navLinks.innerHTML; challenge-0126.intigriti.io findings 4→5; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10027,6 +10045,21 @@
       "source": "discovery:challenge-1025.intigriti.io",
       "slug": "client-side-intigriti-october-shoppix-ssrf-evidence",
       "shipped_at": "2026-07-21T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-oop-garbage-collector-challenge-evidence",
+      "shipped_at": "2026-07-21T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-spellchecker-xss-challenge-evidence",
+      "shipped_at": "2026-07-21T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0126.intigriti.io",
+      "slug": "client-side-intigriti-january-cryptigriti-xss-evidence",
+      "shipped_at": "2026-07-21T11:15:00.000Z"
     }
   ]
 }
