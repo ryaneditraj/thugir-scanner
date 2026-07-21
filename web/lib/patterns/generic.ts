@@ -2137,6 +2137,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hack-health-info-exposure-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "HackHealth A01 information exposure lab disclosed",
+    description:
+      "HackHealth Nextra A01 module at /cybersecurity/a01/informationExposure documents CWE-200 sensitive header disclosure — X-Powered-By, Access-Control-Allow-Origin, and missing Helmet security headers.",
+    impactOneline:
+      "Public A01 information-exposure walkthrough on a Vercel deploy teaches header enumeration and ngrok tunneling against a live Express API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthInfoExposureEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove X-Powered-By, set restrictive CORS, and add Helmet security headers.",
+      steps: [
+        "Use Helmet middleware to strip X-Powered-By and set HSTS, CSP, and X-Frame-Options.",
+        "Restrict Access-Control-Allow-Origin to trusted domains only.",
+        "Host HackHealth A01 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A01 information-exposure tutorial documents CWE-200 header leaks on a public deploy. Show Helmet configuration and how to gate the lab behind local-only access.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-jwt-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "HackHealth A02 JWT cryptographic failures lab disclosed",
+    description:
+      "HackHealth Nextra A02 module at /cybersecurity/a02/jwt documents CWE-256 plaintext password storage and weak JWT_SECRET signing keys in jwtAuth.ts / jwtGenerator.ts.",
+    impactOneline:
+      "Public A02 JWT walkthrough on a Vercel deploy teaches token forgery and credential theft against a live authentication API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthJwtEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash passwords with bcrypt/argon2 and use strong random JWT secrets stored in env vars.",
+      steps: [
+        "Replace plaintext password storage with bcrypt or argon2 hashing.",
+        "Generate a cryptographically random JWT_SECRET and store it in environment variables.",
+        "Host HackHealth A02 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A02 JWT tutorial documents CWE-256 plaintext passwords and guessable JWT_SECRET on a public deploy. Show password hashing, secret rotation, and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hack-health-error-messages-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "HackHealth A04 verbose error message lab disclosed",
+    description:
+      "HackHealth Nextra A04 module at /cybersecurity/a04/errorMessages documents CWE-209 username enumeration via verbose authentication error messages.",
+    impactOneline:
+      "Public A04 error-message walkthrough on a Vercel deploy teaches account enumeration via differential login responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthErrorMessagesEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic authentication error messages that do not reveal whether a username exists.",
+      steps: [
+        "Use a single generic message like 'Invalid username or password' for all auth failures.",
+        "Log detailed errors server-side only; never echo stack traces or user-existence hints to clients.",
+        "Host HackHealth A04 attack labs on localhost only, not public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A04 error-message tutorial documents CWE-209 username enumeration on a public deploy. Show generic auth error handling and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openapi-debug-password-exposure",
     platform: "generic",
     category: "Sensitive data exposure",
