@@ -6837,7 +6837,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ? Array.from({ length: 10 }, (_, i) => new URL(`lab-${i + 1}/`, home.finalUrl).toString())
     : [];
   const yogsecXssLabsPrioritySeeds = /yogsec\.github\.io\/xss-labs/i.test(home.finalUrl)
-    ? Array.from({ length: 10 }, (_, i) =>
+    ? Array.from({ length: 20 }, (_, i) =>
         new URL(`labs/lab${i + 1}.html`, home.finalUrl).toString()
       )
     : [];
