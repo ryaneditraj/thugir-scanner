@@ -943,6 +943,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiMarchIframeLovesenderXssEvidence",
   "clientSideIntigritiMarchSecureNotesEvidence",
   "clientSideIntigritiAprilBricksRceEvidence",
+  "clientSideIntigritiAugustEvalStackXssEvidence",
+  "clientSideIntigritiJulyMemoDompurifyXssEvidence",
+  "clientSideIntigritiMarchLeakyFlagmentEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1583,6 +1586,36 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/Video Audio Extractor|Extract audio from your video files/i.test(html)) {
     for (const p of ["/upload", "/challenge"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Memo Sharing|safe platform for sharing memos/i.test(html)) {
+    for (const p of ["/challenge", "/challenge/"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Leaky Flagment|Can you steal my flag/i.test(html)) {
+    for (const p of ["/login", "/source.zip"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/August XSS challenge|challenge-0823\.intigriti\.io/i.test(html + pageUrl)) {
+    for (const p of ["/challenge/index.html", "/challenge/"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {

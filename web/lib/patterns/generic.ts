@@ -5284,6 +5284,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-august-eval-stack-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti August eval/Math stack XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0823.intigriti.io hosts an August XSS lab with URLSearchParams operator queues, Math stack validation, and eval(result.innerText) gadget chain.",
+    impactOneline:
+      "Public August 2023 challenge documents eval(result.innerText) Math stack XSS with alert(document.domain) capture goal at challenge/index.html.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiAugustEvalStackXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti eval stack challenges are intentional training — never eval user-controlled arithmetic stacks.",
+      steps: [
+        "Host August eval stack labs on contest-only infrastructure.",
+        "Replace eval() with a safe math parser that rejects arbitrary JavaScript.",
+        "Validate Math.* operators server-side before rendering stack results."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti August eval/Math stack XSS challenges. Show safe arithmetic evaluation without eval() on innerText stacks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-july-memo-dompurify-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti July Memo Sharing DOMPurify XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0724.intigriti.io hosts Memo Sharing with ?memo= query reflection into displayElement.innerHTML and DOMPurify.sanitize bypass gadgets.",
+    impactOneline:
+      "Public July 2024 challenge documents sharedMemo innerHTML sink with DOMPurify.sanitize memo reflection at /challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJulyMemoDompurifyXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti DOMPurify memo challenges are intentional training — do not assign untrusted HTML to innerHTML even after sanitization.",
+      steps: [
+        "Host July memo labs on contest-only infrastructure.",
+        "Use textContent for memo display instead of innerHTML + DOMPurify.",
+        "Validate memo query params server-side and reject HTML gadget payloads."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Memo Sharing DOMPurify XSS challenges with ?memo= innerHTML sinks. Show safe memo rendering without innerHTML.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-march-leaky-flagment-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Intigriti March Leaky Flagment flag theft challenge disclosed",
+    description:
+      "Intigriti challenge-0325.intigriti.io hosts the Leaky Flagment notes app with INTIGRITI{.*} flag capture goals, /login challenge server, and downloadable source.zip.",
+    impactOneline:
+      "Public March 2025 challenge documents Can you steal my flag? via Leaky Flagment notes login at /login with source.zip artifact.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMarchLeakyFlagmentEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Leaky Flagment challenges are intentional training — enforce authorization on note fragments and flag storage.",
+      steps: [
+        "Host March Leaky Flagment labs on contest-only infrastructure.",
+        "Enforce per-user authorization on note fragment APIs.",
+        "Remove downloadable source.zip from public challenge deploys after contest ends."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Leaky Flagment flag theft challenges. Show per-user authorization on note fragments and secure flag storage.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
