@@ -13415,6 +13415,134 @@ const clientSideIntigritiOctoberHalloweenXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti August 2022 Business Card Generator XSS (challenge-0822.intigriti.io) --
+const CLIENT_INTIGRITI_AUGUST_BUSINESS_CARD_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "August 2022 business card challenge host",
+    re: /challenge-0822\.intigriti\.io|Intigriti(?:'s)?\s+August\s+XSS\s+challenge/i
+  },
+  {
+    label: "Business Card Generator lab",
+    re: /Business Card Generator|buiness-card/i
+  },
+  {
+    label: "DOMPurify hash message modal sink",
+    re: /location\.hash\.replace\(['"]#msg=['"]|modal\.innerHTML\s*=\s*DOMPurify\.sanitize\(message\)/i
+  },
+  {
+    label: "preview.php POST with csrf-token",
+    re: /action=["']preview\.php["'][\s\S]{0,200}csrf-token|meta name=["']csrf-token["']/i
+  },
+  {
+    label: "theme.php JSON theme fetch",
+    re: /fetch\(["']theme\.php["']\)|update-theme\.php/i
+  }
+];
+
+const clientSideIntigritiAugustBusinessCardXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_AUGUST_BUSINESS_CARD_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0822|Business Card Generator/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti August 2022 challenge documents Business Card Generator with DOMPurify hash modal sink, preview.php POST, and theme.php JSON theming"
+    }
+  };
+};
+
+// --- Intigriti September 2022 Magic 8 Ball postMessage XSS (challenge-0922.intigriti.io)
+const CLIENT_INTIGRITI_SEPTEMBER_MAGIC8BALL_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "September 2022 magic 8 ball challenge host",
+    re: /challenge-0922\.intigriti\.io|Intigriti(?:'s)?\s+September\s+XSS\s+challenge/i
+  },
+  {
+    label: "Magic 8 Ball iframe lab",
+    re: /Magic 8 Ball|challenge\/magic\.php/i
+  },
+  {
+    label: "postMessage set/result gadget chain",
+    re: /case\s+['"]result['"][\s\S]{0,120}innerHTML\s*=\s*e\.data\.value|action:\s*['"]result['"]/
+  },
+  {
+    label: "sandboxed iframe postMessage to magic.php",
+    re: /sandbox=["']allow-scripts allow-same-origin["'][\s\S]{0,200}magic\.php|contentWindow\.postMessage/
+  },
+  {
+    label: "eval fallback on API response",
+    re: /catch\s*\([^)]*\)\s*\{[\s\S]{0,80}resp\s*=\s*eval\(e\)/i
+  }
+];
+
+const clientSideIntigritiSeptemberMagic8BallXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_SEPTEMBER_MAGIC8BALL_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0922|Magic 8 Ball/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti September 2022 Magic 8 Ball challenge documents postMessage set/result gadgets, sandboxed magic.php iframe, and eval() API fallback"
+    }
+  };
+};
+
+// --- Intigriti June 2022 choice/message XSS (challenge-0622.intigriti.io) ------------
+const CLIENT_INTIGRITI_JUNE_CHOICE_MESSAGE_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "June 2022 choice challenge host",
+    re: /challenge-0622\.intigriti\.io|Intigriti(?:'s)?\s+June\s+XSS\s+challenge/i
+  },
+  {
+    label: "What do you like select lab",
+    re: /What do you like\?|getChoice\(this\)/i
+  },
+  {
+    label: "choice query param redirect gadget",
+    re: /pathname\+["']\?choice=["']\+value|URLSearchParams\(window\.location\.search\)\.get\(['"]choice['"]\)/i
+  },
+  {
+    label: "alert choice hidden message form",
+    re: /value=["']alert["'][\s\S]{0,200}name=["']message["']|choice=alert[\s\S]{0,120}name=["']message["']/i
+  }
+];
+
+const clientSideIntigritiJuneChoiceMessageXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JUNE_CHOICE_MESSAGE_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0622|What do you like/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti June 2022 challenge documents ?choice= redirect gadget and alert-branch message form for reflected XSS training"
+    }
+  };
+};
+
 // --- Intigriti SantaCloud CTF (santacloud.intigriti.io) ------------------------------
 const CLIENT_INTIGRITI_SANTACLOUD_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -23794,6 +23922,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiOctoberNotesXssEvidence,
   clientSideIntigritiJanuaryFriendsSqliEvidence,
   clientSideIntigritiOctoberHalloweenXssEvidence,
+  clientSideIntigritiAugustBusinessCardXssEvidence,
+  clientSideIntigritiSeptemberMagic8BallXssEvidence,
+  clientSideIntigritiJuneChoiceMessageXssEvidence,
   clientSideIntigritiSantacloudCtfEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,

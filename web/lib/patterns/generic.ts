@@ -5050,6 +5050,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-august-business-card-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti August Business Card Generator XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0822.intigriti.io hosts the Business Card Generator lab with DOMPurify hash modal sinks, preview.php POST, and theme.php JSON theming.",
+    impactOneline:
+      "Public August 2022 challenge documents #msg= DOMPurify modal XSS and business-card preview flows at challenge/app.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiAugustBusinessCardXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti business-card challenges are intentional training — never render URL hash fragments with DOMPurify bypass gadgets.",
+      steps: [
+        "Host Intigriti iframe labs on contest-only infrastructure.",
+        "Avoid innerHTML sinks fed from location.hash even behind sanitizers.",
+        "Require CSRF tokens on preview POST endpoints in production."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Business Card Generator challenges with DOMPurify hash modal sinks. Show safe hash handling and preview POST validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-september-magic8ball-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti September Magic 8 Ball postMessage XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0922.intigriti.io hosts the Magic 8 Ball lab with sandboxed magic.php iframe, postMessage set/result gadgets, and eval() API fallback.",
+    impactOneline:
+      "Public September 2022 challenge documents postMessage innerHTML sinks and eval fallback at challenge/magic.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiSeptemberMagic8BallXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti postMessage challenges are intentional training — validate message origins and never eval API responses.",
+      steps: [
+        "Host Magic 8 Ball iframe labs on contest-only infrastructure.",
+        "Validate postMessage origin before touching DOM sinks.",
+        "Parse API JSON with JSON.parse instead of eval fallbacks."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Magic 8 Ball postMessage challenges with eval API fallbacks. Show origin-checked postMessage handlers and safe JSON parsing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-june-choice-message-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti June choice/message XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0622.intigriti.io hosts a What do you like? select lab with ?choice= redirect gadgets and an alert-branch message form.",
+    impactOneline:
+      "Public June 2022 challenge documents choice query-param redirects and message reflection at challenge/index.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJuneChoiceMessageXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti choice/message challenges are intentional training — encode reflected message parameters.",
+      steps: [
+        "Host June choice labs on contest-only infrastructure.",
+        "Encode user input reflected in HTML forms and redirects.",
+        "Avoid branching XSS gadgets via predictable choice= query values."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti June choice/message XSS challenges with ?choice= redirect gadgets. Show encoded reflection and safe redirect handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
