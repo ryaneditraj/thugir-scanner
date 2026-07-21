@@ -7754,6 +7754,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-race-condition-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store race-condition coupon abuse walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/race-condition-coupon-abuse documents TOCTOU — coupon validated and counter incremented in two separate database calls, allowing concurrent request abuse.",
+    impactOneline:
+      "Public race-condition walkthrough teaches single-use coupon bypass via concurrent requests against a live e-commerce API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecRaceConditionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic database transactions or row-level locks for coupon redemption; gate attack walkthroughs behind local-only hosting.",
+      steps: [
+        "Wrap coupon validation and counter increment in a single atomic transaction with SELECT FOR UPDATE.",
+        "Use idempotency keys to deduplicate concurrent redemption requests.",
+        "Host OopsSec race-condition attack labs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents TOCTOU coupon abuse via concurrent requests. Show atomic transaction fixes and local-only lab gating.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-voidsec-shopping-cart-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -9466,6 +9492,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host yogsec-style XSS training labs. Show how to isolate reflected and DOM XSS exercises from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-yogsec-xss-lab-module-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Labs per-module innerHTML sink disclosed",
+    description:
+      "yogsec XSS Labs module pages at /labs/labN.html document intentional reflected, stored, and DOM XSS via unsanitized innerHTML sinks (User-Agent, cookie, localStorage).",
+    impactOneline:
+      "Public yogsec lab modules expose client-side XSS simulation code with documented vulnerable innerHTML assignments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideYogsecXssLabModuleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — use textContent instead of innerHTML in production.",
+      steps: [
+        "Replace innerHTML with textContent or DOMPurify-sanitized output for user-controlled data.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "We host yogsec XSS lab modules with innerHTML sinks. Show textContent/DOMPurify fixes and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-labs-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn XSS Labs training dashboard disclosed",
+    description:
+      "the0x-pwn lab-xss publishes 10 reflected and DOM XSS challenges with eval/template-literal sinks and href innerHTML injection on GitHub Pages.",
+    impactOneline:
+      "Public the0x-pwn XSS lab dashboard documents filter-bypass and reflected XSS training modules with live client-side sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the0x-pwn XSS labs are intentional training — never use eval or unsanitized innerHTML with user input in production.",
+      steps: [
+        "Avoid eval() and template-literal execution of user-controlled query parameters.",
+        "Encode URL attributes and use textContent instead of innerHTML for dynamic links.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn-style XSS training labs with eval and innerHTML sinks. Show safe output encoding and lab isolation from production.",
     version: 1,
     enabled: true
   },
