@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T18:06:16.419Z",
+  "updated_at": "2026-07-21T18:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,20 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1430,
   "discovery_findings": 7136,
-  "improvements_shipped": 882,
-  "last_run": "2026-07-21T18:06:16.419Z",
+  "improvements_shipped": 885,
+  "last_run": "2026-07-21T18:18:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
+      "primary_recall": "6/6",
       "gap": [],
-      "note": "First-pass full recall on primary Heroku (pages=6 probes=265; no wake retries needed)",
+      "primary_gap": [],
+      "note": "First-pass full recall on primary Heroku (pages=6 probes=265; no staging fallback needed)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,6 +58,7 @@
       "urls_scanned": 8,
       "findings": 43,
       "focus": "Queue drain: hack-this-site labs/auth/api-labs + OWASP A01/A03 modules, VWAD grpc-goat, gitagent-securebot, ai-prompt-lab; +5 URLs (hack-health A01 infoExposure, A02 JWT, A03 SQLi, A04 errorMessages, A07 hardcodedCred)",
+      "improvements_shipped_this_run": 3,
       "urls_queued_not_scanned": [
         "https://domgo.at/cxss/example/117",
         "https://domgo.at/cxss/example/118",
@@ -73,14 +78,19 @@
       "hack-this-site-eta.vercel.app/auth/: 18 findings — JWT/session labs + IDOR/SQLi/XSS bundle evidence",
       "hack-this-site-eta.vercel.app/labs/: 7 findings — hands-on vuln lab hub with reflected XSS + IDOR",
       "vwad.owasp.org/app/grpc-goat/: 5 findings — gRPC Goat lab + hardcoded demo credentials",
-      "ai-prompt-lab.vercel.app/: 5 findings — exposed OpenAI API key in client bundle"
+      "ai-prompt-lab.vercel.app/: 5 findings — exposed OpenAI API key in client bundle",
+      "hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce: A01 brute-force + CWE-307 lab evidence",
+      "benchmark cold-start: idorObjectAccess reads primed track-order JSON from bootstrap combined",
+      "benchmark cold-start: juiceShopBootstrap SQL-only wake when admin/IDOR precede search route"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "hack-health-tutorial OWASP modules at queue tail — not yet drained this run",
       "demo-of-cve-2025-55182-saas.vercel.app: React2Shell demo still undrained at queue tail",
-      "vwad.owasp.org/app/voice-goat/: Docker-only deploy returns 404 from cloud"
+      "domgo.at cxss/117-120 return Exercise-1 placeholder — not unique labs",
+      "vwad.owasp.org/app/voice-goat/: Docker-only deploy returns 404 from cloud",
+      "web-pentest-playground.onrender.com: service suspended"
     ]
   },
   "discovery_highlights": {
@@ -214,7 +224,7 @@
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
     "securebank-blog.vercel.app": 6,
-    "hack-health-tutorial.vercel.app": 5,
+    "hack-health-tutorial.vercel.app": 6,
     "preview-zeroday-sec.vercel.app": 2,
     "chimera.atlascrew.dev": 10,
     "archon-eight.vercel.app": 8,

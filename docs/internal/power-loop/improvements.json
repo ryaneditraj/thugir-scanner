@@ -5813,6 +5813,24 @@
       "slug": "client-side-hack-health-intro-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/intro HackHealth + OWASP Top 10 hub links /cybersecurity/a01–a10; hackHealthTutorialPrioritySeeds; hack-health-tutorial.vercel.app findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-brute-force-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a01/bruteForce title HH tutorial - Brute Force + A01:2021 Broken Access Control + CWE-307 Improper Restriction of Authentication Attempts; hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce findings 4→5; benchmark juice-shop.herokuapp.com 7 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "idor-bootstrap-combined-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: idorObjectAccess now reads primed /rest/track-order/1 success JSON from bootstrap combined on Heroku cold pass1; juice-shop.herokuapp.com primary 7 findings 6/6 recall (no staging fallback)"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sqli-bootstrap-sql-only-wake",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopBootstrap loop 8→12 attempts + 6×3s SQL-only retries when admin/IDOR wake before /rest/products/search?q='')); primary heroku 7 findings 6/6 recall maintained"
     }
   ],
   "shipped": [
@@ -10225,6 +10243,21 @@
       "source": "discovery:hack-health-tutorial.vercel.app",
       "slug": "client-side-hack-health-intro-evidence",
       "shipped_at": "2026-07-21T17:30:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-brute-force-evidence",
+      "shipped_at": "2026-07-21T18:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "idor-bootstrap-combined-oracle",
+      "shipped_at": "2026-07-21T18:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "sqli-bootstrap-sql-only-wake",
+      "shipped_at": "2026-07-21T18:15:00.000Z"
     }
   ]
 }
