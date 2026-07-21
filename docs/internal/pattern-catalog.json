@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T18:03:59.633Z",
-  "total": 561,
-  "uniqueSlugs": 559,
+  "generatedAt": "2026-07-21T19:02:59.790Z",
+  "total": 564,
+  "uniqueSlugs": 562,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 543,
+    "generic": 546,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 492,
+    "deep": 495,
     "continuous": 0
   },
   "byCategory": {
@@ -24,9 +24,9 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 35,
+    "Information disclosure": 36,
     "Security misconfiguration": 44,
-    "Broken authentication": 40,
+    "Broken authentication": 42,
     "Injection": 116,
     "Cross-site scripting": 91,
     "general": 18,
@@ -137,7 +137,10 @@
     "client-side-graphql-security-hub-evidence",
     "client-side-grpc-goat-lab-evidence",
     "client-side-hack-health-brute-force-evidence",
+    "client-side-hack-health-error-messages-evidence",
+    "client-side-hack-health-info-exposure-evidence",
     "client-side-hack-health-intro-evidence",
+    "client-side-hack-health-jwt-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
