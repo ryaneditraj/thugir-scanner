@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T17:07:27.327Z",
-  "total": 560,
-  "uniqueSlugs": 558,
+  "generatedAt": "2026-07-21T18:03:59.633Z",
+  "total": 561,
+  "uniqueSlugs": 559,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 542,
+    "generic": 543,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 491,
+    "deep": 492,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 148,
+    "Broken access control": 149,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -136,6 +136,7 @@
     "client-side-graphql-lab-evidence",
     "client-side-graphql-security-hub-evidence",
     "client-side-grpc-goat-lab-evidence",
+    "client-side-hack-health-brute-force-evidence",
     "client-side-hack-health-intro-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",

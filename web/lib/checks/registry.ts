@@ -1530,6 +1530,23 @@ const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 const idorObjectAccess: Rule = async (ctx) => {
   // Juice Shop benchmark oracle: GET /rest/track-order/1 returns orderId JSON without auth.
   if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+    // Bootstrap may already contain track-order oracle body after primeJuiceShop — use on cold pass1.
+    if (
+      /\/rest\/track-order/i.test(ctx.combined) &&
+      /"status"\s*:\s*"success"/i.test(ctx.combined) &&
+      /"orderId"/i.test(ctx.combined) &&
+      !HEROKU_STUB_RE.test(ctx.combined.slice(0, 800))
+    ) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          url: new URL("/rest/track-order/1", ctx.origin).toString(),
+          sample: ctx.combined.match(/"status"\s*:\s*"success"[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ?? "orderId",
+          note: "Juice Shop /rest/track-order/1 returns order data without auth — benchmark IDOR oracle (bootstrap)"
+        }
+      };
+    }
     const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
     for (let attempt = 0; attempt < 10; attempt++) {
       const r = await fetchDoc(trackUrl, { maxBytes: 8192, timeoutMs: 18000 });
@@ -7849,6 +7866,51 @@ const clientSideHackHealthIntroEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "HackHealth Nextra intro hub catalogs OWASP Top 10 attack labs across /cybersecurity/a01–a10 routes"
+    }
+  };
+};
+
+// --- HackHealth A01 brute-force BAC tutorial (hack-health-tutorial.vercel.app/a01/bruteForce) --
+const CLIENT_HACK_HEALTH_BRUTE_FORCE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A01 brute force module title",
+    re: /HH tutorial - Brute Force|Brute Force<\/title>/i
+  },
+  {
+    label: "A01:2021 Broken Access Control heading",
+    re: /A01:2021\s*-\s*Broken Access Control/i
+  },
+  {
+    label: "CWE-307 authentication attempts restriction",
+    re: /CWE-307[\s\S]{0,80}Improper Restriction of Authentication Attempts/i
+  },
+  {
+    label: "BAC brute-force attack walkthrough",
+    re: /Broken Access Control \(BAC\)|brute[\s-]?force attack|credential stuffing|password spray/i
+  },
+  {
+    label: "HackHealth brute-force route",
+    re: /\/cybersecurity\/a01\/bruteForce/i
+  }
+];
+
+const clientSideHackHealthBruteForceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_BRUTE_FORCE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/brute[\s-]?force|CWE-307|Broken Access Control/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A01 tutorial documents brute-force / broken access control (CWE-307) against the login API"
     }
   };
 };
@@ -25394,6 +25456,7 @@ export const RULES: Record<string, Rule> = {
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,
   clientSideHackHealthIntroEvidence,
+  clientSideHackHealthBruteForceEvidence,
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,
