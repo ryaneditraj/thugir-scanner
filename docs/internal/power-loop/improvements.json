@@ -5669,6 +5669,24 @@
       "slug": "client-side-intigriti-february-leek-nft-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Create your own official Leek NFT + /upload iframe + /save?config= base64 gadget on /create; challenge-0223.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1224.intigriti.io",
+      "slug": "client-side-intigriti-december-fireplace-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Fireplace Generator /index.php/view?title= reflects into h1 + fireplace id + source.zip; challenge-1224.intigriti.io findings 2→3 incl december-fireplace slug; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0525.intigriti.io",
+      "slug": "client-side-intigriti-may-dompurify-message-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fetch /message?name= + DOMPurify.sanitize(data) innerHTML sink + confetti.js CONFIG_SRC in script.js; challenge-0525.intigriti.io findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1025.intigriti.io",
+      "slug": "client-side-intigriti-october-shoppix-ssrf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Shoppix Importer challenge.php?url=http://example.com returns Fetched content HTML preview; challenge-1025.intigriti.io findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9976,6 +9994,21 @@
       "source": "discovery:challenge-0223.intigriti.io",
       "slug": "client-side-intigriti-february-leek-nft-xss-evidence",
       "shipped_at": "2026-07-21T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1224.intigriti.io",
+      "slug": "client-side-intigriti-december-fireplace-xss-evidence",
+      "shipped_at": "2026-07-21T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0525.intigriti.io",
+      "slug": "client-side-intigriti-may-dompurify-message-xss-evidence",
+      "shipped_at": "2026-07-21T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1025.intigriti.io",
+      "slug": "client-side-intigriti-october-shoppix-ssrf-evidence",
+      "shipped_at": "2026-07-21T06:10:00.000Z"
     }
   ]
 }
