@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T23:08:02.787Z",
+  "updated_at": "2026-07-21T23:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1455,
   "discovery_findings": 7295,
-  "improvements_shipped": 897,
-  "last_run": "2026-07-21T23:08:02.787Z",
+  "improvements_shipped": 900,
+  "last_run": "2026-07-21T23:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -51,27 +51,25 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 27,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
-      "dns_failures": [
-        "http://testhtml5.vulnweb.com/ (unreachable from cloud)"
-      ],
-      "focus": "Queue drain: bugbountyhunter ch6/7, redtiger level3-5, websegura mutillidae, hacking-lab; +5 new URLs (the0x-pwn lab-4/6/7/9, pentest-fauxbank)",
-      "improvements_shipped_this_run": 0
+      "dns_failures": [],
+      "focus": "XSS lab module marker extensions: the0x-pwn lab-3/5 DOM sinks, yogsec lab15 window.name, povzayd lab2 level module",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings, deep crawl pages=6 probes=265)",
-      "websegura.radwarelatam.com/mutillidae: 6 findings incl exposed-config-backup + html-comment-credential-disclosure",
-      "redtiger.labs.overthewire.org level3-5: 4 findings each — SQLi login-form evidence",
-      "hacking-lab.com: 3 findings — CTF platform markers + tech-stack-disclosure"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "the0x-pwn.github.io/lab-xss/lab-3: DOM-Based XSS resultQuery.innerHTML sink detected (2→3 findings)",
+      "yogsec.github.io/xss-labs/labs/lab15.html: window.name/eval lab module detected (2→3 findings)",
+      "povzayd.github.io/XSS-LABS/LABS/lab2.html: Level 2 filterReflected innerHTML lab detected (4→5 findings)"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "challenge-0626.intigriti.io/challenge.html returns HTTP 404 — June 2026 CTF not yet live",
       "testhtml5.vulnweb.com: host unreachable from cloud",
-      "bugbountyhunter challenges: platform markers only — per-challenge XSS sinks need deeper crawl",
       "hack-health A06/A08/A09/A10 tail queue URLs not yet reached (queue head drain priority)"
     ]
   },

@@ -22656,7 +22656,15 @@ const clientSideYogsecXssLabsEvidence: Rule = async (ctx) => {
 const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "yogsec XSS Lab module title",
-    re: /XSS Lab #\d+:[\s\S]{0,80}(?:Reflection|User-Agent|localStorage|cookie|DOM)/i
+    re: /XSS Lab #\d+:[\s\S]{0,80}(?:Reflection|User-Agent|localStorage|cookie|DOM|window\.name)/i
+  },
+  {
+    label: "window.name persistence lab",
+    re: /window\.name persists across page reloads|window\.name Across Pages/i
+  },
+  {
+    label: "eval(window.name) vulnerable sink",
+    re: /Vulnerable Code:[\s\S]{0,60}eval\(window\.name\)|eval\(window\.name\)/i
   },
   {
     label: "Reflected XSS lab badge",
@@ -22721,6 +22729,26 @@ const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
     label: "Lab difficulty tags",
     re: /Beginner|Intermediate|Advanced[\s\S]{0,40}Reflected XSS/i
+  },
+  {
+    label: "DOM-Based XSS lab module heading",
+    re: /DOM-Based XSS[\s\S]{0,40}(?:\/ Labs|Labs)/i
+  },
+  {
+    label: "DOM XSS document.write lab heading",
+    re: /DOM XSS in document\.write/i
+  },
+  {
+    label: "resultQuery innerHTML hash/query sink",
+    re: /resultQuery\.innerHTML\s*=\s*(?:hash|query)/
+  },
+  {
+    label: "document.write option query injection",
+    re: /document\.write\(['"]<option selected>['"]\s*\+\s*query/
+  },
+  {
+    label: "the0x-pwn per-lab route",
+    re: /the0x-pwn\.github\.io\/lab-xss\/lab-\d+/i
   }
 ];
 
@@ -22733,7 +22761,8 @@ const clientSideThe0xPwnXssLabsEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/XSS Labs|the0x-pwn|Reflected XSS/i.test(ctx.combined)) return NEGATIVE;
+  if (!/XSS Labs|the0x-pwn|Reflected XSS|DOM-Based XSS|DOM XSS in document\.write/i.test(ctx.combined))
+    return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.91 : 0.88,
@@ -22769,17 +22798,42 @@ const CLIENT_POVZAYD_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
     label: "Reflected/stored XSS lab sinks",
     re: /document\.write\(search\)|innerHTML = "Welcome, " \+ hash|div\.innerHTML = comment/i
+  },
+  {
+    label: "XSS Lab level module title",
+    re: /XSS Lab — Level \d+/i
+  },
+  {
+    label: "filterReflected innerHTML sink",
+    re: /getElementById\(["']reflected-output["']\)\.innerHTML\s*=\s*filterReflected|reflected-output"\)\.innerHTML\s*=\s*filterReflected/
+  },
+  {
+    label: "location.hash DOM XSS sink",
+    re: /location\.hash\.slice\(1\)|getElementById\("dom-box"\)\.innerHTML\s*=\s*domInput/
+  },
+  {
+    label: "stored XSS localStorage comments",
+    re: /lvl\d+_comments|filterStored\(c\)/
   }
 ];
 
 const clientSidePovzaydXssLabsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const onPovzayd =
+    /povzayd\.github\.io\/XSS-LABS/i.test(pageUrl) ||
+    /povzayd\.github\.io\/XSS-LABS|Welcome to XSS\s*LABS/i.test(ctx.combined);
+  if (!onPovzayd) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_POVZAYD_XSS_LABS_RES) {
     const m = ctx.combined.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/povzayd|XSS\s*LABS/i.test(ctx.combined)) return NEGATIVE;
+  if (
+    !/povzayd|Welcome to XSS\s*LABS/i.test(ctx.combined) &&
+    !/povzayd\.github\.io\/XSS-LABS/i.test(pageUrl)
+  )
+    return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,

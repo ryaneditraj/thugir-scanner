@@ -5903,6 +5903,24 @@
       "slug": "client-side-oopssec-race-condition-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: validates a coupon and increments its counter in two separate database calls + concurrent requests slip through; extractOopssecStoreSeeds seeds /posts/race-condition-coupon-abuse; koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/ findings 0→6 incl race-condition slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-3 resultQuery.innerHTML = hash/query + lab-5 document.write('<option selected>' + query); the0x-pwn.github.io/lab-xss/lab-3/ findings 2→3, lab-5 findings 2→3; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-xss-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab15.html XSS Lab #15 window.name + eval(window.name) + innerHTML name display; yogsec priority seeds extended lab1-20; yogsec.github.io/xss-labs/labs/lab15.html findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "client-side-povzayd-xss-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: LABS/lab2.html XSS Lab — Level 2 + getElementById('reflected-output').innerHTML = filterReflected(q) + location.hash dom-box sink; povzayd URL gate fix; povzayd.github.io/XSS-LABS/LABS/lab2.html findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10390,6 +10408,21 @@
       "source": "discovery:koadt.github.io",
       "slug": "client-side-oopssec-race-condition-evidence",
       "shipped_at": "2026-07-21T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-dom-document-write-lab-markers",
+      "shipped_at": "2026-07-21T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-window-name-lab-module",
+      "shipped_at": "2026-07-21T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "client-side-povzayd-level2-lab-module",
+      "shipped_at": "2026-07-21T23:10:00.000Z"
     }
   ]
 }
