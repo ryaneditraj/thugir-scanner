@@ -14071,6 +14071,138 @@ const clientSideIntigritiJuneLeakyJarEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti April 2022 Window Maker prototype pollution (challenge-0422) -----------
+const CLIENT_INTIGRITI_APRIL_WINDOW_MAKER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-0422 host",
+    re: /challenge-0422\.intigriti\.io/i
+  },
+  {
+    label: "Window Maker mithril lab",
+    re: /Window Maker|Window Maker is a website to help people build their own UI/i
+  },
+  {
+    label: "mithril query-string config gadget",
+    re: /m\.buildQueryString|m\.parseQueryString\(location\.search\)/i
+  },
+  {
+    label: "merge appConfig from query config",
+    re: /merge\(appConfig,\s*qs\.config\)|appConfig\["window-name"\]/i
+  },
+  {
+    label: "__proto__ protected merge keys",
+    re: /protectedKeys\s*=\s*\['__proto__'|protectedKeys[\s\S]{0,40}__proto__/i
+  }
+];
+
+const clientSideIntigritiAprilWindowMakerXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_APRIL_WINDOW_MAKER_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0422|Window Maker/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti April 2022 Window Maker challenge documents mithril query-string config merge with __proto__ blacklist and XP.css window builder XSS gadgets"
+    }
+  };
+};
+
+// --- Intigriti December 2022 Christmas Blog CSP/DOM clobbering (challenge-1222) -----
+const CLIENT_INTIGRITI_DECEMBER_CHRISTMAS_BLOG_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-1222 host",
+    re: /challenge-1222\.intigriti\.io/i
+  },
+  {
+    label: "Christmas Blog December challenge",
+    re: /Christmas Blog|December XSS challenge|fh4ntke/i
+  },
+  {
+    label: "username alert capture goal",
+    re: /alert showing the victim's\/another user's username/i
+  },
+  {
+    label: "Bootstrap twitter share modal gadget",
+    re: /twitterModal|share-area|#intigriti-xss blog post/i
+  },
+  {
+    label: "nonce CSP inline script",
+    re: /<script nonce=['"][^'"]+['"]>|script-src[^;]*nonce/i
+  }
+];
+
+const clientSideIntigritiDecemberChristmasBlogXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_DECEMBER_CHRISTMAS_BLOG_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1222|Christmas Blog/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti December 2022 Christmas Blog challenge documents Bootstrap share-modal DOM clobbering/CSP nonce XSS with username capture goal"
+    }
+  };
+};
+
+// --- Intigriti February 2023 Leek NFT iframe XSS (challenge-0223) ---------------------
+const CLIENT_INTIGRITI_FEBRUARY_LEEK_NFT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-0223 host",
+    re: /challenge-0223\.intigriti\.io/i
+  },
+  {
+    label: "Leek NFT creator lab",
+    re: /Create your own official Leek "NFT"|Leek NFT|modal-image-layer/i
+  },
+  {
+    label: "Dr Leek challenge author",
+    re: /Dr Leek|x64pr0fessor/i
+  },
+  {
+    label: "base64 save config gadget",
+    re: /\/save\?config=|document\.getElementById\("sbtn"\)\.href\s*=\s*"\/save\?config="/i
+  },
+  {
+    label: "upload iframe background lab",
+    re: /<iframe[^>]+src=["']\/upload["']|Upload your own background/i
+  }
+];
+
+const clientSideIntigritiFebruaryLeekNftXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_FEBRUARY_LEEK_NFT_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0223|Leek NFT/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti February 2023 Leek NFT challenge documents /create NFT builder with /upload iframe background lab and /save?config= base64 gadget chain"
+    }
+  };
+};
+
 // --- Leaky Jar recipe review stored XSS (leakyjar.intigriti.io) -----------------------
 const LEAKY_JAR_RECIPE_REVIEW_XSS_RES: { label: string; re: RegExp }[] = [
   {
@@ -24461,6 +24593,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiMarchLeakyFlagmentEvidence,
   clientSideIntigritiJanuaryIframeReactXssEvidence,
   clientSideIntigritiJuneLeakyJarEvidence,
+  clientSideIntigritiAprilWindowMakerXssEvidence,
+  clientSideIntigritiDecemberChristmasBlogXssEvidence,
+  clientSideIntigritiFebruaryLeekNftXssEvidence,
   leakyJarRecipeReviewStoredXssEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,

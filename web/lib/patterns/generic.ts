@@ -5440,6 +5440,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-april-window-maker-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti April Window Maker prototype pollution challenge disclosed",
+    description:
+      "Intigriti challenge-0422.intigriti.io hosts the Window Maker mithril lab with query-string config merge, __proto__ blacklist, and XP.css window builder XSS gadgets.",
+    impactOneline:
+      "Public April 2022 challenge documents prototype pollution via m.parseQueryString config merge at challenge/Window Maker.html.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiAprilWindowMakerXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Window Maker challenges are intentional training — never merge untrusted query objects into app config.",
+      steps: [
+        "Host April Window Maker labs on contest-only infrastructure.",
+        "Reject __proto__/constructor keys and use Object.create(null) for config maps.",
+        "Avoid rendering user-controlled window names or toolbar HTML without encoding."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Window Maker prototype pollution challenges. Show safe config parsing without merge() on query-string objects.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-december-christmas-blog-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti December Christmas Blog CSP/DOM clobbering challenge disclosed",
+    description:
+      "Intigriti challenge-1222.intigriti.io hosts the Christmas Blog lab with Bootstrap share-modal gadgets, nonce CSP scripts, and username capture goals.",
+    impactOneline:
+      "Public December 2022 challenge documents DOM clobbering/CSP bypass via #share-area and twitterModal at /blog/{uuid}.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiDecemberChristmasBlogXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Christmas Blog challenges are intentional training — harden share widgets against DOM clobbering and unsafe inline script gadgets.",
+      steps: [
+        "Host December Christmas Blog labs on contest-only infrastructure.",
+        "Avoid predictable element IDs targeted by DOM clobbering in share modals.",
+        "Use strict CSP without unsafe-inline and encode share textarea content."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Christmas Blog CSP/DOM clobbering challenges. Show hardened share modals without clobberable IDs or unsafe inline handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-february-leek-nft-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti February Leek NFT iframe XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0223.intigriti.io hosts the Leek NFT builder with /upload iframe background lab and /save?config= base64 gadget chain.",
+    impactOneline:
+      "Public February 2023 challenge documents iframe XSS via /create NFT layers and /upload background upload at challenge-0223.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiFebruaryLeekNftXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Leek NFT challenges are intentional training — sandbox upload iframes and validate base64 config payloads.",
+      steps: [
+        "Host February Leek NFT labs on contest-only infrastructure.",
+        "Sandbox /upload iframes with restrictive CSP and no parent DOM access.",
+        "Validate and schema-check /save?config= payloads server-side."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Leek NFT iframe XSS challenges. Show sandboxed upload iframes and safe config encoding without parent DOM gadgets.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
