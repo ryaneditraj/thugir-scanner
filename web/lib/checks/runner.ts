@@ -844,6 +844,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
   "clientSideWebsecUploadIncludeChallengeEvidence",
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
+  "clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence",
   "clientSideWebsecOpenBasedirEvalChallengeEvidence",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
@@ -1151,6 +1152,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingOpenRedirectsLessonEvidence",
   "clientSideHacksplainingXssDomLessonEvidence",
   "clientSideHacksplainingSessionFixationLessonEvidence",
+  "clientSideHacksplainingWeakSessionLessonEvidence",
+  "clientSideHacksplainingAiPromptInjectionLessonEvidence",
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
   "clientSideHacksplainingXmlBombLessonEvidence",
@@ -2083,7 +2086,7 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     /websec challenges/i.test(html) ||
     /web security challenges from the people of websec/i.test(html)
   ) {
-    for (let n = 1; n <= 31; n++) {
+    for (let n = 1; n <= 34; n++) {
       if (n === 19) continue;
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
@@ -6544,6 +6547,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://websec.fr/level31/source.php",
         "https://websec.fr/level32/",
         "https://websec.fr/level32/source.php",
+        "https://websec.fr/level33/",
+        "https://websec.fr/level33/source.php",
         "https://websec.fr/level34/",
         "https://websec.fr/level34/source.php"
       ]

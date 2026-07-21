@@ -2814,6 +2814,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-php-unserialize-blind-destruct-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr PHP blind unserialize __destruct lab disclosed",
+    description:
+      "WebSec.fr level33 unserializes attacker POST payload into class B whose __destruct emits a hidden Almost there? comment — blind destructor gadget training without direct flag echo.",
+    impactOneline:
+      "Public challenge source documents blind unserialize-to-__destruct PHP object injection with hidden output oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host deserialization labs offline; never unserialize untrusted input in production.",
+      steps: [
+        "Move WebSec-style unserialize labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban unserialize on user input; use JSON with strict schemas instead."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level33 lab exposes unserialize($_POST[...]) into class B __destruct with hidden Almost there? output. Show how to retire public labs and eliminate unsafe deserialization.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-open-basedir-eval-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -7126,6 +7152,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style session fixation exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-weak-session-lesson-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining weak session IDs lesson disclosed",
+    description:
+      "Hacksplaining /lessons/weak-session publishes an interactive exploit-then-fix walkthrough covering guessable session identifiers that enable session hijacking.",
+    impactOneline:
+      "Public weak session lesson pages document predictable session ID patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingWeakSessionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining weak session lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable weak session lesson instances on private deployments.",
+        "Use cryptographically random session IDs in production — never copy Hacksplaining weak session handlers.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style weak session ID exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Hacksplaining AI prompt injection lesson disclosed",
+    description:
+      "Hacksplaining /lessons/ai-prompt-injection publishes an interactive exploit-then-fix walkthrough covering attacker instructions that override LLM guardrails.",
+    impactOneline:
+      "Public AI prompt injection lesson pages document LLM instruction override patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacksplainingAiPromptInjectionLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining AI prompt injection lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable AI prompt injection lesson instances on private deployments.",
+        "Treat LLM system prompts as secrets and validate model inputs in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "We mirror Hacksplaining-style AI prompt injection exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
     version: 1,
     enabled: true
   },

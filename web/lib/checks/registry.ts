@@ -4286,6 +4286,96 @@ const clientSideHacksplainingSessionFixationLessonEvidence: Rule = async (ctx) =
   };
 };
 
+// --- Hacksplaining weak session IDs lesson (hacksplaining.com/lessons/weak-session) -----
+const CLIENT_HACKSPLAINING_WEAK_SESSION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Weak session lesson URL",
+    re: /hacksplaining\.com\/lessons\/weak-session/i
+  },
+  {
+    label: "Weak session lesson title",
+    re: /Weak Session(?: IDs)? — Secure Coding Lesson/i
+  },
+  {
+    label: "Guessable session IDs meta description",
+    re: /Guessable session IDs make your website vulnerable to session hijacking/i
+  },
+  {
+    label: "Weak session lesson step nav",
+    re: /lessons\/weak-session\/(?:weak-session-ids|introducing-mal|checking-the-cookie|script-kiddy|hack-in-progress|hack-achieved|finish)/i
+  },
+  {
+    label: "Session hijacking attack description",
+    re: /session hijacking|guessable session|weak session/i
+  }
+];
+
+const clientSideHacksplainingWeakSessionLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/weak-session/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_WEAK_SESSION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/weak-session\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining weak session IDs lesson documents exploit-then-fix chains where guessable session identifiers enable hijacking"
+    }
+  };
+};
+
+// --- Hacksplaining AI prompt injection lesson (hacksplaining.com/lessons/ai-prompt-injection) -
+const CLIENT_HACKSPLAINING_AI_PROMPT_INJECTION_LESSON_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "AI prompt injection lesson URL",
+    re: /hacksplaining\.com\/lessons\/ai-prompt-injection/i
+  },
+  {
+    label: "AI prompt injection lesson title",
+    re: /AI:\s*Prompt Injection — Secure Coding Lesson/i
+  },
+  {
+    label: "Prompt injection meta description",
+    re: /Prompt injection represents an easy way for an attacker to introduce unexpected behavior in a machine learning model/i
+  },
+  {
+    label: "Manipulate AI systems lesson description",
+    re: /Manipulate AI systems by injecting malicious instructions/i
+  },
+  {
+    label: "LLM attack lesson description",
+    re: /prompt injection|machine learning model|unexpected behavior/i
+  }
+];
+
+const clientSideHacksplainingAiPromptInjectionLessonEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (!/hacksplaining\.com\/lessons\/ai-prompt-injection/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_AI_PROMPT_INJECTION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/ai-prompt-injection\/start/i.test(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacksplaining AI prompt injection lesson documents exploit-then-fix chains where attacker instructions override LLM guardrails"
+    }
+  };
+};
+
 // --- Hacksplaining file upload lesson (hacksplaining.com/lessons/file-upload) ---------
 const CLIENT_HACKSPLAINING_FILE_UPLOAD_LESSON_RES: { label: string; re: RegExp }[] = [
   {
@@ -9085,6 +9175,51 @@ const clientSideWebsecPhpUnserializeDestructChallengeEvidence: Rule = async (ctx
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr level30 documents unserialize($_POST['payload']) into class B __destruct that echoes $flag after tragic exception"
+    }
+  };
+};
+
+// --- WebSec.fr blind unserialize __destruct (level33) ---------------------------------
+const CLIENT_WEBSEC_PHP_UNSERIALIZE_BLIND_DESTRUCT_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Thirty-three title",
+    re: /Level(?:&nbsp;|\s)+Thirtee-three|#WebSec(?:&nbsp;|\s)+Level33|Level33/i
+  },
+  {
+    label: "destruct subtitle",
+    re: /destruct\.|going\s+dark/i
+  },
+  {
+    label: "Almost there destruct hint",
+    re: /Almost(?:&nbsp;|\s)+there\?/i
+  },
+  {
+    label: "unserialize POST payload",
+    re: /unserialize[\s\S]{0,120}\$_POST/i
+  },
+  {
+    label: "class B __destruct gadget",
+    re: /class(?:&nbsp;|\s)+B[\s\S]{0,120}__destruct/i
+  }
+];
+
+const clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_BLIND_DESTRUCT_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level33|Thirtee-three|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (/Something(?:&nbsp;|\s)+tragic|Level30|#WebSec(?:&nbsp;|\s)+Level30/i.test(ctx.combined)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level33 documents unserialize($_POST[...]) into class B __destruct that emits hidden Almost there? comment — blind destructor gadget training"
     }
   };
 };
@@ -25156,6 +25291,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecAspectInstrumentationChallengeEvidence,
   clientSideWebsecUploadIncludeChallengeEvidence,
   clientSideWebsecPhpUnserializeDestructChallengeEvidence,
+  clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence,
   clientSideWebsecOpenBasedirEvalChallengeEvidence,
   clientSideWebsecDynamicFunctionCallChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
@@ -25488,6 +25624,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingOpenRedirectsLessonEvidence,
   clientSideHacksplainingXssDomLessonEvidence,
   clientSideHacksplainingSessionFixationLessonEvidence,
+  clientSideHacksplainingWeakSessionLessonEvidence,
+  clientSideHacksplainingAiPromptInjectionLessonEvidence,
   clientSideHacksplainingFileUploadLessonEvidence,
   clientSideHacksplainingCommandExecutionLessonEvidence,
   clientSideHacksplainingXmlBombLessonEvidence,
