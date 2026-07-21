@@ -77,6 +77,7 @@
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "yogsec queue entries used wrong path (lab1.html vs labs/lab1.html) — corrected in new discovery URLs",
       "hack-health a06/vulPackages: Vercel Security Checkpoint may block cloud scans",
+      "hack-health A06/A08/A09 tail queue URLs not yet reached (queue head drain priority)",
       "testhtml5.vulnweb.com: host unreachable from cloud"
     ]
   },
