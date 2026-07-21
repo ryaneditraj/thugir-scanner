@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T14:07:48.480Z",
+  "updated_at": "2026-07-21T16:35:52.708Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,76 +15,69 @@
       ]
     }
   },
-  "total_sites_scanned": 1756,
-  "total_findings": 8819,
+  "total_sites_scanned": 1764,
+  "total_findings": 8870,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1415,
-  "discovery_findings": 6974,
+  "discovery_urls_added": 1420,
+  "discovery_findings": 7018,
   "improvements_shipped": 873,
-  "last_run": "2026-07-21T14:07:48.480Z",
+  "last_run": "2026-07-21T16:35:52.708Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
+      "primary_recall": "1/6",
       "gap": [],
-      "note": "6/6 recall on primary Heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "primary_gap": ["xss", "sqli", "auth_bypass", "sensitive_data"],
+      "note": "Primary Heroku 503 Application Error — pass1 only misconfig (1 finding, pages=1 probes=20); staging fallback restored 6/6 (7 findings, pages=6 probes=242)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
           "categories_hit": 6,
           "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
+          "hit": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data", "misconfig"]
         }
       }
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 42,
-      "focus": "48h-rescan batch (appsecmaster, 516-hackers playground, testfire, zero.webappsecurity, hackadvisor, sixhackacademy, wrongsecrets, finbot-ctf) + Hack Health intro, CookieJar demo index, hack-this-site API oracles, domgo.at cxss/111 queued at tail",
-      "skipped_48h": [
-        "https://bwapp.hakhub.net/",
-        "https://brokencrystals.com/",
-        "https://ginandjuice.shop/"
-      ],
+      "urls_scanned": 7,
+      "findings": 44,
+      "focus": "48h-rescan batch (bwapp, brokencrystals, ginandjuice, maestro AI demo, reef MCP registry, sixhackacademy platform, CVE-2025-55182 demo) + domgo.at cxss/112-116 queued at tail",
+      "dns_failures": ["http://testhtml5.vulnweb.com/ (DNS NXDOMAIN)"],
       "urls_queued_not_scanned": [
+        "https://domgo.at/cxss/example/112",
+        "https://domgo.at/cxss/example/113",
+        "https://domgo.at/cxss/example/114",
+        "https://domgo.at/cxss/example/115",
+        "https://domgo.at/cxss/example/116",
         "https://hack-health-tutorial.vercel.app/cybersecurity/intro",
         "https://cyberdesserts.github.io/cookiejar-lab/demo/index.html",
         "https://hack-this-site-eta.vercel.app/api/reflect",
         "https://hack-this-site-eta.vercel.app/api/sql",
-        "https://domgo.at/cxss/example/111",
-        "https://domgo.at/cxss/example/106",
-        "https://domgo.at/cxss/example/107",
-        "https://domgo.at/cxss/example/108",
-        "https://domgo.at/cxss/example/109",
-        "https://domgo.at/cxss/example/110"
+        "https://domgo.at/cxss/example/111"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "appsecmaster.net: 8 findings incl client-side-react-rsc-cve-evidence + appsec-master lab hub",
-      "labs.hackadvisor.io: 7 findings — browser CTF challenge platform markers",
-      "wrongsecrets.herokuapp.com: 6 findings — secrets-management CTF evidence",
-      "demo.testfire.net: 6 findings via http fallback (exposed-source-maps + SQLi markers)"
+      "juice-shop.herokuapp.com: primary 503 — 1/6 recall on Heroku stub; staging fallback 6/6 (7 findings)",
+      "brokencrystals.com: 15 findings — API/web benchmark rescan",
+      "bwapp.hakhub.net: 7 findings — SQLi/XSS/auth markers",
+      "ginandjuice.shop: 6 findings — PortSwigger lab evidence",
+      "reef-mcp-registry.vercel.app: 6 findings — MCP/agentic security demo (new queue head)",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: 4 findings — agentic AI vuln lab"
     ],
     "learning_gaps": [
-      "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
+      "juice-shop.herokuapp.com: Heroku dyno offline (503 Application Error) — primary oracle unreachable without fallback",
+      "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes on staging",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404 shell — only CSP/header markers",
-      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
-      "hack-this-site API oracles at queue tail — not yet drained this run"
+      "testhtml5.vulnweb.com: DNS dead — use testasp.vulnweb.com or rest.vulnweb.com",
+      "domgo.at cxss/112-116 at queue tail — not yet drained this run"
     ]
   },
   "discovery_highlights": {
@@ -317,6 +310,7 @@
     "pentesterlab.com/exercises/xss_02": 4,
     "koadt.github.io/oss-oopssec-store/roadmap": 6,
     "maestro-agentic-ai-security-demo-mon.netlify.app": 4,
+    "reef-mcp-registry.vercel.app": 6,
     "www.bugbountyhunter.com/challenge?id=9": 3,
     "www.bugbountyhunter.com/challenge?id=10": 3,
     "www.bugbountyhunter.com/challenge?id=11": 3,
@@ -326,7 +320,6 @@
     "www.hackthissite.org/missions/application/32": 6,
     "www.hackthissite.org/missions/application/33": 6,
     "www.hackthissite.org/playlevel/36": 6,
-    "reef-mcp-registry.vercel.app": 6,
     "vwad.owasp.org/app/webgoat": 5,
     "redtiger.labs.overthewire.org/level8.php": 3,
     "redtiger.labs.overthewire.org/level9.php": 5,

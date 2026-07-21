@@ -7163,7 +7163,32 @@
       "url": "https://domgo.at/cxss/example/111",
       "source": "Mario Heiderich domgo.at \u2014 DomGoat level 111 DOM XSS hash sink exercise (cxss series continuation)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/112",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 112 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/113",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 113 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/114",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 114 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/115",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 115 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/116",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 116 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T14:05:00.000Z"
+  "updated_at": "2026-07-21T16:35:00.000Z"
 }
