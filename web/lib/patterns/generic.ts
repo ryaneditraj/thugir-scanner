@@ -2085,6 +2085,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hack-health-intro-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "HackHealth OWASP Top 10 tutorial hub disclosed",
+    description:
+      "HackHealth Nextra intro hub at /cybersecurity/intro catalogs OWASP Top 10 attack labs across /cybersecurity/a01–a10 routes including SQLi, SSRF, and JWT modules.",
+    impactOneline:
+      "Public tutorial hub links to live attack walkthroughs for every OWASP Top 10 category on a Vercel deploy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthIntroEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate HackHealth attack tutorials behind auth or local-only hosting.",
+      steps: [
+        "Move /cybersecurity/a01–a10 labs to localhost-only Nextra builds.",
+        "Add auth or VPN gating before exposing attack walkthrough pages.",
+        "Remove live exploit demos from public Vercel tutorial deploys."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth intro hub links to OWASP Top 10 attack labs on a public deploy. Show how to gate tutorial labs behind local-only access.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openapi-debug-password-exposure",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -4942,6 +4968,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Intigriti IRC challenges with DOMPurify iframe allowlists. Show safe chat rendering without innerHTML reparse.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-july-kitty-blog-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti July 2022 kitty blog iframe XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0722.intigriti.io hosts a July XSS challenge with an iframe to challenge/challenge.php Awesome kitty blog and alert(document.domain) objective.",
+    impactOneline:
+      "Public July 2022 challenge documents iframe-based XSS lab with archive month filters and unescaped blog reflection gadgets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJulyKittyBlogXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti iframe XSS challenges are intentional training — escape blog output and sandbox iframes.",
+      steps: [
+        "Host July kitty-blog labs on contest-only infrastructure.",
+        "Escape archive month filters and blog post output before HTML rendering.",
+        "Use sandboxed iframes with strict CSP for challenge gadget pages."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti July kitty-blog iframe XSS challenges. Show safe blog rendering and iframe sandboxing.",
     version: 1,
     enabled: true
   },
