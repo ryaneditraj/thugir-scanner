@@ -1609,6 +1609,21 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
     }
   }
 
+  if (/challenge-0822\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of [
+      "/challenge/index.php",
+      "/challenge/app.php",
+      "/challenge/login.php",
+      "/challenge/resources/app.js"
+    ]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
   if (/Magic 8 Ball|challenge-0922\.intigriti\.io/i.test(html)) {
     for (const p of ["/challenge/index.php", "/challenge/magic.php", "/challenge/api.php"]) {
       try {
@@ -1621,6 +1636,26 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/What do you like\?|getChoice\(this\)/i.test(html)) {
     for (const p of ["/challenge/index.php", "/challenge/index.php?choice=alert"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0622\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/index.php", "/challenge/index.php?choice=alert"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0922\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/index.php", "/challenge/magic.php", "/challenge/api.php"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {

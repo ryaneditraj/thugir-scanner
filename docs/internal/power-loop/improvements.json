@@ -5561,6 +5561,24 @@
       "slug": "client-side-intigriti-october-halloween-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: BOOOOOOO! + unsafe-eval strict-dynamic CSP + searchParams.get('xss') createTextNode script gadget at challenge/challenge.php; challenge-1021.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0822.intigriti.io",
+      "slug": "client-side-intigriti-august-business-card-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Business Card Generator + buiness-card + DOMPurify.sanitize hash #msg= modal in resources/app.js + theme.php JSON theming; host seeds crawl app.php/app.js; challenge-0822.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0922.intigriti.io",
+      "slug": "client-side-intigriti-september-magic8ball-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Magic 8 Ball iframe + postMessage case 'result' innerHTML=e.data.value + eval(e) API fallback in magic.php; challenge-0922.intigriti.io findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0622.intigriti.io",
+      "slug": "client-side-intigriti-june-choice-message-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: What do you like? select + ?choice= redirect gadget + choice=alert hidden message form at challenge/index.php; challenge-0622.intigriti.io findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9793,6 +9811,21 @@
       "source": "discovery:challenge-1021.intigriti.io",
       "slug": "client-side-intigriti-october-halloween-xss-evidence",
       "shipped_at": "2026-07-20T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0822.intigriti.io",
+      "slug": "client-side-intigriti-august-business-card-xss-evidence",
+      "shipped_at": "2026-07-21T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0922.intigriti.io",
+      "slug": "client-side-intigriti-september-magic8ball-xss-evidence",
+      "shipped_at": "2026-07-21T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0622.intigriti.io",
+      "slug": "client-side-intigriti-june-choice-message-xss-evidence",
+      "shipped_at": "2026-07-21T00:10:00.000Z"
     }
   ]
 }
