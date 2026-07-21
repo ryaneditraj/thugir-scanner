@@ -1,504 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-20T21:40:31.759Z",
-      "url": "https://www.bugbountyhunter.com/challenge?id=16",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-evidence",
-          "title": "BugBountyHunter zseano challenge platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
-          "title": "BugBountyHunter numbered challenge scenario disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 278,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:40:31.759Z"
-    },
-    {
-      "run_id": "2026-07-20T21:40:50.548Z",
-      "url": "http://redtiger.labs.overthewire.org/level6.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-redtiger-hackit-evidence",
-          "title": "RedTiger PHP/SQL hackit disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-blind-login-form-evidence",
-          "title": "RedTiger blind login-bypass form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-classic-login-sql-evidence",
-          "title": "RedTiger classic SQLi login form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 328,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:40:50.548Z"
-    },
-    {
-      "run_id": "2026-07-20T21:41:07.726Z",
-      "url": "https://securebank-blog.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-csrf-evidence",
-          "title": "Client bundle documents CSRF-vulnerable transfer flows",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-securebank-blog-evidence",
-          "title": "SecureBank attack/secure mode educational lab disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 269,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:41:07.726Z"
-    },
-    {
-      "run_id": "2026-07-20T21:41:09.852Z",
-      "url": "https://hack-health-tutorial.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-hack-health-lab-evidence",
-          "title": "Hack Health tutorial documents intentional SQL injection lab",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 298,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:41:09.852Z"
-    },
-    {
-      "run_id": "2026-07-20T21:41:14.321Z",
-      "url": "https://preview-zeroday-sec.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-zeroday-training-evidence",
-          "title": "0day cybersecurity training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 278,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:41:14.321Z"
-    },
-    {
-      "run_id": "2026-07-20T21:41:16.132Z",
-      "url": "https://hack-this-site-eta.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 17,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.84,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-vulnlab-verbose-404-evidence",
-          "title": "VulnLab verbose 404 credential leak disclosed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-vulnlab-academy-evidence",
-          "title": "VulnLab Academy pentest training platform disclosed",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vulnlab-a01-access-evidence",
-          "title": "VulnLab A01 broken access control lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-idor-lab-evidence",
-          "title": "VulnLab IDOR hands-on lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-a03-injection-evidence",
-          "title": "VulnLab A03 injection lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 293,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:41:16.132Z"
-    },
-    {
-      "run_id": "2026-07-20T21:41:22.749Z",
-      "url": "https://chimera.atlascrew.dev/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-jwt-none-evidence",
-          "title": "Client bundle documents JWT alg:none acceptance",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-xxe-evidence",
-          "title": "Client bundle documents XXE via external entity expansion",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-chimera-vuln-lab-evidence",
-          "title": "Chimera WAF honeypot documents 456+ intentional API vulnerabilities",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 294,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:41:22.749Z"
-    },
-    {
-      "run_id": "2026-07-20T21:41:27.971Z",
-      "url": "https://archon-eight.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": "bolt",
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-devsecops-lab-evidence",
-          "title": "DevSecOps microservices lab documents IDOR and gateway bypass attacks",
-          "severity": "high",
-          "confidence": 0.87,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pentesterlab-evidence",
-          "title": "PentesterLab web hacking exercise platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-cyberdefenders-evidence",
-          "title": "CyberDefenders blue team cyber range platform disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-archon-training-evidence",
-          "title": "Archon cybersecurity engineering training path disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 295,
-      "status": "ok",
-      "scanned_at": "2026-07-20T21:41:27.971Z"
-    },
-    {
       "run_id": "2026-07-20T22:01:37.242Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -10186,6 +9688,315 @@
       "probes_run": 265,
       "status": "ok",
       "scanned_at": "2026-07-21T23:02:02.250Z"
+    },
+    {
+      "run_id": "2026-07-21T23:03:41.289Z",
+      "url": "https://www.bugbountyhunter.com/challenge?id=6",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-bugbountyhunter-evidence",
+          "title": "BugBountyHunter zseano challenge platform disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
+          "title": "BugBountyHunter numbered challenge scenario disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 278,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:03:41.289Z"
+    },
+    {
+      "run_id": "2026-07-21T23:04:02.060Z",
+      "url": "https://www.bugbountyhunter.com/challenge?id=7",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-bugbountyhunter-evidence",
+          "title": "BugBountyHunter zseano challenge platform disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
+          "title": "BugBountyHunter numbered challenge scenario disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 278,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:04:02.060Z"
+    },
+    {
+      "run_id": "2026-07-21T23:04:19.202Z",
+      "url": "http://redtiger.labs.overthewire.org/level3.php",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-redtiger-hackit-evidence",
+          "title": "RedTiger PHP/SQL hackit disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "redtiger-blind-login-form-evidence",
+          "title": "RedTiger blind login-bypass form disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "redtiger-classic-login-sql-evidence",
+          "title": "RedTiger classic SQLi login form disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 328,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:04:19.202Z"
+    },
+    {
+      "run_id": "2026-07-21T23:04:36.921Z",
+      "url": "http://redtiger.labs.overthewire.org/level4.php",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-redtiger-hackit-evidence",
+          "title": "RedTiger PHP/SQL hackit disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "redtiger-blind-login-form-evidence",
+          "title": "RedTiger blind login-bypass form disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "redtiger-classic-login-sql-evidence",
+          "title": "RedTiger classic SQLi login form disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 328,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:04:36.921Z"
+    },
+    {
+      "run_id": "2026-07-21T23:04:57.766Z",
+      "url": "http://redtiger.labs.overthewire.org/level5.php",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-redtiger-hackit-evidence",
+          "title": "RedTiger PHP/SQL hackit disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "redtiger-blind-login-form-evidence",
+          "title": "RedTiger blind login-bypass form disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "redtiger-classic-login-sql-evidence",
+          "title": "RedTiger classic SQLi login form disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 328,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:04:57.766Z"
+    },
+    {
+      "run_id": "2026-07-21T23:05:16.400Z",
+      "url": "http://testhtml5.vulnweb.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-21T23:05:16.400Z",
+      "error": "We couldn't reach testhtml5.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-21T23:05:26.415Z",
+      "url": "http://websegura.radwarelatam.com/mutillidae/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-mutillidae-evidence",
+          "title": "OWASP Mutillidae vulnerable lab disclosed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "html-comment-credential-disclosure",
+          "title": "Database or admin credentials in HTML comment",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 341,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:05:26.415Z"
+    },
+    {
+      "run_id": "2026-07-21T23:07:25.369Z",
+      "url": "https://hacking-lab.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-hacking-lab-evidence",
+          "title": "Hacking-Lab cyber security training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 318,
+      "status": "ok",
+      "scanned_at": "2026-07-21T23:07:25.369Z"
     }
   ],
   "teacher_delta_runs": [
