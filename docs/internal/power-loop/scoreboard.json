@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T04:05:10.402Z",
+  "updated_at": "2026-07-21T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -369,6 +369,9 @@
     "challenge-0522.intigriti.io": 3,
     "challenge-0823.intigriti.io": 4,
     "challenge-0724.intigriti.io": 4,
-    "challenge-0325.intigriti.io": 5
+    "challenge-0325.intigriti.io": 5,
+    "challenge-0122.intigriti.io": 3,
+    "challenge.intigriti.io": 3,
+    "leakyjar.intigriti.io": 4
   }
 }
