@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T05:10:00.000Z",
+  "updated_at": "2026-07-21T06:05:15.919Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1692,
-  "total_findings": 8479,
+  "total_sites_scanned": 1701,
+  "total_findings": 8528,
   "critical_findings": 35,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1380,
+  "discovery_urls_added": 1385,
   "discovery_findings": 6773,
   "improvements_shipped": 861,
-  "last_run": "2026-07-21T05:10:00.000Z",
+  "last_run": "2026-07-21T06:05:15.919Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall maintained (7 findings, pages=6 probes=265)",
+      "note": "No benchmark misses — 6/6 recall on first pass (7 findings, pages=6 probes=265)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,32 +50,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 3,
-      "focus": "Intigriti 2022-2023 archive drain: Window Maker prototype pollution, Christmas Blog CSP/DOM clobbering, Leek NFT iframe XSS",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 42,
+      "focus": "Hacksplaining DNS/downgrade lessons + OWASP VWAD Pixi + Escape Duck Store + DVAI + domgo.at cxss/74-79 queued",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
-        "https://domgo.at/cxss/example/69",
-        "https://domgo.at/cxss/example/70",
-        "https://domgo.at/cxss/example/71",
-        "https://domgo.at/cxss/example/72",
-        "https://domgo.at/cxss/example/73"
+        "https://domgo.at/cxss/example/74",
+        "https://domgo.at/cxss/example/75",
+        "https://domgo.at/cxss/example/77",
+        "https://domgo.at/cxss/example/78",
+        "https://domgo.at/cxss/example/79"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "challenge-0422.intigriti.io: Window Maker mithril config merge + __proto__ blacklist (3→4 findings)",
-      "challenge-1222.intigriti.io: Christmas Blog share-modal CSP/DOM clobbering lab (2→3 findings)",
-      "challenge-0223.intigriti.io: Leek NFT /upload iframe + /save?config= gadget (3→4 findings)"
+      "vwad.owasp.org/app/pixi: OWASP VWAD Pixi DevSlop insecure API lab markers (4 findings)",
+      "www.hacksplaining.com/lessons/dns-poisoning: DNS poisoning lesson evidence (7 findings)",
+      "www.hacksplaining.com/lessons/downgrade-attacks: downgrade attack lesson evidence (7 findings)",
+      "duck-store.escape.tech: Escape Duck Store API/web vuln benchmark (7 findings)",
+      "dvaib.com: Damn Vulnerable AI Bank prompt-injection markers (4 findings)"
     ],
     "learning_gaps": [
-      "challenge-0121.intigriti.io / challenge-0221.intigriti.io: DNS dead — January/February 2021 archives offline",
-      "challenge-0821/0921/0321.intigriti.io: empty response — 2021 archives unreachable from cloud",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
+      "domgo.at cxss/74-79 queued at tail — not yet drained (queue scans from head)",
       "defendtheweb.net/playground/intro17: 404 — intro series ends at intro16"
     ],
-    "improvements_shipped_this_run": 3
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -233,7 +235,7 @@
     "fvb.vchan.in": 3,
     "weaponsforge.github.io/hacker-friendly-app": 4,
     "webexp05.vercel.app": 7,
-    "idor-challenge.vercel.app": 2,
+    "idor-challenge.vercel.app": 3,
     "luisillobret2.github.io/WebGoat": 2,
     "vuln-portal.vercel.app": 2,
     "pentest-ground.com:4280": 5,
@@ -346,7 +348,7 @@
     "pentesterlab.com/exercises/http_42": 4,
     "pentesterlab.com/exercises/ssti_02": 4,
     "www.hackthissite.org/missions/application/40": 6,
-    "vwad.owasp.org/app/pixi": 3,
+    "vwad.owasp.org/app/pixi": 4,
     "www.hacksplaining.com/lessons/email-spoofing/start": 7,
     "www.hacksplaining.com/lessons/malvertising/start": 7,
     "www.hacksplaining.com/lessons/ssl-stripping/start": 7,
