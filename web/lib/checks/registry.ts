@@ -14475,6 +14475,138 @@ const clientSideIntigritiAugustCatflixRceEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti January 2026 CRYPTIGRITI XSS (challenge-0126.intigriti.io) ------------
+const CLIENT_INTIGRITI_JANUARY_CRYPTIGRITI_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-0126 host",
+    re: /challenge-0126\.intigriti\.io/i
+  },
+  {
+    label: "CRYPTIGRITI DeFi platform",
+    re: /CRYPTIGRITI[\s\S]{0,40}Secure DeFi Platform|1337Coin|1337COIN/i
+  },
+  {
+    label: "XSS vulnerability challenge rule",
+    re: /leverage a XSS vulnerability on the challenge page/i
+  },
+  {
+    label: "home.html challenge iframe",
+    re: /href=["']\/home\.html["']|iframe[^>]+src=["']\/home\.html["']/i
+  },
+  {
+    label: "security.html flag submission",
+    re: /href=["']\/security\.html["']|submission page.*capture your flag/i
+  },
+  {
+    label: "navLinks innerHTML sink",
+    re: /getElementById\(['"]navLinks['"]\)\.innerHTML/i
+  }
+];
+
+const clientSideIntigritiJanuaryCryptigritiXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JANUARY_CRYPTIGRITI_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0126|CRYPTIGRITI/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti January 2026 CRYPTIGRITI challenge documents DeFi-themed XSS lab with /home.html gadget page and /security.html flag capture"
+    }
+  };
+};
+
+// --- WebSec.fr OOP garbage-collector SQLi (level04) -----------------------------------
+const CLIENT_WEBSEC_OOP_GARBAGE_COLLECTOR_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Four challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Four|LevelFour(?:&nbsp;|\s)*<small>\s*-\s*Cereal is nation/i
+  },
+  {
+    label: "PHP garbage collector training copy",
+    re: /garbage collector to properly display query results|take advantage of php's garbage collector/i
+  },
+  {
+    label: "OOP source1/source2 disclosure",
+    re: /href=["']source1\.php["'][\s\S]{0,80}source2\.php|we also do like to write neat OOP/i
+  },
+  {
+    label: "leet_hax0r serialized cookie",
+    re: /leet_hax0r|unserialize[\s\S]{0,120}base64_decode[\s\S]{0,120}\$_COOKIE/i
+  },
+  {
+    label: "SQL class query concat",
+    re: /SELECT(?:&nbsp;|\s)+username(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users(?:&nbsp;|\s)+WHERE(?:&nbsp;|\s)+id=/i
+  }
+];
+
+const clientSideWebsecOopGarbageCollectorChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_OOP_GARBAGE_COLLECTOR_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelFour|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level04 documents OOP SQL class with garbage-collector timing and leet_hax0r unserialize cookie gadget — injectable id POST parameter"
+    }
+  };
+};
+
+// --- WebSec.fr spellchecker reflected XSS (level05) -----------------------------------
+const CLIENT_WEBSEC_SPELLCHECKER_XSS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Five challenge title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Five|LevelFive(?:&nbsp;|\s)*<small>\s*-\s*Spelling is important/i
+  },
+  {
+    label: "spellshaker PHP spellchecker",
+    re: /spellshaker|wordchecker|Text to check/i
+  },
+  {
+    label: "reported XSS training comment",
+    re: /reporting an XSS|Thanks to Harel for reporting an XSS/i
+  },
+  {
+    label: "spellcheck preg_replace sink",
+    re: /preg_replace[\s\S]{0,200}\$_POST|preg_replace[\s\S]{0,200}\$word/i
+  },
+  {
+    label: "flag.php hint comment",
+    re: /\$flag is defined in flag\.php/i
+  }
+];
+
+const clientSideWebsecSpellcheckerXssChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_SPELLCHECKER_XSS_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelFive|#WebSec|spellshaker/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level05 documents PHP spellchecker with preg_replace reflected-XSS sink on posted spellcheck text"
+    }
+  };
+};
+
 // --- Leaky Jar recipe review stored XSS (leakyjar.intigriti.io) -----------------------
 const LEAKY_JAR_RECIPE_REVIEW_XSS_RES: { label: string; re: RegExp }[] = [
   {
@@ -24874,6 +25006,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiDecemberInfinityStonesXssEvidence,
   clientSideIntigritiMayPixelPioneersXssEvidence,
   clientSideIntigritiAugustCatflixRceEvidence,
+  clientSideIntigritiJanuaryCryptigritiXssEvidence,
+  clientSideWebsecOopGarbageCollectorChallengeEvidence,
+  clientSideWebsecSpellcheckerXssChallengeEvidence,
   leakyJarRecipeReviewStoredXssEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,

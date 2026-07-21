@@ -5674,6 +5674,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-january-cryptigriti-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti January CRYPTIGRITI XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0126.intigriti.io hosts the CRYPTIGRITI DeFi lab with /home.html gadget pages, /security.html flag capture, and navLinks innerHTML sinks for 1337COIN-themed XSS.",
+    impactOneline:
+      "Public January 2026 challenge documents CRYPTIGRITI XSS lab at challenge-0126.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJanuaryCryptigritiXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti CRYPTIGRITI challenges are intentional training — encode all DOM sinks and isolate DeFi demo pages.",
+      steps: [
+        "Render navigation links with textContent instead of innerHTML.",
+        "Apply strict CSP on /home.html and /security.html challenge routes.",
+        "Host contest challenge servers on dedicated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti CRYPTIGRITI XSS challenges. Show safe DOM rendering for navLinks and CSP on challenge iframe pages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-oop-garbage-collector-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr OOP garbage-collector SQLi lab disclosed",
+    description:
+      "WebSec.fr level04 documents OOP SQL classes relying on PHP garbage collection with leet_hax0r serialized cookie gadgets and injectable id POST parameters in source1.php/source2.php.",
+    impactOneline:
+      "Public WebSec.fr level04 challenge exposes OOP SQLi plus unserialize cookie oracle at websec.fr/level04/.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecOopGarbageCollectorChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebSec.fr level04 is an intentional training lab — use parameterized queries and never unserialize attacker cookies.",
+      steps: [
+        "Bind SQL id parameters with prepared statements.",
+        "Replace serialized session cookies with signed opaque tokens.",
+        "Remove __destruct timing oracles that leak query results."
+      ]
+    },
+    fixPrompt:
+      "We host WebSec.fr-style OOP SQL labs. Show parameterized queries and HMAC-signed session cookies instead of unserialize.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-spellchecker-xss-challenge-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "WebSec.fr spellchecker reflected XSS lab disclosed",
+    description:
+      "WebSec.fr level05 documents a PHP spellshaker spellchecker with preg_replace reflected-XSS sinks on posted spellcheck text (wordchecker form).",
+    impactOneline:
+      "Public WebSec.fr level05 spellchecker challenge reflects user input via preg_replace at websec.fr/level05/.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecSpellcheckerXssChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebSec.fr level05 is an intentional training lab — HTML-encode all spellcheck output and avoid regex-based sanitization.",
+      steps: [
+        "Escape spellcheck results with htmlspecialchars before echo.",
+        "Avoid preg_replace with user-controlled replacement strings.",
+        "Use a vetted HTML sanitizer if rich text is required."
+      ]
+    },
+    fixPrompt:
+      "We host WebSec.fr-style spellchecker labs. Show htmlspecialchars encoding for spellcheck output instead of preg_replace reflection.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

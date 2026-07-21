@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T07:04:50.981Z",
-  "total": 546,
-  "uniqueSlugs": 544,
+  "generatedAt": "2026-07-21T11:07:56.243Z",
+  "total": 549,
+  "uniqueSlugs": 547,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 528,
+    "generic": 531,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 477,
+    "deep": 480,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 39,
-    "Injection": 108,
-    "Cross-site scripting": 88,
+    "Injection": 109,
+    "Cross-site scripting": 90,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 6,
@@ -194,6 +194,7 @@
     "client-side-intigriti-december-fireplace-xss-evidence",
     "client-side-intigriti-december-infinity-stones-xss-evidence",
     "client-side-intigriti-february-leek-nft-xss-evidence",
+    "client-side-intigriti-january-cryptigriti-xss-evidence",
     "client-side-intigriti-january-friends-sqli-evidence",
     "client-side-intigriti-january-iframe-react-xss-evidence",
     "client-side-intigriti-january-xss-filter-bypass-evidence",
@@ -436,6 +437,7 @@
     "client-side-websec-fibonacci-eval-challenge-evidence",
     "client-side-websec-file-upload-challenge-evidence",
     "client-side-websec-magic-hash-challenge-evidence",
+    "client-side-websec-oop-garbage-collector-challenge-evidence",
     "client-side-websec-oop-restricted-eval-challenge-evidence",
     "client-side-websec-open-basedir-eval-challenge-evidence",
     "client-side-websec-php-aes-session-challenge-evidence",
@@ -444,6 +446,7 @@
     "client-side-websec-php-unserialize-filter-challenge-evidence",
     "client-side-websec-restricted-php-exec-challenge-evidence",
     "client-side-websec-shell-exec-challenge-evidence",
+    "client-side-websec-spellchecker-xss-challenge-evidence",
     "client-side-websec-sqli-privilege-challenge-evidence",
     "client-side-websec-timing-attack-challenge-evidence",
     "client-side-websec-upload-include-challenge-evidence",
