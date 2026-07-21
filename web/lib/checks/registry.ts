@@ -14203,6 +14203,134 @@ const clientSideIntigritiFebruaryLeekNftXssEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti December 2024 Fireplace Generator XSS (challenge-1224.intigriti.io) ----
+const CLIENT_INTIGRITI_DECEMBER_FIREPLACE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-1224 host",
+    re: /challenge-1224\.intigriti\.io/i
+  },
+  {
+    label: "Fireplace Generator lab",
+    re: /Fireplace Generator|Generate a cozy wood fire for all your Christmas needs/i
+  },
+  {
+    label: "index.php/view title form",
+    re: /action=["']\/index\.php\/view["']|name=["']title["']/i
+  },
+  {
+    label: "title reflected in fireplace markup",
+    re: /class=["']fireplace["']\s+id=|Ignite!/i
+  },
+  {
+    label: "challenge source.zip download",
+    re: /href=["']\/source\.zip["']|Download Source/i
+  }
+];
+
+const clientSideIntigritiDecemberFireplaceXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_DECEMBER_FIREPLACE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1224|Fireplace Generator/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti December 2024 Fireplace Generator challenge documents /index.php/view title reflection into h1 and fireplace id attributes with downloadable source.zip"
+    }
+  };
+};
+
+// --- Intigriti May 2025 DOMPurify message XSS (challenge-0525.intigriti.io) ---------
+const CLIENT_INTIGRITI_MAY_DOMPURIFY_MESSAGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-0525 host",
+    re: /challenge-0525\.intigriti\.io/i
+  },
+  {
+    label: "DOMPurify message fetch lab",
+    re: /DOMPurify\.sanitize\(data\)|fetch\(`\/message\?name=/i
+  },
+  {
+    label: "name regex filter before message fetch",
+    re: /name\.match\(\/\(\[a-zA-Z0-9\]\+\|\\s\)\+\$\/\)/i
+  },
+  {
+    label: "message div innerHTML sink",
+    re: /messageDiv\.innerHTML\s*=\s*DOMPurify\.sanitize/i
+  },
+  {
+    label: "dynamic confetti.js CONFIG_SRC loader",
+    re: /CONFIG_SRC\?\.dataset\["url"\]|confetti\.js/i
+  }
+];
+
+const clientSideIntigritiMayDompurifyMessageXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MAY_DOMPURIFY_MESSAGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0525|DOMPurify/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti May 2025 challenge documents /message?name= fetch into DOMPurify.sanitize innerHTML sink with alphanumeric name regex and confetti.js gadget loader"
+    }
+  };
+};
+
+// --- Intigriti October 2025 Shoppix SSRF (challenge-1025.intigriti.io) ---------------
+const CLIENT_INTIGRITI_OCTOBER_SHOPPIX_SSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-1025 host",
+    re: /challenge-1025\.intigriti\.io/i
+  },
+  {
+    label: "Shoppix Fashion Importer lab",
+    re: /Shoppix Importer|Shoppix Fashion Importer|sustainable fashion/i
+  },
+  {
+    label: "image URL fetch form",
+    re: /name=["']url["']|Enter image URL|Fetch Resource/i
+  },
+  {
+    label: "fetched content preview block",
+    re: /Fetched content:|fetch product images from partner/i
+  }
+];
+
+const clientSideIntigritiOctoberShoppixSsrfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_OCTOBER_SHOPPIX_SSRF_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1025|Shoppix/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti October 2025 Shoppix challenge documents server-side image URL fetch via ?url= with fetched HTML echoed in a preview block — SSRF training surface"
+    }
+  };
+};
+
 // --- Leaky Jar recipe review stored XSS (leakyjar.intigriti.io) -----------------------
 const LEAKY_JAR_RECIPE_REVIEW_XSS_RES: { label: string; re: RegExp }[] = [
   {
@@ -24596,6 +24724,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiAprilWindowMakerXssEvidence,
   clientSideIntigritiDecemberChristmasBlogXssEvidence,
   clientSideIntigritiFebruaryLeekNftXssEvidence,
+  clientSideIntigritiDecemberFireplaceXssEvidence,
+  clientSideIntigritiMayDompurifyMessageXssEvidence,
+  clientSideIntigritiOctoberShoppixSsrfEvidence,
   leakyJarRecipeReviewStoredXssEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,

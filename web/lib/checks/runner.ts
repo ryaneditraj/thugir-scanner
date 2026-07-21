@@ -951,6 +951,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiAprilWindowMakerXssEvidence",
   "clientSideIntigritiDecemberChristmasBlogXssEvidence",
   "clientSideIntigritiFebruaryLeekNftXssEvidence",
+  "clientSideIntigritiDecemberFireplaceXssEvidence",
+  "clientSideIntigritiMayDompurifyMessageXssEvidence",
+  "clientSideIntigritiOctoberShoppixSsrfEvidence",
   "leakyJarRecipeReviewStoredXssEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -1880,6 +1883,36 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/challenge-0223\.intigriti\.io/i.test(pageUrl)) {
     for (const p of ["/create", "/upload"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-1224\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/index.php", "/index.php/view?title=test"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0525\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/begin", "/script.js"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-1025\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge.php"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {

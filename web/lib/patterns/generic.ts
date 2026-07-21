@@ -5518,6 +5518,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-december-fireplace-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti December Fireplace Generator XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1224.intigriti.io hosts the Fireplace Generator lab with /index.php/view title reflection into h1 and fireplace id attributes plus source.zip.",
+    impactOneline:
+      "Public December 2024 challenge documents title-parameter XSS via /index.php/view at challenge-1224.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiDecemberFireplaceXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Fireplace Generator challenges are intentional training — encode title output and sandbox contest infrastructure.",
+      steps: [
+        "HTML-encode title values before reflecting into h1 and id attributes.",
+        "Host December Fireplace labs on contest-only infrastructure.",
+        "Restrict /index.php/view to alphanumeric titles server-side."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Fireplace Generator XSS challenges. Show encoded title output and safe attribute assignment without HTML injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-may-dompurify-message-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti May DOMPurify message XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0525.intigriti.io hosts a /message?name= fetch lab that assigns DOMPurify.sanitize responses to innerHTML with regex-filtered names.",
+    impactOneline:
+      "Public May 2025 challenge documents DOMPurify bypass via /message at challenge-0525.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMayDompurifyMessageXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti DOMPurify message challenges are intentional training — use textContent sinks and strict server-side HTML policies.",
+      steps: [
+        "Render /message responses with textContent instead of innerHTML.",
+        "Apply server-side HTML sanitization before returning greeting HTML.",
+        "Sandbox confetti.js dynamic script loading behind strict origin checks."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti DOMPurify message XSS challenges. Show textContent rendering and server-side sanitization instead of innerHTML sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-october-shoppix-ssrf-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Intigriti October Shoppix SSRF challenge disclosed",
+    description:
+      "Intigriti challenge-1025.intigriti.io hosts the Shoppix Fashion Importer with ?url= server-side fetch that echoes fetched HTML in a preview block.",
+    impactOneline:
+      "Public October 2025 challenge documents image URL SSRF via challenge.php?url= at challenge-1025.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiOctoberShoppixSsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Shoppix SSRF challenges are intentional training — block internal/metadata URLs and disable response echo.",
+      steps: [
+        "Allowlist image CDN hosts instead of fetching arbitrary URLs.",
+        "Block link-local, RFC1918, and cloud metadata IP ranges.",
+        "Return image bytes only — never echo fetched HTML to users."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Shoppix SSRF challenges. Show URL allowlists and safe image proxying without echoing fetched HTML.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
