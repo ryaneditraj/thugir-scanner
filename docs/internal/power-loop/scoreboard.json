@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T06:05:15.919Z",
+  "updated_at": "2026-07-21T06:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1385,
   "discovery_findings": 6773,
-  "improvements_shipped": 861,
-  "last_run": "2026-07-21T06:05:15.919Z",
+  "improvements_shipped": 864,
+  "last_run": "2026-07-21T06:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall on first pass (7 findings, pages=6 probes=265)",
+      "note": "No benchmark misses — 6/6 recall maintained (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,9 +51,9 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 42,
-      "focus": "Hacksplaining DNS/downgrade lessons + OWASP VWAD Pixi + Escape Duck Store + DVAI + domgo.at cxss/74-79 queued",
+      "urls_scanned": 11,
+      "findings": 54,
+      "focus": "Intigriti 2024-2025 archive (Fireplace/DOMPurify/Shoppix) + Hacksplaining DNS/downgrade + OWASP VWAD Pixi + Escape Duck Store",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
         "https://domgo.at/cxss/example/74",
@@ -65,19 +65,20 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "challenge-1224.intigriti.io: Fireplace Generator /index.php/view title reflection + source.zip (2→3 findings)",
+      "challenge-0525.intigriti.io: DOMPurify /message?name= innerHTML sink + confetti.js loader (4→5 findings)",
+      "challenge-1025.intigriti.io: Shoppix Importer ?url= SSRF with fetched HTML preview (3→4 findings)",
       "vwad.owasp.org/app/pixi: OWASP VWAD Pixi DevSlop insecure API lab markers (4 findings)",
       "www.hacksplaining.com/lessons/dns-poisoning: DNS poisoning lesson evidence (7 findings)",
-      "www.hacksplaining.com/lessons/downgrade-attacks: downgrade attack lesson evidence (7 findings)",
-      "duck-store.escape.tech: Escape Duck Store API/web vuln benchmark (7 findings)",
-      "dvaib.com: Damn Vulnerable AI Bank prompt-injection markers (4 findings)"
+      "duck-store.escape.tech: Escape Duck Store API/web vuln benchmark (7 findings)"
     ],
     "learning_gaps": [
+      "domgo.at/cxss/example/69-79: site returns Exercise-1 placeholder for high-numbered examples — no unique lab markers",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
-      "domgo.at cxss/74-79 queued at tail — not yet drained (queue scans from head)",
       "defendtheweb.net/playground/intro17: 404 — intro series ends at intro16"
     ],
-    "improvements_shipped_this_run": 0
+    "improvements_shipped_this_run": 3
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -366,7 +367,6 @@
     "challenge-0123.intigriti.io": 4,
     "challenge-1021.intigriti.io": 3,
     "challenge-0822.intigriti.io": 3,
-    "challenge-0922.intigriti.io": 5,
     "challenge-0622.intigriti.io": 3,
     "challenge-1121.intigriti.io": 4,
     "challenge-1221.intigriti.io": 3,
@@ -381,6 +381,9 @@
     "weaponsforge.github.io": 3,
     "challenge-0422.intigriti.io": 4,
     "challenge-1222.intigriti.io": 3,
-    "challenge-0223.intigriti.io": 4
+    "challenge-0223.intigriti.io": 4,
+    "challenge-1224.intigriti.io": 3,
+    "challenge-0525.intigriti.io": 5,
+    "challenge-1025.intigriti.io": 4
   }
 }
