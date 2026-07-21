@@ -2111,6 +2111,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hack-health-brute-force-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "HackHealth A01 brute-force broken access control lab disclosed",
+    description:
+      "HackHealth Nextra A01 module at /cybersecurity/a01/bruteForce documents CWE-307 brute-force and broken access control attacks against the login API.",
+    impactOneline:
+      "Public A01 brute-force walkthrough on a Vercel deploy teaches credential-stuffing patterns against a live authentication endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackHealthBruteForceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce rate limiting and account lockout; gate attack tutorials behind local-only hosting.",
+      steps: [
+        "Add rate limiting and account lockout on login endpoints.",
+        "Host HackHealth A01 attack labs on localhost only, not public Vercel deploys.",
+        "Monitor and alert on repeated failed authentication attempts."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth A01 brute-force tutorial documents CWE-307 attacks on a public deploy. Show rate-limiting, lockout, and how to gate the lab behind local-only access.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openapi-debug-password-exposure",
     platform: "generic",
     category: "Sensitive data exposure",

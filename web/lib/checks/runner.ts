@@ -952,6 +952,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiJulyMemoDompurifyXssEvidence",
   "clientSideIntigritiJulyKittyBlogXssEvidence",
   "clientSideHackHealthIntroEvidence",
+  "clientSideHackHealthBruteForceEvidence",
   "clientSideIntigritiMarchLeakyFlagmentEvidence",
   "clientSideIntigritiJanuaryIframeReactXssEvidence",
   "clientSideIntigritiJuneLeakyJarEvidence",
@@ -6758,6 +6759,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ? [
           new URL("/cybersecurity/intro", home.finalUrl).toString(),
           new URL("/cybersecurity/init", home.finalUrl).toString(),
+          new URL("/cybersecurity/a01/bruteForce", home.finalUrl).toString(),
           new URL("/cybersecurity/a03/sqlInjection", home.finalUrl).toString()
         ]
       : [];
@@ -7082,7 +7084,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const trackUrl = bootstrapUrls[2]!;
     const sqlUrl = bootstrapUrls[3]!;
     const appleUrl = bootstrapUrls[4]!;
-    for (let attempt = 0; attempt < 8; attempt++) {
+    for (let attempt = 0; attempt < 12; attempt++) {
       const trackBody = bootDocs.get(trackUrl)?.body ?? "";
       const sqlBody = bootDocs.get(sqlUrl)?.body ?? "";
       const appleBody = bootDocs.get(appleUrl)?.body ?? "";
@@ -7114,6 +7116,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       }
       if (!appleReady) {
         bootDocs.set(appleUrl, await probe.get(appleUrl, { maxBytes: 8192, timeoutMs: 12000 }));
+      }
+    }
+    // Heroku often wakes admin/track-order before the SQLi search route — extra SQL-only retries.
+    if (!/SQLITE_ERROR|syntax error|sequelize/i.test(bootDocs.get(sqlUrl)?.body ?? "")) {
+      for (let attempt = 0; attempt < 6; attempt++) {
+        await new Promise((r) => setTimeout(r, 3000));
+        bootDocs.set(sqlUrl, await probe.get(sqlUrl, { maxBytes: 8192, timeoutMs: 15000 }));
+        if (/SQLITE_ERROR|syntax error|sequelize/i.test(bootDocs.get(sqlUrl)?.body ?? "")) break;
       }
     }
     juiceShopBootstrap = [...bootDocs.values()]
