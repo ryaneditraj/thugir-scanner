@@ -1050,6 +1050,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
+  "clientSideOopssecRaceConditionEvidence",
   "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
@@ -1073,6 +1074,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideCtfchallengeEvidence",
   "clientSideExploitEducationEvidence",
   "clientSideYogsecXssLabsEvidence",
+  "clientSideYogsecXssLabModuleEvidence",
+  "clientSideThe0xPwnXssLabsEvidence",
   "clientSideHacker101CtfEvidence",
   "clientSideSockettomeEvidence",
   "clientSideOwaspBricksEvidence",
@@ -4014,9 +4017,49 @@ function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
   if (!/yogsec\.github\.io\/xss-labs|XSS Labs|yogsec\/xss-labs/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const id of ["1", "2", "3", "4", "5", "6"]) {
+  for (let id = 1; id <= 39; id++) {
     try {
       const u = new URL(`labs/lab${id}.html`, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*\/labs\/lab\d+\.html)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM XSS challenges). */
+function extractThe0xPwnLabXssSeeds(html: string, pageUrl: string): string[] {
+  if (!/the0x-pwn\.github\.io\/lab-xss|XSS Labs Dashboard|XSS Training Environment/i.test(`${html}\n${pageUrl}`))
+    return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (let n = 1; n <= 10; n++) {
+    try {
+      const u = new URL(`lab-${n}/`, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"']*\/lab-\d+\/?)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
@@ -5660,7 +5703,15 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
   if (!/OopsSec Store|oss-oopssec-store/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/roadmap", "/roadmap/", "/posts", "/topics", "/about"]) {
+  for (const p of [
+    "/roadmap",
+    "/roadmap/",
+    "/posts",
+    "/topics",
+    "/about",
+    "/posts/race-condition-coupon-abuse/",
+    "/posts/race-condition-coupon-abuse"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -6270,6 +6321,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const burpBountyLabSeeds = extractBurpBountyLabSeeds(home.body, home.finalUrl);
   const wafWorkshopSeeds = extractWafWorkshopMkdocsSeeds(home.body, home.finalUrl);
   const yogsecXssLabsSeeds = extractYogsecXssLabsSeeds(home.body, home.finalUrl);
+  const the0xPwnLabXssSeeds = extractThe0xPwnLabXssSeeds(home.body, home.finalUrl);
   const povzaydXssLabsSeeds = extractPovzaydXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
@@ -6781,6 +6833,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/cybersecurity/a10/ssrf", home.finalUrl).toString()
         ]
       : [];
+  const the0xPwnLabXssPrioritySeeds = /the0x-pwn\.github\.io\/lab-xss/i.test(home.finalUrl)
+    ? Array.from({ length: 10 }, (_, i) => new URL(`lab-${i + 1}/`, home.finalUrl).toString())
+    : [];
+  const yogsecXssLabsPrioritySeeds = /yogsec\.github\.io\/xss-labs/i.test(home.finalUrl)
+    ? Array.from({ length: 10 }, (_, i) =>
+        new URL(`labs/lab${i + 1}.html`, home.finalUrl).toString()
+      )
+    : [];
   const seclabPlaygroundPrioritySeeds =
     /securityweb-iota\.vercel\.app/i.test(home.finalUrl)
       ? ["/xss", "/sqli", "/csrf", "/idor"].map((p) => new URL(p, home.finalUrl).toString())
@@ -6822,6 +6882,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...hackHealthTutorialPrioritySeeds,
+      ...the0xPwnLabXssPrioritySeeds,
+      ...yogsecXssLabsPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
@@ -6885,6 +6947,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...burpBountyLabSeeds,
       ...wafWorkshopSeeds,
       ...yogsecXssLabsSeeds,
+      ...the0xPwnLabXssSeeds,
       ...povzaydXssLabsSeeds,
       ...hacker101CtfSeeds,
       ...owaspBricksSeeds,

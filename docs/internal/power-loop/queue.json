@@ -7265,12 +7265,12 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://yogsec.github.io/xss-labs/lab1.html",
+      "url": "https://yogsec.github.io/xss-labs/labs/lab1.html",
       "source": "yogsec/xss-labs \u2014 localStorage stored XSS lab module (GitHub Pages per-lab deploy)",
       "auth": "public_demo"
     },
     {
-      "url": "https://yogsec.github.io/xss-labs/lab5.html",
+      "url": "https://yogsec.github.io/xss-labs/labs/lab5.html",
       "source": "yogsec/xss-labs \u2014 cookie injection XSS lab module (GitHub Pages per-lab deploy)",
       "auth": "public_demo"
     },

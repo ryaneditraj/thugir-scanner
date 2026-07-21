@@ -4851,6 +4851,50 @@ const clientSideOopssecStoreEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store race-condition coupon abuse walkthrough (posts/race-condition-coupon-abuse) -
+const CLIENT_OOPSSEC_RACE_CONDITION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Race condition coupon abuse title",
+    re: /Race Condition:[\s\S]{0,80}single-use coupon with concurrent requests/i
+  },
+  {
+    label: "TOCTOU two separate database calls",
+    re: /validates a coupon and increments its counter in two separate database calls/i
+  },
+  {
+    label: "Concurrent request slip-through",
+    re: /Send enough concurrent requests and several slip through the check/i
+  },
+  {
+    label: "OopsSec Store coupon validation",
+    re: /OopsSec Store validates a coupon/i
+  },
+  {
+    label: "Race condition walkthrough route",
+    re: /\/posts\/race-condition-coupon-abuse/i
+  }
+];
+
+const clientSideOopssecRaceConditionEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_RACE_CONDITION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|race condition|coupon/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents TOCTOU race condition — coupon validated and incremented in two separate DB calls"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -22608,6 +22652,98 @@ const clientSideYogsecXssLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- yogsec XSS Labs per-module pages (labs/labN.html — reflected/stored/DOM sinks) ----
+const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "yogsec XSS Lab module title",
+    re: /XSS Lab #\d+:[\s\S]{0,80}(?:Reflection|User-Agent|localStorage|cookie|DOM)/i
+  },
+  {
+    label: "Reflected XSS lab badge",
+    re: /Lab #\d+ · Reflected XSS|Lab #\d+ · Stored XSS|Lab #\d+ · DOM-Based XSS/i
+  },
+  {
+    label: "innerHTML sink without sanitization",
+    re: /innerHTML[\s\S]{0,60}(?:NO sanitization|navigator\.userAgent|document\.cookie|localStorage)/i
+  },
+  {
+    label: "Vulnerable code innerHTML assignment",
+    re: /Vulnerable code:[\s\S]{0,80}innerHTML\s*=/i
+  },
+  {
+    label: "yogsec labs path",
+    re: /yogsec\.github\.io\/xss-labs\/labs\/lab\d+\.html/i
+  }
+];
+
+const clientSideYogsecXssLabModuleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/yogsec\.github\.io\/xss-labs/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_YOGSEC_XSS_LAB_MODULE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/XSS Lab #|XSS-Labs|yogsec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "yogsec XSS Labs module documents client-side innerHTML sinks with intentional reflected/stored/DOM XSS training payloads"
+    }
+  };
+};
+
+// --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
+const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Labs Dashboard title",
+    re: /XSS Labs Dashboard|XSS Training Environment/i
+  },
+  {
+    label: "the0x-pwn lab-xss GitHub Pages hub",
+    re: /the0x-pwn\.github\.io\/lab-xss|the0x-pwn\/lab-xss/i
+  },
+  {
+    label: "Reflected XSS lab module heading",
+    re: /Reflected XSS[\s\S]{0,80}(?:Template Literal|href attribute|query parameter|angle brackets)/i
+  },
+  {
+    label: "Template literal eval XSS sink",
+    re: /eval\s*\(\s*`[\s\S]{0,80}textContent\s*=\s*\\\$\{/
+  },
+  {
+    label: "href innerHTML injection sink",
+    re: /innerHTML\s*=\s*['"]<a href=["']\s*\+\s*decodeURIComponent\(query\)/
+  },
+  {
+    label: "Lab difficulty tags",
+    re: /Beginner|Intermediate|Advanced[\s\S]{0,40}Reflected XSS/i
+  }
+];
+
+const clientSideThe0xPwnXssLabsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_LABS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/XSS Labs|the0x-pwn|Reflected XSS/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-xss publishes 10 reflected and DOM XSS challenges with eval/template-literal and href innerHTML sinks"
+    }
+  };
+};
+
 // --- povzayd XSS LABS (povzayd.github.io/XSS-LABS — reflected/stored/DOM browser labs) -
 const CLIENT_POVZAYD_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -26148,6 +26284,8 @@ export const RULES: Record<string, Rule> = {
   clientSideCtfchallengeEvidence,
   clientSideExploitEducationEvidence,
   clientSideYogsecXssLabsEvidence,
+  clientSideYogsecXssLabModuleEvidence,
+  clientSideThe0xPwnXssLabsEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,
@@ -26254,6 +26392,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingUnencryptedCommunicationLessonEvidence,
   clientSideHacksplainingXssiLessonEvidence,
   clientSideOopssecStoreEvidence,
+  clientSideOopssecRaceConditionEvidence,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
