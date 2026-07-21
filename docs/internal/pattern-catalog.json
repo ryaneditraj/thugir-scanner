@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T13:12:43.585Z",
-  "total": 554,
-  "uniqueSlugs": 552,
+  "generatedAt": "2026-07-21T16:10:51.673Z",
+  "total": 558,
+  "uniqueSlugs": 556,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 536,
+    "generic": 540,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 485,
+    "deep": 489,
     "continuous": 0
   },
   "byCategory": {
@@ -26,14 +26,14 @@
     "Information exposure": 1,
     "Information disclosure": 35,
     "Security misconfiguration": 44,
-    "Broken authentication": 39,
-    "Injection": 113,
+    "Broken authentication": 40,
+    "Injection": 115,
     "Cross-site scripting": 90,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 7,
     "Sensitive data exposure": 5,
-    "AI security": 29,
+    "AI security": 30,
     "XSS": 1
   },
   "slugs": [
@@ -98,6 +98,7 @@
     "client-side-ctflearn-websix-evidence",
     "client-side-ctflearn-webthree-evidence",
     "client-side-ctflearn-webtwo-evidence",
+    "client-side-cve-55182-saas-poc-evidence",
     "client-side-cvebench-benchmark-evidence",
     "client-side-cybench-evidence",
     "client-side-cyber-scavenger-hunt-evidence",
@@ -144,6 +145,7 @@
     "client-side-hackinghub-evidence",
     "client-side-hackmyvm-evidence",
     "client-side-hacksec-evidence",
+    "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
     "client-side-hacksplaining-broken-access-control-lesson-evidence",
     "client-side-hacksplaining-clickjacking-lesson-evidence",
     "client-side-hacksplaining-command-execution-lesson-evidence",
@@ -165,6 +167,7 @@
     "client-side-hacksplaining-subdomain-squatting-lesson-evidence",
     "client-side-hacksplaining-toxic-dependencies-lesson-evidence",
     "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
+    "client-side-hacksplaining-weak-session-lesson-evidence",
     "client-side-hacksplaining-xml-bomb-lesson-evidence",
     "client-side-hacksplaining-xss-dom-lesson-evidence",
     "client-side-hacksplaining-xss-reflected-lesson-evidence",
@@ -442,6 +445,7 @@
     "client-side-websec-oop-restricted-eval-challenge-evidence",
     "client-side-websec-open-basedir-eval-challenge-evidence",
     "client-side-websec-php-aes-session-challenge-evidence",
+    "client-side-websec-php-unserialize-blind-destruct-challenge-evidence",
     "client-side-websec-php-unserialize-cookie-challenge-evidence",
     "client-side-websec-php-unserialize-destruct-challenge-evidence",
     "client-side-websec-php-unserialize-filter-challenge-evidence",
