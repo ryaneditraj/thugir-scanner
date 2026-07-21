@@ -10177,6 +10177,21 @@
       "source": "discovery:vuln-portal.vercel.app",
       "slug": "vuln-portal-auth-priority-seeds",
       "shipped_at": "2026-07-21T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-blind-destruct-challenge-evidence",
+      "shipped_at": "2026-07-21T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-weak-session-lesson-evidence",
+      "shipped_at": "2026-07-21T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
+      "shipped_at": "2026-07-21T16:15:00.000Z"
     }
   ]
 }
