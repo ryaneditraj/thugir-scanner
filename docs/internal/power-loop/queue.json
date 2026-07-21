@@ -7338,7 +7338,32 @@
       "url": "https://yogsec.github.io/xss-labs/labs/lab15.html",
       "source": "yogsec/xss-labs — intermediate filter-bypass XSS lab module (GitHub Pages)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-4/",
+      "source": "the0x-pwn/lab-xss — HTML tag filtering bypass XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-6/",
+      "source": "the0x-pwn/lab-xss — reflected XSS with HTML encoding weakness lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-7/",
+      "source": "the0x-pwn/lab-xss — JS context XSS with character restrictions lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-9/",
+      "source": "the0x-pwn/lab-xss — SVG-based script injection XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/",
+      "source": "alfredang/pentest FauxBank — fictional bank OWASP Top 10 guided pentest lab (Vercel deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-21T22:10:00.000Z"
+  "updated_at": "2026-07-21T23:05:00.000Z"
 }
