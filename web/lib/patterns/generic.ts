@@ -5596,6 +5596,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-december-infinity-stones-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti December Infinity Stones XSS challenge disclosed",
+    description:
+      "Intigriti challenge-1225.intigriti.io hosts the Infinity Stones lab with #PerfectlyBalanced hash-gated postMessage eval and sandboxed *.challenge-1225.intigriti.io subdomain iframes.",
+    impactOneline:
+      "Public December 2025 challenge documents multi-stage postMessage XSS via /challenge at challenge-1225.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiDecemberInfinityStonesXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Infinity Stones challenges are intentional training — never eval postMessage payloads and isolate contest subdomains.",
+      steps: [
+        "Remove eval() handlers from postMessage listeners.",
+        "Restrict iframe origins with strict sandbox and CSP frame-src allowlists.",
+        "Host December contest labs on dedicated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Infinity Stones XSS challenges. Show safe postMessage validation without eval and strict iframe sandboxing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-may-pixel-pioneers-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti May Pixel Pioneers XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0526.intigriti.io hosts Pixel Pioneers arcade testimonials with unsanitized username innerHTML, DOMPurify content sinks, and PixelAnalyticsConfig DOM-clobber gadget loading.",
+    impactOneline:
+      "Public May 2026 challenge documents stored XSS via /api/testimonials at challenge-0526.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMayPixelPioneersXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Pixel Pioneers challenges are intentional training — encode all testimonial fields and block DOM-clobber script loaders.",
+      steps: [
+        "Render testimonial usernames with textContent instead of innerHTML.",
+        "Keep DOMPurify on content but enforce server-side HTML policies too.",
+        "Freeze PixelAnalyticsConfig and disallow dynamic tracker script injection."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Pixel Pioneers XSS challenges. Show textContent rendering for usernames and hardened analytics config without DOM clobbering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-august-catflix-rce-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Intigriti August CatFlix RCE challenge disclosed",
+    description:
+      "Intigriti challenge-0825.intigriti.io hosts the CatFlix AI streaming lab with downloadable source and a server-side RCE capture goal via Next.js middleware SSRF chains.",
+    impactOneline:
+      "Public August 2025 challenge documents CatFlix AI RCE lab with /source.zip and /challenge server at challenge-0825.intigriti.io.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiAugustCatflixRceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti CatFlix RCE challenges are intentional training — block SSRF to internal services and sandbox build pipelines.",
+      steps: [
+        "Restrict middleware fetch targets to public image CDNs only.",
+        "Isolate Jenkins/build services from application middleware.",
+        "Host contest challenge servers on dedicated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti CatFlix RCE challenges. Show SSRF-safe middleware fetch policies and isolated CI/CD networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

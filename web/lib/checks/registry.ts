@@ -14331,6 +14331,150 @@ const clientSideIntigritiOctoberShoppixSsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti December 2025 Infinity Stones XSS (challenge-1225.intigriti.io) --------
+const CLIENT_INTIGRITI_DECEMBER_INFINITY_STONES_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-1225 host",
+    re: /challenge-1225\.intigriti\.io/i
+  },
+  {
+    label: "Infinity Stones challenge title",
+    re: /Infinity Stones|Intigriti(?:'s)?\s+December\s+challenge/i
+  },
+  {
+    label: "PerfectlyBalanced hash gate",
+    re: /location\.hash\s*===\s*['"]#PerfectlyBalanced['"]/i
+  },
+  {
+    label: "postMessage eval gadget",
+    re: /eval\s*\(\s*event\.data\.substring\s*\(\s*48\s*\)\s*\)/i
+  },
+  {
+    label: "Infinity Stone subdomain iframes",
+    re: /power\.challenge-1225\.intigriti\.io|reality\.challenge-1225\.intigriti\.io|soul\.challenge-1225\.intigriti\.io/i
+  },
+  {
+    label: "challenge source.zip download",
+    re: /href=["']\/source\.zip["']|Download the[\s\S]{0,40}source code/i
+  }
+];
+
+const clientSideIntigritiDecemberInfinityStonesXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_DECEMBER_INFINITY_STONES_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-1225|Infinity Stones/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti December 2025 Infinity Stones challenge documents #PerfectlyBalanced hash-gated postMessage eval plus sandboxed subdomain iframes for multi-stage XSS training"
+    }
+  };
+};
+
+// --- Intigriti May 2026 Pixel Pioneers XSS (challenge-0526.intigriti.io) --------------
+const CLIENT_INTIGRITI_MAY_PIXEL_PIONEERS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-0526 host",
+    re: /challenge-0526\.intigriti\.io/i
+  },
+  {
+    label: "Pixel Pioneers arcade lab",
+    re: /PIXEL PIONEERS|Pixel Pioneers - Modern Retro Arcade/i
+  },
+  {
+    label: "SCA Shield profile protection copy",
+    re: /SCA Shield v1\.0|Advanced SCA Shield protects your name/i
+  },
+  {
+    label: "unsanitized testimonial username innerHTML",
+    re: /nameDiv\.innerHTML\s*=\s*t\.user_name/i
+  },
+  {
+    label: "DOMPurify testimonial content sink",
+    re: /textDiv\.innerHTML\s*=\s*DOMPurify\.sanitize\s*\(\s*t\.content\s*\)/i
+  },
+  {
+    label: "PixelAnalyticsConfig DOM clobber gadget",
+    re: /window\.PixelAnalyticsConfig|mock-tracker\.js/i
+  }
+];
+
+const clientSideIntigritiMayPixelPioneersXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MAY_PIXEL_PIONEERS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0526|PIXEL PIONEERS/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti May 2026 Pixel Pioneers challenge documents unsanitized testimonial usernames in innerHTML alongside DOMPurify-sanitized content and PixelAnalyticsConfig DOM-clobber gadget loading"
+    }
+  };
+};
+
+// --- Intigriti August 2025 CatFlix RCE (challenge-0825.intigriti.io) -------------------
+const CLIENT_INTIGRITI_AUGUST_CATFLIX_RCE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "challenge-0825 host",
+    re: /challenge-0825\.intigriti\.io/i
+  },
+  {
+    label: "CatFlix AI video platform",
+    re: /CatFlix\s*-\s*AI Generated Cat Videos|Welcome to[\s\S]{0,40}CatFlix AI/i
+  },
+  {
+    label: "RCE on server without sandbox rule",
+    re: /leverage an RCE on the server without sandbox/i
+  },
+  {
+    label: "CatFlix sign-in gate copy",
+    re: /Paws Right There!|Sign in to watch/i
+  },
+  {
+    label: "challenge source.zip download",
+    re: /href=["']\/source\.zip["']|Download source code/i
+  },
+  {
+    label: "CatFlix challenge server iframe",
+    re: /href=["']\/challenge["']|iframe src=["']\/challenge["']/i
+  }
+];
+
+const clientSideIntigritiAugustCatflixRceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_AUGUST_CATFLIX_RCE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0825|CatFlix/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti August 2025 CatFlix challenge documents Next.js CatFlix AI streaming lab with downloadable source and server-side RCE capture goal via middleware SSRF chain"
+    }
+  };
+};
+
 // --- Leaky Jar recipe review stored XSS (leakyjar.intigriti.io) -----------------------
 const LEAKY_JAR_RECIPE_REVIEW_XSS_RES: { label: string; re: RegExp }[] = [
   {
@@ -24727,6 +24871,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiDecemberFireplaceXssEvidence,
   clientSideIntigritiMayDompurifyMessageXssEvidence,
   clientSideIntigritiOctoberShoppixSsrfEvidence,
+  clientSideIntigritiDecemberInfinityStonesXssEvidence,
+  clientSideIntigritiMayPixelPioneersXssEvidence,
+  clientSideIntigritiAugustCatflixRceEvidence,
   leakyJarRecipeReviewStoredXssEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
