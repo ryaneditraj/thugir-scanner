@@ -950,6 +950,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiAprilBricksRceEvidence",
   "clientSideIntigritiAugustEvalStackXssEvidence",
   "clientSideIntigritiJulyMemoDompurifyXssEvidence",
+  "clientSideIntigritiJulyKittyBlogXssEvidence",
+  "clientSideHackHealthIntroEvidence",
   "clientSideIntigritiMarchLeakyFlagmentEvidence",
   "clientSideIntigritiJanuaryIframeReactXssEvidence",
   "clientSideIntigritiJuneLeakyJarEvidence",
@@ -6745,7 +6747,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/platform/node.html", home.finalUrl).toString(),
           new URL("/platform/java.html", home.finalUrl).toString(),
           new URL("/platform/python.html", home.finalUrl).toString(),
-          new URL("/sqli/", home.finalUrl).toString()
+          new URL("/sqli/", home.finalUrl).toString(),
+          new URL("/api/reflect", home.finalUrl).toString(),
+          new URL("/api/sql", home.finalUrl).toString(),
+          new URL("/api/search", home.finalUrl).toString()
+        ]
+      : [];
+  const hackHealthTutorialPrioritySeeds =
+    /hack-health-tutorial\.vercel\.app/i.test(home.finalUrl)
+      ? [
+          new URL("/cybersecurity/intro", home.finalUrl).toString(),
+          new URL("/cybersecurity/init", home.finalUrl).toString(),
+          new URL("/cybersecurity/a03/sqlInjection", home.finalUrl).toString()
         ]
       : [];
   const seclabPlaygroundPrioritySeeds =
@@ -6788,6 +6801,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnPortalPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
+      ...hackHealthTutorialPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
