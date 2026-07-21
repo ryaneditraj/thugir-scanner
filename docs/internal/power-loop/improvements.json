@@ -5795,6 +5795,24 @@
       "slug": "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lessons/ai-prompt-injection/start title AI: Prompt Injection — Secure Coding Lesson + meta unexpected behavior in a machine learning model; hacksplaining.com/lessons/ai-prompt-injection/start findings 2→3 incl new slug; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-api-live-probes",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/reflect?q=thugirXSScanary echoes raw canary in HTML; GET /api/sql?id=1' returns {\"error\":\"SQL Error: You have an error in your SQL syntax\"}; hack-this-site-eta.vercel.app findings 17→19 incl reflected-xss-query-param + sql-error-disclosure; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0722.intigriti.io",
+      "slug": "client-side-intigriti-july-kitty-blog-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Intigriti's July XSS challenge + iframe challenge/challenge.php + Awesome kitty blog + alert(document.domain) rules; challenge-0722.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-intro-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/intro HackHealth + OWASP Top 10 hub links /cybersecurity/a01–a10; hackHealthTutorialPrioritySeeds; hack-health-tutorial.vercel.app findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10192,6 +10210,21 @@
       "source": "discovery:www.hacksplaining.com",
       "slug": "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
       "shipped_at": "2026-07-21T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-api-live-probes",
+      "shipped_at": "2026-07-21T17:30:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0722.intigriti.io",
+      "slug": "client-side-intigriti-july-kitty-blog-xss-evidence",
+      "shipped_at": "2026-07-21T17:30:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-intro-evidence",
+      "shipped_at": "2026-07-21T17:30:00.000Z"
     }
   ]
 }

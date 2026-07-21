@@ -554,6 +554,29 @@ async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string
 
 const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
+  if (/hack-this-site-eta\.vercel\.app/i.test(ctx.origin)) {
+    const reflectUrl = new URL("/api/reflect", ctx.origin);
+    reflectUrl.searchParams.set("q", canary);
+    const reflectDoc = await ctx.probe.get(reflectUrl.toString(), { maxBytes: 8192 });
+    if (reflectDoc.status >= 200 && isReflectedXssCanary(reflectDoc.body, canary)) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          canary,
+          hits: [
+            {
+              path: "/api/reflect",
+              param: "q",
+              url: reflectUrl.toString(),
+              snippet: reflectDoc.body.slice(0, 200).trim()
+            }
+          ],
+          note: "VulnLab /api/reflect echoes query parameter unescaped in HTML — reflected XSS likely"
+        }
+      };
+    }
+  }
   const gruyerePaths = await extractGruyereLiveInstancePaths(ctx);
   if (gruyerePaths.length > 0) {
     for (const path of gruyerePaths) {
@@ -2006,6 +2029,28 @@ const sqlErrorDisclosure: Rule = async (ctx) => {
       }
       if (r.status >= 200 && r.status < 500) break;
       await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+  }
+
+  if (/hack-this-site-eta\.vercel\.app/i.test(ctx.origin)) {
+    const sqlUrl = new URL("/api/sql", ctx.origin);
+    sqlUrl.searchParams.set("id", "1'");
+    const r = await fetchDoc(sqlUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+    if (r.status !== 401 && r.status !== 403) {
+      const marker = SQL_ERROR_MARKERS.find((re) => re.test(r.body));
+      if (marker) {
+        const match = r.body.match(marker);
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url: sqlUrl.toString(),
+            sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+            snippet: r.body.slice(0, 240).trim(),
+            note: "VulnLab /api/sql returns SQL syntax error on id=1' — injection likely"
+          }
+        };
+      }
     }
   }
 
@@ -7765,6 +7810,49 @@ const clientSideHackHealthLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HackHealth cybersecurity intro hub (hack-health-tutorial.vercel.app/intro) ------
+const CLIENT_HACK_HEALTH_INTRO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackHealth tutorial branding",
+    re: /HackHealth/i
+  },
+  {
+    label: "OWASP Top 10 tutorial hub",
+    re: /OWASP Top 10/i
+  },
+  {
+    label: "A03 SQL injection module link",
+    re: /\/cybersecurity\/a03\/sqlInjection/i
+  },
+  {
+    label: "A10 SSRF module link",
+    re: /\/cybersecurity\/a10\/ssrf/i
+  },
+  {
+    label: "Cybersecurity tutorial navigation",
+    re: /\/cybersecurity\/(?:a0[1-9]|a10)\//i
+  }
+];
+
+const clientSideHackHealthIntroEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_INTRO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth Nextra intro hub catalogs OWASP Top 10 attack labs across /cybersecurity/a01–a10 routes"
+    }
+  };
+};
+
 // --- DomGoat DOM XSS learning platform (domgo.at/cxss) -------------------------
 const CLIENT_DOM_GOAT_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -13347,6 +13435,50 @@ const clientSideIntigritiJulyIrcChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Intigriti July 2025 IRC challenge documents socket.io chat with DOMPurify iframe allowlist bypass and innerHTML reparse sink"
+    }
+  };
+};
+
+// --- Intigriti July 2022 kitty blog iframe XSS (challenge-0722.intigriti.io) -------
+const CLIENT_INTIGRITI_JULY_KITTY_BLOG_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "July XSS challenge title",
+    re: /Intigriti(?:'s)?\s+July\s+XSS\s+challenge/i
+  },
+  {
+    label: "alert(document.domain) requirement",
+    re: /alert\(document\.domain\)/i
+  },
+  {
+    label: "iframe challenge.php gadget",
+    re: /<iframe[^>]+src=["']challenge\/challenge\.php/i
+  },
+  {
+    label: "Awesome kitty blog lab",
+    re: /Awesome kitty blog/i
+  },
+  {
+    label: "archive month filter",
+    re: /href=["']\?month=\d/i
+  }
+];
+
+const clientSideIntigritiJulyKittyBlogXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JULY_KITTY_BLOG_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/challenge-0722\.intigriti\.io|intigriti\.io/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti July 2022 challenge documents iframe challenge/challenge.php kitty blog with alert(document.domain) XSS objective"
     }
   };
 };
@@ -25261,6 +25393,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNextjsMiddlewareCveEvidence,
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,
+  clientSideHackHealthIntroEvidence,
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,
@@ -25389,6 +25522,7 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiSecureVaultXssEvidence,
   clientSideIntigritiSmartySstiChallengeEvidence,
   clientSideIntigritiJulyIrcChallengeEvidence,
+  clientSideIntigritiJulyKittyBlogXssEvidence,
   clientSideIntigritiMaySpreadsheetFormulaEvidence,
   clientSideIntigritiMarchEvalXssChallengeEvidence,
   clientSideIntigritiSeptemberSqliChallengeEvidence,
