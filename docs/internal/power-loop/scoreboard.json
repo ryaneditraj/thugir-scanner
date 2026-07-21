@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T02:07:57.661Z",
+  "updated_at": "2026-07-21T02:09:56.730Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1658,
-  "total_findings": 8297,
+  "total_sites_scanned": 1666,
+  "total_findings": 8346,
   "critical_findings": 34,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1360,
-  "discovery_findings": 6655,
+  "discovery_urls_added": 1365,
+  "discovery_findings": 6704,
   "improvements_shipped": 852,
-  "last_run": "2026-07-21T02:07:57.661Z",
+  "last_run": "2026-07-21T02:09:56.730Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall maintained (6 findings)",
+      "note": "No benchmark misses — 6/6 recall on first pass (pages=1 probes=214)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,33 +50,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 10,
-      "focus": "Intigriti archive gap-fill (1121/1221/0522) — specific XSS evidence rules beyond generic challenge marker",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 49,
+      "focus": "Intigriti 2021 archive gap-fill (0921/0721/0621/0421/0321 Bugology); queue drain Hacksplaining + OSS labs",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
+        "https://challenge-0921.intigriti.io/",
+        "https://challenge-0721.intigriti.io/",
+        "https://challenge-0621.intigriti.io/",
+        "https://challenge-0421.intigriti.io/",
+        "https://challenge-0321.intigriti.io/",
         "https://challenge-0821.intigriti.io/",
-        "https://challenge-1220.intigriti.io/",
-        "https://challenge-0323.intigriti.io/",
-        "https://challenge-0423.intigriti.io/",
-        "https://challenge-0523.intigriti.io/",
-        "https://challenge-0521.intigriti.io/",
-        "https://challenge-0322.intigriti.io/"
+        "https://challenge-1220.intigriti.io/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
-      "challenge-1121.intigriti.io: Vue addJS/searchParam XSS lab (3→4 findings)",
-      "challenge-1221.intigriti.io: Christmas cracker payload reflection (2→3 findings)",
-      "challenge-0522.intigriti.io: filterXSS innerHTML bypass lab (2→3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses on first pass",
+      "hacksplaining.com toxic-dependencies: supply-chain lesson evidence (8 findings)",
+      "koadt.github.io/oss-oopssec-store: e-commerce IDOR/SQLi lab markers (8 findings)",
+      "ashimkoirala.github.io/HackLab: OWASP Top 10 browser lab (7 findings)",
+      "ucu-owasp-ctf.vercel.app: CTF challenge platform (5 findings)"
     ],
     "learning_gaps": [
-      "challenge-0821.intigriti.io: host unreachable (empty response) — archive offline",
-      "challenge-1220.intigriti.io: host unreachable — archive offline",
       "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
-      "Heroku cold-start: pass1 can miss idor+sensitive_data before built-in 12s retry",
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent"
+      "challenge-0821/1220 intigriti archives: host unreachable — pending queue drain",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "New Intigriti 2021 archives queued at tail — not yet scanned this run"
     ]
   },
   "discovery_highlights": {
