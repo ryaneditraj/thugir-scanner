@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T12:01:48.834Z",
+  "updated_at": "2026-07-21T12:08:48.732Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1729,
-  "total_findings": 8668,
+  "total_sites_scanned": 1737,
+  "total_findings": 8714,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1400,
-  "discovery_findings": 6886,
+  "discovery_urls_added": 1405,
+  "discovery_findings": 6932,
   "improvements_shipped": 867,
-  "last_run": "2026-07-21T12:01:48.835Z",
+  "last_run": "2026-07-21T12:08:48.732Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -52,34 +52,33 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 30,
-      "focus": "domgo.at cxss/97-101 queued at tail + queue head drain (xxe-lab, nextjs-cve-hackerone, web-pentest-playground, cookiejar-lab, blackhatgraphql, finbot-ctf-demo, hack-yourself-first, php.testsparker)",
+      "findings": 46,
+      "focus": "queue head drain (api.graphqlbook, pentesterlab, root-me, hackthissite, agentpwn, hacksec, webgoat, cyberdefenders) + CVE-2025-55182 SaaS PoC + domgo.at cxss/102-105 queued at tail",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
-        "https://domgo.at/cxss/example/97",
-        "https://domgo.at/cxss/example/98",
-        "https://domgo.at/cxss/example/99",
-        "https://domgo.at/cxss/example/100",
-        "https://domgo.at/cxss/example/101"
+        "https://demo-of-cve-2025-55182-saas.vercel.app/",
+        "https://domgo.at/cxss/example/102",
+        "https://domgo.at/cxss/example/103",
+        "https://domgo.at/cxss/example/104",
+        "https://domgo.at/cxss/example/105"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "hack-yourself-first.azurewebsites.net: 7 findings",
-      "php.testsparker.com: 6 findings",
-      "xxe-lab.vercel.app: 4 findings",
-      "nextjs-cve-hackerone.vercel.app: 4 findings",
-      "cyberdesserts.github.io/cookiejar-lab/demo: 4 findings",
-      "lab.blackhatgraphql.com:9001: 3 findings",
-      "web-pentest-playground.onrender.com: 1 findings",
-      "owasp-finbot-ctf-demo.onrender.com: 1 findings"
+      "cyberdefenders.org: 9 findings (secret-openai, dangerous-html-sinks, vibe-unauthenticated-api-routes)",
+      "api.graphqlbook.org: 6 findings (graphql-introspection-enabled)",
+      "hacksec.in: 6 findings",
+      "webgoat.org: 6 findings (postmessage-dom-xss-evidence, client-side-webgoat-evidence)",
+      "www.root-me.org: 5 findings (secret-twilio, reflected-xss-query-param)",
+      "agentpwn.com: 5 findings (hidden-prompt-injection)",
+      "pentesterlab.com: 4 findings (reflected-xss-query-param)"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "domgo.at/cxss/example/97-101: queued at tail — not yet drained from queue head",
-      "defendtheweb intro17+: series ends at intro16 (intro17 returns 404)",
-      "owasp-finbot-ctf-demo.onrender.com: shallow crawl (1 finding) — agentic AI chains need authenticated CTF namespace"
+      "demo-of-cve-2025-55182-saas.vercel.app + domgo.at/cxss/example/102-105: queued at tail — not yet drained from queue head",
+      "www.root-me.org: secret-twilio in client bundle — likely challenge artifact; verify before cred-class promotion",
+      "cyberdefenders.org: secret-openai in bundle may be demo/placeholder — needs slug validation"
     ]
   },
   "discovery_highlights": {
