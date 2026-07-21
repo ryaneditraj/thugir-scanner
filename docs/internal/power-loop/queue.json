@@ -7238,7 +7238,32 @@
       "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a04/errorMessages",
       "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A04 insecure design verbose auth error messages module (web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a05/cors",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A05 security misconfiguration permissive CORS module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a06/vulPackages",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A06 vulnerable and outdated components Snyk demo module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a08/integrityVerification",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A08 software and data integrity failures module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a09/logger",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A09 security logging and monitoring failures module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a10/ssrf",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A10 server-side request forgery module (web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-21T18:05:00.000Z"
+  "updated_at": "2026-07-21T19:22:00.000Z"
 }
