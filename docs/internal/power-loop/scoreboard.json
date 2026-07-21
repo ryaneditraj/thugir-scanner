@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T04:10:00.000Z",
+  "updated_at": "2026-07-21T05:06:26.901Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1683,
-  "total_findings": 8442,
+  "total_sites_scanned": 1692,
+  "total_findings": 8479,
   "critical_findings": 35,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1375,
-  "discovery_findings": 6743,
-  "improvements_shipped": 861,
-  "last_run": "2026-07-21T04:10:00.000Z",
+  "discovery_urls_added": 1380,
+  "discovery_findings": 6773,
+  "improvements_shipped": 858,
+  "last_run": "2026-07-21T05:06:26.901Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall maintained (7 findings)",
+      "note": "No benchmark misses — 6/6 recall maintained (7 findings, pages=6 probes=265)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,30 +50,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 10,
-      "focus": "Queued Intigriti drain: challenge-0122 iframe XSS, challenge.intigriti.io June Leaky Jar bonus CTF, leakyjar recipe review XSS",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 30,
+      "focus": "DomGoat cxss examples 69-73 continuation; queue drain: juicesec Workers, XSS attacker, vuln editor, DVAI, Fabraix playground",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
-        "https://challenge-0121.intigriti.io/",
-        "https://defendtheweb.net/playground/intro13",
-        "https://challenge-0221.intigriti.io/"
+        "https://domgo.at/cxss/example/69",
+        "https://domgo.at/cxss/example/70",
+        "https://domgo.at/cxss/example/71",
+        "https://domgo.at/cxss/example/72",
+        "https://domgo.at/cxss/example/73"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "challenge-0122.intigriti.io: January iframe React XSS evidence (2→3 findings)",
-      "challenge.intigriti.io: June Leaky Jar bonus CTF evidence (2→3 findings)",
-      "leakyjar.intigriti.io: recipe review stored XSS + Leaky Jar CTF (2→4 findings on recipe page)"
+      "juicesec.mrdinesh.workers.dev: Juice Shop Workers mirror (7 findings)",
+      "xss-attacker.vercel.app: XSS lab evidence (4 findings)",
+      "avid-vuln-editor.vercel.app: vulnerable editor demo (4 findings)",
+      "dvai.vercel.app: DVAI-style vulnerable app (4 findings)"
     ],
     "learning_gaps": [
-      "challenge-0121.intigriti.io / challenge-0221.intigriti.io: DNS dead — January/February 2021 archives offline",
-      "defendtheweb.net/playground/intro13: GitHub Pages 404 — playground retired with hiatus",
+      "secret-resend slug still absent on juice-shop — sensitive_data only via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Intigriti 2021 archives (0921–0321) still at queue tail — pending drain"
+      "defendtheweb.net/playground/intro17: 404 — intro series ends at intro16",
+      "domgo.at/cxss/example/69-73 queued at tail — pending drain next runs"
     ],
-    "improvements_shipped_this_run": 3
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -228,7 +231,7 @@
     "vulnlab.vercel.app": 7,
     "avid-vuln-editor.vercel.app": 4,
     "dvai.vercel.app": 4,
-    "fvb.vchan.in": 2,
+    "fvb.vchan.in": 3,
     "weaponsforge.github.io/hacker-friendly-app": 4,
     "webexp05.vercel.app": 7,
     "idor-challenge.vercel.app": 2,
@@ -372,6 +375,8 @@
     "challenge-0325.intigriti.io": 5,
     "challenge-0122.intigriti.io": 3,
     "challenge.intigriti.io": 3,
-    "leakyjar.intigriti.io": 4
+    "leakyjar.intigriti.io": 4,
+    "tempehs.github.io": 3,
+    "weaponsforge.github.io": 3
   }
 }
