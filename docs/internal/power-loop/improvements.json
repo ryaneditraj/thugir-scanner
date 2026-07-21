@@ -5777,6 +5777,24 @@
       "slug": "vuln-portal-auth-priority-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: root redirect to /auth/login but shallow crawl missed VULNPORTAL markers; vulnPortalPrioritySeeds prepends /auth/login + /auth/register; vuln-portal.vercel.app findings 1→2 incl client-side-vuln-auth-portal-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-blind-destruct-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level33/source.php unserialize($_POST['payload']) + class B __destruct Almost there? + Level Thirtee-three destruct; extractWebsecChallengeSeeds extended to level34 + level33 priority seeds; websec.fr/level33/source.php findings 4→5; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-weak-session-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/weak-session/start title Weak Session IDs — Secure Coding Lesson + meta Guessable session IDs make your website vulnerable to session hijacking; hacksplaining.com/lessons/weak-session/start findings 2→3 incl new slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/ai-prompt-injection/start title AI: Prompt Injection — Secure Coding Lesson + meta unexpected behavior in a machine learning model; hacksplaining.com/lessons/ai-prompt-injection/start findings 2→3 incl new slug; benchmark juice-shop-staging 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
