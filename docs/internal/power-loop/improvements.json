@@ -5741,6 +5741,24 @@
       "slug": "client-side-nivara-security-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: cybersec-demo.vercel.app URL oracle + updated meta Automated security assessments for modern companies; Vercel checkpoint strips HTML markers; cybersec-demo.vercel.app findings 1→2; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-preg-replace-sqli-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level02 LevelTwo doQuery() + preg_replace union|order|select strip + SQLite3 leveltwo.db; websec.fr/level02 findings 8→9; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-super-blacklist-sqli-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level07 LevelSeven super-efficient-blacklist-based sanitize() stripos + SQLite3 database.db user_id concat; websec.fr/level07 findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-sqli-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level405 UNION makes FORCE + source.txt mysql_db_query WHERE user='$login'; netForceChallengeInstanceSourceSeeds + skip homepage seed flood on challenge instances; level405 findings 3→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10093,6 +10111,21 @@
       "source": "discovery:cybersec-demo.vercel.app",
       "slug": "client-side-nivara-security-evidence",
       "shipped_at": "2026-07-21T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-preg-replace-sqli-challenge-evidence",
+      "shipped_at": "2026-07-21T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-super-blacklist-sqli-challenge-evidence",
+      "shipped_at": "2026-07-21T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.net-force.nl",
+      "slug": "client-side-net-force-sqli-challenge-evidence",
+      "shipped_at": "2026-07-21T13:15:00.000Z"
     }
   ]
 }
