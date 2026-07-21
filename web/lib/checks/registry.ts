@@ -13983,6 +13983,134 @@ const clientSideIntigritiMarchLeakyFlagmentEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti January 2022 iframe React XSS (challenge-0122.intigriti.io) ------------
+const CLIENT_INTIGRITI_JANUARY_IFRAME_REACT_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "January 2022 XSS challenge host",
+    re: /challenge-0122\.intigriti\.io|Intigriti(?:'s)?\s+January\s+XSS\s+challenge/i
+  },
+  {
+    label: "iframe challenge subdomain",
+    re: /challenge-0122-challenge\.intigriti\.io/i
+  },
+  {
+    label: "execute arbitrary javascript on the iFramed page",
+    re: /execute arbitrary javascript on the iFramed page/i
+  },
+  {
+    label: "alert(document.domain) capture goal",
+    re: /alert\(document\.domain\)/i
+  },
+  {
+    label: "React dangerouslySetInnerHTML viewer sink",
+    re: /viewer-container["']?\s*,\s*dangerouslySetInnerHTML|dangerouslySetInnerHTML[\s\S]{0,80}viewer-container/i
+  }
+];
+
+const clientSideIntigritiJanuaryIframeReactXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JANUARY_IFRAME_REACT_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0122|January XSS/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti January 2022 challenge documents iframe XSS via challenge-0122-challenge.intigriti.io React dangerouslySetInnerHTML viewer-container sink with alert(document.domain) goal"
+    }
+  };
+};
+
+// --- Intigriti June 2026 Leaky Jar bonus CTF (challenge.intigriti.io / leakyjar) -------
+const CLIENT_INTIGRITI_JUNE_LEAKY_JAR_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "June Bonus challenge host",
+    re: /challenge\.intigriti\.io|leakyjar\.intigriti\.io|June Bonus Challenge/i
+  },
+  {
+    label: "Leaky Jar cookie recipe platform",
+    re: /Leaky\s*Jar|Reach into the jar/i
+  },
+  {
+    label: "INTIGRITI flag format rules",
+    re: /INTIGRITI\{\.\*\}|flag in the format <code>INTIGRITI/i
+  },
+  {
+    label: "recipe review POST form",
+    re: /method=["']POST["'][\s\S]{0,120}action=["']\/recipes\/[^"']+\/review["']|Leave a review/i
+  },
+  {
+    label: "stored recipe review HTML sink",
+    re: /class=["']review-text["']|review-name|Post review/i
+  }
+];
+
+const clientSideIntigritiJuneLeakyJarEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JUNE_LEAKY_JAR_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|Leaky Jar|June Bonus/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti June 2026 Leaky Jar bonus CTF documents INTIGRITI{.*} flag capture via cookie recipe review forms at /recipes/{uuid}/review"
+    }
+  };
+};
+
+// --- Leaky Jar recipe review stored XSS (leakyjar.intigriti.io) -----------------------
+const LEAKY_JAR_RECIPE_REVIEW_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Leaky Jar recipe platform",
+    re: /Leaky\s*Jar|leakyjar\.intigriti\.io/i
+  },
+  {
+    label: "recipe review POST endpoint",
+    re: /action=["']\/recipes\/[0-9a-f-]+\/review["']/i
+  },
+  {
+    label: "review text stored in HTML",
+    re: /class=["']review-text["']|class=["']review["']/i
+  },
+  {
+    label: "unescaped review submission form",
+    re: /name=["']text["'][\s\S]{0,80}Post review|Leave a review/i
+  }
+];
+
+const leakyJarRecipeReviewStoredXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of LEAKY_JAR_RECIPE_REVIEW_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/Leaky Jar|leakyjar\.intigriti\.io|\/recipes\//i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Leaky Jar recipe pages accept POST /recipes/{uuid}/review submissions rendered into review-text HTML without encoding — stored XSS training sink"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -24331,6 +24459,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiAugustEvalStackXssEvidence,
   clientSideIntigritiJulyMemoDompurifyXssEvidence,
   clientSideIntigritiMarchLeakyFlagmentEvidence,
+  clientSideIntigritiJanuaryIframeReactXssEvidence,
+  clientSideIntigritiJuneLeakyJarEvidence,
+  leakyJarRecipeReviewStoredXssEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,

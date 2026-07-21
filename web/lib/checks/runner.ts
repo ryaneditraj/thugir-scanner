@@ -946,6 +946,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiAugustEvalStackXssEvidence",
   "clientSideIntigritiJulyMemoDompurifyXssEvidence",
   "clientSideIntigritiMarchLeakyFlagmentEvidence",
+  "clientSideIntigritiJanuaryIframeReactXssEvidence",
+  "clientSideIntigritiJuneLeakyJarEvidence",
+  "leakyJarRecipeReviewStoredXssEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1498,7 +1501,7 @@ function extractAevumDemoSeeds(html: string, pageUrl: string): string[] {
 /** Intigriti monthly challenges — seed iframe src (/notes, /challenge, /challenge.php) and linked app routes. */
 function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[] {
   if (
-    !/challenge-\d{4}\.intigriti\.io|santacloud\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag|Test Your Race Condition!/i.test(
+    !/challenge-\d{4}\.intigriti\.io|santacloud\.intigriti\.io|leakyjar\.intigriti\.io|challenge\.intigriti\.io|Intigriti(?:'s)?\s+\w+\s+challenge|Find the FLAG and win Intigriti swag|Test Your Race Condition!/i.test(
       html
     )
   )
@@ -1608,6 +1611,26 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
     for (const p of ["/login", "/source.zip"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Leaky Jar|June Bonus challenge|Reach into the jar/i.test(html)) {
+    for (const p of ["/challenge", "/recipes", "/login", "/register", "/bakers"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0122\.intigriti\.io|January XSS challenge/i.test(html + pageUrl)) {
+    for (const p of ["/static/js/main.02a05519.js"]) {
+      try {
+        out.add(new URL(p, "https://challenge-0122-challenge.intigriti.io").toString());
       } catch {
         /* ignore */
       }

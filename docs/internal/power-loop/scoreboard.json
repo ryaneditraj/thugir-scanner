@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1375,
   "discovery_findings": 6743,
-  "improvements_shipped": 855,
-  "last_run": "2026-07-21T04:05:10.402Z",
+  "improvements_shipped": 861,
+  "last_run": "2026-07-21T04:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — 6/6 recall on first pass (pages_crawled=6 probes=265)",
+      "note": "No benchmark misses — 6/6 recall maintained (7 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,37 +50,30 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 36,
-      "focus": "Queue drain: frontend-xss-demo, xss-victim bank, DevSecOps-Hacking-Lab, owasp-top-10-labs, riglabs-cyber-lab, vulnlab, SSRF defense platform",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 10,
+      "focus": "Queued Intigriti drain: challenge-0122 iframe XSS, challenge.intigriti.io June Leaky Jar bonus CTF, leakyjar recipe review XSS",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
-        "https://challenge.intigriti.io/",
-        "https://challenge-0122.intigriti.io/",
         "https://challenge-0121.intigriti.io/",
         "https://defendtheweb.net/playground/intro13",
-        "https://challenge-0221.intigriti.io/",
-        "https://defendtheweb.net/playground/intro14",
-        "https://defendtheweb.net/playground/intro15",
-        "https://defendtheweb.net/playground/intro16",
-        "https://domgo.at/cxss/example/67",
-        "https://domgo.at/cxss/example/68"
+        "https://challenge-0221.intigriti.io/"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: OpenAI key in bundle + IDOR/gateway bypass lab evidence (7 findings)",
-      "vulnlab.vercel.app: SQLi + SSRF + XXE + critical file-upload evidence (7 findings)",
-      "ssrf-defense-platform.onrender.com: SSRF lab + sitemap sensitive paths (6 findings)",
-      "riglabs-cyber-lab.vercel.app: client-side SQL concatenation evidence (4 findings)"
+      "challenge-0122.intigriti.io: January iframe React XSS evidence (2→3 findings)",
+      "challenge.intigriti.io: June Leaky Jar bonus CTF evidence (2→3 findings)",
+      "leakyjar.intigriti.io: recipe review stored XSS + Leaky Jar CTF (2→4 findings on recipe page)"
     ],
     "learning_gaps": [
-      "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
+      "challenge-0121.intigriti.io / challenge-0221.intigriti.io: DNS dead — January/February 2021 archives offline",
+      "defendtheweb.net/playground/intro13: GitHub Pages 404 — playground retired with hiatus",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "scoreboard.json merge conflict from parallel 03 UTC run — resolved this hour",
-      "Intigriti/defendtheweb/domgo tail URLs queued but not yet drained — queue scans from head"
-    ]
+      "Intigriti 2021 archives (0921–0321) still at queue tail — pending drain"
+    ],
+    "improvements_shipped_this_run": 3
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,

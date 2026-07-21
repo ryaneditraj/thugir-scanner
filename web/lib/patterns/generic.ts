@@ -5362,6 +5362,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-january-iframe-react-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti January iframe React XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0122.intigriti.io hosts a January XSS lab with challenge-0122-challenge.intigriti.io iframe and React dangerouslySetInnerHTML viewer-container sink.",
+    impactOneline:
+      "Public January 2022 challenge documents execute arbitrary javascript on the iFramed page with alert(document.domain) capture goal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJanuaryIframeReactXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti iframe React XSS challenges are intentional training — never assign untrusted HTML via dangerouslySetInnerHTML.",
+      steps: [
+        "Host January iframe labs on contest-only infrastructure.",
+        "Replace dangerouslySetInnerHTML with textContent or a strict sanitizer.",
+        "Isolate iframe challenge subdomains with restrictive CSP."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti January iframe React XSS challenges. Show safe rendering without dangerouslySetInnerHTML viewer sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-june-leaky-jar-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Intigriti June Leaky Jar bonus CTF disclosed",
+    description:
+      "Intigriti challenge.intigriti.io / leakyjar.intigriti.io hosts the June Bonus Leaky Jar cookie recipe CTF with INTIGRITI{.*} flag capture goals.",
+    impactOneline:
+      "Public June 2026 bonus challenge documents flag theft via Leaky Jar recipe review forms at /recipes/{uuid}/review.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiJuneLeakyJarEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti Leaky Jar challenges are intentional training — encode review text and enforce per-user authorization on recipe data.",
+      steps: [
+        "Host June Leaky Jar labs on contest-only infrastructure.",
+        "HTML-encode recipe review text before rendering into review-text elements.",
+        "Require authentication and ownership checks on recipe review POST endpoints."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Leaky Jar bonus CTF challenges. Show encoded review rendering and authorization on recipe endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "leaky-jar-recipe-review-stored-xss",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Leaky Jar recipe review stored XSS sink disclosed",
+    description:
+      "Leaky Jar recipe pages at leakyjar.intigriti.io render POST /recipes/{uuid}/review submissions into review-text HTML without encoding.",
+    impactOneline:
+      "Recipe review forms accept arbitrary text rendered as HTML in stored review-text blocks — stored XSS training sink.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "leakyJarRecipeReviewStoredXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user-supplied review text before rendering — never echo POST body fields into HTML.",
+      steps: [
+        "Use textContent or HTML-encode review text before inserting into review-text elements.",
+        "Validate and length-limit review POST parameters server-side.",
+        "Apply Content-Security-Policy to block inline script execution in review sections."
+      ]
+    },
+    fixPrompt:
+      "We mirror Leaky Jar recipe review stored XSS sinks. Show HTML-encoded review rendering instead of raw review-text insertion.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
