@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T04:02:22.298Z",
-  "total": 537,
-  "uniqueSlugs": 535,
+  "generatedAt": "2026-07-21T05:06:03.120Z",
+  "total": 540,
+  "uniqueSlugs": 538,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 519,
+    "generic": 522,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 468,
+    "deep": 471,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 44,
     "Broken authentication": 39,
     "Injection": 107,
-    "Cross-site scripting": 81,
+    "Cross-site scripting": 84,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -184,10 +184,13 @@
     "client-side-insaits-evidence",
     "client-side-intercode-evidence",
     "client-side-intigriti-april-bricks-rce-evidence",
+    "client-side-intigriti-april-window-maker-xss-evidence",
     "client-side-intigriti-august-business-card-xss-evidence",
     "client-side-intigriti-august-eval-stack-xss-evidence",
     "client-side-intigriti-challenge-evidence",
+    "client-side-intigriti-december-christmas-blog-xss-evidence",
     "client-side-intigriti-december-christmas-cracker-xss-evidence",
+    "client-side-intigriti-february-leek-nft-xss-evidence",
     "client-side-intigriti-january-friends-sqli-evidence",
     "client-side-intigriti-january-iframe-react-xss-evidence",
     "client-side-intigriti-january-xss-filter-bypass-evidence",

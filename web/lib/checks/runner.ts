@@ -948,6 +948,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiMarchLeakyFlagmentEvidence",
   "clientSideIntigritiJanuaryIframeReactXssEvidence",
   "clientSideIntigritiJuneLeakyJarEvidence",
+  "clientSideIntigritiAprilWindowMakerXssEvidence",
+  "clientSideIntigritiDecemberChristmasBlogXssEvidence",
+  "clientSideIntigritiFebruaryLeekNftXssEvidence",
   "leakyJarRecipeReviewStoredXssEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -1833,6 +1836,50 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/Business Card Generator|source\.zip/i.test(html)) {
     for (const p of ["/challenge/login.php", "/challenge/source.zip"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0222\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/xss.html"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0422\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/challenge/Window%20Maker.html"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-1222\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of [
+      "/challenge",
+      "/login",
+      "/blog/00000000-00000000-00000000-00000000"
+    ]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0223\.intigriti\.io/i.test(pageUrl)) {
+    for (const p of ["/create", "/upload"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {
