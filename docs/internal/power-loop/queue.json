@@ -6838,7 +6838,32 @@
       "url": "https://challenge-0222.intigriti.io/",
       "source": "Intigriti February 2022 Extremely Short Scripting Game \u2014 XSS monthly CTF by aszx87410 (Bugology archive)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0821.intigriti.io/",
+      "source": "Intigriti August 2021 XSS Cookbook \u2014 prototype pollution + XSS by WHOISbinit (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1121.intigriti.io/",
+      "source": "Intigriti November 2021 OWASP Top 10 \u2014 CSP/CSTI iframe XSS by IvarsVids (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1220.intigriti.io/",
+      "source": "Intigriti December 2021 Calculator \u2014 eval/fragment XSS by E1u5iv3F0x (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-1221.intigriti.io/",
+      "source": "Intigriti December 2021 Christmas Special \u2014 homoglyph XSS by E1u5iv3F0x (Bugology archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0522.intigriti.io/",
+      "source": "Intigriti May 2022 Pollution \u2014 WAF + prototype pollution XSS by PiyushThePal (Bugology archive)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-20T23:05:00.000Z"
+  "updated_at": "2026-07-21T00:16:00.000Z"
 }

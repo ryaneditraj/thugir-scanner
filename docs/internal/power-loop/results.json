@@ -11079,6 +11079,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. First-pass full recall on shallow crawl (1 page); idor-sequential-ids + sql-error-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-20T22:13:32.763Z"
+    },
+    {
+      "run_id": "2026-07-21T00:16:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 6 findings, 6/6 recall (pages_crawled=1 probes=241; idor-sequential-ids present; no gap)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. Parallel 00 UTC run recovered idor-sequential-ids slug; secret-resend still absent (sensitive_data via vibe-unauthenticated-api-routes).",
+      "scanned_at": "2026-07-21T00:16:00.000Z"
     }
   ]
 }
