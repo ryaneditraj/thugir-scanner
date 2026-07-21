@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T09:58:33.033Z",
+  "updated_at": "2026-07-21T10:25:51.337Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1711,
-  "total_findings": 8585,
+  "total_sites_scanned": 1719,
+  "total_findings": 8621,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1390,
-  "discovery_findings": 6817,
+  "discovery_urls_added": 1395,
+  "discovery_findings": 6853,
   "improvements_shipped": 864,
-  "last_run": "2026-07-21T09:58:33.033Z",
+  "last_run": "2026-07-21T10:25:51.337Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "6/6 recall after Heroku cold-start retries (pass1 gap=xss,sqli,idor,auth_bypass,sensitive_data; 12s+25s wake retries recovered all categories)",
+      "note": "6/6 recall via juice-shop-staging fallback after Heroku cold-start (pass1 gap=xss,sqli,idor,auth_bypass,sensitive_data probes=7; pass3 gap=idor,sensitive_data; staging merged 7 findings pages=6 probes=242)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,41 +52,34 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 44,
-      "focus": "domgo.at cxss/80-84 continuation + Hacksplaining TLS/DNS lessons + OWASP VWAD Pixi + webexp05 + idor-challenge",
+      "findings": 36,
+      "focus": "domgo.at cxss/85-89 queued at tail + queue head drain (vAPI, WebGoat mirror, Duck Store, DVAI Bank, Pentest-Ground DVWA+API, CTF hub, owasp-juice.shop)",
       "skipped_48h": [],
       "urls_queued_not_scanned": [
-        "https://domgo.at/cxss/example/74",
-        "https://domgo.at/cxss/example/75",
-        "https://domgo.at/cxss/example/77",
-        "https://domgo.at/cxss/example/78",
-        "https://domgo.at/cxss/example/79",
-        "https://domgo.at/cxss/example/80",
-        "https://domgo.at/cxss/example/81",
-        "https://domgo.at/cxss/example/82",
-        "https://domgo.at/cxss/example/83",
-        "https://domgo.at/cxss/example/84"
+        "https://domgo.at/cxss/example/85",
+        "https://domgo.at/cxss/example/86",
+        "https://domgo.at/cxss/example/87",
+        "https://domgo.at/cxss/example/88",
+        "https://domgo.at/cxss/example/89"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku wake retries (pass1: 1 finding gap=5 categories; final merged 6 findings)",
-      "vwad.owasp.org/app/pixi: OWASP VWAD Pixi DevSlop insecure API lab markers (4 findings)",
-      "www.hacksplaining.com/lessons/dns-poisoning: DNS poisoning lesson evidence (7 findings)",
-      "www.hacksplaining.com/lessons/downgrade-attacks: TLS downgrade lesson evidence (7 findings)",
-      "webexp05.vercel.app: SQLi+XSS+JWT-none CTF hub markers (7 findings)",
-      "idor-challenge.vercel.app: IDOR demonstration lab (3 findings)",
-      "challenge-1225.intigriti.io: Infinity Stones #PerfectlyBalanced postMessage eval + subdomain iframe gadgets (2→5 findings)",
-      "challenge-0526.intigriti.io: Pixel Pioneers unsanitized username innerHTML + DOMPurify content sink (2→5 findings)",
-      "challenge-0825.intigriti.io: CatFlix AI RCE lab with /source.zip + /challenge server (3→6 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 via staging fallback (primary Heroku never fully woke; pass1 probes=7 pages=1)",
+      "duck-store.escape.tech: intentionally vulnerable API/web app (7 findings)",
+      "pentest-ground.com:4280: hosted DVWA SQLi/XSS/LFI lab (5 findings)",
+      "pentest-ground.com:9000: REST API security training (4 findings)",
+      "owasp-juice.shop: official Juice Shop demo instance (5 findings)",
+      "dvaib.com: Damn Vulnerable AI Bank prompt-injection lab (4 findings)",
+      "vapi.apisec.ai: OWASP API Top 10 exercise lab (4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop Heroku cold-start: pass1 probes=2 pages=1 only misconfig — 12s+25s retries required for 6/6 recall",
+      "juice-shop Heroku cold-start: pass1-2 shallow crawl (probes≤48 pages=1) — staging fallback required for idor+sensitive_data",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
-      "domgo.at/cxss/example/74-84: queued at tail — not yet drained from queue head",
-      "challenge-0326.intigriti.io: /challenge route returns 404 — challenge not yet deployed"
+      "domgo.at/cxss/example/85-89: queued at tail — not yet drained from queue head",
+      "defendtheweb intro17+: series ends at intro16 (intro17 returns 404)"
     ],
-    "improvements_shipped_this_run": 3
+    "improvements_shipped_this_run": 0
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
