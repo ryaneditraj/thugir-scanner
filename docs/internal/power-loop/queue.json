@@ -7263,7 +7263,32 @@
       "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a10/ssrf",
       "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A10 server-side request forgery module (web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/lab1.html",
+      "source": "yogsec/xss-labs \u2014 localStorage stored XSS lab module (GitHub Pages per-lab deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/lab5.html",
+      "source": "yogsec/xss-labs \u2014 cookie injection XSS lab module (GitHub Pages per-lab deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0326.intigriti.io/challenge.html",
+      "source": "Intigriti March 2026 CTF \u2014 DOM clobbering + CSP bypass XSS challenge page (official write-up)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0426.intigriti.io/challenge.html",
+      "source": "Intigriti April 2026 CTF \u2014 monthly XSS challenge page (intigriti.io registry)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
+      "source": "kOaDT/oss-oopssec-store \u2014 race-condition TOCTOU coupon abuse walkthrough with vulnerable code oracle",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-21T19:22:00.000Z"
+  "updated_at": "2026-07-21T20:13:00.000Z"
 }
