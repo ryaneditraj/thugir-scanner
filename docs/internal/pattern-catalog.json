@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T16:10:51.673Z",
-  "total": 558,
-  "uniqueSlugs": 556,
+  "generatedAt": "2026-07-21T17:07:27.327Z",
+  "total": 560,
+  "uniqueSlugs": 558,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 540,
+    "generic": 542,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 489,
+    "deep": 491,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 40,
-    "Injection": 115,
-    "Cross-site scripting": 90,
+    "Injection": 116,
+    "Cross-site scripting": 91,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 7,
@@ -136,6 +136,7 @@
     "client-side-graphql-lab-evidence",
     "client-side-graphql-security-hub-evidence",
     "client-side-grpc-goat-lab-evidence",
+    "client-side-hack-health-intro-evidence",
     "client-side-hack-health-lab-evidence",
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
@@ -202,6 +203,7 @@
     "client-side-intigriti-january-iframe-react-xss-evidence",
     "client-side-intigriti-january-xss-filter-bypass-evidence",
     "client-side-intigriti-july-irc-challenge-evidence",
+    "client-side-intigriti-july-kitty-blog-xss-evidence",
     "client-side-intigriti-july-memo-dompurify-xss-evidence",
     "client-side-intigriti-june-choice-message-xss-evidence",
     "client-side-intigriti-june-leaky-jar-evidence",
