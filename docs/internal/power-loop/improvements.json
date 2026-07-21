@@ -5651,6 +5651,24 @@
       "slug": "leaky-jar-recipe-review-stored-xss",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /recipes/{uuid}/review form + review-text stored HTML + Leave a review; leakyjar.intigriti.io/recipes findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0422.intigriti.io",
+      "slug": "client-side-intigriti-april-window-maker-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: m.parseQueryString + merge(appConfig, qs.config) + protectedKeys __proto__ in challenge/Window Maker.html; challenge-0422.intigriti.io findings 3→4; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1222.intigriti.io",
+      "slug": "client-side-intigriti-december-christmas-blog-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Christmas Blog + twitterModal share-area #intigriti-xss + nonce CSP scripts + username capture goal; challenge-1222.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0223.intigriti.io",
+      "slug": "client-side-intigriti-february-leek-nft-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Create your own official Leek NFT + /upload iframe + /save?config= base64 gadget on /create; challenge-0223.intigriti.io findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9943,6 +9961,21 @@
       "source": "discovery:leakyjar.intigriti.io",
       "slug": "leaky-jar-recipe-review-stored-xss",
       "shipped_at": "2026-07-21T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0422.intigriti.io",
+      "slug": "client-side-intigriti-april-window-maker-xss-evidence",
+      "shipped_at": "2026-07-21T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-1222.intigriti.io",
+      "slug": "client-side-intigriti-december-christmas-blog-xss-evidence",
+      "shipped_at": "2026-07-21T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0223.intigriti.io",
+      "slug": "client-side-intigriti-february-leek-nft-xss-evidence",
+      "shipped_at": "2026-07-21T05:10:00.000Z"
     }
   ]
 }
