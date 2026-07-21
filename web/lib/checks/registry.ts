@@ -13851,6 +13851,138 @@ const clientSideIntigritiAprilBricksRceEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti August 2023 eval/Math stack XSS (challenge-0823.intigriti.io) ---------
+const CLIENT_INTIGRITI_AUGUST_EVAL_STACK_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "August 2023 XSS challenge host",
+    re: /challenge-0823\.intigriti\.io|Intigriti(?:'s)?\s+August\s+XSS\s+challenge/i
+  },
+  {
+    label: "eval(result.innerText) arithmetic stack gadget",
+    re: /eval\(result\.innerText\)|result\.innerText\s*=\s*eval/i
+  },
+  {
+    label: "Math operator stack validation",
+    re: /Operator should start with Math\.|Invalid operator:/i
+  },
+  {
+    label: "alert(document.domain) capture goal",
+    re: /alert\(document\.domain\)/i
+  },
+  {
+    label: "URLSearchParams operator queue gadget",
+    re: /URLSearchParams\(window\.location\.search\)|location\.search\s*=\s*['"]\?q=/i
+  }
+];
+
+const clientSideIntigritiAugustEvalStackXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_AUGUST_EVAL_STACK_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0823|August XSS/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti August 2023 challenge documents eval(result.innerText) Math stack gadget chain with alert(document.domain) capture goal at challenge/index.html"
+    }
+  };
+};
+
+// --- Intigriti July 2024 Memo Sharing DOMPurify XSS (challenge-0724.intigriti.io) ----
+const CLIENT_INTIGRITI_JULY_MEMO_DOMPURIFY_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "July 2024 memo challenge host",
+    re: /challenge-0724\.intigriti\.io|Intigriti(?:'s)?\s+July\s+challenge/i
+  },
+  {
+    label: "Memo Sharing platform title",
+    re: /Memo Sharing|safe platform for sharing memos/i
+  },
+  {
+    label: "sharedMemo innerHTML sink",
+    re: /displayElement\.innerHTML\s*=\s*sharedMemo|innerHTML\s*=\s*sharedMemo/i
+  },
+  {
+    label: "DOMPurify sanitize memo gadget",
+    re: /DOMPurify\.sanitize\(sharedMemo\)|const sanitizedMemo = DOMPurify\.sanitize/i
+  },
+  {
+    label: "memo query param reflection",
+    re: /urlParams\.get\(["']memo["']\)|\?memo=\$\{encodeURIComponent/i
+  }
+];
+
+const clientSideIntigritiJulyMemoDompurifyXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_JULY_MEMO_DOMPURIFY_XSS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0724|Memo Sharing/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti July 2024 challenge documents Memo Sharing with sharedMemo innerHTML sink and DOMPurify.sanitize bypass gadgets via ?memo= query reflection"
+    }
+  };
+};
+
+// --- Intigriti March 2025 Leaky Flagment (challenge-0325.intigriti.io) ---------------
+const CLIENT_INTIGRITI_MARCH_LEAKY_FLAGMENT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "March 2025 Leaky Flagment host",
+    re: /challenge-0325\.intigriti\.io|Leaky Flagment/i
+  },
+  {
+    label: "flag theft challenge prompt",
+    re: /Can you steal my flag\?|steal my flag/i
+  },
+  {
+    label: "INTIGRITI flag format rules",
+    re: /INTIGRITI\{\.\*\}|flag in the format <code>INTIGRITI/i
+  },
+  {
+    label: "challenge server login route",
+    re: /challenge server.*\/login|href=["']\/login["']/i
+  },
+  {
+    label: "source.zip challenge artifact",
+    re: /href=["']\/source\.zip["']|Download the challenge.*source code/i
+  }
+];
+
+const clientSideIntigritiMarchLeakyFlagmentEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MARCH_LEAKY_FLAGMENT_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0325|Leaky Flagment/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti March 2025 Leaky Flagment challenge documents INTIGRITI{.*} flag theft via /login notes app with downloadable source.zip"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -24196,6 +24328,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiMarchIframeLovesenderXssEvidence,
   clientSideIntigritiMarchSecureNotesEvidence,
   clientSideIntigritiAprilBricksRceEvidence,
+  clientSideIntigritiAugustEvalStackXssEvidence,
+  clientSideIntigritiJulyMemoDompurifyXssEvidence,
+  clientSideIntigritiMarchLeakyFlagmentEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,
