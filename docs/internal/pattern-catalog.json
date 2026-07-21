@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T12:06:40.280Z",
-  "total": 551,
-  "uniqueSlugs": 549,
+  "generatedAt": "2026-07-21T13:12:43.585Z",
+  "total": 554,
+  "uniqueSlugs": 552,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 533,
+    "generic": 536,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 482,
+    "deep": 485,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 39,
-    "Injection": 110,
+    "Injection": 113,
     "Cross-site scripting": 90,
     "general": 18,
     "SSRF": 1,
@@ -245,6 +245,7 @@
     "client-side-net-force-challenge-evidence",
     "client-side-net-force-evidence",
     "client-side-net-force-offline-challenge-evidence",
+    "client-side-net-force-sqli-challenge-evidence",
     "client-side-nextjs-middleware-cve-evidence",
     "client-side-nimbus-vault-evidence",
     "client-side-nivara-security-evidence",
@@ -444,11 +445,13 @@
     "client-side-websec-php-unserialize-cookie-challenge-evidence",
     "client-side-websec-php-unserialize-destruct-challenge-evidence",
     "client-side-websec-php-unserialize-filter-challenge-evidence",
+    "client-side-websec-preg-replace-sqli-challenge-evidence",
     "client-side-websec-restricted-php-exec-challenge-evidence",
     "client-side-websec-shell-exec-challenge-evidence",
     "client-side-websec-spellchecker-xss-challenge-evidence",
     "client-side-websec-sqli-privilege-challenge-evidence",
     "client-side-websec-store-exec-challenge-evidence",
+    "client-side-websec-super-blacklist-sqli-challenge-evidence",
     "client-side-websec-timing-attack-challenge-evidence",
     "client-side-websec-upload-include-challenge-evidence",
     "client-side-websec-url-grabber-challenge-evidence",

@@ -824,6 +824,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecChallengeEvidence",
   "clientSideWebsecCryptoChallengeEvidence",
   "clientSideWebsecFileUploadChallengeEvidence",
+  "clientSideWebsecPregReplaceSqliChallengeEvidence",
+  "clientSideWebsecSuperBlacklistSqliChallengeEvidence",
   "clientSideWebsecMagicHashChallengeEvidence",
   "clientSideWebsecBlacklistSqliChallengeEvidence",
   "clientSideWebsecClassInstantiationChallengeEvidence",
@@ -968,6 +970,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideNetForceEvidence",
   "clientSideNetForceOfflineChallengeEvidence",
   "clientSideNetForceChallengeEvidence",
+  "clientSideNetForceSqliChallengeEvidence",
   "clientSideBrutelogicXssGymEvidence",
   "clientSideBrutelogicXssTestPageEvidence",
   "clientSideKnoxssTestPageEvidence",
@@ -6458,8 +6461,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "http://redtiger.labs.overthewire.org/special1.php"
       ]
     : [];
-  const netForcePrioritySeeds = /net-force\.nl/i.test(home.finalUrl)
-    ? [
+  const netForcePrioritySeeds =
+    /net-force\.nl/i.test(home.finalUrl) && !/net-force\.nl\/challenge\/level\d+/i.test(home.finalUrl)
+      ? [
         "http://www.net-force.nl/challenge/level101/index.php",
         "http://www.net-force.nl/challenge/level102/index.php",
         "http://www.net-force.nl/challenge/level103/index.php",
@@ -6552,6 +6556,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         new URL(`/${slug}/source1.php`, home.finalUrl).toString(),
         new URL(`/${slug}/source2.php`, home.finalUrl).toString(),
         new URL(`/${slug}/`, home.finalUrl).toString()
+      ];
+    } catch {
+      return [] as string[];
+    }
+  })();
+  const netForceChallengeInstanceSourceSeeds = (() => {
+    const m = /net-force\.nl\/challenge\/(level\d+)\//i.exec(home.finalUrl);
+    if (!m) return [] as string[];
+    const slug = m[1];
+    try {
+      return [
+        new URL("source.txt", home.finalUrl).toString(),
+        new URL("login.zip", home.finalUrl).toString()
       ];
     } catch {
       return [] as string[];
@@ -6778,6 +6795,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...grpcGoatPrioritySeeds,
       ...redTigerPrioritySeeds,
       ...hacksplainingToxicDependenciesPrioritySeeds,
+      ...netForceChallengeInstanceSourceSeeds,
       ...netForcePrioritySeeds,
       ...websecLevelPrioritySeeds,
       ...websecBonusLevelSeeds,

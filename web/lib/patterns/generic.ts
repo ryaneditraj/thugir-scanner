@@ -2319,6 +2319,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-preg-replace-sqli-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr preg_replace SQLi filter bypass lab disclosed",
+    description:
+      "WebSec.fr level02 documents preg_replace stripping of union/order/select keywords before SQLite3 query concatenation on user_id — classic filter-bypass SQLi training.",
+    impactOneline:
+      "Public WebSec.fr level02 challenge exposes injectable SELECT via doQuery() despite keyword blacklist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPregReplaceSqliChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebSec.fr level02 is an intentional training lab — use parameterized queries in production.",
+      steps: [
+        "Replace string-concat SQL with prepared statements.",
+        "Never rely on preg_replace keyword blacklists for injection defense.",
+        "Host SQLi training labs on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host WebSec.fr-style preg_replace SQLi labs. Show parameterized queries instead of keyword stripping before SQLite lookups.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-super-blacklist-sqli-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "WebSec.fr super-blacklist SQLite SQLi lab disclosed",
+    description:
+      "WebSec.fr level07 documents a stripos blacklist sanitize() gate on SQLite3 user_id lookups — super-efficient-blacklist-based filter bypass SQLi training.",
+    impactOneline:
+      "Public WebSec.fr level07 challenge exposes injectable SELECT id,login despite aggressive character and keyword blacklist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecSuperBlacklistSqliChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebSec.fr level07 is an intentional training lab — use parameterized queries in production.",
+      steps: [
+        "Replace blacklist filters with prepared statements.",
+        "Never concatenate user_id into SQL strings.",
+        "Host SQLi training labs on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host WebSec.fr-style super-blacklist SQLi labs. Show parameterized SQLite queries instead of stripos blacklist gates.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-magic-hash-challenge-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -5904,6 +5956,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host Net-Force-style JS auth-bypass challenges. Show how to move credential checks server-side and isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-net-force-sqli-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Net-Force.nl UNION SQL injection login challenge disclosed",
+    description:
+      "Net-Force.nl /challenge/levelNN/ instances such as level405 ship source.txt with mysql_db_query login SQL using unescaped $login — UNION/injection via POST login field.",
+    impactOneline:
+      "Public Net-Force UNION SQLi challenges document string-concat authentication queries attackers bypass without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideNetForceSqliChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Net-Force SQLi challenges are intentional training — use parameterized queries in production.",
+      steps: [
+        "Replace mysql_db_query string concat with prepared statements.",
+        "Remove public source.txt disclosure on internet-facing login forms.",
+        "Gate challenge instances behind authenticated lab accounts."
+      ]
+    },
+    fixPrompt:
+      "We host Net-Force-style UNION SQLi login challenges. Show parameterized queries and how to gate source.txt disclosure on lab instances.",
     version: 1,
     enabled: true
   },

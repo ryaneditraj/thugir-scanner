@@ -8256,6 +8256,90 @@ const clientSideWebsecFileUploadChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr preg_replace keyword-strip SQLi (level02) ------------------------------
+const CLIENT_WEBSEC_PREG_REPLACE_SQLI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Two challenge title",
+    re: /#WebSec\s+Level\s+Two|LevelTwo(?:&nbsp;|\s)*<small>\s*-\s*Select the user by ID/i
+  },
+  {
+    label: "preg_replace SQL keyword strip filter",
+    re: /preg_replace[\s\S]{0,200}\$searchWords[\s\S]{0,120}\$injection/i
+  },
+  {
+    label: "Filtered union/order/select keywords list",
+    re: /union.*order.*select.*from.*group.*by|filtered by the application using[\s\S]{0,120}preg_replace/i
+  },
+  {
+    label: "SQLite3 leveltwo.db doQuery class",
+    re: /SQLite3[\s\S]{0,80}leveltwo\.db|class[\s\S]{0,120}doQuery[\s\S]{0,200}SQLite3/i
+  },
+  {
+    label: "Injectable user_id SELECT concat",
+    re: /SELECT(?:&nbsp;|\s)+id,username(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users(?:&nbsp;|\s)+WHERE(?:&nbsp;|\s)+id=['"]\s*\.\s*\$injection/i
+  }
+];
+
+const clientSideWebsecPregReplaceSqliChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PREG_REPLACE_SQLI_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelTwo|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level02 documents preg_replace keyword stripping before SQLite3 query concat — bypass via nested comments or case tricks on user_id"
+    }
+  };
+};
+
+// --- WebSec.fr super-blacklist SQLite SQLi (level07) ----------------------------------
+const CLIENT_WEBSEC_SUPER_BLACKLIST_SQLI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Seven challenge title",
+    re: /#WebSec\s+Level\s+Seven|LevelSeven(?:&nbsp;|\s)*<small>\s*-\s*Select the user by ID/i
+  },
+  {
+    label: "Super-efficient blacklist SQL filter scope",
+    re: /super-efficient-blacklist-based|Rock-solid/i
+  },
+  {
+    label: "sanitize stripos blacklist gate",
+    re: /function\s+sanitize[\s\S]{0,320}\$blacklist[\s\S]{0,200}stripos/i
+  },
+  {
+    label: "SQLite3 database.db injectable user_id",
+    re: /SQLite3[\s\S]{0,80}database\.db|SQLITE3_OPEN_READONLY/i
+  },
+  {
+    label: "SELECT id,login WHERE id concat",
+    re: /SELECT(?:&nbsp;|\s)+id,login(?:&nbsp;|\s)+FROM(?:&nbsp;|\s)+users(?:&nbsp;|\s)+WHERE(?:&nbsp;|\s)+id=['"]\s*\.\s*\$injection/i
+  }
+];
+
+const clientSideWebsecSuperBlacklistSqliChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_SUPER_BLACKLIST_SQLI_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelSeven|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level07 documents stripos blacklist on SQLite3 user_id lookup — injectable SELECT id,login despite super-efficient-blacklist-based filter"
+    }
+  };
+};
+
 const clientSideWebsecChallengeEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBSEC_CHALLENGE_RES) {
@@ -15081,6 +15165,52 @@ const clientSideNetForceChallengeEvidence: Rule = async (ctx) => {
       level,
       markers: hits.slice(0, 4),
       note
+    }
+  };
+};
+
+// --- Net-Force.nl UNION SQL injection login challenges (level405+) --------------------
+const CLIENT_NET_FORCE_SQLI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "UNION SQL injection challenge title",
+    re: /UNION makes FORCE|Exploit this login system/i
+  },
+  {
+    label: "Challenge source.txt disclosure link",
+    re: /href\s*=\s*["']source\.txt["']/i
+  },
+  {
+    label: "mysql_db_query string-concat login SQL",
+    re: /mysql_db_query[\s\S]{0,160}WHERE\s+user\s*=\s*['"]\$login['"]/i
+  },
+  {
+    label: "Net-Force challenge page title",
+    re: /Net-Force Challenge\s*-\s*\d+/i
+  }
+];
+
+const clientSideNetForceSqliChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/net-force\.nl/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NET_FORCE_SQLI_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/mysql_db_query/i.test(corpus) || !/WHERE\s+user\s*=\s*['"]\$login['"]/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  const level =
+    pageUrl.match(/level(\d+)/i)?.[1] ?? corpus.match(/Net-Force Challenge\s*-\s*(\d+)/i)?.[1];
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      level,
+      markers: hits.slice(0, 4),
+      note: `Net-Force level ${level ?? "NN"} UNION SQL injection login challenge ships source.txt with mysql_db_query string concat — probe POST login field`
     }
   };
 };
@@ -24959,6 +25089,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecChallengeEvidence,
   clientSideWebsecCryptoChallengeEvidence,
   clientSideWebsecFileUploadChallengeEvidence,
+  clientSideWebsecPregReplaceSqliChallengeEvidence,
+  clientSideWebsecSuperBlacklistSqliChallengeEvidence,
   clientSideWebsecMagicHashChallengeEvidence,
   clientSideWebsecBlacklistSqliChallengeEvidence,
   clientSideWebsecClassInstantiationChallengeEvidence,
@@ -25107,6 +25239,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNetForceEvidence,
   clientSideNetForceOfflineChallengeEvidence,
   clientSideNetForceChallengeEvidence,
+  clientSideNetForceSqliChallengeEvidence,
   clientSideVulnlabVerbose404Evidence,
   clientSideBrutelogicXssGymEvidence,
   clientSideBrutelogicXssTestPageEvidence,

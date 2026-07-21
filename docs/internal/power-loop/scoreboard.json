@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T13:06:13.290Z",
+  "updated_at": "2026-07-21T13:17:05.740Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1746,
-  "total_findings": 8763,
+  "total_sites_scanned": 1747,
+  "total_findings": 8770,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1410,
   "discovery_findings": 6932,
-  "improvements_shipped": 870,
-  "last_run": "2026-07-21T13:06:13.290Z",
+  "improvements_shipped": 873,
+  "last_run": "2026-07-21T13:17:05.740Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
@@ -76,22 +76,15 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "appsecmaster.net: 8 findings (client-side-appsec-master-lab-hub-evidence, client-side-react-rsc-cve-evidence)",
-      "labs.hackadvisor.io: 7 findings (client-side-hackadvisor-lab-evidence, reflected-xss-query-param)",
-      "wrongsecrets.herokuapp.com: 6 findings (spring-boot-actuator-exposed, client-side-wrongsecrets-challenge-evidence)",
-      "demo.testfire.net: 6 findings (reflected-xss-query-param, unauthenticated-admin-endpoint)",
-      "zero.webappsecurity.com: 5 findings (client-side-zero-bank-webinspect-evidence)",
-      "owasp-finbot-ctf.org: 5 findings (client-side-agentic-ai-ctf-evidence, openapi-docs-exposed)",
-      "sixhackacademy.com: 3 findings (client-side-sixhack-ctf-lab-evidence)",
-      "516-hackers.github.io: 2 findings (GitHub Pages 404 shell — deploy offline)"
+      "websec.fr/level02: preg_replace keyword-strip SQLi lab (8→9 findings)",
+      "websec.fr/level07: super-blacklist SQLite SQLi lab (8→9 findings)",
+      "www.net-force.nl/challenge/level405: UNION SQLi via source.txt crawl (3→5 findings)"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "516-hackers-vuln-playground: GitHub Pages 404 — shallow crawl only misconfig",
-      "wrongsecrets.herokuapp.com: secrets hidden in source/config/Docker layers — shallow crawl misses oracles",
-      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
-      "domgo.at cxss/102-110 + demo-of-cve-2025-55182-saas: queued at tail — not yet drained from queue head"
+      "domgo.at/cxss/example/102-105: placeholder Exercise-1 pages — not unique labs",
+      "demo-of-cve-2025-55182-saas.vercel.app: already detected via client-side-react-rsc-cve-evidence (4 findings)"
     ]
   },
   "discovery_highlights": {
