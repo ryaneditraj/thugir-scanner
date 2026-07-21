@@ -5885,6 +5885,24 @@
       "slug": "client-side-hack-health-logger-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a09/logger CWE-778 Insufficient Logging + failed login attempts not logged; a09/logger direct scan findings 9 incl slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-2 eval(`resultQuery.textContent = \\`${query}\\``) + lab-8 innerHTML href sink; extractThe0xPwnLabXssSeeds + priority seeds lab-1..10; the0x-pwn.github.io/lab-xss/lab-2/ findings 0→3 incl slug; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-xss-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab5.html XSS Lab #5 User-Agent Reflection + innerHTML = navigator.userAgent; extractYogsecXssLabsSeeds extended 1-6→1-39 + yogsecXssLabsPrioritySeeds; queue lab1/lab5 paths corrected to labs/; yogsec.github.io/xss-labs/labs/lab5.html findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "client-side-oopssec-race-condition-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: validates a coupon and increments its counter in two separate database calls + concurrent requests slip through; extractOopssecStoreSeeds seeds /posts/race-condition-coupon-abuse; koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/ findings 0→6 incl race-condition slug; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10357,6 +10375,21 @@
       "source": "discovery:hack-health-tutorial.vercel.app",
       "slug": "client-side-hack-health-logger-evidence",
       "shipped_at": "2026-07-21T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-labs-evidence",
+      "shipped_at": "2026-07-21T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-xss-lab-module-evidence",
+      "shipped_at": "2026-07-21T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "client-side-oopssec-race-condition-evidence",
+      "shipped_at": "2026-07-21T22:10:00.000Z"
     }
   ]
 }
