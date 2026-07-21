@@ -933,6 +933,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiOctoberNotesXssEvidence",
   "clientSideIntigritiJanuaryFriendsSqliEvidence",
   "clientSideIntigritiOctoberHalloweenXssEvidence",
+  "clientSideIntigritiAugustBusinessCardXssEvidence",
+  "clientSideIntigritiSeptemberMagic8BallXssEvidence",
+  "clientSideIntigritiJuneChoiceMessageXssEvidence",
   "clientSideIntigritiSantacloudCtfEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -1587,6 +1590,42 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
       out.add(new URL("/challenge.php?showsource=1", pageUrl).toString());
     } catch {
       /* ignore */
+    }
+  }
+
+  if (/Business Card Generator|buiness-card/i.test(html)) {
+    for (const p of [
+      "/challenge/index.php",
+      "/challenge/app.php",
+      "/challenge/login.php",
+      "/challenge/resources/app.js",
+      "/challenge/preview.php"
+    ]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Magic 8 Ball|challenge-0922\.intigriti\.io/i.test(html)) {
+    for (const p of ["/challenge/index.php", "/challenge/magic.php", "/challenge/api.php"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/What do you like\?|getChoice\(this\)/i.test(html)) {
+    for (const p of ["/challenge/index.php", "/challenge/index.php?choice=alert"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
 
