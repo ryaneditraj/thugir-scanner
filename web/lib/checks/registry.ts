@@ -7498,6 +7498,54 @@ const clientSideReactRscCveEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CVE-2025-55182 RSC SaaS PoC lab (demo-of-cve-2025-55182-saas.vercel.app) --------
+const CLIENT_CVE_55182_SAAS_POC_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Vulnerable RSC PoC title",
+    re: /Vulnerable RSC PoC|React Server Components RCE PoC/i
+  },
+  {
+    label: "intentionally vulnerable RSC stack",
+    re: /intentionally uses vulnerable React Server Components|intentionally vulnerable React Server Components/i
+  },
+  {
+    label: "CVE-2025-55182 Flight protocol disclosure",
+    re: /CVE-2025-55182[\s\S]{0,120}react-server-dom|react-server-dom[\s\S]{0,120}CVE-2025-55182/i
+  },
+  {
+    label: "react-server-dom-webpack version list",
+    re: /react-server-dom-webpack/i
+  },
+  {
+    label: "SaaS PoC deploy URL",
+    re: /demo-of-cve-2025-55182-saas\.vercel\.app/i
+  }
+];
+
+const clientSideCve55182SaasPocEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownDemo = /demo-of-cve-2025-55182-saas\.vercel\.app/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CVE_55182_SAAS_POC_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownDemo ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/CVE-2025-55182|react-server-dom/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.93 : isKnownDemo ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownDemo
+        ? "demo-of-cve-2025-55182-saas.vercel.app is a known CVE-2025-55182 RSC SaaS PoC for scanner validation"
+        : "page documents an intentionally vulnerable React Server Components SaaS PoC targeting CVE-2025-55182"
+    }
+  };
+};
+
 // --- Next.js middleware authorization bypass CVE lab (CVE-2025-29927 / UNICORDev) --
 const CLIENT_NEXTJS_MIDDLEWARE_CVE_RES: { label: string; re: RegExp }[] = [
   {
@@ -25067,6 +25115,7 @@ export const RULES: Record<string, Rule> = {
   clientSideGraphqlLabEvidence,
   clientSideGraphqlSecurityHubEvidence,
   clientSideReactRscCveEvidence,
+  clientSideCve55182SaasPocEvidence,
   clientSideNextjsMiddlewareCveEvidence,
   clientSideChimeraVulnLabEvidence,
   clientSideHackHealthLabEvidence,

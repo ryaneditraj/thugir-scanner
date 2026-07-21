@@ -1152,6 +1152,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-cve-55182-saas-poc-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "CVE-2025-55182 RSC SaaS PoC lab disclosed",
+    description:
+      "Public Next.js SaaS PoC documents an intentionally vulnerable React Server Components stack (CVE-2025-55182) with react-server-dom-webpack/turbopack packages for scanner validation.",
+    impactOneline:
+      "Public RSC CVE SaaS PoC advertises a known server-side code execution chain for SCA and container scanner testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCve55182SaasPocEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public CVE PoC deployments; upgrade React/Next.js to patched RSC versions.",
+      steps: [
+        "Upgrade react-server-dom-* and Next.js to vendor-patched releases.",
+        "Do not expose intentionally vulnerable RSC PoC containers to the public internet.",
+        "Restrict lab deployments to isolated scanner-validation environments."
+      ]
+    },
+    fixPrompt:
+      "We host a CVE-2025-55182 RSC SaaS PoC for scanner testing. Show how to isolate it and upgrade to patched React Server Components packages.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-nextjs-middleware-cve-evidence",
     platform: "generic",
     category: "Broken authentication",

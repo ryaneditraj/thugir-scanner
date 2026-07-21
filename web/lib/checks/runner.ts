@@ -395,8 +395,9 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
   }
   if (!/\.onrender\.com$/i.test(host)) return home;
   const isVulnApp = /web-security-practice-app\.onrender\.com/i.test(host);
-  const maxAttempts = isVulnApp ? 8 : 5;
-  const delayMs = isVulnApp ? 5000 : 4000;
+  const isWhoopsPay = /whoopspay\.onrender\.com/i.test(host);
+  const maxAttempts = isVulnApp || isWhoopsPay ? 8 : 5;
+  const delayMs = isVulnApp || isWhoopsPay ? 5000 : 4000;
   let best = home;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const ready =
@@ -797,6 +798,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
+  "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
   "clientSideChimeraVulnLabEvidence",
   "clientSideHackHealthLabEvidence",
@@ -6684,6 +6686,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /web-security-practice-app\.onrender\.com/i.test(home.finalUrl)
       ? ["/comments", "/login", "/register"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
+  const vulnPortalPrioritySeeds =
+    /vuln-portal\.vercel\.app/i.test(home.finalUrl)
+      ? ["/auth/login", "/auth/register"].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
   const hackThisSiteEtaAuthHubPrioritySeeds =
     /hack-this-site-eta\.vercel\.app\/auth\/?$/i.test(home.finalUrl)
       ? [
@@ -6774,6 +6780,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...intigritiChallengePrioritySeeds,
       ...cyberDefendersPrioritySeeds,
       ...flaskVulnappOnrenderPrioritySeeds,
+      ...vulnPortalPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,
