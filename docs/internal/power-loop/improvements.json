@@ -5687,6 +5687,24 @@
       "slug": "client-side-intigriti-october-shoppix-ssrf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Shoppix Importer challenge.php?url=http://example.com returns Fetched content HTML preview; challenge-1025.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-1225.intigriti.io",
+      "slug": "client-side-intigriti-december-infinity-stones-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge #PerfectlyBalanced hash gate + postMessage eval(event.data.substring(48)) + power.reality.soul.challenge-1225.intigriti.io iframe gadgets; challenge-1225.intigriti.io findings 2→5 incl december-infinity-stones slug; benchmark juice-shop pass2 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0526.intigriti.io",
+      "slug": "client-side-intigriti-may-pixel-pioneers-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /js/app.js nameDiv.innerHTML=t.user_name + DOMPurify.sanitize(t.content) + PixelAnalyticsConfig DOM-clobber loader; challenge-0526.intigriti.io findings 2→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0825.intigriti.io",
+      "slug": "client-side-intigriti-august-catflix-rce-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CatFlix AI landing leverage an RCE on the server without sandbox + /source.zip + /challenge iframe; challenge-0825.intigriti.io findings 3→6 incl august-catflix-rce slug; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
