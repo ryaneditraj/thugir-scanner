@@ -5633,6 +5633,24 @@
       "slug": "client-side-intigriti-march-leaky-flagment-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Leaky Flagment + Can you steal my flag? + INTIGRITI{.*} + /login challenge server; challenge-0325.intigriti.io findings 2→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0122.intigriti.io",
+      "slug": "client-side-intigriti-january-iframe-react-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: January XSS Challenge + execute arbitrary javascript on the iFramed page + challenge-0122-challenge.intigriti.io iframe + alert(document.domain); challenge-0122.intigriti.io findings 2→3; benchmark 6/6 maintained (7 findings)"
+    },
+    {
+      "source": "discovery:challenge.intigriti.io",
+      "slug": "client-side-intigriti-june-leaky-jar-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: June Bonus Challenge + Leaky Jar + INTIGRITI{.*} flag format + /challenge iframe; challenge.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:leakyjar.intigriti.io",
+      "slug": "leaky-jar-recipe-review-stored-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /recipes/{uuid}/review form + review-text stored HTML + Leave a review; leakyjar.intigriti.io/recipes findings 2→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9910,6 +9928,21 @@
       "source": "discovery:challenge-0423.intigriti.io",
       "slug": "client-side-intigriti-april-bricks-rce-evidence",
       "shipped_at": "2026-07-21T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0122.intigriti.io",
+      "slug": "client-side-intigriti-january-iframe-react-xss-evidence",
+      "shipped_at": "2026-07-21T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge.intigriti.io",
+      "slug": "client-side-intigriti-june-leaky-jar-evidence",
+      "shipped_at": "2026-07-21T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:leakyjar.intigriti.io",
+      "slug": "leaky-jar-recipe-review-stored-xss",
+      "shipped_at": "2026-07-21T04:10:00.000Z"
     }
   ]
 }
