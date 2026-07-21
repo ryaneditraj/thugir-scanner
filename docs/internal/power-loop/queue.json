@@ -7188,7 +7188,32 @@
       "url": "https://domgo.at/cxss/example/116",
       "source": "Mario Heiderich domgo.at \u2014 DomGoat level 116 DOM XSS sink exercise (cxss series continuation)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/117",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 117 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/118",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 118 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/119",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 119 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://domgo.at/cxss/example/120",
+      "source": "Mario Heiderich domgo.at \u2014 DomGoat level 120 DOM XSS sink exercise (cxss series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A01 brute-force BAC lecture module (Vercel deploy)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-21T16:35:00.000Z"
+  "updated_at": "2026-07-21T17:58:00.000Z"
 }
