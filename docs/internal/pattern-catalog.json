@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T20:13:21.440Z",
-  "total": 567,
-  "uniqueSlugs": 565,
+  "generatedAt": "2026-07-21T21:03:51.589Z",
+  "total": 570,
+  "uniqueSlugs": 568,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 549,
+    "generic": 552,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 498,
+    "deep": 501,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 36,
-    "Security misconfiguration": 45,
+    "Security misconfiguration": 48,
     "Broken authentication": 42,
     "Injection": 116,
     "Cross-site scripting": 91,
@@ -141,10 +141,13 @@
     "client-side-hack-health-error-messages-evidence",
     "client-side-hack-health-hardcoded-cred-evidence",
     "client-side-hack-health-info-exposure-evidence",
+    "client-side-hack-health-integrity-evidence",
     "client-side-hack-health-intro-evidence",
     "client-side-hack-health-jwt-evidence",
     "client-side-hack-health-lab-evidence",
+    "client-side-hack-health-logger-evidence",
     "client-side-hack-health-ssrf-evidence",
+    "client-side-hack-health-vul-packages-evidence",
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
     "client-side-hackadvisor-lab-evidence",
