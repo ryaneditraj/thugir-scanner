@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T00:06:29.966Z",
-  "total": 525,
-  "uniqueSlugs": 523,
+  "generatedAt": "2026-07-21T01:05:38.616Z",
+  "total": 528,
+  "uniqueSlugs": 526,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 507,
+    "generic": 510,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 456,
+    "deep": 459,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 44,
     "Broken authentication": 39,
     "Injection": 106,
-    "Cross-site scripting": 72,
+    "Cross-site scripting": 75,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 5,
@@ -185,6 +185,7 @@
     "client-side-intercode-evidence",
     "client-side-intigriti-august-business-card-xss-evidence",
     "client-side-intigriti-challenge-evidence",
+    "client-side-intigriti-december-christmas-cracker-xss-evidence",
     "client-side-intigriti-january-friends-sqli-evidence",
     "client-side-intigriti-january-xss-filter-bypass-evidence",
     "client-side-intigriti-july-irc-challenge-evidence",
@@ -192,7 +193,9 @@
     "client-side-intigriti-june-rce-challenge-evidence",
     "client-side-intigriti-june-sethtml-xss-challenge-evidence",
     "client-side-intigriti-march-eval-xss-challenge-evidence",
+    "client-side-intigriti-may-filterxss-innerhtml-evidence",
     "client-side-intigriti-may-spreadsheet-formula-evidence",
+    "client-side-intigriti-november-vue-search-xss-evidence",
     "client-side-intigriti-october-halloween-xss-evidence",
     "client-side-intigriti-october-notes-xss-evidence",
     "client-side-intigriti-race-condition-challenge-evidence",
