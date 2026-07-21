@@ -7213,7 +7213,32 @@
       "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce",
       "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A01 brute-force BAC lecture module (Vercel deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a01/informationExposure",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A01 information exposure + missing security headers module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a02/jwt",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A02 cryptographic failures JWT weak-secret module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a03/sqlInjection",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A03 SQL injection login bypass module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a07/hardcodedCred",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A07 hard-coded DB credentials module (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-health-tutorial.vercel.app/cybersecurity/a04/errorMessages",
+      "source": "SamuelNeceda/hack-health-tutorial \u2014 OWASP A04 insecure design verbose auth error messages module (web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-21T17:58:00.000Z"
+  "updated_at": "2026-07-21T18:05:00.000Z"
 }
