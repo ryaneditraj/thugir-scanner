@@ -940,6 +940,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiNovemberVueSearchXssEvidence",
   "clientSideIntigritiDecemberChristmasCrackerXssEvidence",
   "clientSideIntigritiMayFilterxssInnerhtmlEvidence",
+  "clientSideIntigritiMarchIframeLovesenderXssEvidence",
+  "clientSideIntigritiMarchSecureNotesEvidence",
+  "clientSideIntigritiAprilBricksRceEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
   "clientSideNetForceEvidence",
@@ -1709,11 +1712,33 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/execute arbitrary javascript on the iFramed page/i.test(html)) {
     for (const p of [
+      "/challenge/LoveSender.php",
+      "/challenge/LoveReceiver.php",
       "/challenge/index.php",
       "/challenge/index.php?s=",
       "/challenge/index.php?payload=",
       "/challenge/challenge.html"
     ]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/Incomplete Secure Notes Application|notes-app-2\.0/i.test(html)) {
+    for (const p of ["/notes", "/create", "/challenge/notes.js", "/challenge/app.js"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/TiVendoUnMattone|strange:monkey/i.test(html)) {
+    for (const p of ["/challenge.php", "/login.php", "/dashboard.php"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {

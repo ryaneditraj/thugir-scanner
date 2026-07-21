@@ -13719,6 +13719,138 @@ const clientSideIntigritiMayFilterxssInnerhtmlEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Intigriti March 2022 iframe LoveSender XSS (challenge-0322.intigriti.io) ---------
+const CLIENT_INTIGRITI_MARCH_IFRAME_LOVESENDER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "March 2022 iframe XSS challenge host",
+    re: /challenge-0322\.intigriti\.io|Intigriti(?:'s)?\s+March\s+XSS\s+challenge/i
+  },
+  {
+    label: "iframe LoveSender challenge lab",
+    re: /iframe[^>]+src\s*=\s*["']challenge\/LoveSender\.php|challenge page here.*LoveSender\.php/i
+  },
+  {
+    label: "LoveSender/LoveReceiver hashing form",
+    re: /LoveReceiver\.php|LoveSender\.php/i
+  },
+  {
+    label: "execute arbitrary javascript on the iFramed page",
+    re: /execute arbitrary javascript on the iFramed page/i
+  },
+  {
+    label: "MD5/sha1 hashing gadget",
+    re: /Hashing algorithm \(MD5,sha1|don't forget to hash it/i
+  }
+];
+
+const clientSideIntigritiMarchIframeLovesenderXssEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MARCH_IFRAME_LOVESENDER_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0322|LoveSender/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti March 2022 challenge documents iframe XSS via LoveSender.php/LoveReceiver.php PHP hashing overflow lab"
+    }
+  };
+};
+
+// --- Intigriti March 2023 Incomplete Secure Notes (challenge-0323.intigriti.io) -------
+const CLIENT_INTIGRITI_MARCH_SECURE_NOTES_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Incomplete Secure Notes 2.0 lab",
+    re: /Incomplete Secure Notes Application 2\.0|notes-app-2\.0/i
+  },
+  {
+    label: "challenge-0323 host",
+    re: /challenge-0323\.intigriti\.io/i
+  },
+  {
+    label: "HTML-only note body sink",
+    re: /We Only Support HTML now|note-submit/i
+  },
+  {
+    label: "notes.js innerHTML sink",
+    re: /getElementById\(["']msg-info["']\)\.innerHTML/i
+  },
+  {
+    label: "steal flag from admin note",
+    re: /steal the flag|admin user has a note with the flag/i
+  }
+];
+
+const clientSideIntigritiMarchSecureNotesEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_MARCH_SECURE_NOTES_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0323|Incomplete Secure Notes/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti March 2023 challenge documents Incomplete Secure Notes 2.0 with HTML note bodies and innerHTML sinks for XSS/CORS flag theft"
+    }
+  };
+};
+
+// --- Intigriti April 2023 TiVendoUnMattone bricks lab (challenge-0423.intigriti.io) --
+const CLIENT_INTIGRITI_APRIL_BRICKS_RCE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "TiVendoUnMattone challenge app",
+    re: /TiVendoUnMattone(?:SRL)?/i
+  },
+  {
+    label: "challenge-0423 host",
+    re: /challenge-0423\.intigriti\.io/i
+  },
+  {
+    label: "hardcoded magical credentials",
+    re: /Your magical credentials are.*strange:monkey/i
+  },
+  {
+    label: "INTIGRITI flag format rules",
+    re: /The flag format is INTIGRITI\{\.\*\}/i
+  },
+  {
+    label: "strangeMMonkey1 author",
+    re: /strangeMMonkey1/i
+  }
+];
+
+const clientSideIntigritiAprilBricksRceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_INTIGRITI_APRIL_BRICKS_RCE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/intigriti\.io|challenge-0423|TiVendoUnMattone/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Intigriti April 2023 challenge documents TiVendoUnMattone with hardcoded strange:monkey credentials, type juggling, LFI, and command injection RCE chain"
+    }
+  };
+};
+
 // --- RingZer0 Team online CTF (ringzer0ctf.com) -------------------------------------
 const CLIENT_RINGZER0_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -24061,6 +24193,9 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiNovemberVueSearchXssEvidence,
   clientSideIntigritiDecemberChristmasCrackerXssEvidence,
   clientSideIntigritiMayFilterxssInnerhtmlEvidence,
+  clientSideIntigritiMarchIframeLovesenderXssEvidence,
+  clientSideIntigritiMarchSecureNotesEvidence,
+  clientSideIntigritiAprilBricksRceEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
   clientSideNetForceEvidence,

@@ -5206,6 +5206,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-intigriti-march-iframe-lovesender-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti March iframe LoveSender XSS challenge disclosed",
+    description:
+      "Intigriti challenge-0322.intigriti.io hosts a March 2022 iframe XSS lab with LoveSender.php/LoveReceiver.php PHP hashing overflow gadgets.",
+    impactOneline:
+      "Public March 2022 challenge documents iframe XSS via LoveSender.php hashing form and alert(document.domain) capture goal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMarchIframeLovesenderXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti iframe XSS challenges are intentional training — validate hashing inputs and avoid iframe gadget chains.",
+      steps: [
+        "Host March iframe XSS labs on contest-only infrastructure.",
+        "Validate PHP hashing algorithm inputs and block integer overflow gadgets.",
+        "Avoid embedding untrusted challenge forms in parent-page iframes without sandboxing."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti March iframe LoveSender XSS challenges with PHP hashing overflow gadgets. Show safe iframe isolation and input validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-march-secure-notes-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Intigriti March Incomplete Secure Notes challenge disclosed",
+    description:
+      "Intigriti challenge-0323.intigriti.io hosts Incomplete Secure Notes Application 2.0 with HTML note bodies, innerHTML sinks, and admin flag theft goals.",
+    impactOneline:
+      "Public March 2023 challenge documents notes-app-2.0 XSS/CORS/CSP flag theft via /notes and /create routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiMarchSecureNotesEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti notes challenges are intentional training — never render user HTML with innerHTML.",
+      steps: [
+        "Host March notes labs on contest-only infrastructure.",
+        "Replace innerHTML note rendering with textContent or strict sanitization.",
+        "Enforce CORS and CSP so admin note flags cannot be exfiltrated cross-origin."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti Incomplete Secure Notes challenges with HTML note bodies and innerHTML sinks. Show safe note rendering and CORS hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-intigriti-april-bricks-rce-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Intigriti April TiVendoUnMattone bricks RCE challenge disclosed",
+    description:
+      "Intigriti challenge-0423.intigriti.io hosts the TiVendoUnMattone lab with hardcoded strange:monkey credentials, type juggling, LFI, and command injection.",
+    impactOneline:
+      "Public April 2023 challenge documents INTIGRITI{.*} flag capture via PHP type juggling and command injection at challenge.php.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideIntigritiAprilBricksRceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Intigriti bricks challenges are intentional training — use strict auth comparisons and block LFI/command injection.",
+      steps: [
+        "Host April bricks labs on contest-only infrastructure.",
+        "Remove hardcoded demo credentials from login pages.",
+        "Use strict type-safe auth checks and sanitize file inclusion paths."
+      ]
+    },
+    fixPrompt:
+      "We mirror Intigriti TiVendoUnMattone challenges with type juggling and command injection chains. Show strict auth and safe file handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
