@@ -5597,6 +5597,24 @@
       "slug": "client-side-intigriti-may-filterxss-innerhtml-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: innerHTML=pages['4']+filterXSS(pages[pl]) + queryObject(location.search) at challenge/challenge.html; challenge-0522.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0322.intigriti.io",
+      "slug": "client-side-intigriti-march-iframe-lovesender-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: iframe src=challenge/LoveSender.php + LoveReceiver.php hashing form + execute arbitrary javascript on the iFramed page; challenge-0322.intigriti.io findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0323.intigriti.io",
+      "slug": "client-side-intigriti-march-secure-notes-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Incomplete Secure Notes Application 2.0 + notes-app-2.0 github + getElementById('msg-info').innerHTML in notes.js; challenge-0323.intigriti.io findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0423.intigriti.io",
+      "slug": "client-side-intigriti-april-bricks-rce-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: TiVendoUnMattone + Your magical credentials are strange:monkey + INTIGRITI{.*} flag format at challenge.php; challenge-0423.intigriti.io findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -9859,6 +9877,21 @@
       "source": "discovery:challenge-0522.intigriti.io",
       "slug": "client-side-intigriti-may-filterxss-innerhtml-evidence",
       "shipped_at": "2026-07-21T01:35:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0322.intigriti.io",
+      "slug": "client-side-intigriti-march-iframe-lovesender-xss-evidence",
+      "shipped_at": "2026-07-21T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0323.intigriti.io",
+      "slug": "client-side-intigriti-march-secure-notes-evidence",
+      "shipped_at": "2026-07-21T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:challenge-0423.intigriti.io",
+      "slug": "client-side-intigriti-april-bricks-rce-evidence",
+      "shipped_at": "2026-07-21T02:10:00.000Z"
     }
   ]
 }
