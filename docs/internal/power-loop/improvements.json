@@ -5867,6 +5867,24 @@
       "slug": "client-side-hack-health-ssrf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a10/ssrf CWE-918 Server Side Request Forgery module; hack-health-tutorial a10/ssrf findings 3\u21929 incl client-side-hack-health-ssrf-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-vul-packages-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a06/vulPackages CWE-1035 + Snyk static tool analysis + nth-check/webpack packages; hackHealthTutorialPrioritySeeds extended; a06/vulPackages gains slug when Vercel checkpoint allows; benchmark juice-shop.herokuapp.com 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-integrity-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a08/integrityVerification CWE-494 Download of Code Without Integrity Check + auto-update without verification; a08/integrityVerification direct scan findings 9 incl slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-logger-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a09/logger CWE-778 Insufficient Logging + failed login attempts not logged; a09/logger direct scan findings 9 incl slug; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10324,6 +10342,21 @@
       "source": "discovery:hack-health-tutorial.vercel.app",
       "slug": "client-side-hack-health-ssrf-evidence",
       "shipped_at": "2026-07-21T20:39:57.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-vul-packages-evidence",
+      "shipped_at": "2026-07-21T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-integrity-evidence",
+      "shipped_at": "2026-07-21T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-logger-evidence",
+      "shipped_at": "2026-07-21T21:10:00.000Z"
     }
   ]
 }
