@@ -6913,7 +6913,32 @@
       "url": "https://challenge-0321.intigriti.io/",
       "source": "Intigriti March 2021 Notes \u2014 CSRF token prediction + DOM XSS (Bugology 0321)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge.intigriti.io/",
+      "source": "Intigriti flagship XSS challenge \u2014 original postMessage/data-URI challenge (Intigriti blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0122.intigriti.io/",
+      "source": "Intigriti January 2022 XSS challenge by TheRealBrenu \u2014 iframe alert(document.domain) (Hackademy archive)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0121.intigriti.io/",
+      "source": "Intigriti January 2021 DOM clobbering XSS \u2014 javascript subdomain origin delete (Medium write-up)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://defendtheweb.net/playground/intro13",
+      "source": "DefendTheWeb \u2014 playground intro13 client-side security challenge (playground series continuation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://challenge-0221.intigriti.io/",
+      "source": "Intigriti February 2021 monthly XSS CTF \u2014 early Hackademy archive",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-21T02:10:00.000Z"
+  "updated_at": "2026-07-21T03:05:00.000Z"
 }
