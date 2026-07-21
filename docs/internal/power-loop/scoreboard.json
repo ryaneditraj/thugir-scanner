@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T17:59:06.020Z",
+  "updated_at": "2026-07-21T18:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,29 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 1773,
-  "total_findings": 8952,
+  "total_sites_scanned": 1774,
+  "total_findings": 8959,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1425,
   "discovery_findings": 7093,
-  "improvements_shipped": 882,
-  "last_run": "2026-07-21T17:59:06.020Z",
+  "improvements_shipped": 885,
+  "last_run": "2026-07-21T18:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
-      "primary_recall": "4/6",
+      "primary_recall": "6/6",
       "gap": [],
-      "primary_gap": [
-        "sqli"
-      ],
-      "note": "Primary Heroku 503 — pass1 1/6 (misconfig only, probes=28); pass2 2 findings probes=0; pass3 4 findings gap=sqli probes=198; staging fallback restored 6/6 (7 findings, pages=6 probes=242)",
+      "primary_gap": [],
+      "note": "Primary Heroku first pass 7 findings 6/6 recall — idor bootstrap + SQL-only wake retries; no staging fallback needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,34 +54,22 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 75,
-      "focus": "Queue head drain: PentesterLab autho_01 + XSS/MySQL FILE, HackThisSite playlevel/34, VWAD voice-goat, hack-this-site A06-A08 OWASP modules; +5 URLs (domgo.at cxss/117-120, hack-health A01 bruteForce)",
-      "urls_queued_not_scanned": [
-        "https://domgo.at/cxss/example/117",
-        "https://domgo.at/cxss/example/118",
-        "https://domgo.at/cxss/example/119",
-        "https://domgo.at/cxss/example/120",
-        "https://hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce",
-        "https://demo-of-cve-2025-55182-saas.vercel.app/",
-        "https://hack-this-site-eta.vercel.app/labs/",
-        "https://hack-this-site-eta.vercel.app/auth/"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 5,
+      "focus": "HackHealth A01 bruteForce CWE-307 lab evidence; Juice Shop primary cold-start bootstrap reliability",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary 503 across 3 passes — sqli gap until staging fallback 6/6",
-      "hack-this-site-eta.vercel.app/owasp/a07.html: 19 findings — OWASP A07 vuln components module",
-      "hack-this-site-eta.vercel.app/owasp/a08.html: 18 findings — OWASP A08 integrity failures module",
-      "pentesterlab.com/exercises/xss-and-mysql-file/: 5 findings — XSS+SQLi chain exercise",
-      "www.hackthissite.org/playlevel/34/: 6 findings — arcade wargame hub + reflected XSS"
+      "juice-shop.herokuapp.com: primary first pass 7 findings 6/6 recall (no staging fallback)",
+      "hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce: A01 brute-force + CWE-307 lab evidence",
+      "benchmark cold-start: idorObjectAccess reads primed track-order JSON from bootstrap combined",
+      "benchmark cold-start: juiceShopBootstrap SQL-only wake when admin/IDOR precede search route"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku dyno offline (503) — sqli oracle missed on primary even after 3 wake retries",
-      "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes on staging",
+      "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vwad.owasp.org/app/voice-goat/: VWAD listing 404 — voice-goat Docker-only, no public deploy",
-      "domgo.at cxss/117-120 at queue tail — not yet drained this run",
+      "domgo.at cxss/117-120 return Exercise-1 placeholder — not unique labs",
       "web-pentest-playground.onrender.com: service suspended"
     ]
   },
@@ -218,7 +204,7 @@
     "labs.hackxpert.com": 5,
     "juice-shop.herokuapp.com": 8,
     "securebank-blog.vercel.app": 6,
-    "hack-health-tutorial.vercel.app": 5,
+    "hack-health-tutorial.vercel.app": 6,
     "preview-zeroday-sec.vercel.app": 2,
     "chimera.atlascrew.dev": 10,
     "archon-eight.vercel.app": 8,
