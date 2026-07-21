@@ -5615,6 +5615,24 @@
       "slug": "client-side-intigriti-april-bricks-rce-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: TiVendoUnMattone + Your magical credentials are strange:monkey + INTIGRITI{.*} flag format at challenge.php; challenge-0423.intigriti.io findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0823.intigriti.io",
+      "slug": "client-side-intigriti-august-eval-stack-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge/index.html eval(result.innerText) + Operator should start with Math. + alert(document.domain) goal; challenge-0823.intigriti.io findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0724.intigriti.io",
+      "slug": "client-side-intigriti-july-memo-dompurify-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge Memo Sharing + displayElement.innerHTML = sharedMemo + DOMPurify.sanitize(sharedMemo); challenge-0724.intigriti.io findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:challenge-0325.intigriti.io",
+      "slug": "client-side-intigriti-march-leaky-flagment-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Leaky Flagment + Can you steal my flag? + INTIGRITI{.*} + /login challenge server; challenge-0325.intigriti.io findings 2→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
