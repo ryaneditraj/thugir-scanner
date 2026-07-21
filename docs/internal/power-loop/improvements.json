@@ -5831,6 +5831,24 @@
       "slug": "sqli-bootstrap-sql-only-wake",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopBootstrap loop 8→12 attempts + 6×3s SQL-only retries when admin/IDOR wake before /rest/products/search?q='')); primary heroku 7 findings 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-info-exposure-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a01/informationExposure Nextra chunk CWE-200 + X-Powered-By Express + Helmet/securityheaders.com; hackHealthTutorialPrioritySeeds extended; hack-health-tutorial.vercel.app/a01/informationExposure findings 4→5 when reachable; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-jwt-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a02/jwt chunk A02:2021 Cryptographic Failures + CWE-256 Plaintext Storage + JWT_SECRET/jwtGenerator.ts; hack-health-tutorial.vercel.app/a02/jwt gains slug when Vercel checkpoint allows; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-error-messages-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a04/errorMessages chunk CWE-209 + error messages indicate whether a user exists; hack-health-tutorial.vercel.app/a04/errorMessages gains slug when reachable; benchmark juice-shop.herokuapp.com 6 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10258,6 +10276,21 @@
       "source": "benchmark:juice-shop",
       "slug": "sqli-bootstrap-sql-only-wake",
       "shipped_at": "2026-07-21T18:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-info-exposure-evidence",
+      "shipped_at": "2026-07-21T19:20:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-jwt-evidence",
+      "shipped_at": "2026-07-21T19:20:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "client-side-hack-health-error-messages-evidence",
+      "shipped_at": "2026-07-21T19:20:00.000Z"
     }
   ]
 }

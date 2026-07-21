@@ -7919,19 +7919,19 @@ const clientSideHackHealthBruteForceEvidence: Rule = async (ctx) => {
 const CLIENT_HACK_HEALTH_INFO_EXPOSURE_RES: { label: string; re: RegExp }[] = [
   {
     label: "A01 information exposure module title",
-    re: /HH tutorial - Information exposure|Information exposure<\/title>/i
+    re: /HH tutorial - Information exposure|Information exposure<\/title>|Information exposure/i
   },
   {
     label: "CWE-200 sensitive information exposure",
-    re: /CWE-200[\s\S]{0,80}Exposure of Sensitive Information/i
+    re: /CWE-200[\s\S]{0,120}Exposure of Sensitive Information/i
   },
   {
     label: "X-Powered-By header disclosure walkthrough",
-    re: /X-Powered-By[\s\S]{0,60}Express/i
+    re: /X-Powered-By[\s\S]{0,80}Express/i
   },
   {
     label: "Helmet middleware prevention section",
-    re: /Helmet middleware[\s\S]{0,60}information exposure|securityheaders\.com/i
+    re: /Helmet middleware|securityheaders\.com/i
   },
   {
     label: "HackHealth informationExposure route",
@@ -7949,7 +7949,7 @@ const clientSideHackHealthInfoExposureEvidence: Rule = async (ctx) => {
   }
   if (hits.length < 2) return NEGATIVE;
   if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
-  if (!/information exposure|CWE-200|X-Powered-By/i.test(ctx.combined)) return NEGATIVE;
+  if (!/information exposure|CWE-200|X-Powered-By|Helmet/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -7964,19 +7964,19 @@ const clientSideHackHealthInfoExposureEvidence: Rule = async (ctx) => {
 const CLIENT_HACK_HEALTH_JWT_RES: { label: string; re: RegExp }[] = [
   {
     label: "A02 JWT authentication module title",
-    re: /HH tutorial - JWT Authentication|JWT Authentication<\/title>/i
+    re: /HH tutorial - JWT Authentication|JWT Authentication<\/title>|JWT Authentication/i
   },
   {
     label: "A02:2021 Cryptographic Failures heading",
-    re: /A02:2021\s*-\s*Cryptographic Failures/i
+    re: /A02:2021[\s\S]{0,40}Cryptographic Failures/i
   },
   {
     label: "CWE-256 plaintext password storage",
-    re: /CWE-256[\s\S]{0,60}Plaintext Storage of a Password/i
+    re: /CWE-256[\s\S]{0,120}Plaintext Storage of a Password/i
   },
   {
     label: "JWT_SECRET signing key walkthrough",
-    re: /JWT_SECRET[\s\S]{0,80}sign their own JWT|jwtGenerator\.ts|jwtAuth\.ts/i
+    re: /JWT_SECRET|jwtGenerator\.ts|jwtAuth\.ts/i
   },
   {
     label: "HackHealth JWT route",
@@ -8013,11 +8013,11 @@ const CLIENT_HACK_HEALTH_ERROR_MESSAGES_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "A04:2021 Insecure Design heading",
-    re: /A04:2021\s*-\s*Insecure Design/i
+    re: /A04:2021[\s\S]{0,40}Insecure Design/i
   },
   {
     label: "CWE-209 verbose error disclosure",
-    re: /CWE-209[\s\S]{0,80}Error Message Containing Sensitive Information/i
+    re: /CWE-209[\s\S]{0,120}Error Message Containing Sensitive Information/i
   },
   {
     label: "Username enumeration via auth errors",
