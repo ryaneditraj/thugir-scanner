@@ -395,8 +395,9 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
   }
   if (!/\.onrender\.com$/i.test(host)) return home;
   const isVulnApp = /web-security-practice-app\.onrender\.com/i.test(host);
-  const maxAttempts = isVulnApp ? 8 : 5;
-  const delayMs = isVulnApp ? 5000 : 4000;
+  const isWhoopsPay = /whoopspay\.onrender\.com/i.test(host);
+  const maxAttempts = isVulnApp || isWhoopsPay ? 8 : 5;
+  const delayMs = isVulnApp || isWhoopsPay ? 5000 : 4000;
   let best = home;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const ready =
@@ -797,6 +798,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
+  "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
   "clientSideChimeraVulnLabEvidence",
   "clientSideHackHealthLabEvidence",
@@ -842,6 +844,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
   "clientSideWebsecUploadIncludeChallengeEvidence",
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
+  "clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence",
   "clientSideWebsecOpenBasedirEvalChallengeEvidence",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
@@ -1149,6 +1152,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingOpenRedirectsLessonEvidence",
   "clientSideHacksplainingXssDomLessonEvidence",
   "clientSideHacksplainingSessionFixationLessonEvidence",
+  "clientSideHacksplainingWeakSessionLessonEvidence",
+  "clientSideHacksplainingAiPromptInjectionLessonEvidence",
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
   "clientSideHacksplainingXmlBombLessonEvidence",
@@ -2081,7 +2086,7 @@ function extractWebsecChallengeSeeds(html: string, origin: string): string[] {
     /websec challenges/i.test(html) ||
     /web security challenges from the people of websec/i.test(html)
   ) {
-    for (let n = 1; n <= 31; n++) {
+    for (let n = 1; n <= 34; n++) {
       if (n === 19) continue;
       const slug = `level${String(n).padStart(2, "0")}`;
       try {
@@ -6542,6 +6547,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://websec.fr/level31/source.php",
         "https://websec.fr/level32/",
         "https://websec.fr/level32/source.php",
+        "https://websec.fr/level33/",
+        "https://websec.fr/level33/source.php",
         "https://websec.fr/level34/",
         "https://websec.fr/level34/source.php"
       ]
@@ -6684,6 +6691,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /web-security-practice-app\.onrender\.com/i.test(home.finalUrl)
       ? ["/comments", "/login", "/register"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
+  const vulnPortalPrioritySeeds =
+    /vuln-portal\.vercel\.app/i.test(home.finalUrl)
+      ? ["/auth/login", "/auth/register"].map((p) => new URL(p, home.finalUrl).toString())
+      : [];
   const hackThisSiteEtaAuthHubPrioritySeeds =
     /hack-this-site-eta\.vercel\.app\/auth\/?$/i.test(home.finalUrl)
       ? [
@@ -6774,6 +6785,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...intigritiChallengePrioritySeeds,
       ...cyberDefendersPrioritySeeds,
       ...flaskVulnappOnrenderPrioritySeeds,
+      ...vulnPortalPrioritySeeds,
       ...hackThisSiteEtaAuthHubPrioritySeeds,
       ...hackThisSiteEtaPrioritySeeds,
       ...seclabPlaygroundPrioritySeeds,

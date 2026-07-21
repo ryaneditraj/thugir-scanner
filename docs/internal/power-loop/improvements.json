@@ -5759,6 +5759,42 @@
       "slug": "client-side-net-force-sqli-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: level405 UNION makes FORCE + source.txt mysql_db_query WHERE user='$login'; netForceChallengeInstanceSourceSeeds + skip homepage seed flood on challenge instances; level405 findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo-of-cve-2025-55182-saas.vercel.app",
+      "slug": "client-side-cve-55182-saas-poc-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vulnerable RSC PoC + intentionally uses vulnerable React Server Components + CVE-2025-55182 react-server-dom-webpack version list; demo-of-cve-2025-55182-saas.vercel.app findings 4→5; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-render-warmup-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Render cold-start returned stub with only missing-security-headers; warmupRenderHost extended 8×5s for whoopspay.onrender.com; whoopspay.onrender.com findings 1→5 incl client-side-whoopspay-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "vuln-portal-auth-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: root redirect to /auth/login but shallow crawl missed VULNPORTAL markers; vulnPortalPrioritySeeds prepends /auth/login + /auth/register; vuln-portal.vercel.app findings 1→2 incl client-side-vuln-auth-portal-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-blind-destruct-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level33/source.php unserialize($_POST['payload']) + class B __destruct Almost there? + Level Thirtee-three destruct; extractWebsecChallengeSeeds extended to level34 + level33 priority seeds; websec.fr/level33/source.php findings 4→5; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-weak-session-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/weak-session/start title Weak Session IDs — Secure Coding Lesson + meta Guessable session IDs make your website vulnerable to session hijacking; hacksplaining.com/lessons/weak-session/start findings 2→3 incl new slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/ai-prompt-injection/start title AI: Prompt Injection — Secure Coding Lesson + meta unexpected behavior in a machine learning model; hacksplaining.com/lessons/ai-prompt-injection/start findings 2→3 incl new slug; benchmark juice-shop-staging 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10126,6 +10162,36 @@
       "source": "discovery:www.net-force.nl",
       "slug": "client-side-net-force-sqli-challenge-evidence",
       "shipped_at": "2026-07-21T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:demo-of-cve-2025-55182-saas.vercel.app",
+      "slug": "client-side-cve-55182-saas-poc-evidence",
+      "shipped_at": "2026-07-21T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-render-warmup-reliability",
+      "shipped_at": "2026-07-21T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-portal.vercel.app",
+      "slug": "vuln-portal-auth-priority-seeds",
+      "shipped_at": "2026-07-21T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-php-unserialize-blind-destruct-challenge-evidence",
+      "shipped_at": "2026-07-21T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-weak-session-lesson-evidence",
+      "shipped_at": "2026-07-21T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
+      "shipped_at": "2026-07-21T16:15:00.000Z"
     }
   ]
 }
