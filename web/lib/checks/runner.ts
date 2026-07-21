@@ -957,6 +957,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiDecemberInfinityStonesXssEvidence",
   "clientSideIntigritiMayPixelPioneersXssEvidence",
   "clientSideIntigritiAugustCatflixRceEvidence",
+  "clientSideIntigritiJanuaryCryptigritiXssEvidence",
+  "clientSideWebsecOopGarbageCollectorChallengeEvidence",
+  "clientSideWebsecSpellcheckerXssChallengeEvidence",
   "leakyJarRecipeReviewStoredXssEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
@@ -1946,6 +1949,16 @@ function extractIntigritiChallengeSeeds(html: string, pageUrl: string): string[]
 
   if (/challenge-0825\.intigriti\.io/i.test(pageUrl)) {
     for (const p of ["/challenge", "/source.zip"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  if (/challenge-0126\.intigriti\.io|CRYPTIGRITI/i.test(html + pageUrl)) {
+    for (const p of ["/home.html", "/security.html", "/challenge"]) {
       try {
         out.add(new URL(p, pageUrl).toString());
       } catch {
@@ -6534,6 +6547,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     try {
       return [
         new URL(`/${slug}/source.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/source1.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/source2.php`, home.finalUrl).toString(),
         new URL(`/${slug}/`, home.finalUrl).toString()
       ];
     } catch {
