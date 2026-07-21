@@ -48,7 +48,7 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
@@ -70,7 +70,9 @@
       "xxe-lab.vercel.app: 4 findings",
       "nextjs-cve-hackerone.vercel.app: 4 findings",
       "cyberdesserts.github.io/cookiejar-lab/demo: 4 findings",
-      "lab.blackhatgraphql.com:9001: 3 findings"
+      "lab.blackhatgraphql.com:9001: 3 findings",
+      "web-pentest-playground.onrender.com: 1 findings",
+      "owasp-finbot-ctf-demo.onrender.com: 1 findings"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
