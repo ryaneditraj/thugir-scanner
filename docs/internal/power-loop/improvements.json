@@ -5723,6 +5723,24 @@
       "slug": "client-side-intigriti-january-cryptigriti-xss-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CRYPTIGRITI DeFi + /home.html + /security.html flag capture + navLinks.innerHTML; challenge-0126.intigriti.io findings 4→5; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-store-exec-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level09 store'n'exec service + cache_file eval gadget + flag.txt objective in source.php; websec.fr/level09 findings 6→7 incl client-side-websec-store-exec-challenge-evidence; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-url-grabber-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level06 URL Grabber + curl_init($url) + POST url parameter in source.php; websec.fr/level06 findings 6→7 incl client-side-websec-url-grabber-challenge-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cybersec-demo.vercel.app",
+      "slug": "client-side-nivara-security-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: cybersec-demo.vercel.app URL oracle + updated meta Automated security assessments for modern companies; Vercel checkpoint strips HTML markers; cybersec-demo.vercel.app findings 1→2; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10060,6 +10078,21 @@
       "source": "discovery:challenge-0126.intigriti.io",
       "slug": "client-side-intigriti-january-cryptigriti-xss-evidence",
       "shipped_at": "2026-07-21T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-store-exec-challenge-evidence",
+      "shipped_at": "2026-07-21T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "client-side-websec-url-grabber-challenge-evidence",
+      "shipped_at": "2026-07-21T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:cybersec-demo.vercel.app",
+      "slug": "client-side-nivara-security-evidence",
+      "shipped_at": "2026-07-21T12:15:00.000Z"
     }
   ]
 }

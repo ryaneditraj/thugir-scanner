@@ -5752,6 +5752,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-url-grabber-challenge-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "WebSec.fr URL grabber SSRF lab disclosed",
+    description:
+      "WebSec.fr level06 documents a URL grabber that fetches attacker-controlled URLs via curl_init on a POST url parameter — an SSRF training challenge.",
+    impactOneline:
+      "Public WebSec.fr level06 URL grabber challenge exposes server-side fetch of remote URLs at websec.fr/level06/.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecUrlGrabberChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebSec.fr level06 is an intentional training lab — block server-side fetches to internal networks and validate URL schemes.",
+      steps: [
+        "Allowlist outbound fetch destinations instead of passing user URLs to curl.",
+        "Block RFC1918, link-local, and metadata IP ranges.",
+        "Require authenticated access before any server-side URL retrieval."
+      ]
+    },
+    fixPrompt:
+      "We host WebSec.fr-style URL grabber labs. Show SSRF-safe URL validation and outbound fetch allowlists instead of curl on user input.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-store-exec-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr store'n'exec eval lab disclosed",
+    description:
+      "WebSec.fr level09 documents a store'n'exec service that writes user text to temp files and evals cache_file contents — arbitrary PHP execution training.",
+    impactOneline:
+      "Public WebSec.fr level09 store'n'exec challenge exposes cache_file eval gadget at websec.fr/level09/.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecStoreExecChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebSec.fr level09 is an intentional training lab — never eval user-controlled file contents.",
+      steps: [
+        "Remove eval() on cache_file or any user-influenced paths.",
+        "Store untrusted text outside the webroot without execution.",
+        "Use sandboxed interpreters with no filesystem read of attacker files."
+      ]
+    },
+    fixPrompt:
+      "We host WebSec.fr-style store'n'exec labs. Show safe file storage without eval on cache_file paths.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ringzer0-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

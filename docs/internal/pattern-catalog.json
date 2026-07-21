@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T11:07:56.243Z",
-  "total": 549,
-  "uniqueSlugs": 547,
+  "generatedAt": "2026-07-21T12:06:40.280Z",
+  "total": 551,
+  "uniqueSlugs": 549,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 531,
+    "generic": 533,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 480,
+    "deep": 482,
     "continuous": 0
   },
   "byCategory": {
@@ -27,11 +27,11 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 39,
-    "Injection": 109,
+    "Injection": 110,
     "Cross-site scripting": 90,
     "general": 18,
     "SSRF": 1,
-    "Server-side request forgery": 6,
+    "Server-side request forgery": 7,
     "Sensitive data exposure": 5,
     "AI security": 29,
     "XSS": 1
@@ -448,8 +448,10 @@
     "client-side-websec-shell-exec-challenge-evidence",
     "client-side-websec-spellchecker-xss-challenge-evidence",
     "client-side-websec-sqli-privilege-challenge-evidence",
+    "client-side-websec-store-exec-challenge-evidence",
     "client-side-websec-timing-attack-challenge-evidence",
     "client-side-websec-upload-include-challenge-evidence",
+    "client-side-websec-url-grabber-challenge-evidence",
     "client-side-webvuln-runner-evidence",
     "client-side-webvulnsguide-cors-lab-evidence",
     "client-side-webvulnsguide-ssrf-lab-evidence",

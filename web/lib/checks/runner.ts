@@ -960,6 +960,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideIntigritiJanuaryCryptigritiXssEvidence",
   "clientSideWebsecOopGarbageCollectorChallengeEvidence",
   "clientSideWebsecSpellcheckerXssChallengeEvidence",
+  "clientSideWebsecUrlGrabberChallengeEvidence",
+  "clientSideWebsecStoreExecChallengeEvidence",
   "leakyJarRecipeReviewStoredXssEvidence",
   "clientSideRingzer0CtfEvidence",
   "clientSideWebhackingKrEvidence",
