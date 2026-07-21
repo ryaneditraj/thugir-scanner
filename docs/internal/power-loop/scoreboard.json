@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T11:15:00.000Z",
+  "updated_at": "2026-07-21T11:12:57.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1719,
-  "total_findings": 8624,
+  "total_sites_scanned": 1728,
+  "total_findings": 8661,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1395,
-  "discovery_findings": 6856,
+  "discovery_urls_added": 1400,
+  "discovery_findings": 6886,
   "improvements_shipped": 867,
-  "last_run": "2026-07-21T11:15:00.000Z",
+  "last_run": "2026-07-21T11:12:57.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "6/6 recall on primary heroku first pass (7 findings, pages_crawled=6 probes=265; no gap)",
+      "note": "6/6 recall on primary Heroku first pass (pages_crawled=6 probes=265; no gap)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,25 +50,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "Engine Evolve run — websec level04/05 gap fill + Intigriti CRYPTIGRITI 0126",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 30,
+      "focus": "domgo.at cxss/97-101 queued at tail + queue head drain (xxe-lab, nextjs-cve-hackerone, web-pentest-playground, cookiejar-lab, blackhatgraphql, finbot-ctf-demo, hack-yourself-first, php.testsparker)",
       "skipped_48h": [],
-      "improvements_shipped_this_run": 3
+      "urls_queued_not_scanned": [
+        "https://domgo.at/cxss/example/97",
+        "https://domgo.at/cxss/example/98",
+        "https://domgo.at/cxss/example/99",
+        "https://domgo.at/cxss/example/100",
+        "https://domgo.at/cxss/example/101"
+      ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "websec.fr/level04/: OOP garbage-collector SQLi + leet_hax0r unserialize cookie (7→8 findings)",
-      "websec.fr/level05/: spellchecker preg_replace reflected XSS (6→7 findings)",
-      "challenge-0126.intigriti.io: CRYPTIGRITI DeFi XSS lab with /home.html gadgets (4→5 findings)"
+      "hack-yourself-first.azurewebsites.net: 7 findings",
+      "php.testsparker.com: 6 findings",
+      "xxe-lab.vercel.app: 4 findings",
+      "nextjs-cve-hackerone.vercel.app: 4 findings",
+      "cyberdesserts.github.io/cookiejar-lab/demo: 4 findings",
+      "lab.blackhatgraphql.com:9001: 3 findings"
     ],
     "learning_gaps": [
+      "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
-      "domgo.at/cxss/example/85-89: queued at tail — seeds exist, awaiting queue drain",
-      "defendtheweb intro12+: series ends at intro16 (intro17 returns 404)",
-      "challenge-0326/0626/0226 intigriti: queued — Inside Job + March DOM-clobber + InkDrop pending"
+      "domgo.at/cxss/example/97-101: queued at tail — not yet drained from queue head",
+      "defendtheweb intro17+: series ends at intro16 (intro17 returns 404)",
+      "owasp-finbot-ctf-demo.onrender.com: shallow crawl (1 finding) — agentic AI chains need authenticated CTF namespace"
     ]
   },
   "discovery_highlights": {
@@ -127,7 +136,7 @@
     "ashimkoirala.github.io/HackLab": 6,
     "vulnweb.netlify.app": 3,
     "web-pentest-playground.onrender.com": 3,
-    "cyberdesserts.github.io/cookiejar-lab/demo": 3,
+    "cyberdesserts.github.io/cookiejar-lab/demo": 4,
     "tempehs.github.io/The_Unsecure_PWA": 3,
     "yusufarbc.github.io/apigoat": 2,
     "koadt.github.io/oss-oopssec-store": 7,
@@ -235,7 +244,7 @@
     "pentest-ground.com:4280": 5,
     "pentest-ground.com:9000": 4,
     "cyberdesserts.github.io": 3,
-    "lab.blackhatgraphql.com:9001": 2,
+    "lab.blackhatgraphql.com:9001": 3,
     "owasp-finbot-ctf-demo.onrender.com": 1,
     "ssrf-defense-platform.onrender.com": 6,
     "api.graphqlbook.org": 6,
