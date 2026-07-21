@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-21T13:12:43.585Z",
-  "total": 554,
-  "uniqueSlugs": 552,
+  "generatedAt": "2026-07-21T15:27:02.205Z",
+  "total": 555,
+  "uniqueSlugs": 553,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 536,
+    "generic": 537,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 485,
+    "deep": 486,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 35,
     "Security misconfiguration": 44,
     "Broken authentication": 39,
-    "Injection": 113,
+    "Injection": 114,
     "Cross-site scripting": 90,
     "general": 18,
     "SSRF": 1,
@@ -98,6 +98,7 @@
     "client-side-ctflearn-websix-evidence",
     "client-side-ctflearn-webthree-evidence",
     "client-side-ctflearn-webtwo-evidence",
+    "client-side-cve-55182-saas-poc-evidence",
     "client-side-cvebench-benchmark-evidence",
     "client-side-cybench-evidence",
     "client-side-cyber-scavenger-hunt-evidence",
