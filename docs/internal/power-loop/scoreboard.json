@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-21T13:01:16.643Z",
+  "updated_at": "2026-07-21T13:06:13.290Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1738,
-  "total_findings": 8721,
+  "total_sites_scanned": 1746,
+  "total_findings": 8763,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1405,
+  "discovery_urls_added": 1410,
   "discovery_findings": 6932,
   "improvements_shipped": 870,
-  "last_run": "2026-07-21T13:01:16.643Z",
+  "last_run": "2026-07-21T13:06:13.290Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
@@ -52,36 +52,46 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 46,
-      "focus": "queue head drain (api.graphqlbook, pentesterlab, root-me, hackthissite, agentpwn, hacksec, webgoat, cyberdefenders) + CVE-2025-55182 SaaS PoC + domgo.at cxss/102-105 queued at tail",
-      "skipped_48h": [],
+      "findings": 42,
+      "focus": "48h-rescan batch (appsecmaster, 516-hackers playground, testfire, zero.webappsecurity, hackadvisor, sixhackacademy, wrongsecrets, finbot-ctf) + domgo.at cxss/106-110 queued at tail",
+      "skipped_48h": [
+        "https://web-security-practice-app.onrender.com/",
+        "https://pentesterlab.com/exercises/autho_01/",
+        "https://pentesterlab.com/exercises/xss-and-mysql-file/",
+        "https://www.hackthissite.org/playlevel/34/",
+        "https://vwad.owasp.org/app/voice-goat/"
+      ],
       "urls_queued_not_scanned": [
         "https://demo-of-cve-2025-55182-saas.vercel.app/",
         "https://domgo.at/cxss/example/102",
         "https://domgo.at/cxss/example/103",
         "https://domgo.at/cxss/example/104",
-        "https://domgo.at/cxss/example/105"
+        "https://domgo.at/cxss/example/105",
+        "https://domgo.at/cxss/example/106",
+        "https://domgo.at/cxss/example/107",
+        "https://domgo.at/cxss/example/108",
+        "https://domgo.at/cxss/example/109",
+        "https://domgo.at/cxss/example/110"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "cyberdefenders.org: 9 findings (secret-openai, dangerous-html-sinks, vibe-unauthenticated-api-routes)",
-      "api.graphqlbook.org: 6 findings (graphql-introspection-enabled)",
-      "hacksec.in: 6 findings",
-      "webgoat.org: 6 findings (postmessage-dom-xss-evidence, client-side-webgoat-evidence)",
-      "www.root-me.org: 5 findings (secret-twilio, reflected-xss-query-param)",
-      "agentpwn.com: 5 findings (hidden-prompt-injection)",
-      "pentesterlab.com: 4 findings (reflected-xss-query-param)",
-      "websec.fr/level09: 7 findings (+client-side-websec-store-exec-challenge-evidence)",
-      "websec.fr/level06: 7 findings (+client-side-websec-url-grabber-challenge-evidence)",
-      "cybersec-demo.vercel.app: 2 findings (+client-side-nivara-security-evidence via URL oracle)"
+      "appsecmaster.net: 8 findings (client-side-appsec-master-lab-hub-evidence, client-side-react-rsc-cve-evidence)",
+      "labs.hackadvisor.io: 7 findings (client-side-hackadvisor-lab-evidence, reflected-xss-query-param)",
+      "wrongsecrets.herokuapp.com: 6 findings (spring-boot-actuator-exposed, client-side-wrongsecrets-challenge-evidence)",
+      "demo.testfire.net: 6 findings (reflected-xss-query-param, unauthenticated-admin-endpoint)",
+      "zero.webappsecurity.com: 5 findings (client-side-zero-bank-webinspect-evidence)",
+      "owasp-finbot-ctf.org: 5 findings (client-side-agentic-ai-ctf-evidence, openapi-docs-exposed)",
+      "sixhackacademy.com: 3 findings (client-side-sixhack-ctf-lab-evidence)",
+      "516-hackers.github.io: 2 findings (GitHub Pages 404 shell — deploy offline)"
     ],
     "learning_gaps": [
       "juice-shop: secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "demo-of-cve-2025-55182-saas.vercel.app + domgo.at/cxss/example/102-105: queued at tail — not yet drained from queue head",
-      "www.root-me.org: secret-twilio in client bundle — likely challenge artifact; verify before cred-class promotion",
-      "cyberdefenders.org: secret-openai in bundle may be demo/placeholder — needs slug validation"
+      "516-hackers-vuln-playground: GitHub Pages 404 — shallow crawl only misconfig",
+      "wrongsecrets.herokuapp.com: secrets hidden in source/config/Docker layers — shallow crawl misses oracles",
+      "owasp-finbot-ctf.org: agentic AI exploit chains require authenticated CTF namespace",
+      "domgo.at cxss/102-110 + demo-of-cve-2025-55182-saas: queued at tail — not yet drained from queue head"
     ]
   },
   "discovery_highlights": {
@@ -271,7 +281,7 @@
     "angular.testsparker.com": 5,
     "aspnet.testsparker.com": 6,
     "516-hackers.github.io": 2,
-    "owasp-finbot-ctf.org": 3,
+    "owasp-finbot-ctf.org": 5,
     "vuln-expose.vercel.app": 7,
     "redtiger.labs.overthewire.org": 3,
     "gitagent-securebot-app.vercel.app": 3,
