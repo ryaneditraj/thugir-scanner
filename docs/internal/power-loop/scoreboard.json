@@ -17,12 +17,12 @@
   },
   "total_sites_scanned": 1710,
   "total_findings": 8578,
-  "critical_findings": 35,
+  "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1390,
   "discovery_findings": 6817,
-  "improvements_shipped": 864,
+  "improvements_shipped": 867,
   "last_run": "2026-07-21T08:14:22.309Z",
   "last_run_summary": {
     "hour_utc": "07",
@@ -74,15 +74,19 @@
       "www.hacksplaining.com/lessons/dns-poisoning: DNS poisoning lesson evidence (7 findings)",
       "www.hacksplaining.com/lessons/downgrade-attacks: TLS downgrade lesson evidence (7 findings)",
       "webexp05.vercel.app: SQLi+XSS+JWT-none CTF hub markers (7 findings)",
-      "idor-challenge.vercel.app: IDOR demonstration lab (3 findings)"
+      "idor-challenge.vercel.app: IDOR demonstration lab (3 findings)",
+      "challenge-1225.intigriti.io: Infinity Stones #PerfectlyBalanced postMessage eval + subdomain iframe gadgets (2→5 findings)",
+      "challenge-0526.intigriti.io: Pixel Pioneers unsanitized username innerHTML + DOMPurify content sink (2→5 findings)",
+      "challenge-0825.intigriti.io: CatFlix AI RCE lab with /source.zip + /challenge server (3→6 findings)"
     ],
     "learning_gaps": [
       "juice-shop Heroku cold-start: pass1 probes=2 pages=1 only misconfig — 12s+25s retries required for 6/6 recall",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop — sensitive_data via vibe-unauthenticated-api-routes",
-      "domgo.at/cxss/example/74-84: queued at tail — not yet drained from queue head"
+      "domgo.at/cxss/example/74-84: queued at tail — not yet drained from queue head",
+      "challenge-0326.intigriti.io: /challenge route returns 404 — challenge not yet deployed"
     ],
-    "improvements_shipped_this_run": 0
+    "improvements_shipped_this_run": 3
   },
   "discovery_highlights": {
     "brokencrystals.com": 15,
@@ -388,6 +392,9 @@
     "challenge-0223.intigriti.io": 4,
     "challenge-1224.intigriti.io": 3,
     "challenge-0525.intigriti.io": 5,
-    "challenge-1025.intigriti.io": 4
+    "challenge-1025.intigriti.io": 4,
+    "challenge-1225.intigriti.io": 5,
+    "challenge-0526.intigriti.io": 5,
+    "challenge-0825.intigriti.io": 6
   }
 }
