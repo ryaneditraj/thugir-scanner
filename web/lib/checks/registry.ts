@@ -7915,6 +7915,141 @@ const clientSideHackHealthBruteForceEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- HackHealth A01 information exposure tutorial (a01/informationExposure) ------
+const CLIENT_HACK_HEALTH_INFO_EXPOSURE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A01 information exposure module title",
+    re: /HH tutorial - Information exposure|Information exposure<\/title>|Information exposure/i
+  },
+  {
+    label: "CWE-200 sensitive information exposure",
+    re: /CWE-200[\s\S]{0,120}Exposure of Sensitive Information/i
+  },
+  {
+    label: "X-Powered-By header disclosure walkthrough",
+    re: /X-Powered-By[\s\S]{0,80}Express/i
+  },
+  {
+    label: "Helmet middleware prevention section",
+    re: /Helmet middleware|securityheaders\.com/i
+  },
+  {
+    label: "HackHealth informationExposure route",
+    re: /\/cybersecurity\/a01\/informationExposure/i
+  }
+];
+
+const clientSideHackHealthInfoExposureEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_INFO_EXPOSURE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/information exposure|CWE-200|X-Powered-By|Helmet/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A01 tutorial documents CWE-200 information exposure via X-Powered-By and missing security headers"
+    }
+  };
+};
+
+// --- HackHealth A02 JWT cryptographic failures tutorial (a02/jwt) --------------
+const CLIENT_HACK_HEALTH_JWT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A02 JWT authentication module title",
+    re: /HH tutorial - JWT Authentication|JWT Authentication<\/title>|JWT Authentication/i
+  },
+  {
+    label: "A02:2021 Cryptographic Failures heading",
+    re: /A02:2021[\s\S]{0,40}Cryptographic Failures/i
+  },
+  {
+    label: "CWE-256 plaintext password storage",
+    re: /CWE-256[\s\S]{0,120}Plaintext Storage of a Password/i
+  },
+  {
+    label: "JWT_SECRET signing key walkthrough",
+    re: /JWT_SECRET|jwtGenerator\.ts|jwtAuth\.ts/i
+  },
+  {
+    label: "HackHealth JWT route",
+    re: /\/cybersecurity\/a02\/jwt/i
+  }
+];
+
+const clientSideHackHealthJwtEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_JWT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/JWT|CWE-256|Cryptographic Failures/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A02 tutorial documents CWE-256 plaintext passwords and weak JWT_SECRET signing keys"
+    }
+  };
+};
+
+// --- HackHealth A04 verbose error messages tutorial (a04/errorMessages) --------
+const CLIENT_HACK_HEALTH_ERROR_MESSAGES_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "A04 error message module title",
+    re: /Generation of Error Message Containing Sensitive Information/i
+  },
+  {
+    label: "A04:2021 Insecure Design heading",
+    re: /A04:2021[\s\S]{0,40}Insecure Design/i
+  },
+  {
+    label: "CWE-209 verbose error disclosure",
+    re: /CWE-209[\s\S]{0,120}Error Message Containing Sensitive Information/i
+  },
+  {
+    label: "Username enumeration via auth errors",
+    re: /error messages indicate whether a user exists|generic error messages when authentication fails/i
+  },
+  {
+    label: "HackHealth errorMessages route",
+    re: /\/cybersecurity\/a04\/errorMessages/i
+  }
+];
+
+const clientSideHackHealthErrorMessagesEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/hack-health-tutorial\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACK_HEALTH_ERROR_MESSAGES_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackHealth|hack-health-tutorial/i.test(ctx.combined)) return NEGATIVE;
+  if (!/CWE-209|error message|Insecure Design/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackHealth A04 tutorial documents CWE-209 username enumeration via verbose authentication error messages"
+    }
+  };
+};
+
 // --- DomGoat DOM XSS learning platform (domgo.at/cxss) -------------------------
 const CLIENT_DOM_GOAT_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -25457,6 +25592,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackHealthLabEvidence,
   clientSideHackHealthIntroEvidence,
   clientSideHackHealthBruteForceEvidence,
+  clientSideHackHealthInfoExposureEvidence,
+  clientSideHackHealthJwtEvidence,
+  clientSideHackHealthErrorMessagesEvidence,
   clientSideDomGoatLabEvidence,
   domgoReferrerDomXssEvidence,
   domgoHashDomXssEvidence,
