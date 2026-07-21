@@ -9138,7 +9138,7 @@ const clientSideWebsecUploadIncludeChallengeEvidence: Rule = async (ctx) => {
 const CLIENT_WEBSEC_PHP_UNSERIALIZE_DESTRUCT_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "WebSec Level Thirty title",
-    re: /Level(?:&nbsp;|\s)+Thirtee|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i
+    re: /#WebSec(?:&nbsp;|\s)+Level30|LevelThirty(?:&nbsp;|\s)*<small>|Level(?:&nbsp;|\s)+Thirty(?:&nbsp;|\s)*<small>/i
   },
   {
     label: "__destruct echoes flag",
@@ -9165,8 +9165,9 @@ const clientSideWebsecPhpUnserializeDestructChallengeEvidence: Rule = async (ctx
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  if (!/websec\.fr|Level30|Thirtee|destruct\.|#WebSec/i.test(ctx.combined)) return NEGATIVE;
-  if (/Thirty-one|Level31/i.test(ctx.combined) && !/Level30|#WebSec(?:&nbsp;|\s)+Level30|destruct\./i.test(ctx.combined)) {
+  if (!/websec\.fr|Level30|#WebSec/i.test(ctx.combined)) return NEGATIVE;
+  if (/Thirtee-three|Level33|Almost(?:&nbsp;|\s)+there/i.test(ctx.combined)) return NEGATIVE;
+  if (/Thirty-one|Level31/i.test(ctx.combined) && !/Level30|#WebSec(?:&nbsp;|\s)+Level30/i.test(ctx.combined)) {
     return NEGATIVE;
   }
   return {
@@ -9204,6 +9205,7 @@ const CLIENT_WEBSEC_PHP_UNSERIALIZE_BLIND_DESTRUCT_CHALLENGE_RES: { label: strin
 ];
 
 const clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_BLIND_DESTRUCT_CHALLENGE_RES) {
     const m = ctx.combined.match(re);
@@ -9211,7 +9213,12 @@ const clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence: Rule = async
   }
   if (hits.length < 3) return NEGATIVE;
   if (!/websec\.fr|Level33|Thirtee-three|#WebSec/i.test(ctx.combined)) return NEGATIVE;
-  if (/Something(?:&nbsp;|\s)+tragic|Level30|#WebSec(?:&nbsp;|\s)+Level30/i.test(ctx.combined)) {
+  if (!/level33/i.test(pageUrl) && !/Level33|Thirtee-three/i.test(ctx.combined)) return NEGATIVE;
+  if (
+    !/level33/i.test(pageUrl) &&
+    /Something(?:&nbsp;|\s)+tragic/i.test(ctx.combined) &&
+    /#WebSec(?:&nbsp;|\s)+Level30\b/i.test(ctx.combined)
+  ) {
     return NEGATIVE;
   }
   return {
