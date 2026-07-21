@@ -14607,6 +14607,90 @@ const clientSideWebsecSpellcheckerXssChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr URL grabber SSRF (level06) ---------------------------------------------
+const CLIENT_WEBSEC_URL_GRABBER_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Six URL grabber title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Six|LevelSix(?:&nbsp;|\s)*<small>\s*-\s*URL Grabber/i
+  },
+  {
+    label: "URL grabber POST form",
+    re: /name=["']url["']|URL grabber which fetches remote URLs/i
+  },
+  {
+    label: "curl_init remote fetch",
+    re: /curl_init[\s\S]{0,120}\$url|People tends to do funny things with curl/i
+  },
+  {
+    label: "POST url parameter assignment",
+    re: /\$url\s*=\s*\$_POST\s*\[\s*['"]url['"]\s*\]/i
+  }
+];
+
+const clientSideWebsecUrlGrabberChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_URL_GRABBER_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelSix|level06|URL Grabber/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level06 documents a URL grabber that fetches attacker-controlled URLs via curl — SSRF training challenge"
+    }
+  };
+};
+
+// --- WebSec.fr store'n'exec eval (level09) --------------------------------------------
+const CLIENT_WEBSEC_STORE_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Nine store-exec title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Nine|LevelNine|Level\s+Nine/i
+  },
+  {
+    label: "store'n'exec service description",
+    re: /store'n'exec|store\s*&apos;n&apos;\s*exec|super\s*<em>store/i
+  },
+  {
+    label: "cache_file eval gadget",
+    re: /cache_file[\s\S]{0,120}eval\s*\(|eval\s*\([\s\S]{0,80}cache_file/i
+  },
+  {
+    label: "flag.txt read objective",
+    re: /read\s+the\s+<code>flag\.txt<\/code>|flag\.txt\s+file/i
+  },
+  {
+    label: "session_id temp file write",
+    re: /session_id[\s\S]{0,120}fwrite|fwrite[\s\S]{0,120}str_replace/i
+  }
+];
+
+const clientSideWebsecStoreExecChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_STORE_EXEC_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|LevelNine|level09|store'n'exec|store.n.exec/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level09 documents store'n'exec cache_file eval gadget — arbitrary PHP execution training challenge"
+    }
+  };
+};
+
 // --- Leaky Jar recipe review stored XSS (leakyjar.intigriti.io) -----------------------
 const LEAKY_JAR_RECIPE_REVIEW_XSS_RES: { label: string; re: RegExp }[] = [
   {
@@ -22705,8 +22789,8 @@ const CLIENT_NIVARA_SECURITY_RES: { label: string; re: RegExp }[] = [
     re: /Nivara[\s\S]{0,40}Security Assessment Platform|Security Assessment Platform/i
   },
   {
-    label: "Automated external security assessments",
-    re: /Automated external security assessments|map your attack surface, test every endpoint/i
+    label: "Automated security assessments tagline",
+    re: /Automated external security assessments|Automated security assessments for modern companies|map your attack surface, test every endpoint/i
   },
   {
     label: "Nivara theme localStorage key",
@@ -22719,19 +22803,25 @@ const CLIENT_NIVARA_SECURITY_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideNivaraSecurityEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownNivaraDemo = /cybersec-demo\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_NIVARA_SECURITY_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/Nivara|cybersec-demo/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownNivaraDemo ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Nivara|cybersec-demo/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    confidence: hits.length >= 3 ? 0.89 : isKnownNivaraDemo ? 0.84 : 0.86,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Nivara advertises an automated external security assessment platform for attack-surface mapping and endpoint testing"
+      note: isKnownNivaraDemo
+        ? "cybersec-demo.vercel.app is a known Nivara security assessment platform demo (URL oracle; Vercel checkpoint may strip HTML markers)"
+        : "Nivara advertises an automated external security assessment platform for attack-surface mapping and endpoint testing"
     }
   };
 };
@@ -25009,6 +25099,8 @@ export const RULES: Record<string, Rule> = {
   clientSideIntigritiJanuaryCryptigritiXssEvidence,
   clientSideWebsecOopGarbageCollectorChallengeEvidence,
   clientSideWebsecSpellcheckerXssChallengeEvidence,
+  clientSideWebsecUrlGrabberChallengeEvidence,
+  clientSideWebsecStoreExecChallengeEvidence,
   leakyJarRecipeReviewStoredXssEvidence,
   clientSideRingzer0CtfEvidence,
   clientSideWebhackingKrEvidence,
