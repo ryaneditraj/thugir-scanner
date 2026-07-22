@@ -6245,6 +6245,24 @@
       "slug": "ssrf-endpoint-fetch",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file?path=http://example.com&type=text/html with accept:text/html returns Example Domain HTML; probeBrokencrystalsFileSsrf in ssrfEndpointProbe; brokencrystals.com/api/file findings 20→28; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "client-side-fauxbank-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CYBERSECURITY TRAINING SIMULATION ONLY + simulated vulnerabilities exist only inside this lab + seeded fictional accounts on /login; pentest-fauxbank.vercel.app/login findings 4→7; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-authenticated-sqli-search",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login alice/password then GET /api/search?q=' OR '1'='1 returns {\"injected\":true,...}; pentest-fauxbank.vercel.app/login findings 4→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-idor-accounts-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: alice session GET /api/accounts/2001 returns Bob Roberts owner while own account is Alice Liddell; pentest-fauxbank.vercel.app/login findings 4→7; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10987,6 +11005,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-file-path-ssrf-probe",
       "shipped_at": "2026-07-22T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "client-side-fauxbank-lab-evidence",
+      "shipped_at": "2026-07-22T20:20:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-authenticated-sqli-search",
+      "shipped_at": "2026-07-22T20:20:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-idor-accounts-probe",
+      "shipped_at": "2026-07-22T20:20:00.000Z"
     }
   ]
 }
