@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T09:05:00.000Z",
+  "updated_at": "2026-07-22T09:07:22.680Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1907,
-  "total_findings": 9665,
+  "total_sites_scanned": 1915,
+  "total_findings": 9697,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1505,
-  "discovery_findings": 7690,
+  "discovery_findings": 7722,
   "improvements_shipped": 925,
-  "last_run": "2026-07-22T09:05:00.000Z",
+  "last_run": "2026-07-22T09:07:22.680Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -52,11 +52,11 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_scanned": 8,
+      "findings": 32,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "yogsec xss-labs lab25-29 (document.write, setAttribute onerror, createElement script, location.hash, postMessage)",
+      "focus": "Queue drain: vapi + unsecure PWA + weaponsforge + fabraix + webexp05 + idor-challenge + WebGoat + duck-store",
       "improvements_shipped_this_run": 0,
       "urls_queued": [
         "https://yogsec.github.io/xss-labs/labs/lab25.html",
@@ -64,11 +64,22 @@
         "https://yogsec.github.io/xss-labs/labs/lab27.html",
         "https://yogsec.github.io/xss-labs/labs/lab28.html",
         "https://yogsec.github.io/xss-labs/labs/lab29.html"
+      ],
+      "urls_validated": [
+        "http://vapi.apisec.ai/",
+        "https://tempehs.github.io/The_Unsecure_PWA/",
+        "https://weaponsforge.github.io/hacker-friendly-app/",
+        "https://playground.fabraix.com/",
+        "https://webexp05.vercel.app/",
+        "https://idor-challenge.vercel.app/",
+        "https://luisillobret2.github.io/WebGoat/",
+        "https://duck-store.escape.tech/"
       ]
     },
     "notable_findings": [
       "juice-shop-staging: 8 findings 6/6 recall via fallback (primary Heroku unreachable)",
-      "security-question-disclosure present on first pass — no wake retry needed"
+      "webexp05.vercel.app: 7 findings; duck-store.escape.tech: 7 findings",
+      "vapi.apisec.ai: 4 findings (API security lab markers)"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com primary unreachable from cloud — staging fallback required",
