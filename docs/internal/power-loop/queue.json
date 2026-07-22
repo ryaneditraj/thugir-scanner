@@ -7513,7 +7513,32 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1007",
       "source": "FarciarzYT/WebSecurityLearningLabs — module 1007 hands-on lab (OWASP training module)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1008",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1008 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1009",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1009 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab14.html",
+      "source": "yogsec/xss-labs — CSP bypass / filter-evasion XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab16.html",
+      "source": "yogsec/xss-labs — advanced DOM XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab17.html",
+      "source": "yogsec/xss-labs — mutation XSS / mXSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T05:18:00.000Z"
+  "updated_at": "2026-07-22T06:08:00.000Z"
 }
