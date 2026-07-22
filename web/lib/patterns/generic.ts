@@ -5253,6 +5253,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ces-ctf-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "CES CTF token-hunt lab disclosed",
+    description:
+      "CES CTF challenges hide tokens in HTML comments, JavaScript step variables, and cookie-role oracles — readable by anyone viewing page source.",
+    impactOneline:
+      "Public CTF token-hunt pages leak hidden credentials and encoded flags in client-side artifacts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCesCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF token-hunt labs are intentional training — never deploy hidden-credential patterns to production.",
+      steps: [
+        "Run CES CTF challenges only on isolated training infrastructure.",
+        "Remove credential hints from HTML comments and client-side JS in production apps.",
+        "Do not copy CTF cookie-role oracles into production authentication flows."
+      ]
+    },
+    fixPrompt:
+      "We host CES CTF token-hunt labs with hidden credentials in HTML comments. Show how to isolate training deployments from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-wizer-ctf-dom-clobbering-evidence",
     platform: "generic",
     category: "Cross-site scripting",
