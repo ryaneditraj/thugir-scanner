@@ -1,50 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-22T00:01:22.820Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 45,
-      "status": "ok",
-      "scanned_at": "2026-07-22T00:01:22.820Z"
-    },
-    {
       "run_id": "2026-07-22T00:20:48.183Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -12850,6 +12806,64 @@
       "probes_run": 301,
       "status": "ok",
       "scanned_at": "2026-07-22T21:14:04.920Z"
+    },
+    {
+      "run_id": "2026-07-22T22:03:13.103Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 201,
+      "status": "ok",
+      "scanned_at": "2026-07-22T22:03:13.103Z"
     }
   ],
   "teacher_delta_runs": [
@@ -13714,6 +13728,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 21 UTC run: shallow crawl (pages=1) but full 6/6 recall — sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure absent; secret-resend slug still absent.",
       "scanned_at": "2026-07-22T21:12:00.000Z"
+    },
+    {
+      "run_id": "2026-07-22T22:16:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=201; no gap)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. 22 UTC run: first-pass 6/6 recall on shallow crawl; security-question-disclosure present (sensitive_data); vibe-unauthenticated-api-routes absent; secret-resend slug still absent.",
+      "scanned_at": "2026-07-22T22:16:00.000Z"
     }
   ]
 }
