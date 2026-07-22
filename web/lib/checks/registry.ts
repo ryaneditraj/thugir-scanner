@@ -19841,12 +19841,47 @@ async function probeOpenvaultBankRailwayApi(ctx: RuleContext): Promise<RuleResul
   };
 }
 
+async function probeBuggyBuyExternalApi(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/BuggyBuy|Vulnerable-Web-Application|vulnerable-web-application-mcd0\.onrender\.com/i.test(ctx.combined)) {
+    return null;
+  }
+  const bases = extractExternalApiBases(ctx.combined, ctx.origin, 2).filter((b) =>
+    /vulnerable-web-application-mcd0\.onrender\.com/i.test(b)
+  );
+  if (bases.length === 0) return null;
+  const paths = ["/api/v1/orders/1", "/api/v1/users", "/api/v1/products?limit=1"];
+  const urls = buildApiProbeUrls(paths, ctx.origin, bases, 4);
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 2);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const ct = r.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+    if (/unauthorized|login required|sign in|authentication/i.test(r.body.slice(0, 500))) continue;
+    if (!/"(?:id|order|email|username|userId|name|products|price)"\s*:/i.test(r.body.slice(0, 400))) {
+      continue;
+    }
+    return {
+      fired: true,
+      confidence: 0.87,
+      evidence: {
+        url,
+        sample: r.body.slice(0, 120).trim(),
+        note: "BuggyBuy Render API returned order/user/product JSON without auth — IDOR/BOLA training oracle"
+      }
+    };
+  }
+  return null;
+}
+
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const juiceShopHit = await probeJuiceShopProductsSearchApi(ctx);
   if (juiceShopHit?.fired) return juiceShopHit;
 
   const openvaultHit = await probeOpenvaultBankRailwayApi(ctx);
   if (openvaultHit?.fired) return openvaultHit;
+
+  const buggyBuyHit = await probeBuggyBuyExternalApi(ctx);
+  if (buggyBuyHit?.fired) return buggyBuyHit;
 
   const paths = [
     ...new Set([
@@ -23010,6 +23045,26 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Cross-key localStorage eval combined code sink",
     re: /localStorage\.getItem\s*\(\s*['"]part[123]['"]\s*\)[\s\S]{0,240}eval\s*\(\s*combined/i
+  },
+  {
+    label: "Dynamic script src DOM XSS lab",
+    re: /XSS Lab #\d+:\s*Dynamic[\s\S]{0,40}script src|script\.src\s*=\s*userLib/i
+  },
+  {
+    label: "onclick attribute injection DOM XSS lab",
+    re: /XSS Lab #\d+:\s*onclick Attribute Injection|Inject onclick with user code/i
+  },
+  {
+    label: "onmouseover injection DOM XSS lab",
+    re: /XSS Lab #\d+:\s*onmouseover Injection|Inject onmouseover with user code/i
+  },
+  {
+    label: "img onerror injection DOM XSS lab",
+    re: /XSS Lab #\d+:\s*onerror in[\s\S]{0,20}img|Inject onerror with user code/i
+  },
+  {
+    label: "body onload injection DOM XSS lab",
+    re: /XSS Lab #\d+:\s*onload in[\s\S]{0,20}body|Simulate body onload with user code/i
   }
 ];
 

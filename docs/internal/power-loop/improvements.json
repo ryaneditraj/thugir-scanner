@@ -5989,6 +5989,18 @@
       "validation": "SOURCE: discovery:url EVIDENCE: BuggyBuy title + vulnerable-web-application-mcd0.onrender.com API + isAdmin admin/dashboard gate; vulnerable-web-application-jecw.vercel.app findings 2→4; benchmark 6/6 maintained"
     },
     {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "buggybuy-render-api-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBuggyBuyExternalApi probes GET /api/v1/orders/1 + /api/v1/users on mcd0.onrender.com when Render backend is awake; client-side-buggybuy-evidence maintained; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "yogsec-dom-event-handler-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab30-34 script.src + onclick/onmouseover/onerror/onload injection module titles; CLIENT_YOGSEC_XSS_LAB_MODULE_RES extended; yogsec lab31 findings 5 incl client-side-yogsec-xss-lab-module-evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:archon-eight.vercel.app",
       "slug": "client-side-archon-api-security-curriculum-evidence",
       "status": "shipped",
