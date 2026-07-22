@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T16:05:29.187Z",
-  "total": 596,
-  "uniqueSlugs": 594,
+  "generatedAt": "2026-07-22T17:07:27.568Z",
+  "total": 597,
+  "uniqueSlugs": 595,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 578,
+    "generic": 579,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 524,
+    "deep": 525,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 39,
     "Security misconfiguration": 48,
     "Broken authentication": 43,
-    "Injection": 120,
+    "Injection": 121,
     "Cross-site scripting": 105,
     "general": 18,
     "SSRF": 1,
@@ -67,6 +67,7 @@
     "client-side-bouvet-intro-ctf-evidence",
     "client-side-breaktheflask-evidence",
     "client-side-brokencrystals-evidence",
+    "client-side-brokencrystals-prototype-pollution-evidence",
     "client-side-brutelogic-xss-gym-evidence",
     "client-side-brutelogic-xss-test-page-evidence",
     "client-side-bug-collection-evidence",
