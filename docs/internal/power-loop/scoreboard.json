@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T15:05:26.403Z",
+  "updated_at": "2026-07-22T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1530,
   "discovery_findings": 7978,
-  "improvements_shipped": 939,
-  "last_run": "2026-07-22T15:05:26.403Z",
+  "improvements_shipped": 944,
+  "last_run": "2026-07-22T15:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
@@ -31,7 +31,7 @@
       "primary_findings": 8,
       "primary_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — stable 6/6 first-pass recall on primary Heroku (pages=6 probes=267)",
+      "note": "No benchmark misses — stable 6/6 first-pass recall on primary Heroku (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,33 +55,25 @@
       "findings": 103,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "PentesterLab exercise deep-links; HackThisSite playlevel/34; VWAD voice-goat 404; hack-this-site-eta OWASP A06–A08 modules",
-      "improvements_shipped_this_run": 0,
-      "queued_not_drained": [
-        "https://brokencrystals.com/graphql",
-        "https://brokencrystals.com/swagger-json",
-        "https://brokencrystals.com/api/testimonials/count",
-        "https://brokencrystals.com/api/partners/partnerLogin",
-        "https://brokencrystals.com/marketplace"
-      ]
+      "focus": "brokencrystals queued sub-oracles — /swagger-json, /graphiql, /api/auth/login weak creds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: 8 findings 6/6 recall — no benchmark misses",
+      "brokencrystals.com: vibe-openapi-docs-exposed via /swagger-json + graphiql-ui-exposed + weak-api-default-credentials (15→20 findings)",
       "hack-this-site-eta.vercel.app/owasp/a06.html: 21 findings — client-side OWASP module markers",
-      "hack-this-site-eta.vercel.app/owasp/a07.html: 22 findings — auth-failure lab evidence",
-      "hack-this-site-eta.vercel.app/owasp/a08.html: 21 findings — integrity-failure lab evidence",
       "pentesterlab.com/exercises/xss-and-mysql-file/: client-side-pentesterlab-xss-mysql-exercise-evidence (critical)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
       "vwad.owasp.org/app/voice-goat/: VWAD listing 404 — redcaller/voice-goat is Docker-only (no public deploy)",
-      "brokencrystals GraphQL/SQLi/XPATH/marketplace oracles queued at tail — await next queue drain",
-      "hack-this-site-eta high finding counts are client-side lesson markers not live exploit endpoints"
+      "web-security-practice-app.onrender.com: Render cold-start timeout — findings 1 during 14 UTC scan",
+      "brokencrystals GraphQL/SQLi/XPATH/marketplace oracles still queued at tail"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com": 17,
+    "brokencrystals.com": 20,
     "demo.testfire.net": 6,
     "zero.webappsecurity.com": 5,
     "rest.vulnweb.com": 3,

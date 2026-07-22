@@ -6173,6 +6173,24 @@
       "slug": "brokencrystals-lab-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractBrokencrystalsLabSeeds seeds /userlogin /newuserlogin /api/config /api/goto; brokencrystals crawl reaches auth lab + config oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "vibe-openapi-docs-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /swagger-json returns OpenAPI 3.0 paths; openApiDocs extended with /swagger-json + Swagger UI HTML at /swagger; brokencrystals.com findings 15→20; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "graphiql-ui-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /graphiql returns <title>GraphiQL</title> + graphiql/main.js; brokencrystals.com findings 15→20; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "weak-api-default-credentials",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login {\"user\":\"admin\",\"password\":\"admin\"} returns {\"email\":\"admin\",\"ldapProfileLink\":\"...\"}; brokencrystals.com findings 15→20; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10870,6 +10888,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-lab-seeds",
       "shipped_at": "2026-07-22T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-swagger-json-openapi-probe",
+      "shipped_at": "2026-07-22T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "graphiql-ui-exposed",
+      "shipped_at": "2026-07-22T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "weak-api-default-credentials",
+      "shipped_at": "2026-07-22T15:10:00.000Z"
     }
   ]
 }

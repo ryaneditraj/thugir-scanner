@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T14:06:03.891Z",
-  "total": 592,
-  "uniqueSlugs": 590,
+  "generatedAt": "2026-07-22T15:04:47.650Z",
+  "total": 594,
+  "uniqueSlugs": 592,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,12 +9,12 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 574,
+    "generic": 576,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 70,
+    "free": 72,
     "deep": 522,
     "continuous": 0
   },
@@ -24,9 +24,9 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 38,
+    "Information disclosure": 39,
     "Security misconfiguration": 48,
-    "Broken authentication": 42,
+    "Broken authentication": 43,
     "Injection": 118,
     "Cross-site scripting": 105,
     "general": 18,
@@ -543,6 +543,7 @@
     "exposed-source-maps",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
+    "graphiql-ui-exposed",
     "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",
     "hidden-prompt-injection",
@@ -625,6 +626,7 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
+    "weak-api-default-credentials",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe"
   ],
