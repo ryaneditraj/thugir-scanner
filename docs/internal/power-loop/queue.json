@@ -7621,22 +7621,22 @@
     },
     {
       "url": "https://yogsec.github.io/xss-labs/labs/lab31.html",
-      "source": "yogsec/xss-labs — insertAdjacentHTML unsanitized HTML DOM XSS lab (GitHub Pages)",
+      "source": "yogsec/xss-labs — onclick attribute injection event-handler XSS lab (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://yogsec.github.io/xss-labs/labs/lab32.html",
-      "source": "yogsec/xss-labs — Range.createContextualFragment DOM XSS lab (GitHub Pages)",
+      "source": "yogsec/xss-labs — onmouseover event-handler injection XSS lab (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://yogsec.github.io/xss-labs/labs/lab33.html",
-      "source": "yogsec/xss-labs — document.write late-bound DOM XSS lab (GitHub Pages)",
+      "source": "yogsec/xss-labs — onerror img tag event-handler XSS lab (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://yogsec.github.io/xss-labs/labs/lab34.html",
-      "source": "yogsec/xss-labs — jQuery html() unsanitized sink DOM XSS lab (GitHub Pages)",
+      "source": "yogsec/xss-labs — onload body tag event-handler XSS lab (GitHub Pages)",
       "auth": "oss_deploy"
     }
   ],
