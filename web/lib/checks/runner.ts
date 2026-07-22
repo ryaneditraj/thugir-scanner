@@ -1091,6 +1091,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideThe0xPwnXssTemplateLiteralLabEvidence",
   "clientSideThe0xPwnXssFilterBypassTagsLabEvidence",
   "clientSideThe0xPwnXssHrefAngleBracketsLabEvidence",
+  "clientSideThe0xPwnXssTagFilterBypassLabEvidence",
+  "clientSideThe0xPwnXssSvgScriptInjectionLabEvidence",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHacker101CtfEvidence",
   "clientSideSockettomeEvidence",

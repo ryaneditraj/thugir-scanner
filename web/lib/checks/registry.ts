@@ -2795,6 +2795,14 @@ const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "eval() on template literal textContent assignment",
     re: /eval\(`resultQuery\.textContent|eval\s*\(\s*`[\s\S]{0,80}textContent\s*=\s*\\`\$\{/
+  },
+  {
+    label: "setAttribute event handler with user-controlled code",
+    re: /setAttribute\s*\(\s*['"]on(?:input|focus|change|keyup|submit)['"]\s*,\s*(?:userCode|code)/i
+  },
+  {
+    label: "new Function for onfocus event handler injection",
+    re: /new\s+Function\s*\(\s*code\s*\)[\s\S]{0,200}\.onfocus\s*=/
   }
 ];
 
@@ -23491,6 +23499,90 @@ const clientSideThe0xPwnXssHrefAngleBracketsLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- the0x-pwn lab-6 HTML tag filter bypass (the0x-pwn.github.io/lab-xss/lab-6/) -
+const CLIENT_THE0X_PWN_XSS_TAG_FILTER_BYPASS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTML tag filtering lab heading",
+    re: /Reflected XSS with HTML Tag Filtering/i
+  },
+  {
+    label: "blockTag denylist array",
+    re: /const blockTag = \[/
+  },
+  {
+    label: "innerHTML reflected query sink",
+    re: /resultQuery\.innerHTML\s*=\s*query/
+  },
+  {
+    label: "extractTag filter with blockTag check",
+    re: /function extractTag\(str\)[\s\S]{0,200}blockTag\.includes\(tag\)/
+  },
+  {
+    label: "onfocus autofocus entity-encoded payload hint",
+    re: /&#x6f;&#x6e;&#x66;&#x6f;&#x63;&#x75;&#x73;|autofocus tabindex=0 onfocus=alert/i
+  }
+];
+
+const clientSideThe0xPwnXssTagFilterBypassLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-6/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_TAG_FILTER_BYPASS_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-6 documents reflected XSS via innerHTML with a blockTag denylist bypassable via unknown elements and onfocus autofocus"
+    }
+  };
+};
+
+// --- the0x-pwn lab-9 SVG script injection (the0x-pwn.github.io/lab-xss/lab-9/) -
+const CLIENT_THE0X_PWN_XSS_SVG_SCRIPT_INJECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SVG script injection lab heading",
+    re: /SVG\s*&\s*Script Injection/i
+  },
+  {
+    label: "innerHTML reflected query sink",
+    re: /resultQuery\.innerHTML\s*=\s*query/
+  },
+  {
+    label: "animatetransform onbegin entity-encoded payload hint",
+    re: /&#x61;&#x6e;&#x69;&#x6d;&#x61;&#x74;&#x65;&#x74;&#x72;&#x61;&#x6e;&#x73;&#x66;&#x6f;&#x72;&#x6d;|animatetransform\s+onbegin=alert/i
+  },
+  {
+    label: "blockTag partial filter before innerHTML",
+    re: /blockTag\.includes\(tag\)[\s\S]{0,300}resultQuery\.innerHTML\s*=\s*query/
+  }
+];
+
+const clientSideThe0xPwnXssSvgScriptInjectionLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-9/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_SVG_SCRIPT_INJECTION_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-9 documents reflected XSS via innerHTML when SVG/animatetransform tags are omitted from the blockTag denylist"
+    }
+  };
+};
+
 // --- montanajim CSCI210 classroom XSS examples (montanajim.github.io/CSCI210/wpref/xssExamples.html) -
 const CLIENT_MONTANAJIM_XSS_CLASSROOM_RES: { label: string; re: RegExp }[] = [
   {
@@ -27265,6 +27357,8 @@ export const RULES: Record<string, Rule> = {
   clientSideThe0xPwnXssTemplateLiteralLabEvidence,
   clientSideThe0xPwnXssFilterBypassTagsLabEvidence,
   clientSideThe0xPwnXssHrefAngleBracketsLabEvidence,
+  clientSideThe0xPwnXssTagFilterBypassLabEvidence,
+  clientSideThe0xPwnXssSvgScriptInjectionLabEvidence,
   clientSideMontanajimXssClassroomEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,

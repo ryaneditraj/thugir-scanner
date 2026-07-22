@@ -6137,6 +6137,24 @@
       "slug": "client-side-the0x-pwn-xss-href-angle-brackets-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: lab-8 container.innerHTML='<a href=\"'+decodeURIComponent(query) REFLECTED · HREF SINK badge; the0x-pwn.github.io/lab-xss/lab-8 findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-setattribute-event-handler",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab36 input.setAttribute('oninput', userCode) + new Function(code) onfocus; DOM_EVAL_XSS_RES extended; yogsec lab36 findings 5→6 incl dom-eval-xss; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-tag-filter-bypass-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-6 Reflected XSS with HTML Tag Filtering + blockTag denylist + resultQuery.innerHTML=query + entity-encoded onfocus autofocus hint; the0x-pwn.github.io/lab-xss/lab-6 findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-9 SVG & Script Injection heading + resultQuery.innerHTML=query + animatetransform onbegin entity-encoded payload hint; the0x-pwn.github.io/lab-xss/lab-9 findings 3→4; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10804,6 +10822,21 @@
       "source": "discovery:the0x-pwn.github.io/lab-xss",
       "slug": "client-side-the0x-pwn-xss-href-angle-brackets-lab-evidence",
       "shipped_at": "2026-07-22T12:40:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-setattribute-event-handler",
+      "shipped_at": "2026-07-22T13:00:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-tag-filter-bypass-lab-evidence",
+      "shipped_at": "2026-07-22T13:00:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
+      "shipped_at": "2026-07-22T13:00:00.000Z"
     }
   ]
 }
