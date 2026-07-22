@@ -9704,6 +9704,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-the0x-pwn-xss-template-literal-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn template literal eval XSS lab disclosed",
+    description:
+      "the0x-pwn lab-2 executes eval() on a template literal that assigns resultQuery.textContent from the query parameter — a reflected XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-2 page documents eval(templateLiteral) XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssTemplateLiteralLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into eval() or template literals that execute code — use textContent in production.",
+      steps: [
+        "Remove eval() from client-side code paths that touch user-controlled query parameters.",
+        "Use textContent and strict output encoding instead of dynamic code execution.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-2-style template literal eval XSS labs. Show safe output encoding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-filter-bypass-tags-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn HTML tag filter bypass XSS lab disclosed",
+    description:
+      "the0x-pwn lab-4 replaces angle brackets then still assigns the filtered query to resultQuery.innerHTML — an incomplete filter-bypass XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-4 page documents partial tag filtering before innerHTML assignment for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssFilterBypassTagsLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Angle-bracket replacement alone does not prevent XSS — use textContent or a strict HTML sanitizer.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled data.",
+        "Use DOMPurify or equivalent instead of partial character replacement filters.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-4-style filter-bypass XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-href-angle-brackets-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn href attribute encoded XSS lab disclosed",
+    description:
+      "the0x-pwn lab-8 reflects decodeURIComponent(query) into an anchor href via container.innerHTML even when angle brackets are HTML-encoded — a reflected XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-8 page documents href-attribute XSS via innerHTML concatenation for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssHrefAngleBracketsLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encoding angle brackets does not protect href attributes — validate URLs and use textContent for links.",
+      steps: [
+        "Block javascript: and data: schemes in dynamic href values.",
+        "Build anchor elements with createElement and setAttribute instead of innerHTML concatenation.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-8-style href XSS labs. Show URL validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-montanajim-xss-classroom-evidence",
     platform: "generic",
     category: "Cross-site scripting",

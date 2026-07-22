@@ -2791,6 +2791,10 @@ const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "eval() on getElementById value",
     re: /eval\s*\(\s*(?:userCode|code|userString)|eval\(userCode\)/i
+  },
+  {
+    label: "eval() on template literal textContent assignment",
+    re: /eval\(`resultQuery\.textContent|eval\s*\(\s*`[\s\S]{0,80}textContent\s*=\s*\\`\$\{/
   }
 ];
 
@@ -23161,7 +23165,7 @@ const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Template literal eval XSS sink",
-    re: /eval\s*\(\s*`[\s\S]{0,80}textContent\s*=\s*\\\$\{/
+    re: /eval\(`resultQuery\.textContent|eval\s*\(\s*`[\s\S]{0,80}textContent\s*=\s*\\`\$\{/
   },
   {
     label: "href innerHTML injection sink",
@@ -23375,6 +23379,114 @@ const clientSideThe0xPwnXssIframeDataUriLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "the0x-pwn lab-10 documents iframe data: URI injection with HTML-tag filter bypass into resultQuery.innerHTML"
+    }
+  };
+};
+
+// --- the0x-pwn lab-2 template literal eval (the0x-pwn.github.io/lab-xss/lab-2/) -
+const CLIENT_THE0X_PWN_XSS_TEMPLATE_LITERAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Reflected XSS template literal lab heading",
+    re: /Reflected XSS[\s\S]{0,40}Template Literal/i
+  },
+  {
+    label: "eval template literal textContent sink",
+    re: /eval\(`resultQuery\.textContent\s*=\s*\\`\$\{query\}\\`/
+  },
+  {
+    label: "resultQuery textContent template assignment",
+    re: /resultQuery\.textContent\s*=\s*\\`\$\{query\}\\`/
+  }
+];
+
+const clientSideThe0xPwnXssTemplateLiteralLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-2/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_TEMPLATE_LITERAL_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-2 documents reflected XSS via eval() on a template literal assigning textContent from query"
+    }
+  };
+};
+
+// --- the0x-pwn lab-4 HTML tag filter bypass (the0x-pwn.github.io/lab-xss/lab-4/) -
+const CLIENT_THE0X_PWN_XSS_FILTER_BYPASS_TAGS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Filter Bypass Tags lab heading",
+    re: /Filter Bypass[\s\S]{0,20}Tags/i
+  },
+  {
+    label: "angle bracket replace then innerHTML sink",
+    re: /query\.replace\(['"]<['"],\s*['"]&lt;['"]\)[\s\S]{0,120}innerHTML\s*=\s*query/
+  },
+  {
+    label: "resultQuery innerHTML after partial tag filter",
+    re: /resultQuery\.innerHTML\s*=\s*query/
+  }
+];
+
+const clientSideThe0xPwnXssFilterBypassTagsLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-4/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_FILTER_BYPASS_TAGS_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-4 documents incomplete angle-bracket filtering before innerHTML assignment"
+    }
+  };
+};
+
+// --- the0x-pwn lab-8 href attribute encoded XSS (the0x-pwn.github.io/lab-xss/lab-8/) -
+const CLIENT_THE0X_PWN_XSS_HREF_ANGLE_BRACKETS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "href attribute angle brackets encoded lab heading",
+    re: /Reflected XSS into href attribute with angle brackets HTML-encoded/i
+  },
+  {
+    label: "REFLECTED HREF SINK badge",
+    re: /REFLECTED\s*·\s*HREF SINK/i
+  },
+  {
+    label: "innerHTML href decodeURIComponent sink",
+    re: /innerHTML\s*=\s*['"]<a href=["']\s*\+\s*decodeURIComponent\(query\)/
+  }
+];
+
+const clientSideThe0xPwnXssHrefAngleBracketsLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-8/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_HREF_ANGLE_BRACKETS_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-8 documents reflected XSS into href via innerHTML with decodeURIComponent query injection"
     }
   };
 };
@@ -27150,6 +27262,9 @@ export const RULES: Record<string, Rule> = {
   clientSideThe0xPwnXssDocumentWriteLabEvidence,
   clientSideThe0xPwnXssJavascriptUrlLabEvidence,
   clientSideThe0xPwnXssIframeDataUriLabEvidence,
+  clientSideThe0xPwnXssTemplateLiteralLabEvidence,
+  clientSideThe0xPwnXssFilterBypassTagsLabEvidence,
+  clientSideThe0xPwnXssHrefAngleBracketsLabEvidence,
   clientSideMontanajimXssClassroomEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
