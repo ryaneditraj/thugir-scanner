@@ -25589,23 +25589,33 @@ const CLIENT_ARCHON_API_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
     label: "OWASP API Top 10 reference",
     re: /OWASP API Top 10/i
+  },
+  {
+    label: "Archon VitePress API security doc slug",
+    re: /security_owasp_apit|security\/owasp.*API Security Testing/i
   }
 ];
 
 const clientSideArchonApiSecurityCurriculumEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownArchonCyberPath = /archon-eight\.vercel\.app\/cybersecurity/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_ARCHON_API_SECURITY_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 3) return NEGATIVE;
-  if (!/archon-eight\.vercel\.app|Archon/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownArchonCyberPath ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/archon-eight\.vercel\.app|Archon/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    confidence: hits.length >= 4 ? 0.9 : isKnownArchonCyberPath ? 0.87 : 0.86,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Archon cybersecurity path documents OWASP API Top 10 modules covering JWT attacks, BOLA/IDOR, GraphQL security, and mass assignment"
+      note: isKnownArchonCyberPath
+        ? "archon-eight.vercel.app/cybersecurity documents OWASP API Top 10 modules (JWT attacks, BOLA/IDOR, GraphQL security, mass assignment)"
+        : "Archon cybersecurity path documents OWASP API Top 10 modules covering JWT attacks, BOLA/IDOR, GraphQL security, and mass assignment"
     }
   };
 };

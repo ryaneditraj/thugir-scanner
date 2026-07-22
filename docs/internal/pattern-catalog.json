@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T02:06:01.392Z",
-  "total": 578,
-  "uniqueSlugs": 576,
+  "generatedAt": "2026-07-22T03:16:07.651Z",
+  "total": 580,
+  "uniqueSlugs": 578,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 560,
+    "generic": 562,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 509,
+    "deep": 511,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 150,
+    "Broken access control": 152,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -50,6 +50,7 @@
     "client-side-api-security-lab-evidence",
     "client-side-appsec-master-evidence",
     "client-side-appsec-master-lab-hub-evidence",
+    "client-side-archon-api-security-curriculum-evidence",
     "client-side-archon-training-evidence",
     "client-side-artemiskit-evidence",
     "client-side-atlas-crew-edge-protection-evidence",
@@ -72,6 +73,7 @@
     "client-side-bugbountyhunter-challenge-scenario-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bugforge-lab-evidence",
+    "client-side-buggybuy-evidence",
     "client-side-bugzap-prompt-defense-evidence",
     "client-side-burp-bounty-lab-evidence",
     "client-side-bwapp-evidence",

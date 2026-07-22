@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T02:51:13.768Z",
+  "updated_at": "2026-07-22T03:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,27 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1849,
-  "total_findings": 9350,
+  "total_sites_scanned": 1850,
+  "total_findings": 9356,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1470,
   "discovery_findings": 7429,
-<<<<<<< HEAD
-  "improvements_shipped": 909,
-=======
-  "improvements_shipped": 906,
->>>>>>> 52f61a8 (power-scan: benchmark + 5 discovery, 49 findings [02 UTC])
-  "last_run": "2026-07-22T02:51:13.768Z",
+  "improvements_shipped": 912,
+  "last_run": "2026-07-22T03:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku cold-start degraded (pass1: 6 findings gap=sensitive_data pages=6 probes=138; pass2: 2 findings pages=1 probes=55; pass3 final 25s wake retry: 7 findings 6/6 pages=1 probes=181 merged — no staging fallback)",
+      "note": "No benchmark misses — first-pass 6/6 recall (6 findings: idor, sqli, auth_bypass, xss, sensitive_data via vibe-unauthenticated-api-routes, misconfig)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,34 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 42,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue drain: redtiger level7/10, hacksplaining xss-reflected + command-execution, archon-eight, cybersec-demo, ctb-pi, vuln-portal; +5 BuggyBuy + Web Security Learning Labs queued",
-      "improvements_shipped_this_run": 0,
-      "urls_queued": [
-        "https://vulnerable-web-application-jecw.vercel.app/",
-        "https://vulnerable-web-application-jecw.vercel.app/login",
-        "https://vulnerable-web-application-jecw.vercel.app/admin",
-        "https://web-security-learning-labs.vercel.app/",
-        "https://web-security-learning-labs.vercel.app/labs"
-      ]
+      "focus": "Engine evolve: RedTiger level7-8 command injection, BuggyBuy SPA, Archon API Top 10 curriculum",
+      "improvements_shipped_this_run": 3,
+      "urls_queued": []
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6/6 recall after 25s Heroku wake retry (pass1 gap=sensitive_data; pass3 restored vibe-unauthenticated-api-routes)",
-      "archon-eight.vercel.app: 8 findings — Archon cybersecurity training platform markers",
-      "hacksplaining.com/lessons/command-execution: 7 findings — command-injection + CSRF lesson evidence",
-      "redtiger.labs level7/10: 4-5 findings — SQLi + command-injection training markers",
-      "ctb-pi.vercel.app: 6 findings — Hurleveur CTF corporate cyber training hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "redtiger.labs level7.php: command-injection slug now fires (4→5 findings)",
+      "vulnerable-web-application-jecw.vercel.app: BuggyBuy cross-origin API markers (2→4 findings)",
+      "archon-eight.vercel.app/cybersecurity: OWASP API Top 10 curriculum slug when VitePress page loads"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: pass1 missed sensitive_data before wake retry; pass2 Heroku 503 regression (2 findings only)",
       "secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "BuggyBuy + Web Security Learning Labs queued at tail — pending next queue drain",
-      "vuln-portal.vercel.app: shallow 2-finding scan — auth terminal markers may need deeper crawl"
+      "web-security-learning-labs.vercel.app: /labs under construction — no vulnerability markers",
+      "archon-eight.vercel.app: intermittent shallow crawl when target rate-limits scanner UA"
     ]
   },
   "discovery_highlights": {
