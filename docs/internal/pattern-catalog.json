@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T00:38:36.822Z",
-  "total": 573,
-  "uniqueSlugs": 571,
+  "generatedAt": "2026-07-22T01:05:02.554Z",
+  "total": 576,
+  "uniqueSlugs": 574,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 555,
+    "generic": 558,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 504,
+    "deep": 507,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 48,
     "Broken authentication": 42,
     "Injection": 116,
-    "Cross-site scripting": 93,
+    "Cross-site scripting": 96,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
@@ -394,6 +394,9 @@
     "client-side-sql-injection-playground-evidence",
     "client-side-ssrf-evidence",
     "client-side-tegalsec-lab-evidence",
+    "client-side-the0x-pwn-xss-document-write-lab-evidence",
+    "client-side-the0x-pwn-xss-dom-hash-lab-evidence",
+    "client-side-the0x-pwn-xss-javascript-url-lab-evidence",
     "client-side-the0x-pwn-xss-labs-evidence",
     "client-side-try2hack-evidence",
     "client-side-unsecure-pwa-evidence",
