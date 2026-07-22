@@ -6209,6 +6209,24 @@
       "slug": "server-side-eval-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/process_numbers {\"processing_expression\":\"7*7\"} returns 49; serverSideEvalEvidence extended with brokencrystals process_numbers probe; brokencrystals findings 15→23; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle prototypePollutionDomXss→createElement('script') + id prototype-pollution-dom-xss-script; /marketplace __proto__ URI parsing; brokencrystals.com findings 23→25; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "reflected-xss-query-param",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/subscriptions?email=thugirXSScanary returns raw canary in 201 body; reflectedXss extended for brokencrystals POST email param; brokencrystals.com findings 23→25; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "onrender-reach-target-timeout",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Render cold-start curl timeout 20s with 0 bytes; reachTarget first-attempt timeout 15s→45s for *.onrender.com hosts; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10921,6 +10939,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "weak-api-default-credentials",
       "shipped_at": "2026-07-22T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+      "shipped_at": "2026-07-22T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-subscription-reflected-xss",
+      "shipped_at": "2026-07-22T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-practice-app.onrender.com",
+      "slug": "onrender-reach-target-timeout",
+      "shipped_at": "2026-07-22T17:10:00.000Z"
     }
   ]
 }
