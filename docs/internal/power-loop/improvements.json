@@ -5993,6 +5993,18 @@
       "slug": "client-side-archon-api-security-curriculum-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity table lists JWT attacks, BOLA/IDOR, GraphQL security, mass assignment, OWASP API Top 10; archon-eight.vercel.app/cybersecurity adds curriculum slug when VitePress page loads; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "security-question-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /rest/user/security-question?email=admin@juice-sh.op returns {\"question\":{\"id\":2,\"question\":\"Mother's maiden name?\"}} without auth; juice-shop.herokuapp.com findings 6→7, sensitive_data now has dedicated slug alongside vibe-unauthenticated-api-routes; benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "client-side-web-security-learning-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Web Security Learning Labs title + SQL Injection/IDOR module cards + models/XSSdemo.html links + Security Through Practice tagline; web-security-learning-labs.vercel.app findings 3→4; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10555,6 +10567,16 @@
       "source": "discovery:archon-eight.vercel.app",
       "slug": "client-side-archon-api-security-curriculum-evidence",
       "shipped_at": "2026-07-22T03:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "security-question-disclosure",
+      "shipped_at": "2026-07-22T04:25:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "client-side-web-security-learning-labs-evidence",
+      "shipped_at": "2026-07-22T04:25:00.000Z"
     }
   ]
 }
