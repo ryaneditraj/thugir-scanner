@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 1943,
-  "total_findings": 9840,
+  "total_sites_scanned": 1950,
+  "total_findings": 9882,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1520,
-  "discovery_findings": 7835,
+  "discovery_urls_added": 1525,
+  "discovery_findings": 7875,
   "improvements_shipped": 941,
   "last_run": "2026-07-22T14:10:00.000Z",
   "last_run_summary": {
@@ -31,7 +31,7 @@
       "primary_findings": 8,
       "primary_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — stable 6/6 first-pass recall on primary Heroku (8 findings)",
+      "note": "No benchmark misses — stable 6/6 first-pass recall on primary Heroku (pages=6 probes=267)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,29 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 2,
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 44,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "brokencrystals.com /api/config exposed credentials + /userlogin logobgcolor CSS injection",
+      "dns_failures": [
+        "http://testhtml5.vulnweb.com/ — unreachable from cloud agent"
+      ],
+      "focus": "brokencrystals deep rescan (15 findings) + /api/config postgres creds; ginandjuice reflected-xss+sqli; reef-mcp MCP supply-chain secrets",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: 8 findings 6/6 recall — no benchmark misses",
-      "brokencrystals.com: GET /api/config exposes postgres://bc:bc@postgres:5432/bc + Google Maps key (15→17 findings)",
-      "brokencrystals.com: logobgcolor URL param flows into logoBgColor inline CSS on /userlogin"
+      "brokencrystals.com: 15–17 findings — exposed-env-file, /api/config postgres://bc:bc@postgres:5432/bc, graphql-introspection, postmessage-dom-xss",
+      "ginandjuice.shop: reflected-xss-query-param + sql-error-disclosure (6 findings)",
+      "reef-mcp-registry.vercel.app: secret-openai + secret-twilio + client-side-mcp-supply-chain-evidence (6 findings)",
+      "maestro-agentic-ai-security-demo-mon.netlify.app: client-side-maestro-rag-sqli-evidence (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (Leaked API Key is OSINT/social-media oracle, not web-scannable)",
-      "www.root-me.org: Anubis bot-wall limits challenge marker reachability",
-      "hacksec.in: per-lab routes behind WordPress password gate — shallow hub crawl only"
+      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
+      "brokencrystals.com/swagger + /graphiql + /api/auth/login queued — sub-oracle endpoints not yet drained",
+      "testhtml5.vulnweb.com: DNS/connect unreachable — use testasp.vulnweb.com or rest.vulnweb.com",
+      "owasp-finbot-ctf.org: agentic exploit chains require authenticated CTF namespace (5 findings hub-only)"
     ]
   },
   "discovery_highlights": {
