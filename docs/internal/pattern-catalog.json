@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T04:17:55.748Z",
-  "total": 582,
-  "uniqueSlugs": 580,
+  "generatedAt": "2026-07-22T05:05:57.709Z",
+  "total": 583,
+  "uniqueSlugs": 581,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 564,
+    "generic": 565,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 70,
-    "deep": 512,
+    "deep": 513,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 37,
     "Security misconfiguration": 48,
     "Broken authentication": 42,
-    "Injection": 117,
+    "Injection": 118,
     "Cross-site scripting": 98,
     "general": 18,
     "SSRF": 1,
@@ -273,6 +273,7 @@
     "client-side-oauth-fetch-playground-evidence",
     "client-side-oopssec-race-condition-evidence",
     "client-side-oopssec-store-evidence",
+    "client-side-oopssec-xff-sqli-evidence",
     "client-side-open-redirect-evidence",
     "client-side-openvault-cheatsheet-evidence",
     "client-side-openvault-learn-evidence",
