@@ -6017,6 +6017,24 @@
       "slug": "client-side-yogsec-xss-lab-module-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: labs/lab11.html Stored in localStorage → Displayed Later + saveMessageBtn + innerHTML NO sanitization; yogsec.github.io/xss-labs/labs/lab11.html findings 0→3; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab8.html eval(window.name) EXTREMELY VULNERABLE sink; DOM_EVAL_XSS_RES extended; yogsec.github.io/xss-labs/labs/lab8.html findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab9.html localStorage.getItem('userData') → innerHTML; localStorage getItem innerHTML sink regex; yogsec.github.io/xss-labs/labs/lab9.html findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab13.html container.innerHTML += `${note.content}` IndexedDB stored XSS; IndexedDB + container.innerHTML += patterns; yogsec.github.io/xss-labs/labs/lab13.html findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10599,6 +10617,21 @@
       "source": "discovery:yogsec.github.io/xss-labs",
       "slug": "client-side-yogsec-lab11-localstorage-xss-markers",
       "shipped_at": "2026-07-22T05:30:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-window-name-xss-sink",
+      "shipped_at": "2026-07-22T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "localstorage-getitem-innerhtml-sink",
+      "shipped_at": "2026-07-22T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "indexeddb-innerhtml-stored-xss-markers",
+      "shipped_at": "2026-07-22T06:10:00.000Z"
     }
   ]
 }

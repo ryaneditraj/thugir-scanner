@@ -2678,6 +2678,14 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /getElementById\([^)]+\)\.innerHTML\s*=\s*(?:msg|html|content|val)\b/
   },
   {
+    label: "container.innerHTML += template with note.content (IndexedDB XSS lab)",
+    re: /container\.innerHTML\s*\+=\s*[`'"][\s\S]{0,60}\$\{note\.content\}/
+  },
+  {
+    label: "localStorage getItem flows into innerHTML assignment",
+    re: /localStorage\.getItem\([^)]+\)[\s\S]{0,200}\.innerHTML\s*=/
+  },
+  {
     label: "document.write on search/query form input",
     re: /document\.write\s*\(\s*(?:search|query|input|val)\b/
   },
@@ -2731,6 +2739,10 @@ const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "new Function() on DOM .value",
     re: /new\s+Function\s*\(\s*(?:document\.)?(?:getElementById|querySelector)\([^)]{0,80}\)\.value/
+  },
+  {
+    label: "eval() on window.name persistence sink",
+    re: /eval\s*\(\s*window\.name\s*\)/
   }
 ];
 
@@ -22918,6 +22930,22 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "saveMessageBtn localStorage XSS lab UI",
     re: /saveMessageBtn[\s\S]{0,40}localStorage|Saved Messages \(loaded from localStorage\)/i
+  },
+  {
+    label: "localStorage key reflection lab title",
+    re: /XSS Lab #\d+:\s*localStorage Key Reflection|localStorage Key Reflection/i
+  },
+  {
+    label: "localStorage getItem innerHTML injection sink",
+    re: /localStorage\.getItem\([^)]+\)[\s\S]{0,160}\.innerHTML\s*=/
+  },
+  {
+    label: "IndexedDB stored XSS lab badge",
+    re: /Lab #\d+ · Stored XSS \(IndexedDB\)|Stored in IndexedDB → Rendered After Read/i
+  },
+  {
+    label: "IndexedDB innerHTML stored XSS sink",
+    re: /IndexedDB[\s\S]{0,120}innerHTML[\s\S]{0,60}NO sanitization|notes from IndexedDB[\s\S]{0,80}innerHTML/i
   }
 ];
 
