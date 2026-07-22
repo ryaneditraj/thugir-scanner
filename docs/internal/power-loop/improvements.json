@@ -6077,6 +6077,24 @@
       "slug": "client-side-web-security-learning-labs-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: /module/1010 returns stub 'Here is a Module: 1010' only — no lab content to detect"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "security-question-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /rest/user/security-question?email=admin@juice-sh.op returns {\"question\":...}; added to JUICE_SHOP_API_HEALTH_PATHS + primeJuiceShopApiProbes + juiceShopBenchmarkOracleReady sensitive gate; pass1 sensitive_data miss reduced; benchmark 8 findings 6/6 recall"
+    },
+    {
+      "source": "discovery:Prakhar-Sethi/vulnlab",
+      "slug": "client-side-vulnlab-ml-threat-detector-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ml-explainer.html ML Threat Detector + 706+ Malicious (XSS, CSRF, obfuscated) + eval(atob quick-test; raw.githack.com/.../ml-explainer.html findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:andrewaltimit.github.io/exploits",
+      "slug": "client-side-databricks-security-assessment-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dashboard stlite.mount + fetch ./app.py Security Assessment Suite + mask_secret/decode_jwt_header; andrewaltimit.github.io/exploits/dashboard/ findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10704,6 +10722,21 @@
       "source": "discovery:yogsec.github.io/xss-labs",
       "slug": "yogsec-xss-labs-hub-seed-normalization",
       "shipped_at": "2026-07-22T08:25:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-security-question-oracle-priming",
+      "shipped_at": "2026-07-22T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:Prakhar-Sethi/vulnlab",
+      "slug": "client-side-vulnlab-ml-threat-detector-evidence",
+      "shipped_at": "2026-07-22T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:andrewaltimit.github.io/exploits",
+      "slug": "client-side-databricks-security-assessment-evidence",
+      "shipped_at": "2026-07-22T09:25:00.000Z"
     }
   ]
 }

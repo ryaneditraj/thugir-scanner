@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T08:12:29.646Z",
-  "total": 583,
-  "uniqueSlugs": 581,
+  "generatedAt": "2026-07-22T09:06:59.436Z",
+  "total": 585,
+  "uniqueSlugs": 583,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 565,
+    "generic": 567,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 70,
-    "deep": 513,
+    "deep": 515,
     "continuous": 0
   },
   "byCategory": {
@@ -24,11 +24,11 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 37,
+    "Information disclosure": 38,
     "Security misconfiguration": 48,
     "Broken authentication": 42,
     "Injection": 118,
-    "Cross-site scripting": 98,
+    "Cross-site scripting": 99,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
@@ -110,6 +110,7 @@
     "client-side-cybersheild-lab-evidence",
     "client-side-cylab-academy-evidence",
     "client-side-damn-vulnerable-bank-evidence",
+    "client-side-databricks-security-assessment-evidence",
     "client-side-defendtheweb-evidence",
     "client-side-defhawk-practice-lab-evidence",
     "client-side-deserialization-evidence",
@@ -434,6 +435,7 @@
     "client-side-vulnlab-auth-session-lab-evidence",
     "client-side-vulnlab-cms-platform-evidence",
     "client-side-vulnlab-idor-lab-evidence",
+    "client-side-vulnlab-ml-threat-detector-evidence",
     "client-side-vulnlab-verbose-404-evidence",
     "client-side-vulnscope-evidence",
     "client-side-vulnshop-evidence",

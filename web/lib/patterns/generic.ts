@@ -9912,6 +9912,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-ml-threat-detector-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnLab ML Threat Detector XSS classifier disclosed",
+    description:
+      "VulnLab ML Threat Detector (ml-explainer.html) documents client-side logistic-regression XSS/CSRF payload classification with eval/atob obfuscation examples and 706+ malicious training samples.",
+    impactOneline:
+      "Public VulnLab ML demos expose intentional XSS payload corpora and eval-based obfuscation patterns used in security education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabMlThreatDetectorEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "ML XSS classifiers are educational — use output encoding and CSP in production, not ML-only filtering.",
+      steps: [
+        "Deploy ML security demos only on dedicated lab infrastructure.",
+        "Use textContent/DOMPurify instead of eval/atob for user-controlled data.",
+        "Treat ML classifiers as defense-in-depth, not a substitute for secure coding."
+      ]
+    },
+    fixPrompt:
+      "We host VulnLab ML Threat Detector demos. Show how to isolate XSS classifier labs from production and replace eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-databricks-security-assessment-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Databricks Apps Security Assessment WASM lab disclosed",
+    description:
+      "AndrewAltimit exploits dashboard compiles a Streamlit security assessment suite to WASM via stlite, loading app.py with JWT decode helpers, secret masking demos, and InfectionIDOL telemetry simulations.",
+    impactOneline:
+      "Public WASM security assessment dashboards document Databricks App attack surfaces and simulated implant telemetry for education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDatabricksSecurityAssessmentEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Security assessment dashboards are training artifacts — isolate WASM labs from production Databricks workspaces.",
+      steps: [
+        "Deploy security assessment demos only on sandbox Databricks workspaces.",
+        "Never embed live secrets in client-side WASM bundles.",
+        "Gate educational dashboards behind authentication when hosted publicly."
+      ]
+    },
+    fixPrompt:
+      "We host Databricks Apps security assessment WASM demos. Show how to isolate Streamlit security labs from production workspaces.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-cms-platform-evidence",
     platform: "generic",
     category: "Information disclosure",
