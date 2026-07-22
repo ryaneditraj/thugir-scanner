@@ -6001,6 +6001,18 @@
       "validation": "SOURCE: discovery:url EVIDENCE: labs/lab30-34 script.src + onclick/onmouseover/onerror/onload injection module titles; CLIENT_YOGSEC_XSS_LAB_MODULE_RES extended; yogsec lab31 findings 5 incl client-side-yogsec-xss-lab-module-evidence; benchmark 6/6 maintained"
     },
     {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "yogsec-dynamic-code-execution-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab25-29 eval(userCode) + setTimeout(userString) + setInterval(userString) + Function() Constructor + javascript: location.href module titles; CLIENT_YOGSEC_XSS_LAB_MODULE_RES + DOM_EVAL_XSS_RES extended; yogsec lab25|26 findings 5→6 incl dom-eval-xss; benchmark staging 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "yogsec-form-event-handler-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab35-39 onfocus autofocus + oninput + onchange select + onkeyup + onsubmit form injection module titles; CLIENT_YOGSEC_XSS_LAB_MODULE_RES extended; yogsec lab35|39 findings 5→6 incl dom-eval-xss; benchmark staging 8 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:archon-eight.vercel.app",
       "slug": "client-side-archon-api-security-curriculum-evidence",
       "status": "shipped",
