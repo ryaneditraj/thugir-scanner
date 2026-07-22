@@ -19989,6 +19989,115 @@ const clientSideHackYourselfFirstEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- FauxBank OWASP Top 10 banking pentest training lab (pentest-fauxbank.vercel.app) -
+const CLIENT_FAUXBANK_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "FauxBank training simulation banner",
+    re: /CYBERSECURITY TRAINING SIMULATION ONLY/i
+  },
+  {
+    label: "FauxBank fictional bank pentest lab",
+    re: /FauxBank[\s\S]{0,120}(?:Cybersecurity Training Simulation|fictional bank pentest training lab)/i
+  },
+  {
+    label: "Simulated vulnerabilities disclaimer",
+    re: /simulated vulnerabilities exist only inside this lab/i
+  },
+  {
+    label: "Seeded fictional accounts hint",
+    re: /seeded fictional accounts|intentionally weak for training/i
+  },
+  {
+    label: "OWASP guided pentest scenarios",
+    re: /guided pentest|OWASP scenarios|Vulnerability Lab/i
+  }
+];
+
+function looksLikeFauxbankLab(origin: string, combined: string): boolean {
+  return /pentest-fauxbank\.vercel\.app|fauxbank/i.test(origin) || /FauxBank/i.test(combined);
+}
+
+const clientSideFauxbankLabEvidence: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FAUXBANK_LAB_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "FauxBank documents guided OWASP Top 10 banking pentest scenarios with intentionally weak credentials"
+    }
+  };
+};
+
+async function ensureFauxbankSession(ctx: RuleContext): Promise<string | null> {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined)) return null;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const r = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "alice", password: "password" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!/"ok"\s*:\s*true|"user"\s*:/i.test(r.body)) return null;
+  return r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const fauxbankAuthenticatedSqlInjectionProbe: Rule = async (ctx) => {
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", "' OR '1'='1");
+  const r = await ctx.probe.get(searchUrl.toString(), {
+    maxBytes: 4096,
+    headers: { Cookie: cookie }
+  });
+  if (r.status < 200 || r.status >= 300) return NEGATIVE;
+  if (!/"injected"\s*:\s*true/i.test(r.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: searchUrl.toString(),
+      payload: "' OR '1'='1",
+      snippet: r.body.slice(0, 200).trim(),
+      note: "GET /api/search returns injected:true after auth — simulated SQL injection (FauxBank)"
+    }
+  };
+};
+
+const fauxbankIdorAccountsProbe: Rule = async (ctx) => {
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const ownUrl = new URL("/api/accounts/1001", ctx.origin).toString();
+  const own = await ctx.probe.get(ownUrl, { maxBytes: 4096, headers: { Cookie: cookie } });
+  if (own.status < 200 || own.status >= 300 || !/"owner"/i.test(own.body)) return NEGATIVE;
+  const crossUrl = new URL("/api/accounts/2001", ctx.origin).toString();
+  const cross = await ctx.probe.get(crossUrl, { maxBytes: 4096, headers: { Cookie: cookie } });
+  if (cross.status < 200 || cross.status >= 300) return NEGATIVE;
+  if (!/"owner"/i.test(cross.body) || /"error"/i.test(cross.body.slice(0, 120))) return NEGATIVE;
+  const ownOwner = own.body.match(/"fullName"\s*:\s*"([^"]+)"/i)?.[1];
+  const crossOwner = cross.body.match(/"fullName"\s*:\s*"([^"]+)"/i)?.[1];
+  if (!ownOwner || !crossOwner || ownOwner === crossOwner) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: crossUrl,
+      ownAccount: ownOwner,
+      crossAccount: crossOwner,
+      snippet: cross.body.slice(0, 200).trim(),
+      note: "Authenticated user can read another customer's account via predictable account ID — IDOR (FauxBank)"
+    }
+  };
+};
+
 const sensitiveApiTokenLeakage: Rule = async (ctx) => {
   const paths = [
     ...new Set([
@@ -27445,6 +27554,9 @@ export const RULES: Record<string, Rule> = {
   sensitiveApiTokenLeakage,
   sensitiveApiPasswordLeakage,
   clientSideHackYourselfFirstEvidence,
+  clientSideFauxbankLabEvidence,
+  fauxbankAuthenticatedSqlInjectionProbe,
+  fauxbankIdorAccountsProbe,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
