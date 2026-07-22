@@ -7438,7 +7438,32 @@
       "url": "https://web-security-learning-labs.vercel.app/labs",
       "source": "Web Security Learning Labs — lab index hub (33 modules advertised on landing page)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerableapp.com/dom-xss.html",
+      "source": "SasanLabs vulnerableapp.com — DOM-based XSS example page with document.write sink (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/learn/modules",
+      "source": "FarciarzYT/WebSecurityLearningLabs — interactive module catalog (33 OWASP labs on Vercel)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1000",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1000 hands-on lab (SQLi/IDOR/XSS track)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1001",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1001 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1002",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1002 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T02:48:00.000Z"
+  "updated_at": "2026-07-22T03:35:00.000Z"
 }
