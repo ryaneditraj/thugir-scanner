@@ -433,6 +433,56 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sqli-query-param-injection",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SQL injection via raw query parameter",
+    description:
+      "An API endpoint executes attacker-supplied SQL from a query parameter (e.g. /api/testimonials/count?query=). A live probe against information_schema returns a table count, proving unsanitized SQL execution.",
+    impactOneline: "Attackers can read or modify database contents via the query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliQueryParamInjection" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw user input into SQL; use parameterized queries.",
+      steps: [
+        "Replace dynamic SQL string building with prepared statements or ORM bindings.",
+        "Restrict query endpoints to predefined safe operations.",
+        "Return generic errors; log SQL details server-side only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count endpoint executes SQL from the query parameter. Switch to parameterized queries, whitelist allowed operations, and show me the fixed handler.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xpath-injection-disclosure",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "XPATH injection leaks credentials in XML response",
+    description:
+      "A login or search endpoint builds an XPATH query from user input. Boolean injection with ' or '1'='1 returns multiple <password> elements in the XML response — positive proof of credential disclosure.",
+    impactOneline: "Attackers can extract other users' passwords via XPATH injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xpathInjectionDisclosure" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize XPATH queries; never concatenate user input.",
+      steps: [
+        "Use XPATH variable bindings instead of string concatenation.",
+        "Validate and escape user input before query construction.",
+        "Return generic auth failures without leaking XML node data."
+      ]
+    },
+    fixPrompt:
+      "Our /api/partners/partnerLogin endpoint is vulnerable to XPATH injection — password=' or '1'='1 returns multiple user passwords. Fix the XPATH query construction and show the patched handler.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "weak-api-default-credentials",
     platform: "generic",
     category: "Broken authentication",

