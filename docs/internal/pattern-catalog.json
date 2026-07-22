@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T15:04:47.650Z",
-  "total": 594,
-  "uniqueSlugs": 592,
+  "generatedAt": "2026-07-22T16:05:29.187Z",
+  "total": 596,
+  "uniqueSlugs": 594,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 576,
+    "generic": 578,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 522,
+    "deep": 524,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 39,
     "Security misconfiguration": 48,
     "Broken authentication": 43,
-    "Injection": 118,
+    "Injection": 120,
     "Cross-site scripting": 105,
     "general": 18,
     "SSRF": 1,
@@ -600,6 +600,7 @@
     "sitemap-listed-sensitive-file-exposed",
     "spring-boot-actuator-exposed",
     "sql-error-disclosure",
+    "sqli-query-param-injection",
     "ssrf-endpoint-fetch",
     "ssti-template-injection",
     "stack-cors-wildcard-api",
@@ -628,7 +629,8 @@
     "vibe-weak-csp",
     "weak-api-default-credentials",
     "windsurf-public-env-leak",
-    "wizer-ctf-idor-task-manager-probe"
+    "wizer-ctf-idor-task-manager-probe",
+    "xpath-injection-disclosure"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."
 }
