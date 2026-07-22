@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T21:03:27.182Z",
-  "total": 602,
-  "uniqueSlugs": 600,
+  "generatedAt": "2026-07-22T22:17:27.677Z",
+  "total": 603,
+  "uniqueSlugs": 601,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 584,
+    "generic": 585,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 530,
+    "deep": 531,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 39,
+    "Information disclosure": 40,
     "Security misconfiguration": 48,
     "Broken authentication": 43,
     "Injection": 124,
@@ -80,6 +80,7 @@
     "client-side-bwapp-evidence",
     "client-side-bwapp-injection-catalog-evidence",
     "client-side-cahyod-vulnerable-lab-evidence",
+    "client-side-ces-ctf-evidence",
     "client-side-chimera-vuln-lab-evidence",
     "client-side-clawguard-ai-audit-evidence",
     "client-side-code-breaking-evidence",
