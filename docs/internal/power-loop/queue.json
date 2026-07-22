@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://shield-dark-pattern-demo.vercel.app/",
+      "source": "pixiebrix/agent-browser-shield — RiverMart mock e-commerce SPA with deliberate dark-pattern threats (GitHub live demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/",
+      "source": "AI & Security Platform — 14 hands-on OWASP + supply-chain challenges in Next.js + Supabase (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://server.vulnapp.id/mutillidae/",
+      "source": "Metasploitable2 hub — Mutillidae II SQLi/XSS/command-injection training surface (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/",
+      "source": "apisec-inc/urban-VAmPI — OWASP API Top 10 staging Railway deploy (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
+      "source": "ctfsec/pwnshop — in-app vulnerability index for 51 OWASP Top 10 (2025) + LLM flaws (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://brokencrystals.com/api/partners/searchPartners",
       "source": "NeuraLegion/brokencrystals — XPath string-detection injection oracle on partner search (README)",
       "auth": "benchmark"
