@@ -7638,7 +7638,32 @@
       "url": "https://yogsec.github.io/xss-labs/labs/lab34.html",
       "source": "yogsec/xss-labs — onload body tag event-handler XSS lab (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab35.html",
+      "source": "yogsec/xss-labs — onfocus with autofocus event-handler XSS lab (GitHub Pages, 39-lab series)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab36.html",
+      "source": "yogsec/xss-labs — oninput event-handler injection XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab37.html",
+      "source": "yogsec/xss-labs — onchange select XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab38.html",
+      "source": "yogsec/xss-labs — onkeyup event-handler XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab39.html",
+      "source": "yogsec/xss-labs — onsubmit form hijacking XSS lab (GitHub Pages, series finale)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T10:05:00.000Z"
+  "updated_at": "2026-07-22T12:15:00.000Z"
 }
