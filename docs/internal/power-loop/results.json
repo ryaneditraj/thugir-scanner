@@ -1,315 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-21T23:03:41.289Z",
-      "url": "https://www.bugbountyhunter.com/challenge?id=6",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-evidence",
-          "title": "BugBountyHunter zseano challenge platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
-          "title": "BugBountyHunter numbered challenge scenario disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 278,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:03:41.289Z"
-    },
-    {
-      "run_id": "2026-07-21T23:04:02.060Z",
-      "url": "https://www.bugbountyhunter.com/challenge?id=7",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-evidence",
-          "title": "BugBountyHunter zseano challenge platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
-          "title": "BugBountyHunter numbered challenge scenario disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 278,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:04:02.060Z"
-    },
-    {
-      "run_id": "2026-07-21T23:04:19.202Z",
-      "url": "http://redtiger.labs.overthewire.org/level3.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-redtiger-hackit-evidence",
-          "title": "RedTiger PHP/SQL hackit disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-blind-login-form-evidence",
-          "title": "RedTiger blind login-bypass form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-classic-login-sql-evidence",
-          "title": "RedTiger classic SQLi login form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 328,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:04:19.202Z"
-    },
-    {
-      "run_id": "2026-07-21T23:04:36.921Z",
-      "url": "http://redtiger.labs.overthewire.org/level4.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-redtiger-hackit-evidence",
-          "title": "RedTiger PHP/SQL hackit disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-blind-login-form-evidence",
-          "title": "RedTiger blind login-bypass form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-classic-login-sql-evidence",
-          "title": "RedTiger classic SQLi login form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 328,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:04:36.921Z"
-    },
-    {
-      "run_id": "2026-07-21T23:04:57.766Z",
-      "url": "http://redtiger.labs.overthewire.org/level5.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-redtiger-hackit-evidence",
-          "title": "RedTiger PHP/SQL hackit disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-blind-login-form-evidence",
-          "title": "RedTiger blind login-bypass form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "redtiger-classic-login-sql-evidence",
-          "title": "RedTiger classic SQLi login form disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 328,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:04:57.766Z"
-    },
-    {
-      "run_id": "2026-07-21T23:05:16.400Z",
-      "url": "http://testhtml5.vulnweb.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-21T23:05:16.400Z",
-      "error": "We couldn't reach testhtml5.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-21T23:05:26.415Z",
-      "url": "http://websegura.radwarelatam.com/mutillidae/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "exposed-config-backup",
-          "title": "Config or backup file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-mutillidae-evidence",
-          "title": "OWASP Mutillidae vulnerable lab disclosed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "html-comment-credential-disclosure",
-          "title": "Database or admin credentials in HTML comment",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 341,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:05:26.415Z"
-    },
-    {
-      "run_id": "2026-07-21T23:07:25.369Z",
-      "url": "https://hacking-lab.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-hacking-lab-evidence",
-          "title": "Hacking-Lab cyber security training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 318,
-      "status": "ok",
-      "scanned_at": "2026-07-21T23:07:25.369Z"
-    },
-    {
       "run_id": "2026-07-22T00:01:22.820Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -12269,6 +11960,896 @@
       "probes_run": 97,
       "status": "ok",
       "scanned_at": "2026-07-22T21:01:31.434Z"
+    },
+    {
+      "run_id": "2026-07-22T21:13:37.189Z",
+      "url": "https://brokencrystals.com/api/partners/searchPartners",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 29,
+      "findings": [
+        {
+          "slug": "exposed-env-file",
+          "title": "Environment file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-git-dir",
+          "title": "Exposed .git directory",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphiql-ui-exposed",
+          "title": "GraphiQL interactive IDE exposed in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sqli-query-param-injection",
+          "title": "SQL injection via raw query parameter",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xpath-injection-disclosure",
+          "title": "XPATH injection leaks credentials in XML response",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "command-injection-form-probe",
+          "title": "OS command injection via form POST parameter",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssti-template-injection",
+          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "client-side-brokencrystals-evidence",
+          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "exposed-api-config",
+          "title": "Unauthenticated API config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-css-injection-evidence",
+          "title": "Client bundle reflects URL param into inline CSS",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+          "severity": "high",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 238,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:13:37.189Z"
+    },
+    {
+      "run_id": "2026-07-22T21:13:41.287Z",
+      "url": "https://brokencrystals.com/api/partners/query",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 28,
+      "findings": [
+        {
+          "slug": "exposed-env-file",
+          "title": "Environment file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-git-dir",
+          "title": "Exposed .git directory",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphiql-ui-exposed",
+          "title": "GraphiQL interactive IDE exposed in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sqli-query-param-injection",
+          "title": "SQL injection via raw query parameter",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xpath-injection-disclosure",
+          "title": "XPATH injection leaks credentials in XML response",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "command-injection-form-probe",
+          "title": "OS command injection via form POST parameter",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssti-template-injection",
+          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "client-side-brokencrystals-evidence",
+          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "exposed-api-config",
+          "title": "Unauthenticated API config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-css-injection-evidence",
+          "title": "Client bundle reflects URL param into inline CSS",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+          "severity": "high",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 238,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:13:41.287Z"
+    },
+    {
+      "run_id": "2026-07-22T21:13:44.358Z",
+      "url": "https://brokencrystals.com/api/testimonials",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 28,
+      "findings": [
+        {
+          "slug": "exposed-env-file",
+          "title": "Environment file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-git-dir",
+          "title": "Exposed .git directory",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphiql-ui-exposed",
+          "title": "GraphiQL interactive IDE exposed in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sqli-query-param-injection",
+          "title": "SQL injection via raw query parameter",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xpath-injection-disclosure",
+          "title": "XPATH injection leaks credentials in XML response",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "command-injection-form-probe",
+          "title": "OS command injection via form POST parameter",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssti-template-injection",
+          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "client-side-brokencrystals-evidence",
+          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "exposed-api-config",
+          "title": "Unauthenticated API config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-css-injection-evidence",
+          "title": "Client bundle reflects URL param into inline CSS",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+          "severity": "high",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 238,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:13:44.358Z"
+    },
+    {
+      "run_id": "2026-07-22T21:13:47.434Z",
+      "url": "https://pentest-fauxbank.vercel.app/api/search",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-fauxbank-lab-evidence",
+          "title": "FauxBank OWASP banking pentest training lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-authenticated-sqli-search",
+          "title": "Authenticated SQL injection via FauxBank search API",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "fauxbank-idor-accounts-probe",
+          "title": "FauxBank account IDOR via predictable account IDs",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 307,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:13:47.434Z"
+    },
+    {
+      "run_id": "2026-07-22T21:13:52.698Z",
+      "url": "https://ctf-website-ten.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 287,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:13:52.698Z"
+    },
+    {
+      "run_id": "2026-07-22T21:13:54.629Z",
+      "url": "https://chal15.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wizer-ctf-evidence",
+          "title": "Wizer developer security CTF disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 327,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:13:54.629Z"
+    },
+    {
+      "run_id": "2026-07-22T21:14:02.100Z",
+      "url": "https://shiny-computing-machine.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-xss-evidence",
+          "title": "Source or bundle documents reflected XSS via unescaped input",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-ctf-challenge-hub-evidence",
+          "title": "Static CTF challenge hub with linked web security labs",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "general"
+        },
+        {
+          "slug": "client-side-jwt-none-evidence",
+          "title": "Client bundle documents JWT alg:none acceptance",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "client-side-path-traversal-evidence",
+          "title": "Client-side path traversal / LFI lab documented in crawl",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 308,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:14:02.100Z"
+    },
+    {
+      "run_id": "2026-07-22T21:14:04.920Z",
+      "url": "https://vulnforge.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-vulnforge-evidence",
+          "title": "VulnForge attack-surface scanner SPA disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 301,
+      "status": "ok",
+      "scanned_at": "2026-07-22T21:14:04.920Z"
     }
   ],
   "teacher_delta_runs": [
