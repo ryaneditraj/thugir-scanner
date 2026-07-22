@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T19:21:48.042Z",
-  "total": 597,
-  "uniqueSlugs": 595,
+  "generatedAt": "2026-07-22T20:12:02.488Z",
+  "total": 600,
+  "uniqueSlugs": 598,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 579,
+    "generic": 582,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 525,
+    "deep": 528,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 152,
+    "Broken access control": 154,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 39,
     "Security misconfiguration": 48,
     "Broken authentication": 43,
-    "Injection": 121,
+    "Injection": 122,
     "Cross-site scripting": 105,
     "general": 18,
     "SSRF": 1,
@@ -126,6 +126,7 @@
     "client-side-epicdetect-evidence",
     "client-side-eval-filter-bypass-lab-evidence",
     "client-side-exploit-education-evidence",
+    "client-side-fauxbank-lab-evidence",
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
     "client-side-flask-vulnapp-evidence",
@@ -542,6 +543,8 @@
     "exposed-env-file",
     "exposed-git-dir",
     "exposed-source-maps",
+    "fauxbank-authenticated-sqli-search",
+    "fauxbank-idor-accounts-probe",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
     "graphiql-ui-exposed",

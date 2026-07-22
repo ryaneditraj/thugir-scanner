@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T19:25:00.000Z",
+  "updated_at": "2026-07-22T20:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 1982,
-  "total_findings": 10302,
+  "total_sites_scanned": 1984,
+  "total_findings": 10316,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1540,
   "discovery_findings": 8276,
-  "improvements_shipped": 948,
-  "last_run": "2026-07-22T19:25:00.000Z",
+  "improvements_shipped": 951,
+  "last_run": "2026-07-22T20:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 7,
@@ -35,7 +35,7 @@
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku wake retry restored 6/6 recall (7 findings after retry from 5-finding cold pass gap=sensitive_data)",
+      "note": "No benchmark misses — recall stable at 6/6 (7 findings on primary Heroku)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,20 +55,18 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_scanned": 1,
+      "findings": 7,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "brokencrystals README oracles — POST /api/render SSTI, GET /api/spawn RCE, GET /api/file SSRF",
+      "focus": "FauxBank OWASP banking pentest lab — lab evidence + authenticated SQLi search + account IDOR",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: wake retry 5→7 findings, 6/6 recall restored",
-      "brokencrystals.com/api/render: POST doT SSTI Hello {{=7*7}}→Hello 49 (19→27 findings)",
-      "brokencrystals.com/api/spawn: GET command=echo canary RCE proof (20→28 findings)",
-      "brokencrystals.com/api/file: GET path=http://example.com SSRF with accept header (20→28 findings)",
-      "brokencrystals.com/marketplace: 24 findings — prototype pollution + DOM XSS oracle",
-      "brokencrystals.com/api/testimonials/count: 26 findings — SQLi query-param oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "pentest-fauxbank.vercel.app/login: client-side-fauxbank-lab-evidence + fauxbank-authenticated-sqli-search + fauxbank-idor-accounts-probe (4→7 findings)",
+      "GET /api/search?q=' OR '1'='1 returns injected:true after alice/password login",
+      "GET /api/accounts/2001 returns Bob Roberts account data while authenticated as alice"
     ],
     "learning_gaps": [
       "juice-shop.herokuapp.com primary benchmark still cold-starts at 5 findings before wake retry",
@@ -86,6 +84,7 @@
     "brokencrystals.com/api/spawn": 28,
     "brokencrystals.com/api/file": 28,
     "brokencrystals.com/api/email/sendSupportEmail": 20,
+    "pentest-fauxbank.vercel.app/login": 7,
     "pentest-fauxbank.vercel.app/dashboard": 4,
     "demo.testfire.net": 6,
     "zero.webappsecurity.com": 5,
