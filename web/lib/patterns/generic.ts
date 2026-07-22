@@ -2678,6 +2678,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-fauxbank-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank OWASP banking pentest training lab disclosed",
+    description:
+      "FauxBank simulates a fictional online bank with guided OWASP Top 10 scenarios including IDOR, SQLi, XSS, and CSRF modules.",
+    impactOneline:
+      "Public banking pentest training labs expose realistic attack surfaces if deployed outside isolated environments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFauxbankLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host FauxBank-style training labs on VPN-only infrastructure.",
+      steps: [
+        "Deploy banking pentest labs on isolated Docker or lab-only subdomains.",
+        "Gate instructor dashboards behind SSO.",
+        "Never mirror seeded demo credentials on production banking apps."
+      ]
+    },
+    fixPrompt:
+      "We use FauxBank-style OWASP training labs for team pentest practice. Show how to isolate lab instances and remove public seeded credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-authenticated-sqli-search",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Authenticated SQL injection via FauxBank search API",
+    description:
+      "FauxBank GET /api/search returns injected:true when a SQL-style payload is passed in the q parameter after login.",
+    impactOneline:
+      "Search endpoints that concatenate user input into SQL let attackers read or modify data across accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAuthenticatedSqlInjectionProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all search endpoints.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate and escape search terms server-side.",
+        "Add integration tests that reject injection payloads."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search endpoint returns injected:true for OR 1=1 payloads after login. Show parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-idor-accounts-probe",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank account IDOR via predictable account IDs",
+    description:
+      "FauxBank GET /api/accounts/{id} returns another customer's balance and owner details when authenticated as a different user.",
+    impactOneline:
+      "Broken object-level authorization on account IDs exposes balances and PII across customers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankIdorAccountsProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every account lookup against the session user.",
+      steps: [
+        "Verify account.ownerId matches the authenticated user before returning data.",
+        "Use non-guessable account identifiers.",
+        "Add automated IDOR regression tests on /api/accounts/*."
+      ]
+    },
+    fixPrompt:
+      "Authenticated users can GET /api/accounts/2001 and read another customer's balance. Show server-side ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
