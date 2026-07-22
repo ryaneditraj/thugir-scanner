@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T20:23:35.071Z",
+  "updated_at": "2026-07-22T21:14:45.512Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1991,
-  "total_findings": 10393,
+  "total_sites_scanned": 1992,
+  "total_findings": 10400,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1545,
   "discovery_findings": 8360,
-  "improvements_shipped": 948,
-  "last_run": "2026-07-22T20:23:35.071Z",
+  "improvements_shipped": 953,
+  "last_run": "2026-07-22T21:14:45.512Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 7,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "Pass1 cold-start 5 findings gap=sensitive_data; 12s wake retry restored 7 findings 6/6 recall",
+      "note": "Heroku wake retry completed — 7 findings 6/6 recall after ~11m cold-start",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,39 +50,30 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 84,
-      "skipped_48h": [
-        "https://brokencrystals.com/marketplace",
-        "https://brokencrystals.com/graphql",
-        "https://pentest-fauxbank.vercel.app/login",
-        "https://pentest-fauxbank.vercel.app/dashboard"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Metasploitable2 vulnapp hub (DVWA/phpMyAdmin) + brokencrystals XXE/SQLi header oracles + FauxBank /lab",
-      "improvements_shipped_this_run": 0
+      "focus": "brokencrystals XXE POST + x-product-name SQLi header live probes from queue oracles",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: wake retry 5→7 findings, 6/6 recall (gap=sensitive_data on pass1)",
-      "server.vulnapp.id/dvwa: 6 findings — phpinfo + phpMyAdmin + hardcoded demo creds on Metasploitable hub",
-      "server.vulnapp.id/phpMyAdmin: 5 findings — exposed phpMyAdmin admin login",
-      "brokencrystals.com/api/metadata: 27 findings — client-side-xxe-evidence + SSTI + SSRF oracles",
-      "brokencrystals.com/api/products/views: 29 findings — SQLi via x-product-name header oracle",
-      "pentest-fauxbank.vercel.app/lab: 1 finding — shallow misconfig-only on guided lab landing"
+      "juice-shop.herokuapp.com: 7 findings 6/6 recall after Heroku wake retry",
+      "brokencrystals.com/api/metadata: 27→29 findings — xxe-xml-post-probe live ENTITY expansion",
+      "brokencrystals.com/api/products/views: 29→31 findings — sqli-header-error-disclosure on x-product-name"
     ],
     "learning_gaps": [
       "juice-shop pass1 cold-start still misses sensitive_data before wake retry (secret-resend slug absent)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pentest-fauxbank.vercel.app/lab: guided scenarios require auth — shallow crawl only hits misconfig",
-      "brokencrystals /api/metadata GET 404 — XXE oracle needs POST XML body probe"
+      "pentest-fauxbank.vercel.app/lab: prior scan 1 finding before fauxbank auth probes — rescan shows 7 findings with SQLi+IDOR"
     ]
   },
   "discovery_highlights": {
     "server.vulnapp.id/dvwa": 6,
     "server.vulnapp.id/phpMyAdmin": 5,
-    "brokencrystals.com/api/metadata": 27,
-    "brokencrystals.com/api/products/views": 29,
+    "brokencrystals.com/api/metadata": 29,
+    "brokencrystals.com/api/products/views": 31,
     "pentest-fauxbank.vercel.app/lab": 1,
     "brokencrystals.com/graphql": 25,
     "brokencrystals.com/api/partners/partnerLogin": 25,
