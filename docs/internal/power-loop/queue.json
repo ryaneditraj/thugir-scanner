@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://vulnshop.vercel.app/login",
+      "source": "yashasrnair/VulnShop — NoSQL injection login-bypass demo panel (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/products",
+      "source": "yashasrnair/VulnShop — stored XSS + path-traversal product upload lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/orders",
+      "source": "yashasrnair/VulnShop — IDOR all-orders listing lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/register",
+      "source": "yashasrnair/VulnShop — mass-assignment privilege escalation registration lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://server.vulnapp.id/",
+      "source": "vulnapp.id Metasploitable2 hub — DVWA/mutillidae/phpMyAdmin training surface index (web search)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://shield-dark-pattern-demo.vercel.app/",
       "source": "pixiebrix/agent-browser-shield — RiverMart mock e-commerce SPA with deliberate dark-pattern threats (GitHub live demo)",
       "auth": "oss_deploy"
