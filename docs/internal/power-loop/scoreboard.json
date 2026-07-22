@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T05:33:00.000Z",
+  "updated_at": "2026-07-22T06:09:00.186Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1876,
-  "total_findings": 9496,
+  "total_sites_scanned": 1885,
+  "total_findings": 9541,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1485,
-  "discovery_findings": 7556,
+  "discovery_urls_added": 1490,
+  "discovery_findings": 7594,
   "improvements_shipped": 916,
-  "last_run": "2026-07-22T05:33:00.000Z",
+  "last_run": "2026-07-22T06:09:00.186Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku 7 findings 6/6 recall first pass (pages=1 probes=240); security-question-disclosure + vibe-unauthenticated-api-routes both present",
+      "note": "Primary Heroku 7 findings 6/6 recall first pass (pages=1 probes=232); security-question-disclosure + vibe-unauthenticated-api-routes both present",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,36 +52,32 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 42,
+      "findings": 38,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "OopsSec XFF SQLi walkthrough + yogsec lab11 localStorage XSS; queue drain HackLab/vulnshop/WebVulnsGuide",
-      "improvements_shipped_this_run": 2,
-      "urls_validated": [
-        "https://koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/",
-        "https://yogsec.github.io/xss-labs/labs/lab11.html"
-      ],
+      "focus": "WSL modules 1008-1009 + yogsec lab14/16/17 queued; queue drain DevSecOps/owasp-top-10-labs/vulnlab/juicesec",
+      "improvements_shipped_this_run": 0,
       "urls_queued": [
-        "https://yogsec.github.io/xss-labs/labs/lab8.html",
-        "https://yogsec.github.io/xss-labs/labs/lab9.html",
-        "https://yogsec.github.io/xss-labs/labs/lab13.html",
-        "https://povzayd.github.io/XSS-LABS/LABS/lab3.html",
-        "https://web-security-learning-labs.vercel.app/module/1007"
+        "https://web-security-learning-labs.vercel.app/module/1008",
+        "https://web-security-learning-labs.vercel.app/module/1009",
+        "https://yogsec.github.io/xss-labs/labs/lab14.html",
+        "https://yogsec.github.io/xss-labs/labs/lab16.html",
+        "https://yogsec.github.io/xss-labs/labs/lab17.html"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 7 findings 6/6 recall on first pass — security-question-disclosure + vibe-unauthenticated-api-routes",
-      "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection: client-side-oopssec-xff-sqli-evidence (5 findings on post)",
-      "yogsec.github.io/xss-labs/labs/lab11.html: client-side-yogsec-xss-lab-module-evidence (3 findings)",
-      "ashimkoirala.github.io/HackLab: 7 findings — zero-dependency OWASP Top 10 browser lab evidence",
-      "demo.weblock.ru: 8 findings — Vulnerable Bank + AI prompt-injection demo markers"
+      "juice-shop.herokuapp.com: 7 findings 6/6 recall first pass — no benchmark misses",
+      "everdan0075.github.io/DevSecOps-Hacking-Lab: secret-openai + exposed-source-maps (7 findings)",
+      "vulnlab.vercel.app: 7 findings — lovable platform + permissive-cors markers",
+      "juicesec.mrdinesh.workers.dev: 7 findings — Juice Shop Workers variant with dangerous-html-sinks",
+      "mehdiaitsaid.github.io/owasp-top-10-labs: 4 findings — interactive OWASP Top 10 lab evidence"
     ],
     "learning_gaps": [
       "secret-resend slug still absent — sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "yogsec lab8/9/13 + povzayd lab3 + WSL module 1007 queued at tail — pending next queue drain",
-      "Web Security Learning Labs modules 1003-1006 are stub pages — no additional lab content yet",
-      "acuart.phpnet.us: DNS dead — classic Acunetix demo unreachable"
+      "WSL modules 1008-1009 + yogsec lab14/16/17 queued at tail — pending next queue drain",
+      "riglabs-cyber-lab.vercel.app: shallow landing only (1 finding) — lab modules may require navigation",
+      "dvai.vercel.app: Damn Vulnerable AI — LLM attack chains need authenticated agent sessions"
     ]
   },
   "discovery_highlights": {
