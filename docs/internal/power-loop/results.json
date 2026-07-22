@@ -1,35 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-21T05:06:02.798Z",
-      "url": "https://playground.fabraix.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 272,
-      "status": "ok",
-      "scanned_at": "2026-07-21T05:06:02.798Z"
-    },
-    {
       "run_id": "2026-07-21T06:04:40.637Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -10137,6 +10108,71 @@
       "probes_run": 273,
       "status": "ok",
       "scanned_at": "2026-07-22T05:19:02.620Z"
+    },
+    {
+      "run_id": "2026-07-22T06:01:45.434Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 232,
+      "status": "ok",
+      "scanned_at": "2026-07-22T06:01:45.434Z"
     }
   ],
   "teacher_delta_runs": [
@@ -10891,6 +10927,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 05 UTC run: first-pass full 6/6 recall on shallow crawl; security-question-disclosure present (sensitive_data); secret-resend slug still absent.",
       "scanned_at": "2026-07-22T05:17:14.000Z"
+    },
+    {
+      "run_id": "2026-07-22T06:07:08.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=232; no gap)",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. 06 UTC run: stable 6/6 first-pass recall on shallow crawl; security-question-disclosure + vibe-unauthenticated-api-routes both present; secret-resend slug still absent.",
+      "scanned_at": "2026-07-22T06:07:08.000Z"
     }
   ]
 }
