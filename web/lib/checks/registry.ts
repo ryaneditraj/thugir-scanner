@@ -2759,6 +2759,22 @@ const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "eval() on sessionStorage search matches",
     re: /sessionStorage[\s\S]{0,400}eval\s*\(|eval\s*\(\s*matches\[/
+  },
+  {
+    label: "eval() on localStorage JSON parsed payloads",
+    re: /JSON\.parse\s*\(\s*localStorage\.getItem[\s\S]{0,300}eval\s*\(\s*payload/
+  },
+  {
+    label: "eval() on forEach payload from localStorage JSON",
+    re: /payloads\.forEach[\s\S]{0,120}eval\s*\(\s*payload\s*\)/
+  },
+  {
+    label: "eval() on combined localStorage key fragments",
+    re: /localStorage\.getItem\s*\(\s*['"]part[123]['"]\s*\)[\s\S]{0,300}eval\s*\(\s*combined/
+  },
+  {
+    label: "eval(combined) after joining localStorage parts",
+    re: /let\s+combined\s*=\s*part1\s*\+\s*part2[\s\S]{0,120}eval\s*\(\s*combined/
   }
 ];
 
@@ -22978,6 +22994,22 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "sessionStorage search eval XSS lab",
     re: /sessionStorage \+ Search Filter|eval\(match\)|Executing matches via eval/i
+  },
+  {
+    label: "localStorage JSON eval XSS lab title",
+    re: /XSS Lab #\d+:\s*localStorage as JSON|localStorage JSON[\s\S]{0,40}Parsed\s*&\s*(?:Injected|Executed)/i
+  },
+  {
+    label: "localStorage JSON eval vulnerable sink",
+    re: /JSON\.parse\s*\(\s*localStorage\.getItem[\s\S]{0,160}eval\s*\(\s*payload/i
+  },
+  {
+    label: "Cross-key injection XSS lab badge",
+    re: /Lab #\d+ · Cross-Key Injection|Multiple Keys[\s\S]{0,40}Cross-Key Injection/i
+  },
+  {
+    label: "Cross-key localStorage eval combined code sink",
+    re: /localStorage\.getItem\s*\(\s*['"]part[123]['"]\s*\)[\s\S]{0,240}eval\s*\(\s*combined/i
   }
 ];
 

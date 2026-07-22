@@ -6053,6 +6053,30 @@
       "slug": "dom-eval-xss",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: labs/lab17.html sessionStorage search filter eval(matches[i]); sessionStorage+eval(match) regex; yogsec.github.io/xss-labs/labs/lab17.html findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab18.html JSON.parse(localStorage.getItem('payloads')) + payloads.forEach(eval(payload)); yogsec.github.io/xss-labs/labs/lab18.html findings 4→6; benchmark 6/6 maintained on primary oracle"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab19.html localStorage part1+part2+part3 combined then eval(combined); yogsec.github.io/xss-labs/labs/lab19.html findings 3→6; benchmark 6/6 maintained on primary oracle"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "yogsec-xss-labs-hub-seed-normalization",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: scanning labs/lab18.html seeded labs/labs/lab1.html (404); yogsecXssLabsHubUrl normalizes to /xss-labs/ hub before seeding; crawl now reaches labs/lab1.html; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "client-side-web-security-learning-labs-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /module/1010 returns stub 'Here is a Module: 1010' only — no lab content to detect"
     }
   ],
   "shipped": [
@@ -10665,6 +10689,21 @@
       "source": "discovery:yogsec.github.io/xss-labs",
       "slug": "sessionstorage-search-eval-xss-sink",
       "shipped_at": "2026-07-22T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "localstorage-json-eval-xss-sink",
+      "shipped_at": "2026-07-22T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "localstorage-cross-key-eval-xss-sink",
+      "shipped_at": "2026-07-22T08:25:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "yogsec-xss-labs-hub-seed-normalization",
+      "shipped_at": "2026-07-22T08:25:00.000Z"
     }
   ]
 }
