@@ -5921,6 +5921,24 @@
       "slug": "client-side-povzayd-xss-labs-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: LABS/lab2.html XSS Lab — Level 2 + getElementById('reflected-output').innerHTML = filterReflected(q) + location.hash dom-box sink; povzayd URL gate fix; povzayd.github.io/XSS-LABS/LABS/lab2.html findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-javascript-url-lab-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-7 Reflected XSS in a JavaScript URL + back.href = javascript:fetch('/analytics',{method:'post'...}); the0x-pwn.github.io/lab-xss/lab-7/ findings 2→3; benchmark juice-shop-staging 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-base64-eval-lab-module",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab20 XSS Lab #20 Base64 Encoded + eval(decoded) + Lab #20 · Base64 Encoded XSS badge; yogsec module rule corpus includes pageUrl; yogsec.github.io/xss-labs/labs/lab20.html findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-search-eval-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab21 Search Box XSS (eval) + Vulnerable Code: eval(code); yogsecXssLabsPrioritySeeds extended 20→39; yogsec.github.io/xss-labs/labs/lab21.html findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10423,6 +10441,21 @@
       "source": "discovery:povzayd.github.io",
       "slug": "client-side-povzayd-level2-lab-module",
       "shipped_at": "2026-07-21T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-javascript-url-lab-markers",
+      "shipped_at": "2026-07-22T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-base64-eval-lab-module",
+      "shipped_at": "2026-07-22T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "client-side-yogsec-search-eval-lab-seeds",
+      "shipped_at": "2026-07-22T00:10:00.000Z"
     }
   ]
 }
