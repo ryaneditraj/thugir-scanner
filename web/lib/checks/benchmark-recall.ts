@@ -8,6 +8,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "client-side-xxe-evidence": ["sqli"],
   "client-side-api-security-lab-evidence": ["idor", "auth_bypass"],
   "unauthenticated-admin-endpoint": ["auth_bypass"],
+  "security-question-disclosure": ["sensitive_data"],
   "dangerous-html-sinks": ["xss"],
   "dom-eval-xss": ["xss"],
   "idor-sequential-ids": ["idor"],

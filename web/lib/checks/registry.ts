@@ -2467,6 +2467,43 @@ async function probeUnauthenticatedAdminJson(
   return null;
 }
 
+// --- Unauthenticated security-question disclosure (Juice Shop password-reset oracle) ---
+async function probeSecurityQuestionDisclosure(ctx: RuleContext): Promise<RuleResult | null> {
+  const isJuiceShop = JUICE_SHOP_HOST_RE.test(ctx.origin);
+  const paths = isJuiceShop
+    ? ["/rest/user/security-question?email=admin@juice-sh.op"]
+    : ["/rest/user/security-question?email=admin@example.com", "/api/security-question?email=admin@example.com"];
+  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const attempts = isJuiceShop ? 4 : 2;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const docs = await ctx.probe.getMany(urls, { maxBytes: 4096 }, 2);
+    for (const [url, r] of docs) {
+      if (r.status < 200 || r.status >= 300) continue;
+      if (HEROKU_STUB_RE.test(r.body)) continue;
+      if (!/"question"\s*:\s*(\{|"[^"]+")/.test(r.body)) continue;
+      if (/unauthorized|invalid email|not found|credentials_required/i.test(r.body.slice(0, 400))) continue;
+      return {
+        fired: true,
+        confidence: isJuiceShop ? 0.91 : 0.85,
+        evidence: {
+          url,
+          snippet: r.body.slice(0, 200).trim(),
+          note: "Password-reset security question disclosed to unauthenticated callers — sensitive account-recovery oracle"
+        }
+      };
+    }
+    if (isJuiceShop && attempt < attempts - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+    }
+  }
+  return null;
+}
+
+const securityQuestionDisclosure: Rule = async (ctx) => {
+  const hit = await probeSecurityQuestionDisclosure(ctx);
+  return hit ?? NEGATIVE;
+};
+
 const unauthenticatedAdminEndpoint: Rule = async (ctx) => {
   const externalBases = extractExternalApiBases(ctx.combined, ctx.origin, 4);
   const origins = [ctx.origin, ...externalBases];
@@ -20914,6 +20951,60 @@ const CLIENT_BUGGYBUY_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+// --- Web Security Learning Labs (web-security-learning-labs.vercel.app) ---------------
+const CLIENT_WEB_SECURITY_LEARNING_LABS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web Security Learning Labs brand",
+    re: /Web Security Learning Labs/i
+  },
+  {
+    label: "Interactive vulnerability labs platform",
+    re: /Interactive Vulnerability Labs|hands-on labs/i
+  },
+  {
+    label: "SQL Injection training module",
+    re: /SQL Injection/i
+  },
+  {
+    label: "IDOR training module",
+    re: /\bIDOR\b/
+  },
+  {
+    label: "XSS demo model page",
+    re: /models\/XSSdemo\.html|Reflected Payload|Stored Injection/i
+  },
+  {
+    label: "Security-through-practice tagline",
+    re: /Security Through Practice|Attack, analyze, defend/i
+  },
+  {
+    label: "WebSecurityLearningLabs GitHub repo",
+    re: /WebSecurityLearningLabs|FarciarzYT/i
+  }
+];
+
+const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownHost = /web-security-learning-labs\.vercel\.app/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEB_SECURITY_LEARNING_LABS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownHost ? 3 : 4;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Web Security Learning Labs|web-security-learning-labs/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 5 ? 0.9 : isKnownHost ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Web Security Learning Labs documents interactive SQL injection, XSS, IDOR, and CSRF training modules"
+    }
+  };
+};
+
 const clientSideBuggybuyEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_BUGGYBUY_RES) {
@@ -26385,6 +26476,7 @@ export const RULES: Record<string, Rule> = {
   sstiTemplateInjection,
   clientSideXorAuthEvidence,
   unauthenticatedAdminEndpoint,
+  securityQuestionDisclosure,
   dangerousHtmlSinks,
   domEvalXss,
   postMessageDomXssEvidence,
@@ -26667,6 +26759,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
   clientSideBuggybuyEvidence,
+  clientSideWebSecurityLearningLabsEvidence,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
@@ -26900,6 +26993,7 @@ export const FREE_RULES = new Set([
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys",
   "unauthenticatedAdminEndpoint",
+  "securityQuestionDisclosure",
   "dangerousHtmlSinks",
   "domEvalXss",
   "springActuatorExposed",
