@@ -9782,6 +9782,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-the0x-pwn-xss-tag-filter-bypass-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn HTML tag filter bypass XSS lab disclosed",
+    description:
+      "the0x-pwn lab-6 reflects query into resultQuery.innerHTML behind a blockTag denylist that can be bypassed with unknown elements and onfocus autofocus payloads.",
+    impactOneline:
+      "Public the0x-pwn lab-6 page documents denylist-based tag filtering bypass before innerHTML assignment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssTagFilterBypassLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Tag denylists are bypassable — use textContent or a strict HTML sanitizer instead of innerHTML.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled data.",
+        "Use DOMPurify with an allowlist rather than a blocklist of tag names.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-6-style tag-filter bypass XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn SVG script injection XSS lab disclosed",
+    description:
+      "the0x-pwn lab-9 reflects query into resultQuery.innerHTML when SVG and animatetransform tags are omitted from the blockTag denylist — enabling animatetransform onbegin payloads.",
+    impactOneline:
+      "Public the0x-pwn lab-9 page documents SVG/animatetransform injection via partial tag filtering before innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssSvgScriptInjectionLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Incomplete SVG tag blocking leaves animatetransform event handlers exploitable via innerHTML.",
+      steps: [
+        "Replace innerHTML with textContent for reflected search results.",
+        "Use a strict HTML sanitizer that strips SVG event handlers.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-9-style SVG injection XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-montanajim-xss-classroom-evidence",
     platform: "generic",
     category: "Cross-site scripting",
