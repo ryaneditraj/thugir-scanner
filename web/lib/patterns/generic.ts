@@ -11494,6 +11494,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-brokencrystals-prototype-pollution-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+    description:
+      "Broken Crystals /marketplace parses URI query params into objects via __proto__, polluting Object.prototype. The bundle uses prototypePollutionDomXss as a script src gadget — enabling DOM XSS via /marketplace?__proto__[prototypePollutionDomXss]=data:,alert(1);",
+    impactOneline:
+      "Prototype pollution on marketplace filtering can escalate to arbitrary script execution in the victim browser.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBrokencrystalsPrototypePollutionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never parse URI params into objects via __proto__; use Object.create(null) or safe query parsers.",
+      steps: [
+        "Parse query strings with libraries that block __proto__ and constructor keys.",
+        "Freeze Object.prototype in client bundles where feasible.",
+        "Validate script src values against an allowlist instead of reading polluted prototype keys."
+      ]
+    },
+    fixPrompt:
+      "Our /marketplace page parses URI params into objects and uses prototypePollutionDomXss as a script source. Show how to block __proto__ pollution and sanitize dynamic script loading.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-skillaudit-evidence",
     platform: "generic",
     category: "AI security",

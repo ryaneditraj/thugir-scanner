@@ -554,6 +554,29 @@ async function extractGruyereLiveInstancePaths(ctx: RuleContext): Promise<string
 
 const reflectedXss: Rule = async (ctx) => {
   const canary = `thugirXSS${Date.now().toString(36)}`;
+  if (/brokencrystals\.com/i.test(ctx.origin)) {
+    const subUrl = new URL("/api/subscriptions", ctx.origin);
+    subUrl.searchParams.set("email", canary);
+    const subDoc = await ctx.probe.get(subUrl.toString(), { method: "POST", maxBytes: 8192 });
+    if (subDoc.status >= 200 && subDoc.status < 300 && isReflectedXssCanary(subDoc.body, canary)) {
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          canary,
+          hits: [
+            {
+              path: "/api/subscriptions",
+              param: "email",
+              url: subUrl.toString(),
+              snippet: subDoc.body.slice(0, 200).trim()
+            }
+          ],
+          note: "Broken Crystals POST /api/subscriptions echoes email unescaped in response body — reflected XSS likely"
+        }
+      };
+    }
+  }
   if (/hack-this-site-eta\.vercel\.app/i.test(ctx.origin)) {
     const reflectUrl = new URL("/api/reflect", ctx.origin);
     reflectUrl.searchParams.set("q", canary);
@@ -26327,6 +26350,45 @@ const clientSideCssInjectionEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Broken Crystals marketplace prototype pollution DOM XSS (brokencrystals.com) -----
+const CLIENT_BROKENCRYSTALS_PP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "prototypePollutionDomXss script source gadget",
+    re: /prototypePollutionDomXss[\s\S]{0,120}createElement\(["']script["']\)/i
+  },
+  {
+    label: "prototype-pollution-dom-xss-script element id",
+    re: /prototype-pollution-dom-xss-script|id="prototype-pollution-dom-xss-script"/i
+  },
+  {
+    label: "marketplace URI param object parsing",
+    re: /\/marketplace[\s\S]{0,200}__proto__|__proto__[\s\S]{0,200}\/marketplace/i
+  },
+  {
+    label: "sendSupportEmail server-side URI parsing",
+    re: /sendSupportEmail[\s\S]{0,200}__proto__|__proto__[\s\S]{0,200}sendSupportEmail/i
+  }
+];
+
+const clientSideBrokencrystalsPrototypePollutionEvidence: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin) && !/Broken Crystals|brokencrystals\.com/i.test(ctx.combined))
+    return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BROKENCRYSTALS_PP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Broken Crystals /marketplace parses URI params into objects via __proto__, enabling prototype pollution and DOM XSS via prototypePollutionDomXss script gadget"
+    }
+  };
+};
+
 // --- SkillAudit MCP skill safety scanner (skillaudit.vercel.app) ---------------------
 const CLIENT_SKILLAUDIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -27714,6 +27776,7 @@ export const RULES: Record<string, Rule> = {
   clientSideAirtAcademyEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
+  clientSideBrokencrystalsPrototypePollutionEvidence,
   exposedApiConfig,
   sqliQueryParamInjection,
   xpathInjectionDisclosure,
