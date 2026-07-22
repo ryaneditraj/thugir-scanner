@@ -4021,14 +4021,26 @@ function extractExploitEducationSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Hub root for yogsec XSS Labs — avoids labs/labs/labN.html when seeding from a lab page. */
+function yogsecXssLabsHubUrl(pageUrl: string): string {
+  try {
+    const u = new URL(pageUrl);
+    if (!/yogsec\.github\.io/i.test(u.hostname)) return pageUrl;
+    return new URL("/xss-labs/", u.origin).toString();
+  } catch {
+    return pageUrl;
+  }
+}
+
 /** yogsec XSS Labs (yogsec.github.io/xss-labs — reflected/stored/DOM browser labs). */
 function extractYogsecXssLabsSeeds(html: string, pageUrl: string): string[] {
   if (!/yogsec\.github\.io\/xss-labs|XSS Labs|yogsec\/xss-labs/i.test(html)) return [];
   const out = new Set<string>();
-  const pageOrigin = new URL(pageUrl).origin;
+  const hubUrl = yogsecXssLabsHubUrl(pageUrl);
+  const pageOrigin = new URL(hubUrl).origin;
   for (let id = 1; id <= 39; id++) {
     try {
-      const u = new URL(`labs/lab${id}.html`, pageUrl);
+      const u = new URL(`labs/lab${id}.html`, hubUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
@@ -6875,7 +6887,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     : [];
   const yogsecXssLabsPrioritySeeds = /yogsec\.github\.io\/xss-labs/i.test(home.finalUrl)
     ? Array.from({ length: 39 }, (_, i) =>
-        new URL(`labs/lab${i + 1}.html`, home.finalUrl).toString()
+        new URL(`labs/lab${i + 1}.html`, yogsecXssLabsHubUrl(home.finalUrl)).toString()
       )
     : [];
   const seclabPlaygroundPrioritySeeds =
