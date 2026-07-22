@@ -10766,6 +10766,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-dark-pattern-lab-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Dark-pattern e-commerce demo with pre-checked upsells disclosed",
+    description:
+      "RiverMart demo documents deceptive checkout patterns: pre-checked optional add-ons, misleading trust badges, and shadow-DOM widget labs.",
+    impactOneline:
+      "Public dark-pattern demos reveal manipulative UX patterns (preselection, confirmshaming) reusable for compliance testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDarkPatternLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Dark-pattern demos should be clearly labeled; production checkout must not pre-select paid add-ons.",
+      steps: [
+        "Default optional fees and marketing opt-ins to unchecked.",
+        "Avoid misleading trust badges without substantiation.",
+        "Audit third-party widgets mounted in shadow roots for consent bypass."
+      ]
+    },
+    fixPrompt:
+      "We host a RiverMart-style dark-pattern demo. Show how to eliminate pre-checked upsells and misleading trust signals.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ai-security-platform-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI Security Platform hands-on challenge catalog disclosed",
+    description:
+      "AI Security Platform publishes Next.js + Supabase security exercises covering XSS, IDOR, auth bypass, brute force, and supply-chain labs.",
+    impactOneline:
+      "Public AI security challenge platforms expose intentional vulnerability surfaces for training and reconnaissance.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiSecurityPlatformEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate challenge instances from production; require auth before exposing exploit chains.",
+      steps: [
+        "Run challenge backends in dedicated sandbox projects.",
+        "Do not reuse production Supabase keys in public lab frontends.",
+        "Rate-limit unauthenticated challenge APIs."
+      ]
+    },
+    fixPrompt:
+      "We host an AI Security Platform with public /challenges routes. Show how to isolate lab backends and protect Supabase credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-forgotten-backup-disclosure",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Forgotten developer backup exposed via FTP null-byte bypass",
+    description:
+      "OWASP Juice Shop FTP directory allows null-byte bypass to download package.json.bak and package-lock.json.bak backups.",
+    impactOneline:
+      "Exposed package backups leak dependency versions and internal project metadata useful for targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopForgottenBackupDisclosure" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove backup files from web-accessible directories; enforce strict extension allowlists without bypass.",
+      steps: [
+        "Delete .bak files from public FTP/document roots.",
+        "Reject null-byte and double-extension path tricks in file servers.",
+        "Store developer backups outside the web root."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop FTP allows package.json.bak via %2500.md null-byte bypass. Show how to block extension bypass and remove backups.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-eks-goat-evidence",
     platform: "generic",
     category: "Security misconfiguration",

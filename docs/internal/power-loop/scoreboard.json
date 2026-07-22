@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T22:20:40.458Z",
+  "updated_at": "2026-07-22T23:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1555,
   "discovery_findings": 8511,
-  "improvements_shipped": 953,
-  "last_run": "2026-07-22T22:20:40.458Z",
+  "improvements_shipped": 956,
+  "last_run": "2026-07-22T23:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 6,
+      "primary_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "First-pass 6/6 recall on shallow crawl (pages=1 probes=201); sensitive_data via security-question-disclosure — vibe-unauthenticated-api-routes absent",
+      "note": "juice-shop-forgotten-backup-disclosure via FTP null-byte bypass; recall 6/6 with 9 findings",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,41 +50,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 41,
-      "skipped_48h": [
-        "https://brokencrystals.com/api/partners/searchPartners",
-        "https://brokencrystals.com/api/partners/query",
-        "https://brokencrystals.com/api/testimonials",
-        "https://pentest-fauxbank.vercel.app/api/search",
-        "https://ctf-website-ten.vercel.app/",
-        "https://server.vulnapp.id/dvwa/",
-        "https://server.vulnapp.id/phpMyAdmin/"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 2,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "RiverMart dark-pattern demo + AI security platform + Mutillidae/VAmPI/Pwnshop oracles + BugBountyHunter/Wizer CTF queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "RiverMart dark-pattern lab evidence + AI Security Platform challenge catalog + Juice Shop FTP forgotten backup",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6 findings 6/6 recall first pass — security-question-disclosure for sensitive_data",
-      "shield-dark-pattern-demo.vercel.app: 3 findings — RiverMart dark-pattern XSS/CORS oracles",
-      "ai-security-platform-iota.vercel.app: 3 findings — OWASP + supply-chain challenge platform markers",
-      "server.vulnapp.id/mutillidae: 7 findings — Mutillidae II SQLi/XSS training surface",
-      "urban-vampi-staging.up.railway.app: 6 findings — VAmPI API Top 10 IDOR + lab evidence",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 11 findings — 51-vuln index + CORS/auth oracles"
+      "juice-shop-staging: 9 findings 6/6 recall — juice-shop-forgotten-backup-disclosure via /ftp/package.json.bak%2500.md",
+      "shield-dark-pattern-demo.vercel.app: 4 findings — client-side-dark-pattern-lab-evidence (RiverMart pre-checked upsells)",
+      "ai-security-platform-iota.vercel.app: 4 findings — client-side-ai-security-platform-evidence (Next.js + Supabase challenge hub)"
     ],
     "learning_gaps": [
-      "juice-shop shallow crawl (pages=1) — security-question-disclosure present but vibe-unauthenticated-api-routes absent this pass",
-      "secret-resend slug still absent on juice-shop benchmark",
+      "secret-resend slug still absent on juice-shop (Leaked API Key challenge is social-media API, not bundle Resend key)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ai-security-platform-iota: challenge demos need authenticated browser chains beyond landing-page crawl",
-      "shield-dark-pattern-demo: dark-pattern rules need client-side evidence probes beyond generic XSS sinks"
+      "juice-shop.herokuapp.com Heroku dyno intermittently unreachable — staging oracle used for validation"
     ]
   },
   "discovery_highlights": {
-    "shield-dark-pattern-demo.vercel.app": 3,
-    "ai-security-platform-iota.vercel.app": 3,
+    "shield-dark-pattern-demo.vercel.app": 4,
+    "ai-security-platform-iota.vercel.app": 4,
     "server.vulnapp.id/mutillidae": 7,
     "urban-vampi-staging.up.railway.app": 6,
     "pwnshop.ctfsecurity.com/vulnerabilities": 11,

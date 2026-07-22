@@ -1131,6 +1131,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabApiLabsEvidence",
   "clientSideVulnerableWebSiteEvidence",
   "clientSideNivaraSecurityEvidence",
+  "clientSideDarkPatternLabEvidence",
+  "clientSideAiSecurityPlatformEvidence",
+  "juiceShopForgottenBackupDisclosure",
   "clientSideEksGoatEvidence",
   "clientSideCtflearnEvidence",
   "clientSideCybenchEvidence",
@@ -5745,6 +5748,71 @@ function extractFauxbankLabSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** RiverMart dark-pattern checkout demo (shield-dark-pattern-demo.vercel.app). */
+function extractShieldDarkPatternSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    return [];
+  }
+  if (
+    !/shield-dark-pattern-demo\.vercel\.app/i.test(host) &&
+    !/RiverMart/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/checkout", "/cart", "/product/p-headphones"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** AI Security Platform challenge hub (ai-security-platform-iota.vercel.app). */
+function extractAiSecurityPlatformChallengeSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    return [];
+  }
+  if (
+    !/ai-security-platform-iota\.vercel\.app/i.test(host) &&
+    !/AI\s*&\s*Security Platform|Hands-on Next\.js \+ Supabase security exercises/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const re = /href=["'](\/challenges\/[^"'#?]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) !== null) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const p of ["/challenges/xss", "/challenges/idor", "/challenges/admin-console"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Invicti ASP.NET practice site — seed guestbook XSS lab page. */
 function extractInvictiAspnetSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -6571,6 +6639,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const brokencrystalsLabSeeds = extractBrokencrystalsLabSeeds(home.body, home.finalUrl);
   const fauxbankLabSeeds = extractFauxbankLabSeeds(home.body, home.finalUrl);
+  const shieldDarkPatternSeeds = extractShieldDarkPatternSeeds(home.body, home.finalUrl);
+  const aiSecurityPlatformSeeds = extractAiSecurityPlatformChallengeSeeds(home.body, home.finalUrl);
   const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
   const vaultappSeeds = extractVaultappSeeds(home.body, home.finalUrl);
   const llmSecDevSeeds = extractLlmSecDevSeeds(home.body, home.finalUrl);
@@ -7227,6 +7297,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuiceBlogPostSeeds,
       ...brokencrystalsLabSeeds,
       ...fauxbankLabSeeds,
+      ...shieldDarkPatternSeeds,
+      ...aiSecurityPlatformSeeds,
       ...restVulnwebSeeds,
       ...vulnappHubSeeds,
       ...blueTeamLabsSeeds,
@@ -7350,7 +7422,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       "/rest/admin/application-configuration",
       "/rest/track-order/1",
       "/rest/products/search?q='))",
-      "/rest/products/search?q=apple"
+      "/rest/products/search?q=apple",
+      "/ftp/package.json.bak%2500.md",
+      "/ftp/acquisitions.md"
     ];
     const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
     const mainJsUrl = new URL("/main.js", jsOrigin).toString();

@@ -6293,6 +6293,24 @@
       "slug": "client-side-ces-ctf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CES CTF — The Lost Tokens + const step3 = Y2lwaGVy + getCookie(role)===admin oracle; extractCesCtfSeeds crawls login/profile/app.js; ctf-website-ten.vercel.app findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:shield-dark-pattern-demo.vercel.app",
+      "slug": "client-side-dark-pattern-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: RiverMart defaultChecked gift wrap/newsletter/store card + Members rate RiverMart #1 trust badge; shield-dark-pattern-demo.vercel.app findings 3→4; benchmark juice-shop-staging 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "client-side-ai-security-platform-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta Hands-on Next.js + Supabase security exercises + /challenges/xss|idor catalog; ai-security-platform-iota.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-forgotten-backup-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /ftp/package.json.bak%2500.md returns {\"name\":\"juice-shop\",\"version\":\"6.2.0-SNAPSHOT\"}; juiceShopForgottenBackupDisclosure + bootstrap FTP paths; juice-shop-staging findings 8→9, recall 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11075,6 +11093,21 @@
       "source": "discovery:ctf-website-ten.vercel.app",
       "slug": "client-side-ces-ctf-evidence",
       "shipped_at": "2026-07-22T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:shield-dark-pattern-demo.vercel.app",
+      "slug": "client-side-dark-pattern-lab-evidence",
+      "shipped_at": "2026-07-22T23:15:00.000Z"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "client-side-ai-security-platform-evidence",
+      "shipped_at": "2026-07-22T23:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-forgotten-backup-disclosure",
+      "shipped_at": "2026-07-22T23:15:00.000Z"
     }
   ]
 }
