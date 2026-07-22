@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://brokencrystals.com/api/partners/searchPartners",
+      "source": "NeuraLegion/brokencrystals — XPath string-detection injection oracle on partner search (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/partners/query",
+      "source": "NeuraLegion/brokencrystals — raw XPath injection endpoint (README; not linked in frontend)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/testimonials",
+      "source": "NeuraLegion/brokencrystals — persistent XSS via authenticated testimonial POST (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/search",
+      "source": "alfredang/pentest FauxBank — simulated SQL injection lesson module (GitHub README lesson #6)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf-website-ten.vercel.app/",
+      "source": "CES CTF — The Lost Tokens browser-based vuln hunt with hidden tokens (web search)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://server.vulnapp.id/dvwa/",
       "source": "Metasploitable2 hub — DVWA on server.vulnapp.id (linked from public vulnapp hub)",
       "auth": "public_demo"
