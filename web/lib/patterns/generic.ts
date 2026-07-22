@@ -408,6 +408,56 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "graphiql-ui-exposed",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "GraphiQL interactive IDE exposed in production",
+    description:
+      "GraphiQL or similar GraphQL playground UIs are reachable without authentication, giving attackers an interactive console to explore the schema, craft queries, and test mutations.",
+    impactOneline: "A public GraphiQL IDE lets anyone explore and abuse your GraphQL API interactively.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphiqlUiExposed" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Disable GraphiQL and any GraphQL playground in production.",
+      steps: [
+        "Remove /graphiql routes from production builds or gate them behind admin auth.",
+        "Disable introspection on the GraphQL endpoint.",
+        "Confirm production returns 404 for playground paths."
+      ]
+    },
+    fixPrompt:
+      "My production app exposes GraphiQL at /graphiql without authentication. Disable the playground in production and lock down GraphQL introspection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "weak-api-default-credentials",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "JSON login API accepts common default credentials",
+    description:
+      "A JSON authentication endpoint accepts well-known default username/password pairs (e.g. admin/admin), allowing unauthenticated attackers to obtain a valid session or user profile without brute force.",
+    impactOneline: "Default API credentials grant authenticated access without guessing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "weakApiDefaultCredentials" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove default credentials and enforce strong authentication on login APIs.",
+      steps: [
+        "Rotate any default admin/service accounts immediately.",
+        "Reject common credential pairs and enforce account lockout after failed attempts.",
+        "Require MFA for privileged API accounts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login endpoint accepts default credentials like admin/admin. Remove default accounts, rotate secrets, and add rate limiting plus MFA for admin API access.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "directory-listing-enabled",
     platform: "generic",
     category: "Information disclosure",

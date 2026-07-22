@@ -1162,6 +1162,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideBrokencrystalsEvidence",
   "exposedApiConfig",
   "clientSideCssInjectionEvidence",
+  "graphiqlUiExposed",
+  "weakApiDefaultCredentials",
   "clientSideVapiEvidence",
   "clientSideArchonTrainingEvidence",
   "clientSideArchonApiSecurityCurriculumEvidence",
@@ -5658,7 +5660,17 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
   }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/userlogin", "/newuserlogin", "/api/config", "/api/goto", "/users/register"]) {
+  for (const p of [
+    "/userlogin",
+    "/newuserlogin",
+    "/api/config",
+    "/api/goto",
+    "/users/register",
+    "/swagger",
+    "/swagger-json",
+    "/graphiql",
+    "/api/auth/login"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
