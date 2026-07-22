@@ -7688,7 +7688,32 @@
       "url": "https://vuln-demo.vercel.app/",
       "source": "vuln-demo — multi-vulnerability Next.js training sandbox (Vercel OSS deploy, web search)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://brokencrystals.com/swagger",
+      "source": "NeuraLegion/brokencrystals — exposed Swagger UI API documentation (public benchmark)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/graphiql",
+      "source": "NeuraLegion/brokencrystals — GraphQL introspection enabled (public benchmark)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/login",
+      "source": "NeuraLegion/brokencrystals — weak default credentials login API (README oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/brokencrystals/",
+      "source": "OWASP VWAD — Broken Crystals benchmark directory entry (owasp.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/login",
+      "source": "FauxBank — fictional banking pentest training login surface (web search)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-22T13:05:00.000Z"
+  "updated_at": "2026-07-22T14:05:00.000Z"
 }
