@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T19:25:00.000Z",
+  "updated_at": "2026-07-22T20:23:35.071Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,27 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1982,
-  "total_findings": 10302,
+  "total_sites_scanned": 1991,
+  "total_findings": 10393,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1540,
-  "discovery_findings": 8276,
+  "discovery_urls_added": 1545,
+  "discovery_findings": 8360,
   "improvements_shipped": 948,
-  "last_run": "2026-07-22T19:25:00.000Z",
+  "last_run": "2026-07-22T20:23:35.071Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 7,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 8,
-      "oracle_recall": "6/6",
-      "gap": [],
-      "note": "Primary Heroku wake retry restored 6/6 recall (7 findings after retry from 5-finding cold pass gap=sensitive_data)",
+      "note": "Pass1 cold-start 5 findings gap=sensitive_data; 12s wake retry restored 7 findings 6/6 recall",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,30 +50,40 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 84,
+      "skipped_48h": [
+        "https://brokencrystals.com/marketplace",
+        "https://brokencrystals.com/graphql",
+        "https://pentest-fauxbank.vercel.app/login",
+        "https://pentest-fauxbank.vercel.app/dashboard"
+      ],
       "dns_failures": [],
-      "focus": "brokencrystals README oracles — POST /api/render SSTI, GET /api/spawn RCE, GET /api/file SSRF",
-      "improvements_shipped_this_run": 3
+      "focus": "Metasploitable2 vulnapp hub (DVWA/phpMyAdmin) + brokencrystals XXE/SQLi header oracles + FauxBank /lab",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: wake retry 5→7 findings, 6/6 recall restored",
-      "brokencrystals.com/api/render: POST doT SSTI Hello {{=7*7}}→Hello 49 (19→27 findings)",
-      "brokencrystals.com/api/spawn: GET command=echo canary RCE proof (20→28 findings)",
-      "brokencrystals.com/api/file: GET path=http://example.com SSRF with accept header (20→28 findings)",
-      "brokencrystals.com/marketplace: 24 findings — prototype pollution + DOM XSS oracle",
-      "brokencrystals.com/api/testimonials/count: 26 findings — SQLi query-param oracle"
+      "juice-shop.herokuapp.com: wake retry 5→7 findings, 6/6 recall (gap=sensitive_data on pass1)",
+      "server.vulnapp.id/dvwa: 6 findings — phpinfo + phpMyAdmin + hardcoded demo creds on Metasploitable hub",
+      "server.vulnapp.id/phpMyAdmin: 5 findings — exposed phpMyAdmin admin login",
+      "brokencrystals.com/api/metadata: 27 findings — client-side-xxe-evidence + SSTI + SSRF oracles",
+      "brokencrystals.com/api/products/views: 29 findings — SQLi via x-product-name header oracle",
+      "pentest-fauxbank.vercel.app/lab: 1 finding — shallow misconfig-only on guided lab landing"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com primary benchmark still cold-starts at 5 findings before wake retry",
+      "juice-shop pass1 cold-start still misses sensitive_data before wake retry (secret-resend slug absent)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure)"
+      "pentest-fauxbank.vercel.app/lab: guided scenarios require auth — shallow crawl only hits misconfig",
+      "brokencrystals /api/metadata GET 404 — XXE oracle needs POST XML body probe"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/marketplace": 24,
+    "server.vulnapp.id/dvwa": 6,
+    "server.vulnapp.id/phpMyAdmin": 5,
+    "brokencrystals.com/api/metadata": 27,
+    "brokencrystals.com/api/products/views": 29,
+    "pentest-fauxbank.vercel.app/lab": 1,
     "brokencrystals.com/graphql": 25,
     "brokencrystals.com/api/partners/partnerLogin": 25,
     "brokencrystals.com/api/testimonials/count": 26,
