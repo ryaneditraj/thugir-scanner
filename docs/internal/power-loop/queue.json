@@ -7613,7 +7613,32 @@
       "url": "https://yogsec.github.io/xss-labs/labs/lab29.html",
       "source": "yogsec/xss-labs — postMessage origin-bypass DOM XSS lab (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab30.html",
+      "source": "yogsec/xss-labs — createElement script src dynamic injection DOM XSS lab (GitHub Pages, 39-lab series)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab31.html",
+      "source": "yogsec/xss-labs — insertAdjacentHTML unsanitized HTML DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab32.html",
+      "source": "yogsec/xss-labs — Range.createContextualFragment DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab33.html",
+      "source": "yogsec/xss-labs — document.write late-bound DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab34.html",
+      "source": "yogsec/xss-labs — jQuery html() unsanitized sink DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T09:05:00.000Z"
+  "updated_at": "2026-07-22T10:05:00.000Z"
 }
