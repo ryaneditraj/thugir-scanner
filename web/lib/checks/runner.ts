@@ -486,6 +486,7 @@ async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
     for (const hostname of hosts) candidates.push({ protocol, hostname });
   }
 
+  const isOnRenderHost = /\.onrender\.com$/i.test(target.hostname);
   let best: FetchedDoc | null = null;
   let bestScore = -1;
   for (let i = 0; i < candidates.length; i++) {
@@ -493,7 +494,10 @@ async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
     const candidateUrl = new URL(target.toString());
     candidateUrl.protocol = c.protocol;
     candidateUrl.hostname = c.hostname;
-    const doc = await fetchDoc(candidateUrl.toString(), { timeoutMs: i === 0 ? 15000 : 7000 });
+    const firstTimeoutMs = isOnRenderHost ? 45000 : 15000;
+    const doc = await fetchDoc(candidateUrl.toString(), {
+      timeoutMs: i === 0 ? firstTimeoutMs : 7000
+    });
     if (doc.status === 0) continue;
     const score = reachScore(doc);
     if (score > bestScore) {
@@ -1162,6 +1166,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideAirtAcademyEvidence",
   "clientSideSecResearchLabEvidence",
   "clientSideBrokencrystalsEvidence",
+  "clientSideBrokencrystalsPrototypePollutionEvidence",
   "exposedApiConfig",
   "clientSideCssInjectionEvidence",
   "graphiqlUiExposed",
