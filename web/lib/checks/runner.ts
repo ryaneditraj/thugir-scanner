@@ -1053,6 +1053,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
   "clientSideOopssecRaceConditionEvidence",
+  "clientSideOopssecXffSqliEvidence",
   "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
@@ -5741,7 +5742,11 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/topics",
     "/about",
     "/posts/race-condition-coupon-abuse/",
-    "/posts/race-condition-coupon-abuse"
+    "/posts/race-condition-coupon-abuse",
+    "/posts/x-forwarded-for-sql-injection/",
+    "/posts/x-forwarded-for-sql-injection",
+    "/posts/sql-injection-writeup/",
+    "/posts/product-search-sql-injection/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -5753,7 +5758,7 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
   }
   const linkRe = /href\s*=\s*["'](\/oss-oopssec-store\/(?:roadmap|posts\/[^"']+))["']/gi;
   let m: RegExpExecArray | null;
-  while ((m = linkRe.exec(html)) && out.size < 8) {
+  while ((m = linkRe.exec(html)) && out.size < 12) {
     try {
       out.add(new URL(m[1], pageUrl).toString());
     } catch {

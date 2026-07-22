@@ -4932,6 +4932,50 @@ const clientSideOopssecRaceConditionEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store X-Forwarded-For SQLi walkthrough (posts/x-forwarded-for-sql-injection) -
+const CLIENT_OOPSSEC_XFF_SQLI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "X-Forwarded-For SQLi walkthrough title",
+    re: /SQL Injection via X-Forwarded-For Header|X-Forwarded-For SQLi/i
+  },
+  {
+    label: "IP tracking via X-Forwarded-For header",
+    re: /tracks visitor IPs via the X-Forwarded-For header|X-Forwarded-For header and drops the raw value into a SQL query/i
+  },
+  {
+    label: "Header-based SQL injection oracle",
+    re: /raw value into a SQL query|IP tracking.*SQL/i
+  },
+  {
+    label: "XFF SQLi walkthrough route",
+    re: /\/posts\/x-forwarded-for-sql-injection/i
+  },
+  {
+    label: "Challenge 19 X-Forwarded-For SQLi card",
+    re: /Challenge 19[\s\S]{0,40}X-Forwarded-For SQLi/i
+  }
+];
+
+const clientSideOopssecXffSqliEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_XFF_SQLI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|X-Forwarded-For|SQL Injection/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents SQL injection via unsanitized X-Forwarded-For header in IP-tracking query"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -22866,6 +22910,14 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "localStorage innerHTML stored XSS sink",
     re: /localStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+  },
+  {
+    label: "localStorage displayed-later stored XSS lab",
+    re: /Stored in localStorage[\s\S]{0,40}Displayed Later|Save to localStorage[\s\S]{0,40}innerHTML/i
+  },
+  {
+    label: "saveMessageBtn localStorage XSS lab UI",
+    re: /saveMessageBtn[\s\S]{0,40}localStorage|Saved Messages \(loaded from localStorage\)/i
   }
 ];
 
@@ -26908,6 +26960,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingXssiLessonEvidence,
   clientSideOopssecStoreEvidence,
   clientSideOopssecRaceConditionEvidence,
+  clientSideOopssecXffSqliEvidence,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

@@ -7805,6 +7805,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-xff-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store X-Forwarded-For SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/x-forwarded-for-sql-injection documents SQL injection via unsanitized X-Forwarded-For header values dropped into an IP-tracking query.",
+    impactOneline:
+      "Public walkthrough teaches header-based SQL injection against apps that trust X-Forwarded-For for visitor IP logging.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecXffSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Never concatenate HTTP header values into SQL; use parameterized queries and validate IP addresses server-side.",
+      steps: [
+        "Use parameterized queries for all IP-tracking and audit-log inserts.",
+        "Validate X-Forwarded-For against a trusted proxy allow-list before logging.",
+        "Host OopsSec SQLi walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our app logs visitor IPs from X-Forwarded-For into SQL. Show parameterized query fixes and trusted-proxy validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-voidsec-shopping-cart-evidence",
     platform: "generic",
     category: "Broken access control",
