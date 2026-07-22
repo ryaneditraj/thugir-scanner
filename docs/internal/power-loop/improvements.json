@@ -10749,6 +10749,16 @@
       "source": "discovery:andrewaltimit.github.io/exploits",
       "slug": "client-side-databricks-security-assessment-evidence",
       "shipped_at": "2026-07-22T09:25:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "buggybuy-render-api-probe",
+      "shipped_at": "2026-07-22T10:15:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "yogsec-dom-event-handler-lab-markers",
+      "shipped_at": "2026-07-22T10:15:00.000Z"
     }
   ]
 }
