@@ -7663,7 +7663,32 @@
       "url": "https://yogsec.github.io/xss-labs/labs/lab39.html",
       "source": "yogsec/xss-labs — onsubmit form hijacking XSS lab (GitHub Pages, series finale)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://brokencrystals.com/userlogin",
+      "source": "NeuraLegion/brokencrystals — CSS injection via logobgcolor URL param (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/config",
+      "source": "NeuraLegion/brokencrystals — exposed server config / DB connection string endpoint (README oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://aryan-rajoria.github.io/vuln-web-sec-proj/",
+      "source": "aryan-rajoria/vuln-web-sec-proj — OWASP Top 10 student security lab (GitHub Pages deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/login",
+      "source": "VulnBank — intentionally vulnerable online banking training app login surface (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-demo.vercel.app/",
+      "source": "vuln-demo — multi-vulnerability Next.js training sandbox (Vercel OSS deploy, web search)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T12:15:00.000Z"
+  "updated_at": "2026-07-22T13:05:00.000Z"
 }
