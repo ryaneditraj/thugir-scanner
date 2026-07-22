@@ -6119,6 +6119,24 @@
       "slug": "client-side-databricks-security-assessment-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dashboard stlite.mount + fetch ./app.py Security Assessment Suite + mask_secret/decode_jwt_header; andrewaltimit.github.io/exploits/dashboard/ findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-template-literal-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-2 eval(`resultQuery.textContent = \\`${query}\\``) template literal sink; the0x-pwn.github.io/lab-xss/lab-2 findings 3→5 incl dom-eval-xss; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-filter-bypass-tags-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-4 query.replace('<','&lt;') then resultQuery.innerHTML=query incomplete filter; the0x-pwn.github.io/lab-xss/lab-4 findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-href-angle-brackets-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-8 container.innerHTML='<a href=\"'+decodeURIComponent(query) REFLECTED · HREF SINK badge; the0x-pwn.github.io/lab-xss/lab-8 findings 3→4; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10771,6 +10789,21 @@
       "source": "discovery:yogsec.github.io/xss-labs",
       "slug": "yogsec-dom-event-handler-lab-markers",
       "shipped_at": "2026-07-22T10:15:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-template-literal-lab-evidence",
+      "shipped_at": "2026-07-22T12:40:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-filter-bypass-tags-lab-evidence",
+      "shipped_at": "2026-07-22T12:40:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io/lab-xss",
+      "slug": "client-side-the0x-pwn-xss-href-angle-brackets-lab-evidence",
+      "shipped_at": "2026-07-22T12:40:00.000Z"
     }
   ]
 }
