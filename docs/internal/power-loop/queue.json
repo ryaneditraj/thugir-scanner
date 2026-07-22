@@ -7563,7 +7563,32 @@
       "url": "https://playground.fabraix.com/challenges",
       "source": "fabraix/playground — Show HN AI agent red-team challenge hub with published exploit transcripts",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab22.html",
+      "source": "yogsec/xss-labs — innerHTML unsanitized input + eval() DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab23.html",
+      "source": "yogsec/xss-labs — insertAdjacentHTML + eval() DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab24.html",
+      "source": "yogsec/xss-labs — outerHTML replacement + eval() DOM XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://andrewaltimit.github.io/exploits/dashboard/",
+      "source": "AndrewAltimit/exploits — Databricks Apps security assessment WASM dashboard (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://raw.githack.com/Prakhar-Sethi/vulnlab/main/ml-explainer.html",
+      "source": "Prakhar-Sethi/vulnlab — ML Shield logistic-regression XSS/CSRF payload classifier walkthrough (githack)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T07:02:00.000Z"
+  "updated_at": "2026-07-22T08:30:00.000Z"
 }
