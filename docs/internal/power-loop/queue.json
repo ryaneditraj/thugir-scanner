@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://brokencrystals.com/api/render",
+      "source": "NeuraLegion/brokencrystals — SSTI via doT templating on /api/render (README oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spawn",
+      "source": "NeuraLegion/brokencrystals — OS command injection via query param (README oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file",
+      "source": "NeuraLegion/brokencrystals — SSRF / cloud metadata oracle via /api/file (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/email/sendSupportEmail",
+      "source": "NeuraLegion/brokencrystals — email header injection + prototype pollution oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/dashboard",
+      "source": "alfredang/pentest FauxBank — guided OWASP scenario dashboard (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://web-security-practice-app.onrender.com/",
       "source": "n00by3te/web-security-practice-app — intentionally vulnerable Flask app (Medium deploy link)",
       "auth": "oss_deploy"
@@ -7740,5 +7765,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-22T15:05:00.000Z"
+  "updated_at": "2026-07-22T18:25:00.000Z"
 }
