@@ -7413,7 +7413,32 @@
       "url": "https://montanajim.github.io/CSCI210/wpref/xssExamples.html",
       "source": "montanajim/CSCI210 — reflected + stored XSS classroom examples with vulnerable/fixed PHP pairs (GitHub Pages)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/",
+      "source": "MuhaibShamsher/BuggyBuy — deliberately vulnerable MERN e-commerce (NoSQLi, XSS, IDOR, JWT) Vercel deploy (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/login",
+      "source": "MuhaibShamsher/BuggyBuy — login SQLi/NoSQLi training surface (README live link)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/admin",
+      "source": "MuhaibShamsher/BuggyBuy — admin panel broken access control lab (README live link)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/",
+      "source": "Web Security Learning Labs — 33 interactive OWASP training modules (SQLi/XSS/IDOR/CSRF) Vercel platform (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/labs",
+      "source": "Web Security Learning Labs — lab index hub (33 modules advertised on landing page)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-22T01:53:00.000Z"
+  "updated_at": "2026-07-22T02:48:00.000Z"
 }
