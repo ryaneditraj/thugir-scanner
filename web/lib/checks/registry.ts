@@ -23724,6 +23724,102 @@ const clientSideVulnlabAcademyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab ML Threat Detector (Prakhar-Sethi/vulnlab ml-explainer.html) ------------
+const CLIENT_VULNLAB_ML_THREAT_DETECTOR_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "ML Threat Detector VULNLAB title",
+    re: /ML Threat Detector[\s\S]{0,60}VULNLAB/i
+  },
+  {
+    label: "XSS payload classifier walkthrough",
+    re: /machine learning classifies XSS payloads|trained entirely in JavaScript/i
+  },
+  {
+    label: "Malicious training corpus markers",
+    re: /706\+ Malicious \(XSS, CSRF, obfuscated\)|Known XSS patterns/i
+  },
+  {
+    label: "Obfuscated eval payload quick-test",
+    re: /eval\(atob\(|Obfuscated XSS payload buttons/i
+  },
+  {
+    label: "VULNLAB interactive education nav",
+    re: /⚡\s*VULNLAB|Interactive Security Education/i
+  }
+];
+
+const clientSideVulnlabMlThreatDetectorEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/vulnlab|Prakhar-Sethi\/vulnlab|ml-explainer/i.test(`${pageUrl}\n${ctx.combined}`))
+    return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_ML_THREAT_DETECTOR_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab ML Threat Detector documents client-side XSS/CSRF payload classification with intentional eval/atob bypass examples for security education"
+    }
+  };
+};
+
+// --- Databricks Apps Security Assessment (AndrewAltimit/exploits WASM dashboard) ------
+const CLIENT_DATABRICKS_SECURITY_ASSESSMENT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Databricks Apps Security Assessment title",
+    re: /Databricks Apps Security Assessment|Security Assessment Suite/i
+  },
+  {
+    label: "stlite WASM Streamlit mount",
+    re: /stlite\.mount|@stlite\/mountable/i
+  },
+  {
+    label: "InfectionIDOL dashboard asset",
+    re: /InfectionIDOL-dashboard\.svg|InfectionIDOL/i
+  },
+  {
+    label: "WASM sandbox containment notice",
+    re: /runs entirely in your browser|WASM sandbox has no internet access/i
+  },
+  {
+    label: "Streamlit security demo helpers",
+    re: /mask_secret|decode_jwt_header|is_databricks_app/i
+  }
+];
+
+const clientSideDatabricksSecurityAssessmentEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/andrewaltimit\.github\.io\/exploits|Databricks Apps/i.test(`${pageUrl}\n${ctx.combined}`))
+    return NEGATIVE;
+  let corpus = ctx.combined;
+  if (/fetch\(['"]\.\/app\.py['"]\)|stlite\.mount/i.test(corpus)) {
+    const appUrl = new URL("./app.py", pageUrl).toString();
+    const appDoc = await ctx.probe.get(appUrl, { maxBytes: 24_000 });
+    if (appDoc.status >= 200 && appDoc.status < 400 && appDoc.body.length > 200) {
+      corpus = `${corpus}\n${appDoc.body}`;
+    }
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DATABRICKS_SECURITY_ASSESSMENT_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Databricks Apps Security Assessment WASM dashboard documents Streamlit security demos with JWT masking helpers and simulated implant telemetry for education"
+    }
+  };
+};
+
 // --- VulnLab Academy A09 logging failures (hack-this-site-eta.vercel.app/owasp/a09.html) -
 const CLIENT_VULNLAB_A09_LOGGING_RES: { label: string; re: RegExp }[] = [
   {
@@ -26951,6 +27047,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVaultappLabEvidence,
   clientSideDamnVulnerableBankEvidence,
   clientSideVulnlabAcademyEvidence,
+  clientSideVulnlabMlThreatDetectorEvidence,
+  clientSideDatabricksSecurityAssessmentEvidence,
   clientSideVulnlabA01AccessEvidence,
   clientSideVulnlabIdorLabEvidence,
   clientSideVulnlabA02CryptoEvidence,

@@ -256,7 +256,8 @@ const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/track-order/1",
   "/rest/products/search?q=warmup",
   "/rest/products/search?q=apple",
-  "/rest/products/search?q='))"
+  "/rest/products/search?q=''))",
+  "/rest/user/security-question?email=admin@juice-sh.op"
 ];
 
 /** True when Juice Shop REST API responds (not Heroku Application Error stub). */
@@ -269,6 +270,7 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
       });
       if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
+      if (p.includes("security-question") && /"question"\s*:/i.test(doc.body)) return true;
       if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
         return true;
       // Juice Shop SQLi oracle returns HTTP 500 with SQLITE_ERROR — still proves API is live.
@@ -299,6 +301,8 @@ async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> 
         });
         if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) return null;
         if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return "admin";
+        if (p.includes("security-question") && /"question"\s*:/i.test(doc.body))
+          return "sensitive";
         if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
           return "idor";
         if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return "sqli";
@@ -316,7 +320,7 @@ async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> 
     })
   );
   const ready = new Set(checks.filter(Boolean));
-  return ready.has("admin") && ready.has("idor") && ready.has("sqli");
+  return ready.has("admin") && ready.has("idor") && ready.has("sqli") && ready.has("sensitive");
 }
 
 /** Pre-fetch Juice Shop REST + bundle paths into probe cache after dyno wake-up. */
@@ -325,6 +329,7 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const apiPaths = [
     "/rest/admin/application-configuration",
     "/rest/track-order/1",
+    "/rest/user/security-question?email=admin@juice-sh.op",
     "/rest/products/search?q=''))",
     "/rest/products/search?q=warmup",
     "/rest/products/search?q=apple"
@@ -1092,6 +1097,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVaultappLabEvidence",
   "clientSideDamnVulnerableBankEvidence",
   "clientSideVulnlabAcademyEvidence",
+  "clientSideVulnlabMlThreatDetectorEvidence",
+  "clientSideDatabricksSecurityAssessmentEvidence",
   "clientSideVulnlabA01AccessEvidence",
   "clientSideVulnlabIdorLabEvidence",
   "clientSideVulnlabA02CryptoEvidence",
