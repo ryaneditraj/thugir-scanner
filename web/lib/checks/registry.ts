@@ -2456,7 +2456,34 @@ function extractSstiGetEndpoints(html: string, origin: string): { url: string; p
   return out;
 }
 
+async function probeBrokencrystalsDotSsti(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const url = new URL("/api/render", ctx.origin).toString();
+  const r = await ctx.probe.get(url, {
+    method: "POST",
+    body: "Hello {{=7*7}}",
+    headers: { "Content-Type": "text/plain" },
+    maxBytes: 128
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!/Hello\s+49/.test(r.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      probe: "Hello {{=7*7}}",
+      result: "Hello 49",
+      snippet: r.body.trim().slice(0, 80),
+      note: "doT template engine evaluated arithmetic in POST body — SSTI likely (brokencrystals /api/render)"
+    }
+  };
+}
+
 const sstiTemplateInjection: Rule = async (ctx) => {
+  const dotSsti = await probeBrokencrystalsDotSsti(ctx);
+  if (dotSsti?.fired) return dotSsti;
+
   const endpoints = [
     ...extractSstiGetEndpoints(ctx.combined, ctx.origin),
     ...SSTI_FALLBACK_PATHS.map((p) => ({ url: new URL(p, ctx.origin).toString(), param: "name" }))
@@ -9102,8 +9129,32 @@ async function probeInvictiNslookupCommandInjection(ctx: RuleContext): Promise<R
   };
 }
 
+const SPAWN_CMD_CANARY = "thugirSpawnCmdCanary";
+
+async function probeBrokencrystalsSpawnCommandInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const url = new URL("/api/spawn", ctx.origin);
+  url.searchParams.set("command", `echo ${SPAWN_CMD_CANARY}`);
+  const r = await ctx.probe.get(url.toString(), { maxBytes: 256 });
+  if (r.status < 200 || r.status >= 500) return null;
+  if (!r.body.includes(SPAWN_CMD_CANARY)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: url.toString(),
+      param: "command",
+      canary: SPAWN_CMD_CANARY,
+      snippet: r.body.trim().slice(0, 200),
+      note: "GET /api/spawn command param executes shell and echoes output — OS command injection (Broken Crystals)"
+    }
+  };
+}
+
 const invictiNslookupCommandInjectionProbe: Rule = async (ctx) =>
-  (await probeInvictiNslookupCommandInjection(ctx)) ?? NEGATIVE;
+  (await probeInvictiNslookupCommandInjection(ctx)) ??
+  (await probeBrokencrystalsSpawnCommandInjection(ctx)) ??
+  NEGATIVE;
 
 const clientSideInvictiPracticeSiteEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -19553,7 +19604,35 @@ function extractPostUrlForms(html: string, origin: string): { action: string; fi
   return forms;
 }
 
+async function probeBrokencrystalsFileSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const fileUrl = new URL("/api/file", ctx.origin);
+  fileUrl.searchParams.set("path", SSRF_CANARY_URL);
+  fileUrl.searchParams.set("type", "text/html");
+  const r = await ctx.probe.get(fileUrl.toString(), {
+    headers: { accept: "text/html" },
+    maxBytes: 16_384,
+    redirect: "manual"
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!bodyReflectsSsrfCanary(r.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: fileUrl.toString(),
+      param: "path",
+      status: r.status,
+      snippet: r.body.slice(0, 180).trim(),
+      note: "GET /api/file path param fetches remote URL server-side — SSRF (Broken Crystals)"
+    }
+  };
+}
+
 const ssrfEndpointProbe: Rule = async (ctx) => {
+  const bcFileSsrf = await probeBrokencrystalsFileSsrf(ctx);
+  if (bcFileSsrf?.fired) return bcFileSsrf;
+
   const paths = [...new Set([...extractSsrfPaths(ctx.combined), ...SSRF_GET_PATHS])].slice(0, 8);
   const getUrls: string[] = [];
   const seen = new Set<string>();
