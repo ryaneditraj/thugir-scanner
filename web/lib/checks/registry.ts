@@ -1003,6 +1003,7 @@ const errorDisclosure: Rule = async (ctx) => {
 const OPENAPI_PATHS = [
   "/openapi.json",
   "/swagger.json",
+  "/swagger-json",
   "/v2/swagger.json",
   "/api/openapi.json",
   "/v3/api-docs",
@@ -1011,6 +1012,8 @@ const OPENAPI_PATHS = [
   "/static/openapi.json",
   "/api/docs/openapi.json"
 ];
+
+const SWAGGER_UI_PATHS = ["/swagger", "/swagger/", "/swagger/index.html", "/swagger-ui", "/swagger-ui/"];
 
 /** Swagger UI embeds the spec URL in inline config (e.g. FastAPI /api/docs → /static/openapi.json). */
 function extractSwaggerUiOpenApiPaths(text: string): string[] {
@@ -1132,6 +1135,13 @@ async function fetchOpenApiGetPathsWithDetails(ctx: RuleContext, limit = 12): Pr
   return [...paths].slice(0, limit);
 }
 
+function looksSwaggerUiBody(body: string): boolean {
+  return (
+    /<title>\s*Swagger UI\s*<\/title>/i.test(body) ||
+    (/swagger-ui\.css/i.test(body) && /swagger-ui/i.test(body))
+  );
+}
+
 const openApiDocs: Rule = async (ctx) => {
   const urls = openApiProbePaths(ctx).map((path) => new URL(path, ctx.origin).toString());
   const docs = await ctx.probe.getMany(urls, { maxBytes: 12_000 }, 4);
@@ -1150,6 +1160,101 @@ const openApiDocs: Rule = async (ctx) => {
       confidence: 0.9,
       evidence: { url, title: title || undefined, note: "OpenAPI/Swagger schema reachable without auth" }
     };
+  }
+  const swaggerUiUrls = SWAGGER_UI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const uiDocs = await ctx.probe.getMany(swaggerUiUrls, { maxBytes: 16_384 }, 3);
+  for (const [url, r] of uiDocs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!looksSwaggerUiBody(r.body)) continue;
+    const specPaths = extractSwaggerUiOpenApiPaths(r.body);
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        specPaths: specPaths.slice(0, 4),
+        note: "Swagger UI interactive API documentation reachable without auth"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const GRAPHIQL_UI_PATHS = ["/graphiql", "/graphiql/"];
+
+const graphiqlUiExposed: Rule = async (ctx) => {
+  const urls = GRAPHIQL_UI_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 12_000 }, 2);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const isGraphiql =
+      /<title>\s*GraphiQL\s*<\/title>/i.test(r.body) ||
+      (/graphiql\/main\.js/i.test(r.body) && /id=["']main["']/i.test(r.body));
+    if (!isGraphiql) continue;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        note: "GraphiQL interactive GraphQL IDE reachable without auth — schema exploration and mutation testing enabled"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const WEAK_API_DEFAULT_CREDS: Record<string, string>[] = [
+  { user: "admin", password: "admin" },
+  { username: "admin", password: "admin" },
+  { email: "admin@juice-sh.op", password: "admin123" },
+  { email: "test@test.com", password: "Test123!" }
+];
+const WEAK_API_LOGIN_PATHS = ["/api/auth/login", "/api/login", "/api/authenticate", "/identity/api/auth/login"];
+
+function looksLikeWeakApiLoginLab(origin: string, combined: string): boolean {
+  return (
+    /brokencrystals\.com|crapi|vampi|apisec\.ai|hackable\.so/i.test(origin) ||
+    /\/api\/auth\/login|\/api\/login/i.test(combined) ||
+    looksLikeApiSecurityLab(combined)
+  );
+}
+
+function weakApiLoginSucceeded(body: string): boolean {
+  const trimmed = body.trim();
+  if (!trimmed.startsWith("{")) return false;
+  if (/"error"\s*:/i.test(trimmed) || /"message"\s*:\s*"(?:invalid|unauthorized|forbidden)/i.test(trimmed))
+    return false;
+  return (
+    /"(?:email|token|access_token|ldapProfileLink|userId|id)"\s*:/i.test(trimmed) ||
+    /"token"\s*:\s*"eyJ/i.test(trimmed)
+  );
+}
+
+const weakApiDefaultCredentials: Rule = async (ctx) => {
+  if (!looksLikeWeakApiLoginLab(ctx.origin, ctx.combined)) return NEGATIVE;
+  for (const path of WEAK_API_LOGIN_PATHS) {
+    for (const creds of WEAK_API_DEFAULT_CREDS) {
+      const url = new URL(path, ctx.origin).toString();
+      const r = await ctx.probe.get(url, {
+        method: "POST",
+        body: JSON.stringify(creds),
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 4096
+      });
+      if (r.status < 200 || r.status >= 300) continue;
+      if (!weakApiLoginSucceeded(r.body)) continue;
+      const credFields = Object.keys(creds).join("/");
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          url,
+          credFields,
+          snippet: r.body.slice(0, 180).trim(),
+          note: "JSON login API accepts common default credentials without rate limiting or MFA"
+        }
+      };
+    }
   }
   return NEGATIVE;
 };
@@ -27060,11 +27165,13 @@ export const RULES: Record<string, Rule> = {
   inlineStateSecrets,
   graphqlIntrospection,
   graphqlEndpointDisclosedInDocs,
+  graphiqlUiExposed,
   directoryListing,
   phpinfoExposed,
   phpMyAdminExposed,
   errorDisclosure,
   openApiDocs,
+  weakApiDefaultCredentials,
   demoModeFlags,
   supabaseStoragePublic,
   supabaseServiceRoleClient,
@@ -27622,10 +27729,12 @@ export const FREE_RULES = new Set([
   "inlineStateSecrets",
   "graphqlIntrospection",
   "graphqlEndpointDisclosedInDocs",
+  "graphiqlUiExposed",
   "directoryListing",
   "phpinfoExposed",
   "phpMyAdminExposed",
   "openApiDocs",
+  "weakApiDefaultCredentials",
   "demoModeFlags",
   "supabaseStoragePublic",
   "supabaseServiceRoleClient",
