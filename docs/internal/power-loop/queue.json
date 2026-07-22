@@ -7363,7 +7363,32 @@
       "url": "https://pentest-fauxbank.vercel.app/",
       "source": "alfredang/pentest FauxBank — fictional bank OWASP Top 10 guided pentest lab (Vercel deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-1/",
+      "source": "the0x-pwn/lab-xss — basic reflected XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab3.html",
+      "source": "yogsec/xss-labs — URL-parameter reflected XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab7.html",
+      "source": "yogsec/xss-labs — event-handler XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab12.html",
+      "source": "yogsec/xss-labs — filter-bypass stored XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab1.html",
+      "source": "povzayd/XSS-LABS — Level 1 basic reflected XSS lab (case-sensitive /LABS/ path)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-21T23:05:00.000Z"
+  "updated_at": "2026-07-22T00:56:00.000Z"
 }
