@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T22:17:27.677Z",
-  "total": 603,
-  "uniqueSlugs": 601,
+  "generatedAt": "2026-07-22T23:08:44.028Z",
+  "total": 606,
+  "uniqueSlugs": 604,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 585,
+    "generic": 588,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 531,
+    "deep": 534,
     "continuous": 0
   },
   "byCategory": {
@@ -24,8 +24,8 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 40,
-    "Security misconfiguration": 48,
+    "Information disclosure": 41,
+    "Security misconfiguration": 49,
     "Broken authentication": 43,
     "Injection": 124,
     "Cross-site scripting": 105,
@@ -33,7 +33,7 @@
     "SSRF": 1,
     "Server-side request forgery": 8,
     "Sensitive data exposure": 7,
-    "AI security": 30,
+    "AI security": 31,
     "XSS": 1
   },
   "slugs": [
@@ -43,6 +43,7 @@
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
     "client-side-ai-prompt-lab-evidence",
+    "client-side-ai-security-platform-evidence",
     "client-side-aikido-zen-demo-evidence",
     "client-side-airt-academy-evidence",
     "client-side-alf-serviceworker-evidence",
@@ -113,6 +114,7 @@
     "client-side-cybersheild-lab-evidence",
     "client-side-cylab-academy-evidence",
     "client-side-damn-vulnerable-bank-evidence",
+    "client-side-dark-pattern-lab-evidence",
     "client-side-databricks-security-assessment-evidence",
     "client-side-defendtheweb-evidence",
     "client-side-defhawk-practice-lab-evidence",
@@ -558,6 +560,7 @@
     "idor-sequential-ids",
     "inline-state-secrets",
     "insecure-cookies",
+    "juice-shop-forgotten-backup-disclosure",
     "leaky-jar-recipe-review-stored-xss",
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",

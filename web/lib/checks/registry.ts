@@ -20239,6 +20239,31 @@ const OPENVAULT_API_FALLBACK_PATHS = [
   "/api/v1/profile"
 ];
 
+const JUICE_SHOP_FTP_BACKUP_PATHS = [
+  "/ftp/package.json.bak%2500.md",
+  "/ftp/package-lock.json.bak%2500.md"
+];
+
+const juiceShopForgottenBackupDisclosure: Rule = async (ctx) => {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  for (const path of JUICE_SHOP_FTP_BACKUP_PATHS) {
+    const url = new URL(path, ctx.origin).toString();
+    const r = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!/"name"\s*:\s*"juice-shop"/i.test(r.body) || !/"version"\s*:/i.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url,
+        snippet: r.body.slice(0, 180).trim(),
+        note: "Juice Shop FTP null-byte bypass exposes forgotten package.json.bak developer backup (Forgotten Developer Backup challenge)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 async function probeJuiceShopProductsSearchApi(ctx: RuleContext): Promise<RuleResult | null> {
   if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return null;
   const url = new URL("/rest/products/search?q=apple", ctx.origin).toString();
@@ -25323,6 +25348,110 @@ const clientSideNivaraSecurityEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- RiverMart dark-pattern demo (shield-dark-pattern-demo.vercel.app) ---------------
+const CLIENT_DARK_PATTERN_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RiverMart fake e-commerce storefront",
+    re: /RiverMart/i
+  },
+  {
+    label: "Pre-checked gift wrap add-on",
+    re: /defaultChecked:!0[\s\S]{0,160}Add gift wrap/i
+  },
+  {
+    label: "Pre-checked newsletter opt-in",
+    re: /defaultChecked:!0[\s\S]{0,160}Subscribe to RiverMart deals emails/i
+  },
+  {
+    label: "Pre-checked store card enrollment",
+    re: /Sign me up for the RiverMart Store Card/i
+  },
+  {
+    label: "Misleading trust council badge",
+    re: /Members rate RiverMart #1|Verified by RiverMart Trust Council/i
+  },
+  {
+    label: "Shadow DOM third-party widget lab",
+    re: /Shadow-DOM third-party widgets|attachShadow\(\)/i
+  }
+];
+
+const clientSideDarkPatternLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownDemo = /shield-dark-pattern-demo\.vercel\.app/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DARK_PATTERN_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownDemo ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/RiverMart|shield-dark-pattern-demo/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : isKnownDemo ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RiverMart demo documents pre-checked upsells, misleading trust badges, and shadow-DOM widget dark patterns"
+    }
+  };
+};
+
+// --- AI Security Platform hands-on labs (ai-security-platform-iota.vercel.app) -----
+const CLIENT_AI_SECURITY_PLATFORM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "AI Security Platform branding",
+    re: /AI\s*&\s*Security Platform|ai-security-platform/i
+  },
+  {
+    label: "Hands-on Next.js + Supabase exercises meta",
+    re: /Hands-on Next\.js \+ Supabase security exercises/i
+  },
+  {
+    label: "Kristiyan Velkov author credit",
+    re: /Kristiyan Velkov/i
+  },
+  {
+    label: "Challenge catalog XSS route",
+    re: /\/challenges\/xss/i
+  },
+  {
+    label: "Challenge catalog IDOR route",
+    re: /\/challenges\/idor/i
+  },
+  {
+    label: "Cookie auth bypass challenge",
+    re: /\/challenges\/admin-console|Cookie Auth Bypass/i
+  },
+  {
+    label: "Supply chain security category",
+    re: /supply.?chain/i
+  }
+];
+
+const clientSideAiSecurityPlatformEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownDemo = /ai-security-platform-iota\.vercel\.app/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AI_SECURITY_PLATFORM_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownDemo ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/AI Security|ai-security-platform|Kristiyan Velkov/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : isKnownDemo ? 0.87 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "AI Security Platform publishes hands-on Next.js + Supabase challenge catalog covering XSS, IDOR, auth bypass, and supply-chain labs"
+    }
+  };
+};
+
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -28152,6 +28281,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
+  clientSideDarkPatternLabEvidence,
+  clientSideAiSecurityPlatformEvidence,
+  juiceShopForgottenBackupDisclosure,
   clientSideEksGoatEvidence,
   clientSideCtflearnEvidence,
   clientSideCybenchEvidence,
