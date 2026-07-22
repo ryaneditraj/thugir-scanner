@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T00:54:02.563Z",
+  "updated_at": "2026-07-22T00:55:44.470Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1823,
-  "total_findings": 9202,
+  "total_sites_scanned": 1831,
+  "total_findings": 9252,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1455,
-  "discovery_findings": 7295,
+  "discovery_urls_added": 1460,
+  "discovery_findings": 7345,
   "improvements_shipped": 903,
-  "last_run": "2026-07-22T00:54:02.563Z",
+  "last_run": "2026-07-22T00:55:44.470Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -51,26 +51,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 50,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "the0x-pwn lab-7 JavaScript URL XSS + yogsec lab20 Base64 eval + lab21 Search Box eval module markers; yogsec priority seeds 20→39",
-      "improvements_shipped_this_run": 3
+      "focus": "Queue head drain: bugbountyhunter ch9/10/16, redtiger level6, securebank-blog, hack-health, zeroday-sec, hack-this-site-eta; +5 XSS lab modules queued (the0x-pwn lab-1, yogsec lab3/7/12, povzayd lab1)",
+      "improvements_shipped_this_run": 0,
+      "urls_queued": [
+        "https://the0x-pwn.github.io/lab-xss/lab-1/",
+        "https://yogsec.github.io/xss-labs/labs/lab3.html",
+        "https://yogsec.github.io/xss-labs/labs/lab7.html",
+        "https://yogsec.github.io/xss-labs/labs/lab12.html",
+        "https://povzayd.github.io/XSS-LABS/LABS/lab1.html"
+      ]
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "the0x-pwn.github.io/lab-xss/lab-7: javascript:fetch analytics URL XSS lab detected (2→3 findings)",
-      "yogsec.github.io/xss-labs/labs/lab20.html: Base64 eval XSS module detected (2→3 findings)",
-      "yogsec.github.io/xss-labs/labs/lab21.html: Search Box eval(code) module detected (2→3 findings)"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary Heroku cold-start gap auth_bypass,sensitive_data",
+      "hack-this-site-eta.vercel.app: 19 findings — educational vuln platform markers",
+      "hack-health-tutorial.vercel.app: 9 findings — OWASP Top 10 module evidence",
+      "securebank-blog.vercel.app: 6 findings — banking lab attack/secure mode",
+      "redtiger.labs level6: 4 findings — SQLi training lab"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: primary Heroku cold-start exceeds cloud scan timeout — staging oracle used",
+      "juice-shop.herokuapp.com: primary Heroku cold-start missed auth_bypass+sensitive_data (pass1); staging fallback required for 6/6",
+      "secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "povzayd lab3/lab4: placeholder/broken pages — no runnable XSS lab content",
-      "yogsec lab10.html: returns HTTP 200 empty body",
-      "challenge-0626.intigriti.io/challenge.html returns HTTP 404 — June 2026 CTF not yet live"
+      "hack-health A06/A08/A09/A10 tail queue URLs not yet reached",
+      "new XSS lab modules (the0x-pwn lab-1, yogsec lab3/7/12, povzayd lab1) queued at tail — pending next drain"
     ]
   },
   "discovery_highlights": {
