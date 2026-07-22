@@ -26505,6 +26505,138 @@ const xpathInjectionDisclosure: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- XXE via POST XML body (brokencrystals.com /api/metadata) -----------------
+const XXE_XML_CANARY = "thugirXxeCanary";
+const XXE_XML_POST_PATHS = ["/api/metadata", "/api/xml", "/xml"];
+
+function buildXxeEntityProbeXml(canary: string): string {
+  return `<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe "${canary}">]><root>&xxe;</root>`;
+}
+
+function bodyReflectsXxeCanary(body: string, canary: string): boolean {
+  return body.includes(canary) && /<root[^>]*>[\s\S]*<\/root>/i.test(body);
+}
+
+async function probeBrokencrystalsMetadataXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const url = new URL("/api/metadata", ctx.origin).toString();
+  const payload = buildXxeEntityProbeXml(XXE_XML_CANARY);
+  const r = await ctx.probe.get(url, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 2048
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!bodyReflectsXxeCanary(r.body, XXE_XML_CANARY)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      method: "POST",
+      contentType: "application/xml",
+      canary: XXE_XML_CANARY,
+      snippet: r.body.slice(0, 220).trim(),
+      note: "POST /api/metadata expands external XML entity in response body — XXE (Broken Crystals)"
+    }
+  };
+}
+
+const xxeXmlPostProbe: Rule = async (ctx) => {
+  const bcXxe = await probeBrokencrystalsMetadataXxe(ctx);
+  if (bcXxe?.fired) return bcXxe;
+
+  const discovered = extractApiPaths(ctx.combined, 8).filter((p) =>
+    /\/api\/metadata|\/xml$/i.test(p)
+  );
+  const paths = [...new Set([...XXE_XML_POST_PATHS, ...discovered])].slice(0, 4);
+  for (const path of paths) {
+    const url = new URL(path, ctx.origin).toString();
+    const payload = buildXxeEntityProbeXml(XXE_XML_CANARY);
+    const r = await ctx.probe.get(url, {
+      method: "POST",
+      body: payload,
+      headers: { "Content-Type": "application/xml" },
+      maxBytes: 2048
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (!bodyReflectsXxeCanary(r.body, XXE_XML_CANARY)) continue;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        method: "POST",
+        contentType: "application/xml",
+        canary: XXE_XML_CANARY,
+        snippet: r.body.slice(0, 220).trim(),
+        note: "POST XML endpoint expands external entity in response — XXE likely"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- SQL injection via HTTP header (brokencrystals /api/products/views) -------
+const SQLI_HEADER_PATHS = ["/api/products/views"];
+
+async function probeBrokencrystalsProductsViewsSqliHeader(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const url = new URL("/api/products/views", ctx.origin).toString();
+  const r = await ctx.probe.get(url, {
+    headers: { "x-product-name": "Opal'" },
+    maxBytes: 4096
+  });
+  if (r.status < 400) return null;
+  if (!/unterminated quoted string|syntax error at or near/i.test(r.body)) return null;
+  const location = r.body.match(/"location"\s*:\s*"([^"]+)"/)?.[1];
+  return {
+    fired: true,
+    confidence: location ? 0.93 : 0.9,
+    evidence: {
+      url,
+      header: "x-product-name",
+      payload: "Opal'",
+      status: r.status,
+      location,
+      snippet: r.body.slice(0, 240).trim(),
+      note: "GET /api/products/views reflects SQL syntax error from x-product-name header — SQL injection + path disclosure (Broken Crystals)"
+    }
+  };
+}
+
+const sqliHeaderErrorDisclosure: Rule = async (ctx) => {
+  const bcHeaderSqli = await probeBrokencrystalsProductsViewsSqliHeader(ctx);
+  if (bcHeaderSqli?.fired) return bcHeaderSqli;
+
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  for (const path of SQLI_HEADER_PATHS) {
+    const url = new URL(path, ctx.origin).toString();
+    const r = await ctx.probe.get(url, {
+      headers: { "x-product-name": "Opal'" },
+      maxBytes: 4096
+    });
+    if (r.status < 400) continue;
+    const marker = SQL_ERROR_MARKERS.find((re) => re.test(r.body));
+    if (!marker) continue;
+    const match = r.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        header: "x-product-name",
+        payload: "Opal'",
+        sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+        snippet: r.body.slice(0, 240).trim(),
+        note: "API endpoint returns SQL error when x-product-name header is malformed — header-based SQL injection likely"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Client-side CSS injection via URL param → inline style (brokencrystals /userlogin) -
 const CLIENT_CSS_INJECTION_RES: { label: string; re: RegExp }[] = [
   {
@@ -27970,7 +28102,9 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsPrototypePollutionEvidence,
   exposedApiConfig,
   sqliQueryParamInjection,
+  sqliHeaderErrorDisclosure,
   xpathInjectionDisclosure,
+  xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
   clientSideArchonTrainingEvidence,

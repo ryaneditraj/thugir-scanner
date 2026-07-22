@@ -2080,6 +2080,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "xxe-xml-post-probe",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "XXE confirmed via POST XML entity expansion",
+    description:
+      "A server endpoint accepts POST application/xml and expands external entities in the response body. A live probe with a custom ENTITY canary echoed inside <root> proves XML External Entity processing.",
+    impactOneline:
+      "XXE lets attackers read local files, reach internal URLs, or trigger denial-of-service via entity expansion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xxeXmlPostProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity processing in all XML parsers.",
+      steps: [
+        "Reject DOCTYPE declarations and external entities in user-supplied XML.",
+        "Set parser options: noent=false, nonet=true, dtdload=false.",
+        "Return generic errors without echoing expanded entity content."
+      ]
+    },
+    fixPrompt:
+      "Our /api/metadata endpoint expands XML external entities on POST. Disable entity expansion, block DOCTYPE, and show the hardened parser configuration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-header-error-disclosure",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SQL injection via HTTP request header",
+    description:
+      "An API endpoint builds SQL from an HTTP header value (e.g. x-product-name). A malformed header triggers a database syntax error and may leak the server file path in the JSON error response.",
+    impactOneline:
+      "Header-based SQL injection can read or modify database rows and leak internal file paths via verbose errors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliHeaderErrorDisclosure" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never interpolate HTTP headers into SQL; use parameterized queries.",
+      steps: [
+        "Bind header values via prepared statements instead of string concatenation.",
+        "Return generic database errors without location or query fragments.",
+        "Validate product names against an allowlist before UPDATE/SELECT."
+      ]
+    },
+    fixPrompt:
+      "GET /api/products/views builds SQL from the x-product-name header and returns syntax errors with file paths. Show parameterized queries and safe error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-api-security-lab-evidence",
     platform: "generic",
     category: "Broken access control",
