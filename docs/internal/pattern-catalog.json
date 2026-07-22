@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T01:05:02.554Z",
-  "total": 576,
-  "uniqueSlugs": 574,
+  "generatedAt": "2026-07-22T02:06:01.392Z",
+  "total": 578,
+  "uniqueSlugs": 576,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 558,
+    "generic": 560,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 69,
-    "deep": 507,
+    "deep": 509,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 48,
     "Broken authentication": 42,
     "Injection": 116,
-    "Cross-site scripting": 96,
+    "Cross-site scripting": 98,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
@@ -256,6 +256,7 @@
     "client-side-mcp-supply-chain-evidence",
     "client-side-metasploitable-lab-evidence",
     "client-side-mlastg-evidence",
+    "client-side-montanajim-xss-classroom-evidence",
     "client-side-mutillidae-evidence",
     "client-side-net-force-challenge-evidence",
     "client-side-net-force-evidence",
@@ -396,6 +397,7 @@
     "client-side-tegalsec-lab-evidence",
     "client-side-the0x-pwn-xss-document-write-lab-evidence",
     "client-side-the0x-pwn-xss-dom-hash-lab-evidence",
+    "client-side-the0x-pwn-xss-iframe-data-uri-lab-evidence",
     "client-side-the0x-pwn-xss-javascript-url-lab-evidence",
     "client-side-the0x-pwn-xss-labs-evidence",
     "client-side-try2hack-evidence",

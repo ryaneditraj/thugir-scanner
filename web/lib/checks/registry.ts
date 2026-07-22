@@ -22701,6 +22701,30 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "Vulnerable eval(code) URL-parameter sink",
     re: /Vulnerable Code:[\s\S]{0,40}eval\(code\)/
+  },
+  {
+    label: "POST parameter sessionStorage reflection lab",
+    re: /Lab #\d+ · POST Parameter Reflection|POST Data XSS using sessionStorage/i
+  },
+  {
+    label: "sessionStorage innerHTML POST simulation sink",
+    re: /sessionStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+  },
+  {
+    label: "Referer header reflection lab badge",
+    re: /Lab #\d+ · Reflected XSS \(Referer Mock\)|Referer Header Reflection/i
+  },
+  {
+    label: "Referer header innerHTML reflection sink",
+    re: /Referer[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+  },
+  {
+    label: "localStorage stored XSS lab badge",
+    re: /Lab #\d+ · Stored XSS \(localStorage\)|localStorage Value Reflection/i
+  },
+  {
+    label: "localStorage innerHTML stored XSS sink",
+    re: /localStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
   }
 ];
 
@@ -22919,6 +22943,87 @@ const clientSideThe0xPwnXssJavascriptUrlLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "the0x-pwn lab-7 documents reflected XSS via javascript: URL with analytics fetch callback"
+    }
+  };
+};
+
+// --- the0x-pwn lab-10 iframe data: URI injection (the0x-pwn.github.io/lab-xss/lab-10/) -
+const CLIENT_THE0X_PWN_XSS_IFRAME_DATA_URI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Iframe Data URI Injection lab heading",
+    re: /Iframe Data URI Injection/i
+  },
+  {
+    label: "iframe data:text/html src filter bypass",
+    re: /tag\s*===\s*['"]iframe['"][\s\S]{0,200}data:text\/html,/
+  },
+  {
+    label: "data:text/html iframe innerHTML sink",
+    re: /src\.startsWith\(['"]data:text\/html,['"]\)|data:text\/html,/
+  }
+];
+
+const clientSideThe0xPwnXssIframeDataUriLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-10/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_IFRAME_DATA_URI_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-10 documents iframe data: URI injection with HTML-tag filter bypass into resultQuery.innerHTML"
+    }
+  };
+};
+
+// --- montanajim CSCI210 classroom XSS examples (montanajim.github.io/CSCI210/wpref/xssExamples.html) -
+const CLIENT_MONTANAJIM_XSS_CLASSROOM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "page1_reflect.php vulnerable reflected XSS demo",
+    re: /page1_reflect\.php[\s\S]{0,80}vulnerable[\s\S]{0,40}reflected XSS/i
+  },
+  {
+    label: "stored_hacked.php vulnerable stored XSS guestbook",
+    re: /stored_hacked\.php[\s\S]{0,80}vulnerable[\s\S]{0,40}stored XSS/i
+  },
+  {
+    label: "htmlspecialchars reflected XSS remediation pair",
+    re: /page1_reflect_prevent\.php|escapes it with[\s\S]{0,40}htmlspecialchars/i
+  },
+  {
+    label: "sanitize helper stored XSS remediation",
+    re: /stored_hacked_prevent\.php|sanitize\(\)[\s\S]{0,80}htmlspecialchars/i
+  },
+  {
+    label: "CSCI210 XSS classroom walkthrough",
+    re: /montanajim\.github\.io\/CSCI210|Read the inline comments[\s\S]{0,60}vulnerable lines/i
+  }
+];
+
+const clientSideMontanajimXssClassroomEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/montanajim\.github\.io\/CSCI210/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MONTANAJIM_XSS_CLASSROOM_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/page1_reflect\.php|stored_hacked\.php|reflected XSS|stored XSS/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "montanajim CSCI210 wpref documents vulnerable vs fixed PHP pairs for reflected and stored XSS classroom demos"
     }
   };
 };
@@ -26493,6 +26598,8 @@ export const RULES: Record<string, Rule> = {
   clientSideThe0xPwnXssDomHashLabEvidence,
   clientSideThe0xPwnXssDocumentWriteLabEvidence,
   clientSideThe0xPwnXssJavascriptUrlLabEvidence,
+  clientSideThe0xPwnXssIframeDataUriLabEvidence,
+  clientSideMontanajimXssClassroomEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,

@@ -9626,6 +9626,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-the0x-pwn-xss-iframe-data-uri-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn iframe data: URI injection XSS lab disclosed",
+    description:
+      "the0x-pwn lab-10 filters HTML tags but allows iframe elements with data:text/html payloads injected into resultQuery.innerHTML — an advanced filter-bypass XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-10 page documents iframe data: URI injection with HTML-tag filter bypass for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssIframeDataUriLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the0x-pwn lab-10 is intentional training — block data: URIs and sanitize iframe src attributes in production.",
+      steps: [
+        "Disallow data: and javascript: URI schemes in iframe src attributes.",
+        "Use a strict HTML sanitizer allow-list instead of tag-name blocklists.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-10-style iframe data: URI XSS labs. Show data: URI blocking and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-montanajim-xss-classroom-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "montanajim CSCI210 classroom XSS examples disclosed",
+    description:
+      "montanajim CSCI210 wpref documents page1_reflect.php vulnerable reflected XSS and stored_hacked.php guestbook stored XSS alongside htmlspecialchars/sanitize() remediation pairs.",
+    impactOneline:
+      "Public CSCI210 classroom pages expose vulnerable vs fixed PHP XSS demo pairs for web security education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMontanajimXssClassroomEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Classroom XSS demos are intentional training — always escape output with htmlspecialchars in production.",
+      steps: [
+        "Use htmlspecialchars(ENT_QUOTES, 'UTF-8') when reflecting user input in HTML.",
+        "Sanitize stored output with strip_tags and htmlspecialchars before rendering.",
+        "Keep classroom vulnerable PHP demos isolated from production networks."
+      ]
+    },
+    fixPrompt:
+      "We host montanajim-style classroom XSS demos. Show htmlspecialchars output encoding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacker101-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
