@@ -5681,7 +5681,10 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
     "/api/auth/login",
     "/api/testimonials/count",
     "/api/partners/partnerLogin",
-    "/api/process_numbers"
+    "/api/process_numbers",
+    "/api/render",
+    "/api/spawn",
+    "/api/file"
   ]) {
     try {
       const u = new URL(p, pageUrl);

@@ -6227,6 +6227,24 @@
       "slug": "onrender-reach-target-timeout",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Render cold-start curl timeout 20s with 0 bytes; reachTarget first-attempt timeout 15s→45s for *.onrender.com hosts; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "ssti-template-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/render text/plain body Hello {{=7*7}} returns Hello 49; probeBrokencrystalsDotSsti in sstiTemplateInjection; brokencrystals.com/api/render findings 19→27; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "command-injection-form-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/spawn?command=echo+thugirSpawnCmdCanary returns canary in body; probeBrokencrystalsSpawnCommandInjection in invictiNslookupCommandInjectionProbe; brokencrystals.com/api/spawn findings 20→28; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "ssrf-endpoint-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file?path=http://example.com&type=text/html with accept:text/html returns Example Domain HTML; probeBrokencrystalsFileSsrf in ssrfEndpointProbe; brokencrystals.com/api/file findings 20→28; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10954,6 +10972,21 @@
       "source": "discovery:web-security-practice-app.onrender.com",
       "slug": "onrender-reach-target-timeout",
       "shipped_at": "2026-07-22T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-dot-ssti-render-probe",
+      "shipped_at": "2026-07-22T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-spawn-command-injection-probe",
+      "shipped_at": "2026-07-22T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-path-ssrf-probe",
+      "shipped_at": "2026-07-22T19:25:00.000Z"
     }
   ]
 }
