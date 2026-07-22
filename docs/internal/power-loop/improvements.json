@@ -6263,6 +6263,18 @@
       "slug": "fauxbank-idor-accounts-probe",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: alice session GET /api/accounts/2001 returns Bob Roberts owner while own account is Alice Liddell; pentest-fauxbank.vercel.app/login findings 4→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "xxe-xml-post-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/metadata Content-Type application/xml with ENTITY thugirXxeCanary returns 201 <root>thugirXxeCanary</root>; brokencrystals.com/api/metadata findings 27→29; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "sqli-header-error-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/views -H x-product-name:Opal' returns 500 SQL unterminated quoted string + location /usr/src/app/dist/products/products.controller.js; brokencrystals.com/api/products/views findings 29→31; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11020,6 +11032,16 @@
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-idor-accounts-probe",
       "shipped_at": "2026-07-22T20:20:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "xxe-xml-post-probe",
+      "shipped_at": "2026-07-22T21:14:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "sqli-header-error-disclosure",
+      "shipped_at": "2026-07-22T21:14:00.000Z"
     }
   ]
 }
