@@ -937,6 +937,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideDragSecurityFlawsEvidence",
   "clientSideDragSecurityFlawsLabModuleEvidence",
   "clientSideWizerCtfEvidence",
+  "clientSideCesCtfEvidence",
   "clientSideWizerCtfStoredDomXssEvidence",
   "clientSideWizerCtfDomClobberingEvidence",
   "wizerCtfIdorTaskManagerProbe",
@@ -6184,6 +6185,32 @@ function extractDvwaVulnSourceSeeds(html: string, origin: string): string[] {
   return [...out];
 }
 
+/** CES CTF token-hunt SPAs link login/profile labs from static HTML nav. */
+function extractCesCtfSeeds(html: string, pageUrl: string): string[] {
+  if (!/CES\s+CTF|The Lost Tokens|ctf-website-ten\.vercel\.app/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/login.html", "/profile.html", "/index.html", "/js/app.js"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href\s*=\s*["']([^"'#?]*(?:login|profile)\.html)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html)) && out.size < 8) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Hackforge-style CTF SPAs expose challenge routes only in JS — seed from HTML meta. */
 function extractCtfPlatformSpaSeeds(html: string, origin: string): string[] {
   const isHackforge =
@@ -6468,6 +6495,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const benstaffordXssSeeds = extractBenstaffordXssAttackSeeds(home.body, home.finalUrl);
   const ctfHubSeeds = extractCtfChallengeHubLinks(home.body, home.finalUrl);
   const ctfPlatformSeeds = extractCtfPlatformSpaSeeds(home.body, origin);
+  const cesCtfSeeds = extractCesCtfSeeds(home.body, home.finalUrl);
   const websecSeeds = extractWebsecChallengeSeeds(home.body, origin);
   const sixHackSeeds = extractSixHackCtfSeeds(home.body, origin);
   const gruyereSeeds = extractGruyereCodelabSeeds(home.body, origin);
@@ -7097,6 +7125,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...benstaffordXssSeeds,
       ...ctfHubSeeds,
       ...ctfPlatformSeeds,
+      ...cesCtfSeeds,
       ...websecSeeds,
       ...sixHackSeeds,
       ...gruyereSeeds,

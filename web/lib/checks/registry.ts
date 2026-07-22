@@ -2623,13 +2623,48 @@ async function probeUnauthenticatedAdminJson(
 }
 
 // --- Unauthenticated security-question disclosure (Juice Shop password-reset oracle) ---
+function securityQuestionBootstrapHit(
+  combined: string,
+  origin: string,
+  isJuiceShop: boolean
+): RuleResult | null {
+  if (HEROKU_STUB_RE.test(combined.slice(0, 800))) return null;
+  if (!/"question"\s*:\s*(\{|"[^"]+")/.test(combined)) return null;
+  if (!/\/rest\/user\/security-question|\/api\/security-question/i.test(combined)) return null;
+  if (/unauthorized|invalid email|not found|credentials_required/i.test(combined.slice(0, 400)))
+    return null;
+  const url =
+    combined.match(/https?:\/\/[^\s"'<>]+\/rest\/user\/security-question[^\s"'<>]*/i)?.[0] ??
+    new URL(
+      isJuiceShop
+        ? "/rest/user/security-question?email=admin@juice-sh.op"
+        : "/rest/user/security-question?email=admin@example.com",
+      origin
+    ).toString();
+  const snippet =
+    combined.match(/\{"question"[\s\S]{0,180}/i)?.[0]?.slice(0, 200).trim() ??
+    combined.match(/"question"\s*:\s*"[^"]+"/i)?.[0]?.slice(0, 200).trim() ??
+    '{"question":...}';
+  return {
+    fired: true,
+    confidence: isJuiceShop ? 0.91 : 0.85,
+    evidence: {
+      url,
+      snippet,
+      note: "Password-reset security question disclosed to unauthenticated callers — sensitive account-recovery oracle (bootstrap)"
+    }
+  };
+}
+
 async function probeSecurityQuestionDisclosure(ctx: RuleContext): Promise<RuleResult | null> {
   const isJuiceShop = JUICE_SHOP_HOST_RE.test(ctx.origin);
+  const bootstrap = securityQuestionBootstrapHit(ctx.combined, ctx.origin, isJuiceShop);
+  if (bootstrap) return bootstrap;
   const paths = isJuiceShop
     ? ["/rest/user/security-question?email=admin@juice-sh.op"]
     : ["/rest/user/security-question?email=admin@example.com", "/api/security-question?email=admin@example.com"];
   const urls = paths.map((p) => new URL(p, ctx.origin).toString());
-  const attempts = isJuiceShop ? 4 : 2;
+  const attempts = isJuiceShop ? 6 : 2;
   for (let attempt = 0; attempt < attempts; attempt++) {
     const docs = await ctx.probe.getMany(urls, { maxBytes: 4096 }, 2);
     for (const [url, r] of docs) {
@@ -2648,7 +2683,7 @@ async function probeSecurityQuestionDisclosure(ctx: RuleContext): Promise<RuleRe
       };
     }
     if (isJuiceShop && attempt < attempts - 1) {
-      await new Promise((resolve) => setTimeout(resolve, 2500));
+      await new Promise((resolve) => setTimeout(resolve, attempt < 2 ? 2500 : 4000));
     }
   }
   return null;
@@ -13841,6 +13876,50 @@ const CLIENT_WIZER_CTF_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+// --- CES CTF token-hunt labs (ctf-website-ten.vercel.app) ---------------------
+const CLIENT_CES_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CES CTF title",
+    re: /CES\s+CTF|The Lost Tokens/i
+  },
+  {
+    label: "CTF token hunt instructions",
+    re: /hidden tokens|Five hidden tokens|flagCES\{/i
+  },
+  {
+    label: "CTF token step variable",
+    re: /const\s+step\d+\s*=\s*["'][A-Za-z0-9+/]{8,}={0,2}["']/i
+  },
+  {
+    label: "Cookie role admin oracle",
+    re: /getCookie\s*\(\s*['"]role['"]\s*\)[\s\S]{0,200}?===\s*['"]admin['"]/i
+  },
+  {
+    label: "CTF decode/cipher hint",
+    re: /caesarcipher\d|decode|pixels may carry more than color/i
+  }
+];
+
+const clientSideCesCtfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CES_CTF_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/CES\s+CTF|The Lost Tokens|ctf-website/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CES CTF token-hunt lab discloses hidden tokens in HTML comments, JS variables, and cookie-role oracles"
+    }
+  };
+};
+
 const clientSideWizerCtfEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
@@ -19165,10 +19244,10 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
     };
   }
   const passwordFormSecret =
-    /<form[\s\S]{0,900}?name\s*=\s*["']password["'][\s\S]{0,1400}?<!--\s*[a-z0-9]{10,}\s*-->/i;
+    /<form[\s\S]{0,900}?(?:name\s*=\s*["']password["']|type\s*=\s*["']password["'])[\s\S]{0,1400}?<!--\s*[a-z0-9]{6,}\s*-->/i;
   const bare = ctx.combined.match(passwordFormSecret);
   if (bare) {
-    const secret = bare[0].match(/<!--\s*([a-z0-9]{10,})\s*-->/)?.[1];
+    const secret = bare[0].match(/<!--\s*([a-z0-9]{6,})\s*-->/)?.[1];
     return {
       fired: true,
       confidence: 0.88,
@@ -19180,7 +19259,7 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
     };
   }
   const base64FormSecret =
-    /<form[\s\S]{0,900}?name\s*=\s*["']password["'][\s\S]{0,1400}?<!--\s*[A-Za-z0-9+/]{12,}={0,2}\s*-->/i;
+    /<form[\s\S]{0,900}?(?:name\s*=\s*["']password["']|type\s*=\s*["']password["'])[\s\S]{0,1400}?<!--\s*[A-Za-z0-9+/]{12,}={0,2}\s*-->/i;
   const b64 = ctx.combined.match(base64FormSecret);
   if (b64) {
     const secret = b64[0].match(/<!--\s*([A-Za-z0-9+/]{12,}={0,2})\s*-->/)?.[1];
@@ -19204,6 +19283,21 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
       evidence: {
         sample: portal[0].slice(0, 220).replace(/\s+/g, " ").trim(),
         note: "HTML comment discloses API keys, admin credentials, or database connection strings in page source"
+      }
+    };
+  }
+  const ctfTokenComment =
+    /<!--\s*[A-Za-z0-9+/]{12,}={0,2}\s*-->[\s\S]{0,600}?(?:hidden tokens|flagCES|token hunt|decode|cipher)/i;
+  const ctfComment = ctx.combined.match(ctfTokenComment);
+  if (ctfComment) {
+    const secret = ctfComment[0].match(/<!--\s*([A-Za-z0-9+/]{12,}={0,2})\s*-->/)?.[1];
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        sample: ctfComment[0].slice(0, 220).replace(/\s+/g, " ").trim(),
+        secretHint: secret?.slice(0, 24),
+        note: "HTML comment contains base64-encoded CTF token visible in page source"
       }
     };
   }
@@ -27860,6 +27954,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
+  clientSideCesCtfEvidence,
   clientSideWizerCtfStoredDomXssEvidence,
   clientSideWizerCtfDomClobberingEvidence,
   wizerCtfIdorTaskManagerProbe,
