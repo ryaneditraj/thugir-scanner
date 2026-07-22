@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T03:36:00.000Z",
+  "updated_at": "2026-07-22T04:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1858,
-  "total_findings": 9401,
+  "total_sites_scanned": 1860,
+  "total_findings": 9415,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1475,
   "discovery_findings": 7474,
-  "improvements_shipped": 912,
-  "last_run": "2026-07-22T03:36:00.000Z",
+  "improvements_shipped": 914,
+  "last_run": "2026-07-22T04:25:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku cold-start degraded (pass1: 5 findings gap=sensitive_data pages=1 probes=224; pass2: 5 findings pages=1 probes=216; pass3 final 25s wake retry: 6 findings 6/6 pages=1 probes=223 — no staging fallback)",
+      "note": "Primary Heroku 7 findings 6/6 recall; new security-question-disclosure slug fires on /rest/user/security-question?email=admin@juice-sh.op alongside vibe-unauthenticated-api-routes",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,34 +50,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 45,
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 4,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue drain: cookiejar-lab hub, hacksplaining xml-bombs/subdomain-squatting/toxic-deps/unencrypted-comm/xssi, urban-vampi-production, hiddeninvestigations; +5 vulnerableapp dom-xss + Web Security Learning Labs modules queued",
-      "improvements_shipped_this_run": 0,
-      "urls_queued": [
-        "https://vulnerableapp.com/dom-xss.html",
-        "https://web-security-learning-labs.vercel.app/learn/modules",
-        "https://web-security-learning-labs.vercel.app/module/1000",
-        "https://web-security-learning-labs.vercel.app/module/1001",
-        "https://web-security-learning-labs.vercel.app/module/1002"
+      "focus": "Web Security Learning Labs platform evidence + crawl seeds for /learn/modules and models/*demo.html",
+      "improvements_shipped_this_run": 2,
+      "urls_validated": [
+        "https://web-security-learning-labs.vercel.app/"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6/6 recall after 25s Heroku wake retry (pass1 gap=sensitive_data; pass3 restored vibe-unauthenticated-api-routes)",
-      "hacksplaining.com/lessons/toxic-dependencies: 8 findings — supply-chain + CSRF lesson evidence",
-      "hacksplaining.com/lessons/xml-bombs: 7 findings — XML bomb + injection lesson markers",
-      "urban-vampi-production.up.railway.app: 6 findings — production Railway vuln lab markers",
-      "hiddeninvestigations.net: 4 findings — react2shell Docker lab landing evidence"
+      "juice-shop.herokuapp.com: 7 findings 6/6 recall — security-question-disclosure adds dedicated sensitive_data slug",
+      "web-security-learning-labs.vercel.app: 4 findings — client-side-web-security-learning-labs-evidence (SQLi/XSS/IDOR module cards)",
+      "vulnerable-web-application-jecw.vercel.app: 4 findings — client-side-buggybuy-evidence (prior run)",
+      "natas1.natas.labs.overthewire.org: 4 findings — overthewire-natas + referer-guard evidence (prior run)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: pass1+pass2 missed sensitive_data before final wake retry (shallow pages=1 crawl)",
-      "secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "scoreboard.json had merge conflict (improvements_shipped) — fixed before benchmark could complete",
-      "vulnerableapp dom-xss + Web Security Learning Labs module paths queued at tail — pending next queue drain"
+      "web-security-learning-labs /module/1000–1002 are stub pages (Here is a Module: N) — no additional lab content yet",
+      "BuggyBuy Render API (vulnerable-web-application-mcd0.onrender.com) cold/slow — live API probes time out",
+      "vulnerableapp dom-xss + Web Security Learning Labs module paths still queued for next discovery drain"
     ]
   },
   "discovery_highlights": {
@@ -209,7 +203,8 @@
     "authlab.digi.ninja": 3,
     "defendtheweb.net": 2,
     "labs.hackxpert.com": 5,
-    "juice-shop.herokuapp.com": 6,
+    "juice-shop.herokuapp.com": 7,
+    "web-security-learning-labs.vercel.app": 4,
     "securebank-blog.vercel.app": 6,
     "hack-health-tutorial.vercel.app": 9,
     "preview-zeroday-sec.vercel.app": 2,

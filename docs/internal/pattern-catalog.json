@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-22T03:16:07.651Z",
-  "total": 580,
-  "uniqueSlugs": 578,
+  "generatedAt": "2026-07-22T04:17:55.748Z",
+  "total": 582,
+  "uniqueSlugs": 580,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 562,
+    "generic": 564,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
-    "free": 69,
-    "deep": 511,
+    "free": 70,
+    "deep": 512,
     "continuous": 0
   },
   "byCategory": {
@@ -24,10 +24,10 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 36,
+    "Information disclosure": 37,
     "Security misconfiguration": 48,
     "Broken authentication": 42,
-    "Injection": 116,
+    "Injection": 117,
     "Cross-site scripting": 98,
     "general": 18,
     "SSRF": 1,
@@ -450,6 +450,7 @@
     "client-side-w3challs-evidence",
     "client-side-waf-workshop-evidence",
     "client-side-web-security-lab-zh-evidence",
+    "client-side-web-security-learning-labs-evidence",
     "client-side-webgoat-evidence",
     "client-side-webhacking-kr-evidence",
     "client-side-websec-aspect-instrumentation-challenge-evidence",
@@ -581,6 +582,7 @@
     "secret-stripe-restricted",
     "secret-supabase-service-role",
     "secret-twilio",
+    "security-question-disclosure",
     "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
     "server-side-eval-evidence",
