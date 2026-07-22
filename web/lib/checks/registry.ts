@@ -2686,6 +2686,10 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /localStorage\.getItem\([^)]+\)[\s\S]{0,200}\.innerHTML\s*=/
   },
   {
+    label: "document.cookie flows into innerHTML assignment",
+    re: /document\.cookie[\s\S]{0,300}\.innerHTML\s*=/
+  },
+  {
     label: "document.write on search/query form input",
     re: /document\.write\s*\(\s*(?:search|query|input|val)\b/
   },
@@ -2743,6 +2747,18 @@ const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "eval() on window.name persistence sink",
     re: /eval\s*\(\s*window\.name\s*\)/
+  },
+  {
+    label: "eval() on history.state persistence sink",
+    re: /history\.state[\s\S]{0,200}eval\s*\(/
+  },
+  {
+    label: "eval() on stateData from history.state",
+    re: /eval\s*\(\s*stateData\s*\)/
+  },
+  {
+    label: "eval() on sessionStorage search matches",
+    re: /sessionStorage[\s\S]{0,400}eval\s*\(|eval\s*\(\s*matches\[/
   }
 ];
 
@@ -22946,6 +22962,22 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "IndexedDB innerHTML stored XSS sink",
     re: /IndexedDB[\s\S]{0,120}innerHTML[\s\S]{0,60}NO sanitization|notes from IndexedDB[\s\S]{0,80}innerHTML/i
+  },
+  {
+    label: "Cookie storage XSS lab badge",
+    re: /Lab #\d+ · Stored XSS \(Cookies\)|Cookie Storage|Stored in Cookies/i
+  },
+  {
+    label: "document.cookie innerHTML cookie XSS sink",
+    re: /document\.cookie[\s\S]{0,200}innerHTML[\s\S]{0,80}(?:unsanitized cookie|NO sanitization)/i
+  },
+  {
+    label: "history.state eval XSS lab",
+    re: /history\.state \(pushState\)|eval\(history\.state\.data\)|history\.state Storage/i
+  },
+  {
+    label: "sessionStorage search eval XSS lab",
+    re: /sessionStorage \+ Search Filter|eval\(match\)|Executing matches via eval/i
   }
 ];
 
