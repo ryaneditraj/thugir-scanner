@@ -2775,6 +2775,22 @@ const DOM_EVAL_XSS_RES: { label: string; re: RegExp }[] = [
   {
     label: "eval(combined) after joining localStorage parts",
     re: /let\s+combined\s*=\s*part1\s*\+\s*part2[\s\S]{0,120}eval\s*\(\s*combined/
+  },
+  {
+    label: "setTimeout(codeString) with user-controlled code",
+    re: /setTimeout\s*\(\s*(?:code|userCode|userString)[\s,)]|setTimeout\(userString/i
+  },
+  {
+    label: "setInterval(codeString) with user-controlled code",
+    re: /setInterval\s*\(\s*(?:code|userCode|userString)[\s,)]|setInterval\(userString/i
+  },
+  {
+    label: "Function() constructor with user input",
+    re: /new\s+Function\s*\(\s*(?:code|userCode|userString)|Function\s*\(\s*userCode/i
+  },
+  {
+    label: "eval() on getElementById value",
+    re: /eval\s*\(\s*(?:userCode|code|userString)|eval\(userCode\)/i
   }
 ];
 
@@ -23065,6 +23081,46 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "body onload injection DOM XSS lab",
     re: /XSS Lab #\d+:\s*onload in[\s\S]{0,20}body|Simulate body onload with user code/i
+  },
+  {
+    label: "eval user-controlled string XSS lab",
+    re: /XSS Lab #\d+:\s*eval\(\)\s+of\s+User-Controlled String|eval\(userCode\)|EXTREMELY DANGEROUS with user input/i
+  },
+  {
+    label: "setTimeout userString XSS lab",
+    re: /XSS Lab #\d+:\s*setTimeout\(userString\)|setTimeout\(userString\) Vulnerability/i
+  },
+  {
+    label: "setInterval userString XSS lab",
+    re: /XSS Lab #\d+:\s*setInterval\(userString\)|setInterval\(userString\) Vulnerability/i
+  },
+  {
+    label: "Function constructor XSS lab",
+    re: /XSS Lab #\d+:\s*Function\(\)\s+Constructor|Function\(\)\s+Constructor Vulnerability/i
+  },
+  {
+    label: "javascript: location.href XSS lab",
+    re: /XSS Lab #\d+:\s*javascript:\s+Pseudo-Protocol in location\.href|location\.href\s*=\s*['"]javascript:/i
+  },
+  {
+    label: "onfocus autofocus injection XSS lab",
+    re: /XSS Lab #\d+:\s*onfocus autofocus Injection|onfocus \+ autofocus Injection/i
+  },
+  {
+    label: "oninput event injection XSS lab",
+    re: /XSS Lab #\d+:\s*oninput Event Injection|Inject oninput with user code/i
+  },
+  {
+    label: "onchange select injection XSS lab",
+    re: /XSS Lab #\d+:\s*onchange in select Element|onchange in\s*&lt;select&gt;/i
+  },
+  {
+    label: "onkeyup injection XSS lab",
+    re: /XSS Lab #\d+:\s*onkeyup Injection|Inject onkeyup with user code/i
+  },
+  {
+    label: "onsubmit form injection XSS lab",
+    re: /XSS Lab #\d+:\s*onsubmit Injection in Form|Inject onsubmit with user code/i
   }
 ];
 
