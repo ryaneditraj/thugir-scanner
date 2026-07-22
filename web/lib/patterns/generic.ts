@@ -4796,9 +4796,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "RedTiger command-injection login challenge disclosed",
     description:
-      "RedTiger Hackit level9–10 expose password-only POST logins that evaluate backtick shell metacharacters — HTML comments leak the command-injection payload oracle.",
+      "RedTiger Hackit level7–10 expose password-only POST logins that evaluate backtick shell metacharacters — HTML comments leak the command-injection payload oracle.",
     impactOneline:
-      "Public RedTiger level9/10 pages document OS command injection via login password field for scanner calibration.",
+      "Public RedTiger level7–10 pages document OS command injection via login password field for scanner calibration.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "redtigerCommandInjectionEvidence" },
     tierRequired: "deep",
@@ -11338,6 +11338,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host a BUG Collection-style vulnerable Next.js training app. Show how to isolate testLib labs and fix MongoDB injection on production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-buggybuy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BuggyBuy vulnerable e-commerce training app disclosed",
+    description:
+      "BuggyBuy SPA documents a cross-origin Render API with isAdmin admin-dashboard gating, REST product routes, and intentional broken-access-control training flows.",
+    impactOneline:
+      "Public BuggyBuy deploy exposes client-side markers for admin bypass and unauthenticated API access against its Render backend.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBuggybuyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BuggyBuy is an intentional training app — isolate the Render backend and gate admin routes.",
+      steps: [
+        "Require server-side authorization on all /api/v1/* routes.",
+        "Do not rely on client-side isAdmin flags for access control.",
+        "Host training backends on isolated lab infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "We host a BuggyBuy-style vulnerable e-commerce SPA with a cross-origin API. Show how to isolate the lab and enforce server-side admin authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-archon-api-security-curriculum-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Archon OWASP API Top 10 curriculum disclosed",
+    description:
+      "Archon cybersecurity path documents API Security Testing modules covering JWT attacks, BOLA/IDOR, GraphQL security, mass assignment, and OWASP API Top 10.",
+    impactOneline:
+      "Public Archon docs expose API security training curriculum with broken authorization patterns for unauthenticated study.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideArchonApiSecurityCurriculumEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Archon API security curriculum is educational — gate interactive labs behind authentication.",
+      steps: [
+        "Require login before serving runnable API vulnerability labs.",
+        "Keep JWT/BOLA/GraphQL walkthroughs on isolated training subdomains.",
+        "Do not copy vulnerable API patterns from training docs into production services."
+      ]
+    },
+    fixPrompt:
+      "We publish Archon-style OWASP API Top 10 curriculum with JWT and BOLA modules. Show how to auth-gate labs and isolate training from production APIs.",
     version: 1,
     enabled: true
   },
