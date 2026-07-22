@@ -744,7 +744,9 @@ const DEEP_RULES = new Set<string>([
   "unauthenticatedApiRoutes",
   "sqlErrorDisclosure",
   "sqliQueryParamInjection",
+  "sqliHeaderErrorDisclosure",
   "xpathInjectionDisclosure",
+  "xxeXmlPostProbe",
   "invictiNslookupCommandInjectionProbe",
   "postLoginSqlBypass",
   "sstiTemplateInjection",
@@ -5687,7 +5689,9 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
     "/api/process_numbers",
     "/api/render",
     "/api/spawn",
-    "/api/file"
+    "/api/file",
+    "/api/metadata",
+    "/api/products/views"
   ]) {
     try {
       const u = new URL(p, pageUrl);
