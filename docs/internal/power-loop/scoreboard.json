@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T19:11:40.593Z",
+  "updated_at": "2026-07-22T19:13:52.330Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,33 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1974,
-  "total_findings": 10187,
+  "total_sites_scanned": 1982,
+  "total_findings": 10302,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1535,
-  "discovery_findings": 8161,
+  "discovery_urls_added": 1540,
+  "discovery_findings": 8276,
   "improvements_shipped": 945,
-  "last_run": "2026-07-22T19:11:40.593Z",
+  "last_run": "2026-07-22T19:13:52.330Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 1,
-      "primary_recall": "1/6",
-      "primary_gap": [
-        "xss",
-        "sqli",
-        "idor",
-        "auth_bypass",
-        "sensitive_data"
-      ],
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 8,
-      "oracle_recall": "6/6",
-      "gap": [],
-      "note": "Primary Heroku HTTP 503 on all warm attempts — shallow 1-finding cold passes only. Staging oracle restored 6/6 recall (8 findings).",
+      "primary_findings": 6,
+      "primary_recall": "6/6",
+      "primary_gap": [],
+      "note": "Shallow crawl (pages=1 probes=226) but full 6/6 recall on primary Heroku — no staging fallback needed",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -61,34 +51,40 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 83,
-      "skipped_48h": [],
+      "urls_scanned": 8,
+      "findings": 115,
+      "skipped_48h": [
+        "https://brokencrystals.com/api/render",
+        "https://brokencrystals.com/api/spawn",
+        "https://brokencrystals.com/api/file",
+        "https://brokencrystals.com/api/email/sendSupportEmail",
+        "https://pentest-fauxbank.vercel.app/dashboard"
+      ],
       "dns_failures": [],
-      "focus": "brokencrystals README oracles — /api/render SSTI, /api/spawn RCE, /api/file SSRF, /api/email/sendSupportEmail; FauxBank dashboard",
-      "improvements_shipped_this_run": 0,
-      "extra_queue_drain": {
-        "urls_scanned": 8,
-        "findings": 97,
-        "note": "Prior queue head drained before new-URL prepend scan"
-      }
+      "focus": "brokencrystals /marketplace prototype pollution, /graphql SSTI, /api/partners/partnerLogin XPath, /api/testimonials/count SQLi; FauxBank login",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: HTTP 503 — 1 finding only (misconfig) on cold passes; staging 8 findings 6/6 recall",
-      "brokencrystals.com/api/render: 19 findings — SSTI/doT template oracle surface",
-      "brokencrystals.com/api/spawn: 20 findings — command injection query-param oracle",
-      "brokencrystals.com/api/file: 20 findings — SSRF/cloud-metadata oracle",
-      "pentest-fauxbank.vercel.app/dashboard: 4 findings — guided OWASP banking lab markers"
+      "juice-shop.herokuapp.com: 6 findings 6/6 recall on primary — security-question-disclosure (sensitive_data) on shallow crawl",
+      "brokencrystals.com/marketplace: 24 findings — prototype pollution + DOM XSS oracle",
+      "brokencrystals.com/graphql: 25 findings — GraphQL introspection + SSTI surface",
+      "brokencrystals.com/api/partners/partnerLogin: 25 findings — XPath injection oracle",
+      "brokencrystals.com/api/testimonials/count: 26 findings — SQLi query-param oracle",
+      "pentest-fauxbank.vercel.app/login: 4 findings — guided OWASP banking lab markers"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com primary benchmark dead (503) — recall depends on staging fallback",
+      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure only this pass)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "results.json had merge-conflict markers — resolved before scan",
-      "brokencrystals /marketplace prototype-pollution oracle still at queue tail"
+      "vibe-unauthenticated-api-routes absent on 19 UTC shallow juice-shop pass — recall still 6/6 via security-question-disclosure",
+      "primary Heroku recall unstable across runs — 18 UTC 503 vs 19 UTC 6/6 shallow"
     ]
   },
   "discovery_highlights": {
+    "brokencrystals.com/marketplace": 24,
+    "brokencrystals.com/graphql": 25,
+    "brokencrystals.com/api/partners/partnerLogin": 25,
+    "brokencrystals.com/api/testimonials/count": 26,
+    "pentest-fauxbank.vercel.app/login": 4,
     "brokencrystals.com": 20,
     "brokencrystals.com/api/render": 19,
     "brokencrystals.com/api/spawn": 20,
