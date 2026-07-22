@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T03:36:00.000Z",
+  "updated_at": "2026-07-22T04:29:30.477Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1858,
-  "total_findings": 9401,
+  "total_sites_scanned": 1867,
+  "total_findings": 9448,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1475,
-  "discovery_findings": 7474,
+  "discovery_urls_added": 1480,
+  "discovery_findings": 7514,
   "improvements_shipped": 912,
-  "last_run": "2026-07-22T03:36:00.000Z",
+  "last_run": "2026-07-22T04:29:30.477Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku cold-start degraded (pass1: 5 findings gap=sensitive_data pages=1 probes=224; pass2: 5 findings pages=1 probes=216; pass3 final 25s wake retry: 6 findings 6/6 pages=1 probes=223 — no staging fallback)",
+      "note": "Primary Heroku cold-start degraded (pass1: 6 findings gap=sqli pages=6 probes=157; pass2 12s retry: 7 findings 6/6 pages=6 probes=181 — no staging fallback)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,32 +52,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 45,
+      "findings": 40,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Queue drain: cookiejar-lab hub, hacksplaining xml-bombs/subdomain-squatting/toxic-deps/unencrypted-comm/xssi, urban-vampi-production, hiddeninvestigations; +5 vulnerableapp dom-xss + Web Security Learning Labs modules queued",
+      "focus": "Queue drain: acuart.phpnet.us, websec.fr, vulnbank.org, dvwa.vercel.app, apigoat, ucu-owasp-ctf, OGT-Cyber-Game, oss-oopssec-store; +5 Web Security Learning Labs modules 1003-1006 + yogsec lab11 queued",
       "improvements_shipped_this_run": 0,
       "urls_queued": [
-        "https://vulnerableapp.com/dom-xss.html",
-        "https://web-security-learning-labs.vercel.app/learn/modules",
-        "https://web-security-learning-labs.vercel.app/module/1000",
-        "https://web-security-learning-labs.vercel.app/module/1001",
-        "https://web-security-learning-labs.vercel.app/module/1002"
+        "https://web-security-learning-labs.vercel.app/module/1003",
+        "https://web-security-learning-labs.vercel.app/module/1004",
+        "https://web-security-learning-labs.vercel.app/module/1005",
+        "https://web-security-learning-labs.vercel.app/module/1006",
+        "https://yogsec.github.io/xss-labs/labs/lab11.html"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6/6 recall after 25s Heroku wake retry (pass1 gap=sensitive_data; pass3 restored vibe-unauthenticated-api-routes)",
-      "hacksplaining.com/lessons/toxic-dependencies: 8 findings — supply-chain + CSRF lesson evidence",
-      "hacksplaining.com/lessons/xml-bombs: 7 findings — XML bomb + injection lesson markers",
-      "urban-vampi-production.up.railway.app: 6 findings — production Railway vuln lab markers",
-      "hiddeninvestigations.net: 4 findings — react2shell Docker lab landing evidence"
+      "juice-shop.herokuapp.com: 6/6 recall after 12s wake retry (pass1 gap=sqli; retry restored sql-error-disclosure)",
+      "koadt.github.io/oss-oopssec-store: 9 findings — OopsSec Store roadmap + X-Forwarded-For SQLi walkthrough markers",
+      "websec.fr: 6 findings — French web security challenge platform evidence",
+      "vulnbank.org: 6 findings — vulnerable banking demo markers",
+      "ucu-owasp-ctf.vercel.app: 5 findings — OWASP CTF lab evidence"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: pass1+pass2 missed sensitive_data before final wake retry (shallow pages=1 crawl)",
+      "juice-shop.herokuapp.com: pass1 missed sql-error-disclosure (sqli gap) before 12s wake retry on deep crawl pages=6",
       "secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "scoreboard.json had merge conflict (improvements_shipped) — fixed before benchmark could complete",
-      "vulnerableapp dom-xss + Web Security Learning Labs module paths queued at tail — pending next queue drain"
+      "Web Security Learning Labs modules 1003-1006 + yogsec lab11 queued at tail — pending next queue drain"
     ]
   },
   "discovery_highlights": {

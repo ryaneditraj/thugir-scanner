@@ -7463,7 +7463,32 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1002",
       "source": "FarciarzYT/WebSecurityLearningLabs — module 1002 hands-on lab (OWASP training module)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1003",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1003 hands-on lab (OWASP SQLi/XSS track)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1004",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1004 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1005",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1005 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1006",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1006 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab11.html",
+      "source": "yogsec/xss-labs — Level 11 reflected/stored XSS training lab (GitHub Pages)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T03:35:00.000Z"
+  "updated_at": "2026-07-22T04:26:00.000Z"
 }
