@@ -15,23 +15,30 @@
       ]
     }
   },
-  "total_sites_scanned": 1924,
-  "total_findings": 9736,
+  "total_sites_scanned": 1933,
+  "total_findings": 9781,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1510,
-  "discovery_findings": 7753,
+  "discovery_urls_added": 1515,
+  "discovery_findings": 7790,
   "improvements_shipped": 935,
   "last_run": "2026-07-22T12:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses; pass1 gap=sqli recovered on Heroku wake retry (5→8 findings)",
+      "primary_miss_signal": {
+        "pass1": "2 findings gap=xss,sqli,auth_bypass,sensitive_data pages=1 probes=1",
+        "pass2": "2 findings pages=1 probes=25",
+        "pass3": "3 findings pages=1 probes=181",
+        "note": "Primary Heroku cold-start shallow crawl — staging fallback restored full recall"
+      },
+      "note": "No benchmark misses; 12:40 validation pass1 gap=sqli recovered on Heroku wake retry (5→8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,25 +57,47 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 37,
+      "skipped_48h": [
+        "https://juice-shop.herokuapp.com/",
+        "https://dvaib.com/",
+        "https://pentest-ground.com:4280/",
+        "https://pentest-ground.com:9000/",
+        "https://capture-the-flag-official-website.vercel.app/",
+        "https://owasp-juice.shop/",
+        "https://xxe-lab.vercel.app/",
+        "https://nextjs-cve-hackerone.vercel.app/",
+        "https://web-pentest-playground.onrender.com/"
+      ],
       "dns_failures": [],
       "focus": "the0x-pwn lab-2 template literal eval + lab-4 tag filter bypass + lab-8 href angle-bracket XSS module rules",
-      "improvements_shipped_this_run": 3
+      "improvements_shipped_this_run": 3,
+      "urls_added_list": [
+        "https://yogsec.github.io/xss-labs/labs/lab35.html",
+        "https://yogsec.github.io/xss-labs/labs/lab36.html",
+        "https://yogsec.github.io/xss-labs/labs/lab37.html",
+        "https://yogsec.github.io/xss-labs/labs/lab38.html",
+        "https://yogsec.github.io/xss-labs/labs/lab39.html"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) after wake retry — no benchmark misses",
+      "juice-shop-staging: 8 findings 6/6 recall after primary cold-start degradation",
       "the0x-pwn lab-2: template literal eval rule + dom-eval-xss (3→5 findings)",
       "the0x-pwn lab-4: incomplete tag filter before innerHTML (3→4 findings)",
-      "the0x-pwn lab-8: href attribute innerHTML sink (3→4 findings)"
+      "the0x-pwn lab-8: href attribute innerHTML sink (3→4 findings)",
+      "yogsec lab25-26: dom-eval-xss via setTimeout/eval(userCode) patterns (5→6 findings)",
+      "hack-yourself-first.azurewebsites.net: 7 findings — Troy Hunt Supercar Showdown training app",
+      "php.testsparker.com: 6 findings — reflected XSS + SQLi markers on Acunetix practice site"
     ],
     "learning_gaps": [
+      "juice-shop.herokuapp.com primary: pass1 gap=xss,sqli,auth_bypass,sensitive_data on pages=1 probes=1 — Heroku cold-start blocks deep crawl without staging fallback",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "owasp-finbot-ctf-demo.onrender.com: 1 finding only — agentic AI exploit chains need authenticated CTF namespace",
       "web-pentest-playground.onrender.com: Render service suspended (503)",
-      "owasp-finbot-ctf-demo.onrender.com: Render cold-start returns sparse HTML",
-      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404"
+      "516-hackers.github.io/516-hackers-vuln-playground: GitHub Pages 404",
+      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)"
     ]
   },
   "discovery_highlights": {
