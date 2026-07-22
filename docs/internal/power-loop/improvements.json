@@ -6005,6 +6005,18 @@
       "slug": "client-side-web-security-learning-labs-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Web Security Learning Labs title + SQL Injection/IDOR module cards + models/XSSdemo.html links + Security Through Practice tagline; web-security-learning-labs.vercel.app findings 3→4; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "client-side-oopssec-xff-sqli-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/x-forwarded-for-sql-injection/ title SQL Injection via X-Forwarded-For Header + tracks visitor IPs via X-Forwarded-For dropped into SQL query; post direct scan findings 5 incl client-side-oopssec-xff-sqli-evidence; benchmark 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "client-side-yogsec-xss-lab-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab11.html Stored in localStorage → Displayed Later + saveMessageBtn + innerHTML NO sanitization; yogsec.github.io/xss-labs/labs/lab11.html findings 0→3; benchmark 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10577,6 +10589,16 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "client-side-web-security-learning-labs-evidence",
       "shipped_at": "2026-07-22T04:25:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "client-side-oopssec-xff-sqli-evidence",
+      "shipped_at": "2026-07-22T05:30:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "client-side-yogsec-lab11-localstorage-xss-markers",
+      "shipped_at": "2026-07-22T05:30:00.000Z"
     }
   ]
 }
