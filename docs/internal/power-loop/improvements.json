@@ -5939,6 +5939,24 @@
       "slug": "client-side-yogsec-search-eval-lab-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: lab21 Search Box XSS (eval) + Vulnerable Code: eval(code); yogsecXssLabsPrioritySeeds extended 20→39; yogsec.github.io/xss-labs/labs/lab21.html findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-dom-hash-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-3 DOM-Based XSS + decodeURIComponent(location.hash.slice(1)) + resultQuery.innerHTML = hash; the0x-pwn.github.io/lab-xss/lab-3/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-document-write-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-5 DOM XSS in document.write + document.write('<option selected>' + query); the0x-pwn.github.io/lab-xss/lab-5/ findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-javascript-url-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lab-7 Reflected XSS in a JavaScript URL + back.href = javascript:fetch('/analytics'...); the0x-pwn.github.io/lab-xss/lab-7/ findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10456,6 +10474,21 @@
       "source": "discovery:yogsec.github.io",
       "slug": "client-side-yogsec-search-eval-lab-seeds",
       "shipped_at": "2026-07-22T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-dom-hash-lab-evidence",
+      "shipped_at": "2026-07-22T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-document-write-lab-evidence",
+      "shipped_at": "2026-07-22T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "client-side-the0x-pwn-xss-javascript-url-lab-evidence",
+      "shipped_at": "2026-07-22T01:10:00.000Z"
     }
   ]
 }

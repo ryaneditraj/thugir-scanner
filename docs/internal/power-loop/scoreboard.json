@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T00:55:44.470Z",
+  "updated_at": "2026-07-22T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1460,
   "discovery_findings": 7345,
-  "improvements_shipped": 903,
-  "last_run": "2026-07-22T00:55:44.470Z",
+  "improvements_shipped": 906,
+  "last_run": "2026-07-22T01:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku cold-start degraded (pass1 gap=auth_bypass,sensitive_data); staging fallback 7 findings 6/6 recall",
+      "note": "No benchmark misses — recall stable at 6/6; 3 the0x-pwn per-module XSS lab rules shipped",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,34 +51,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 50,
-      "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "Queue head drain: bugbountyhunter ch9/10/16, redtiger level6, securebank-blog, hack-health, zeroday-sec, hack-this-site-eta; +5 XSS lab modules queued (the0x-pwn lab-1, yogsec lab3/7/12, povzayd lab1)",
-      "improvements_shipped_this_run": 0,
-      "urls_queued": [
-        "https://the0x-pwn.github.io/lab-xss/lab-1/",
-        "https://yogsec.github.io/xss-labs/labs/lab3.html",
-        "https://yogsec.github.io/xss-labs/labs/lab7.html",
-        "https://yogsec.github.io/xss-labs/labs/lab12.html",
-        "https://povzayd.github.io/XSS-LABS/LABS/lab1.html"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "the0x-pwn per-module XSS lab rules: lab-3 DOM hash, lab-5 document.write, lab-7 javascript: URL",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (7 findings) after primary Heroku cold-start gap auth_bypass,sensitive_data",
-      "hack-this-site-eta.vercel.app: 19 findings — educational vuln platform markers",
-      "hack-health-tutorial.vercel.app: 9 findings — OWASP Top 10 module evidence",
-      "securebank-blog.vercel.app: 6 findings — banking lab attack/secure mode",
-      "redtiger.labs level6: 4 findings — SQLi training lab"
+      "juice-shop-staging: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "the0x-pwn lab-3: DOM hash innerHTML module evidence (3→4 findings)",
+      "the0x-pwn lab-5: document.write option injection module evidence (3→4 findings)",
+      "the0x-pwn lab-7: javascript: URL analytics module evidence (3→4 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: primary Heroku cold-start missed auth_bypass+sensitive_data (pass1); staging fallback required for 6/6",
       "secret-resend slug still absent — sensitive_data via vibe-unauthenticated-api-routes",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "hack-health A06/A08/A09/A10 tail queue URLs not yet reached",
-      "new XSS lab modules (the0x-pwn lab-1, yogsec lab3/7/12, povzayd lab1) queued at tail — pending next drain"
+      "yogsec lab3 returns Try Again :( — page offline",
+      "queued XSS lab modules (the0x-pwn lab-1, yogsec lab3/7/12, povzayd lab1) pending queue drain"
     ]
   },
   "discovery_highlights": {

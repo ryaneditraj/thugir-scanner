@@ -9548,6 +9548,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-the0x-pwn-xss-dom-hash-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn DOM hash innerHTML XSS lab disclosed",
+    description:
+      "the0x-pwn lab-3 decodes location.hash and assigns it to resultQuery.innerHTML without sanitization — a DOM-based XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-3 page documents location.hash → innerHTML DOM XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssDomHashLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign location.hash to innerHTML — use textContent and strict URL validation in production.",
+      steps: [
+        "Decode hash fragments with textContent or DOMPurify instead of innerHTML.",
+        "Host XSS training labs only on isolated lab infrastructure.",
+        "Use Content-Security-Policy to block inline script execution in production apps."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-3-style DOM hash XSS labs. Show safe hash handling and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-document-write-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn document.write option injection XSS lab disclosed",
+    description:
+      "the0x-pwn lab-5 injects unsanitized query parameters into option elements via document.write — a DOM XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-5 page documents document.write query concatenation XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssDocumentWriteLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid document.write with user-controlled data — build DOM nodes with createElement and textContent.",
+      steps: [
+        "Replace document.write concatenation with safe DOM APIs and output encoding.",
+        "Host XSS training labs only on isolated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate inline script execution in production."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-5-style document.write XSS labs. Show safe DOM construction and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-javascript-url-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn javascript: URL analytics XSS lab disclosed",
+    description:
+      "the0x-pwn lab-7 sets back.href to a javascript: URL with an analytics fetch callback — a reflected XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-7 page documents javascript: URL injection via href assignment for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssJavascriptUrlLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign user input to javascript: href URLs — validate and block dangerous URL schemes.",
+      steps: [
+        "Block javascript: and data: schemes in dynamic href assignments.",
+        "Use allowlisted redirect targets instead of reflecting query into URL attributes.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-7-style javascript: URL XSS labs. Show URL scheme validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacker101-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

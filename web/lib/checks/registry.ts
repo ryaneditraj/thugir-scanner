@@ -22815,6 +22815,114 @@ const clientSideThe0xPwnXssLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- the0x-pwn lab-3 DOM hash innerHTML module (the0x-pwn.github.io/lab-xss/lab-3/) ----
+const CLIENT_THE0X_PWN_XSS_DOM_HASH_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DOM-Based XSS lab heading",
+    re: /DOM-Based XSS[\s\S]{0,40}(?:\/ Labs|Labs)/i
+  },
+  {
+    label: "location.hash slice sink",
+    re: /decodeURIComponent\(location\.hash\.slice\(1\)\)/
+  },
+  {
+    label: "resultQuery innerHTML hash assignment",
+    re: /resultQuery\.innerHTML\s*=\s*hash/
+  }
+];
+
+const clientSideThe0xPwnXssDomHashLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-3/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_DOM_HASH_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-3 documents DOM XSS via location.hash decoded into resultQuery.innerHTML without sanitization"
+    }
+  };
+};
+
+// --- the0x-pwn lab-5 document.write option injection (the0x-pwn.github.io/lab-xss/lab-5/) -
+const CLIENT_THE0X_PWN_XSS_DOCUMENT_WRITE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DOM XSS document.write lab heading",
+    re: /DOM XSS in document\.write/i
+  },
+  {
+    label: "document.write option query injection",
+    re: /document\.write\(['"]<option selected>['"]\s*\+\s*query/
+  },
+  {
+    label: "country select document.write chain",
+    re: /document\.write\(['"]<select name="country"/
+  }
+];
+
+const clientSideThe0xPwnXssDocumentWriteLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-5/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_DOCUMENT_WRITE_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-5 documents DOM XSS via document.write injecting unsanitized query into option elements"
+    }
+  };
+};
+
+// --- the0x-pwn lab-7 javascript: URL analytics fetch (the0x-pwn.github.io/lab-xss/lab-7/) -
+const CLIENT_THE0X_PWN_XSS_JAVASCRIPT_URL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Reflected XSS JavaScript URL lab heading",
+    re: /Reflected XSS in a JavaScript URL/i
+  },
+  {
+    label: "javascript analytics fetch sink",
+    re: /javascript:fetch\(['"]\/analytics['"]/
+  },
+  {
+    label: "back.href javascript URL assignment",
+    re: /back\.href\s*=\s*`javascript:fetch/
+  }
+];
+
+const clientSideThe0xPwnXssJavascriptUrlLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-7/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_JAVASCRIPT_URL_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-7 documents reflected XSS via javascript: URL with analytics fetch callback"
+    }
+  };
+};
+
 // --- povzayd XSS LABS (povzayd.github.io/XSS-LABS — reflected/stored/DOM browser labs) -
 const CLIENT_POVZAYD_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -26382,6 +26490,9 @@ export const RULES: Record<string, Rule> = {
   clientSideYogsecXssLabsEvidence,
   clientSideYogsecXssLabModuleEvidence,
   clientSideThe0xPwnXssLabsEvidence,
+  clientSideThe0xPwnXssDomHashLabEvidence,
+  clientSideThe0xPwnXssDocumentWriteLabEvidence,
+  clientSideThe0xPwnXssJavascriptUrlLabEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,
