@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T00:10:00.000Z",
+  "updated_at": "2026-07-22T00:54:02.563Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 1822,
-  "total_findings": 9195,
+  "total_sites_scanned": 1823,
+  "total_findings": 9202,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1455,
   "discovery_findings": 7295,
   "improvements_shipped": 903,
-  "last_run": "2026-07-22T00:10:00.000Z",
+  "last_run": "2026-07-22T00:54:02.563Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — staging oracle 7 findings 6/6; primary Heroku cold-start slow from cloud",
+      "note": "Primary Heroku cold-start degraded (pass1 gap=auth_bypass,sensitive_data); staging fallback 7 findings 6/6 recall",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
