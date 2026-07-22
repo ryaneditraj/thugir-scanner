@@ -9502,7 +9502,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "yogsec XSS Labs per-module innerHTML sink disclosed",
     description:
-      "yogsec XSS Labs module pages at /labs/labN.html document intentional reflected, stored, and DOM XSS via unsanitized innerHTML sinks (User-Agent, cookie, localStorage, window.name/eval).",
+      "yogsec XSS Labs module pages at /labs/labN.html document intentional reflected, stored, and DOM XSS via unsanitized innerHTML sinks (User-Agent, cookie, localStorage, window.name/eval, Base64 decode+eval, Search Box eval).",
     impactOneline:
       "Public yogsec lab modules expose client-side XSS simulation code with documented vulnerable innerHTML assignments.",
     detectorKind: "rule_ref",
@@ -9528,7 +9528,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "the0x-pwn XSS Labs training dashboard disclosed",
     description:
-      "the0x-pwn lab-xss publishes 10 reflected and DOM XSS challenges with eval/template-literal sinks, href innerHTML injection, location-hash DOM sinks, and document.write option injection on GitHub Pages.",
+      "the0x-pwn lab-xss publishes 10 reflected and DOM XSS challenges with eval/template-literal sinks, href innerHTML injection, javascript: URL analytics fetch, HTML-tag-filter bypass, SVG script injection, location-hash DOM sinks, and document.write option injection on GitHub Pages.",
     impactOneline:
       "Public the0x-pwn XSS lab dashboard documents filter-bypass and reflected XSS training modules with live client-side sinks.",
     detectorKind: "rule_ref",

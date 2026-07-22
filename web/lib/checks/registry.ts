@@ -22681,15 +22681,36 @@ const CLIENT_YOGSEC_XSS_LAB_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "yogsec labs path",
     re: /yogsec\.github\.io\/xss-labs\/labs\/lab\d+\.html/i
+  },
+  {
+    label: "Base64 encoded XSS lab title",
+    re: /XSS Lab #\d+:\s*Base64 Encoded/i
+  },
+  {
+    label: "Base64 eval XSS lab badge",
+    re: /Lab #\d+ · Base64 Encoded XSS/i
+  },
+  {
+    label: "eval(decoded) Base64 XSS sink",
+    re: /eval\(decoded\)|Decode & Execute \(XSS via eval\)/
+  },
+  {
+    label: "Search box eval XSS lab",
+    re: /XSS Lab #\d+:\s*Search Box XSS|Search Box XSS \(eval\)/i
+  },
+  {
+    label: "Vulnerable eval(code) URL-parameter sink",
+    re: /Vulnerable Code:[\s\S]{0,40}eval\(code\)/
   }
 ];
 
 const clientSideYogsecXssLabModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   if (!/yogsec\.github\.io\/xss-labs/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_YOGSEC_XSS_LAB_MODULE_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
@@ -22747,6 +22768,22 @@ const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
     re: /document\.write\(['"]<option selected>['"]\s*\+\s*query/
   },
   {
+    label: "Reflected XSS JavaScript URL lab heading",
+    re: /Reflected XSS in a JavaScript URL/i
+  },
+  {
+    label: "javascript analytics fetch XSS sink",
+    re: /javascript:fetch\(['"]\/analytics['"]/
+  },
+  {
+    label: "HTML tag filtering XSS lab heading",
+    re: /Reflected XSS with HTML Tag Filtering/i
+  },
+  {
+    label: "SVG script injection lab heading",
+    re: /SVG\s*&\s*Script Injection/i
+  },
+  {
     label: "the0x-pwn per-lab route",
     re: /the0x-pwn\.github\.io\/lab-xss\/lab-\d+/i
   }
@@ -22755,13 +22792,18 @@ const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
 const clientSideThe0xPwnXssLabsEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   if (!/the0x-pwn\.github\.io\/lab-xss/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_THE0X_PWN_XSS_LABS_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/XSS Labs|the0x-pwn|Reflected XSS|DOM-Based XSS|DOM XSS in document\.write/i.test(ctx.combined))
+  if (
+    !/XSS Labs|the0x-pwn|Reflected XSS|DOM-Based XSS|DOM XSS in document\.write|SVG\s*&\s*Script Injection/i.test(
+      corpus
+    )
+  )
     return NEGATIVE;
   return {
     fired: true,
