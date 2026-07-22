@@ -7488,7 +7488,32 @@
       "url": "https://yogsec.github.io/xss-labs/labs/lab11.html",
       "source": "yogsec/xss-labs — Level 11 reflected/stored XSS training lab (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab8.html",
+      "source": "yogsec/xss-labs — iframe srcdoc XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab9.html",
+      "source": "yogsec/xss-labs — SVG onload XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab13.html",
+      "source": "yogsec/xss-labs — template-literal filter bypass XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab3.html",
+      "source": "povzayd/XSS-LABS — Level 3 attribute-context XSS lab (case-sensitive /LABS/ path)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1007",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1007 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
     }
   ],
-  "updated_at": "2026-07-22T04:26:00.000Z"
+  "updated_at": "2026-07-22T05:18:00.000Z"
 }
