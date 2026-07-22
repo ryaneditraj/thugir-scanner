@@ -6275,6 +6275,24 @@
       "slug": "sqli-header-error-disclosure",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/views -H x-product-name:Opal' returns 500 SQL unterminated quoted string + location /usr/src/app/dist/products/products.controller.js; brokencrystals.com/api/products/views findings 29→31; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "security-question-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: securityQuestionBootstrapHit reads primed /rest/user/security-question from probe cache; attempts 4→6 with longer wake delays; juice-shop.herokuapp.com benchmark 6 findings 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:ctf-website-ten.vercel.app",
+      "slug": "html-comment-credential-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login.html <!--password123--> beside type=password input name=pass; htmlCommentCredentialDisclosure now matches type=password forms; ctf-website-ten.vercel.app findings 2→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctf-website-ten.vercel.app",
+      "slug": "client-side-ces-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CES CTF — The Lost Tokens + const step3 = Y2lwaGVy + getCookie(role)===admin oracle; extractCesCtfSeeds crawls login/profile/app.js; ctf-website-ten.vercel.app findings 2→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11042,6 +11060,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "sqli-header-error-disclosure",
       "shipped_at": "2026-07-22T21:14:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "security-question-bootstrap-oracle",
+      "shipped_at": "2026-07-22T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ctf-website-ten.vercel.app",
+      "slug": "html-comment-password-type-input",
+      "shipped_at": "2026-07-22T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ctf-website-ten.vercel.app",
+      "slug": "client-side-ces-ctf-evidence",
+      "shipped_at": "2026-07-22T22:15:00.000Z"
     }
   ]
 }

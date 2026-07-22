@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T21:15:00.000Z",
+  "updated_at": "2026-07-22T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2000,
-  "total_findings": 10510,
+  "total_sites_scanned": 2008,
+  "total_findings": 10516,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1550,
-  "discovery_findings": 8470,
-  "improvements_shipped": 953,
-  "last_run": "2026-07-22T21:15:00.000Z",
+  "discovery_findings": 8476,
+  "improvements_shipped": 956,
+  "last_run": "2026-07-22T22:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 6,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "First-pass 6/6 recall on shallow crawl (pages=1 probes=97); sensitive_data via vibe-unauthenticated-api-routes only — security-question-disclosure absent",
+      "note": "Benchmark 6/6 recall maintained; security-question-disclosure now reads primed bootstrap cache for cold-start reliability",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,33 +50,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 110,
-      "skipped_48h": [
-        "https://server.vulnapp.id/dvwa/",
-        "https://server.vulnapp.id/phpMyAdmin/",
-        "https://brokencrystals.com/api/metadata",
-        "https://brokencrystals.com/api/products/views",
-        "https://pentest-fauxbank.vercel.app/lab"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 4,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "brokencrystals XPath oracles (searchPartners/query/testimonials) + FauxBank SQLi module + CES CTF token hunt",
-      "improvements_shipped_this_run": 2
+      "focus": "CES CTF token-hunt lab (ctf-website-ten.vercel.app) + Juice Shop security-question bootstrap reliability",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 6 findings 6/6 recall first pass — vibe-unauthenticated-api-routes for sensitive_data",
-      "brokencrystals.com/api/partners/searchPartners: 29 findings — xpath-injection-disclosure oracle",
-      "brokencrystals.com/api/partners/query: 28 findings — raw XPath injection endpoint",
-      "brokencrystals.com/api/testimonials: 28 findings — persistent XSS testimonial surface",
-      "pentest-fauxbank.vercel.app/api/search: 6 findings — simulated SQLi lesson module",
-      "brokencrystals.com/api/metadata: 27→29 findings — xxe-xml-post-probe live ENTITY expansion (parallel run)"
+      "juice-shop.herokuapp.com: 6 findings 6/6 recall — security-question-bootstrap reads primed probe cache",
+      "ctf-website-ten.vercel.app: 2→4 findings — html-comment-credential-disclosure (<!--password123-->) + client-side-ces-ctf-evidence",
+      "ctf-website-ten.vercel.app: profile.html cookie role=admin oracle + JS step3 base64 token detected"
     ],
     "learning_gaps": [
-      "juice-shop shallow crawl (pages=1) still omits security-question-disclosure — sensitive_data only via vibe-unauthenticated-api-routes",
       "secret-resend slug still absent on juice-shop benchmark",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ctf-website-ten.vercel.app: 2 findings — token-hunt CTF needs manual browser chain beyond shallow crawl"
+      "ctf-website-1-dtpz.onrender.com backend DB offline — live SQLi/search probes fail with ENOTFOUND"
     ]
   },
   "discovery_highlights": {
@@ -87,7 +77,7 @@
     "chal15.vercel.app": 6,
     "shiny-computing-machine.vercel.app": 7,
     "vulnforge.vercel.app": 4,
-    "ctf-website-ten.vercel.app": 2,
+    "ctf-website-ten.vercel.app": 4,
     "server.vulnapp.id/dvwa": 6,
     "server.vulnapp.id/phpMyAdmin": 5,
     "brokencrystals.com/api/metadata": 29,
