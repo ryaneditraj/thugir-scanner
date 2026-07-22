@@ -6035,6 +6035,24 @@
       "slug": "dangerous-html-sinks",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: labs/lab13.html container.innerHTML += `${note.content}` IndexedDB stored XSS; IndexedDB + container.innerHTML += patterns; yogsec.github.io/xss-labs/labs/lab13.html findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dangerous-html-sinks",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab14.html document.cookie → vulnerableOutput.innerHTML unsanitized cookie data; document.cookie innerHTML sink regex; yogsec.github.io/xss-labs/labs/lab14.html findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab16.html eval(stateData) where stateData=history.state.data; history.state eval sink regex; yogsec.github.io/xss-labs/labs/lab16.html findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "dom-eval-xss",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: labs/lab17.html sessionStorage search filter eval(matches[i]); sessionStorage+eval(match) regex; yogsec.github.io/xss-labs/labs/lab17.html findings 3→4; benchmark 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10632,6 +10650,21 @@
       "source": "discovery:yogsec.github.io/xss-labs",
       "slug": "indexeddb-innerhtml-stored-xss-markers",
       "shipped_at": "2026-07-22T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "cookie-innerhtml-stored-xss-sink",
+      "shipped_at": "2026-07-22T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "history-state-eval-xss-sink",
+      "shipped_at": "2026-07-22T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:yogsec.github.io/xss-labs",
+      "slug": "sessionstorage-search-eval-xss-sink",
+      "shipped_at": "2026-07-22T07:10:00.000Z"
     }
   ]
 }
