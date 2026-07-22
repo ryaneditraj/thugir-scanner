@@ -660,6 +660,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "security-question-disclosure",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Password-reset security question disclosed without authentication",
+    description:
+      "An account-recovery endpoint returns a user's security question (or password-reset hint) to unauthenticated GET requests. Attackers can harvest reset oracles for targeted account takeover.",
+    impactOneline: "Anyone can read password-reset security questions for known email addresses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "securityQuestionDisclosure" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Never expose security questions or reset hints without authenticated session proof.",
+      steps: [
+        "Require a valid reset token before revealing security questions.",
+        "Rate-limit and CAPTCHA account-recovery endpoints.",
+        "Return generic responses that do not confirm whether an email exists."
+      ]
+    },
+    fixPrompt:
+      "My /rest/user/security-question endpoint returns the user's security question without authentication. Require a valid reset token and return 401 for unauthenticated callers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dangerous-html-sinks",
     platform: "generic",
     category: "Cross-site scripting",
@@ -11364,6 +11389,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host a BuggyBuy-style vulnerable e-commerce SPA with a cross-origin API. Show how to isolate the lab and enforce server-side admin authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-web-security-learning-labs-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Web Security Learning Labs training platform disclosed",
+    description:
+      "Web Security Learning Labs publishes interactive SQL injection, XSS, IDOR, and CSRF modules with hands-on vulnerability demos on a public Vercel platform.",
+    impactOneline:
+      "Public training platform exposes injectable lab modules and vulnerability walkthroughs reusable as attack templates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebSecurityLearningLabsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Web Security Learning Labs is educational — gate interactive modules behind authentication.",
+      steps: [
+        "Require login before serving runnable vulnerability labs.",
+        "Host SQLi/XSS/IDOR demos on isolated training subdomains.",
+        "Do not copy lab exploit patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "We host Web Security Learning Labs-style SQLi/XSS/IDOR training modules. Show how to auth-gate labs and isolate them from production.",
     version: 1,
     enabled: true
   },

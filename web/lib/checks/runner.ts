@@ -1048,6 +1048,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnforgeEvidence",
   "clientSideVulnshopEvidence",
   "clientSideBuggybuyEvidence",
+  "clientSideWebSecurityLearningLabsEvidence",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -4681,6 +4682,29 @@ function extractBugBountyHunterChallengeSeeds(html: string, pageUrl: string): st
   return [...out];
 }
 
+/** Web Security Learning Labs — seed module catalog and demo model pages. */
+function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): string[] {
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  if (!/web-security-learning-labs\.vercel\.app$/i.test(host)) return [];
+  if (!/Web Security Learning Labs/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const p of ["/learn/modules", "/learn/paths", "/labs", "/blog", "/learn"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const m of html.matchAll(/href=["'](?:\.\/)?models\/([A-Za-z]+demo\.html)["']/gi)) {
+    try {
+      out.add(new URL(`models/${m[1]}`, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** SasanLabs vulnerableapp.com — prioritize DOM XSS training page from sparse homepage. */
 function extractVulnerableappDomXssSeeds(html: string, pageUrl: string): string[] {
   const host = new URL(pageUrl).hostname.toLowerCase();
@@ -6397,6 +6421,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const secCodeEducationalSeeds = extractSecCodeEducationalSeeds(home.body, home.finalUrl);
   const vulnerableAppSeeds = extractVulnerableAppDocSeeds(home.body, home.finalUrl);
   const vulnerableappDomXssSeeds = extractVulnerableappDomXssSeeds(home.body, home.finalUrl);
+  const webSecurityLearningLabsSeeds = extractWebSecurityLearningLabsSeeds(home.body, home.finalUrl);
   const bugCollectionSeeds = extractBugCollectionSeeds(home.body, home.finalUrl);
   const oopssecStoreSeeds = extractOopssecStoreSeeds(home.body, home.finalUrl);
   const cookiejarLabSeeds = extractCookiejarLabSeeds(home.body, home.finalUrl);
@@ -7018,6 +7043,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...secCodeEducationalSeeds,
       ...vulnerableAppSeeds,
       ...vulnerableappDomXssSeeds,
+      ...webSecurityLearningLabsSeeds,
       ...bugCollectionSeeds,
       ...oopssecStoreSeeds,
       ...cookiejarLabSeeds,
