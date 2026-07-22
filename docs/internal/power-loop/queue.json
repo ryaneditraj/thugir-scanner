@@ -7388,7 +7388,32 @@
       "url": "https://povzayd.github.io/XSS-LABS/LABS/lab1.html",
       "source": "povzayd/XSS-LABS — Level 1 basic reflected XSS lab (case-sensitive /LABS/ path)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab2.html",
+      "source": "yogsec/xss-labs — URL-parameter reflected XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab4.html",
+      "source": "yogsec/xss-labs — attribute-context XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab6.html",
+      "source": "yogsec/xss-labs — DOM-based XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-10/",
+      "source": "the0x-pwn/lab-xss — iframe data-URI injection XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://montanajim.github.io/CSCI210/wpref/xssExamples.html",
+      "source": "montanajim/CSCI210 — reflected + stored XSS classroom examples with vulnerable/fixed PHP pairs (GitHub Pages)",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-22T00:56:00.000Z"
+  "updated_at": "2026-07-22T01:53:00.000Z"
 }
