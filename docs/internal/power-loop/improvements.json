@@ -6155,6 +6155,24 @@
       "slug": "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: lab-9 SVG & Script Injection heading + resultQuery.innerHTML=query + animatetransform onbegin entity-encoded payload hint; the0x-pwn.github.io/lab-xss/lab-9 findings 3→4; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "exposed-api-config",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/config returns {\"sql\":\"postgres://bc:bc@postgres:5432/bc\",\"googlemaps\":\"AIzaSy...\",\"awsBucket\":\"https://neuralegion-open-bucket.s3.amazonaws.com\"}; brokencrystals.com findings 15→17; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-css-injection-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle searchParams.get('logobgcolor')→logoBgColor inline style on /userlogin; brokencrystals.com findings 15→17; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractBrokencrystalsLabSeeds seeds /userlogin /newuserlogin /api/config /api/goto; brokencrystals crawl reaches auth lab + config oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10837,6 +10855,21 @@
       "source": "discovery:the0x-pwn.github.io/lab-xss",
       "slug": "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
       "shipped_at": "2026-07-22T13:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "exposed-api-config",
+      "shipped_at": "2026-07-22T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-css-injection-evidence",
+      "shipped_at": "2026-07-22T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-lab-seeds",
+      "shipped_at": "2026-07-22T14:10:00.000Z"
     }
   ]
 }
