@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://server.vulnapp.id/dvwa/",
+      "source": "Metasploitable2 hub — DVWA on server.vulnapp.id (linked from public vulnapp hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://server.vulnapp.id/phpMyAdmin/",
+      "source": "Metasploitable2 hub — exposed phpMyAdmin admin surface on public vulnapp hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/metadata",
+      "source": "NeuraLegion/brokencrystals — XXE + reflective XSS oracle via POST XML/SVG body (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/views",
+      "source": "NeuraLegion/brokencrystals — SQLi via x-product-name header oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/lab",
+      "source": "alfredang/pentest FauxBank — guided OWASP pentest lab scenarios surface (web search)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://brokencrystals.com/marketplace",
       "source": "NeuraLegion/brokencrystals — client-side prototype pollution + DOM XSS oracle (README)",
       "auth": "benchmark"
