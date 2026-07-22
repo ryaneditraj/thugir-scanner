@@ -65,7 +65,7 @@
       "brokencrystals.com: 15–17 findings — exposed-env-file, /api/config postgres://bc:bc@postgres:5432/bc, graphql-introspection, postmessage-dom-xss",
       "ginandjuice.shop: reflected-xss-query-param + sql-error-disclosure (6 findings)",
       "reef-mcp-registry.vercel.app: secret-openai + secret-twilio + client-side-mcp-supply-chain-evidence (6 findings)",
-      "maestro-agentic-ai-security-demo-mon.netlify.app: client-side-maestro-rag-sqli-evidence (4 findings)"
+      "maestro-agentic-ai-security-demo-mon.netlify.app: client-side-maestro-rag-sqli-evidence + stack-database-url-in-bundle (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
