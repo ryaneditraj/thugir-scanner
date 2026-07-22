@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T09:25:00.000Z",
+  "updated_at": "2026-07-22T10:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1915,
-  "total_findings": 9697,
+  "total_sites_scanned": 1924,
+  "total_findings": 9736,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1505,
-  "discovery_findings": 7722,
+  "discovery_urls_added": 1510,
+  "discovery_findings": 7753,
   "improvements_shipped": 928,
-  "last_run": "2026-07-22T09:25:00.000Z",
+  "last_run": "2026-07-22T10:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 gap=auth_bypass (5 findings); wake retry merged to 8 findings 6/6 recall; security-question primed in oracle-ready gate",
+      "note": "First-pass 6/6 recall on primary Heroku (pages=6 probes=267; no wake retry needed)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,29 +48,34 @@
         }
       }
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 7,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 31,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Validate ml-explainer + andrewaltimit dashboard evidence rules",
-      "improvements_shipped_this_run": 3,
-      "urls_validated": [
-        "https://raw.githack.com/Prakhar-Sethi/vulnlab/main/ml-explainer.html",
-        "https://andrewaltimit.github.io/exploits/dashboard/"
+      "focus": "Queue drain: DVAI, Pentest-Ground DVWA+API, CTF hub, official Juice Shop, XXE lab, Next.js CVE demo",
+      "improvements_shipped_this_run": 0,
+      "urls_added_list": [
+        "https://yogsec.github.io/xss-labs/labs/lab30.html",
+        "https://yogsec.github.io/xss-labs/labs/lab31.html",
+        "https://yogsec.github.io/xss-labs/labs/lab32.html",
+        "https://yogsec.github.io/xss-labs/labs/lab33.html",
+        "https://yogsec.github.io/xss-labs/labs/lab34.html"
       ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 8 findings 6/6 recall after security-question oracle priming",
-      "ml-explainer.html: VulnLab ML Threat Detector evidence (3\u21924 findings)",
-      "andrewaltimit dashboard: Databricks WASM security assessment evidence (2\u21923 findings)"
+      "juice-shop.herokuapp.com: 8 findings 6/6 benchmark recall first pass (security-question-disclosure + sql-error-disclosure)",
+      "pentest-ground.com:9000: server-side-eval-evidence critical + vibe-openapi-docs-exposed",
+      "pentest-ground.com:4280: reflected-xss-query-param + phpinfo-exposed on hosted DVWA",
+      "nextjs-cve-hackerone.vercel.app: client-side-react-rsc-cve-evidence critical",
+      "xxe-lab.vercel.app: client-side-xxe-evidence on v0 platform"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "acuart.phpnet.us DNS dead \u2014 classic Acunetix demo unreachable",
-      "juice-shop primary Heroku intermittently unreachable \u2014 staging fallback still useful"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "web-pentest-playground.onrender.com: shallow crawl 1 finding only — Render cold start limits probe depth",
+      "secret-resend slug still absent on juice-shop (sensitive_data covered via security-question-disclosure + vibe-unauthenticated-api-routes)"
     ]
   },
   "discovery_highlights": {
