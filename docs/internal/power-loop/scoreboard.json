@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T06:10:00.000Z",
+  "updated_at": "2026-07-22T07:03:27.669Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 1885,
-  "total_findings": 9548,
+  "total_sites_scanned": 1894,
+  "total_findings": 9597,
   "critical_findings": 36,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1490,
-  "discovery_findings": 7596,
+  "discovery_urls_added": 1495,
+  "discovery_findings": 7637,
   "improvements_shipped": 919,
-  "last_run": "2026-07-22T06:10:00.000Z",
+  "last_run": "2026-07-22T07:03:27.669Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku 8 findings 6/6 recall first pass; security-question-disclosure + vibe-unauthenticated-api-routes present",
+      "note": "Primary Heroku 8 findings 6/6 recall first pass (pages=6 probes=266); security-question-disclosure + vibe-unauthenticated-api-routes; no wake retry",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,44 +50,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 44,
+      "findings": 41,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "yogsec lab8 eval(window.name) + lab9 localStorage innerHTML + lab13 IndexedDB innerHTML sinks; queue drain DevSecOps/owasp-top-10-labs/vulnlab/juicesec",
-      "improvements_shipped_this_run": 3,
-      "urls_validated": [
-        "https://yogsec.github.io/xss-labs/labs/lab8.html",
-        "https://yogsec.github.io/xss-labs/labs/lab9.html",
-        "https://yogsec.github.io/xss-labs/labs/lab13.html"
-      ],
+      "focus": "OWASP VWAD pixi voice-agent lab + Hacksplaining lesson chain (dns-poisoning/downgrade/email-spoofing/malvertising); queue drain dvai/fvb/unsecure-pwa",
+      "improvements_shipped_this_run": 0,
       "urls_queued": [
-        "https://web-security-learning-labs.vercel.app/module/1008",
-        "https://web-security-learning-labs.vercel.app/module/1009",
-        "https://yogsec.github.io/xss-labs/labs/lab14.html",
-        "https://yogsec.github.io/xss-labs/labs/lab16.html",
-        "https://yogsec.github.io/xss-labs/labs/lab17.html"
-      ],
-      "urls_rejected": [
-        "https://povzayd.github.io/XSS-LABS/LABS/lab3.html — under-construction placeholder, no XSS markers",
-        "https://web-security-learning-labs.vercel.app/module/1007 — stub page (Here is a Module: 1007)"
+        "https://web-security-learning-labs.vercel.app/module/1010",
+        "https://yogsec.github.io/xss-labs/labs/lab18.html",
+        "https://yogsec.github.io/xss-labs/labs/lab19.html",
+        "https://yogsec.github.io/xss-labs/labs/lab21.html",
+        "https://playground.fabraix.com/challenges"
       ]
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: 8 findings 6/6 recall — no benchmark misses",
-      "yogsec lab8: dom-eval-xss via eval(window.name) (3→4 findings)",
-      "yogsec lab9: dangerous-html-sinks via localStorage.getItem→innerHTML (3→4 findings)",
-      "yogsec lab13: dangerous-html-sinks via IndexedDB container.innerHTML += (3→4 findings)",
-      "everdan0075.github.io/DevSecOps-Hacking-Lab: secret-openai + exposed-source-maps (7 findings)",
-      "vulnlab.vercel.app: 7 findings — lovable platform + permissive-cors markers"
+      "vwad.owasp.org/app/pixi: OWASP voice-agent LLM attack lab markers (4 findings)",
+      "hacksplaining.com lessons: reflected XSS + CSRF + email-spoofing lesson evidence (6-7 findings each)",
+      "dvai.vercel.app: dangerous-html-sinks on Damn Vulnerable AI range (4 findings)",
+      "fvb.vchan.in: First Vulnerable Bank API lab evidence + weak CSP (3 findings)"
     ],
     "learning_gaps": [
-      "povzayd lab3 is a placeholder page — no XSS training markers to detect",
-      "WSL module 1007 is a stub — no lab content yet",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "WSL modules 1008-1009 + yogsec lab14/16/17 queued at tail — pending next queue drain",
-      "secret-resend slug is Resend API key regex — not a Juice Shop oracle gap"
+      "secret-resend slug still absent — sensitive_data covered via security-question-disclosure + vibe-unauthenticated-api-routes",
+      "WSL module 1010 + yogsec lab18/19/21 + fabraix challenges queued at tail — pending next queue drain",
+      "hacksplaining lessons are educational overlays — markers are client-side lesson stubs not live exploit endpoints"
     ]
   },
   "discovery_highlights": {

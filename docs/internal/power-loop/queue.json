@@ -7538,7 +7538,32 @@
       "url": "https://yogsec.github.io/xss-labs/labs/lab17.html",
       "source": "yogsec/xss-labs — mutation XSS / mXSS lab module (GitHub Pages)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1010",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1010 hands-on lab (OWASP training module)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab18.html",
+      "source": "yogsec/xss-labs — setTimeout string-eval XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab19.html",
+      "source": "yogsec/xss-labs — setInterval injection XSS lab module (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://yogsec.github.io/xss-labs/labs/lab21.html",
+      "source": "yogsec/xss-labs — javascript: pseudo-protocol location.href XSS lab (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges",
+      "source": "fabraix/playground — Show HN AI agent red-team challenge hub with published exploit transcripts",
+      "auth": "public_demo"
     }
   ],
-  "updated_at": "2026-07-22T06:08:00.000Z"
+  "updated_at": "2026-07-22T07:02:00.000Z"
 }
