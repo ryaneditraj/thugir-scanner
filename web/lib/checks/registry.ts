@@ -13069,7 +13069,7 @@ const redtigerCommandInjectionEvidence: Rule = async (ctx) => {
   if (!/redtiger\.labs\.overthewire\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   const corpus = `${ctx.home.body}\n${pageUrl}\n${ctx.combined}`;
-  const levelMatch = corpus.match(/level(9|10)\.php/i);
+  const levelMatch = corpus.match(/level(7|8|9|10)\.php/i);
   if (!levelMatch) return NEGATIVE;
   const levelNum = levelMatch[1];
   const backtickShell =
@@ -20882,6 +20882,56 @@ const clientSideVulnshopEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- BuggyBuy vulnerable e-commerce SPA (vulnerable-web-application-jecw.vercel.app) -
+const CLIENT_BUGGYBUY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BuggyBuy vulnerable e-commerce title",
+    re: /BuggyBuy/i
+  },
+  {
+    label: "Render backend API host",
+    re: /vulnerable-web-application-mcd0\.onrender\.com/i
+  },
+  {
+    label: "isAdmin admin gate in SPA",
+    re: /\.isAdmin\b|userInfo\.isAdmin/i
+  },
+  {
+    label: "Admin dashboard route",
+    re: /\/admin\/dashboard/i
+  },
+  {
+    label: "Intentional wrong-credentials login oracle",
+    re: /Wrong Credentials/i
+  },
+  {
+    label: "GitHub vulnerable app source repo",
+    re: /MuhaibShamsher\/Vulnerab/i
+  },
+  {
+    label: "REST products API path",
+    re: /\/api\/v1\/products/i
+  }
+];
+
+const clientSideBuggybuyEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BUGGYBUY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/BuggyBuy|vulnerable-web-application-mcd0/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BuggyBuy SPA documents a cross-origin Render API with isAdmin admin-dashboard gating and intentional broken-access-control training flows"
+    }
+  };
+};
+
 // --- JWTLens Burp Suite JWT security scanner landing (jwtlens.netlify.app) -----------
 const CLIENT_JWTLENS_RES: { label: string; re: RegExp }[] = [
   {
@@ -25514,6 +25564,52 @@ const clientSideArchonTrainingEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Archon API security curriculum (archon-eight.vercel.app/cybersecurity) -----------
+const CLIENT_ARCHON_API_SECURITY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Archon API security testing module",
+    re: /API Security Testing/i
+  },
+  {
+    label: "JWT attacks curriculum",
+    re: /JWT attacks/i
+  },
+  {
+    label: "BOLA/IDOR module",
+    re: /BOLA\/IDOR/i
+  },
+  {
+    label: "GraphQL security module",
+    re: /GraphQL security/i
+  },
+  {
+    label: "Mass assignment in API labs",
+    re: /mass assignment/i
+  },
+  {
+    label: "OWASP API Top 10 reference",
+    re: /OWASP API Top 10/i
+  }
+];
+
+const clientSideArchonApiSecurityCurriculumEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ARCHON_API_SECURITY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/archon-eight\.vercel\.app|Archon/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Archon cybersecurity path documents OWASP API Top 10 modules covering JWT attacks, BOLA/IDOR, GraphQL security, and mass assignment"
+    }
+  };
+};
+
 // --- OverTheWire Bandit beginner wargame (overthewire.org / bandit.labs) --------------
 const CLIENT_OVERTHEWIRE_BANDIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -26560,6 +26656,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
+  clientSideBuggybuyEvidence,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
@@ -26667,6 +26764,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsEvidence,
   clientSideVapiEvidence,
   clientSideArchonTrainingEvidence,
+  clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
   clientSideOverthewireKryptonEvidence,
   clientSideOverthewireNarniaEvidence,
