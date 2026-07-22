@@ -7713,7 +7713,32 @@
       "url": "https://pentest-fauxbank.vercel.app/login",
       "source": "FauxBank — fictional banking pentest training login surface (web search)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/graphql",
+      "source": "NeuraLegion/brokencrystals — GraphQL SSTI/RCE + introspection oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/swagger-json",
+      "source": "NeuraLegion/brokencrystals — OpenAPI JSON spec for REST vuln oracles (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/testimonials/count",
+      "source": "NeuraLegion/brokencrystals — SQLi via query param oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/partners/partnerLogin",
+      "source": "NeuraLegion/brokencrystals — XPATH injection login oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/marketplace",
+      "source": "NeuraLegion/brokencrystals — prototype pollution / insecure deserialization oracle (README)",
+      "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-22T14:05:00.000Z"
+  "updated_at": "2026-07-22T15:05:00.000Z"
 }
