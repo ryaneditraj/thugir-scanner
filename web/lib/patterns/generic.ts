@@ -11342,6 +11342,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "exposed-api-config",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Unauthenticated API config exposes database credentials",
+    description:
+      "A public /api/config (or similar) endpoint returns JSON with Postgres/MySQL connection strings, cloud API keys, or S3 bucket URLs without authentication.",
+    impactOneline:
+      "Exposed config endpoints leak database passwords and third-party API keys attackers use for lateral movement.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "exposedApiConfig" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose runtime config with credentials via unauthenticated HTTP endpoints.",
+      steps: [
+        "Remove /api/config from public routes; serve only non-sensitive public config to browsers.",
+        "Store database URLs and API keys in server-side environment variables only.",
+        "Rotate any credentials that were exposed via the config endpoint."
+      ]
+    },
+    fixPrompt:
+      "Our /api/config returns postgres:// credentials and Google Maps API keys without auth. Lock down the endpoint, move secrets to env vars, and rotate exposed credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-css-injection-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Client bundle reflects URL param into inline CSS",
+    description:
+      "SPA login pages read a URL search param (e.g. logobgcolor) and pass it directly into an inline logoBgColor style prop without sanitization.",
+    impactOneline:
+      "CSS injection via URL parameters can exfiltrate page content, hijack UI, or chain into XSS on login surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCssInjectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate URL-driven style values against an allowlist; never pass raw search params into inline CSS.",
+      steps: [
+        "Allowlist logo background colors (e.g. named CSS colors or hex codes matching /^#[0-9a-f]{3,8}$/i).",
+        "Reject or strip quotes, semicolons, and url() in user-supplied style values.",
+        "Prefer CSS custom properties set server-side instead of reflecting URL params into style attributes."
+      ]
+    },
+    fixPrompt:
+      "Our /userlogin page reads logobgcolor from the URL into logoBgColor inline CSS. Show how to allowlist safe color values and block CSS injection payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-skillaudit-evidence",
     platform: "generic",
     category: "AI security",

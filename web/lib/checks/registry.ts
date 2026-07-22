@@ -26042,6 +26042,85 @@ const clientSideBrokencrystalsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Unauthenticated /api/config exposing DB credentials (brokencrystals.com) -----------
+const EXPOSED_CONFIG_PATHS = ["/api/config", "/config.json", "/api/configuration"];
+const SENSITIVE_CONFIG_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "Postgres connection string", re: /postgres(?:ql)?:\/\/[^\s"'<>]+/i },
+  { label: "MySQL connection string", re: /mysql:\/\/[^\s"'<>]+/i },
+  { label: "MongoDB connection string", re: /mongodb(?:\+srv)?:\/\/[^\s"'<>]+/i },
+  { label: "Google Maps API key", re: /AIzaSy[A-Za-z0-9_-]{20,}/ },
+  { label: "AWS S3 bucket URL", re: /https?:\/\/[a-z0-9.-]+\.s3\.amazonaws\.com/i }
+];
+
+const exposedApiConfig: Rule = async (ctx) => {
+  const htmlConfigScript = /<script[^>]+id=["']config["'][^>]+src=["']([^"']+)["']/i.test(
+    ctx.combined
+  );
+  const discovered = extractApiPaths(ctx.combined, 8).filter((p) =>
+    /\/api\/config|\/config\.json/i.test(p)
+  );
+  const isBrokencrystals = /brokencrystals\.com/i.test(ctx.origin);
+  if (!htmlConfigScript && !isBrokencrystals && discovered.length === 0) return NEGATIVE;
+  const paths = [...new Set([...EXPOSED_CONFIG_PATHS, ...discovered])].slice(0, 4);
+  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 4096 }, 3);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const ct = r.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+    const markers: { label: string; sample: string }[] = [];
+    for (const { label, re } of SENSITIVE_CONFIG_MARKERS) {
+      const m = r.body.match(re);
+      if (m) markers.push({ label, sample: m[0].slice(0, 80) });
+    }
+    if (markers.length === 0) continue;
+    return {
+      fired: true,
+      confidence: markers.length >= 2 ? 0.93 : 0.9,
+      evidence: {
+        url,
+        markers: markers.slice(0, 4),
+        snippet: r.body.slice(0, 200).trim(),
+        note: "unauthenticated config endpoint exposes database connection strings or cloud API keys"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+// --- Client-side CSS injection via URL param → inline style (brokencrystals /userlogin) -
+const CLIENT_CSS_INJECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "logobgcolor URL param from searchParams",
+    re: /get\(["']logobgcolor["']\)|searchParams[\s\S]{0,120}logobgcolor/i
+  },
+  {
+    label: "logoBgColor flows into inline style prop",
+    re: /logoBgColor\s*[:=]|logoBgColor:\s*[A-Za-z_$]+\(\)/
+  },
+  {
+    label: "userlogin route with logobgcolor query link",
+    re: /\/userlogin\?logobgcolor=|Login\s*=\s*["']\/userlogin["']/i
+  }
+];
+
+const clientSideCssInjectionEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CSS_INJECTION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "URL search param flows into logo background inline CSS without sanitization — CSS injection likely"
+    }
+  };
+};
+
 // --- SkillAudit MCP skill safety scanner (skillaudit.vercel.app) ---------------------
 const CLIENT_SKILLAUDIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -27427,6 +27506,8 @@ export const RULES: Record<string, Rule> = {
   clientSideAirtAcademyEvidence,
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
+  exposedApiConfig,
+  clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
