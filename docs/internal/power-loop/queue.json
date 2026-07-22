@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://brokencrystals.com/marketplace",
+      "source": "NeuraLegion/brokencrystals — client-side prototype pollution + DOM XSS oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/graphql",
+      "source": "NeuraLegion/brokencrystals — GraphQL SSTI/RCE + introspection oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/partners/partnerLogin",
+      "source": "NeuraLegion/brokencrystals — XPath injection login oracle (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/login",
+      "source": "alfredang/pentest FauxBank — guided OWASP banking lab login surface (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/testimonials/count",
+      "source": "NeuraLegion/brokencrystals — SQLi via query param oracle (README)",
+      "auth": "benchmark"
+    },
+    {
       "url": "https://brokencrystals.com/api/render",
       "source": "NeuraLegion/brokencrystals — SSTI via doT templating on /api/render (README oracle)",
       "auth": "benchmark"
@@ -7765,5 +7790,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-22T18:25:00.000Z"
+  "updated_at": "2026-07-22T19:12:00.000Z"
 }

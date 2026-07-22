@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T18:25:00.000Z",
+  "updated_at": "2026-07-22T19:11:40.593Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,22 +15,28 @@
       ]
     }
   },
-  "total_sites_scanned": 1973,
-  "total_findings": 10181,
+  "total_sites_scanned": 1974,
+  "total_findings": 10187,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1535,
   "discovery_findings": 8161,
-  "improvements_shipped": 942,
-  "last_run": "2026-07-22T18:25:00.000Z",
+  "improvements_shipped": 945,
+  "last_run": "2026-07-22T19:11:40.593Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 1,
       "primary_recall": "1/6",
-      "primary_gap": ["xss", "sqli", "idor", "auth_bypass", "sensitive_data"],
+      "primary_gap": [
+        "xss",
+        "sqli",
+        "idor",
+        "auth_bypass",
+        "sensitive_data"
+      ],
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 8,
       "oracle_recall": "6/6",
