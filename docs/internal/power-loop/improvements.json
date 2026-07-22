@@ -6191,6 +6191,24 @@
       "slug": "weak-api-default-credentials",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login {\"user\":\"admin\",\"password\":\"admin\"} returns {\"email\":\"admin\",\"ldapProfileLink\":\"...\"}; brokencrystals.com findings 15→20; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "sqli-query-param-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/testimonials/count?query=select count(table_name)... returns 216; brokencrystals.com findings 15→23; benchmark juice-shop-staging 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "xpath-injection-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/partners/partnerLogin?user=anyuser&password=' or '1'='1 returns XML with multiple <password> elements (Walter White/Jesse Pinkman); brokencrystals.com findings 15→23; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "server-side-eval-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/process_numbers {\"processing_expression\":\"7*7\"} returns 49; serverSideEvalEvidence extended with brokencrystals process_numbers probe; brokencrystals findings 15→23; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
