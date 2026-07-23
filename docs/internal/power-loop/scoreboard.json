@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T12:16:12.569Z",
+  "updated_at": "2026-07-23T12:22:44.378Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2111,
-  "total_findings": 10981,
+  "total_sites_scanned": 2119,
+  "total_findings": 11072,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1606,
-  "discovery_findings": 8806,
+  "discovery_urls_added": 1611,
+  "discovery_findings": 8897,
   "improvements_shipped": 980,
-  "last_run": "2026-07-23T12:16:12.569Z",
+  "last_run": "2026-07-23T12:22:44.378Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings)",
+      "note": "Shallow crawl (pages=1 probes=104) but full 6/6 recall — sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,36 +52,34 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 20,
+      "findings": 91,
       "skipped_48h": [],
-      "focus": "Escape API Security Academy + Delta-9 CTF sandbox evidence rules",
-      "improvements_shipped_this_run": 3
+      "focus": "Escape API Security Academy resolver-level auth + hack-this-site serverless API labs + queue head drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "escape.tech/academy/sql-injection: client-side-escape-academy-evidence (1→2 findings)",
-      "escape.tech/academy/broken-object-level-authorization: client-side-escape-academy-evidence (1→2 findings)",
-      "d9bkk.com/hackmeifyoucan: client-side-delta9-hackmeifyoucan-evidence (2→3 findings)",
-      "dashboard.d9bkk.com/hackmeifyoucan: client-side-delta9-hackmeifyoucan-evidence (1→2 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings, shallow crawl) — no benchmark misses",
+      "hack-this-site-eta.vercel.app/api/cors: 21 findings incl reflected-xss-query-param + client-side-xss-evidence",
+      "hack-this-site-eta.vercel.app/api/cookies: 21 findings incl sql-error-disclosure + unauthenticated-admin-endpoint",
+      "escape.tech/academy/unrestricted-resource-consumption: client-side-graphql-security-hub-evidence (3 findings)",
+      "escape.tech/academy/broken-function-level-authorization: client-side-escape-academy-evidence (2 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com: Heroku 503 cold-start can miss categories on shallow passes — staging oracle fallback required",
-      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "dashboard.d9bkk.com/hackmeifyoucan: Cloudflare rate-limits subpath robots.txt probes intermittently"
+      "juice-shop.herokuapp.com: shallow crawl (pages=1) — security-question-disclosure + juice-shop-forgotten-backup-disclosure absent; sensitive_data only via vibe-unauthenticated-api-routes",
+      "secret-resend slug still absent on juice-shop",
+      "escape.tech/academy/*: WebContainer lessons surface client-side-escape-academy-evidence unless lesson bundle exposes sinks"
     ]
   },
   "discovery_highlights": {
-    "escape.tech/academy/sql-injection": 2,
-    "escape.tech/academy/broken-object-level-authorization": 2,
-    "escape.tech/academy/broken-authentication": 2,
-    "escape.tech/academy/json-injection": 1,
-    "escape.tech/academy/cors": 2,
-    "d9bkk.com/hackmeifyoucan": 3,
-    "dashboard.d9bkk.com/hackmeifyoucan": 2,
-    "vwad.owasp.org/app/owasp-skf-labs": 5,
-    "pentest-lab.vercel.app": 4,
-    "middleware-vulnerability-cve-2025.vercel.app": 3,
-    "juice-shop.herokuapp.com": 9
+    "hack-this-site-eta.vercel.app/api/cors": 21,
+    "hack-this-site-eta.vercel.app/api/cookies": 21,
+    "hack-this-site-eta.vercel.app/api/headers": 20,
+    "hack-this-site-eta.vercel.app/api/methods": 20,
+    "escape.tech/academy/broken-function-level-authorization": 2,
+    "escape.tech/academy/disable-debug-mode": 2,
+    "escape.tech/academy/unrestricted-resource-consumption": 3,
+    "escape.tech/academy/broken-object-property-level-authorization": 2,
+    "juice-shop.herokuapp.com": 6
   }
 }
