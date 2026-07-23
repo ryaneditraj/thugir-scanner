@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T16:16:04.000Z",
+  "updated_at": "2026-07-23T17:04:44.882Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2163,
-  "total_findings": 11452,
+  "total_sites_scanned": 2174,
+  "total_findings": 11563,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1631,
-  "discovery_findings": 9147,
+  "discovery_urls_added": 1636,
+  "discovery_findings": 9249,
   "improvements_shipped": 989,
-  "last_run": "2026-07-23T16:16:04.000Z",
+  "last_run": "2026-07-23T17:04:44.882Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings, pages=1 probes=185)",
+      "note": "No benchmark misses — recall stable at 6/6 (9 findings, pages=6 probes=301)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,32 +51,30 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 75,
+      "urls_scanned": 10,
+      "findings": 102,
       "skipped_48h": [
-        "https://hack-this-site-eta.vercel.app/api/validate/cors",
         "https://hack-this-site-eta.vercel.app/api/validate/xss-reflected",
         "https://web-security-lab.vercel.app/learn/xss",
         "https://web-security-lab.vercel.app/learn/csrf"
       ],
       "dns_failures": [],
-      "focus": "VulnLab validate API live probes shipped; parallel discovery scanned remaining validate/* labs",
-      "improvements_shipped_this_run": 3
+      "focus": "hack-this-site client-side lab HTML pages + vibe-eval/jwtarsenal pattern catalogs; drained validate/cors+upload+input-validation+security-headers+secret-scanner",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/api/validate/xss-reflected: client-side-vulnlab-validate-api-evidence via live /api/validate/* labId JSON (17 findings)",
-      "oauthlabs.com: client-side-oauth-labs-playground-evidence + oauth-oidc-metadata-exposed (2→5 findings)",
-      "auth0.oauthlabs.com: oauth-oidc-metadata-exposed + playground evidence (1→5 findings)",
-      "dsopas.github.io/MindAPI: client-side-mindapi-evidence + /MindAPI/play crawl (2→6 findings, pages 1→4)",
-      "hack-this-site-eta.vercel.app/api/validate/cors: 19 findings via parent SPA bundle deep crawl",
-      "hack-this-site-eta.vercel.app/api/validate/upload: 19 findings — shared validate API lab markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, pages=6) — no benchmark misses",
+      "hack-this-site-eta.vercel.app/labs/idor.html: 21 findings via SPA bundle (idor-sequential-ids + sql-error-disclosure + dom-eval-xss)",
+      "hack-this-site-eta.vercel.app/labs/xss-reflected.html + sqli-error.html: 18 findings each — shared platform markers",
+      "vibe-eval.com: client-side-csrf-evidence + client-side-ssrf-evidence + client-side-api-security-lab-evidence (6 findings)",
+      "jwtarsenal.com: dangerous-html-sinks + vibe-sitemap-sensitive-paths (4 findings)",
+      "hack-this-site-eta.vercel.app/api/validate/cors: 17 findings; validate/upload: 15 findings via parent SPA deep crawl"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "validate/security-headers + validate/secret-scanner return JSON only — shallow endpoint crawl misses lab-specific oracles",
-      "validate/* endpoints still share parent SPA bundle for page-level slugs — live /api/validate probe adds dedicated oracle slug"
+      "validate/input-validation + security-headers + secret-scanner: JSON-only responses — 1 finding each (missing-security-headers only)",
+      "client-side lab HTML pages inherit full SPA bundle slugs — dedicated lab oracles need per-lab route markers"
     ]
   },
   "discovery_highlights": {
@@ -90,9 +88,9 @@
     "hack-this-site-eta.vercel.app/api/validate/localstorage": 19,
     "hack-this-site-eta.vercel.app/api/validate/git-exposure": 19,
     "hack-this-site-eta.vercel.app/labs/secret-scanner.html": 21,
-    "hack-this-site-eta.vercel.app/api/validate/cors": 19,
-    "hack-this-site-eta.vercel.app/api/validate/upload": 19,
-    "hack-this-site-eta.vercel.app/api/validate/input-validation": 17,
+    "hack-this-site-eta.vercel.app/api/validate/cors": 17,
+    "hack-this-site-eta.vercel.app/api/validate/upload": 15,
+    "hack-this-site-eta.vercel.app/api/validate/input-validation": 1,
     "hack-this-site-eta.vercel.app/api/validate/security-headers": 1,
     "hack-this-site-eta.vercel.app/api/validate/secret-scanner": 1,
     "oauthlabs.com": 5,
@@ -104,6 +102,11 @@
     "hacker101.com": 7,
     "pentest-fauxbank.vercel.app/support": 9,
     "pentest-fauxbank.vercel.app/transfer": 8,
-    "juice-shop.herokuapp.com": 9
+    "juice-shop.herokuapp.com": 9,
+    "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 18,
+    "hack-this-site-eta.vercel.app/labs/sqli-error.html": 18,
+    "hack-this-site-eta.vercel.app/labs/idor.html": 21,
+    "vibe-eval.com": 6,
+    "jwtarsenal.com": 4
   }
 }
