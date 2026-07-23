@@ -6383,6 +6383,24 @@
       "slug": "client-side-arcanum-ai-sec-hub-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Labs, CTFs, bounties & tooling for AI red teaming + gandalf.lakera.ai + ctf.spylab.ai + doublespeak.chat outbound links; extractArcanumAiSecHubSeeds; arcanum-sec.github.io/ai-sec-resources findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackxor.net",
+      "slug": "client-side-hackxor-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Welcome, hacker mission chooser + /mission?id= links + hackxor title; clientSideHackxorEvidence; hackxor.net findings 3→4; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/pygoat",
+      "slug": "client-side-pygoat-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Intentionally vulnerable Django + OWASP Top 10 roadmap + adeyosemanputra/pygoat JSON-LD; vwad.owasp.org/app/pygoat findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/damn-vulnerable-node-application-dvna",
+      "slug": "client-side-dvna-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Damn vulnerable Node.js + documented and undocumented vulnerabilities + DVNA VWAD JSON-LD; vwad DVNA catalog findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11210,6 +11228,21 @@
       "source": "discovery:arcanum-sec.github.io",
       "slug": "client-side-arcanum-ai-sec-hub-evidence",
       "shipped_at": "2026-07-23T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:hackxor.net",
+      "slug": "client-side-hackxor-evidence",
+      "shipped_at": "2026-07-23T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/pygoat",
+      "slug": "client-side-pygoat-evidence",
+      "shipped_at": "2026-07-23T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/damn-vulnerable-node-application-dvna",
+      "slug": "client-side-dvna-evidence",
+      "shipped_at": "2026-07-23T04:10:00.000Z"
     }
   ]
 }
