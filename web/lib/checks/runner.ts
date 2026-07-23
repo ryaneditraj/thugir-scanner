@@ -814,6 +814,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideOauthFetchPlaygroundEvidence",
   "clientSideOauthLabsPlaygroundEvidence",
   "clientSideMindApiEvidence",
+  "clientSideHermesCodexEvidence",
+  "clientSidePentestGroundGuardianLeaksEvidence",
+  "clientSidePentestGroundHubEvidence",
   "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
@@ -5092,6 +5095,66 @@ function extractMindApiSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Hermes Codex Starlight docs (hermes-codex.vercel.app) — seed AI security + CVE research pages. */
+const HERMES_CODEX_DOC_RE = /href\s*=\s*["'](\/(?:ai-security|cve)(?:\/[^"'#?]+)?)["']/gi;
+
+function extractHermesCodexSeeds(html: string, pageUrl: string): string[] {
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  if (
+    !/hermes-codex\.vercel\.app$/i.test(host) &&
+    !/Hermes Codex|Advanced Cyber Intelligence/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/ai-security/",
+    "/ai-security/core-studies/indirect-prompt-injection/",
+    "/ai-security/core-studies/tool-injection-architecture/",
+    "/cve/"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  let m: RegExpExecArray | null;
+  while ((m = HERMES_CODEX_DOC_RE.exec(html))) {
+    try {
+      const u = new URL(m[1], pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      u.hash = "";
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Pentest-Ground lab catalog — seed linked vulnerable app ports from hub table. */
+function extractPentestGroundHubSeeds(html: string, pageUrl: string): string[] {
+  if (!/pentest-ground\.com/i.test(pageUrl) && !/GuardianLeaks|pentest-ground\.com:\d+/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const portRe = /https?:\/\/pentest-ground\.com:(\d+)\/?/gi;
+  let m: RegExpExecArray | null;
+  while ((m = portRe.exec(html))) {
+    out.add(`https://pentest-ground.com:${m[1]}/`);
+  }
+  for (const port of ["81", "4280", "9000", "7001"]) {
+    if (html.includes(`pentest-ground.com:${port}`)) {
+      out.add(`https://pentest-ground.com:${port}/`);
+    }
+  }
+  return [...out];
+}
+
 /** AppSecMaster (appsecmaster.net) — seed XSS/SQLi category lab hub pages. */
 function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   if (!/AppSecMaster|appsecmaster\.net/i.test(html)) return [];
@@ -6690,6 +6753,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
   const mindApiSeeds = extractMindApiSeeds(home.body, home.finalUrl);
+  const hermesCodexSeeds = extractHermesCodexSeeds(home.body, home.finalUrl);
+  const pentestGroundHubSeeds = extractPentestGroundHubSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
@@ -7324,6 +7389,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnforgeSeeds,
       ...vulnshopSeeds,
       ...mindApiSeeds,
+      ...hermesCodexSeeds,
+      ...pentestGroundHubSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,

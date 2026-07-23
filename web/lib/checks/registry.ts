@@ -23378,6 +23378,148 @@ const clientSideMindApiEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hermes Codex AI security research hub (hermes-codex.vercel.app) ------------------
+const CLIENT_HERMES_CODEX_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hermes Codex research hub title",
+    re: /Hermes Codex|Advanced Cyber Intelligence\s*&\s*AI Security Research/i
+  },
+  {
+    label: "Indirect prompt injection case study",
+    re: /Indirect Prompt Injection Analysis|How attackers hijack LLM sessions via poisoned web content/i
+  },
+  {
+    label: "Tool injection agentic RCE study",
+    re: /Tool Injection:\s*The RCE of AI|Architectural analysis of kinetic exploitation in Agentic AI/i
+  },
+  {
+    label: "RAG poisoning research module",
+    re: /RAG Poisoning|Knowledge Base Manipulation/i
+  },
+  {
+    label: "Training data poisoning supply-chain study",
+    re: /Training Data Poisoning|ultimate supply chain attack against Artificial Intelligence/i
+  },
+  {
+    label: "CVE analysis catalog",
+    re: /CVE-\d{4}-\d+:\s*[^<]{10,}|Latest Vulnerabilities/i
+  },
+  {
+    label: "NixTensor hermes-codex repository",
+    re: /github\.com\/NixTensor\/hermes-codex|hermes-codex\.vercel\.app/i
+  }
+];
+
+const clientSideHermesCodexEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HERMES_CODEX_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/hermes-codex|Hermes Codex/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hermes Codex publishes AI security research on indirect prompt injection, tool injection RCE, RAG poisoning, and CVE analysis"
+    }
+  };
+};
+
+// --- Pentest-Ground GuardianLeaks vulnerable Flask blog (pentest-ground.com:81) -------
+const CLIENT_PENTEST_GROUND_GUARDIAN_LEAKS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "GuardianLeaks lab name",
+    re: /GuardianLeaks/i
+  },
+  {
+    label: "Pentest-Ground catalog XSS SSRF code injection",
+    re: /GuardianLeaks[\s\S]{0,400}?(?:XSS|Cross-site scripting)[\s\S]{0,200}?(?:SSRF|Server_Side_Request_Forgery)[\s\S]{0,200}?(?:Code Injection|Code_Injection)/i
+  },
+  {
+    label: "pentest-ground.com port 81 lab URL",
+    re: /pentest-ground\.com:81/i
+  },
+  {
+    label: "Flask blog create/search routes",
+    re: /href\s*=\s*["']\/(?:create|search|post\/\d)["']/i
+  },
+  {
+    label: "Pentest-Tools blog template markers",
+    re: /pentest-tools\.com|Security Guard Company/i
+  }
+];
+
+const clientSidePentestGroundGuardianLeaksEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const onLabHost = /pentest-ground\.com:81/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTEST_GROUND_GUARDIAN_LEAKS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = onLabHost ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/GuardianLeaks|pentest-ground\.com:81/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : onLabHost ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pentest-Ground GuardianLeaks is a deliberately vulnerable Flask blog lab catalogued for XSS, SSRF, and code-injection training"
+    }
+  };
+};
+
+// --- Pentest-Ground vulnerable lab catalog hub (pentest-ground.com) -------------------
+const CLIENT_PENTEST_GROUND_HUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Pentest-Ground lab catalog",
+    re: /pentest-ground\.com|Pentest-Ground/i
+  },
+  {
+    label: "GuardianLeaks catalog row",
+    re: /GuardianLeaks[\s\S]{0,120}?pentest-ground\.com:81/i
+  },
+  {
+    label: "DVWA hosted lab reference",
+    re: /pentest-ground\.com:4280|DVWA|Damn Vulnerable Web Application/i
+  },
+  {
+    label: "OpenAPI eval RCE lab reference",
+    re: /pentest-ground\.com:9000|Evaluation result/i
+  },
+  {
+    label: "OWASP attack category links in catalog",
+    re: /owasp\.org\/www-community\/attacks\/(?:xss|Server_Side_Request_Forgery|Code_Injection)/i
+  }
+];
+
+const clientSidePentestGroundHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/pentest-ground\.com/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTEST_GROUND_HUB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Pentest-Ground hosts a catalog of deliberately vulnerable web apps including GuardianLeaks (XSS/SSRF/code injection), DVWA, and OpenAPI eval labs"
+    }
+  };
+};
+
 // --- Judgement Day AI red team arena (judgement-day-khaki.vercel.app) -----------------
 const CLIENT_JUDGEMENT_DAY_ARENA_RES: { label: string; re: RegExp }[] = [
   {
@@ -28402,6 +28544,9 @@ export const RULES: Record<string, Rule> = {
   clientSideOauthFetchPlaygroundEvidence,
   clientSideOauthLabsPlaygroundEvidence,
   clientSideMindApiEvidence,
+  clientSideHermesCodexEvidence,
+  clientSidePentestGroundGuardianLeaksEvidence,
+  clientSidePentestGroundHubEvidence,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
