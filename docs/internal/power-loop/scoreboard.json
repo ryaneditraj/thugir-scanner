@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T18:06:00.000Z",
+  "updated_at": "2026-07-23T18:07:26.403Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2175,
-  "total_findings": 11571,
-  "critical_findings": 37,
+  "total_sites_scanned": 2183,
+  "total_findings": 11642,
+  "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1641,
-  "discovery_findings": 9249,
-  "improvements_shipped": 989,
-  "last_run": "2026-07-23T18:06:00.000Z",
+  "discovery_urls_added": 1646,
+  "discovery_findings": 9320,
+  "improvements_shipped": 992,
+  "last_run": "2026-07-23T18:07:26.403Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -51,22 +51,26 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_scanned": 8,
+      "findings": 71,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "cookies-samesite + SecLab XSS/SQLi paths + web-security-learning-labs modules + hack-this-site localStorage lab",
+      "focus": "cookies-samesite + SecLab XSS/SQLi paths + web-security-learning-labs modules + hack-this-site localStorage lab; queue drained 3 prior lab pages",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings, pages=1 probes=258) — no benchmark misses",
-      "security-question-disclosure + juice-shop-forgotten-backup-disclosure present on shallow crawl; secret-resend slug still absent"
+      "hack-this-site-eta.vercel.app/labs/localstorage.html: 20 findings incl secret-stripe-live + idor-sequential-ids + dom-eval-xss",
+      "web-security-lab.vercel.app/learn/cookies-samesite: 5 findings (client-side-csrf-evidence + dangerous-html-sinks)",
+      "web-security-learning-labs.vercel.app/learn/modules: 4 findings via client-side-web-security-learning-labs-evidence",
+      "seclab.vercel.app/xss + /sqli: shallow 3 findings each (misconfig only — live attack demos not surfaced)",
+      "hack-this-site-eta.vercel.app/labs/idor.html: regression 21→1 finding (Vercel checkpoint / shallow crawl)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "web-security-lab cookies-samesite chapter not yet scanned",
-      "seclab.vercel.app per-lab routes (xss/sqli) not yet scanned — root had only 3 shallow findings"
+      "seclab.vercel.app per-lab routes return only misconfig markers — CWE-79/CWE-89 live demos need API route oracles",
+      "hack-this-site idor.html intermittent shallow crawl (1 vs 21 findings) — Vercel Security Checkpoint may block ThugirScanner UA"
     ]
   },
   "discovery_highlights": {
@@ -99,6 +103,11 @@
     "hack-this-site-eta.vercel.app/labs/sqli-error.html": 18,
     "hack-this-site-eta.vercel.app/labs/idor.html": 21,
     "vibe-eval.com": 6,
-    "jwtarsenal.com": 4
+    "jwtarsenal.com": 4,
+    "web-security-lab.vercel.app/learn/cookies-samesite": 5,
+    "seclab.vercel.app/xss": 3,
+    "seclab.vercel.app/sqli": 3,
+    "web-security-learning-labs.vercel.app/learn/modules": 4,
+    "hack-this-site-eta.vercel.app/labs/localstorage.html": 20
   }
 }
