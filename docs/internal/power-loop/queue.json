@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://escape.tech/academy/disable-debug-mode",
+      "source": "Escape API Security Academy — GraphQL debug-mode information-disclosure lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/unrestricted-resource-consumption",
+      "source": "Escape API Security Academy — GraphQL query complexity / DoS lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/broken-object-property-level-authorization",
+      "source": "Escape API Security Academy — GraphQL field-level authorization lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/cors",
+      "source": "Escape API Security Academy — GraphQL CORS / CSRF header lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://middleware-vulnerability-cve-2025.vercel.app",
+      "source": "Herman-Adu/middleware-vulnerability-cve-2025 — Next.js CVE-2025 middleware demo (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://escape.tech/academy/sql-injection",
       "source": "Escape API Security Academy — interactive GraphQL SQL injection lesson (escape.tech/academy)",
       "auth": "public_demo"
