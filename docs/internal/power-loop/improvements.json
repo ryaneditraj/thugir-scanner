@@ -6653,6 +6653,24 @@
       "slug": "client-side-web-security-learning-labs-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: <title>Web Security Learning Labs</title> on Next.js CSR shell; clientSideWebSecurityLearningLabsEvidence minHits 3→1 URL oracle; web-security-learning-labs.vercel.app/learn/modules findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:webchal1.vercel.app",
+      "slug": "ssrf-endpoint-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/notes/import {\"url\":\"http://example.com\"} returns 201; GET /api/notes body contains Example Domain HTML; probeDeferredImportSsrf follows import POST with collection GET; webchal1.vercel.app findings 4→6; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "client-side-fabraix-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/01-guardrail-bypass Blocked by guardrails + Every message is scored by a guardrail; /challenges/access-code-001 access-code-001 constant; clientSideFabraixChallengeEvidence per-slug path oracle; playground.fabraix.com/challenges/* findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:webchal1.vercel.app",
+      "slug": "notevault-import-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /import page documents server-side URL fetch; extractWizerCtfSeeds seeds /import + /challenge for NoteVault CTF; webchal1 pages_crawled includes import surface; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11630,6 +11648,21 @@
       "source": "discovery:jwtarsenal.com",
       "slug": "client-side-jwt-arsenal-evidence",
       "shipped_at": "2026-07-23T18:20:00.000Z"
+    },
+    {
+      "source": "discovery:webchal1.vercel.app",
+      "slug": "deferred-import-ssrf-probe",
+      "shipped_at": "2026-07-23T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "client-side-fabraix-challenge-evidence",
+      "shipped_at": "2026-07-23T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:webchal1.vercel.app",
+      "slug": "notevault-import-crawl-seeds",
+      "shipped_at": "2026-07-23T21:10:00.000Z"
     }
   ]
 }
