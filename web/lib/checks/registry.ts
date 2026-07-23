@@ -24586,6 +24586,138 @@ const clientSideJuiceShopVaptEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Hackxor web hacking game (hackxor.net — mission-based vuln practice) -------------
+const CLIENT_HACKXOR_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hackxor mission game title",
+    re: /<title>\s*hackxor\s*<\/title>|id="topbar">hackxor/i
+  },
+  {
+    label: "Mission chooser welcome",
+    re: /Welcome,\s*hacker[\s\S]{0,80}choose from the available missions/i
+  },
+  {
+    label: "Mission table links",
+    re: /href\s*=\s*["']\/mission\?id=\d+["']|Mission<\/th>/i
+  },
+  {
+    label: "Missions scoreboard nav",
+    re: /href\s*=\s*["']\/["'][^>]*>Missions|href\s*=\s*["']\/leaderboard["']/i
+  },
+  {
+    label: "VWAD hackxor catalog description",
+    re: /web application hacking game via missions[\s\S]{0,120}real vulnerabilities/i
+  }
+];
+
+const clientSideHackxorEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKXOR_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/hackxor\.net|hackxor/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hackxor is a mission-based web hacking game built from real pentest bug reports with online challenge levels"
+    }
+  };
+};
+
+// --- PyGoat Django OWASP Top 10 training app (vwad.owasp.org/app/pygoat) ------------
+const CLIENT_PYGOAT_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "PyGoat VWAD listing title",
+    re: /PyGoat\s*[-—–]\s*OWASP VWAD|"name":\s*"PyGoat"/i
+  },
+  {
+    label: "Intentionally vulnerable Django app",
+    re: /Intentionally vulnerable Django web application/i
+  },
+  {
+    label: "OWASP Top 10 roadmap challenges",
+    re: /roadmap based on OWASP Top 10|Challenges in challenge\/challenge\.json/i
+  },
+  {
+    label: "adeyosemanputra/pygoat repository",
+    re: /github\.com\/adeyosemanputra\/pygoat|codeRepository":\s*"https:\/\/github\.com\/adeyosemanputra\/pygoat"/i
+  },
+  {
+    label: "PyGoat solutions walkthrough path",
+    re: /softwareHelp":\s*"https:\/\/github\.com\/adeyosemanputra\/pygoat\/tree\/master\/Solutions/i
+  }
+];
+
+const clientSidePygoatEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PYGOAT_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/PyGoat|pygoat|adeyosemanputra\/pygoat/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PyGoat is an intentionally vulnerable Django application catalogued in OWASP VWAD for OWASP Top 10 challenge practice"
+    }
+  };
+};
+
+// --- DVNA Node.js vulnerable app (vwad.owasp.org/app/damn-vulnerable-node*) ---------
+const CLIENT_DVNA_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DVNA VWAD listing title",
+    re: /Damn Vulnerable Node(?:js)? Application\s*[-—–]?\s*DVNA|DVNA\s*[-—–]\s*OWASP VWAD/i
+  },
+  {
+    label: "Damn vulnerable Node.js practice app",
+    re: /Damn vulnerable Node\.js web application to practice common web vulnerabilities/i
+  },
+  {
+    label: "Documented and undocumented vulnerabilities",
+    re: /documented and undocumented vulnerabilities|various difficulty levels/i
+  },
+  {
+    label: "DVNA security professionals students audience",
+    re: /For security professionals, developers, and students/i
+  },
+  {
+    label: "isp1r0 or appsecco DVNA repository",
+    re: /github\.com\/(?:isp1r0|appsecco)\/DVNA|Damn Vulnerable Node Application/i
+  }
+];
+
+const clientSideDvnaEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DVNA_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/DVNA|Damn Vulnerable Node|damn-vulnerable-node/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DVNA is a deliberately vulnerable Node.js application catalogued in OWASP VWAD for practicing documented and undocumented web flaws"
+    }
+  };
+};
+
 // --- Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game) -----
 const CLIENT_HACKER101_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -28644,6 +28776,9 @@ export const RULES: Record<string, Rule> = {
   clientSideThe0xPwnXssTagFilterBypassLabEvidence,
   clientSideThe0xPwnXssSvgScriptInjectionLabEvidence,
   clientSideMontanajimXssClassroomEvidence,
+  clientSideHackxorEvidence,
+  clientSidePygoatEvidence,
+  clientSideDvnaEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,

@@ -10273,6 +10273,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hackxor-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Hackxor mission-based web hacking game disclosed",
+    description:
+      "Hackxor is a realistic web hacking game with mission levels built from real pentest bug reports, exposing SQLi, XSS, and authentication bypass challenges.",
+    impactOneline:
+      "Public Hackxor mission pages document web attack practice surfaces with online challenge levels for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackxorEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hackxor is intentional training software — never deploy mission instances on production networks.",
+      steps: [
+        "Run Hackxor only in isolated lab VMs with no production data.",
+        "Do not mirror Hackxor vulnerability patterns in production applications.",
+        "Block public internet access to Hackxor demo instances when not needed for training."
+      ]
+    },
+    fixPrompt:
+      "We reference the Hackxor web hacking game for security training. Show how to isolate mission-based lab instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pygoat-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "PyGoat Django OWASP Top 10 training lab disclosed",
+    description:
+      "PyGoat is an intentionally vulnerable Django web application catalogued in OWASP VWAD with OWASP Top 10 challenges and solution walkthroughs.",
+    impactOneline:
+      "Public PyGoat VWAD listings document Django injection, XSS, and access-control training challenges for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePygoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PyGoat is intentional training software — keep installs offline from production.",
+      steps: [
+        "Install PyGoat only in local VMs or isolated containers.",
+        "Do not expose PyGoat instances to the public internet.",
+        "Use PyGoat findings to patch similar patterns in production Django code."
+      ]
+    },
+    fixPrompt:
+      "Our site documents PyGoat-style deliberately insecure Django exercises. Show how to keep lab installs isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dvna-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "DVNA Node.js vulnerable application lab disclosed",
+    description:
+      "Damn Vulnerable Node Application (DVNA) is a deliberately insecure Node.js app catalogued in OWASP VWAD for practicing documented and undocumented web flaws.",
+    impactOneline:
+      "Public DVNA VWAD listings document Node.js injection, auth, and access-control training targets for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvnaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVNA is intentional training software — keep installs offline from production.",
+      steps: [
+        "Install DVNA only in local VMs or isolated containers.",
+        "Do not expose DVNA instances to the public internet.",
+        "Use DVNA findings to patch similar patterns in production Node.js code."
+      ]
+    },
+    fixPrompt:
+      "Our site documents DVNA-style deliberately insecure Node.js exercises. Show how to keep lab installs isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sockettome-evidence",
     platform: "generic",
     category: "Security misconfiguration",

@@ -1154,6 +1154,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideThe0xPwnXssTagFilterBypassLabEvidence",
   "clientSideThe0xPwnXssSvgScriptInjectionLabEvidence",
   "clientSideMontanajimXssClassroomEvidence",
+  "clientSideHackxorEvidence",
+  "clientSidePygoatEvidence",
+  "clientSideDvnaEvidence",
   "clientSideHacker101CtfEvidence",
   "clientSideSockettomeEvidence",
   "clientSideOwaspBricksEvidence",
@@ -5028,6 +5031,29 @@ function extractVwadWrongsecretsLiveSeed(html: string, pageUrl: string): string[
   return [...out];
 }
 
+/** VWAD Hackxor listing links live mission-based hacking game at hackxor.net. */
+function extractVwadHackxorLiveSeed(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org\/app\/hackxor|Hackxor - OWASP VWAD/i.test(html)) return [];
+  const out = new Set<string>();
+  const jsonLdUrl = html.match(/"url"\s*:\s*"(https:\/\/hackxor\.net\/+)"/i);
+  if (jsonLdUrl?.[1]) {
+    try {
+      out.add(new URL(jsonLdUrl[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const hrefMatch = html.match(/https?:\/\/hackxor\.net\/?/i);
+  if (hrefMatch?.[0]) {
+    try {
+      out.add(new URL(hrefMatch[0]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** VWAD Gin & Juice Shop listing links PortSwigger scanner evaluation lab at ginandjuice.shop. */
 function extractVwadGinJuiceLiveSeed(html: string, pageUrl: string): string[] {
   if (!/vwad\.owasp\.org\/app\/gin-juice-shop|Gin\s*&\s*Juice Shop/i.test(html)) return [];
@@ -6812,6 +6838,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
+  const vwadHackxorLiveSeeds = extractVwadHackxorLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -7303,6 +7330,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/gin-juice-shop/i.test(home.finalUrl)
       ? ["https://ginandjuice.shop/"]
       : [];
+  const vwadHackxorPrioritySeeds =
+    /vwad\.owasp\.org\/app\/hackxor/i.test(home.finalUrl)
+      ? ["https://hackxor.net/"]
+      : [];
   const vwadScannerBenchPrioritySeeds =
     /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store|owasp-vulnerableapp)/i.test(home.finalUrl)
       ? [
@@ -7339,6 +7370,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsLiveSeeds,
       ...vwadGinJuicePrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
+      ...vwadHackxorPrioritySeeds,
+      ...vwadHackxorLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
       ...owaspTop10IntroHubPrioritySeeds,
