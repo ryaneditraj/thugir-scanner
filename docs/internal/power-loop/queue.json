@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T17:05:00.000Z",
+  "updated_at": "2026-07-23T18:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-lab.vercel.app/learn/cookies-samesite",
+      "source": "Web 安全实验室 — SameSite cookie attribute lesson chapter (web-security-lab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/xss",
+      "source": "DaniSam-STU/security-lab — live XSS lab with vulnerable vs secure code comparison (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/sqli",
+      "source": "DaniSam-STU/security-lab — live SQLi lab with in-memory SQLite backend (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/learn/modules",
+      "source": "Web Security Learning Labs — interactive module catalog (SQLi/IDOR/XSS chapters)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/localstorage.html",
+      "source": "dkyazzentwatwa/hack-this-site — STORAGE-001 localStorage secret leak client-side lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/labs/xss-reflected.html",
       "source": "dkyazzentwatwa/hack-this-site — A03 reflected XSS client-side lab page (GitHub README)",
