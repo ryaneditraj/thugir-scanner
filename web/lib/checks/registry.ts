@@ -8159,23 +8159,39 @@ const CLIENT_NEXTJS_MIDDLEWARE_CVE_RES: { label: string; re: RegExp }[] = [
   {
     label: "UNICORDev exploit repository path",
     re: /exploit-CVE-2025-29927|UNICORDev\/exploit-CVE-2025-29927/i
+  },
+  {
+    label: "Next.js middleware bypass POC title",
+    re: /CVE-2025-29927:\s*Next\.js Middleware Bypass POC|Middleware Security Vulnerability/i
+  },
+  {
+    label: "middleware-vulnerability CVE demo host",
+    re: /middleware-vulnerability-cve-2025\.vercel\.app/i
   }
 ];
 
 const clientSideNextjsMiddlewareCveEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownMiddlewareCveDemo =
+    /middleware-vulnerability-cve-2025\.vercel\.app/i.test(pageUrl) ||
+    /middleware-vulnerability-cve-2025\.vercel\.app/i.test(ctx.scanUrl || "");
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_NEXTJS_MIDDLEWARE_CVE_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/CVE-2025-29927/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownMiddlewareCveDemo ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/CVE-2025-29927/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.92 : 0.88,
+    confidence: hits.length >= 3 ? 0.92 : isKnownMiddlewareCveDemo ? 0.9 : 0.88,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "page documents CVE-2025-29927 Next.js middleware authorization bypass via x-middleware-subrequest header"
+      note: isKnownMiddlewareCveDemo && hits.length < 3
+        ? "middleware-vulnerability-cve-2025.vercel.app is a known CVE-2025-29927 Next.js middleware bypass demo (URL oracle; Vercel may patch bypass behavior)"
+        : "page documents CVE-2025-29927 Next.js middleware authorization bypass via x-middleware-subrequest header"
     }
   };
 };
@@ -17315,6 +17331,18 @@ const CLIENT_HACKTHEBOX_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "Academy module catalogue",
     re: /academy\.hackthebox\.com\/catalogue|module-name|Academy x HTB Labs/i
+  },
+  {
+    label: "Web Service & API Attacks course",
+    re: /Web Service\s*&\s*API Attacks Course|academy-module-top-content-title">Web Service/i
+  },
+  {
+    label: "SOAP / XXE / SSRF curriculum modules",
+    re: /SOAP SQL Injection|SOAPAction Spoofing|<li>XXE<\/li>|Web Service.{0,40}API Attacks/i
+  },
+  {
+    label: "Academy course preview path",
+    re: /academy\.hackthebox\.com\/course\/preview\//i
   }
 ];
 
@@ -25025,6 +25053,22 @@ const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "JSON injection lesson",
     re: /Validate JSON Inputs|arbitrary JSON input object|perform arbitrary SQL queries/i
+  },
+  {
+    label: "GraphQL CORS / CSRF lesson",
+    re: /lessons\/cors\/|vulnerable GraphQL server[\s\S]{0,120}evil website|Understand the role of CORS/i
+  },
+  {
+    label: "Disable debug mode lesson",
+    re: /Disable Debug Mode for Production|Apollo Server has its debug mode enabled/i
+  },
+  {
+    label: "Query complexity / DoS lesson",
+    re: /Unrestricted Resource Consumption|query complexity|depth.?limit/i
+  },
+  {
+    label: "Field-level authorization lesson",
+    re: /Broken Object Property Level Authorization|object property level authorization/i
   },
   {
     label: "escape.tech/academy host",
