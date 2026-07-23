@@ -5423,6 +5423,84 @@ const clientSideHackinghubEvidence: Rule = async (ctx) => {
   };
 };
 
+const CLIENT_HACKINGHUB_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackingHub hub challenge payload",
+    re: /__HUB_DATA__[\s\S]{0,4000}deliberately vulnerable/i
+  },
+  {
+    label: "LLM tool-chain exfiltration lab",
+    re: /LLM with tools[\s\S]{0,200}exfiltrate another customer/i
+  },
+  {
+    label: "ShopMate AI prompt-injection challenge",
+    re: /ShopMate is a deliberately vulnerable AI-powered e-commerce/i
+  },
+  {
+    label: "Hackbox VM challenge module",
+    re: /"show_hackbox"\s*:\s*true[\s\S]{0,800}"vm_id"\s*:\s*\d+/i
+  }
+];
+
+const clientSideHackinghubChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/app\.hackinghub\.io\/hubs\//i.test(pageUrl) && !/__HUB_DATA__/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKINGHUB_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackingHub hub pages embed __HUB_DATA__ describing deliberately vulnerable AI/web challenge scenarios"
+    }
+  };
+};
+
+const CLIENT_FINBOT_DEMO_NAMESPACE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OWASP ASI FinBot demo namespace",
+    re: /OWASP ASI FinBot|owasp asi finbot/i
+  },
+  {
+    label: "CineFlow Productions agentic demo",
+    re: /CineFlow Productions[\s\S]{0,120}FinBot/i
+  },
+  {
+    label: "FinBot demo cineflow route",
+    re: /\/demo\/cineflow\//i
+  },
+  {
+    label: "FinBot multi-portal CTF platform",
+    re: /Four Portals[\s\S]{0,80}One Platform|Vendor Portal[\s\S]{0,200}Admin Portal/i
+  }
+];
+
+const clientSideFinbotDemoNamespaceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/owasp-finbot-ctf\.org/i.test(pageUrl) && !/owasp-finbot-ctf\.org/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_FINBOT_DEMO_NAMESPACE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OWASP FinBot CTF exposes isolated demo namespaces (CineFlow) and multi-portal agentic challenge surfaces"
+    }
+  };
+};
+
 // --- TempeHS Unsecure PWA educational lab (tempehs.github.io/The_Unsecure_PWA) ------
 const CLIENT_UNSECURE_PWA_RES: { label: string; re: RegExp }[] = [
   {
@@ -29586,6 +29664,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
+  clientSideHackinghubChallengeEvidence,
+  clientSideFinbotDemoNamespaceEvidence,
   clientSideUnsecurePwaEvidence,
   clientSidePromptmapEvidence,
   clientSideGoogleXssGameEvidence,

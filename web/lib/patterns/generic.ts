@@ -13055,6 +13055,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hackinghub-challenge-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackingHub web hacking challenge hub disclosed",
+    description:
+      "HackingHub hub pages embed __HUB_DATA__ describing deliberately vulnerable AI and web application scenarios (ShopMate LLM tool abuse, hackbox VMs, IDOR chains).",
+    impactOneline:
+      "Public HackingHub challenge hubs document exploit scenarios for unauthenticated CTF practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackinghubChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HackingHub challenges are intentional training — isolate hub VMs from production namespaces.",
+      steps: [
+        "Require authentication before starting hackbox challenge instances.",
+        "Run AI challenge assistants on isolated lab infrastructure.",
+        "Do not expose production-like customer data in challenge LLM toolchains."
+      ]
+    },
+    fixPrompt:
+      "We host HackingHub-style challenge hubs with AI assistants. Show how to isolate hackbox VMs and LLM tool permissions from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-finbot-demo-namespace-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot agentic demo namespace disclosed",
+    description:
+      "OWASP FinBot CTF exposes isolated demo namespaces (CineFlow Productions) and multi-portal vendor/admin/CTF surfaces for agentic AI exploit training.",
+    impactOneline:
+      "Public FinBot demo namespaces document agentic AI attack surfaces transferable to production LLM deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFinbotDemoNamespaceEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot demo namespaces are intentional — never reuse their agent tool permissions in production.",
+      steps: [
+        "Gate FinBot portals behind authentication.",
+        "Isolate /demo/* namespaces from production agent infrastructure.",
+        "Monitor agent tool calls for prompt-injection exfiltration patterns."
+      ]
+    },
+    fixPrompt:
+      "We host FinBot-style agentic demo namespaces. Show how to isolate /demo routes and portal agents from production LLM deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-unsecure-pwa-evidence",
     platform: "generic",
     category: "Broken access control",
