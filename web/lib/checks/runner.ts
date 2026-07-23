@@ -1164,6 +1164,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackersecAcademyEvidence",
   "clientSideEchoctfEvidence",
   "clientSideHacker101CtfEvidence",
+  "clientSideHacker101ClassEvidence",
   "clientSideSockettomeEvidence",
   "clientSideOwaspBricksEvidence",
   "clientSideFvbLabEvidence",
@@ -4380,10 +4381,15 @@ function extractCmdChallengeSeeds(html: string, pageUrl: string): string[] {
 
 /** Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game). */
 function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
-  if (!/ctf\.hacker101\.com|Hacker101 CTF|learn to hack in a safe/i.test(html)) return [];
+  if (!/ctf\.hacker101\.com|Hacker101 CTF|learn to hack in a safe|hacker101\.com/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/about", "/howtoplay", "/auth/login", "/scoreboard"]) {
+  if (/^(?:www\.)?hacker101\.com$/i.test(new URL(pageUrl).hostname)) {
+    out.add("https://ctf.hacker101.com/");
+    out.add("https://ctf.hacker101.com/about");
+    out.add("https://ctf.hacker101.com/howtoplay");
+  }
+  for (const p of ["/about", "/howtoplay", "/auth/login", "/scoreboard", "/start-here", "/videos"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
