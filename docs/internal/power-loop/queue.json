@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://echoctf.red/",
+      "source": "echoCTF.RED — public hacking laboratories with targets, CVEs, and challenges (labs-pentest catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackersec.academy/",
+      "source": "HACKSEC Academy — web application pentest training labs (capturetheflag.com.br redirect; labs-pentest catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cmdchallenge.com/",
+      "source": "CMD Challenge — shell command puzzle platform for security practitioners (labs-pentest catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://12days.cmdchallenge.com/",
+      "source": "CMD Challenge 12 Days — holiday variant shell security puzzle platform",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://oops.cmdchallenge.com/",
+      "source": "CMD Challenge Oops — shell puzzle variant (cmdchallenge.com family)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://vwad.owasp.org/app/pygoat/",
       "source": "OWASP VWAD — PyGoat Django OWASP Top 10 training app catalog (links to Heroku live demos)",
       "auth": "benchmark"
@@ -7970,5 +7995,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-23T03:12:00.000Z"
+  "updated_at": "2026-07-23T04:12:00.000Z"
 }

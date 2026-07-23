@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T04:04:28.177Z",
+  "updated_at": "2026-07-23T04:10:33.021Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2056,
-  "total_findings": 10757,
+  "total_sites_scanned": 2064,
+  "total_findings": 10786,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1576,
-  "discovery_findings": 8633,
+  "discovery_urls_added": 1581,
+  "discovery_findings": 8662,
   "improvements_shipped": 965,
-  "last_run": "2026-07-23T04:04:28.177Z",
+  "last_run": "2026-07-23T04:10:33.021Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "6/6 recall maintained (8 findings, pages=1 probes=245); no benchmark misses; parallel runs merged Hacker101/OAuth improvements + VWAD discovery",
+      "note": "6/6 recall maintained (8 findings, pages=1 probes=258); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,34 +51,32 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 45,
+      "urls_scanned": 8,
+      "findings": 29,
       "skipped_48h": [
-        "https://xvwa.vercel.app/",
-        "https://seclab.vercel.app/",
-        "https://hackxor.net/",
-        "https://public-firing-range.appspot.com/",
-        "https://google-gruyere.appspot.com/",
-        "https://ctf.hacker101.com/ctf"
+        "https://vwad.owasp.org/app/pygoat/",
+        "https://vwad.owasp.org/app/damn-vulnerable-node-application-dvna/",
+        "https://vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna/",
+        "https://vwad.owasp.org/app/peruggia/",
+        "https://vwad.owasp.org/app/hackxor/"
       ],
       "dns_failures": [],
-      "focus": "OWASP VWAD catalog seeding (PyGoat, DVNA×2, Peruggia, Hackxor) + Hacker101/OAuth OIDC probe improvements",
-      "improvements_shipped_this_run": 3
+      "focus": "echoCTF.RED + HACKSEC Academy + CMD Challenge family; queue drain hit VWAD WebGoat, Wizer CTF, RedTiger level9",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark 6/6 recall (8 findings) — juice-shop-forgotten-backup-disclosure present; no benchmark misses",
-      "vwad.owasp.org/app/pygoat: 3 findings — PyGoat VWAD catalog + Heroku demo oracle markers",
-      "vwad.owasp.org/app/peruggia: 4 findings — Peruggia image-gallery vuln catalog evidence",
-      "ctf.hacker101.com/ctf: 3 findings — client-side-hacker101-ctf-evidence after apex homepage fallback",
-      "auth0.oauthlabs.com: 5 findings — oauth-oidc-metadata-exposed + OAuth Labs playground evidence",
-      "koadt.github.io/oss-oopssec-store/roadmap: 7 findings — 34-chapter CTF roadmap oracle"
+      "echoctf.red: 4 findings — reflected-xss-query-param + postmessage-dom-xss-evidence on CTF platform landing",
+      "hackersec.academy: 4 findings — client-side-api-security-lab-evidence + exposed-source-maps (capturetheflag.com.br redirect)",
+      "vwad.owasp.org/app/webgoat: 6 findings — secret-twilio + client-side-webgoat-evidence on VWAD catalog",
+      "redtiger.labs.overthewire.org/level9.php: 5 findings — redtiger-command-injection-evidence + classic SQLi login oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "VWAD catalog pages are metadata oracles — live exploit chains require following linked deploy URLs (pygoat Heroku, hackxor.net missions)",
-      "seclab.vercel.app: deployed site may be unrelated Angular app — prefer securityweb-iota.vercel.app module routes",
-      "DVNA VWAD entries document offline-only Node labs — no public internet deploy per project warnings"
+      "cmdchallenge.com family: shallow terminal UI — postmessage-dom-xss-evidence only; no command-injection oracle from static shell",
+      "echoctf.red: challenge instances require authenticated session — landing XSS markers only",
+      "hackersec.academy: lab routes behind login — metadata oracles from marketing bundle"
     ]
   },
   "discovery_highlights": {
@@ -129,6 +127,14 @@
     "codeex-ai.vercel.app": 4,
     "shield-dark-pattern-demo.vercel.app": 4,
     "ctf.hacker101.com": 3,
-    "koadt.github.io/oss-oopssec-store/roadmap": 7
+    "koadt.github.io/oss-oopssec-store/roadmap": 7,
+    "echoctf.red": 4,
+    "hackersec.academy": 4,
+    "cmdchallenge.com": 2,
+    "12days.cmdchallenge.com": 2,
+    "oops.cmdchallenge.com": 2,
+    "vwad.owasp.org/app/webgoat": 6,
+    "wizer-ctf.com": 4,
+    "redtiger.labs.overthewire.org/level9.php": 5
   }
 }
