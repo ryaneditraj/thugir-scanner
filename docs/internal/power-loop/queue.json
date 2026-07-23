@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T21:05:00.000Z",
+  "updated_at": "2026-07-23T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/auth/jwt.html",
+      "source": "dkyazzentwatwa/hack-this-site — JWT algorithm/none attack lab (auth/ tree, GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/auth/session.html",
+      "source": "dkyazzentwatwa/hack-this-site — session fixation/hijack lab (auth/ tree)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/auth/login.html",
+      "source": "dkyazzentwatwa/hack-this-site — weak login / SQLi auth lab (auth/ tree)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/auth/reset.html",
+      "source": "dkyazzentwatwa/hack-this-site — predictable password-reset token lab (auth/ tree)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/auth/session",
+      "source": "dkyazzentwatwa/hack-this-site — unauthenticated session management API oracle (README api/auth/*)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/labs/git-exposure.html",
       "source": "dkyazzentwatwa/hack-this-site — VULN-007 git exposure hands-on lab (GitHub README lab catalog)",
