@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T13:20:00.000Z",
+  "updated_at": "2026-07-23T14:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-lab.vercel.app/learn/csp",
+      "source": "Web 安全实验室 — CSP deep-defense / inline-script lesson chapter (web-security-lab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/learn/same-origin",
+      "source": "Web 安全实验室 — same-origin policy + CORS concept chapter (web-security-lab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/sqli-error",
+      "source": "dkyazzentwatwa/hack-this-site — automated SQLi error validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/idor",
+      "source": "dkyazzentwatwa/hack-this-site — automated IDOR validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/secret-scanner.html",
+      "source": "dkyazzentwatwa/hack-this-site — A02 secret-scanner client-side leak lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://pentest-fauxbank.vercel.app/scanner",
       "source": "alfredang/pentest FauxBank — simulated pentest scanner module (GitHub README)",

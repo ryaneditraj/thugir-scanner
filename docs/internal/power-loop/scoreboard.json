@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-23T14:10:00.000Z",
+=======
+  "updated_at": "2026-07-23T14:07:00.000Z",
+>>>>>>> cc2c143 (power-scan: benchmark + 5 discovery, 88 findings [14 UTC])
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +26,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1621,
   "discovery_findings": 9014,
+<<<<<<< HEAD
   "improvements_shipped": 989,
   "last_run": "2026-07-23T14:10:00.000Z",
+=======
+  "improvements_shipped": 986,
+  "last_run": "2026-07-23T14:07:00.000Z",
+>>>>>>> cc2c143 (power-scan: benchmark + 5 discovery, 88 findings [14 UTC])
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -66,14 +75,22 @@
         "https://www.vulnerableapp.com/ (unreachable — DNS/connect failure)"
       ],
       "focus": "Web Security Lab CSP/same-origin chapters; hack-this-site validation API labs + secret-scanner; queue drain hackinghub + hacker101",
+<<<<<<< HEAD
       "improvements_shipped_this_run": 0,
       "parallel_engine_run": "FauxBank CSRF/XSS probes + Juice Shop FTP backup retries shipped by parallel engine evolve (3 improvements)"
+=======
+      "improvements_shipped_this_run": 0
+>>>>>>> cc2c143 (power-scan: benchmark + 5 discovery, 88 findings [14 UTC])
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings first pass, pages=6 probes=282) — no benchmark misses",
       "web-security-lab.vercel.app/learn/csp: client-side-web-security-lab-zh-evidence + dangerous-html-sinks (5 findings)",
       "web-security-lab.vercel.app/learn/same-origin: same-origin/CORS education markers (5 findings)",
+<<<<<<< HEAD
       "hack-this-site-eta.vercel.app/api/validate/sqli-error: sql-error-disclosure + reflected-xss-query-param (19 findings)",
+=======
+      "hack-this-site-eta.vercel.app/api/validate/sqli-error: sql-error-disclosure + reflected-xss-query-param + client-side-vulnlab-a03-injection-evidence (19 findings)",
+>>>>>>> cc2c143 (power-scan: benchmark + 5 discovery, 88 findings [14 UTC])
       "hack-this-site-eta.vercel.app/api/validate/idor: client-side-vulnlab-idor-lab-evidence + idor-sequential-ids (19 findings)",
       "hack-this-site-eta.vercel.app/labs/secret-scanner.html: dom-eval-xss + client-side-vulnlab-a02-secret-scanner-evidence (21 findings)",
       "hacker101.com: client-side-hacker101-evidence + exposed-source-maps (7 findings)"
@@ -82,7 +99,11 @@
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
       "www.vulnerableapp.com: unreachable from cloud agent — queue entry needs alternate deploy",
+<<<<<<< HEAD
       "pentest-fauxbank modules skipped — scanned within 48h window (parallel run shipped fauxbank-csrf-transfer-probe + fauxbank-stored-xss-support-probe)"
+=======
+      "pentest-fauxbank modules skipped — scanned within 48h window"
+>>>>>>> cc2c143 (power-scan: benchmark + 5 discovery, 88 findings [14 UTC])
     ]
   },
   "discovery_highlights": {
@@ -93,8 +114,11 @@
     "hack-this-site-eta.vercel.app/labs/secret-scanner.html": 21,
     "app.hackinghub.io": 3,
     "hacker101.com": 7,
+<<<<<<< HEAD
     "pentest-fauxbank.vercel.app/support": 9,
     "pentest-fauxbank.vercel.app/transfer": 8,
+=======
+>>>>>>> cc2c143 (power-scan: benchmark + 5 discovery, 88 findings [14 UTC])
     "juice-shop.herokuapp.com": 9
   }
 }
