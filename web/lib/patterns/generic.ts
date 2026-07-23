@@ -10325,6 +10325,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacker-friendly-firebase-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "weaponsforge Firebase misconfig training app disclosed",
+    description:
+      "weaponsforge/hacker-friendly-app documents intentionally insecure Firebase security rules, HTML quote rendering, and XSS training scenarios in its public GitHub README.",
+    impactOneline:
+      "Public Firebase security lab READMEs expose insecure rules and XSS training contracts useful for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackerFriendlyFirebaseEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Firebase security demos are intentional training — never deploy insecure rules to production.",
+      steps: [
+        "Use Firebase security rules that deny unauthenticated reads/writes in production.",
+        "Sanitize HTML output before rendering user-controlled quote content.",
+        "Isolate Firebase training projects from production credentials."
+      ]
+    },
+    fixPrompt:
+      "We host a weaponsforge-style Firebase security demo. Show how to lock down Firebase rules and escape HTML output in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentest-lab-scanner-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "PentestLab vulnerability scanner demo disclosed",
+    description:
+      "pentest-lab.vercel.app publishes an inline web vulnerability scanner demo with SQL injection payload catalog and simulated SQLi/XSS findings.",
+    impactOneline:
+      "Public PentestLab scanner demos document SQLi payload catalogs and simulated vulnerability findings for training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentestLabScannerEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PentestLab is intentional training — do not expose production scanners without authentication.",
+      steps: [
+        "Gate vulnerability scanner demos behind authentication.",
+        "Run scanner training labs on isolated infrastructure.",
+        "Do not use demo SQLi payloads against production endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host a PentestLab-style vulnerability scanner demo. Show how to isolate scanner training UIs from production targets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-cybersec-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "CYBERSEC LAB OWASP training platform disclosed",
+    description:
+      "cybersec-lab.vercel.app is a Spanish interactive OWASP training SPA with SQLi login-bypass, XSS, buffer overflow, and CTF challenge modules.",
+    impactOneline:
+      "Public CYBERSEC LAB bundles document hands-on OWASP Top 10 challenge modules with live SQLi and XSS oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCybersecLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CYBERSEC LAB is intentional training — gate challenge modules behind authentication.",
+      steps: [
+        "Require enrollment before exposing injectable lab endpoints.",
+        "Run OWASP training SPAs on isolated lab infrastructure.",
+        "Do not copy SQLi/XSS challenge patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We host a CYBERSEC LAB-style OWASP training SPA. Show how to gate injectable challenge modules behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacker101-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
