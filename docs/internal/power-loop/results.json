@@ -1,70 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-22T09:06:55.129Z",
-      "url": "https://webexp05.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challenge-hub-evidence",
-          "title": "Static CTF challenge hub with linked web security labs",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "general"
-        },
-        {
-          "slug": "client-side-jwt-none-evidence",
-          "title": "Client bundle documents JWT alg:none acceptance",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "client-side-path-traversal-evidence",
-          "title": "Client-side path traversal / LFI lab documented in crawl",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 287,
-      "status": "ok",
-      "scanned_at": "2026-07-22T09:06:55.129Z"
-    },
-    {
       "run_id": "2026-07-22T09:06:56.804Z",
       "url": "https://idor-challenge.vercel.app/",
       "auth": "public_demo",
@@ -12733,6 +12669,64 @@
       "probes_run": 287,
       "status": "ok",
       "scanned_at": "2026-07-23T12:22:16.987Z"
+    },
+    {
+      "run_id": "2026-07-23T13:05:28.056Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 81,
+      "status": "ok",
+      "scanned_at": "2026-07-23T13:05:28.056Z"
     }
   ],
   "teacher_delta_runs": [
