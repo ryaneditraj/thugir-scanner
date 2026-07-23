@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T00:20:00.000Z",
+  "updated_at": "2026-07-23T01:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2027,
-  "total_findings": 10635,
+  "total_sites_scanned": 2028,
+  "total_findings": 10643,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1565,
   "discovery_findings": 8573,
-  "improvements_shipped": 962,
-  "last_run": "2026-07-23T00:20:00.000Z",
+  "improvements_shipped": 965,
+  "last_run": "2026-07-23T01:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 9,
+      "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "Heroku cold-start: pass1 8 findings gap=sqli; wake retry merged to 9 findings 6/6 recall; FTP/apple oracle bootstrap",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,33 +50,29 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 29,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 15,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "VulnShop route module oracles + Juice Shop FTP/apple oracle bootstrap",
+      "focus": "OAuth Labs playground evidence + MindAPI mindmap hub + OpenAI secret FP fix",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 9 findings 6/6 recall after Heroku wake retry",
-      "vulnshop.vercel.app/login: 5 findings — JWT is_admin broken access module evidence (4→5)",
-      "vulnshop.vercel.app/products: 5 findings — SQL injection search lab module evidence (4→5)",
-      "vulnshop.vercel.app/orders: 5 findings — IDOR Practice module evidence (4→5)",
-      "vulnshop.vercel.app/register: 5 findings — mass assignment module evidence (4→5)",
-      "oauthlabs.com: 5 findings — OAuth 2.0 PKCE/DPoP playground misconfig + client-side auth evidence"
+      "juice-shop.herokuapp.com: 8 findings 6/6 recall — no benchmark misses",
+      "oauthlabs.com: OpenAI secret FP removed; dedicated OAuth 2.0 Playground evidence (5→3 cleaner findings)",
+      "dsopas.github.io/MindAPI: mindmap hub + /about crawl seeds (2→6 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnshop-production.up.railway.app backend offline — live /api/debug probes unreachable",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "bugbountyhunter challenges: shallow crawl may miss embedded iframe/sandbox exploit surfaces"
+      "vulnerable-web-site.vercel.app/csrf|xss routes serve login shell — module labs require auth session",
+      "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
   "discovery_highlights": {
-    "oauthlabs.com": 5,
+    "oauthlabs.com": 3,
     "auth0.oauthlabs.com": 5,
-    "dsopas.github.io/MindAPI": 2,
+    "dsopas.github.io/MindAPI": 6,
     "vulnerable-web-site.vercel.app/csrf": 3,
     "vulnerable-web-site.vercel.app/xss": 3,
     "vulnshop.vercel.app/login": 5,
@@ -87,7 +83,7 @@
     "www.bugbountyhunter.com/challenge?id=9": 3,
     "www.bugbountyhunter.com/challenge?id=10": 3,
     "www.bugbountyhunter.com/challenge?id=16": 3,
-    "juice-shop.herokuapp.com": 9,
+    "juice-shop.herokuapp.com": 8,
     "ai-security-platform-iota.vercel.app": 3,
     "server.vulnapp.id/mutillidae": 7,
     "urban-vampi-staging.up.railway.app": 4,
