@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-23T22:06:00.000Z",
-=======
   "updated_at": "2026-07-23T22:17:38.000Z",
->>>>>>> ad2b352 (engine: 3 discovery improvements from power-loop [2026-07-23 UTC])
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,7 +15,6 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 2220,
   "total_findings": 12058,
   "critical_findings": 38,
@@ -27,19 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1666,
   "discovery_findings": 9691,
-  "improvements_shipped": 998,
-  "last_run": "2026-07-23T22:06:00.000Z",
-=======
-  "total_sites_scanned": 2212,
-  "total_findings": 11941,
-  "critical_findings": 38,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1661,
-  "discovery_findings": 9574,
   "improvements_shipped": 1001,
   "last_run": "2026-07-23T22:17:38.000Z",
->>>>>>> ad2b352 (engine: 3 discovery improvements from power-loop [2026-07-23 UTC])
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -47,7 +31,7 @@
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — stable 6/6 first-pass deep crawl (pages=6 probes=287)",
+      "note": "No benchmark misses — recall stable at 6/6 (9 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -73,24 +57,6 @@
         "hack-this-site-eta.vercel.app/labs/* (git-exposure, upload, input-validation, security-headers, cms/wordpress)"
       ],
       "dns_failures": [],
-<<<<<<< HEAD
-      "focus": "HackThisSite auth/ tree (jwt, session, login, reset) + api/auth/session oracle; queue drain also hit pentesterlab xss-and-mysql-file, hackthissite playlevel/34, vwad voice-goat"
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/auth/jwt.html: 22 findings — inherits Tier-2 SPA bundle; no client-side-jwt-none-evidence slug",
-      "hack-this-site-eta.vercel.app/api/auth/session: 17 findings — session API oracle reachable",
-      "pentesterlab.com/exercises/xss-and-mysql-file/: 5 findings incl reflected-xss-query-param",
-      "vwad.owasp.org/app/voice-goat/: 4 findings — OWASP VWAD directory bundle only"
-    ],
-    "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "HackThisSite auth/* pages inherit identical ~20-finding SPA bundle as /labs/* — need /api/auth/* live probes for JWT/session CWE recall",
-      "auth/jwt.html missing client-side-jwt-none-evidence despite JWT lab page — bundle fingerprint dominates",
-      "vwad.owasp.org/app/voice-goat/: directory landing only; VoiceGoat services need localhost:8000-8003 or hosted instance",
-      "HackThisSite Tier-2 lab pages inherit identical SPA bundle — per-lab CWE oracles need validate/* or auth API cross-probes"
-=======
       "focus": "Juice Shop social-feed secret bootstrap; HackThisSite validate/* live CWE oracles; Brokencrystals XPATH username param fix",
       "improvements_shipped_this_run": 3
     },
@@ -98,17 +64,20 @@
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
       "hack-this-site-eta.vercel.app/labs/sqli-error.html: vulnlab-validate live oracles 18→23 findings",
       "juice-shop social Bluesky/Mastodon feed bodies merged into secret-resend corpus (oracle path for Leaked API Key)",
-      "brokencrystals.com: xpathInjectionDisclosure uses username query param per OpenAPI spec"
+      "brokencrystals.com: xpathInjectionDisclosure uses username query param per OpenAPI spec",
+      "hack-this-site-eta.vercel.app/auth/jwt.html: 22 findings — inherits Tier-2 SPA bundle",
+      "hack-this-site-eta.vercel.app/api/auth/session: 17 findings — session API oracle reachable"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (Resend key not in current Bluesky/Mastodon feeds)",
       "playground.fabraix.com/challenges/data-exfil-001: weak bundle markers — path oracle only",
-      "HackThisSite Tier-2 lab pages inherit identical SPA bundle — per-lab CWE oracles partially addressed via validate/* live probes",
+      "HackThisSite auth/* pages inherit identical ~20-finding SPA bundle — need /api/auth/* live probes for JWT/session CWE recall",
+      "auth/jwt.html missing client-side-jwt-none-evidence despite JWT lab page — bundle fingerprint dominates",
+      "vwad.owasp.org/app/voice-goat/: directory landing only; VoiceGoat services need localhost:8000-8003 or hosted instance",
       "web-security-lab.vercel.app/learn/{jwt,idor,phishing,ddos,rbac} return 404 — docs list chapters not yet deployed",
       "challenge-0726.intigriti.io: nginx 403 blocks scanner UA from cloud",
       "brokencrystals.com XPATH endpoint returns 403 from cloud egress — param fix correct per spec"
->>>>>>> ad2b352 (engine: 3 discovery improvements from power-loop [2026-07-23 UTC])
     ]
   },
   "discovery_highlights": {
