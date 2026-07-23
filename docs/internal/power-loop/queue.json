@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T18:06:00.000Z",
+  "updated_at": "2026-07-23T19:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://labs.hackadvisor.io/challenges/sql-injection",
+      "source": "HackAdvisor Labs — per-challenge SQL injection bug-report CTF oracle (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io/challenges/xss",
+      "source": "HackAdvisor Labs — per-challenge XSS bug-report CTF oracle (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io/challenges/idor",
+      "source": "HackAdvisor Labs — per-challenge IDOR bug-report CTF oracle (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io/challenges/csrf",
+      "source": "HackAdvisor Labs — per-challenge CSRF bug-report CTF oracle (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://labs.hackadvisor.io/challenges/ssrf",
+      "source": "HackAdvisor Labs — per-challenge SSRF bug-report CTF oracle (web search)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-lab.vercel.app/learn/cookies-samesite",
       "source": "Web 安全实验室 — SameSite cookie attribute lesson chapter (web-security-lab.vercel.app)",
