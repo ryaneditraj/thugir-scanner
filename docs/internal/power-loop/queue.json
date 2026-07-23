@@ -1,5 +1,31 @@
 {
+  "updated_at": "2026-07-23T13:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-fauxbank.vercel.app/scanner",
+      "source": "alfredang/pentest FauxBank — simulated pentest scanner module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/instructor",
+      "source": "alfredang/pentest FauxBank — instructor dashboard / vuln toggles (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/report",
+      "source": "alfredang/pentest FauxBank — pentest report generator module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/support",
+      "source": "alfredang/pentest FauxBank — stored XSS in support tickets lesson #3 (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/transfer",
+      "source": "alfredang/pentest FauxBank — missing CSRF on transfers lesson #7 (GitHub README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/api/methods",
       "source": "dkyazzentwatwa/hack-this-site — HTTP method testing API lab (GitHub README)",
