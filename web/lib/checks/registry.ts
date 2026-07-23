@@ -24762,6 +24762,151 @@ const clientSideCmdChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- weaponsforge hacker-friendly-app Firebase misconfig demo (GitHub Pages) ----------
+const CLIENT_HACKER_FRIENDLY_FIREBASE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "hack-prone Firebase quotes app",
+    re: /Hack-Prone Quotes of the Day App|hack-prone app/i
+  },
+  {
+    label: "Firebase security flaws training",
+    re: /demonstrate common Firebase security flaws|Firebase security risks/i
+  },
+  {
+    label: "insecure Firebase security rules",
+    re: /insecure, hacker-friendly security rules|inviting and welcoming atmosphere for hackers/i
+  },
+  {
+    label: "XSS via HTML quote rendering",
+    re: /Cross-Site-Scripting \(XSS\) attacks|Display the quotes as "HTML"/i
+  },
+  {
+    label: "weaponsforge repository",
+    re: /weaponsforge\/hacker-friendly-app/i
+  }
+];
+
+const clientSideHackerFriendlyFirebaseEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (/weaponsforge\.github\.io\/hacker-friendly-app/i.test(pageUrl)) {
+    const readme = await ctx.probe.get(
+      "https://raw.githubusercontent.com/weaponsforge/hacker-friendly-app/main/README.md",
+      { maxBytes: 12_000 }
+    );
+    if (readme.status >= 200 && readme.status < 400 && readme.body.length > 200) {
+      corpus += `\n${readme.body}`;
+    }
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKER_FRIENDLY_FIREBASE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/weaponsforge|hacker-friendly-app|Firebase security flaws/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "weaponsforge/hacker-friendly-app documents intentionally insecure Firebase security rules and HTML quote rendering for XSS training"
+    }
+  };
+};
+
+// --- PentestLab vulnerability scanner training demo (pentest-lab.vercel.app) ----------
+const CLIENT_PENTEST_LAB_SCANNER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "PentestLab scanner branding",
+    re: /⚡ PentestLab|PentestLab[\s\S]{0,40}Web Vulnerability Scanner/i
+  },
+  {
+    label: "SQL Injection Payloads panel",
+    re: /SQL Injection Payloads|' OR '1'='1/i
+  },
+  {
+    label: "Simulated SQLi critical finding",
+    re: /type:'SQL Injection'[\s\S]{0,80}severity:'critical'|SQL Injection[\s\S]{0,40}severity:'critical'/i
+  },
+  {
+    label: "Simulated XSS high finding",
+    re: /type:'XSS'[\s\S]{0,60}severity:'high'|XSS[\s\S]{0,40}severity:'high'/i
+  },
+  {
+    label: "pentest-lab host",
+    re: /pentest-lab\.vercel\.app/i
+  }
+];
+
+const clientSidePentestLabScannerEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_PENTEST_LAB_SCANNER_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/PentestLab|pentest-lab\.vercel\.app/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "PentestLab publishes an inline vulnerability scanner demo with SQL injection payload catalog and simulated SQLi/XSS findings"
+    }
+  };
+};
+
+// --- CYBERSEC LAB Spanish OWASP training platform (cybersec-lab.vercel.app) -----------
+const CLIENT_CYBERSEC_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Web Hacking SQLi XSS module",
+    re: /Web Hacking[\s\S]{0,120}SQL Injection, XSS/i
+  },
+  {
+    label: "OWASP Top 10 web vulnerabilities",
+    re: /SQL Injection, XSS y vulnerabilidades del OWASP Top 10|vulnerabilidades del OWASP Top 10/i
+  },
+  {
+    label: "SQLi login bypass challenge",
+    re: /login_bypass[\s\S]{0,160}sqlAnswers|admin'--[\s\S]{0,40}THM\{sql_injection/i
+  },
+  {
+    label: "XSS input challenge module",
+    re: /xss_input[\s\S]{0,120}xssPatterns|XSS — Cross-Site Scripting/i
+  },
+  {
+    label: "THM CTF flag format",
+    re: /THM\{[a-z_]+\}/i
+  },
+  {
+    label: "cybersec-lab host",
+    re: /cybersec-lab\.vercel\.app/i
+  }
+];
+
+const clientSideCybersecLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CYBERSEC_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/cybersec-lab\.vercel\.app|Web Hacking|OWASP Top 10/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CYBERSEC LAB is a Spanish interactive OWASP training SPA with SQLi login-bypass, XSS, buffer overflow, and CTF challenge modules"
+    }
+  };
+};
+
 // --- HackerSec Academy pentest training platform (hackersec.academy) -----------------
 const CLIENT_HACKERSEC_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -28916,6 +29061,9 @@ export const RULES: Record<string, Rule> = {
   clientSidePygoatEvidence,
   clientSideDvnaEvidence,
   clientSideCmdChallengeEvidence,
+  clientSideHackerFriendlyFirebaseEvidence,
+  clientSidePentestLabScannerEvidence,
+  clientSideCybersecLabEvidence,
   clientSideHackersecAcademyEvidence,
   clientSideEchoctfEvidence,
   clientSideHacker101CtfEvidence,
