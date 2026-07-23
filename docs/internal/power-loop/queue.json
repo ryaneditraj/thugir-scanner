@@ -1,6 +1,36 @@
 {
   "discovery_urls": [
     {
+      "url": "https://xvwa.vercel.app/",
+      "source": "s4n7h0/xvwa — Xtreme Vulnerable Web Application PHP/MySQL OWASP lab (awesome-vuln-apps; never scanned)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/",
+      "source": "SecLab — modular SQLi/XSS/IDOR/CSRF training lab with per-vuln routes (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hackxor.net/",
+      "source": "hackxor — realistic web hacking game from real pentest bug reports (kaiiyer/awesome-vulnerable)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/",
+      "source": "Google Firing Range — scanner benchmark for XSS/reflected injection oracles (awesome-vulnerable)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://google-gruyere.appspot.com/",
+      "source": "Google Gruyere — Python web app security CTF with code-injection/SQLi/XSS challenges (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf.hacker101.com/ctf",
+      "source": "Hacker101 CTF — public web security capture-the-flag challenges (vavkamil/awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://hermes-codex.vercel.app/",
       "source": "Hermes Codex — AI security research hub with indirect prompt-injection case studies (Vercel OSS deploy, web search)",
       "auth": "public_demo"
@@ -1107,16 +1137,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/",
-      "source": "Google XSS Application Security Firing Range — public XSS benchmark (awesome-vulnerable-apps)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://google-gruyere.appspot.com/",
-      "source": "Google Gruyere codelab — intentionally vulnerable web app security training (Google Code Labs)",
-      "auth": "public_demo"
-    },
-    {
       "url": "http://rest.vulnweb.com/",
       "source": "Acunetix vulnweb REST API demo — classic injection/auth training site (awesome-vuln-apps)",
       "auth": "public_demo"
@@ -1124,11 +1144,6 @@
     {
       "url": "http://testaspnet.vulnweb.com/",
       "source": "Acunetix vulnweb ASP.NET demo — XSS/SQLi practice site (awesome-vuln-apps)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://hackxor.net/",
-      "source": "Hackxor — browser-based XSS/CSRF/auth challenge platform (web search)",
       "auth": "public_demo"
     },
     {
@@ -1184,11 +1199,6 @@
     {
       "url": "https://zerohealth.aliyu.dev/",
       "source": "aligorithm/Zero-Health — deliberately vulnerable health tech + AI/LLM OWASP lab (GitHub homepage)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://seclab.vercel.app/",
-      "source": "DaniSam-STU/security-lab — XSS/SQLi/CSRF/IDOR side-by-side Next.js training (GitHub homepage)",
       "auth": "oss_deploy"
     },
     {
@@ -2390,11 +2400,6 @@
       "url": "https://appsec-ci-pipeline.onrender.com/",
       "source": "gauthamram57/appsec-ci-pipeline — deliberately vulnerable Django app with stored XSS + SQLi (Render deploy)",
       "auth": "oss_deploy"
-    },
-    {
-      "url": "https://xvwa.vercel.app/",
-      "source": "s4n7h0/xvwa — Xtreme Vulnerable Web Application public Vercel deploy (awesome-vuln-apps)",
-      "auth": "public_demo"
     },
     {
       "url": "https://cors-lab.vercel.app/",
@@ -7940,5 +7945,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-23T01:13:00.000Z"
+  "updated_at": "2026-07-23T02:11:45.992Z"
 }
