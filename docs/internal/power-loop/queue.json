@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T16:15:00.000Z",
+  "updated_at": "2026-07-23T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/xss-reflected.html",
+      "source": "dkyazzentwatwa/hack-this-site — A03 reflected XSS client-side lab page (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/sqli-error.html",
+      "source": "dkyazzentwatwa/hack-this-site — A03 SQLi error-based client-side lab page (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/idor.html",
+      "source": "dkyazzentwatwa/hack-this-site — A01 IDOR client-side lab page (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vibe-eval.com/",
+      "source": "vibe-eval — vibe-coded app security anti-patterns catalog (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://jwtarsenal.com/",
+      "source": "JWT Arsenal — interactive JWT attack knowledge base and labs (web search)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/api/validate/cors",
       "source": "dkyazzentwatwa/hack-this-site — CORS misconfiguration validation API lab (GitHub README)",
