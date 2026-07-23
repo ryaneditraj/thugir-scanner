@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-23T21:07:00.000Z",
-=======
   "updated_at": "2026-07-23T21:10:00.000Z",
->>>>>>> 782d0ef (docs: log 3 discovery improvements — webchal1 SSRF, Fabraix challenges)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,7 +15,6 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 2211,
   "total_findings": 11932,
   "critical_findings": 38,
@@ -27,19 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1661,
   "discovery_findings": 9574,
-  "improvements_shipped": 995,
-  "last_run": "2026-07-23T21:07:00.000Z",
-=======
-  "total_sites_scanned": 2205,
-  "total_findings": 11828,
-  "critical_findings": 38,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1656,
-  "discovery_findings": 9479,
   "improvements_shipped": 1004,
   "last_run": "2026-07-23T21:10:00.000Z",
->>>>>>> 782d0ef (docs: log 3 discovery improvements — webchal1 SSRF, Fabraix challenges)
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -66,30 +50,6 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-<<<<<<< HEAD
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 101,
-      "skipped_48h": [
-        "https://webchal1.vercel.app/",
-        "https://playground.fabraix.com/challenges/01-guardrail-bypass",
-        "https://playground.fabraix.com/challenges/access-code-001",
-        "https://playground.fabraix.com/challenges/data-exfil-001",
-        "https://hack-this-site-eta.vercel.app/labs/cors.html"
-      ],
-      "dns_failures": [],
-      "focus": "HackThisSite Tier-2 labs (git-exposure, upload, input-validation, security-headers) + CMS WordPress training surface",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/labs/git-exposure.html: 20 findings via SPA bundle + client-side-hack-this-site-evidence",
-      "hack-this-site-eta.vercel.app/labs/upload.html: 20 findings incl file-upload lab markers",
-      "hack-this-site-eta.vercel.app/labs/input-validation.html: 20 findings incl INPUT-001 validation bypass evidence",
-      "hack-this-site-eta.vercel.app/labs/security-headers.html: 20 findings incl HEADER-001 misconfig evidence",
-      "hack-this-site-eta.vercel.app/cms/wordpress.html: 15 findings — CMS training surface with reduced SPA overlap",
-      "pentesterlab.com/exercises/autho_01/: 4 findings incl Web for Pentester auth oracle"
-=======
       "urls_added": 0,
       "urls_scanned": 3,
       "findings": 12,
@@ -103,21 +63,15 @@
       "webchal1.vercel.app: POST /api/notes/import + GET /api/notes SSRF oracle (4→6 findings incl ssrf-endpoint-fetch)",
       "playground.fabraix.com/challenges/*: per-challenge Fabraix slug (2→3 findings each)",
       "NoteVault /import crawl seeds for chal*.vercel.app CTF instances"
->>>>>>> 782d0ef (docs: log 3 discovery improvements — webchal1 SSRF, Fabraix challenges)
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-<<<<<<< HEAD
-      "HackThisSite Tier-2 lab pages inherit identical 20-finding SPA bundle — per-lab CWE oracles need validate/* cross-probes",
-      "hack-this-site-eta.vercel.app/api/validate/secret-scanner: 1 finding only — checkpoint may strip /api/validate path",
-      "web-security-practice-app.onrender.com: cold-start 1 finding — shallow crawl on Render free tier"
-=======
       "playground.fabraix.com/challenges/data-exfil-001: weak bundle markers — path oracle only",
       "Fabraix per-challenge routes need sink-tool live oracles beyond bundle evidence",
+      "HackThisSite Tier-2 lab pages inherit identical 20-finding SPA bundle — per-lab CWE oracles need validate/* cross-probes",
       "web-security-lab.vercel.app/learn/{jwt,idor,phishing,ddos,rbac} return 404 — docs list chapters not yet deployed",
       "challenge-0726.intigriti.io: nginx 403 blocks scanner UA from cloud"
->>>>>>> 782d0ef (docs: log 3 discovery improvements — webchal1 SSRF, Fabraix challenges)
     ]
   },
   "discovery_highlights": {
