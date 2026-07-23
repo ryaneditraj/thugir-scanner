@@ -10247,6 +10247,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-cmd-challenge-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "CMD Challenge shell puzzle platform disclosed",
+    description:
+      "CMD Challenge is a public one-line shell puzzle platform built on jquery.terminal for command-line security practice, with sibling variants at oops and 12days subdomains.",
+    impactOneline:
+      "Public CMD Challenge instances document interactive shell-security practice surfaces for unauthenticated command-line drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCmdChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CMD Challenge is intentional training — isolate shell puzzle instances from production networks.",
+      steps: [
+        "Run shell challenge platforms only on dedicated lab infrastructure.",
+        "Do not expose production servers to command-injection puzzle endpoints.",
+        "Rate-limit challenge submissions to prevent abuse."
+      ]
+    },
+    fixPrompt:
+      "We host CMD Challenge-style shell puzzles. Show how to isolate command-line practice platforms from production systems.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-hackersec-academy-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackerSec Academy pentest training platform disclosed",
+    description:
+      "HackerSec Academy is a Brazilian pentest training platform advertising 30+ CTF labs, HCP V2 certification, and modules covering SQLi, XSS, IDOR, API, cloud, and LLM security.",
+    impactOneline:
+      "Public HackerSec Academy marketing pages document hands-on pentest lab curricula and CTF practice surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackersecAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HackerSec Academy labs are intentional training — gate lab instances behind authentication.",
+      steps: [
+        "Require enrollment before exposing injectable lab endpoints.",
+        "Run CTF labs on isolated subdomains with no production data.",
+        "Do not copy lab vulnerability patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "We host HackerSec-style pentest training with CTF labs. Show how to gate lab routes behind authentication and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-echoctf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "echoCTF.RED hacking laboratory platform disclosed",
+    description:
+      "echoCTF.RED is a public hacking laboratory platform with CVE-based targets, innovative CTF challenges, and authenticated challenge instances.",
+    impactOneline:
+      "Public echoCTF.RED landing pages document hacking laboratory and CVE-target training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideEchoctfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "echoCTF is intentional training — require authentication before serving live challenge instances.",
+      steps: [
+        "Gate challenge instances and targets behind authenticated sessions.",
+        "Run laboratory VMs on isolated infrastructure with no production network access.",
+        "Monitor for unauthorized scanning of challenge endpoints."
+      ]
+    },
+    fixPrompt:
+      "We host echoCTF-style hacking laboratories. Show how to require authentication before exposing live challenge instances.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacker101-ctf-evidence",
     platform: "generic",
     category: "Broken access control",

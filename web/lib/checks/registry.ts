@@ -24718,6 +24718,142 @@ const clientSideDvnaEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- CMD Challenge shell puzzle platform (cmdchallenge.com family) -------------------
+const CLIENT_CMD_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CMD Challenge one-line shell puzzles",
+    re: /One-line shell challenges[\s\S]{0,80}commandline|cmdchallenge/i
+  },
+  {
+    label: "jquery.terminal challenge shell",
+    re: /jquery\.terminal|id=["']term-challenge["']|challenge-desc/i
+  },
+  {
+    label: "CMD Challenge sibling variants",
+    re: /oops\.cmdchallenge\.com|12days\.cmdchallenge\.com/i
+  },
+  {
+    label: "CMD Challenge Golang backend",
+    re: /Site built with[\s\S]{0,60}Golang|jarv\.org\/tags\/cmdchallenge/i
+  },
+  {
+    label: "CMD Challenge host",
+    re: /cmdchallenge\.com/i
+  }
+];
+
+const clientSideCmdChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CMD_CHALLENGE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/cmdchallenge\.com|One-line shell challenges/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "CMD Challenge is a public shell-command puzzle platform built on jquery.terminal for command-line security practice"
+    }
+  };
+};
+
+// --- HackerSec Academy pentest training platform (hackersec.academy) -----------------
+const CLIENT_HACKERSEC_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HackerSec Academy branding",
+    re: /HackerSec Academy|hackersec\.academy/i
+  },
+  {
+    label: "HCP practical pentest certification",
+    re: /HCP V2|HackerSec Certified Pentester|certifica[cç][aã]o HCP/i
+  },
+  {
+    label: "30+ CTF practice labs",
+    re: /\+30 laborat[oó]rios CTF|30\+ laborat[oó]rios CTF pr[aá]ticos/i
+  },
+  {
+    label: "Web pentest curriculum modules",
+    re: /SQL Injection, XSS, IDOR, SSRF|Pentest Web|Pentest de APIs/i
+  },
+  {
+    label: "LLM and cloud security modules",
+    re: /LLM Security|Cloud Security em AWS|ataques em modelos de IA/i
+  },
+  {
+    label: "AI course metadata oracle",
+    re: /ai-content-description|ai-course-info|ai-company-info/i
+  }
+];
+
+const clientSideHackersecAcademyEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKERSEC_ACADEMY_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/HackerSec Academy|hackersec\.academy/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "HackerSec Academy documents hands-on pentest training with 30+ CTF labs covering SQLi, XSS, IDOR, API, cloud, and LLM security"
+    }
+  };
+};
+
+// --- echoCTF.RED public hacking laboratories (echoctf.red) ---------------------------
+const CLIENT_ECHOCTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "echoCTF.RED branding",
+    re: /echoCTF\.RED|echoctf\.red/i
+  },
+  {
+    label: "Public hacking laboratories tagline",
+    re: /hacking laboratories|laboratories with targets/i
+  },
+  {
+    label: "CVE-based target training",
+    re: /identifying and exploiting CVE based targets|Train on identifying and exploiting CVE/i
+  },
+  {
+    label: "Innovative CTF challenges",
+    re: /Solve unique and innovative challenges|Challenges[\s\S]{0,40}Targets/i
+  },
+  {
+    label: "echoCTF signup/login platform",
+    re: /Sign up for an echoCTF\.RED account|Login to your echoCTF\.RED account/i
+  }
+];
+
+const clientSideEchoctfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ECHOCTF_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/echoCTF\.RED|echoctf\.red/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "echoCTF.RED is a public hacking laboratory platform with CVE-based targets and authenticated challenge instances"
+    }
+  };
+};
+
 // --- Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game) -----
 const CLIENT_HACKER101_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -28779,6 +28915,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,
   clientSideDvnaEvidence,
+  clientSideCmdChallengeEvidence,
+  clientSideHackersecAcademyEvidence,
+  clientSideEchoctfEvidence,
   clientSideHacker101CtfEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,

@@ -1157,6 +1157,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
   "clientSideDvnaEvidence",
+  "clientSideCmdChallengeEvidence",
+  "clientSideHackersecAcademyEvidence",
+  "clientSideEchoctfEvidence",
   "clientSideHacker101CtfEvidence",
   "clientSideSockettomeEvidence",
   "clientSideOwaspBricksEvidence",
@@ -4347,6 +4350,31 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** CMD Challenge shell puzzle platform (cmdchallenge.com / oops / 12days variants). */
+function extractCmdChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (!/cmdchallenge\.com|One-line shell challenges|jquery\.terminal/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const href of html.matchAll(
+    /href\s*=\s*["'](https?:\/\/(?:oops|12days|[\w-]+)\.cmdchallenge\.com\/?)["']/gi
+  )) {
+    try {
+      out.add(new URL(href[1]).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const host of ["https://oops.cmdchallenge.com/", "https://12days.cmdchallenge.com/"]) {
+    try {
+      const u = new URL(host);
+      if (u.origin !== pageOrigin) out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Hacker101 CTF (ctf.hacker101.com — HackerOne web security challenge game). */
 function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
   if (!/ctf\.hacker101\.com|Hacker101 CTF|learn to hack in a safe/i.test(html)) return [];
@@ -6790,6 +6818,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const the0xPwnLabXssSeeds = extractThe0xPwnLabXssSeeds(home.body, home.finalUrl);
   const povzaydXssLabsSeeds = extractPovzaydXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
+  const cmdChallengeSeeds = extractCmdChallengeSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const fvbGitbookSeeds = extractFvbGitbookSeeds(home.body, home.finalUrl);
   const damnVulnerableBankSeeds = extractDamnVulnerableBankSeeds(home.body, home.finalUrl);
@@ -7434,6 +7463,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...the0xPwnLabXssSeeds,
       ...povzaydXssLabsSeeds,
       ...hacker101CtfSeeds,
+      ...cmdChallengeSeeds,
       ...owaspBricksSeeds,
       ...fvbGitbookSeeds,
       ...damnVulnerableBankSeeds,
