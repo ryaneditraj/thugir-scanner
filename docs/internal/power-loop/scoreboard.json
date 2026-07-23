@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T19:02:01.138Z",
+  "updated_at": "2026-07-23T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2184,
-  "total_findings": 11651,
+  "total_sites_scanned": 2192,
+  "total_findings": 11717,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1646,
-  "discovery_findings": 9320,
+  "discovery_urls_added": 1651,
+  "discovery_findings": 9386,
   "improvements_shipped": 995,
-  "last_run": "2026-07-23T19:02:01.138Z",
+  "last_run": "2026-07-23T19:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
@@ -52,23 +52,23 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 71,
+      "findings": 66,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "VulnLab hands-on /labs/*.html per-lab oracles; vibe-eval.com AI security catalog; jwtarsenal.com JWT exploitation toolkit",
-      "improvements_shipped_this_run": 3
+      "focus": "HackAdvisor Labs per-challenge oracles (sql-injection/xss/idor/csrf/ssrf); vibe-eval.com + jwtarsenal.com rescan; VulnLab validate/cors API oracle",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, pages=6) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/labs/xss-reflected.html: 2 findings incl new client-side-vulnlab-hands-on-lab-evidence (was 18 via shared SPA bundle only)",
-      "vibe-eval.com: client-side-vibe-eval-evidence + existing CSRF/SSRF/API lab slugs (6 findings)",
-      "jwtarsenal.com: client-side-jwt-arsenal-evidence + dangerous-html-sinks + vibe-sitemap-sensitive-paths (4 findings)",
-      "hack-this-site-eta.vercel.app/labs/localstorage.html: 20 findings incl secret-stripe-live + idor-sequential-ids + dom-eval-xss"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, pages=6 probes=282) — no benchmark misses",
+      "labs.hackadvisor.io/challenges/*: 7 findings each incl new client-side-hackadvisor-lab-evidence + reflected-xss-query-param (identical SPA fingerprint across 5 per-challenge routes)",
+      "vibe-eval.com: 7 findings incl client-side-vibe-eval-evidence + CSRF/SSRF/API lab slugs",
+      "jwtarsenal.com: 5 findings incl client-side-jwt-arsenal-evidence + dangerous-html-sinks",
+      "hack-this-site-eta.vercel.app/api/validate/cors: 19 findings incl graphql-introspection-enabled + client-side-vulnlab-validate-api-evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "VulnLab Vercel Security Checkpoint intermittently blocks ThugirScanner UA — validate API probes need plain-browser retry",
+      "HackAdvisor per-challenge routes share identical 7-finding bundle — need dedicated challenge-body oracles for CWE-specific recall",
       "seclab.vercel.app per-lab routes return only misconfig markers — CWE-79/CWE-89 live demos need API route oracles"
     ]
   },
@@ -83,7 +83,7 @@
     "hack-this-site-eta.vercel.app/api/validate/localstorage": 19,
     "hack-this-site-eta.vercel.app/api/validate/git-exposure": 19,
     "hack-this-site-eta.vercel.app/labs/secret-scanner.html": 21,
-    "hack-this-site-eta.vercel.app/api/validate/cors": 17,
+    "hack-this-site-eta.vercel.app/api/validate/cors": 19,
     "hack-this-site-eta.vercel.app/api/validate/upload": 15,
     "hack-this-site-eta.vercel.app/api/methods": 20,
     "hack-this-site-eta.vercel.app/api/cors": 21,
@@ -95,14 +95,19 @@
     "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 2,
     "hack-this-site-eta.vercel.app/labs/sqli-error.html": 18,
     "hack-this-site-eta.vercel.app/labs/idor.html": 21,
-    "vibe-eval.com": 6,
-    "jwtarsenal.com": 4,
+    "vibe-eval.com": 7,
+    "jwtarsenal.com": 5,
     "web-security-lab.vercel.app/learn/cookies-samesite": 5,
     "seclab.vercel.app/xss": 3,
     "seclab.vercel.app/sqli": 3,
     "web-security-learning-labs.vercel.app/learn/modules": 4,
     "hack-this-site-eta.vercel.app/labs/localstorage.html": 20,
     "escape.tech/academy/broken-authentication": 3,
-    "escape.tech/academy/sql-injection": 2
+    "escape.tech/academy/sql-injection": 2,
+    "labs.hackadvisor.io/challenges/sql-injection": 7,
+    "labs.hackadvisor.io/challenges/xss": 7,
+    "labs.hackadvisor.io/challenges/idor": 7,
+    "labs.hackadvisor.io/challenges/csrf": 7,
+    "labs.hackadvisor.io/challenges/ssrf": 7
   }
 }
