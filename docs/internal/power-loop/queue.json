@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T19:05:00.000Z",
+  "updated_at": "2026-07-23T20:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://webchal1.vercel.app/",
+      "source": "CryptoNite CTF 2026 webchal1 — SSRF via notes import (blog.rei.my.id writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/01-guardrail-bypass",
+      "source": "fabraix/playground — Show HN AI agent red-team guardrail bypass challenge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/access-code-001",
+      "source": "fabraix/playground — agentic access-code reveal sink challenge (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/data-exfil-001",
+      "source": "fabraix/playground — agentic data-exfil via outbound request challenge (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/cors.html",
+      "source": "dkyazzentwatwa/hack-this-site — CORS misconfiguration hands-on lab page",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://labs.hackadvisor.io/challenges/sql-injection",
       "source": "HackAdvisor Labs — per-challenge SQL injection bug-report CTF oracle (web search)",
