@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://d9bkk.com/hackmeifyoucan/",
+      "source": "delta9world/Delta-9 — sandbox CTF with SQLi/IDOR/JWT/path-traversal levels (d9bkk.com redirect)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dashboard.d9bkk.com/hackmeifyoucan/",
+      "source": "delta9world/Delta-9 — Hack Me If You Can CTF dashboard mirror (10 OWASP-style levels)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthebox.com/hacker/hacking-labs",
+      "source": "Hack The Box — 1720+ virtual hacking labs hub (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://academy.hackthebox.com/course/preview/web-service--api-attacks",
+      "source": "HTB Academy — Web Service & API Attacks course preview (SOAP/XXE/SSRF/ReDoS labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://app.hackinghub.io/",
+      "source": "HackingHub — ethical web application hacking challenge platform (CTFchallenge.com family)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://challenge-0726.intigriti.io/",
       "source": "Intigriti July 2026 XSS challenge — monthly public security puzzle (intigriti.io challenge calendar)",
       "auth": "public_demo"
