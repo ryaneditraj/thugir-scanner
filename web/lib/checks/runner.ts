@@ -523,11 +523,20 @@ async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
   if (best) {
     // ctf.hacker101.com/ctf returns an empty 200 shell — fall back to homepage markers.
     try {
-      const bestHost = new URL(best.finalUrl || target.toString()).hostname;
-      if (best.body.length < 256 && /ctf\.hacker101\.com$/i.test(bestHost)) {
-        const homeUrl = new URL("/", best.finalUrl || target.toString()).toString();
-        const homeDoc = await fetchDoc(homeUrl, { timeoutMs: 15000, maxBytes: 600_000 });
-        if (homeDoc.body.length > best.body.length) return homeDoc;
+      const bestUrl = new URL(best.finalUrl || target.toString());
+      const bestHost = bestUrl.hostname;
+      if (
+        best.body.length < 256 &&
+        /^(?:www\.)?ctf\.hacker101\.com$/i.test(bestHost)
+      ) {
+        const homeCandidates = [
+          "https://ctf.hacker101.com/",
+          new URL("/", bestUrl.origin).toString()
+        ];
+        for (const homeUrl of homeCandidates) {
+          const homeDoc = await fetchDoc(homeUrl, { timeoutMs: 15000, maxBytes: 600_000 });
+          if (homeDoc.body.length > best.body.length) return homeDoc;
+        }
       }
     } catch {
       /* ignore */

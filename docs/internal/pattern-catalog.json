@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T02:21:10.674Z",
-  "total": 612,
-  "uniqueSlugs": 610,
+  "generatedAt": "2026-07-23T03:06:53.720Z",
+  "total": 614,
+  "uniqueSlugs": 612,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 594,
+    "generic": 596,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 540,
+    "deep": 542,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 41,
+    "Information disclosure": 42,
     "Security misconfiguration": 49,
     "Broken authentication": 44,
     "Injection": 125,
@@ -33,7 +33,7 @@
     "SSRF": 1,
     "Server-side request forgery": 8,
     "Sensitive data exposure": 7,
-    "AI security": 32,
+    "AI security": 33,
     "XSS": 1
   },
   "slugs": [
@@ -51,6 +51,7 @@
     "client-side-api-security-lab-evidence",
     "client-side-appsec-master-evidence",
     "client-side-appsec-master-lab-hub-evidence",
+    "client-side-arcanum-ai-sec-hub-evidence",
     "client-side-archon-api-security-curriculum-evidence",
     "client-side-archon-training-evidence",
     "client-side-artemiskit-evidence",
@@ -572,6 +573,7 @@
     "lovable-supabase-storage-public",
     "missing-security-headers",
     "notices-file-lfi-probe",
+    "oauth-oidc-metadata-exposed",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
     "pentest-forge-linked-lab-probe",
