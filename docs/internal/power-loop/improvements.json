@@ -6329,6 +6329,24 @@
       "slug": "juice-shop-ftp-apple-oracle-bootstrap",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: pass1 Heroku cold-start gap=sqli before retry; juiceShopBenchmarkOracleReady now accepts FTP package.json.bak + /rest/products/search?q=apple as sensitive_data gates; primary heroku benchmark 9 findings 6/6 after wake retry"
+    },
+    {
+      "source": "discovery:oauthlabs.com",
+      "slug": "secret-openai-tailwind-fp-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Tailwind mask/gradient utilities sk-image-linear-from-pos matched secret-openai; scanSecret filters linear|gradient|image|mask|from-|to- tokens and >2 hyphens; oauthlabs.com findings 5→3 (OpenAI FP + imprecise oauth-fetch slug removed); benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:oauthlabs.com",
+      "slug": "client-side-oauth-labs-playground-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta OAuth 2.0 Playground | OAuth Labs + PKCE parameters + DPoP parameters in index-CNmtwZNn.js; clientSideOauthLabsPlaygroundEvidence; oauthlabs.com gains dedicated OAuth Labs slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dsopas.github.io/MindAPI",
+      "slug": "client-side-mindapi-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: about page MindAPI + OWASP API Security Top 10 + Bringing order to API hacking chaos; extractMindApiSeeds crawls /about /play /references; dsopas.github.io/MindAPI findings 2→6; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
