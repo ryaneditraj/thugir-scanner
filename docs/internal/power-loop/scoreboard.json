@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T00:05:25.790Z",
+  "updated_at": "2026-07-23T00:11:47.271Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2019,
-  "total_findings": 10606,
+  "total_sites_scanned": 2027,
+  "total_findings": 10635,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1560,
-  "discovery_findings": 8544,
+  "discovery_urls_added": 1565,
+  "discovery_findings": 8573,
   "improvements_shipped": 959,
-  "last_run": "2026-07-23T00:05:25.790Z",
+  "last_run": "2026-07-23T00:11:47.271Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "Heroku cold-start: pass1 3 findings gap=sqli,auth_bypass,sensitive_data; wake retries merged to 8 findings pages=6 probes=279",
+      "note": "Stable 6/6 first-pass recall on shallow crawl (pages=1 probes=256); juice-shop-forgotten-backup-disclosure newly present",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,36 +52,32 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 33,
-      "skipped_48h": [
-        "https://shield-dark-pattern-demo.vercel.app/",
-        "https://ai-security-platform-iota.vercel.app/",
-        "https://server.vulnapp.id/mutillidae/",
-        "https://urban-vampi-staging.up.railway.app/",
-        "https://pwnshop.ctfsecurity.com/vulnerabilities",
-        "https://brokencrystals.com/api/partners/searchPartners",
-        "https://brokencrystals.com/api/partners/query"
-      ],
+      "findings": 29,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "VulnShop module oracles (login/products/orders/register) + vulnapp.id hub + BugBountyHunter challenge drain",
+      "focus": "OAuth Labs playground + MindAPI hub + vulnerable-web-site CSRF/XSS modules + queue drain (BugBountyHunter, VWAD WebGoat)",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 8 findings 6/6 recall after Heroku wake retry — unauthenticated-admin-endpoint + security-question-disclosure",
-      "vulnshop.vercel.app/login: 4 findings — NoSQL injection + broken-auth demo panel markers",
-      "vulnshop.vercel.app/products: 4 findings — stored XSS + file-upload path traversal evidence",
-      "server.vulnapp.id: 8 findings — Metasploitable2 hub links to DVWA/mutillidae/phpMyAdmin",
-      "www.bugbountyhunter.com/challenge?id=9: 3 findings — XSS challenge platform evidence"
+      "juice-shop.herokuapp.com: 8 findings 6/6 recall — juice-shop-forgotten-backup-disclosure + security-question-disclosure on first pass",
+      "oauthlabs.com: 5 findings — OAuth 2.0 PKCE/DPoP playground misconfig + client-side auth evidence",
+      "auth0.oauthlabs.com: 5 findings — exposed OAuth authorization server training endpoint",
+      "vulnerable-web-site.vercel.app/csrf: 3 findings — CSRF transfer-funds lab module markers",
+      "vulnerable-web-site.vercel.app/xss: 3 findings — stored XSS comments lab module markers"
     ],
     "learning_gaps": [
-      "juice-shop pass1 cold-start: only 3/6 categories before wake retry (sqli,auth_bypass,sensitive_data missed)",
-      "secret-resend slug still absent on juice-shop benchmark",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data via security-question-disclosure + forgotten-backup + vibe-unauthenticated-api-routes)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnshop sub-paths share landing-page crawl — module-specific oracles may need deeper route seeds",
-      "bugbountyhunter challenges: shallow crawl may miss embedded iframe/sandbox exploit surfaces"
+      "dsopas.github.io/MindAPI: 2 findings — API security reference hub, not interactive vuln surface",
+      "shallow crawl pages=1 on juice-shop — deep crawl may surface additional challenge oracles"
     ]
   },
   "discovery_highlights": {
+    "oauthlabs.com": 5,
+    "auth0.oauthlabs.com": 5,
+    "dsopas.github.io/MindAPI": 2,
+    "vulnerable-web-site.vercel.app/csrf": 3,
+    "vulnerable-web-site.vercel.app/xss": 3,
     "vulnshop.vercel.app/login": 4,
     "vulnshop.vercel.app/products": 4,
     "vulnshop.vercel.app/orders": 4,
