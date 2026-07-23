@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://oauthlabs.com/",
+      "source": "OAuth Labs — interactive OAuth 2.0 PKCE/DPoP playground with live Auth0 demo server (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://auth0.oauthlabs.com/",
+      "source": "OAuth Labs — deliberately exposed OAuth authorization server for token-exchange training (oauthlabs.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dsopas.github.io/MindAPI/",
+      "source": "dsopas/MindAPI — API security learning hub with GraphQL/REST/JWT attack references (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/csrf",
+      "source": "megmogmog1965/vulnerable-web-site — CSRF transfer-funds lab module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/xss",
+      "source": "megmogmog1965/vulnerable-web-site — stored XSS comments lab module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://vulnshop.vercel.app/login",
       "source": "yashasrnair/VulnShop — NoSQL injection login-bypass demo panel (GitHub README)",
       "auth": "oss_deploy"

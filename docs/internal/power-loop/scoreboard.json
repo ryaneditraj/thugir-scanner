@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-22T23:47:05.508Z",
+  "updated_at": "2026-07-23T00:05:25.790Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2018,
-  "total_findings": 10598,
+  "total_sites_scanned": 2019,
+  "total_findings": 10606,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1560,
   "discovery_findings": 8544,
-  "improvements_shipped": 956,
-  "last_run": "2026-07-22T23:47:05.508Z",
+  "improvements_shipped": 959,
+  "last_run": "2026-07-23T00:05:25.790Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -242,7 +242,6 @@
     "authlab.digi.ninja": 3,
     "defendtheweb.net": 2,
     "labs.hackxpert.com": 5,
-    "juice-shop.herokuapp.com": 8,
     "web-security-learning-labs.vercel.app": 4,
     "securebank-blog.vercel.app": 6,
     "hack-health-tutorial.vercel.app": 9,
@@ -347,8 +346,6 @@
     "koadt.github.io/oss-oopssec-store/roadmap": 6,
     "maestro-agentic-ai-security-demo-mon.netlify.app": 4,
     "reef-mcp-registry.vercel.app": 6,
-    "www.bugbountyhunter.com/challenge?id=9": 3,
-    "www.bugbountyhunter.com/challenge?id=10": 3,
     "www.bugbountyhunter.com/challenge?id=11": 3,
     "www.net-force.nl/challenge/level405/index.php": 3,
     "pentesterlab.com/exercises/sqli_02": 4,
