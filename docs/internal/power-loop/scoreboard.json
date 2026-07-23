@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T01:16:00.000Z",
+  "updated_at": "2026-07-23T01:16:43.336Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2036,
-  "total_findings": 10672,
+  "total_sites_scanned": 2037,
+  "total_findings": 10680,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1570,
   "discovery_findings": 8601,
-  "improvements_shipped": 959,
-  "last_run": "2026-07-23T01:15:45.571Z",
+  "improvements_shipped": 965,
+  "last_run": "2026-07-23T01:16:43.336Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -73,11 +73,6 @@
     ]
   },
   "discovery_highlights": {
-    "hermes-codex.vercel.app": 3,
-    "pentest-ground.com:81": 5,
-    "codeex-ai.vercel.app": 4,
-    "arcanum-sec.github.io/ai-sec-resources": 7,
-    "soham-ai.vercel.app": 4,
     "oauthlabs.com": 5,
     "auth0.oauthlabs.com": 5,
     "dsopas.github.io/MindAPI": 2,
@@ -444,6 +439,11 @@
     "openvaultbank.com/api/v1/admin": 5,
     "natas0.natas.labs.overthewire.org": 4,
     "the0x-pwn.github.io/lab-xss/lab-4": 4,
-    "the0x-pwn.github.io/lab-xss/lab-8": 4
+    "the0x-pwn.github.io/lab-xss/lab-8": 4,
+    "hermes-codex.vercel.app": 3,
+    "pentest-ground.com:81": 5,
+    "codeex-ai.vercel.app": 4,
+    "arcanum-sec.github.io/ai-sec-resources": 7,
+    "soham-ai.vercel.app": 4
   }
 }

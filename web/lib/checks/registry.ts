@@ -23267,6 +23267,8 @@ const CLIENT_OAUTH_FETCH_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideOauthFetchPlaygroundEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const isOauthFetchHost = /oauth-fetch\.oauthlabs\.com/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OAUTH_FETCH_PLAYGROUND_RES) {
     const m = ctx.combined.match(re);
@@ -23274,12 +23276,104 @@ const clientSideOauthFetchPlaygroundEvidence: Rule = async (ctx) => {
   }
   if (hits.length < 2) return NEGATIVE;
   if (!/oauth-fetch|oauthlabs/i.test(ctx.combined)) return NEGATIVE;
+  if (
+    !isOauthFetchHost &&
+    !/Playground\s*\|\s*oauth-fetch|oauth-fetch.*playground/i.test(ctx.combined)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
       note: "oauth-fetch playground documents OAuth2 protected-resource fetching with Bearer and DPoP token types"
+    }
+  };
+};
+
+// --- OAuth 2.0 Playground training hub (oauthlabs.com) --------------------------------
+const CLIENT_OAUTH_LABS_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "OAuth 2.0 Playground title",
+    re: /OAuth 2\.0 Playground\s*\|\s*OAuth Labs|OAuth Labs.*OAuth 2\.0 Playground/i
+  },
+  {
+    label: "access token and refresh token scenarios",
+    re: /obtaining access tokens|exchanging refresh tokens|calling protected APIs/i
+  },
+  {
+    label: "PKCE code verifier parameters",
+    re: /PKCE parameters|code_verifier|Proof Key for Code Exchange/i
+  },
+  {
+    label: "DPoP token binding playground",
+    re: /DPoP parameters|dpop_jkt|Demonstrating Proof-of-Possession \(DPoP\)/i
+  },
+  {
+    label: "oauthlabs branding",
+    re: /oauthlabs|auth0\.oauthlabs\.com/i
+  }
+];
+
+const clientSideOauthLabsPlaygroundEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OAUTH_LABS_PLAYGROUND_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/oauthlabs\.com|OAuth 2\.0 Playground/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OAuth Labs publishes an interactive OAuth 2.0 playground for PKCE, refresh-token, and DPoP training scenarios"
+    }
+  };
+};
+
+// --- MindAPI API security mindmap (dsopas.github.io/MindAPI) ---------------------------
+const CLIENT_MINDAPI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "MindAPI project title",
+    re: /MindAPI|Bringing order to API hacking chaos/i
+  },
+  {
+    label: "API security mindmap methodology",
+    re: /mindmap which combines years of experience in testing API security|API hacking chaos/i
+  },
+  {
+    label: "OWASP API Security Top 10 testing section",
+    re: /OWASP API Security Top 10|Testing \(Follows OWASP API Security Top 10/i
+  },
+  {
+    label: "Reconnaissance and testing sections",
+    re: /Reconnaissance[\s\S]{0,80}Testing|Play with it live/i
+  },
+  {
+    label: "dsopas MindAPI GitHub",
+    re: /dsopas\/MindAPI|github\.com\/dsopas\/MindAPI/i
+  }
+];
+
+const clientSideMindApiEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MINDAPI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/MindAPI|dsopas\.github\.io\/MindAPI/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "MindAPI is an API security mindmap hub covering reconnaissance and OWASP API Security Top 10 testing methodology"
     }
   };
 };
@@ -28306,6 +28400,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnGuideEvidence,
   clientSideBountybenchBenchmarkEvidence,
   clientSideOauthFetchPlaygroundEvidence,
+  clientSideOauthLabsPlaygroundEvidence,
+  clientSideMindApiEvidence,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,

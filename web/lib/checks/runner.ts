@@ -554,6 +554,12 @@ function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
           (m) =>
             !/WEBPACK|__WEBPACK|MODULE/i.test(m) && (m.match(/_/g) || []).length <= 1
         )
+      : pattern.slug === "secret-openai"
+        ? raw.filter(
+            (m) =>
+              !/linear|gradient|image|mask|from-|to-|opacity|blur|shadow/i.test(m) &&
+              (m.match(/-/g) || []).length <= 2
+          )
       : pattern.slug === "secret-aws-akid"
         ? raw.filter((m) => !/(.)\1{7,}/.test(m.slice(4)) && !/X{8,}/i.test(m))
         : [...raw];
@@ -806,6 +812,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnGuideEvidence",
   "clientSideBountybenchBenchmarkEvidence",
   "clientSideOauthFetchPlaygroundEvidence",
+  "clientSideOauthLabsPlaygroundEvidence",
+  "clientSideMindApiEvidence",
   "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
@@ -5061,6 +5069,29 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** dsopas/MindAPI API security mindmap hub (dsopas.github.io/MindAPI) — seed about + play pages. */
+function extractMindApiSeeds(html: string, pageUrl: string): string[] {
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  if (
+    !/dsopas\.github\.io$/i.test(host) &&
+    !/MindAPI|Bringing order to API hacking chaos|dsopas\/MindAPI/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/MindAPI/about/", "/MindAPI/play/", "/MindAPI/references/"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** AppSecMaster (appsecmaster.net) — seed XSS/SQLi category lab hub pages. */
 function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   if (!/AppSecMaster|appsecmaster\.net/i.test(html)) return [];
@@ -6658,6 +6689,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
+  const mindApiSeeds = extractMindApiSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
@@ -7291,6 +7323,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...istEduVulnPortalSeeds,
       ...vulnforgeSeeds,
       ...vulnshopSeeds,
+      ...mindApiSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
