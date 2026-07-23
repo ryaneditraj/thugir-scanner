@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T20:03:51.424Z",
-  "total": 638,
-  "uniqueSlugs": 636,
+  "generatedAt": "2026-07-23T21:05:52.397Z",
+  "total": 639,
+  "uniqueSlugs": 637,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 620,
+    "generic": 621,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 566,
+    "deep": 567,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "SSRF": 1,
     "Server-side request forgery": 8,
     "Sensitive data exposure": 7,
-    "AI security": 35,
+    "AI security": 36,
     "XSS": 1
   },
   "slugs": [
@@ -136,6 +136,7 @@
     "client-side-escape-academy-evidence",
     "client-side-eval-filter-bypass-lab-evidence",
     "client-side-exploit-education-evidence",
+    "client-side-fabraix-challenge-evidence",
     "client-side-fauxbank-lab-evidence",
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
