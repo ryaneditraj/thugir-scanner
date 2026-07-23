@@ -1283,6 +1283,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingXssiLessonEvidence",
   "clientSidePortswiggerAcademyEvidence",
   "clientSideHackinghubEvidence",
+  "clientSideHackinghubChallengeEvidence",
+  "clientSideFinbotDemoNamespaceEvidence",
   "clientSideUnsecurePwaEvidence",
   "clientSidePromptmapEvidence",
   "clientSideGoogleXssGameEvidence",
@@ -4393,6 +4395,13 @@ function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
     out.add("https://ctf.hacker101.com/");
     out.add("https://ctf.hacker101.com/about");
     out.add("https://ctf.hacker101.com/howtoplay");
+    for (const p of ["/start-here", "/videos", "/resources", "/discord"]) {
+      try {
+        out.add(new URL(p, pageUrl).toString());
+      } catch {
+        /* ignore */
+      }
+    }
   }
   for (const p of ["/about", "/howtoplay", "/auth/login", "/scoreboard", "/start-here", "/videos"]) {
     try {
@@ -4413,6 +4422,46 @@ function extractHacker101CtfSeeds(html: string, pageUrl: string): string[] {
     }
   }
   return [...out];
+}
+
+/** OWASP FinBot CTF — seed agentic demo namespaces and portal pages from marketing shell. */
+function extractFinbotCtfSeeds(html: string, pageUrl: string): string[] {
+  if (!/owasp-finbot-ctf\.org|OWASP FinBot|Juice Shop for Agentic AI/i.test(html)) return [];
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/portals", "/how-it-works", "/about", "/demo/cineflow/", "/docs"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** HackingHub — seed /hubs/* challenge pages from sitemap (Nuxt shell hides lab copy on homepage). */
+async function extractHackinghubHubSitemapSeeds(origin: string, probe: ProbeCache): Promise<string[]> {
+  if (!/app\.hackinghub\.io/i.test(origin)) return [];
+  const doc = await probe.get(`${origin}/sitemap.xml`, { maxBytes: 32_768 });
+  if (doc.status !== 200 || !doc.body.trim()) return [];
+  const urls: string[] = [];
+  const re = /<loc>([^<]+)<\/loc>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(doc.body)) && urls.length < 12) {
+    try {
+      const loc = m[1].trim();
+      const u = loc.startsWith("http") ? new URL(loc) : new URL(loc, origin);
+      if (u.origin !== origin) continue;
+      if (!/\/hubs\/[^/?#]+/i.test(u.pathname)) continue;
+      if (/\?tab=/i.test(u.search)) continue;
+      urls.push(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return urls;
 }
 
 /** OWASP EKS Goat mdBook (ekssecurity.netlify.app — cloud-native security masterclass). */
@@ -6673,6 +6722,9 @@ function prioritizeSecurityLabLinks(links: string[]): string[] {
     "ctf_platform",
     "events/",
     "cookiejar-lab/demo",
+    "/hubs/",
+    "finbot",
+    "/demo/cineflow",
     "lab-guide",
     "security-notes",
     "cookiejar-lab/docs",
@@ -6884,6 +6936,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const the0xPwnLabXssSeeds = extractThe0xPwnLabXssSeeds(home.body, home.finalUrl);
   const povzaydXssLabsSeeds = extractPovzaydXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
+  const finbotCtfSeeds = extractFinbotCtfSeeds(home.body, home.finalUrl);
+  const hackinghubHubSeeds = await extractHackinghubHubSitemapSeeds(origin, probe);
   const cmdChallengeSeeds = extractCmdChallengeSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const fvbGitbookSeeds = extractFvbGitbookSeeds(home.body, home.finalUrl);
@@ -7530,6 +7584,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...the0xPwnLabXssSeeds,
       ...povzaydXssLabsSeeds,
       ...hacker101CtfSeeds,
+      ...finbotCtfSeeds,
+      ...hackinghubHubSeeds,
       ...cmdChallengeSeeds,
       ...owaspBricksSeeds,
       ...fvbGitbookSeeds,
