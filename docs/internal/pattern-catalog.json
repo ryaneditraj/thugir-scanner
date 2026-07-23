@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T18:17:15.326Z",
-  "total": 636,
-  "uniqueSlugs": 634,
+  "generatedAt": "2026-07-23T19:11:01.991Z",
+  "total": 637,
+  "uniqueSlugs": 635,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 618,
+    "generic": 619,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 564,
+    "deep": 565,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 42,
     "Security misconfiguration": 52,
     "Broken authentication": 45,
-    "Injection": 131,
+    "Injection": 132,
     "Cross-site scripting": 108,
     "general": 18,
     "SSRF": 1,
@@ -613,6 +613,7 @@
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",
     "robots-sensitive-paths",
+    "seclab-nextjs-lab-api-probe",
     "secret-anthropic",
     "secret-aws-akid",
     "secret-github-fine",
