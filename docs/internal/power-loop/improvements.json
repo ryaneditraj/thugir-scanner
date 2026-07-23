@@ -6635,6 +6635,24 @@
       "slug": "client-side-vulnlab-hands-on-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /labs/idor.html data-lab-id=\"idor\" + GET /api/validate/idor returns labId JSON; clientSideVulnlabHandsOnLabEvidence cross-probes validate API + path oracle when Vercel checkpoint drops HTML; hack-this-site-eta.vercel.app/labs/idor.html findings 1→21; benchmark 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-hands-on-scanurl-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel checkpoint finalUrl drops /labs/idor.html path; clientSideVulnlabHandsOnLabEvidence now extracts labSlug from scanUrl + validate API oracle; hack-this-site-eta.vercel.app/labs/idor.html findings 1→21 on checkpoint; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:labs.hackadvisor.io",
+      "slug": "client-side-hackadvisor-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/sql-injection|xss|idor|csrf|ssrf routes + 100+ web security challenges catalog meta; clientSideHackAdvisorChallengeEvidence per-slug path oracle; labs.hackadvisor.io/challenges/sql-injection gains dedicated CWE slug (7→8 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "client-side-web-security-learning-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: <title>Web Security Learning Labs</title> on Next.js CSR shell; clientSideWebSecurityLearningLabsEvidence minHits 3→1 URL oracle; web-security-learning-labs.vercel.app/learn/modules findings 4→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [

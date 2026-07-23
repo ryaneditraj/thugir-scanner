@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T19:14:11.039Z",
+  "updated_at": "2026-07-23T20:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1651,
   "discovery_findings": 9386,
-  "improvements_shipped": 998,
-  "last_run": "2026-07-23T19:14:11.040Z",
+  "improvements_shipped": 1001,
+  "last_run": "2026-07-23T20:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
@@ -50,29 +50,25 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 66,
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "SecLab Next.js API probes + URL oracle; Web Security Lab SameSite chapter; VulnLab hands-on validate API cross-probe; HackAdvisor per-challenge oracles",
+      "focus": "VulnLab idor.html scanUrl checkpoint fallback; HackAdvisor per-challenge CWE path oracles; Web Security Learning Labs CSR URL oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "seclab.vercel.app/xss: client-side-seclab-playground-evidence via lab-route URL oracle (3→4 findings; live API probes ready for Next.js deploy)",
-      "seclab.vercel.app/sqli: client-side-seclab-playground-evidence (3→4 findings)",
-      "web-security-lab.vercel.app/learn/cookies-samesite: SameSite chapter markers + minHits=1 chapter oracle",
-      "hack-this-site-eta.vercel.app/labs/idor.html: validate API cross-probe + path oracle (1→21 findings when HTML reachable)",
-      "labs.hackadvisor.io/challenges/*: 7 findings each incl client-side-hackadvisor-lab-evidence",
-      "vibe-eval.com: 7 findings incl client-side-vibe-eval-evidence",
-      "jwtarsenal.com: 5 findings incl client-side-jwt-arsenal-evidence"
+      "hack-this-site-eta.vercel.app/labs/idor.html: scanUrl fallback restores hands-on lab evidence when Vercel checkpoint strips /labs/ path (1→21)",
+      "labs.hackadvisor.io/challenges/sql-injection: per-challenge CWE slug via client-side-hackadvisor-challenge-evidence (7→8)",
+      "web-security-learning-labs.vercel.app/learn/modules: minHits=1 URL oracle on CSR shell title (4→5)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
+      "challenge-0726.intigriti.io: nginx 403 blocks scanner UA from cloud",
       "seclab.vercel.app current Vercel deploy is Angular stub — seclabNextjsLabApiProbe awaits DaniSam-STU/security-lab Next.js redeploy",
-      "HackAdvisor per-challenge routes share identical 7-finding bundle — need dedicated challenge-body oracles for CWE-specific recall",
+      "shield-dark-pattern-demo.vercel.app: RiverMart markers live in Vite JS bundle — needs script fetch for evidence beyond title shell",
       "VulnLab Vercel Security Checkpoint intermittently blocks ThugirScanner UA on cold scans"
     ]
   },
@@ -105,14 +101,14 @@
     "seclab.vercel.app/xss": 4,
     "seclab.vercel.app/sqli": 4,
     "seclab.vercel.app": 3,
-    "web-security-learning-labs.vercel.app/learn/modules": 4,
+    "web-security-learning-labs.vercel.app/learn/modules": 5,
     "hack-this-site-eta.vercel.app/labs/localstorage.html": 20,
     "escape.tech/academy/broken-authentication": 3,
     "escape.tech/academy/sql-injection": 2,
-    "labs.hackadvisor.io/challenges/sql-injection": 7,
-    "labs.hackadvisor.io/challenges/xss": 7,
-    "labs.hackadvisor.io/challenges/idor": 7,
-    "labs.hackadvisor.io/challenges/csrf": 7,
-    "labs.hackadvisor.io/challenges/ssrf": 7
+    "labs.hackadvisor.io/challenges/sql-injection": 8,
+    "labs.hackadvisor.io/challenges/xss": 8,
+    "labs.hackadvisor.io/challenges/idor": 8,
+    "labs.hackadvisor.io/challenges/csrf": 8,
+    "labs.hackadvisor.io/challenges/ssrf": 8
   }
 }
