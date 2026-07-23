@@ -6563,6 +6563,24 @@
       "slug": "juice-shop-forgotten-backup-disclosure",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /ftp/package.json.bak%2500.md returns juice-shop package.json on Heroku cold-start after retry loop; juice-shop.herokuapp.com findings 8→9, recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-validate-api-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/validate/xss-reflected returns {\"labId\":\"xss-reflected\",\"hint\":\"...executable JavaScript...\"}; clientSideVulnlabValidateApiEvidence probes xss-reflected/localstorage/git-exposure/sqli-error/idor; hack-this-site-eta.vercel.app/api/validate/xss-reflected gains dedicated validate slug; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:oauthlabs.com",
+      "slug": "client-side-oauth-labs-playground-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: meta OAuth 2.0 Playground | OAuth Labs + obtaining access tokens; clientSideOauthLabsPlaygroundEvidence minHits=1 URL oracle for oauthlabs.com; oauthlabs.com findings 2→5 incl oauth-oidc-metadata-exposed; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dsopas.github.io/MindAPI",
+      "slug": "client-side-mindapi-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Bringing order to API hacking chaos + MindAPI RSS title; clientSideMindApiEvidence minHits=1 + extractMindApiHostFallbackSeeds /MindAPI/play; dsopas.github.io/MindAPI findings 2→6 pages 1→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11495,6 +11513,21 @@
       "source": "discovery:academy.hackthebox.com",
       "slug": "htb-academy-module-details-oracle",
       "shipped_at": "2026-07-23T13:19:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-validate-api-evidence",
+      "shipped_at": "2026-07-23T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:oauthlabs.com",
+      "slug": "oauth-labs-playground-url-oracle",
+      "shipped_at": "2026-07-23T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:dsopas.github.io/MindAPI",
+      "slug": "mindapi-host-fallback-crawl",
+      "shipped_at": "2026-07-23T16:15:00.000Z"
     }
   ]
 }
