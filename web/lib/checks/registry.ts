@@ -7987,6 +7987,14 @@ const CLIENT_JWT_NONE_RES: { label: string; re: RegExp }[] = [
   {
     label: "CTF JWT manipulation challenge with admin flag API",
     re: /Manipulate your JWT token[\s\S]{0,600}(?:\/api\/admin\/flag|<code>\/api\/admin\/flag<\/code>)/i
+  },
+  {
+    label: "VulnLab JWT alg=none algorithm confusion lab",
+    re: /JWT-002 Algorithm Confusion|Accepts alg=none/i
+  },
+  {
+    label: "VulnLab JWT decode API without signature validation",
+    re: /\/api\/jwt\/decode[\s\S]{0,240}No signature validation/i
   }
 ];
 
@@ -26346,6 +26354,104 @@ const vulnlabValidateXssLiveOracle: Rule = (ctx) =>
 const vulnlabValidateIdorLiveOracle: Rule = (ctx) =>
   probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[2]!);
 
+const VULNLAB_JWT_NONE_TOKEN = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJyb2xlIjoiYWRtaW4ifQ.";
+
+const vulnlabJwtDecodeLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/auth\/jwt\.html/i.test(urlHint) &&
+    !/\/api\/jwt\/decode/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const decodeUrl = new URL("/api/jwt/decode", ctx.origin).toString();
+  const doc = await ctx.probe.get(decodeUrl, {
+    method: "POST",
+    body: JSON.stringify({ token: VULNLAB_JWT_NONE_TOKEN }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"alg"\s*:\s*"none"/.test(doc.body) || !/No signature validation/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: decodeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnLab /api/jwt/decode accepts alg=none JWT without signature validation (warnings confirm bypass)"
+    }
+  };
+};
+
+const vulnlabAuthSessionLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/auth\/session\.html/i.test(urlHint) &&
+    !/\/api\/auth\/session/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const sessionUrl = new URL("/api/auth/session", ctx.origin).toString();
+  const doc = await ctx.probe.get(sessionUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"sessionId"\s*:\s*"SID-/.test(doc.body)) return NEGATIVE;
+  if (!/predictable|entropy.*low/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: sessionUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnLab /api/auth/session exposes predictable SID-* session IDs with low-entropy warning"
+    }
+  };
+};
+
+const vulnlabAuthLoginEnumerationLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/auth\/login\.html/i.test(urlHint) &&
+    !/\/api\/auth\/login/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const invalidUser = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ user: "thugir-no-such-user", pass: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512
+  });
+  const invalidPass = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ user: "admin", pass: "thugir-wrong-pass" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512
+  });
+  if (invalidUser.status < 200 || invalidUser.status >= 500) return NEGATIVE;
+  if (invalidPass.status < 200 || invalidPass.status >= 500) return NEGATIVE;
+  const userErr = /Invalid username/i.test(invalidUser.body);
+  const passErr = /Invalid password/i.test(invalidPass.body);
+  if (!userErr || !passErr) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: loginUrl,
+      invalidUser: invalidUser.body.trim().slice(0, 120),
+      invalidPassword: invalidPass.body.trim().slice(0, 120),
+      note: "VulnLab /api/auth/login returns distinct errors for invalid username vs invalid password — login enumeration oracle"
+    }
+  };
+};
+
 // --- VulnLab /api/* audit training APIs (hack-this-site-eta.vercel.app) -----------------
 const VULNLAB_AUDIT_API_PATHS = [
   "/api/methods",
@@ -30157,6 +30263,9 @@ export const RULES: Record<string, Rule> = {
   vulnlabValidateSqliLiveOracle,
   vulnlabValidateXssLiveOracle,
   vulnlabValidateIdorLiveOracle,
+  vulnlabJwtDecodeLiveOracle,
+  vulnlabAuthSessionLiveOracle,
+  vulnlabAuthLoginEnumerationLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,

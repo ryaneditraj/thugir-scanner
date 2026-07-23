@@ -9883,6 +9883,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-jwt-decode-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnLab JWT decode API accepts alg=none without validation",
+    description:
+      "POST /api/jwt/decode decodes alg=none JWT tokens and returns a warning that no signature validation was performed — confirming JWT algorithm confusion training oracle.",
+    impactOneline:
+      "Live JWT decode API confirms alg=none bypass oracle without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabJwtDecodeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg=none JWTs and enforce signature verification server-side.",
+      steps: [
+        "Allowlist permitted JWT algorithms and reject alg=none before parsing claims.",
+        "Gate /api/jwt/decode behind authenticated lab sessions.",
+        "Never decode attacker-supplied tokens without signature verification."
+      ]
+    },
+    fixPrompt:
+      "Our /api/jwt/decode accepts alg=none tokens without signature validation. Show secure JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-auth-session-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnLab session API exposes predictable session IDs",
+    description:
+      "GET /api/auth/session returns JSON with SID-* session IDs and notes that entropy is low and IDs are predictable.",
+    impactOneline:
+      "Live session API confirms weak session management oracle for auth lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabAuthSessionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random session IDs and rotate on login.",
+      steps: [
+        "Generate session IDs with CSPRNG (at least 128 bits of entropy).",
+        "Regenerate session IDs after authentication (prevent fixation).",
+        "Gate lab session APIs behind authenticated training sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/session exposes predictable SID-* session IDs. Show secure session ID generation and rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-auth-login-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnLab login API enables username enumeration",
+    description:
+      "POST /api/auth/login returns Invalid username for unknown users but Invalid password when the username exists — a live login enumeration oracle.",
+    impactOneline:
+      "Differential login error messages confirm username enumeration without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabAuthLoginEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return identical login errors for invalid username and password.",
+      steps: [
+        "Use a generic message like Invalid credentials for all failed logins.",
+        "Apply constant-time comparison to prevent timing side channels.",
+        "Rate-limit login attempts per IP and account."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login returns different errors for invalid username vs password. Show enumeration-safe login responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",
