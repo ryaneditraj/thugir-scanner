@@ -7411,6 +7411,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hackadvisor-challenge-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "HackAdvisor CWE-specific challenge route disclosed",
+    description:
+      "HackAdvisor /challenges/{slug} routes document per-topic browser labs (SQLi, XSS, IDOR, CSRF, SSRF) modeled on real bug reports.",
+    impactOneline:
+      "Public challenge routes expose CWE-specific training targets reusable for reconnaissance and exploit rehearsal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackAdvisorChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HackAdvisor challenge routes are intentional — isolate instances and require lab start.",
+      steps: [
+        "Gate challenge VMs behind authenticated lab sessions.",
+        "Do not mirror challenge vulnerability patterns in production.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host HackAdvisor-style per-topic challenge routes. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-agentic-ai-ctf-evidence",
     platform: "generic",
     category: "AI security",

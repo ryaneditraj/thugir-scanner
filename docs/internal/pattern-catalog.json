@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T19:13:49.425Z",
-  "total": 637,
-  "uniqueSlugs": 635,
+  "generatedAt": "2026-07-23T20:03:51.424Z",
+  "total": 638,
+  "uniqueSlugs": 636,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 619,
+    "generic": 620,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 565,
+    "deep": 566,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 164,
+    "Broken access control": 165,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -167,6 +167,7 @@
     "client-side-hack-health-vul-packages-evidence",
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
+    "client-side-hackadvisor-challenge-evidence",
     "client-side-hackadvisor-lab-evidence",
     "client-side-hacker-friendly-firebase-evidence",
     "client-side-hacker101-class-evidence",
