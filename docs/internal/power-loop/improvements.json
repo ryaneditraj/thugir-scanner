@@ -6491,6 +6491,24 @@
       "slug": "vulnerable-web-site-spa-route-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: README CSRF/XSS/clickjacking/SSRF lab catalog + middleware auth gate on /xss; extractVulnerableWebSiteSeeds + URL oracle on vulnerable-web-site.vercel.app host; vulnerable-web-site.vercel.app/xss findings 3 maintained with dedicated slug on login shell; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:escape.tech/academy",
+      "slug": "client-side-escape-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: graphql-security-academy + Combat SQL Injections + Implement Object-Level Authorization lesson markdown on escape.tech/academy; escape.tech/academy/sql-injection findings 1→2; benchmark 6/6 maintained (9 findings)"
+    },
+    {
+      "source": "discovery:d9bkk.com",
+      "slug": "client-side-delta9-hackmeifyoucan-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: robots.txt Disallow /hackmeifyoucan/the-back-office + D9CTFbot-PHRA + hackmeifyoucan path; d9bkk.com/hackmeifyoucan findings 2→3; dashboard.d9bkk.com/hackmeifyoucan 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dashboard.d9bkk.com",
+      "slug": "robots-subpath-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: robotsSensitivePaths now probes ${pathname}/robots.txt for subpath deploys; SENSITIVE_PATH_NEEDLES extended with /back-office and the-back-office; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11378,6 +11396,21 @@
       "source": "discovery:boudaoud20.github.io/xss-attack-lab",
       "slug": "dangerous-html-sinks-decodeURIComponent-writeup",
       "shipped_at": "2026-07-23T08:16:00.000Z"
+    },
+    {
+      "source": "discovery:escape.tech/academy",
+      "slug": "client-side-escape-academy-evidence",
+      "shipped_at": "2026-07-23T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:d9bkk.com",
+      "slug": "client-side-delta9-hackmeifyoucan-evidence",
+      "shipped_at": "2026-07-23T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:dashboard.d9bkk.com",
+      "slug": "robots-subpath-probe",
+      "shipped_at": "2026-07-23T11:10:00.000Z"
     }
   ]
 }
