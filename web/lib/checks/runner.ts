@@ -257,7 +257,8 @@ const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/products/search?q=warmup",
   "/rest/products/search?q=apple",
   "/rest/products/search?q=''))",
-  "/rest/user/security-question?email=admin@juice-sh.op"
+  "/rest/user/security-question?email=admin@juice-sh.op",
+  "/ftp/package.json.bak%2500.md"
 ];
 
 /** True when Juice Shop REST API responds (not Heroku Application Error stub). */
@@ -271,6 +272,7 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
       if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
       if (p.includes("security-question") && /"question"\s*:/i.test(doc.body)) return true;
+      if (p.includes("ftp") && /"name"\s*:\s*"juice-shop"/i.test(doc.body)) return true;
       if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
         return true;
       // Juice Shop SQLi oracle returns HTTP 500 with SQLITE_ERROR — still proves API is live.
@@ -303,6 +305,15 @@ async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> 
         if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return "admin";
         if (p.includes("security-question") && /"question"\s*:/i.test(doc.body))
           return "sensitive";
+        if (p.includes("ftp") && /"name"\s*:\s*"juice-shop"/i.test(doc.body)) return "sensitive";
+        if (
+          p.includes("apple") &&
+          doc.status >= 200 &&
+          doc.status < 300 &&
+          /"status"\s*:\s*"success"/i.test(doc.body) &&
+          /"data"\s*:\s*\[\s*\{/.test(doc.body)
+        )
+          return "sensitive";
         if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
           return "idor";
         if (p.includes("'))") && /SQLITE|syntax error|sequelize/i.test(doc.body)) return "sqli";
@@ -332,7 +343,8 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     "/rest/user/security-question?email=admin@juice-sh.op",
     "/rest/products/search?q=''))",
     "/rest/products/search?q=warmup",
-    "/rest/products/search?q=apple"
+    "/rest/products/search?q=apple",
+    "/ftp/package.json.bak%2500.md"
   ];
   const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
@@ -1064,6 +1076,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnforgeAcademyEvidence",
   "clientSideVulnforgeEvidence",
   "clientSideVulnshopEvidence",
+  "clientSideVulnshopModuleEvidence",
   "clientSideBuggybuyEvidence",
   "clientSideWebSecurityLearningLabsEvidence",
   "clientSideJwtlensEvidence",
@@ -5028,6 +5041,26 @@ function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** VulnShop pentest practice SPA (vulnshop.vercel.app) — seed per-route OWASP lab modules. */
+function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  if (!/vulnshop\.vercel\.app$/i.test(host) && !/VulnShop|vulnshop-production/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of ["/login", "/register", "/products", "/orders", "/admin"]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** AppSecMaster (appsecmaster.net) — seed XSS/SQLi category lab hub pages. */
 function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   if (!/AppSecMaster|appsecmaster\.net/i.test(html)) return [];
@@ -6624,6 +6657,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const appsecMasterLabSeeds = extractAppsecMasterLabSeeds(home.body, origin);
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
+  const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
@@ -7256,6 +7290,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...appsecMasterLabSeeds,
       ...istEduVulnPortalSeeds,
       ...vulnforgeSeeds,
+      ...vulnshopSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
