@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://escape.tech/academy/sql-injection",
+      "source": "Escape API Security Academy — interactive GraphQL SQL injection lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/broken-object-level-authorization",
+      "source": "Escape API Security Academy — GraphQL BOLA/IDOR hands-on lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/broken-authentication",
+      "source": "Escape API Security Academy — GraphQL mutation brute-force lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.tech/academy/json-injection",
+      "source": "Escape API Security Academy — JSON input validation / injection lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/owasp-skf-labs/",
+      "source": "OWASP VWAD — SKF Docker lab examples catalog with online demo links (securityknowledgeframework.org)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://d9bkk.com/hackmeifyoucan/",
       "source": "delta9world/Delta-9 — sandbox CTF with SQLi/IDOR/JWT/path-traversal levels (d9bkk.com redirect)",
       "auth": "public_demo"
