@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T04:10:33.021Z",
+  "updated_at": "2026-07-23T05:07:20.556Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2064,
-  "total_findings": 10786,
+  "total_sites_scanned": 2073,
+  "total_findings": 10826,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1581,
-  "discovery_findings": 8662,
+  "discovery_urls_added": 1586,
+  "discovery_findings": 8693,
   "improvements_shipped": 968,
-  "last_run": "2026-07-23T04:10:33.021Z",
+  "last_run": "2026-07-23T05:07:20.556Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 8,
+      "primary_findings": 9,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "6/6 recall maintained (8 findings, pages=1 probes=258); no benchmark misses",
+      "note": "6/6 recall maintained (9 findings, pages=6 probes=282); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,31 +52,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 29,
+      "findings": 31,
       "skipped_48h": [
-        "https://vwad.owasp.org/app/pygoat/",
-        "https://vwad.owasp.org/app/damn-vulnerable-node-application-dvna/",
-        "https://vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna/",
-        "https://vwad.owasp.org/app/peruggia/",
-        "https://vwad.owasp.org/app/hackxor/"
+        "https://echoctf.red/",
+        "https://hackersec.academy/",
+        "https://cmdchallenge.com/",
+        "https://12days.cmdchallenge.com/",
+        "https://oops.cmdchallenge.com/"
       ],
       "dns_failures": [],
-      "focus": "echoCTF.RED + HACKSEC Academy + CMD Challenge family; queue drain hit VWAD WebGoat, Wizer CTF, RedTiger level9",
+      "focus": "CYBERSEC LAB + PentestLab + XSS writeup oracle + SasanLabs DOM XSS + Hacker101 CTF; queue drain hit BugBountyHunter ch6/ch7 + chal7",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 recall (8 findings) — juice-shop-forgotten-backup-disclosure present; no benchmark misses",
-      "echoctf.red: 4 findings — reflected-xss-query-param + postmessage-dom-xss-evidence on CTF platform landing",
-      "hackersec.academy: 4 findings — client-side-api-security-lab-evidence + exposed-source-maps (capturetheflag.com.br redirect)",
-      "vwad.owasp.org/app/webgoat: 6 findings — secret-twilio + client-side-webgoat-evidence on VWAD catalog",
-      "redtiger.labs.overthewire.org/level9.php: 5 findings — redtiger-command-injection-evidence + classic SQLi login oracles"
+      "juice-shop.herokuapp.com: benchmark 6/6 recall (9 findings) — juice-shop-forgotten-backup-disclosure + security-question-disclosure present; no benchmark misses",
+      "cybersec-lab.vercel.app: 5 findings — secret-private-key (critical) + client-side-sql-evidence on Spanish OWASP training platform",
+      "hacker101.com: 5 findings — exposed-source-maps + postmessage-dom-xss-evidence + sitemap sensitive paths",
+      "www.vulnerableapp.com: 3 findings — client-side-vulnerableapp-dom-xss-evidence on SasanLabs public DOM XSS demo",
+      "chal7.vercel.app: 6 findings — sql-error-disclosure + client-side-wizer-ctf-evidence (Wizer CTF challenge)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "cmdchallenge.com family: shallow terminal UI — postmessage-dom-xss-evidence only; no command-injection oracle from static shell",
-      "echoctf.red: challenge instances require authenticated session — landing XSS markers only",
-      "hackersec.academy: lab routes behind login — metadata oracles from marketing bundle"
+      "pentest-lab.vercel.app: shallow scanner UI — misconfig/XSS bundle markers only; no live SQLi oracle from landing",
+      "boudaoud20.github.io/xss-attack-lab: static writeup page — client-side-security-writeup-evidence only; live PHP lab not hosted",
+      "hacker101.com: CTF challenge instances require authenticated session — landing markers + source maps only"
     ]
   },
   "discovery_highlights": {
@@ -135,6 +135,14 @@
     "oops.cmdchallenge.com": 2,
     "vwad.owasp.org/app/webgoat": 6,
     "wizer-ctf.com": 4,
-    "redtiger.labs.overthewire.org/level9.php": 5
+    "redtiger.labs.overthewire.org/level9.php": 5,
+    "cybersec-lab.vercel.app": 5,
+    "pentest-lab.vercel.app": 3,
+    "boudaoud20.github.io/xss-attack-lab": 3,
+    "www.vulnerableapp.com": 3,
+    "hacker101.com": 5,
+    "www.bugbountyhunter.com/challenge?id=6": 3,
+    "www.bugbountyhunter.com/challenge?id=7": 3,
+    "chal7.vercel.app": 6
   }
 }
