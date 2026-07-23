@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T10:19:09.473Z",
+  "updated_at": "2026-07-23T11:07:06.002Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2101,
-  "total_findings": 10946,
+  "total_sites_scanned": 2110,
+  "total_findings": 10975,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1601,
-  "discovery_findings": 8786,
+  "discovery_urls_added": 1606,
+  "discovery_findings": 8806,
   "improvements_shipped": 977,
-  "last_run": "2026-07-23T10:19:09.473Z",
+  "last_run": "2026-07-23T11:07:06.002Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "11",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku 503 degraded — pass1 gap=xss,sensitive_data; staging fallback restored 6/6",
+      "note": "Primary Heroku healthy — first-pass 6/6 recall (pages=6 probes=282; no fallback needed)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -44,13 +44,7 @@
             "auth_bypass",
             "sensitive_data",
             "misconfig"
-          ],
-          "primary_pass1_gap": [
-            "xss",
-            "sensitive_data"
-          ],
-          "primary_pass1_findings": 4,
-          "primary_pass3_findings": 1
+          ]
         }
       }
     },
@@ -58,21 +52,20 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 17,
+      "findings": 20,
       "skipped_48h": [],
-      "focus": "Escape API Security Academy GraphQL lessons + OWASP VWAD SKF labs catalog",
+      "focus": "Escape API Security Academy remaining GraphQL lessons + CVE-2025 middleware demo",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: primary Heroku 503 — pass1 4/6 gap=xss,sensitive_data; staging fallback 9 findings 6/6",
-      "escape.tech/academy/broken-authentication: dangerous-html-sinks in WebContainer lesson UI (2 findings)",
-      "vwad.owasp.org/app/owasp-skf-labs: client-side-skf-lab-evidence + VWAD catalog markers (5 findings)",
-      "dashboard.d9bkk.com/hackmeifyoucan: 6-page crawl vibe-weak-csp (1 finding)",
-      "www.hackthebox.com/hacker/hacking-labs: HTB + Hacking-Lab platform evidence (4 findings)"
+      "juice-shop.herokuapp.com: primary Heroku healthy — 9 findings 6/6 recall first pass (pages=6 probes=282)",
+      "escape.tech/academy/cors: client-side-csrf-evidence in GraphQL CORS lesson (2 findings)",
+      "middleware-vulnerability-cve-2025.vercel.app: client-side-nextjs-middleware-cve-evidence critical (3 findings)",
+      "academy.hackthebox.com/course/preview/web-service--api-attacks: postmessage-dom-xss + api-security-lab evidence (5 findings)",
+      "www.vulnerableapp.com: dangerous-html-sinks + DOM XSS demo evidence (3 findings)"
     ],
     "learning_gaps": [
-      "juice-shop.herokuapp.com: Heroku 503 cold-start misses xss+sensitive_data on shallow passes — staging oracle required",
-      "escape.tech/academy/*: WebContainer lessons shallow — mostly misconfig unless lesson bundle exposes sinks",
+      "escape.tech/academy/*: WebContainer lessons still shallow — mostly misconfig unless lesson bundle exposes sinks (cors lesson hit csrf evidence)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)"
     ]
@@ -125,6 +118,11 @@
     "escape.tech/academy/broken-object-level-authorization": 1,
     "escape.tech/academy/broken-authentication": 2,
     "escape.tech/academy/json-injection": 1,
-    "vwad.owasp.org/app/owasp-skf-labs": 5
+    "vwad.owasp.org/app/owasp-skf-labs": 5,
+    "escape.tech/academy/disable-debug-mode": 1,
+    "escape.tech/academy/unrestricted-resource-consumption": 2,
+    "escape.tech/academy/broken-object-property-level-authorization": 1,
+    "escape.tech/academy/cors": 2,
+    "middleware-vulnerability-cve-2025.vercel.app": 3
   }
 }
