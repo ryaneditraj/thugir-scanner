@@ -9571,6 +9571,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oauth-oidc-metadata-exposed",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "OAuth OpenID Connect discovery metadata exposed",
+    description:
+      "The authorization server publishes a live /.well-known/openid-configuration document listing token, authorization, and optional dynamic client registration endpoints.",
+    impactOneline:
+      "Public OIDC discovery on training OAuth servers helps attackers enumerate token and registration endpoints for OAuth abuse drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oauthOidcMetadataExposed" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict OIDC discovery on production authorization servers; training labs may intentionally expose metadata.",
+      steps: [
+        "Disable dynamic client registration on production OAuth authorization servers.",
+        "Require authentication before exposing registration_endpoint.",
+        "Monitor token_endpoint abuse and enforce strict redirect URI validation."
+      ]
+    },
+    fixPrompt:
+      "We expose auth0.oauthlabs.com OIDC discovery for OAuth training. Show how to gate registration_endpoint and monitor token_endpoint abuse in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-arcanum-ai-sec-hub-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Arcanum AI security resource hub disclosed",
+    description:
+      "Arcanum AI Security Resource Hub catalogs prompt-injection labs, CTFs, and red-team tooling with outbound links to live targets like Gandalf, SpyLab, and Doublespeak.",
+    impactOneline:
+      "Public AI security link directories expose curated prompt-injection lab URLs useful for red-team reconnaissance and scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideArcanumAiSecHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Resource hubs are intentional directories — isolate lab instances from production AI systems.",
+      steps: [
+        "Run prompt-injection labs on dedicated infrastructure with no production data.",
+        "Gate outbound lab links behind authentication when hosting internal resource hubs.",
+        "Monitor lab egress for abuse when exposing public CTF catalogs."
+      ]
+    },
+    fixPrompt:
+      "We host an Arcanum-style AI security resource hub. Show how to isolate linked prompt-injection labs from production AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-mindapi-evidence",
     platform: "generic",
     category: "Broken access control",

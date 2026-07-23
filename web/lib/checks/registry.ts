@@ -23336,6 +23336,84 @@ const clientSideOauthLabsPlaygroundEvidence: Rule = async (ctx) => {
   };
 };
 
+const oauthOidcMetadataExposed: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  const isTrainingAs =
+    /^auth0\.oauthlabs\.com$/i.test(host) ||
+    (/oauthlabs\.com$/i.test(host) && /oauthlabs|OAuth 2\.0 Playground/i.test(ctx.combined));
+  if (!isTrainingAs) return NEGATIVE;
+
+  const probeHost = /^auth0\.oauthlabs\.com$/i.test(host) ? host : "auth0.oauthlabs.com";
+  const url = `https://${probeHost}/.well-known/openid-configuration`;
+  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"issuer"\s*:\s*"https?:\/\//.test(doc.body)) return NEGATIVE;
+  if (!/"token_endpoint"\s*:/.test(doc.body) || !/"authorization_endpoint"\s*:/.test(doc.body)) {
+    return NEGATIVE;
+  }
+  const hasRegistration = /"registration_endpoint"\s*:/.test(doc.body);
+  return {
+    fired: true,
+    confidence: hasRegistration ? 0.91 : 0.88,
+    evidence: {
+      url,
+      status: doc.status,
+      sample: doc.body.slice(0, 220),
+      note: "OAuth authorization server exposes OpenID Connect discovery metadata with live token and authorization endpoints"
+    }
+  };
+};
+
+// --- Arcanum AI Security Resource Hub (arcanum-sec.github.io/ai-sec-resources) ---------
+const CLIENT_ARCANUM_AI_SEC_HUB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Arcanum AI security resource hub tagline",
+    re: /Labs, CTFs, competitions, bounties.*AI red teaming and prompt-injection testing/i
+  },
+  {
+    label: "Curated by arcanum-sec.com",
+    re: /Curated by[\s\S]{0,80}arcanum-sec\.com/i
+  },
+  {
+    label: "Lakera Gandalf prompt-injection lab link",
+    re: /gandalf\.lakera\.ai/i
+  },
+  {
+    label: "SpyLab AI CTF link",
+    re: /ctf\.spylab\.ai/i
+  },
+  {
+    label: "Doublespeak prompt-injection chat lab",
+    re: /doublespeak\.chat/i
+  }
+];
+
+const clientSideArcanumAiSecHubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ARCANUM_AI_SEC_HUB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/arcanum-sec\.github\.io\/ai-sec-resources|arcanum-sec\.com/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Arcanum AI Security Resource Hub catalogs prompt-injection labs, CTFs, and red-team tooling with outbound live lab URLs"
+    }
+  };
+};
+
 // --- MindAPI API security mindmap (dsopas.github.io/MindAPI) ---------------------------
 const CLIENT_MINDAPI_RES: { label: string; re: RegExp }[] = [
   {
@@ -28543,6 +28621,8 @@ export const RULES: Record<string, Rule> = {
   clientSideBountybenchBenchmarkEvidence,
   clientSideOauthFetchPlaygroundEvidence,
   clientSideOauthLabsPlaygroundEvidence,
+  oauthOidcMetadataExposed,
+  clientSideArcanumAiSecHubEvidence,
   clientSideMindApiEvidence,
   clientSideHermesCodexEvidence,
   clientSidePentestGroundGuardianLeaksEvidence,
