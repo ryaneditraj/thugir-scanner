@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T21:01:23.133Z",
+  "updated_at": "2026-07-23T21:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2203,
-  "total_findings": 11831,
+  "total_sites_scanned": 2211,
+  "total_findings": 11932,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1656,
-  "discovery_findings": 9473,
+  "discovery_urls_added": 1661,
+  "discovery_findings": 9574,
   "improvements_shipped": 995,
-  "last_run": "2026-07-23T21:01:23.133Z",
+  "last_run": "2026-07-23T21:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
@@ -52,28 +52,33 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 87,
-      "skipped_48h": [],
+      "findings": 101,
+      "skipped_48h": [
+        "https://webchal1.vercel.app/",
+        "https://playground.fabraix.com/challenges/01-guardrail-bypass",
+        "https://playground.fabraix.com/challenges/access-code-001",
+        "https://playground.fabraix.com/challenges/data-exfil-001",
+        "https://hack-this-site-eta.vercel.app/labs/cors.html"
+      ],
       "dns_failures": [],
-      "focus": "CryptoNite SSRF webchal1; Fabraix Show HN agentic red-team challenges; HackThisSite CORS lab + validate API cross-probe",
-      "improvements_shipped_this_run": 3
+      "focus": "HackThisSite Tier-2 labs (git-exposure, upload, input-validation, security-headers) + CMS WordPress training surface",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "webchal1.vercel.app: 4 findings incl client-side-wizer-ctf-evidence + dangerous-html-sinks (SSRF lab surface)",
-      "playground.fabraix.com/challenges/*: 2 findings each incl client-side-prompt-injection-evidence",
-      "hack-this-site-eta.vercel.app/labs/cors.html: 20 findings via SPA bundle inheritance",
-      "hack-this-site-eta.vercel.app/api/validate/upload: 19 findings incl upload/oracle markers",
-      "hack-this-site-eta.vercel.app/labs/idor.html: scanUrl fallback restores hands-on lab evidence when Vercel checkpoint strips /labs/ path (1→21)",
-      "labs.hackadvisor.io/challenges/sql-injection: per-challenge CWE slug via client-side-hackadvisor-challenge-evidence (7→8)"
+      "hack-this-site-eta.vercel.app/labs/git-exposure.html: 20 findings via SPA bundle + client-side-hack-this-site-evidence",
+      "hack-this-site-eta.vercel.app/labs/upload.html: 20 findings incl file-upload lab markers",
+      "hack-this-site-eta.vercel.app/labs/input-validation.html: 20 findings incl INPUT-001 validation bypass evidence",
+      "hack-this-site-eta.vercel.app/labs/security-headers.html: 20 findings incl HEADER-001 misconfig evidence",
+      "hack-this-site-eta.vercel.app/cms/wordpress.html: 15 findings — CMS training surface with reduced SPA overlap",
+      "pentesterlab.com/exercises/autho_01/: 4 findings incl Web for Pentester auth oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "webchal1.vercel.app: SSRF via /api/notes/import not yet an active oracle — only bundle evidence",
-      "Fabraix per-challenge routes share identical 2-finding prompt-injection bundle — need sink-tool oracles",
-      "web-security-lab.vercel.app/learn/{jwt,idor,phishing,ddos,rbac} return 404 — docs list chapters not yet deployed",
-      "challenge-0726.intigriti.io: nginx 403 blocks scanner UA from cloud"
+      "HackThisSite Tier-2 lab pages inherit identical 20-finding SPA bundle — per-lab CWE oracles need validate/* cross-probes",
+      "hack-this-site-eta.vercel.app/api/validate/secret-scanner: 1 finding only — checkpoint may strip /api/validate path",
+      "web-security-practice-app.onrender.com: cold-start 1 finding — shallow crawl on Render free tier"
     ]
   },
   "discovery_highlights": {
@@ -118,6 +123,12 @@
     "labs.hackadvisor.io/challenges/xss": 8,
     "labs.hackadvisor.io/challenges/idor": 8,
     "labs.hackadvisor.io/challenges/csrf": 8,
-    "labs.hackadvisor.io/challenges/ssrf": 8
+    "labs.hackadvisor.io/challenges/ssrf": 8,
+    "hack-this-site-eta.vercel.app/labs/git-exposure.html": 20,
+    "hack-this-site-eta.vercel.app/labs/upload.html": 20,
+    "hack-this-site-eta.vercel.app/labs/input-validation.html": 20,
+    "hack-this-site-eta.vercel.app/labs/security-headers.html": 20,
+    "hack-this-site-eta.vercel.app/cms/wordpress.html": 15,
+    "pentesterlab.com/exercises/autho_01": 4
   }
 }
