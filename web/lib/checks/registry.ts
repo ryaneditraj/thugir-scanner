@@ -680,20 +680,33 @@ const reflectedXss: Rule = async (ctx) => {
 
 // --- robots.txt discloses sensitive paths -------------------------------------
 const robotsSensitivePaths: Rule = async (ctx) => {
-  const doc = await ctx.probe.get(`${ctx.origin}/robots.txt`, { maxBytes: 4096 });
-  if (doc.status !== 200 || !doc.body.trim()) return NEGATIVE;
-  const body = doc.body.toLowerCase();
-  const disclosed = SENSITIVE_PATH_NEEDLES.filter((p) => body.includes(p));
-  if (disclosed.length === 0) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.8,
-    evidence: {
-      url: doc.finalUrl,
-      disclosedPaths: disclosed.slice(0, 8),
-      snippet: doc.body.slice(0, 280).trim()
+  const robotsUrls = [`${ctx.origin}/robots.txt`];
+  try {
+    const scanPath = new URL(ctx.scanUrl || ctx.home.finalUrl || ctx.origin).pathname;
+    if (scanPath && scanPath !== "/") {
+      const sub = scanPath.replace(/\/+$/, "");
+      if (sub) robotsUrls.push(`${ctx.origin}${sub}/robots.txt`);
     }
-  };
+  } catch {
+    /* ignore malformed scan URL */
+  }
+  for (const robotsUrl of [...new Set(robotsUrls)]) {
+    const doc = await ctx.probe.get(robotsUrl, { maxBytes: 4096 });
+    if (doc.status !== 200 || !doc.body.trim()) continue;
+    const body = doc.body.toLowerCase();
+    const disclosed = SENSITIVE_PATH_NEEDLES.filter((p) => body.includes(p));
+    if (disclosed.length === 0) continue;
+    return {
+      fired: true,
+      confidence: 0.8,
+      evidence: {
+        url: doc.finalUrl,
+        disclosedPaths: disclosed.slice(0, 8),
+        snippet: doc.body.slice(0, 280).trim()
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 // --- server / framework version disclosure ----------------------------------
@@ -24991,6 +25004,109 @@ const clientSideCybersecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Escape API Security Academy (escape.tech/academy) ------------------------------
+const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "API Security Academy branding",
+    re: /API Security Academy|Escape_academy_logo/i
+  },
+  {
+    label: "GraphQL security academy repo",
+    re: /graphql-security-academy|Escape-Technologies\/graphql-security-academy/i
+  },
+  {
+    label: "GraphQL SQLi lesson",
+    re: /Combat SQL Injections|SQL injection[\s\S]{0,80}GraphQL server/i
+  },
+  {
+    label: "GraphQL BOLA lesson",
+    re: /object-level authorization[\s\S]{0,80}GraphQL|Implement Object-Level Authorization/i
+  },
+  {
+    label: "JSON injection lesson",
+    re: /Validate JSON Inputs|arbitrary JSON input object|perform arbitrary SQL queries/i
+  },
+  {
+    label: "escape.tech/academy host",
+    re: /escape\.tech\/academy/i
+  }
+];
+
+const clientSideEscapeAcademyEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownEscapeAcademy = /escape\.tech\/academy/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_ESCAPE_ACADEMY_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownEscapeAcademy ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/escape\.tech\/academy|graphql-security-academy|API Security Academy/i.test(corpus))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : isKnownEscapeAcademy ? 0.86 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownEscapeAcademy && hits.length < 3
+        ? "escape.tech/academy is a known GraphQL API Security Academy (URL oracle; Svelte lesson shell may omit WebContainer bundle markers)"
+        : "Escape API Security Academy publishes hands-on GraphQL SQLi, BOLA, and JSON injection lessons with vulnerable Apollo servers"
+    }
+  };
+};
+
+// --- Delta-9 Hack Me If You Can CTF sandbox (d9bkk.com / dashboard.d9bkk.com) -------
+const CLIENT_DELTA9_HACKMEIFYOUCAN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "hackmeifyoucan path",
+    re: /hackmeifyoucan/i
+  },
+  {
+    label: "the-back-office robots hint",
+    re: /the-back-office|Staff only\. Nothing to see here/i
+  },
+  {
+    label: "D9CTF custom bot",
+    re: /D9CTFbot-PHRA/i
+  },
+  {
+    label: "d9bkk host",
+    re: /d9bkk\.com/i
+  },
+  {
+    label: "sandbox CTF disallowed paths",
+    re: /Disallow:\s*\/(?:admin|api|wallet|kyc)/i
+  }
+];
+
+const clientSideDelta9HackmeifyoucanEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownDelta9 =
+    /d9bkk\.com\/hackmeifyoucan|dashboard\.d9bkk\.com\/hackmeifyoucan/i.test(pageUrl) ||
+    /d9bkk\.com\/hackmeifyoucan|dashboard\.d9bkk\.com\/hackmeifyoucan/i.test(ctx.scanUrl || "");
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DELTA9_HACKMEIFYOUCAN_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownDelta9 ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/hackmeifyoucan|d9bkk\.com/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.89 : isKnownDelta9 ? 0.85 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownDelta9 && hits.length < 3
+        ? "d9bkk.com/hackmeifyoucan is a known Delta-9 CTF sandbox (URL oracle; Cloudflare may strip challenge markers on cold fetch)"
+        : "Delta-9 Hack Me If You Can sandbox exposes CTF levels (SQLi, IDOR, JWT, path traversal) with robots.txt hints to hidden /the-back-office"
+    }
+  };
+};
+
 // --- HackerSec Academy pentest training platform (hackersec.academy) -----------------
 const CLIENT_HACKERSEC_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -29203,6 +29319,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHackerFriendlyFirebaseEvidence,
   clientSidePentestLabScannerEvidence,
   clientSideCybersecLabEvidence,
+  clientSideEscapeAcademyEvidence,
+  clientSideDelta9HackmeifyoucanEvidence,
   clientSideHackersecAcademyEvidence,
   clientSideEchoctfEvidence,
   clientSideHacker101CtfEvidence,

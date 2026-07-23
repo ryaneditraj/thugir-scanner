@@ -10403,6 +10403,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-escape-academy-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Escape API Security Academy GraphQL lessons disclosed",
+    description:
+      "escape.tech/academy publishes hands-on GraphQL SQL injection, BOLA, and JSON injection lessons with deliberately vulnerable Apollo servers.",
+    impactOneline:
+      "Public API Security Academy lessons document exploitable GraphQL authorization and injection patterns for training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideEscapeAcademyEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape Academy is intentional training — gate lesson servers behind authentication.",
+      steps: [
+        "Run GraphQL security lessons on isolated lab infrastructure.",
+        "Do not expose vulnerable Apollo resolvers on production domains.",
+        "Require enrollment before serving injectable lesson APIs."
+      ]
+    },
+    fixPrompt:
+      "We host Escape-style GraphQL security academy lessons. Show how to isolate vulnerable lesson servers from production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-delta9-hackmeifyoucan-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Delta-9 Hack Me If You Can CTF sandbox disclosed",
+    description:
+      "d9bkk.com/hackmeifyoucan is a Delta-9 sandbox CTF with SQLi, IDOR, JWT, and path-traversal levels; robots.txt hints at hidden /the-back-office.",
+    impactOneline:
+      "Public CTF sandbox robots.txt discloses staff-only paths and challenge routes attackers can enumerate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDelta9HackmeifyoucanEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "CTF sandboxes are intentional — monitor for abuse and keep staff routes off robots.txt.",
+      steps: [
+        "Remove teaser hints from public robots.txt on production-adjacent hosts.",
+        "Rate-limit unauthenticated access to CTF challenge APIs.",
+        "Isolate sandbox instances from production credentials."
+      ]
+    },
+    fixPrompt:
+      "We host a Hack Me If You Can CTF sandbox. Show how to keep staff-only routes off robots.txt and isolate challenge APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cybersec-lab-evidence",
     platform: "generic",
     category: "Injection",
