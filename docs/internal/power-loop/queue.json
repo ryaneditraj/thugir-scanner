@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://vwad.owasp.org/app/pygoat/",
+      "source": "OWASP VWAD — PyGoat Django OWASP Top 10 training app catalog (links to Heroku live demos)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-node-application-dvna/",
+      "source": "OWASP VWAD — isp1r0/DVNA Node.js vulnerable app catalog (documented + undocumented vulns)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna/",
+      "source": "OWASP VWAD — appsecco/DVNA OWASP Top 10 Node.js lab with guidebook (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/peruggia/",
+      "source": "OWASP VWAD — Peruggia image-gallery vuln practice app catalog (SourceForge)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/hackxor/",
+      "source": "OWASP VWAD — Hackxor web hacking game missions catalog (hackxor.net online levels)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://xvwa.vercel.app/",
       "source": "s4n7h0/xvwa — Xtreme Vulnerable Web Application PHP/MySQL OWASP lab (awesome-vuln-apps; never scanned)",
       "auth": "oss_deploy"
@@ -7945,5 +7970,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-23T02:11:45.992Z"
+  "updated_at": "2026-07-23T03:12:00.000Z"
 }
