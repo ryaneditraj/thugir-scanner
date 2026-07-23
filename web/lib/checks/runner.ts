@@ -1183,6 +1183,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabIdorLabEvidence",
   "clientSideVulnlabValidateApiEvidence",
   "clientSideVulnlabAuditApiEvidence",
+  "clientSideVulnlabHandsOnLabEvidence",
+  "clientSideVibeEvalEvidence",
+  "clientSideJwtArsenalEvidence",
   "clientSideVulnlabA02CryptoEvidence",
   "clientSideVulnlabA03InjectionEvidence",
   "clientSideVulnlabA06ComponentsEvidence",
@@ -6077,6 +6080,41 @@ function extractFauxbankLabSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** JWT Arsenal browser exploit modules (jwtarsenal.com). */
+function extractJwtArsenalExploitSeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    return [];
+  }
+  if (!/jwtarsenal\.com/i.test(host) && !/JWT Arsenal|Offensive JWT Toolkit/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/debug",
+    "/cheatsheet",
+    "/knowledge-base",
+    "/exploit/alg-none",
+    "/exploit/algorithm-confusion",
+    "/exploit/jwk-injection",
+    "/exploit/jku-injection",
+    "/exploit/kid-injection",
+    "/exploit/unverified-signature"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** RiverMart dark-pattern checkout demo (shield-dark-pattern-demo.vercel.app). */
 function extractShieldDarkPatternSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -7017,6 +7055,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const brokencrystalsLabSeeds = extractBrokencrystalsLabSeeds(home.body, home.finalUrl);
   const fauxbankLabSeeds = extractFauxbankLabSeeds(home.body, home.finalUrl);
+  const jwtArsenalExploitSeeds = extractJwtArsenalExploitSeeds(home.body, home.finalUrl);
   const shieldDarkPatternSeeds = extractShieldDarkPatternSeeds(home.body, home.finalUrl);
   const aiSecurityPlatformSeeds = extractAiSecurityPlatformChallengeSeeds(home.body, home.finalUrl);
   const dvgaLiveSeeds = extractDvgaLiveSeeds(home.body, home.finalUrl);
@@ -7696,6 +7735,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuiceBlogPostSeeds,
       ...brokencrystalsLabSeeds,
       ...fauxbankLabSeeds,
+      ...jwtArsenalExploitSeeds,
       ...shieldDarkPatternSeeds,
       ...aiSecurityPlatformSeeds,
       ...restVulnwebSeeds,

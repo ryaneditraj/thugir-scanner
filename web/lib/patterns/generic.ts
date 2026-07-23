@@ -10533,6 +10533,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-hands-on-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VulnLab hands-on OWASP exercise page disclosed",
+    description:
+      "hack-this-site-eta.vercel.app/labs/*.html publishes per-category hands-on exercises (reflected XSS, SQLi error, IDOR, CORS) with inline vulnerable code and validate API checkers.",
+    impactOneline:
+      "Public hands-on lab pages document injectable endpoints and DOM sinks attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabHandsOnLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate VulnLab exercise pages behind authentication; never reuse lab sinks in production.",
+      steps: [
+        "Require login before serving /labs/*.html exercise instances.",
+        "Isolate lab APIs from production databases.",
+        "Rate-limit validate API endpoints to prevent automated abuse."
+      ]
+    },
+    fixPrompt:
+      "We host VulnLab hands-on OWASP exercise pages. Show how to gate /labs routes behind auth and isolate validate APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vibe-eval-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "VibeEval AI-generated app security catalog disclosed",
+    description:
+      "vibe-eval.com publishes an AI security testing catalog that probes vibe-coded apps for exposed keys, missing RLS, auth bypass, IDOR, and SSRF with 310+ attack probes.",
+    impactOneline:
+      "Public VibeEval catalog documents anti-patterns in AI-builder apps attackers use to tune scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVibeEvalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VibeEval is a security product catalog — do not expose production API keys in demo scans.",
+      steps: [
+        "Use isolated staging apps for VibeEval demonstration scans.",
+        "Never point security scanners at production customer data.",
+        "Gate autonomous probe features behind authenticated accounts."
+      ]
+    },
+    fixPrompt:
+      "We host a VibeEval-style AI security testing catalog. Show how to isolate demo scans from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-jwt-arsenal-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "JWT Arsenal offensive JWT toolkit disclosed",
+    description:
+      "jwtarsenal.com is a 100% client-side JWT exploitation toolkit covering alg:none, algorithm confusion, JWK/JKU/KID injection, and unverified signature bypass.",
+    impactOneline:
+      "Public JWT attack modules document bearer-token bypass techniques attackers use to calibrate auth scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJwtArsenalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JWT Arsenal is intentional education — enforce algorithm allowlists and signature verification in production.",
+      steps: [
+        "Reject alg:none and unexpected algorithm downgrades server-side.",
+        "Pin trusted JWKS URLs; never fetch keys from jku/jwk headers.",
+        "Always verify JWT signatures before trusting claims."
+      ]
+    },
+    fixPrompt:
+      "We host JWT Arsenal-style attack modules for education. Show how to enforce algorithm allowlists and JWKS pinning in production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-delta9-hackmeifyoucan-evidence",
     platform: "generic",
     category: "Broken access control",
