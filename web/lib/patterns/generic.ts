@@ -2808,6 +2808,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-csrf-transfer-probe",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank transfer API missing CSRF protection",
+    description:
+      "FauxBank POST /api/transfer accepts authenticated fund transfers without a CSRF token or Origin validation.",
+    impactOneline:
+      "Missing CSRF defenses let attackers forge cross-site requests that move money from victim sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankCsrfTransferProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on all state-changing banking endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens and validate them on POST /api/transfer.",
+        "Reject cross-origin requests unless Origin/Referer match an allowlist.",
+        "Use SameSite=strict cookies for session authentication."
+      ]
+    },
+    fixPrompt:
+      "Our /api/transfer endpoint processes POST requests with only a session cookie and no CSRF token. Show token validation middleware.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-stored-xss-support-probe",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "FauxBank support tickets store unescaped HTML (stored XSS)",
+    description:
+      "FauxBank POST /api/support persists raw HTML in ticket bodies; GET /api/support returns the payload unescaped.",
+    impactOneline:
+      "Stored XSS in support tickets can hijack bank staff or customer sessions viewing ticket queues.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankStoredXssSupportProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode all user-supplied ticket content before storage and rendering.",
+      steps: [
+        "HTML-encode ticket bodies on output or sanitize with a strict allowlist.",
+        "Use Content-Security-Policy to block inline script execution.",
+        "Add regression tests that reject script tags in support submissions."
+      ]
+    },
+    fixPrompt:
+      "GET /api/support returns ticket bodies with raw <img onerror=...> HTML we posted earlier. Show output encoding fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",

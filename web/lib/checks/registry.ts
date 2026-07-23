@@ -20334,6 +20334,63 @@ const fauxbankIdorAccountsProbe: Rule = async (ctx) => {
   };
 };
 
+const fauxbankCsrfTransferProbe: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const ownUrl = new URL("/api/accounts/1001", ctx.origin).toString();
+  const own = await ctx.probe.get(ownUrl, { maxBytes: 4096, headers: { Cookie: cookie } });
+  if (own.status < 200 || own.status >= 300) return NEGATIVE;
+  const fromId = own.body.match(/"id"\s*:\s*(\d+)/)?.[1] ?? "1001";
+  const transferUrl = new URL("/api/transfer", ctx.origin).toString();
+  const r = await ctx.probe.get(transferUrl, {
+    method: "POST",
+    body: JSON.stringify({ from: Number(fromId), to: 2001, amount: 1 }),
+    headers: { Cookie: cookie, "Content-Type": "application/json" },
+    maxBytes: 4096
+  });
+  if (r.status < 200 || r.status >= 300) return NEGATIVE;
+  if (!/"ok"\s*:\s*true/i.test(r.body) || !/"from"\s*:\s*\{/.test(r.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: transferUrl,
+      payload: { from: Number(fromId), to: 2001, amount: 1 },
+      snippet: r.body.slice(0, 200).trim(),
+      note: "POST /api/transfer executes without CSRF token — cross-site transfer forgery (FauxBank lesson #7)"
+    }
+  };
+};
+
+const fauxbankStoredXssSupportProbe: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const canary = "thugirXSScanary" + Date.now().toString(36);
+  const postUrl = new URL("/api/support", ctx.origin).toString();
+  const posted = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ subject: "xss-probe", body: `<img src=x onerror=${canary}>` }),
+    headers: { Cookie: cookie, "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (posted.status < 200 || posted.status >= 300 || !/"ok"\s*:\s*true/i.test(posted.body)) return NEGATIVE;
+  const listed = await ctx.probe.get(postUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
+  if (listed.status < 200 || listed.status >= 300 || !/"tickets"\s*:\s*\[/i.test(listed.body)) return NEGATIVE;
+  if (!listed.body.includes(canary) || !/onerror\s*=\s*thugirXSScanary/i.test(listed.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: postUrl,
+      canary,
+      snippet: listed.body.match(new RegExp(`"body"\\s*:\\s*"[^"]*${canary}[^"]*"`, "i"))?.[0]?.slice(0, 200) ?? listed.body.slice(0, 200),
+      note: "POST /api/support stores raw HTML; GET /api/support returns unescaped XSS payload in ticket body (FauxBank lesson #3)"
+    }
+  };
+};
+
 const sensitiveApiTokenLeakage: Rule = async (ctx) => {
   const paths = [
     ...new Set([
@@ -20390,18 +20447,22 @@ const juiceShopForgottenBackupDisclosure: Rule = async (ctx) => {
   if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
   for (const path of JUICE_SHOP_FTP_BACKUP_PATHS) {
     const url = new URL(path, ctx.origin).toString();
-    const r = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
-    if (r.status < 200 || r.status >= 300) continue;
-    if (!/"name"\s*:\s*"juice-shop"/i.test(r.body) || !/"version"\s*:/i.test(r.body)) continue;
-    return {
-      fired: true,
-      confidence: 0.91,
-      evidence: {
-        url,
-        snippet: r.body.slice(0, 180).trim(),
-        note: "Juice Shop FTP null-byte bypass exposes forgotten package.json.bak developer backup (Forgotten Developer Backup challenge)"
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const r = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+      if (r.status >= 200 && r.status < 300 && !HEROKU_STUB_RE.test(r.body)) {
+        if (!/"name"\s*:\s*"juice-shop"/i.test(r.body) || !/"version"\s*:/i.test(r.body)) break;
+        return {
+          fired: true,
+          confidence: 0.91,
+          evidence: {
+            url,
+            snippet: r.body.slice(0, 180).trim(),
+            note: "Juice Shop FTP null-byte bypass exposes forgotten package.json.bak developer backup (Forgotten Developer Backup challenge)"
+          }
+        };
       }
-    };
+      if (attempt < 5) await new Promise((resolve) => setTimeout(resolve, attempt < 2 ? 2500 : 4000));
+    }
   }
   return NEGATIVE;
 };
@@ -29034,6 +29095,8 @@ export const RULES: Record<string, Rule> = {
   clientSideFauxbankLabEvidence,
   fauxbankAuthenticatedSqlInjectionProbe,
   fauxbankIdorAccountsProbe,
+  fauxbankCsrfTransferProbe,
+  fauxbankStoredXssSupportProbe,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
