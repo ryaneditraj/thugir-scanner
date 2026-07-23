@@ -6671,6 +6671,24 @@
       "slug": "notevault-import-crawl-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /import page documents server-side URL fetch; extractWizerCtfSeeds seeds /import + /challenge for NoteVault CTF; webchal1 pages_crawled includes import surface; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-social-feed-secret-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: application-configuration social.blueSkyUrl + mastodonUrl; fetchJuiceShopSocialFeedBodies merges Bluesky/Mastodon public API bodies into juiceShopBootstrap for secret-resend regex; juice-shop.herokuapp.com 9 findings 6/6 maintained (Resend key not in current feeds — oracle path wired)"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-live-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/validate/sqli-error|xss-reflected|idor returns labId JSON; probeVulnlabValidateLabOracle + vulnlab-validate-sqli/xss/idor-live-oracle patterns; hack-this-site-eta.vercel.app/labs/sqli-error.html findings 18→23; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "xpath-injection-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OpenAPI /api/auth/login GET uses username+password query params (was user); xpathInjectionDisclosure now sets username=anyuser; brokencrystals.com positive proof when endpoint reachable; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11663,6 +11681,21 @@
       "source": "discovery:webchal1.vercel.app",
       "slug": "notevault-import-crawl-seeds",
       "shipped_at": "2026-07-23T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-social-feed-secret-bootstrap",
+      "shipped_at": "2026-07-23T22:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-live-oracles",
+      "shipped_at": "2026-07-23T22:17:38.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "xpath-injection-disclosure",
+      "shipped_at": "2026-07-23T22:17:38.000Z"
     }
   ]
 }
