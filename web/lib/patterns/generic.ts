@@ -9727,6 +9727,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-validate-api-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab /api/validate lab checker APIs disclosed",
+    description:
+      "VulnLab Academy exposes /api/validate/* JSON checker endpoints returning labId and hint fields for XSS, SQLi, IDOR, localStorage, and git-exposure labs.",
+    impactOneline:
+      "Public validation APIs document per-lab exploit oracles for scanner benchmarking and hands-on pentest drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabValidateApiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public lab-validation APIs from production; training checkers belong behind auth.",
+      steps: [
+        "Gate /api/validate/* behind authenticated lab sessions.",
+        "Do not expose labId/hint JSON that confirms exploit success to anonymous users.",
+        "Use server-side grading instead of client-visible validation endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our VulnLab exposes /api/validate/* checker APIs with labId hints. Show how to gate lab validation behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-judgement-day-arena-evidence",
     platform: "generic",
     category: "Broken access control",

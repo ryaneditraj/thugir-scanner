@@ -23606,16 +23606,24 @@ const CLIENT_OAUTH_LABS_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
 const clientSideOauthLabsPlaygroundEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}`;
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname.toLowerCase();
+  } catch {
+    /* ignore */
+  }
+  const isKnownOauthlabs = /(?:^|\.)oauthlabs\.com$/i.test(host);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OAUTH_LABS_PLAYGROUND_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
+  const minHits = isKnownOauthlabs ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
   if (!/oauthlabs\.com|OAuth 2\.0 Playground/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : isKnownOauthlabs ? 0.86 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
       note: "OAuth Labs publishes an interactive OAuth 2.0 playground for PKCE, refresh-token, and DPoP training scenarios"
@@ -23726,16 +23734,22 @@ const CLIENT_MINDAPI_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideMindApiEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownMindApi =
+    /dsopas\.github\.io\/MindAPI/i.test(pageUrl) ||
+    (/dsopas\.github\.io$/i.test(new URL(pageUrl).hostname) && /MindAPI/i.test(corpus));
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_MINDAPI_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/MindAPI|dsopas\.github\.io\/MindAPI/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownMindApi ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/MindAPI|dsopas\.github\.io\/MindAPI/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : isKnownMindApi ? 0.86 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
       note: "MindAPI is an API security mindmap hub covering reconnaissance and OWASP API Security Top 10 testing methodology"
@@ -26067,6 +26081,53 @@ const clientSideVulnlabIdorLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "VulnLab IDOR lab fetches /api/orders/{id} without authorization and exposes /api/validate/idor checker"
+    }
+  };
+};
+
+// --- VulnLab /api/validate/* live lab checker APIs (hack-this-site-eta.vercel.app) ------
+const VULNLAB_VALIDATE_LABS = [
+  "xss-reflected",
+  "localstorage",
+  "git-exposure",
+  "sqli-error",
+  "idor"
+] as const;
+
+const clientSideVulnlabValidateApiEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(pageUrl) &&
+    !/hack-this-site-eta\.vercel\.app/i.test(ctx.origin) &&
+    !/\/api\/validate\//i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const labs: { labId: string; hint: string; url: string }[] = [];
+  for (const lab of VULNLAB_VALIDATE_LABS) {
+    const url = new URL(`/api/validate/${lab}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400 || !/"labId"\s*:/.test(doc.body)) continue;
+    try {
+      const parsed = JSON.parse(doc.body) as { labId?: string; hint?: string };
+      if (parsed.labId) {
+        labs.push({
+          labId: parsed.labId,
+          hint: String(parsed.hint || "").slice(0, 120),
+          url
+        });
+      }
+    } catch {
+      /* ignore malformed JSON */
+    }
+  }
+  if (labs.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: labs.length >= 3 ? 0.91 : labs.length >= 2 ? 0.89 : 0.87,
+    evidence: {
+      labs: labs.slice(0, 5),
+      note: `VulnLab /api/validate/* checker APIs expose ${labs.length} lab oracles (labId + hint JSON) for hands-on pentest validation`
     }
   };
 };
@@ -29551,6 +29612,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDatabricksSecurityAssessmentEvidence,
   clientSideVulnlabA01AccessEvidence,
   clientSideVulnlabIdorLabEvidence,
+  clientSideVulnlabValidateApiEvidence,
   clientSideVulnlabA02CryptoEvidence,
   clientSideVulnlabA03InjectionEvidence,
   clientSideVulnlabA04InsecureDesignEvidence,
