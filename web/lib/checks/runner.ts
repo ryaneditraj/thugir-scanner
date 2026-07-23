@@ -1077,6 +1077,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebSecurityLabZhEvidence",
   "clientSideSectrainerEvidence",
   "clientSideHackAdvisorLabEvidence",
+  "clientSideHackAdvisorChallengeEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideVulnerableChatbotDemoEvidence",
   "clientSideWrongSecretsEvidence",
@@ -7556,7 +7557,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         ]
       : [];
   const hackAdvisorPrioritySeeds = /labs\.hackadvisor\.io/i.test(home.finalUrl)
-    ? ["/challenges", "/en/challenges"].map((p) => new URL(p, home.finalUrl).toString())
+    ? [
+        "/challenges",
+        "/en/challenges",
+        "/challenges/sql-injection",
+        "/challenges/xss",
+        "/challenges/idor",
+        "/challenges/csrf",
+        "/challenges/ssrf"
+      ].map((p) => new URL(p, home.finalUrl).toString())
     : [];
   const cyberDefendersPrioritySeeds = /cyberdefenders\.org/i.test(home.finalUrl)
     ? ["/labs", "/blueteam-ctf-challenges", "/blueteam-ctf-challenges/"].map((p) =>

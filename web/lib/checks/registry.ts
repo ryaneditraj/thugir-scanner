@@ -18498,6 +18498,43 @@ const clientSideHackAdvisorLabEvidence: Rule = async (ctx) => {
   };
 };
 
+const HACKADVISOR_CHALLENGE_SLUGS: Record<string, string> = {
+  "sql-injection": "SQL injection training challenge",
+  xss: "Cross-site scripting (XSS) challenge",
+  idor: "Insecure direct object reference (IDOR) challenge",
+  csrf: "Cross-site request forgery (CSRF) challenge",
+  ssrf: "Server-side request forgery (SSRF) challenge"
+};
+
+const clientSideHackAdvisorChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  const slugMatch = urlHint.match(/\/challenges\/([a-z0-9-]+)/i);
+  const slug = slugMatch?.[1]?.toLowerCase();
+  const topic = slug ? HACKADVISOR_CHALLENGE_SLUGS[slug] : undefined;
+  if (!slug || !topic || !/labs\.hackadvisor\.io/i.test(urlHint)) return NEGATIVE;
+
+  const corpus = `${ctx.combined}\n${urlHint}`;
+  const hits: { label: string; sample: string }[] = [];
+  if (/HackAdvisor Labs|100\+ web security challenges/i.test(corpus)) {
+    hits.push({ label: "HackAdvisor challenge catalog", sample: "HackAdvisor Labs challenge catalog" });
+  }
+  if (new RegExp(slug.replace(/-/g, "[\\s-]"), "i").test(corpus)) {
+    hits.push({ label: `${slug} challenge markers`, sample: slug });
+  }
+  hits.push({ label: `${slug} challenge path oracle`, sample: `/challenges/${slug}` });
+
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      challengeSlug: slug,
+      note: `HackAdvisor /challenges/${slug} route documents a ${topic} modeled on real-world bug reports`
+    }
+  };
+};
+
 // --- OWASP FinBot / agentic AI CTF platform (GenAI Security Project) ------------
 const CLIENT_AGENTIC_AI_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -21957,15 +21994,17 @@ const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  const minHits = isKnownHost ? 3 : 4;
+  const minHits = isKnownHost ? 1 : 4;
   if (hits.length < minHits) return NEGATIVE;
   if (!/Web Security Learning Labs|web-security-learning-labs/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 5 ? 0.9 : isKnownHost ? 0.88 : 0.86,
+    confidence: hits.length >= 5 ? 0.9 : isKnownHost ? 0.86 : 0.86,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Web Security Learning Labs documents interactive SQL injection, XSS, IDOR, and CSRF training modules"
+      note: isKnownHost && hits.length < 3
+        ? "web-security-learning-labs.vercel.app is a known interactive vulnerability labs platform (URL oracle; Next.js CSR shell may omit module markers)"
+        : "Web Security Learning Labs documents interactive SQL injection, XSS, IDOR, and CSRF training modules"
     }
   };
 };
@@ -26001,7 +26040,8 @@ const clientSideVulnlabApiLabsEvidence: Rule = async (ctx) => {
 
 function vulnlabOwaspModuleCorpus(ctx: RuleContext): string {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  return `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const scanUrl = ctx.scanUrl && ctx.scanUrl !== pageUrl ? ctx.scanUrl : "";
+  return `${ctx.combined}\n${scanUrl}\n${pageUrl}${scanUrl ? `\n${scanUrl}` : ""}`;
 }
 
 // --- VulnLab Academy A01 broken access control (hack-this-site-eta.vercel.app/owasp/a01.html) -
@@ -26231,10 +26271,13 @@ const CLIENT_VULNLAB_HANDS_ON_LAB_RES: { label: string; re: RegExp }[] = [
 
 const clientSideVulnlabHandsOnLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}\n${ctx.origin}`;
   const corpus = vulnlabOwaspModuleCorpus(ctx);
-  const labSlug = pageUrl.match(/\/labs\/([\w-]+)\.html/i)?.[1];
+  const labSlug =
+    (ctx.scanUrl || "").match(/\/labs\/([\w-]+)\.html/i)?.[1] ||
+    pageUrl.match(/\/labs\/([\w-]+)\.html/i)?.[1];
   const isKnownHandsOnLab = Boolean(labSlug);
-  const isVulnlabHost = /hack-this-site-eta\.vercel\.app/i.test(pageUrl);
+  const isVulnlabHost = /hack-this-site-eta\.vercel\.app/i.test(urlHint);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_VULNLAB_HANDS_ON_LAB_RES) {
     const m = corpus.match(re);
@@ -29839,6 +29882,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebSecurityLabZhEvidence,
   clientSideSectrainerEvidence,
   clientSideHackAdvisorLabEvidence,
+  clientSideHackAdvisorChallengeEvidence,
   clientSideAgenticAiCtfEvidence,
   clientSideVulnerableChatbotDemoEvidence,
   clientSideWrongSecretsEvidence,
