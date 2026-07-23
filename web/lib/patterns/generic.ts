@@ -7125,6 +7125,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hackthebox-ctf-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hack The Box CTF challenge platform disclosed",
+    description:
+      "ctf.hackthebox.com is the official HTB Capture The Flag platform with jeopardy-style web exploitation challenges and machine-pwning events.",
+    impactOneline:
+      "Public HTB CTF pages document challenge taxonomy and event infrastructure attackers use to calibrate scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackTheBoxCtfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTB CTF events are intentional training — isolate challenge instances from production networks.",
+      steps: [
+        "Run HTB CTF challenge VMs only on dedicated lab VLANs.",
+        "Require authenticated HTB accounts before spawning injectable challenge instances.",
+        "Never copy CTF challenge vulnerability patterns into production code."
+      ]
+    },
+    fixPrompt:
+      "We participate in Hack The Box CTF events for team training. Show how to isolate CTF challenge VMs from production and gate spawns behind SSO.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackthebox-academy-evidence",
     platform: "generic",
     category: "Broken access control",
