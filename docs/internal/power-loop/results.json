@@ -1,70 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-22T03:34:49.168Z",
-      "url": "https://www.hacksplaining.com/lessons/unencrypted-communication/start",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-hacksplaining-unencrypted-communication-lesson-evidence",
-          "title": "Hacksplaining unencrypted communication lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-hacksplaining-evidence",
-          "title": "Hacksplaining interactive OWASP secure-coding lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-hacksplaining-csrf-lesson-evidence",
-          "title": "Hacksplaining CSRF lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-hacksplaining-xss-reflected-lesson-evidence",
-          "title": "Hacksplaining reflected XSS lesson disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 307,
-      "status": "ok",
-      "scanned_at": "2026-07-22T03:34:49.168Z"
-    },
-    {
       "run_id": "2026-07-22T03:34:54.864Z",
       "url": "https://www.hacksplaining.com/lessons/xssi/start",
       "auth": "public_demo",
@@ -12650,6 +12586,78 @@
       "probes_run": 317,
       "status": "ok",
       "scanned_at": "2026-07-23T02:15:02.075Z"
+    },
+    {
+      "run_id": "2026-07-23T03:02:54.082Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 245,
+      "status": "ok",
+      "scanned_at": "2026-07-23T03:02:54.082Z"
     }
   ],
   "teacher_delta_runs": [
@@ -13547,6 +13555,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 02 UTC run: stable 6/6 first-pass recall on shallow crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T02:16:00.000Z"
+    },
+    {
+      "run_id": "2026-07-23T03:10:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=245; gap=[])",
+      "teacher_delta": [],
+      "notes": "No teacher tools available to diff against local scanner findings. 03 UTC run: stable 6/6 first-pass recall; juice-shop-forgotten-backup-disclosure + security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
+      "scanned_at": "2026-07-23T03:10:00.000Z"
     }
   ]
 }
