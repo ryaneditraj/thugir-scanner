@@ -9545,6 +9545,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oauth-labs-playground-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "OAuth Labs OAuth 2.0 playground disclosed",
+    description:
+      "oauthlabs.com publishes an interactive OAuth 2.0 playground for obtaining access tokens, exchanging refresh tokens, and calling protected APIs with PKCE and DPoP.",
+    impactOneline:
+      "Public OAuth Labs demos expose PKCE, refresh-token, and DPoP training contracts used to calibrate OAuth security scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOauthLabsPlaygroundEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OAuth Labs playground is intentional training — never use production client secrets in public demos.",
+      steps: [
+        "Use mock authorization servers in public OAuth playground demos.",
+        "Rotate demo client credentials regularly.",
+        "Require authentication before token-exchange endpoints in production."
+      ]
+    },
+    fixPrompt:
+      "We host an OAuth 2.0 Playground on oauthlabs.com. Show how to isolate demo client credentials from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-mindapi-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "MindAPI API security mindmap hub disclosed",
+    description:
+      "dsopas/MindAPI is an API security mindmap combining reconnaissance and OWASP API Security Top 10 testing methodology for API hacking practice.",
+    impactOneline:
+      "Public MindAPI hubs document structured API security testing methodology useful for reconnaissance and attack-surface mapping drills.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMindApiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MindAPI is intentional API security education — do not expose production API keys in public mindmap demos.",
+      steps: [
+        "Run API security labs only on isolated infrastructure.",
+        "Never embed live API credentials in public mindmap exports.",
+        "Scope API testing to authorized targets only."
+      ]
+    },
+    fixPrompt:
+      "We host MindAPI-style API security mindmaps. Show how to keep them scoped to authorized testing targets.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-judgement-day-arena-evidence",
     platform: "generic",
     category: "Broken access control",
