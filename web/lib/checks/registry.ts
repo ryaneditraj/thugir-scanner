@@ -26187,6 +26187,169 @@ const clientSideVulnlabAuditApiEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab Academy hands-on lab pages (hack-this-site-eta.vercel.app/labs/*.html) ------
+const CLIENT_VULNLAB_HANDS_ON_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VulnLab hands-on lab HTML path",
+    re: /hack-this-site-eta\.vercel\.app\/labs\/[\w-]+\.html/i
+  },
+  {
+    label: "xss-reflected DOM lab",
+    re: /A03-006 Reflected XSS|data-lab-id="xss-reflected"|xss-output["']\)\.innerHTML/i
+  },
+  {
+    label: "sqli-error simulated SQL lab",
+    re: /A03-001 SQL Injection \(Error\)|data-lab-id="sqli-error"|fetch\("\/api\/sql\?id="/i
+  },
+  {
+    label: "idor order lookup lab",
+    re: /A01-001 IDOR Scanner|data-lab-id="idor"|fetch\(\s*["']\/api\/orders\/["']\s*\+/i
+  },
+  {
+    label: "cors misconfiguration lab",
+    re: /A05-001 CORS Misconfiguration|data-lab-id="cors"|Access-Control-Allow-Origin/i
+  },
+  {
+    label: "secret scanner lab",
+    re: /A02-002 Secret Scanner|data-lab-id="secret-scanner"|window\.__SECRET_KEY__/i
+  },
+  {
+    label: "security headers lab",
+    re: /A05-002 Security Headers|data-lab-id="security-headers"|Content-Security-Policy/i
+  },
+  {
+    label: "clickjacking UI redress lab",
+    re: /A04-002 Clickjacking|data-lab-id="clickjacking"|iframe overlay/i
+  }
+];
+
+const clientSideVulnlabHandsOnLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const labSlug = pageUrl.match(/\/labs\/([\w-]+)\.html/i)?.[1];
+  const isKnownHandsOnLab = Boolean(labSlug);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_HANDS_ON_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownHandsOnLab ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app|\/labs\//i.test(corpus))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : isKnownHandsOnLab ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      labSlug: labSlug ?? undefined,
+      note: labSlug
+        ? `VulnLab /labs/${labSlug}.html documents hands-on ${labSlug.replace(/-/g, " ")} exercise with validate API checker`
+        : "VulnLab /labs/*.html pages document hands-on OWASP Top 10 exercises with inline vulnerable code"
+    }
+  };
+};
+
+// --- VibeEval AI security testing catalog (vibe-eval.com) -----------------------------
+const CLIENT_VIBE_EVAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "VibeEval branding",
+    re: /VibeEval[\s—-]+AI Security Testing|vibe-eval\.com/i
+  },
+  {
+    label: "AI-generated app security probes",
+    re: /AI Security Testing for AI-Generated Apps|probe your running app for exposed keys/i
+  },
+  {
+    label: "310 attack probes",
+    re: /310\+ real (?:attack )?probes|fires 310\+ real probes/i
+  },
+  {
+    label: "RLS and auth gap detection",
+    re: /missing RLS|auth gaps|auth bypass, IDOR, RLS/i
+  },
+  {
+    label: "vibe-coded app anti-patterns",
+    re: /Lovable, Cursor, Bolt, v0, Claude Code, Replit|vibe-coded/i
+  }
+];
+
+const clientSideVibeEvalEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownVibeEval = /vibe-eval\.com/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VIBE_EVAL_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownVibeEval ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/VibeEval|vibe-eval\.com/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : isKnownVibeEval ? 0.87 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownVibeEval
+        ? "vibe-eval.com is a known AI security testing catalog for vibe-coded apps (URL oracle; probes exposed keys, RLS, auth gaps)"
+        : "VibeEval documents autonomous security probes for AI-generated apps covering auth bypass, IDOR, SSRF, and exposed API keys"
+    }
+  };
+};
+
+// --- JWT Arsenal offensive JWT toolkit (jwtarsenal.com) --------------------------------
+const CLIENT_JWT_ARSENAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JWT Arsenal branding",
+    re: /JWT Arsenal[\s—-]+Offensive JWT Toolkit|jwtarsenal\.com/i
+  },
+  {
+    label: "client-side JWT exploitation toolkit",
+    re: /100% client-side JWT exploitation toolkit|client-side JWT exploitation toolkit/i
+  },
+  {
+    label: "alg none exploit module",
+    re: /Algorithm None|alg:none|\/exploit\/alg-none/i
+  },
+  {
+    label: "algorithm confusion RS256 HS256",
+    re: /Algorithm Confusion|RS256.*HS256|algorithm-confusion/i
+  },
+  {
+    label: "JWK/JKU/KID injection modules",
+    re: /JWK Injection|JKU Injection|KID Injection|jwk-injection|jku-injection|kid-injection/i
+  },
+  {
+    label: "unverified signature bypass",
+    re: /Unverified Signature|unverified-signature/i
+  }
+];
+
+const clientSideJwtArsenalEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownJwtArsenal = /jwtarsenal\.com/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_JWT_ARSENAL_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownJwtArsenal ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/JWT Arsenal|jwtarsenal\.com/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : isKnownJwtArsenal ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownJwtArsenal
+        ? "jwtarsenal.com is a known browser-based JWT exploitation toolkit (URL oracle; alg:none, algorithm confusion, JWK/JKU/KID injection)"
+        : "JWT Arsenal documents client-side JWT attack modules for alg:none, algorithm confusion, and header injection exploits"
+    }
+  };
+};
+
 // --- VulnLab Academy A02 cryptographic failures (hack-this-site-eta.vercel.app/owasp/a02.html) -
 const CLIENT_VULNLAB_A02_CRYPTO_RES: { label: string; re: RegExp }[] = [
   {
@@ -29669,6 +29832,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabIdorLabEvidence,
   clientSideVulnlabValidateApiEvidence,
   clientSideVulnlabAuditApiEvidence,
+  clientSideVulnlabHandsOnLabEvidence,
+  clientSideVibeEvalEvidence,
+  clientSideJwtArsenalEvidence,
   clientSideVulnlabA02CryptoEvidence,
   clientSideVulnlabA03InjectionEvidence,
   clientSideVulnlabA04InsecureDesignEvidence,
