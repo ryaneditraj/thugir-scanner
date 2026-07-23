@@ -6311,6 +6311,24 @@
       "slug": "juice-shop-forgotten-backup-disclosure",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /ftp/package.json.bak%2500.md returns {\"name\":\"juice-shop\",\"version\":\"6.2.0-SNAPSHOT\"}; juiceShopForgottenBackupDisclosure + bootstrap FTP paths; juice-shop-staging findings 8→9, recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "client-side-vulnshop-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /login JWT is_admin+weak secret, /orders [A01: IDOR Practice], /register Mass Assignment [A01], /products try SQL injection here; clientSideVulnshopModuleEvidence path-aware; vulnshop.vercel.app/login|products|orders|register findings 4→5; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-spa-route-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA shell serves same bundle on all routes; extractVulnshopSeeds seeds /login /register /products /orders /admin from vulnshop.vercel.app hub; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-ftp-apple-oracle-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: pass1 Heroku cold-start gap=sqli before retry; juiceShopBenchmarkOracleReady now accepts FTP package.json.bak + /rest/products/search?q=apple as sensitive_data gates; primary heroku benchmark 9 findings 6/6 after wake retry"
     }
   ],
   "shipped": [
