@@ -1078,6 +1078,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideSectrainerEvidence",
   "clientSideHackAdvisorLabEvidence",
   "clientSideHackAdvisorChallengeEvidence",
+  "clientSideFabraixChallengeEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideVulnerableChatbotDemoEvidence",
   "clientSideWrongSecretsEvidence",
@@ -4707,7 +4708,8 @@ function extractRedTigerHackitSeeds(html: string, origin: string): string[] {
 
 /** Wizer CTF hub (wizer-ctf.com / sam.wizer-ctf.com) — seed guest play catalog and linked chal*.vercel.app instances. */
 function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
-  if (!/Wizer CTF|wizer-ctf\.com|sam\.wizer-ctf\.com|wizer-training\.com/i.test(html)) return [];
+  if (!/Wizer CTF|wizer-ctf\.com|sam\.wizer-ctf\.com|wizer-training\.com|NoteVault|notes\/import/i.test(html))
+    return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of ["/?pos=last", "/login", "/signup"]) {
@@ -4717,6 +4719,17 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
       out.add(u.toString());
     } catch {
       /* ignore */
+    }
+  }
+  if (/NoteVault|Import Note from URL|notes\/import/i.test(html)) {
+    for (const p of ["/import", "/challenge", "/notes/new"]) {
+      try {
+        const u = new URL(p, pageUrl);
+        if (u.origin !== pageOrigin) continue;
+        out.add(u.toString());
+      } catch {
+        /* ignore */
+      }
     }
   }
   const decoded = html.replace(/&#34;/g, '"').replace(/&quot;/g, '"');
@@ -4732,6 +4745,34 @@ function extractWizerCtfSeeds(html: string, pageUrl: string): string[] {
   // sam.wizer-ctf.com promo hub omits chal*.vercel.app links — seed known public instances.
   for (let i = 1; i <= 17; i++) {
     out.add(`https://chal${i}.vercel.app/`);
+  }
+  return [...out];
+}
+
+/** Fabraix Playground — seed Show HN agentic red-team challenge routes. */
+function extractFabraixChallengeSeeds(html: string, pageUrl: string): string[] {
+  if (
+    !/playground\.fabraix\.com/i.test(pageUrl) &&
+    !/Fabraix Playground|Test your prompt injection skills against AI agents/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  for (const slug of ["01-guardrail-bypass", "access-code-001", "data-exfil-001"]) {
+    try {
+      out.add(new URL(`/challenges/${slug}`, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  const linkRe = /href=["'](\/challenges\/[a-z0-9-]+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = linkRe.exec(html))) {
+    try {
+      out.add(new URL(m[1], pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
   }
   return [...out];
 }
@@ -7567,6 +7608,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "/challenges/ssrf"
       ].map((p) => new URL(p, home.finalUrl).toString())
     : [];
+  const fabraixChallengeSeeds = extractFabraixChallengeSeeds(home.body, home.finalUrl);
   const cyberDefendersPrioritySeeds = /cyberdefenders\.org/i.test(home.finalUrl)
     ? ["/labs", "/blueteam-ctf-challenges", "/blueteam-ctf-challenges/"].map((p) =>
         new URL(p, home.finalUrl).toString()
@@ -7575,6 +7617,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const crawlSeeds = prioritizeSecurityLabLinks([
     ...new Set([
+      ...fabraixChallengeSeeds,
       ...hackAdvisorPrioritySeeds,
       ...intigritiChallengePrioritySeeds,
       ...cyberDefendersPrioritySeeds,

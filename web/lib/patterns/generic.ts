@@ -7437,6 +7437,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-fabraix-challenge-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Fabraix agentic red-team challenge route disclosed",
+    description:
+      "Fabraix Playground /challenges/{slug} routes document per-challenge agentic AI red-team exercises (guardrail bypass, access-code extraction, data exfiltration).",
+    impactOneline:
+      "Public agentic challenge routes expose CWE-specific AI attack surfaces reusable for reconnaissance and exploit rehearsal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideFabraixChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fabraix challenges are intentional — isolate instances and require authenticated lab sessions.",
+      steps: [
+        "Gate agentic challenge VMs behind authenticated lab sessions.",
+        "Do not mirror challenge vulnerability patterns in production agents.",
+        "Rate-limit unauthenticated challenge enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Fabraix-style agentic red-team challenge routes. Show how to isolate challenge VMs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-agentic-ai-ctf-evidence",
     platform: "generic",
     category: "AI security",

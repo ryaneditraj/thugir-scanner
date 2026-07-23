@@ -18535,6 +18535,58 @@ const clientSideHackAdvisorChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Fabraix Playground per-challenge agentic red-team routes -------------------
+const FABRAIX_CHALLENGE_SLUGS: Record<string, { topic: string; res: RegExp[] }> = {
+  "01-guardrail-bypass": {
+    topic: "AI guardrail bypass red-team challenge",
+    res: [/Blocked by guardrails/i, /Every message is scored by a guardrail/i]
+  },
+  "access-code-001": {
+    topic: "access code extraction agent challenge",
+    res: [/access-code-001/i]
+  },
+  "data-exfil-001": {
+    topic: "data exfiltration agent challenge",
+    res: [/data.exfil/i, /exfiltrat/i, /challenge-objective/i]
+  }
+};
+
+const clientSideFabraixChallengeEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  const slugMatch = urlHint.match(/\/challenges\/([a-z0-9-]+)/i);
+  const slug = slugMatch?.[1]?.toLowerCase();
+  if (!slug || !/playground\.fabraix\.com/i.test(urlHint)) return NEGATIVE;
+
+  const spec = FABRAIX_CHALLENGE_SLUGS[slug];
+  const corpus = `${ctx.combined}\n${urlHint}`;
+  const hits: { label: string; sample: string }[] = [];
+  if (/Fabraix Playground|Test your prompt injection skills|Adversarial Verification for AI Agents/i.test(corpus)) {
+    hits.push({ label: "Fabraix Playground branding", sample: "Fabraix Playground" });
+  }
+  if (spec) {
+    for (const re of spec.res) {
+      const m = corpus.match(re);
+      if (m) hits.push({ label: `${slug} challenge marker`, sample: m[0].slice(0, 100) });
+    }
+    hits.push({ label: `${slug} challenge path oracle`, sample: `/challenges/${slug}` });
+  } else if (new RegExp(slug.replace(/-/g, "[\\s-]"), "i").test(corpus)) {
+    hits.push({ label: `${slug} challenge markers`, sample: slug });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      challengeSlug: slug,
+      note: spec
+        ? `Fabraix /challenges/${slug} documents a ${spec.topic}`
+        : `Fabraix /challenges/${slug} route documents an agentic red-team challenge`
+    }
+  };
+};
+
 // --- OWASP FinBot / agentic AI CTF platform (GenAI Security Project) ------------
 const CLIENT_AGENTIC_AI_CTF_RES: { label: string; re: RegExp }[] = [
   {
@@ -19877,6 +19929,7 @@ const SSRF_POST_PATHS = [
   "/api/ssrf",
   "/api/render",
   "/api/metadata",
+  "/api/notes/import",
   "/workshop/api/merchant/contact_mechanic"
 ];
 const SSRF_POST_FIELDS = ["url", "target", "link", "uri", "mechanic_api"];
@@ -19911,7 +19964,8 @@ async function tryApiLabJwt(ctx: RuleContext): Promise<string | null> {
 
 function extractSsrfPaths(text: string): string[] {
   const paths = new Set<string>();
-  const re = /["'`](\/(?:api\/)?(?:fetch|proxy|ssrf|render|metadata)[a-z0-9/_-]*)["'`]/gi;
+  const re =
+    /["'`](\/(?:api\/)?(?:fetch|proxy|ssrf|render|metadata|notes\/import)[a-z0-9/_-]*)["'`]/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(text))) {
     const p = m[1].split("?")[0].replace(/\/+$/, "") || m[1];
@@ -19923,6 +19977,53 @@ function extractSsrfPaths(text: string): string[] {
 
 function bodyReflectsSsrfCanary(body: string): boolean {
   return SSRF_CANARY_MARKERS.some((re) => re.test(body));
+}
+
+/** Import endpoints (e.g. NoteVault /api/notes/import) return only an id — SSRF proof is on a follow-up GET. */
+async function probeDeferredImportSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  const importPaths = [
+    ...SSRF_POST_PATHS.filter((p) => /import/i.test(p)),
+    ...extractSsrfPaths(ctx.combined).filter((p) => /import/i.test(p))
+  ];
+  for (const path of [...new Set(importPaths)].slice(0, 4)) {
+    for (const field of SSRF_POST_FIELDS) {
+      const postUrl = new URL(path, ctx.origin).toString();
+      const pr = await ctx.probe.get(postUrl, {
+        method: "POST",
+        body: JSON.stringify({ [field]: SSRF_CANARY_URL }),
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 4096,
+        redirect: "manual"
+      });
+      if (pr.status < 200 || pr.status >= 300) continue;
+      if (bodyReflectsSsrfCanary(pr.body)) continue;
+      const followCandidates = [
+        path.replace(/\/import\/?$/i, ""),
+        "/api/notes",
+        path.replace(/\/import$/i, "s")
+      ].filter((p) => p && p !== path);
+      for (const fp of [...new Set(followCandidates)].slice(0, 3)) {
+        const getUrl = new URL(fp.startsWith("/") ? fp : `/${fp}`, ctx.origin).toString();
+        const gr = await ctx.probe.get(getUrl, { maxBytes: 16_384, redirect: "manual" });
+        if (gr.status < 200 || gr.status >= 300) continue;
+        if (!bodyReflectsSsrfCanary(gr.body)) continue;
+        return {
+          fired: true,
+          confidence: 0.91,
+          evidence: {
+            url: postUrl,
+            method: "POST",
+            field,
+            followUp: getUrl,
+            status: pr.status,
+            snippet: gr.body.slice(0, 180).trim(),
+            note: "POST import endpoint fetched attacker URL server-side; imported content visible via collection GET — SSRF confirmed"
+          }
+        };
+      }
+    }
+  }
+  return null;
 }
 
 function extractPostUrlForms(html: string, origin: string): { action: string; field: string }[] {
@@ -20083,6 +20184,9 @@ const ssrfEndpointProbe: Rule = async (ctx) => {
       }
     }
   }
+
+  const deferredImport = await probeDeferredImportSsrf(ctx);
+  if (deferredImport?.fired) return deferredImport;
 
   const htmlForms = extractPostUrlForms(ctx.combined, ctx.origin);
   for (const { action, field } of htmlForms.slice(0, 4)) {
@@ -29883,6 +29987,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSectrainerEvidence,
   clientSideHackAdvisorLabEvidence,
   clientSideHackAdvisorChallengeEvidence,
+  clientSideFabraixChallengeEvidence,
   clientSideAgenticAiCtfEvidence,
   clientSideVulnerableChatbotDemoEvidence,
   clientSideWrongSecretsEvidence,
