@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://cybersec-lab.vercel.app/",
+      "source": "CYBERSEC LAB — Spanish interactive OWASP training platform with 8 rooms / 16 challenges (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-lab.vercel.app/",
+      "source": "PentestLab — web vulnerability scanner training demo with SQLi payload panel (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://boudaoud20.github.io/xss-attack-lab/",
+      "source": "Boudaoud20/xss-attack-lab — XSStrike XSS lab report with vulnerable PHP code oracles (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.vulnerableapp.com/",
+      "source": "SasanLabs VulnerableApp — public DOM-based XSS example page (vulnerableapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hacker101.com/",
+      "source": "Hacker101 — free web security CTF levels and video lessons (HackerOne)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://echoctf.red/",
       "source": "echoCTF.RED — public hacking laboratories with targets, CVEs, and challenges (labs-pentest catalog)",
       "auth": "public_demo"
