@@ -6365,6 +6365,24 @@
       "slug": "client-side-pentest-ground-hub-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: hub table rows GuardianLeaks :81 + DVWA :4280 + eval :9000 with owasp.org attack links; extractPentestGroundHubSeeds seeds linked lab ports; pentest-ground.com findings 0→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctf.hacker101.com",
+      "slug": "hacker101-ctf-empty-shell-homepage-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf returns empty shell (www redirect 404); reachTarget falls back to https://ctf.hacker101.com/ with Welcome to the Hacker101 CTF markers; ctf.hacker101.com/ctf findings 2→3; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:auth0.oauthlabs.com",
+      "slug": "oauth-oidc-metadata-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /.well-known/openid-configuration returns issuer+token_endpoint+authorization_endpoint+registration_endpoint; auth0.oauthlabs.com findings 1→5; benchmark 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:arcanum-sec.github.io",
+      "slug": "client-side-arcanum-ai-sec-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Labs, CTFs, bounties & tooling for AI red teaming + gandalf.lakera.ai + ctf.spylab.ai + doublespeak.chat outbound links; extractArcanumAiSecHubSeeds; arcanum-sec.github.io/ai-sec-resources findings 7→8; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11177,6 +11195,21 @@
       "source": "discovery:pentest-ground.com",
       "slug": "client-side-pentest-ground-hub-evidence",
       "shipped_at": "2026-07-23T02:30:00.000Z"
+    },
+    {
+      "source": "discovery:ctf.hacker101.com",
+      "slug": "hacker101-ctf-empty-shell-homepage-fallback",
+      "shipped_at": "2026-07-23T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:auth0.oauthlabs.com",
+      "slug": "oauth-oidc-metadata-exposed",
+      "shipped_at": "2026-07-23T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:arcanum-sec.github.io",
+      "slug": "client-side-arcanum-ai-sec-hub-evidence",
+      "shipped_at": "2026-07-23T03:15:00.000Z"
     }
   ]
 }

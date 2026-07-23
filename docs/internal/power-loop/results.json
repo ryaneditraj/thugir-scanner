@@ -12170,7 +12170,7 @@
       "scanned_at": "2026-07-23T02:15:02.075Z"
     },
     {
-      "run_id": "2026-07-23T03:02:54.082Z",
+      "run_id": "2026-07-23T03:06:54.483Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -12237,9 +12237,9 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 1,
-      "probes_run": 245,
+      "probes_run": 258,
       "status": "ok",
-      "scanned_at": "2026-07-23T03:02:54.082Z"
+      "scanned_at": "2026-07-23T03:06:54.483Z"
     },
     {
       "run_id": "2026-07-23T03:12:40.516Z",

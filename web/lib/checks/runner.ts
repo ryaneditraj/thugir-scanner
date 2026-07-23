@@ -520,7 +520,29 @@ async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
     }
     if (score >= 1000) return doc;
   }
-  if (best) return best;
+  if (best) {
+    // ctf.hacker101.com/ctf returns an empty 200 shell — fall back to homepage markers.
+    try {
+      const bestUrl = new URL(best.finalUrl || target.toString());
+      const bestHost = bestUrl.hostname;
+      if (
+        best.body.length < 256 &&
+        /^(?:www\.)?ctf\.hacker101\.com$/i.test(bestHost)
+      ) {
+        const homeCandidates = [
+          "https://ctf.hacker101.com/",
+          new URL("/", bestUrl.origin).toString()
+        ];
+        for (const homeUrl of homeCandidates) {
+          const homeDoc = await fetchDoc(homeUrl, { timeoutMs: 15000, maxBytes: 600_000 });
+          if (homeDoc.body.length > best.body.length) return homeDoc;
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+    return best;
+  }
   return {
     url: target.toString(),
     finalUrl: target.toString(),
@@ -813,6 +835,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideBountybenchBenchmarkEvidence",
   "clientSideOauthFetchPlaygroundEvidence",
   "clientSideOauthLabsPlaygroundEvidence",
+  "oauthOidcMetadataExposed",
+  "clientSideArcanumAiSecHubEvidence",
   "clientSideMindApiEvidence",
   "clientSideHermesCodexEvidence",
   "clientSidePentestGroundGuardianLeaksEvidence",
@@ -5095,6 +5119,35 @@ function extractMindApiSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Arcanum AI Security Resource Hub — seed outbound prompt-injection lab URLs from catalog HTML. */
+const ARCANUM_LAB_HOST_RE =
+  /(?:gandalf\.lakera\.ai|ctf\.spylab\.ai|doublespeak\.chat|escape\.pangea\.cloud|0din\.ai|bot-tricks\.com|application\.security|ctf\.arkx\.ninja|app\.grayswan\.ai)/i;
+
+function extractArcanumAiSecHubSeeds(html: string, pageUrl: string): string[] {
+  if (
+    !/arcanum-sec\.github\.io\/ai-sec-resources|AI red teaming and prompt-injection testing/i.test(
+      `${html}\n${pageUrl}`
+    )
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const urlRe = /https?:\/\/[a-z0-9][-a-z0-9.]*[a-z0-9](?::\d+)?(?:\/[^\s"'<>)]*)?/gi;
+  let m: RegExpExecArray | null;
+  while ((m = urlRe.exec(html))) {
+    const raw = m[0].replace(/[),.'"]+$/, "");
+    try {
+      const u = new URL(raw);
+      if (/github\.com|fonts\.google|arcanum-sec\.com|docs\.google\.com/i.test(u.hostname)) continue;
+      if (!ARCANUM_LAB_HOST_RE.test(u.hostname)) continue;
+      out.add(`${u.origin}/`);
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out].slice(0, 8);
+}
+
 /** Hermes Codex Starlight docs (hermes-codex.vercel.app) — seed AI security + CVE research pages. */
 const HERMES_CODEX_DOC_RE = /href\s*=\s*["'](\/(?:ai-security|cve)(?:\/[^"'#?]+)?)["']/gi;
 
@@ -6754,6 +6807,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
   const mindApiSeeds = extractMindApiSeeds(home.body, home.finalUrl);
   const hermesCodexSeeds = extractHermesCodexSeeds(home.body, home.finalUrl);
+  const arcanumAiSecHubSeeds = extractArcanumAiSecHubSeeds(home.body, home.finalUrl);
   const pentestGroundHubSeeds = extractPentestGroundHubSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
@@ -7390,6 +7444,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnshopSeeds,
       ...mindApiSeeds,
       ...hermesCodexSeeds,
+      ...arcanumAiSecHubSeeds,
       ...pentestGroundHubSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
