@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T23:17:38.000Z",
+  "updated_at": "2026-07-23T23:11:24.591Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2221,
-  "total_findings": 12067,
+  "total_sites_scanned": 2229,
+  "total_findings": 12187,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1666,
-  "discovery_findings": 9700,
+  "discovery_urls_added": 1671,
+  "discovery_findings": 9812,
   "improvements_shipped": 1004,
-  "last_run": "2026-07-23T23:17:38.000Z",
+  "last_run": "2026-07-23T23:11:24.591Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (8 findings, shallow crawl pages=1 probes=250)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,28 +50,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 84,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 121,
+      "skipped_48h": [
+        "hack-this-site-eta.vercel.app/auth/* (jwt, session, login, reset)",
+        "hack-this-site-eta.vercel.app/labs/* (git-exposure, upload, input-validation, security-headers, cms/wordpress)"
+      ],
       "dns_failures": [],
-      "focus": "VulnLab /api/auth/* and /api/jwt/decode live oracles for auth/* lab pages",
-      "improvements_shipped_this_run": 3
+      "focus": "HackThisSite api/auth/* live oracles + env-file/clickjacking/api-labs REST; Brokencrystals /api/render|spawn|file",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/auth/jwt.html: vulnlab-jwt-decode-live-oracle + client-side-jwt-none-evidence (22→29 findings)",
-      "hack-this-site-eta.vercel.app/auth/session.html: vulnlab-auth-session-live-oracle predictable SID-* (21→27 findings)",
-      "hack-this-site-eta.vercel.app/auth/login.html: vulnlab-auth-login-enumeration-live-oracle Invalid username vs password (22→28 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "hack-this-site-eta.vercel.app/api/auth/login: 13 findings — live auth API oracle with sqli/idor/graphql-introspection bundle",
+      "hack-this-site-eta.vercel.app/api/auth/reset: 17 findings — predictable reset token surface + exposed-source-maps",
+      "hack-this-site-eta.vercel.app/labs/env-file.html: 2 findings — vulnlab hands-on lab evidence only",
+      "hack-this-site-eta.vercel.app/labs/clickjacking.html: 2 findings — shallow lab page markers",
+      "hack-this-site-eta.vercel.app/api-labs/rest.html: 1 finding — REST lab landing only",
+      "brokencrystals.com/api/render|spawn|file: 28-29 findings each — API injection surfaces"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (Resend key not in current Bluesky/Mastodon feeds)",
-      "playground.fabraix.com/challenges/data-exfil-001: weak bundle markers — path oracle only",
-      "vwad.owasp.org/app/voice-goat/: directory landing only; VoiceGoat services need localhost:8000-8003 or hosted instance",
-      "web-security-lab.vercel.app/learn/{jwt,idor,phishing,ddos,rbac} return 404 — docs list chapters not yet deployed",
-      "challenge-0726.intigriti.io: nginx 403 blocks scanner UA from cloud",
-      "brokencrystals.com XPATH endpoint returns 403 from cloud egress — param fix correct per spec"
+      "secret-resend slug still absent on juice-shop",
+      "HackThisSite api/auth/* inherits full SPA bundle — JWT-specific slugs still missing on auth/jwt.html",
+      "env-file.html + clickjacking.html shallow pages need /api/* cross-probes for sensitive_data recall",
+      "api-labs/rest.html single-finding — GraphQL/SOAP sibling pages not drained this run"
     ]
   },
   "discovery_highlights": {
@@ -128,6 +132,14 @@
     "hack-this-site-eta.vercel.app/auth/login.html": 28,
     "hack-this-site-eta.vercel.app/auth/reset.html": 20,
     "hack-this-site-eta.vercel.app/api/auth/session": 17,
+    "hack-this-site-eta.vercel.app/api/auth/login": 13,
+    "hack-this-site-eta.vercel.app/api/auth/reset": 17,
+    "hack-this-site-eta.vercel.app/labs/env-file.html": 2,
+    "hack-this-site-eta.vercel.app/labs/clickjacking.html": 2,
+    "hack-this-site-eta.vercel.app/api-labs/rest.html": 1,
+    "brokencrystals.com/api/render": 28,
+    "brokencrystals.com/api/spawn": 29,
+    "brokencrystals.com/api/file": 29,
     "pentesterlab.com/exercises/xss-and-mysql-file": 5,
     "www.hackthissite.org/playlevel/34": 6,
     "vwad.owasp.org/app/voice-goat": 4

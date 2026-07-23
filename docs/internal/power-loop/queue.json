@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T22:05:00.000Z",
+  "updated_at": "2026-07-23T23:09:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/auth/login",
+      "source": "dkyazzentwatwa/hack-this-site — weak login API oracle (README api/auth/login)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/auth/reset",
+      "source": "dkyazzentwatwa/hack-this-site — predictable password-reset token API (README api/auth/reset)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/env-file.html",
+      "source": "dkyazzentwatwa/hack-this-site — VULN-008 env file finder lab (GitHub labs/env-file.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/clickjacking.html",
+      "source": "dkyazzentwatwa/hack-this-site — clickjacking UI-redress lab (GitHub labs/clickjacking.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api-labs/rest.html",
+      "source": "dkyazzentwatwa/hack-this-site — REST API security testing lab page (GitHub api-labs/rest.html)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/auth/jwt.html",
       "source": "dkyazzentwatwa/hack-this-site — JWT algorithm/none attack lab (auth/ tree, GitHub README)",
