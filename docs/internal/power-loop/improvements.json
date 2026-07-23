@@ -6347,6 +6347,24 @@
       "slug": "client-side-mindapi-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: about page MindAPI + OWASP API Security Top 10 + Bringing order to API hacking chaos; extractMindApiSeeds crawls /about /play /references; dsopas.github.io/MindAPI findings 2→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hermes-codex.vercel.app",
+      "slug": "client-side-hermes-codex-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage Indirect Prompt Injection Analysis + Tool Injection: The RCE of AI + RAG Poisoning cards; extractHermesCodexSeeds crawls /ai-security/ + /cve/; hermes-codex.vercel.app findings 3→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com:81",
+      "slug": "client-side-pentest-ground-guardian-leaks-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pentest-ground.com catalog lists GuardianLeaks at :81 with XSS+SSRF+Code Injection; Flask /create /search routes on lab host; pentest-ground.com:81 findings 5→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "client-side-pentest-ground-hub-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub table rows GuardianLeaks :81 + DVWA :4280 + eval :9000 with owasp.org attack links; extractPentestGroundHubSeeds seeds linked lab ports; pentest-ground.com findings 0→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11144,6 +11162,21 @@
       "source": "benchmark:juice-shop",
       "slug": "juice-shop-forgotten-backup-disclosure",
       "shipped_at": "2026-07-22T23:15:00.000Z"
+    },
+    {
+      "source": "discovery:hermes-codex.vercel.app",
+      "slug": "client-side-hermes-codex-evidence",
+      "shipped_at": "2026-07-23T02:30:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com:81",
+      "slug": "client-side-pentest-ground-guardian-leaks-evidence",
+      "shipped_at": "2026-07-23T02:30:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "client-side-pentest-ground-hub-evidence",
+      "shipped_at": "2026-07-23T02:30:00.000Z"
     }
   ]
 }
