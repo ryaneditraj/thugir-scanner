@@ -251,6 +251,51 @@ function isJuiceShopHost(url: string): boolean {
   }
 }
 
+/** Fetch Bluesky/Mastodon public feeds from Juice Shop social URLs (Leaked API Key challenge oracle). */
+async function fetchJuiceShopSocialFeedBodies(
+  configBody: string,
+  probe: ProbeCache
+): Promise<string> {
+  const chunks: string[] = [];
+  try {
+    const social = (
+      JSON.parse(configBody) as { config?: { application?: { social?: Record<string, string | null> } } }
+    )?.config?.application?.social;
+    if (!social) return "";
+
+    const bskyUrl = social.blueSkyUrl;
+    if (bskyUrl) {
+      const handle = bskyUrl.match(/profile\/([^/?#]+)/i)?.[1];
+      if (handle) {
+        const feedUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(handle)}&limit=20`;
+        const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+        if (doc.status >= 200 && doc.status < 400) chunks.push(doc.body);
+      }
+    }
+
+    const mastodonUrl = social.mastodonUrl;
+    if (mastodonUrl) {
+      const match = mastodonUrl.match(/^(https?:\/\/[^/]+)\/@([^/?#]+)/i);
+      if (match) {
+        const [, instance, acct] = match;
+        const lookupUrl = `${instance}/api/v1/accounts/lookup?acct=${encodeURIComponent(acct)}`;
+        const lookup = await probe.get(lookupUrl, { maxBytes: 4096, timeoutMs: 12000 });
+        if (lookup.status >= 200 && lookup.status < 400) {
+          const idMatch = lookup.body.match(/"id"\s*:\s*"(\d+)"/);
+          if (idMatch) {
+            const statusesUrl = `${instance}/api/v1/accounts/${idMatch[1]}/statuses?limit=25`;
+            const statuses = await probe.get(statusesUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+            if (statuses.status >= 200 && statuses.status < 400) chunks.push(statuses.body);
+          }
+        }
+      }
+    }
+  } catch {
+    /* ignore malformed config or feed fetch errors */
+  }
+  return chunks.join("\n");
+}
+
 const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/admin/application-configuration",
   "/rest/track-order/1",
@@ -1184,6 +1229,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabA01AccessEvidence",
   "clientSideVulnlabIdorLabEvidence",
   "clientSideVulnlabValidateApiEvidence",
+  "vulnlabValidateSqliLiveOracle",
+  "vulnlabValidateXssLiveOracle",
+  "vulnlabValidateIdorLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",
@@ -7972,14 +8020,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         if (/SQLITE_ERROR|syntax error|sequelize/i.test(bootDocs.get(sqlUrl)?.body ?? "")) break;
       }
     }
-    juiceShopBootstrap = [...bootDocs.values()]
-      .filter((d) => {
-        if (HEROKU_APP_ERROR_RE.test(d.body)) return false;
-        if (d.status >= 200 && d.status < 500) return true;
-        // SQLi oracle is intentionally HTTP 500 — keep for deep-rule markers.
-        return d.status === 500 && /SQLITE_ERROR|syntax error|sequelize/i.test(d.body);
-      })
-      .map((d) => d.body)
+    const configBody = bootDocs.get(bootstrapUrls[1]!)?.body ?? "";
+    const socialFeedBodies = configBody
+      ? await fetchJuiceShopSocialFeedBodies(configBody, probe)
+      : "";
+    juiceShopBootstrap = [
+      ...[...bootDocs.values()]
+        .filter((d) => {
+          if (HEROKU_APP_ERROR_RE.test(d.body)) return false;
+          if (d.status >= 200 && d.status < 500) return true;
+          // SQLi oracle is intentionally HTTP 500 — keep for deep-rule markers.
+          return d.status === 500 && /SQLITE_ERROR|syntax error|sequelize/i.test(d.body);
+        })
+        .map((d) => d.body),
+      socialFeedBodies
+    ]
+      .filter(Boolean)
       .join("\n");
   }
 

@@ -9805,6 +9805,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-validate-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab SQLi validate API live oracle",
+    description:
+      "GET /api/validate/sqli-error returns JSON with labId sqli-error and a hint describing SQL injection payload expectations for the hands-on lab.",
+    impactOneline:
+      "Live validation API confirms SQL injection lab oracle without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/* responds.",
+        "Do not expose sqli-error hint JSON to anonymous scanners.",
+        "Use server-side grading for SQLi labs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/sqli-error endpoint leaks SQLi lab hints. Show how to gate validation behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnLab reflected XSS validate API live oracle",
+    description:
+      "GET /api/validate/xss-reflected returns JSON with labId xss-reflected and a hint describing executable JavaScript payload expectations.",
+    impactOneline:
+      "Live validation API confirms reflected XSS lab oracle without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/* responds.",
+        "Do not expose xss-reflected hint JSON to anonymous scanners.",
+        "Use server-side grading for XSS labs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/xss-reflected endpoint leaks XSS lab hints. Show how to gate validation behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab IDOR validate API live oracle",
+    description:
+      "GET /api/validate/idor returns JSON with labId idor and a hint describing broken object access expectations for the hands-on lab.",
+    impactOneline:
+      "Live validation API confirms IDOR lab oracle without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/* responds.",
+        "Do not expose idor hint JSON to anonymous scanners.",
+        "Use server-side grading for IDOR labs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/idor endpoint leaks IDOR lab hints. Show how to gate validation behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",

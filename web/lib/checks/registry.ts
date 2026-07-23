@@ -18547,7 +18547,7 @@ const FABRAIX_CHALLENGE_SLUGS: Record<string, { topic: string; res: RegExp[] }> 
   },
   "data-exfil-001": {
     topic: "data exfiltration agent challenge",
-    res: [/data.exfil/i, /exfiltrat/i, /challenge-objective/i]
+    res: [/data-exfil-001/i, /data.exfil/i, /exfiltrat/i, /challenge-objective/i]
   }
 };
 
@@ -26291,6 +26291,61 @@ const clientSideVulnlabValidateApiEvidence: Rule = async (ctx) => {
   };
 };
 
+type VulnlabValidateLabSpec = {
+  labId: string;
+  topic: string;
+  cwe: string;
+};
+
+const VULNLAB_VALIDATE_LAB_SPECS: VulnlabValidateLabSpec[] = [
+  { labId: "sqli-error", topic: "SQL injection error-based lab", cwe: "sqli" },
+  { labId: "xss-reflected", topic: "reflected XSS lab", cwe: "xss" },
+  { labId: "idor", topic: "IDOR order lookup lab", cwe: "idor" }
+];
+
+async function probeVulnlabValidateLabOracle(
+  ctx: RuleContext,
+  spec: VulnlabValidateLabSpec
+): Promise<RuleResult> {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !new RegExp(`/api/validate/${spec.labId}(?:\\?|$|/)`, "i").test(urlHint) &&
+    !new RegExp(`/labs/${spec.labId}\\.html`, "i").test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const validateUrl = new URL(`/api/validate/${spec.labId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400 || !/"labId"\s*:/.test(doc.body)) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(doc.body) as { labId?: string; hint?: string };
+    if (parsed.labId !== spec.labId) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        labId: spec.labId,
+        hint: String(parsed.hint || "").slice(0, 160),
+        url: validateUrl,
+        note: `VulnLab /api/validate/${spec.labId} returns live ${spec.topic} oracle JSON (labId + hint) for hands-on pentest validation`
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+}
+
+const vulnlabValidateSqliLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[0]!);
+
+const vulnlabValidateXssLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[1]!);
+
+const vulnlabValidateIdorLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[2]!);
+
 // --- VulnLab /api/* audit training APIs (hack-this-site-eta.vercel.app) -----------------
 const VULNLAB_AUDIT_API_PATHS = [
   "/api/methods",
@@ -28513,7 +28568,7 @@ const xpathInjectionDisclosure: Rule = async (ctx) => {
   if (!looksLikeXpathInjectionLab(ctx.origin, ctx.combined)) return NEGATIVE;
   for (const path of XPATH_INJECTION_PATHS) {
     const url = new URL(path, ctx.origin);
-    url.searchParams.set("user", "anyuser");
+    url.searchParams.set("username", "anyuser");
     url.searchParams.set("password", "' or '1'='1");
     const r = await ctx.probe.get(url.toString(), { maxBytes: 12_000 });
     if (r.status < 200 || r.status >= 300) continue;
@@ -30099,6 +30154,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA01AccessEvidence,
   clientSideVulnlabIdorLabEvidence,
   clientSideVulnlabValidateApiEvidence,
+  vulnlabValidateSqliLiveOracle,
+  vulnlabValidateXssLiveOracle,
+  vulnlabValidateIdorLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,
