@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T05:06:36.405Z",
-  "total": 620,
-  "uniqueSlugs": 618,
+  "generatedAt": "2026-07-23T06:15:02.092Z",
+  "total": 623,
+  "uniqueSlugs": 621,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 602,
+    "generic": 605,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 548,
+    "deep": 551,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 42,
-    "Security misconfiguration": 50,
+    "Security misconfiguration": 51,
     "Broken authentication": 44,
-    "Injection": 127,
+    "Injection": 129,
     "Cross-site scripting": 107,
     "general": 18,
     "SSRF": 1,
@@ -113,6 +113,7 @@
     "client-side-cyberdefenders-evidence",
     "client-side-cyberdrill-evidence",
     "client-side-cyberpunker-insecureship-evidence",
+    "client-side-cybersec-lab-evidence",
     "client-side-cybersheild-lab-evidence",
     "client-side-cylab-academy-evidence",
     "client-side-damn-vulnerable-bank-evidence",
@@ -164,6 +165,7 @@
     "client-side-hack-yourself-first-evidence",
     "client-side-hackable-lab-evidence",
     "client-side-hackadvisor-lab-evidence",
+    "client-side-hacker-friendly-firebase-evidence",
     "client-side-hacker101-ctf-evidence",
     "client-side-hackersec-academy-evidence",
     "client-side-hacking-lab-evidence",
@@ -312,6 +314,7 @@
     "client-side-pc-parts-store-lab-evidence",
     "client-side-pentest-ground-guardian-leaks-evidence",
     "client-side-pentest-ground-hub-evidence",
+    "client-side-pentest-lab-scanner-evidence",
     "client-side-pentester-academy-lab-evidence",
     "client-side-pentesterlab-api-01-exercise-evidence",
     "client-side-pentesterlab-api-02-exercise-evidence",
