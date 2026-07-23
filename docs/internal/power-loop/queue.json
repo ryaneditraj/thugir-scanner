@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://hermes-codex.vercel.app/",
+      "source": "Hermes Codex — AI security research hub with indirect prompt-injection case studies (Vercel OSS deploy, web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:81/",
+      "source": "Pentest-Ground GuardianLeaks — deliberately vulnerable web app with XSS/SSRF/code-injection labs (pentest-ground.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://codeex-ai.vercel.app/",
+      "source": "Heoster/CodeEx-AI — cybersecurity simulator with 10 interactive attack/defense scenarios (GitHub README Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://arcanum-sec.github.io/ai-sec-resources/",
+      "source": "Arcanum AI Security Resource Hub — curated LLM red-team labs/CTFs directory (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://soham-ai.vercel.app/",
+      "source": "Heoster/CodeEx-AI — alternate Vercel deploy of cybersecurity training simulator (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://oauthlabs.com/",
       "source": "OAuth Labs — interactive OAuth 2.0 PKCE/DPoP playground with live Auth0 demo server (web search)",
       "auth": "public_demo"
