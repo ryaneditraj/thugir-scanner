@@ -5387,19 +5387,25 @@ const CLIENT_HACKINGHUB_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideHackinghubEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownHackinghub = /app\.hackinghub\.io/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_HACKINGHUB_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/HackingHub|ctfchallenge\.com|hackinghub/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownHackinghub ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/HackingHub|ctfchallenge\.com|hackinghub/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : isKnownHackinghub ? 0.86 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "HackingHub (ctfchallenge.com) offers ethical web application hacking challenges with leaderboard and hackbox training modules"
+      note: isKnownHackinghub && hits.length < 2
+        ? "app.hackinghub.io is a known ethical web hacking challenge platform (URL oracle; Nuxt shell may omit bundle lab markers)"
+        : "HackingHub (ctfchallenge.com) offers ethical web application hacking challenges with leaderboard and hackbox training modules"
     }
   };
 };
@@ -21928,19 +21934,25 @@ const CLIENT_XVWA_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideXvwaEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownXvwa = /xvwa\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_XVWA_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/XVWA|Xtreme Vulnerable Web Application/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownXvwa ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/XVWA|Xtreme Vulnerable Web Application/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    confidence: hits.length >= 3 ? 0.91 : isKnownXvwa ? 0.86 : 0.88,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "XVWA documents 15+ deliberately vulnerable attack modules (SQLi, XSS, SSRF, IDOR, SSTI, CSRF)"
+      note: isKnownXvwa && hits.length < 2
+        ? "xvwa.vercel.app is a known XVWA mirror (URL oracle; crawl /vulnerabilities/*/home.php for PHP SQLi/XSS source)"
+        : "XVWA documents 15+ deliberately vulnerable attack modules (SQLi, XSS, SSRF, IDOR, SSTI, CSRF)"
     }
   };
 };
@@ -26200,19 +26212,25 @@ const CLIENT_VULNERABLE_WEB_SITE_RES: { label: string; re: RegExp }[] = [
 ];
 
 const clientSideVulnerableWebSiteEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownVws = /vulnerable-web-site\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_VULNERABLE_WEB_SITE_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/Vulnerable Web Site|vulnerable-web-site/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownVws ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Vulnerable Web Site|vulnerable-web-site/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : isKnownVws ? 0.86 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "Vulnerable Web Site is a Next.js lab reproducing CSRF, clickjacking, stored XSS, and optional SSRF for security testing practice"
+      note: isKnownVws && hits.length < 3
+        ? "vulnerable-web-site.vercel.app is a known CSRF/XSS/clickjacking/SSRF Next.js lab (URL oracle; lab routes require session cookie)"
+        : "Vulnerable Web Site is a Next.js lab reproducing CSRF, clickjacking, stored XSS, and optional SSRF for security testing practice"
     }
   };
 };
