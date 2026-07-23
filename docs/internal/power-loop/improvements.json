@@ -11195,6 +11195,21 @@
       "source": "discovery:pentest-ground.com",
       "slug": "client-side-pentest-ground-hub-evidence",
       "shipped_at": "2026-07-23T02:30:00.000Z"
+    },
+    {
+      "source": "discovery:ctf.hacker101.com",
+      "slug": "hacker101-ctf-empty-shell-homepage-fallback",
+      "shipped_at": "2026-07-23T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:auth0.oauthlabs.com",
+      "slug": "oauth-oidc-metadata-exposed",
+      "shipped_at": "2026-07-23T03:15:00.000Z"
+    },
+    {
+      "source": "discovery:arcanum-sec.github.io",
+      "slug": "client-side-arcanum-ai-sec-hub-evidence",
+      "shipped_at": "2026-07-23T03:15:00.000Z"
     }
   ]
 }
