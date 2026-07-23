@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://hack-this-site-eta.vercel.app/api/methods",
+      "source": "dkyazzentwatwa/hack-this-site — HTTP method testing API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/headers",
+      "source": "dkyazzentwatwa/hack-this-site — HTTP header manipulation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/cookies",
+      "source": "dkyazzentwatwa/hack-this-site — cookie security testing API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/cors",
+      "source": "dkyazzentwatwa/hack-this-site — CORS misconfiguration serverless API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://escape.tech/academy/broken-function-level-authorization",
+      "source": "Escape API Security Academy — GraphQL resolver-level authorization lesson (escape.tech/academy)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://escape.tech/academy/disable-debug-mode",
       "source": "Escape API Security Academy — GraphQL debug-mode information-disclosure lesson (escape.tech/academy)",
       "auth": "public_demo"
@@ -8120,5 +8145,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-23T10:19:00.000Z"
+  "updated_at": "2026-07-23T12:20:21.460Z"
 }
