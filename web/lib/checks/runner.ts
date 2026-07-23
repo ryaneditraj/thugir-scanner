@@ -5140,6 +5140,23 @@ function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** megmogmog1965/vulnerable-web-site — seed CSRF/XSS/clickjacking/SSRF lab routes (auth-gated). */
+function extractVulnerableWebSiteSeeds(html: string, pageUrl: string): string[] {
+  const host = new URL(pageUrl).hostname.toLowerCase();
+  if (!/vulnerable-web-site\.vercel\.app$/i.test(host) && !/Vulnerable Web Site|vulnerable-web-site/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  for (const p of ["/xss", "/csrf", "/clickjacking", "/ssrf", "/home"]) {
+    try {
+      out.add(new URL(p, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** VulnShop pentest practice SPA (vulnshop.vercel.app) — seed per-route OWASP lab modules. */
 function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
   const host = new URL(pageUrl).hostname.toLowerCase();
@@ -6441,21 +6458,56 @@ function extractWrongSecretsChallengeSeeds(html: string, origin: string): string
   return [...out];
 }
 
-/** XVWA (xvwa.vercel.app) — sidepanel lists 15+ attack modules under /xvwa/vulnerabilities/. */
+/** XVWA (xvwa.vercel.app) — sidepanel lists 15+ attack modules; Vercel mirrors serve at root /vulnerabilities/. */
 function extractXvwaVulnSeeds(html: string, origin: string): string[] {
   if (!/XVWA|Xtreme Vulnerable Web Application/i.test(html)) return [];
   const out = new Set<string>();
-  const basePath = /\/xvwa\//i.test(html) ? "/xvwa" : "";
-  for (const p of [`${basePath}/about.html`, `${basePath}/instruction.php`, `${basePath}/sidepanel.php`]) {
+  const host = new URL(origin).hostname.toLowerCase();
+  const isRootDeploy = /xvwa\.vercel\.app$/i.test(host) || !/\/xvwa\//i.test(html);
+  const basePath = isRootDeploy ? "" : "/xvwa";
+  for (const p of [
+    `${basePath}/about.html`,
+    `${basePath}/instruction.php`,
+    `${basePath}/sidepanel.php`,
+    "/sidepanel.php",
+    "/instruction.php",
+    "/about.html"
+  ]) {
     try {
       out.add(new URL(p, origin).toString());
     } catch {
       /* ignore */
     }
   }
-  for (const mod of ["sqli", "reflected_xss", "ssrf_xspa", "idor", "ssti"]) {
+  const modules = [
+    "sqli",
+    "sqli_blind",
+    "reflected_xss",
+    "stored_xss",
+    "dom_xss",
+    "ssrf_xspa",
+    "idor",
+    "csrf",
+    "ssti",
+    "cmdi",
+    "xpath",
+    "fileupload"
+  ];
+  for (const mod of modules) {
+    for (const suffix of ["", "/home.php"]) {
+      for (const prefix of isRootDeploy ? ["", basePath] : [basePath]) {
+        try {
+          out.add(new URL(`${prefix}/vulnerabilities/${mod}${suffix}`, origin).toString());
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+  }
+  for (const m of html.matchAll(/href\s*=\s*["'](\/xvwa\/vulnerabilities\/[^"'#]+)["']/gi)) {
     try {
-      out.add(new URL(`${basePath}/vulnerabilities/${mod}/`, origin).toString());
+      out.add(new URL(m[1], origin).toString());
+      out.add(new URL(m[1].replace(/^\/xvwa/, ""), origin).toString());
     } catch {
       /* ignore */
     }
@@ -6870,6 +6922,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
+  const vulnerableWebSiteSeeds = extractVulnerableWebSiteSeeds(home.body, home.finalUrl);
   const mindApiSeeds = extractMindApiSeeds(home.body, home.finalUrl);
   const hermesCodexSeeds = extractHermesCodexSeeds(home.body, home.finalUrl);
   const arcanumAiSecHubSeeds = extractArcanumAiSecHubSeeds(home.body, home.finalUrl);
@@ -7515,6 +7568,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...istEduVulnPortalSeeds,
       ...vulnforgeSeeds,
       ...vulnshopSeeds,
+      ...vulnerableWebSiteSeeds,
       ...mindApiSeeds,
       ...hermesCodexSeeds,
       ...arcanumAiSecHubSeeds,
