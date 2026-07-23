@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T22:17:38.000Z",
+  "updated_at": "2026-07-23T23:17:38.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2220,
-  "total_findings": 12058,
+  "total_sites_scanned": 2221,
+  "total_findings": 12067,
   "critical_findings": 38,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1666,
-  "discovery_findings": 9691,
-  "improvements_shipped": 1001,
-  "last_run": "2026-07-23T22:17:38.000Z",
+  "discovery_findings": 9700,
+  "improvements_shipped": 1004,
+  "last_run": "2026-07-23T23:17:38.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
@@ -50,30 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 117,
-      "skipped_48h": [
-        "hack-this-site-eta.vercel.app/labs/* (git-exposure, upload, input-validation, security-headers, cms/wordpress)"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 84,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Juice Shop social-feed secret bootstrap; HackThisSite validate/* live CWE oracles; Brokencrystals XPATH username param fix",
+      "focus": "VulnLab /api/auth/* and /api/jwt/decode live oracles for auth/* lab pages",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/labs/sqli-error.html: vulnlab-validate live oracles 18→23 findings",
-      "juice-shop social Bluesky/Mastodon feed bodies merged into secret-resend corpus (oracle path for Leaked API Key)",
-      "brokencrystals.com: xpathInjectionDisclosure uses username query param per OpenAPI spec",
-      "hack-this-site-eta.vercel.app/auth/jwt.html: 22 findings — inherits Tier-2 SPA bundle",
-      "hack-this-site-eta.vercel.app/api/auth/session: 17 findings — session API oracle reachable"
+      "hack-this-site-eta.vercel.app/auth/jwt.html: vulnlab-jwt-decode-live-oracle + client-side-jwt-none-evidence (22→29 findings)",
+      "hack-this-site-eta.vercel.app/auth/session.html: vulnlab-auth-session-live-oracle predictable SID-* (21→27 findings)",
+      "hack-this-site-eta.vercel.app/auth/login.html: vulnlab-auth-login-enumeration-live-oracle Invalid username vs password (22→28 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (Resend key not in current Bluesky/Mastodon feeds)",
       "playground.fabraix.com/challenges/data-exfil-001: weak bundle markers — path oracle only",
-      "HackThisSite auth/* pages inherit identical ~20-finding SPA bundle — need /api/auth/* live probes for JWT/session CWE recall",
-      "auth/jwt.html missing client-side-jwt-none-evidence despite JWT lab page — bundle fingerprint dominates",
       "vwad.owasp.org/app/voice-goat/: directory landing only; VoiceGoat services need localhost:8000-8003 or hosted instance",
       "web-security-lab.vercel.app/learn/{jwt,idor,phishing,ddos,rbac} return 404 — docs list chapters not yet deployed",
       "challenge-0726.intigriti.io: nginx 403 blocks scanner UA from cloud",
@@ -106,7 +100,7 @@
     "dsopas.github.io/MindAPI": 6,
     "pentest-fauxbank.vercel.app/transfer": 8,
     "juice-shop.herokuapp.com": 9,
-    "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 2,
+    "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 19,
     "hack-this-site-eta.vercel.app/labs/sqli-error.html": 23,
     "hack-this-site-eta.vercel.app/labs/idor.html": 21,
     "vibe-eval.com": 7,
@@ -129,9 +123,9 @@
     "hack-this-site-eta.vercel.app/labs/security-headers.html": 20,
     "hack-this-site-eta.vercel.app/cms/wordpress.html": 15,
     "pentesterlab.com/exercises/autho_01": 4,
-    "hack-this-site-eta.vercel.app/auth/jwt.html": 22,
-    "hack-this-site-eta.vercel.app/auth/session.html": 21,
-    "hack-this-site-eta.vercel.app/auth/login.html": 22,
+    "hack-this-site-eta.vercel.app/auth/jwt.html": 29,
+    "hack-this-site-eta.vercel.app/auth/session.html": 27,
+    "hack-this-site-eta.vercel.app/auth/login.html": 28,
     "hack-this-site-eta.vercel.app/auth/reset.html": 20,
     "hack-this-site-eta.vercel.app/api/auth/session": 17,
     "pentesterlab.com/exercises/xss-and-mysql-file": 5,
