@@ -6689,6 +6689,24 @@
       "slug": "xpath-injection-disclosure",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: OpenAPI /api/auth/login GET uses username+password query params (was user); xpathInjectionDisclosure now sets username=anyuser; brokencrystals.com positive proof when endpoint reachable; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-jwt-decode-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/jwt/decode with alg=none token returns warnings No signature validation performed; auth/jwt.html findings 22→29; client-side-jwt-none-evidence now fires via VulnLab alg=none markers; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-session-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/session returns {\"sessionId\":\"SID-00001\",\"entropy\":\"low\"}; auth/session.html findings 21→27; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-login-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login returns Invalid username vs Invalid password for unknown user vs wrong password; auth/login.html findings 22→28; benchmark juice-shop 9 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11696,6 +11714,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "xpath-injection-disclosure",
       "shipped_at": "2026-07-23T22:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-jwt-decode-live-oracle",
+      "shipped_at": "2026-07-23T23:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-session-live-oracle",
+      "shipped_at": "2026-07-23T23:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-auth-login-enumeration-live-oracle",
+      "shipped_at": "2026-07-23T23:17:38.000Z"
     }
   ]
 }

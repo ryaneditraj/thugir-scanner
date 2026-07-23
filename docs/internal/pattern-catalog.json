@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T22:17:02.340Z",
-  "total": 642,
-  "uniqueSlugs": 640,
+  "generatedAt": "2026-07-23T23:10:07.624Z",
+  "total": 645,
+  "uniqueSlugs": 643,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 624,
+    "generic": 627,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 570,
+    "deep": 573,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 42,
     "Security misconfiguration": 52,
-    "Broken authentication": 45,
+    "Broken authentication": 48,
     "Injection": 133,
     "Cross-site scripting": 109,
     "general": 18,
@@ -669,6 +669,9 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
+    "vulnlab-auth-login-enumeration-live-oracle",
+    "vulnlab-auth-session-live-oracle",
+    "vulnlab-jwt-decode-live-oracle",
     "vulnlab-validate-idor-live-oracle",
     "vulnlab-validate-sqli-live-oracle",
     "vulnlab-validate-xss-live-oracle",
