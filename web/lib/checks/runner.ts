@@ -886,6 +886,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideFauxbankLabEvidence",
   "fauxbankAuthenticatedSqlInjectionProbe",
   "fauxbankIdorAccountsProbe",
+  "fauxbankCsrfTransferProbe",
+  "fauxbankStoredXssSupportProbe",
   "clientSideWebsecChallengeEvidence",
   "clientSideWebsecCryptoChallengeEvidence",
   "clientSideWebsecFileUploadChallengeEvidence",
