@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T13:05:27.275Z",
-  "total": 627,
-  "uniqueSlugs": 625,
+  "generatedAt": "2026-07-23T14:05:31.629Z",
+  "total": 629,
+  "uniqueSlugs": 627,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 609,
+    "generic": 611,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 555,
+    "deep": 557,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 161,
+    "Broken access control": 162,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 51,
     "Broken authentication": 44,
     "Injection": 130,
-    "Cross-site scripting": 107,
+    "Cross-site scripting": 108,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
@@ -567,7 +567,9 @@
     "exposed-git-dir",
     "exposed-source-maps",
     "fauxbank-authenticated-sqli-search",
+    "fauxbank-csrf-transfer-probe",
     "fauxbank-idor-accounts-probe",
+    "fauxbank-stored-xss-support-probe",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
     "graphiql-ui-exposed",

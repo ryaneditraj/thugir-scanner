@@ -6545,6 +6545,24 @@
       "slug": "htb-academy-module-details-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: academy.hackthebox.com/module/details/88 SSO redirect strips module HTML; module/details/\\d+ path marker + minHits=1 URL oracle; academy.hackthebox.com/module/details/88 findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-csrf-transfer-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/transfer {\"from\":1001,\"to\":2001,\"amount\":1} returns {\"ok\":true,...} without CSRF token after alice/password login; pentest-fauxbank.vercel.app/transfer findings 1→8; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-stored-xss-support-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/support body=<img onerror=canary> then GET /api/support echoes raw HTML in ticket JSON; pentest-fauxbank.vercel.app/support findings 5→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-forgotten-backup-disclosure",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /ftp/package.json.bak%2500.md returns juice-shop package.json on Heroku cold-start after retry loop; juice-shop.herokuapp.com findings 8→9, recall 6/6 maintained"
     }
   ],
   "shipped": [
