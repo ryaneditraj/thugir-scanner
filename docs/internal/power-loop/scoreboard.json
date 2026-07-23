@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T18:07:26.403Z",
+  "updated_at": "2026-07-23T18:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1646,
   "discovery_findings": 9320,
-  "improvements_shipped": 992,
-  "last_run": "2026-07-23T18:07:26.403Z",
+  "improvements_shipped": 995,
+  "last_run": "2026-07-23T18:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 8,
+      "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (8 findings, pages=1 probes=258)",
+      "note": "No benchmark misses — recall stable at 6/6 (9 findings, pages=6 probes=282)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,22 +55,21 @@
       "findings": 71,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "cookies-samesite + SecLab XSS/SQLi paths + web-security-learning-labs modules + hack-this-site localStorage lab; queue drained 3 prior lab pages",
-      "improvements_shipped_this_run": 0
+      "focus": "VulnLab hands-on /labs/*.html per-lab oracles; vibe-eval.com AI security catalog; jwtarsenal.com JWT exploitation toolkit",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings, pages=1 probes=258) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/labs/localstorage.html: 20 findings incl secret-stripe-live + idor-sequential-ids + dom-eval-xss",
-      "web-security-lab.vercel.app/learn/cookies-samesite: 5 findings (client-side-csrf-evidence + dangerous-html-sinks)",
-      "web-security-learning-labs.vercel.app/learn/modules: 4 findings via client-side-web-security-learning-labs-evidence",
-      "seclab.vercel.app/xss + /sqli: shallow 3 findings each (misconfig only — live attack demos not surfaced)",
-      "hack-this-site-eta.vercel.app/labs/idor.html: regression 21→1 finding (Vercel checkpoint / shallow crawl)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, pages=6) — no benchmark misses",
+      "hack-this-site-eta.vercel.app/labs/xss-reflected.html: 2 findings incl new client-side-vulnlab-hands-on-lab-evidence (was 18 via shared SPA bundle only)",
+      "vibe-eval.com: client-side-vibe-eval-evidence + existing CSRF/SSRF/API lab slugs (6 findings)",
+      "jwtarsenal.com: client-side-jwt-arsenal-evidence + dangerous-html-sinks + vibe-sitemap-sensitive-paths (4 findings)",
+      "hack-this-site-eta.vercel.app/labs/localstorage.html: 20 findings incl secret-stripe-live + idor-sequential-ids + dom-eval-xss"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "seclab.vercel.app per-lab routes return only misconfig markers — CWE-79/CWE-89 live demos need API route oracles",
-      "hack-this-site idor.html intermittent shallow crawl (1 vs 21 findings) — Vercel Security Checkpoint may block ThugirScanner UA"
+      "VulnLab Vercel Security Checkpoint intermittently blocks ThugirScanner UA — validate API probes need plain-browser retry",
+      "seclab.vercel.app per-lab routes return only misconfig markers — CWE-79/CWE-89 live demos need API route oracles"
     ]
   },
   "discovery_highlights": {
@@ -86,20 +85,14 @@
     "hack-this-site-eta.vercel.app/labs/secret-scanner.html": 21,
     "hack-this-site-eta.vercel.app/api/validate/cors": 17,
     "hack-this-site-eta.vercel.app/api/validate/upload": 15,
-    "hack-this-site-eta.vercel.app/api/validate/input-validation": 1,
-    "hack-this-site-eta.vercel.app/api/validate/security-headers": 1,
-    "hack-this-site-eta.vercel.app/api/validate/secret-scanner": 1,
+    "hack-this-site-eta.vercel.app/api/methods": 20,
+    "hack-this-site-eta.vercel.app/api/cors": 21,
     "oauthlabs.com": 5,
     "auth0.oauthlabs.com": 5,
     "dsopas.github.io/MindAPI": 6,
-    "app.hackinghub.io": 3,
-    "app.hackinghub.io/hubs/shopmate": 4,
-    "owasp-finbot-ctf.org/demo/cineflow": 6,
-    "hacker101.com": 7,
-    "pentest-fauxbank.vercel.app/support": 9,
     "pentest-fauxbank.vercel.app/transfer": 8,
-    "juice-shop.herokuapp.com": 8,
-    "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 18,
+    "juice-shop.herokuapp.com": 9,
+    "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 2,
     "hack-this-site-eta.vercel.app/labs/sqli-error.html": 18,
     "hack-this-site-eta.vercel.app/labs/idor.html": 21,
     "vibe-eval.com": 6,
@@ -108,6 +101,8 @@
     "seclab.vercel.app/xss": 3,
     "seclab.vercel.app/sqli": 3,
     "web-security-learning-labs.vercel.app/learn/modules": 4,
-    "hack-this-site-eta.vercel.app/labs/localstorage.html": 20
+    "hack-this-site-eta.vercel.app/labs/localstorage.html": 20,
+    "escape.tech/academy/broken-authentication": 3,
+    "escape.tech/academy/sql-injection": 2
   }
 }

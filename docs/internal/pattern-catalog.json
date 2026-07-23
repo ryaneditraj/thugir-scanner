@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T17:10:08.962Z",
-  "total": 633,
-  "uniqueSlugs": 631,
+  "generatedAt": "2026-07-23T18:17:15.326Z",
+  "total": 636,
+  "uniqueSlugs": 634,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 615,
+    "generic": 618,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 561,
+    "deep": 564,
     "continuous": 0
   },
   "byCategory": {
@@ -26,14 +26,14 @@
     "Information exposure": 1,
     "Information disclosure": 42,
     "Security misconfiguration": 52,
-    "Broken authentication": 44,
-    "Injection": 130,
+    "Broken authentication": 45,
+    "Injection": 131,
     "Cross-site scripting": 108,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
     "Sensitive data exposure": 7,
-    "AI security": 34,
+    "AI security": 35,
     "XSS": 1
   },
   "slugs": [
@@ -269,6 +269,7 @@
     "client-side-juice-shop-project-evidence",
     "client-side-juice-shop-vapt-evidence",
     "client-side-juicesec-lab-evidence",
+    "client-side-jwt-arsenal-evidence",
     "client-side-jwt-none-evidence",
     "client-side-jwtlens-evidence",
     "client-side-knoxss-test-page-evidence",
@@ -440,6 +441,7 @@
     "client-side-unsecure-pwa-evidence",
     "client-side-vapi-api-lab-evidence",
     "client-side-vaultapp-lab-evidence",
+    "client-side-vibe-eval-evidence",
     "client-side-voidsec-shopping-cart-evidence",
     "client-side-vuln-auth-portal-evidence",
     "client-side-vuln-expose-evidence",
@@ -467,6 +469,7 @@
     "client-side-vulnlab-audit-api-evidence",
     "client-side-vulnlab-auth-session-lab-evidence",
     "client-side-vulnlab-cms-platform-evidence",
+    "client-side-vulnlab-hands-on-lab-evidence",
     "client-side-vulnlab-idor-lab-evidence",
     "client-side-vulnlab-ml-threat-detector-evidence",
     "client-side-vulnlab-validate-api-evidence",
