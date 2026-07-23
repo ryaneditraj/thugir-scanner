@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T13:19:42.107Z",
+  "updated_at": "2026-07-23T13:24:24.894Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2120,
-  "total_findings": 11080,
+  "total_sites_scanned": 2128,
+  "total_findings": 11118,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1611,
-  "discovery_findings": 8897,
+  "discovery_urls_added": 1616,
+  "discovery_findings": 8935,
   "improvements_shipped": 983,
-  "last_run": "2026-07-23T13:19:42.107Z",
+  "last_run": "2026-07-23T13:24:24.894Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 6,
+      "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Shallow crawl (pages=1 probes=104) but full 6/6 recall — sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure absent",
+      "note": "Cold-start pass1 missed sensitive_data (5 findings pages=1 probes=80); 12s wake retry restored 8 findings 6/6 recall — security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,39 +52,43 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 91,
-      "skipped_48h": [],
-      "focus": "Next.js middleware CVE demo URL oracle; Escape Academy CORS lesson markers; HTB Academy course preview; hack-this-site serverless API labs",
-      "improvements_shipped_this_run": 3
+      "findings": 38,
+      "skipped_48h": [
+        "https://hack-this-site-eta.vercel.app/api/methods",
+        "https://hack-this-site-eta.vercel.app/api/headers",
+        "https://hack-this-site-eta.vercel.app/api/cookies",
+        "https://hack-this-site-eta.vercel.app/api/cors",
+        "https://escape.tech/academy/broken-function-level-authorization"
+      ],
+      "focus": "FauxBank OWASP banking lab modules (scanner/instructor/report/support/transfer); Escape Academy CORS; Next.js middleware CVE demo; HTB Academy API attacks preview",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings, shallow crawl) — no benchmark misses",
-      "middleware-vulnerability-cve-2025.vercel.app: client-side-nextjs-middleware-cve-evidence (1→3 findings)",
-      "escape.tech/academy/cors: client-side-escape-academy-evidence (1→3 findings)",
-      "escape.tech/academy/json-injection: client-side-escape-academy-evidence (1→2 findings)",
-      "academy.hackthebox.com/course/preview/web-service--api-attacks: client-side-hackthebox-academy-evidence (0→5 findings)",
-      "hack-this-site-eta.vercel.app/api/cors: 21 findings incl reflected-xss-query-param + client-side-xss-evidence",
-      "escape.tech/academy/unrestricted-resource-consumption: client-side-graphql-security-hub-evidence (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings after wake retry) — cold-start miss sensitive_data on pass1",
+      "pentest-fauxbank.vercel.app/scanner: fauxbank-authenticated-sqli-search + fauxbank-idor-accounts-probe + client-side-fauxbank-lab-evidence (7 findings)",
+      "pentest-fauxbank.vercel.app/support: stored-XSS lesson surface via dangerous-html-sinks (5 findings)",
+      "pentest-fauxbank.vercel.app/transfer: shallow — only missing-security-headers (1 finding; CSRF lesson not probed unauthenticated)",
+      "escape.tech/academy/cors: client-side-csrf-evidence + client-side-escape-academy-evidence (3 findings)",
+      "middleware-vulnerability-cve-2025.vercel.app: client-side-nextjs-middleware-cve-evidence (3 findings)",
+      "academy.hackthebox.com/course/preview/web-service--api-attacks: client-side-hackthebox-academy-evidence (5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com: shallow crawl (pages=1) — security-question-disclosure + juice-shop-forgotten-backup-disclosure absent; sensitive_data only via vibe-unauthenticated-api-routes",
+      "juice-shop.herokuapp.com: pass1 cold-start missed sensitive_data before wake retry (gap=[sensitive_data])",
       "secret-resend slug still absent on juice-shop",
-      "challenge-0726.intigriti.io: nginx 403 blocks cloud scanner from challenge HTML"
+      "pentest-fauxbank.vercel.app/transfer: CSRF lesson #7 not detected without authenticated session",
+      "hack-this-site-eta API labs skipped — scanned within 48h window"
     ]
   },
   "discovery_highlights": {
+    "pentest-fauxbank.vercel.app/scanner": 7,
+    "pentest-fauxbank.vercel.app/instructor": 7,
+    "pentest-fauxbank.vercel.app/report": 7,
+    "pentest-fauxbank.vercel.app/support": 5,
+    "pentest-fauxbank.vercel.app/transfer": 1,
     "middleware-vulnerability-cve-2025.vercel.app": 3,
     "escape.tech/academy/cors": 3,
-    "escape.tech/academy/json-injection": 2,
     "academy.hackthebox.com/course/preview/web-service--api-attacks": 5,
-    "hack-this-site-eta.vercel.app/api/cors": 21,
-    "hack-this-site-eta.vercel.app/api/cookies": 21,
-    "hack-this-site-eta.vercel.app/api/headers": 20,
-    "escape.tech/academy/broken-function-level-authorization": 2,
-    "escape.tech/academy/disable-debug-mode": 2,
-    "escape.tech/academy/unrestricted-resource-consumption": 3,
-    "escape.tech/academy/broken-object-property-level-authorization": 2,
-    "juice-shop.herokuapp.com": 6
+    "juice-shop.herokuapp.com": 8
   }
 }
