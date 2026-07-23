@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T14:05:00.000Z",
+  "updated_at": "2026-07-23T15:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/xss-reflected",
+      "source": "dkyazzentwatwa/hack-this-site — automated reflected XSS validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/localstorage",
+      "source": "dkyazzentwatwa/hack-this-site — localStorage secret leak validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/git-exposure",
+      "source": "dkyazzentwatwa/hack-this-site — .git exposure validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/learn/xss",
+      "source": "Web 安全实验室 — cross-site scripting lesson chapter (web-security-lab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-lab.vercel.app/learn/csrf",
+      "source": "Web 安全实验室 — CSRF attack/defense lesson chapter (web-security-lab.vercel.app)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-lab.vercel.app/learn/csp",
       "source": "Web 安全实验室 — CSP deep-defense / inline-script lesson chapter (web-security-lab.vercel.app)",
