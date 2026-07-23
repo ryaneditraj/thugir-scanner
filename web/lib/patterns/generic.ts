@@ -14587,5 +14587,83 @@ export const genericPatterns: Pattern[] = [
       "We host drag-security-flaws XSS and IDOR lesson modules. Show how to isolate educational attack walkthroughs from production user data flows.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-hermes-codex-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Hermes Codex AI security research hub disclosed",
+    description:
+      "hermes-codex.vercel.app publishes AI adversarial research on indirect prompt injection, tool-injection RCE, RAG poisoning, and CVE analysis.",
+    impactOneline:
+      "Public Hermes Codex research documents LLM attack chains useful for calibrating AI security scanners against prompt-injection and agentic-RCE oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHermesCodexEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hermes Codex is intentional security research — never expose production LLM keys in public case studies.",
+      steps: [
+        "Use isolated research environments for adversarial AI experiments.",
+        "Redact live API keys from published CVE write-ups.",
+        "Scope prompt-injection PoCs to authorized test agents only."
+      ]
+    },
+    fixPrompt:
+      "We publish Hermes Codex AI security research. Show how to keep case-study environments isolated from production LLM deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentest-ground-guardian-leaks-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pentest-Ground GuardianLeaks vulnerable lab disclosed",
+    description:
+      "pentest-ground.com:81 hosts GuardianLeaks, a deliberately vulnerable Flask blog catalogued for XSS, SSRF, and code-injection training.",
+    impactOneline:
+      "GuardianLeaks exposes a public XSS/SSRF/code-injection training surface referenced by the Pentest-Ground vulnerable-app catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentestGroundGuardianLeaksEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GuardianLeaks is an intentional training lab — do not deploy on production infrastructure.",
+      steps: [
+        "Run GuardianLeaks only on isolated lab networks.",
+        "Block public access to training Flask apps in production.",
+        "Patch XSS, SSRF, and code-injection flaws before any production blog deployment."
+      ]
+    },
+    fixPrompt:
+      "We host GuardianLeaks as a Pentest-Ground training lab. Show how to keep it network-isolated from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pentest-ground-hub-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pentest-Ground vulnerable lab catalog disclosed",
+    description:
+      "pentest-ground.com indexes deliberately vulnerable web apps — GuardianLeaks, DVWA, and OpenAPI eval labs — with linked OWASP attack categories.",
+    impactOneline:
+      "Pentest-Ground hub catalogs public vulnerable-app targets useful as scanner calibration oracles for XSS, SSRF, SQLi, and RCE.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePentestGroundHubEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pentest-Ground catalogs intentional training targets — never point production scanners at unauthorized hosts.",
+      steps: [
+        "Scope automated scans to owned lab infrastructure only.",
+        "Keep DVWA and GuardianLeaks instances on isolated VLANs.",
+        "Document which catalog entries are authorized scan targets."
+      ]
+    },
+    fixPrompt:
+      "We maintain a Pentest-Ground vulnerable-app catalog. Show how to restrict automated scanning to authorized lab hosts only.",
+    version: 1,
+    enabled: true
   }
 ];
