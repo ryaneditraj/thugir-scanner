@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T06:18:53.107Z",
+  "updated_at": "2026-07-23T06:24:21.785Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1591,
   "discovery_findings": 8737,
-  "improvements_shipped": 971,
-  "last_run": "2026-07-23T06:18:53.107Z",
+  "improvements_shipped": 974,
+  "last_run": "2026-07-23T06:24:21.785Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 9,
+      "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "6/6 recall maintained (9 findings, pages=6 probes=186); no benchmark misses",
+      "note": "6/6 recall maintained (8 findings) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,22 +56,23 @@
       "new_url_findings": 35,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Intigriti Jul-2026 + HTB CTF hub + HackThisSite index + VulnLab OWASP hub + HTB Academy module",
-      "improvements_shipped_this_run": 0
+      "focus": "weaponsforge Firebase README probe + PentestLab scanner demo + CYBERSEC LAB OWASP SPA bundle markers",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 recall (9 findings, pages=6 probes=186) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark 6/6 recall (8 findings) — no benchmark misses",
+      "weaponsforge.github.io/hacker-friendly-app: GitHub README Firebase misconfig + XSS markers (3→4 findings)",
+      "pentest-lab.vercel.app: inline SQLi payload catalog + simulated scanner findings (3→4 findings)",
+      "cybersec-lab.vercel.app: Spanish OWASP Top 10 SPA with SQLi login_bypass + XSS modules (5→6 findings)",
       "hack-this-site-eta.vercel.app/owasp/: 24 findings incl sql-error-disclosure + dom-eval-xss + unauthenticated-admin-endpoint + graphql-introspection-enabled",
-      "www.hackthissite.org/pages/index/index.php: 5 findings incl client-side-hackthissite-evidence mission platform markers",
-      "ctf.hackthebox.com: 3 findings incl vibe-sitemap-sensitive-paths + client-side-hackthebox-evidence",
-      "challenge-0726.intigriti.io: 403 bot-wall — missing-security-headers only (landing unreachable)"
+      "www.hackthissite.org/pages/index/index.php: 5 findings incl client-side-hackthissite-evidence mission platform markers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "challenge-0726.intigriti.io: Cloudflare/bot-wall returns 403 — shallow crawl, XSS puzzle markers unreachable",
-      "academy.hackthebox.com/module/details/88: module content behind login — client-side-hackthebox-evidence landing only",
-      "cybersec-lab/pentest-lab/boudaoud20: queue head rescanned within 48h window — low delta vs 05 UTC pass"
+      "weaponsforge.github.io/hacker-friendly-app: deployed GitHub Pages shell is Next.js scaffold — README cross-origin probe required for lab markers",
+      "cybersec-lab.vercel.app: injectable challenge routes are client-side SPA modules — bundle markers only without live auth",
+      "pentest-lab.vercel.app: scanner findings are simulated client-side — no live target probing",
+      "challenge-0726.intigriti.io: Cloudflare/bot-wall returns 403 — shallow crawl, XSS puzzle markers unreachable"
     ]
   },
   "discovery_highlights": {
@@ -101,18 +102,20 @@
     "vwad.owasp.org/app/webgoat": 6,
     "wizer-ctf.com": 4,
     "redtiger.labs.overthewire.org/level9.php": 5,
-    "cybersec-lab.vercel.app": 5,
-    "pentest-lab.vercel.app": 3,
+    "cybersec-lab.vercel.app": 6,
+    "pentest-lab.vercel.app": 4,
     "boudaoud20.github.io/xss-attack-lab": 3,
     "www.vulnerableapp.com": 3,
     "hacker101.com": 5,
     "www.bugbountyhunter.com/challenge?id=6": 3,
     "www.bugbountyhunter.com/challenge?id=7": 3,
     "chal7.vercel.app": 6,
+    "sam.wizer-ctf.com": 5,
+    "weaponsforge.github.io/hacker-friendly-app": 4,
     "hack-this-site-eta.vercel.app/owasp": 24,
     "www.hackthissite.org/pages/index/index.php": 5,
     "ctf.hackthebox.com": 3,
     "challenge-0726.intigriti.io": 1,
-    "academy.hackthebox.com/module/details/88": 2,
+    "academy.hackthebox.com/module/details/88": 2
   }
 }

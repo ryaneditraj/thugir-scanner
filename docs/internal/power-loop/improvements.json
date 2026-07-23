@@ -6419,6 +6419,24 @@
       "slug": "client-side-echoctf-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: echoCTF.RED hacking laboratories + CVE based targets + innovative challenges landing copy; echoctf.red findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:weaponsforge.github.io/hacker-friendly-app",
+      "slug": "client-side-hacker-friendly-firebase-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: raw.githubusercontent.com/weaponsforge/hacker-friendly-app README hack-prone Firebase + insecure security rules + Display quotes as HTML XSS; weaponsforge.github.io/hacker-friendly-app findings 3→4; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-lab.vercel.app",
+      "slug": "client-side-pentest-lab-scanner-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML PentestLab Web Vulnerability Scanner + SQL Injection Payloads ' OR '1'='1 + simulated SQLi/XSS findings; pentest-lab.vercel.app findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cybersec-lab.vercel.app",
+      "slug": "client-side-cybersec-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Web Hacking SQL Injection/XSS OWASP Top 10 + login_bypass sqlAnswers admin'-- + THM{sql_injection_pwned}; cybersec-lab.vercel.app findings 5→6; benchmark juice-shop 8 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11276,6 +11294,21 @@
       "source": "discovery:echoctf.red",
       "slug": "client-side-echoctf-evidence",
       "shipped_at": "2026-07-23T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:weaponsforge.github.io/hacker-friendly-app",
+      "slug": "client-side-hacker-friendly-firebase-evidence",
+      "shipped_at": "2026-07-23T06:24:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-lab.vercel.app",
+      "slug": "client-side-pentest-lab-scanner-evidence",
+      "shipped_at": "2026-07-23T06:24:00.000Z"
+    },
+    {
+      "source": "discovery:cybersec-lab.vercel.app",
+      "slug": "client-side-cybersec-lab-evidence",
+      "shipped_at": "2026-07-23T06:24:00.000Z"
     }
   ]
 }
