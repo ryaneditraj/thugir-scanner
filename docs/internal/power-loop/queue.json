@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T15:12:00.000Z",
+  "updated_at": "2026-07-23T16:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/cors",
+      "source": "dkyazzentwatwa/hack-this-site — CORS misconfiguration validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/upload",
+      "source": "dkyazzentwatwa/hack-this-site — unrestricted file upload validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/input-validation",
+      "source": "dkyazzentwatwa/hack-this-site — missing input validation validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/security-headers",
+      "source": "dkyazzentwatwa/hack-this-site — security headers validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/secret-scanner",
+      "source": "dkyazzentwatwa/hack-this-site — secret-scanner validation API lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/api/validate/xss-reflected",
       "source": "dkyazzentwatwa/hack-this-site — automated reflected XSS validation API lab (GitHub README)",
