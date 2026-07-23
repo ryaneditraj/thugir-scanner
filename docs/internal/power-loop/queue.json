@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T20:05:00.000Z",
+  "updated_at": "2026-07-23T21:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/git-exposure.html",
+      "source": "dkyazzentwatwa/hack-this-site — VULN-007 git exposure hands-on lab (GitHub README lab catalog)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/upload.html",
+      "source": "dkyazzentwatwa/hack-this-site — VULN-004 file upload validation lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/input-validation.html",
+      "source": "dkyazzentwatwa/hack-this-site — INPUT-001 input validation bypass lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/labs/security-headers.html",
+      "source": "dkyazzentwatwa/hack-this-site — HEADER-001 security headers misconfiguration lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/wordpress.html",
+      "source": "dkyazzentwatwa/hack-this-site — CMS WordPress vulnerability training surface (GitHub cms/ tree)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://webchal1.vercel.app/",
       "source": "CryptoNite CTF 2026 webchal1 — SSRF via notes import (blog.rei.my.id writeup)",
