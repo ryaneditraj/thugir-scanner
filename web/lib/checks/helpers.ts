@@ -42,7 +42,9 @@ export const SENSITIVE_PATH_NEEDLES = [
   "/.well-known/acme",
   "/api/debug",
   "/staging",
-  "/internal"
+  "/internal",
+  "/back-office",
+  "the-back-office"
 ];
 
 export const DEMO_FLAG_RES = [
