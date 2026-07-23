@@ -6599,6 +6599,24 @@
       "slug": "escape-academy-broken-auth-lesson-markers",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: broken-authentication lesson title Prevent Mutation Brute-Force Attacks + brute-force attacks targeting GraphQL authentication; CLIENT_ESCAPE_ACADEMY_RES extended; escape.tech/academy/broken-authentication findings 2→3 incl client-side-escape-academy-evidence; benchmark 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-hands-on-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/xss-reflected.html has A03-006 Reflected XSS + data-lab-id=\"xss-reflected\" + xss-output.innerHTML; clientSideVulnlabHandsOnLabEvidence minHits=1 on /labs/*.html; hack-this-site-eta.vercel.app/labs/xss-reflected.html gains dedicated slug (2 findings vs 18 shared SPA bundle); benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vibe-eval.com",
+      "slug": "client-side-vibe-eval-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VibeEval — AI Security Testing + 310+ real attack probes + missing RLS + auth gaps; clientSideVibeEvalEvidence minHits=1 URL oracle; vibe-eval.com findings 6 incl new client-side-vibe-eval-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:jwtarsenal.com",
+      "slug": "client-side-jwt-arsenal-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWT Arsenal - Offensive JWT Toolkit + alg:none + algorithm confusion RS256/HS256 + JWK/JKU/KID injection modules; clientSideJwtArsenalEvidence + extractJwtArsenalExploitSeeds crawl seeds; jwtarsenal.com findings 4 incl new client-side-jwt-arsenal-evidence; benchmark 9 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11561,6 +11579,21 @@
       "source": "discovery:escape.tech/academy",
       "slug": "escape-academy-broken-auth-lesson-markers",
       "shipped_at": "2026-07-23T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-hands-on-lab-evidence",
+      "shipped_at": "2026-07-23T18:20:00.000Z"
+    },
+    {
+      "source": "discovery:vibe-eval.com",
+      "slug": "client-side-vibe-eval-evidence",
+      "shipped_at": "2026-07-23T18:20:00.000Z"
+    },
+    {
+      "source": "discovery:jwtarsenal.com",
+      "slug": "client-side-jwt-arsenal-evidence",
+      "shipped_at": "2026-07-23T18:20:00.000Z"
     }
   ]
 }
