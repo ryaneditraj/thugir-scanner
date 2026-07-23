@@ -8816,6 +8816,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnshop-module-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop route-specific vulnerability module disclosed",
+    description:
+      "VulnShop SPA documents per-route OWASP labs — SQL injection on /products, IDOR on /orders, mass assignment on /register, and JWT is_admin broken access on /login.",
+    impactOneline:
+      "Route-specific VulnShop modules teach exploitable SQLi, IDOR, mass assignment, and JWT forgery patterns in one deployable SPA.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnshopModuleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnShop modules are intentional training — isolate lab routes from production APIs.",
+      steps: [
+        "Parameterize SQL product search queries; never concatenate user input.",
+        "Verify order ownership server-side before returning order details.",
+        "Reject unexpected registration fields like balance from client payloads.",
+        "Validate JWT signatures with strong secrets and enforce server-side role checks."
+      ]
+    },
+    fixPrompt:
+      "We host VulnShop pentest modules (SQLi search, IDOR orders, mass-assignment register, JWT login bypass). Show how to fix each route.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwtlens-evidence",
     platform: "generic",
     category: "Broken authentication",

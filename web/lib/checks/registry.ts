@@ -21531,6 +21531,72 @@ const clientSideVulnshopEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnShop route-specific module oracles (vulnshop.vercel.app/login|orders|…) --------
+const VULNSHOP_MODULE_ORACLES: {
+  pathRe: RegExp;
+  markers: { label: string; re: RegExp }[];
+  note: string;
+}[] = [
+  {
+    pathRe: /\/login\b/i,
+    markers: [
+      { label: "JWT is_admin admin gate", re: /is_admin/i },
+      { label: "Weak JWT signing secret", re: /weak secret.*"secret"|"secret".*weak secret/i },
+      { label: "Broken Access Control lab", re: /\[A01\]\s*Broken Access Control/i }
+    ],
+    note: "VulnShop /login documents JWT is_admin broken access control with forgeable weak signing secret"
+  },
+  {
+    pathRe: /\/orders\b/i,
+    markers: [
+      { label: "IDOR Practice panel", re: /\[A01:\s*IDOR Practice\]/i },
+      {
+        label: "Order lookup without ownership check",
+        re: /does not verify that the order belongs to you|Try any order ID/i
+      }
+    ],
+    note: "VulnShop /orders documents IDOR via unauthenticated order lookup by sequential IDs"
+  },
+  {
+    pathRe: /\/register\b/i,
+    markers: [
+      { label: "Mass Assignment vuln tag", re: /Mass Assignment \[A01\]/i },
+      { label: "Balance field mass-assignment", re: /server accepts a.*balance.*field|balance.*mass-assignment/i }
+    ],
+    note: "VulnShop /register documents mass-assignment via client-supplied balance field"
+  },
+  {
+    pathRe: /\/products\b/i,
+    markers: [
+      { label: "SQL injection search placeholder", re: /try SQL injection here/i },
+      { label: "Products search lab", re: /Search products/i }
+    ],
+    note: "VulnShop /products documents SQL injection via product search parameter"
+  }
+];
+
+const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
+  if (!/vulnshop|VulnShop/i.test(ctx.combined + urlCorpus)) return NEGATIVE;
+  for (const oracle of VULNSHOP_MODULE_ORACLES) {
+    if (!oracle.pathRe.test(urlCorpus)) continue;
+    const hits: { label: string; sample: string }[] = [];
+    for (const m of oracle.markers) {
+      const match = ctx.combined.match(m.re);
+      if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+    }
+    if (hits.length >= 1) {
+      return {
+        fired: true,
+        confidence: hits.length >= 2 ? 0.9 : 0.87,
+        evidence: { markers: hits.slice(0, 3), note: oracle.note }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- BuggyBuy vulnerable e-commerce SPA (vulnerable-web-application-jecw.vercel.app) -
 const CLIENT_BUGGYBUY_RES: { label: string; re: RegExp }[] = [
   {
@@ -28209,6 +28275,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
+  clientSideVulnshopModuleEvidence,
   clientSideBuggybuyEvidence,
   clientSideWebSecurityLearningLabsEvidence,
   clientSideJwtlensEvidence,
