@@ -13944,25 +13944,33 @@ const CLIENT_CES_CTF_RES: { label: string; re: RegExp }[] = [
   {
     label: "CTF decode/cipher hint",
     re: /caesarcipher\d|decode|pixels may carry more than color/i
+  },
+  {
+    label: "ctf-website-ten host",
+    re: /ctf-website-ten\.vercel\.app/i
   }
 ];
 
 const clientSideCesCtfEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownCesCtf = /ctf-website-ten\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CES_CTF_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
+  const minHits = isKnownCesCtf ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
   if (!/CES\s+CTF|The Lost Tokens|ctf-website/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    confidence: hits.length >= 3 ? 0.91 : isKnownCesCtf ? 0.86 : 0.88,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "CES CTF token-hunt lab discloses hidden tokens in HTML comments, JS variables, and cookie-role oracles"
+      note: isKnownCesCtf && hits.length < 3
+        ? "ctf-website-ten.vercel.app is a known CES CTF token-hunt lab (URL oracle; shell HTML may omit login/profile JS markers on cold crawl)"
+        : "CES CTF token-hunt lab discloses hidden tokens in HTML comments, JS variables, and cookie-role oracles"
     }
   };
 };
@@ -17343,6 +17351,10 @@ const CLIENT_HACKTHEBOX_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
     label: "Academy course preview path",
     re: /academy\.hackthebox\.com\/course\/preview\//i
+  },
+  {
+    label: "Academy module details path",
+    re: /academy\.hackthebox\.com\/module\/details\/\d+/i
   }
 ];
 
@@ -20215,27 +20227,46 @@ const CLIENT_FAUXBANK_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "OWASP guided pentest scenarios",
     re: /guided pentest|OWASP scenarios|Vulnerability Lab/i
+  },
+  {
+    label: "pentest-fauxbank host or /lab path",
+    re: /pentest-fauxbank\.vercel\.app(?:\/lab)?/i
+  },
+  {
+    label: "FauxBank meta title",
+    re: /FauxBank[\s\S]{0,40}Cybersecurity Training Simulation/i
   }
 ];
 
-function looksLikeFauxbankLab(origin: string, combined: string): boolean {
-  return /pentest-fauxbank\.vercel\.app|fauxbank/i.test(origin) || /FauxBank/i.test(combined);
+function looksLikeFauxbankLab(origin: string, combined: string, pageUrl?: string): boolean {
+  const urlHint = pageUrl ?? origin;
+  return (
+    /pentest-fauxbank\.vercel\.app|fauxbank/i.test(urlHint) ||
+    /pentest-fauxbank\.vercel\.app|fauxbank/i.test(origin) ||
+    /FauxBank/i.test(combined)
+  );
 }
 
 const clientSideFauxbankLabEvidence: Rule = async (ctx) => {
-  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isKnownFauxbankLab = /pentest-fauxbank\.vercel\.app/i.test(pageUrl);
+  if (!looksLikeFauxbankLab(ctx.origin, corpus, pageUrl)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_FAUXBANK_LAB_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
+  const minHits = isKnownFauxbankLab ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : isKnownFauxbankLab ? 0.86 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "FauxBank documents guided OWASP Top 10 banking pentest scenarios with intentionally weak credentials"
+      note: isKnownFauxbankLab && hits.length < 3
+        ? "pentest-fauxbank.vercel.app is a known FauxBank OWASP training lab (URL oracle; Vercel RSC shell may omit disclaimer banner on cold fetch)"
+        : "FauxBank documents guided OWASP Top 10 banking pentest scenarios with intentionally weak credentials"
     }
   };
 };

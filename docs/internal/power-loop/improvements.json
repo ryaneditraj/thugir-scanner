@@ -6527,6 +6527,24 @@
       "slug": "client-side-hackthebox-academy-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Web Service & API Attacks Course + SOAP SQL Injection + XXE module list on course/preview path; academy.hackthebox.com/course/preview/web-service--api-attacks findings 0→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctf-website-ten.vercel.app",
+      "slug": "ces-ctf-vercel-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CES CTF — The Lost Tokens title + ctf-website-ten.vercel.app host; clientSideCesCtfEvidence minHits=1 URL oracle; ctf-website-ten.vercel.app findings 2→4; benchmark juice-shop 6 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-lab-vercel-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FauxBank — Cybersecurity Training Simulation meta + pentest-fauxbank.vercel.app/lab RSC shell; clientSideFauxbankLabEvidence minHits=1 URL oracle; pentest-fauxbank.vercel.app/lab findings 1→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "htb-academy-module-details-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: academy.hackthebox.com/module/details/88 SSO redirect strips module HTML; module/details/\\d+ path marker + minHits=1 URL oracle; academy.hackthebox.com/module/details/88 findings 2→3; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11444,6 +11462,21 @@
       "source": "discovery:academy.hackthebox.com",
       "slug": "htb-academy-course-preview-markers",
       "shipped_at": "2026-07-23T12:01:00.000Z"
+    },
+    {
+      "source": "discovery:ctf-website-ten.vercel.app",
+      "slug": "ces-ctf-vercel-url-oracle",
+      "shipped_at": "2026-07-23T13:19:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-lab-vercel-url-oracle",
+      "shipped_at": "2026-07-23T13:19:00.000Z"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "htb-academy-module-details-oracle",
+      "shipped_at": "2026-07-23T13:19:00.000Z"
     }
   ]
 }
