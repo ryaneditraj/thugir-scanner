@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T07:30:27.135Z",
-  "total": 624,
-  "uniqueSlugs": 622,
+  "generatedAt": "2026-07-23T08:03:53.513Z",
+  "total": 625,
+  "uniqueSlugs": 623,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 606,
+    "generic": 607,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 552,
+    "deep": 553,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 159,
+    "Broken access control": 160,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -202,6 +202,7 @@
     "client-side-hacksplaining-xss-stored-lesson-evidence",
     "client-side-hacksplaining-xssi-lesson-evidence",
     "client-side-hackthebox-academy-evidence",
+    "client-side-hackthebox-ctf-evidence",
     "client-side-hackthebox-evidence",
     "client-side-hackthissite-evidence",
     "client-side-hackthissite-realistic-mission-evidence",

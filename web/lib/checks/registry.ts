@@ -2821,7 +2821,15 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "innerHTML = decodeURIComponent(user input)",
-    re: /(?:getElementById|querySelector)\([^)]+\)\.innerHTML\s*=\s*decodeURIComponent\s*\(\s*(?:input|params?\.(?:name|q|query)|userInput)\b/
+    re: /(?:document\.)?(?:getElementById|querySelector)\([^)]+\)\.innerHTML\s*=\s*decodeURIComponent\s*\(\s*(?:input|params?\.(?:name|q|query)|userInput)\b/
+  },
+  {
+    label: "innerHTML decodeURIComponent hash/query input (XSS lab)",
+    re: /\.innerHTML\s*=\s*decodeURIComponent\s*\(\s*(?:input|params?\.(?:name|q|query)|userInput)\b/
+  },
+  {
+    label: "getElementById innerHTML decodeURIComponent (HTML-broken write-up)",
+    re: /getElementById[\s\S]{0,120}\.innerHTML\s*=\s*decodeURIComponent[\s\S]{0,80}\binput\b/
   },
   {
     label: "commentStore.map rendered via innerHTML (stored XSS)",
