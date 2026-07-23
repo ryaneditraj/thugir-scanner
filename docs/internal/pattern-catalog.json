@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T14:05:31.629Z",
-  "total": 629,
-  "uniqueSlugs": 627,
+  "generatedAt": "2026-07-23T15:06:53.957Z",
+  "total": 631,
+  "uniqueSlugs": 629,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 611,
+    "generic": 613,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 557,
+    "deep": 559,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 162,
+    "Broken access control": 163,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -33,7 +33,7 @@
     "SSRF": 1,
     "Server-side request forgery": 8,
     "Sensitive data exposure": 7,
-    "AI security": 33,
+    "AI security": 34,
     "XSS": 1
   },
   "slugs": [
@@ -139,6 +139,7 @@
     "client-side-fauxbank-lab-evidence",
     "client-side-ffufme-evidence",
     "client-side-file-upload-evidence",
+    "client-side-finbot-demo-namespace-evidence",
     "client-side-flask-vulnapp-evidence",
     "client-side-flask-vulnapp-stored-xss-evidence",
     "client-side-frontend-xss-demo-evidence",
@@ -172,6 +173,7 @@
     "client-side-hacker101-ctf-evidence",
     "client-side-hackersec-academy-evidence",
     "client-side-hacking-lab-evidence",
+    "client-side-hackinghub-challenge-evidence",
     "client-side-hackinghub-evidence",
     "client-side-hackmyvm-evidence",
     "client-side-hacksec-evidence",
