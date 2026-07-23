@@ -6617,6 +6617,24 @@
       "slug": "client-side-jwt-arsenal-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: JWT Arsenal - Offensive JWT Toolkit + alg:none + algorithm confusion RS256/HS256 + JWK/JKU/KID injection modules; clientSideJwtArsenalEvidence + extractJwtArsenalExploitSeeds crawl seeds; jwtarsenal.com findings 4 incl new client-side-jwt-arsenal-evidence; benchmark 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-nextjs-lab-api-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DaniSam-STU/security-lab README documents /api/xss-vulnerable POST + /api/sqli-vulnerable string concat + /api/users-vulnerable/1 IDOR; seclabNextjsLabApiProbe rejects Angular stub shell; clientSideSecLabPlaygroundEvidence minHits=1 URL oracle on seclab.vercel.app/{xss,sqli,csrf,idor}; seclab.vercel.app/xss findings 3→4; benchmark 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-lab.vercel.app",
+      "slug": "client-side-web-security-lab-zh-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /learn/cookies-samesite Cookie、会话与 SameSite + 教育演示：Cookie 属性; CLIENT_WEB_SECURITY_LAB_ZH_RES SameSite markers + minHits=1 chapter URL oracle; web-security-lab.vercel.app/learn/cookies-samesite gains client-side-web-security-lab-zh-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-hands-on-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/idor.html data-lab-id=\"idor\" + GET /api/validate/idor returns labId JSON; clientSideVulnlabHandsOnLabEvidence cross-probes validate API + path oracle when Vercel checkpoint drops HTML; hack-this-site-eta.vercel.app/labs/idor.html findings 1→21; benchmark 9 findings 6/6 maintained"
     }
   ],
   "shipped": [

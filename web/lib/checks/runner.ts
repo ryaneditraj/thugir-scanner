@@ -1234,6 +1234,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadMcpServersLabEvidence",
   "clientSideVwadVulnerableappEvidence",
   "clientSideVulnerableappDomXssEvidence",
+  "seclabNextjsLabApiProbe",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -7529,7 +7530,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     : [];
   const seclabPlaygroundPrioritySeeds =
-    /securityweb-iota\.vercel\.app/i.test(home.finalUrl)
+    /securityweb-iota\.vercel\.app|seclab\.vercel\.app/i.test(home.finalUrl)
       ? ["/xss", "/sqli", "/csrf", "/idor"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
   const vwadWrongsecretsPrioritySeeds =

@@ -12223,6 +12223,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-nextjs-lab-api-probe",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab Next.js vulnerable API routes exposed",
+    description:
+      "SecLab Next.js training app exposes live /api/xss-vulnerable, /api/sqli-vulnerable, and /api/users-vulnerable routes with intentional CWE-79/CWE-89/CWE-639 flaws.",
+    impactOneline:
+      "Public SecLab API routes return unsafe XSS reflection, SQL string-concat queries, and unauthenticated user records for hands-on practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabNextjsLabApiProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate SecLab API training routes behind auth; never deploy vulnerable patterns to production.",
+      steps: [
+        "Require authentication before serving /api/*-vulnerable routes.",
+        "Isolate SecLab on dedicated infrastructure with no production data.",
+        "Monitor lab egress for abuse."
+      ]
+    },
+    fixPrompt:
+      "We host SecLab Next.js XSS/SQLi/IDOR API labs. Show how to auth-gate training routes and isolate the sandbox.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-seclab-playground-evidence",
     platform: "generic",
     category: "Broken access control",

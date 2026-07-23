@@ -18376,19 +18376,25 @@ const CLIENT_WEB_SECURITY_LAB_ZH_RES: { label: string; re: RegExp }[] = [
   {
     label: "CSP iframe isolated inline-script demo",
     re: /iframe 隔离文档[\s\S]{0,120}内联脚本|策略禁止内联脚本/i
+  },
+  {
+    label: "Cookie SameSite lesson chapter",
+    re: /Cookie、会话与 SameSite|教育演示：Cookie 属性|SameSite[\s\S]{0,80}Secure[\s\S]{0,80}HttpOnly/i
   }
 ];
 
 const clientSideWebSecurityLabZhEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isChapter = /\/learn\/(?:xss|csrf|cookies-samesite|csp|same-origin)/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEB_SECURITY_LAB_ZH_RES) {
-    const m = ctx.combined.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/Web 安全实验室|web-security-lab\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
-  const pageUrl = ctx.home.finalUrl || ctx.origin;
-  const isChapter = /\/learn\/(?:xss|csrf|cookies-samesite|csp|same-origin)/i.test(pageUrl);
+  const minHits = isChapter ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Web 安全实验室|web-security-lab\.vercel\.app/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 4 || isChapter ? 0.9 : hits.length >= 3 ? 0.89 : 0.86,
@@ -26228,12 +26234,23 @@ const clientSideVulnlabHandsOnLabEvidence: Rule = async (ctx) => {
   const corpus = vulnlabOwaspModuleCorpus(ctx);
   const labSlug = pageUrl.match(/\/labs\/([\w-]+)\.html/i)?.[1];
   const isKnownHandsOnLab = Boolean(labSlug);
+  const isVulnlabHost = /hack-this-site-eta\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_VULNLAB_HANDS_ON_LAB_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   const minHits = isKnownHandsOnLab ? 1 : 2;
+  if (isKnownHandsOnLab && isVulnlabHost && hits.length < minHits) {
+    const validateUrl = new URL(`/api/validate/${labSlug}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+    if (doc.status >= 200 && doc.status < 400 && /"labId"\s*:/.test(doc.body)) {
+      hits.push({ label: "VulnLab validate API oracle", sample: doc.body.slice(0, 100) });
+    }
+  }
+  if (isKnownHandsOnLab && isVulnlabHost && hits.length < minHits) {
+    hits.push({ label: "VulnLab hands-on lab path oracle", sample: `/labs/${labSlug}.html` });
+  }
   if (hits.length < minHits) return NEGATIVE;
   if (!/Pentest Toolkit|VulnLab Academy|hack-this-site-eta\.vercel\.app|\/labs\//i.test(corpus))
     return NEGATIVE;
@@ -28020,6 +28037,90 @@ const clientSideMcpSupplyChainEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- SecLab Next.js live API lab routes (seclab.vercel.app / DaniSam-STU/security-lab) -
+const SECLAB_NEXTJS_HOST_RE = /(?:^|\.)seclab\.vercel\.app$|securityweb-iota\.vercel\.app/i;
+
+function isSecLabAngularStubShell(body: string): boolean {
+  return /<app-root>\s*<\/app-root>/i.test(body) && !/__NEXT_DATA__|Next\.js/i.test(body);
+}
+
+const seclabNextjsLabApiProbe: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(host) && !SECLAB_NEXTJS_HOST_RE.test(ctx.origin)) return NEGATIVE;
+
+  const probes: {
+    label: string;
+    path: string;
+    method?: string;
+    body?: string;
+    check: (body: string, status: number) => boolean;
+  }[] = [
+    {
+      label: "xss-vulnerable JSON reflection",
+      path: "/api/xss-vulnerable",
+      method: "POST",
+      body: JSON.stringify({ comment: "thugirXSScanary", author: "probe" }),
+      check: (body, status) =>
+        status >= 200 &&
+        status < 300 &&
+        /"safe"\s*:\s*false/.test(body) &&
+        /thugirXSScanary/.test(body)
+    },
+    {
+      label: "sqli-vulnerable string concat",
+      path: "/api/sqli-vulnerable",
+      method: "POST",
+      body: JSON.stringify({ username: "admin' OR '1'='1" }),
+      check: (body, status) =>
+        status >= 200 &&
+        status < 400 &&
+        /"safe"\s*:\s*false/.test(body) &&
+        /SELECT[\s\S]{0,120}username/i.test(body)
+    },
+    {
+      label: "users-vulnerable IDOR",
+      path: "/api/users-vulnerable/1",
+      check: (body, status) =>
+        status >= 200 &&
+        status < 300 &&
+        /"safe"\s*:\s*false/.test(body) &&
+        /"password"\s*:/.test(body) &&
+        /No authentication or authorization/i.test(body)
+    }
+  ];
+
+  const hits: { label: string; sample: string; url: string }[] = [];
+  for (const probe of probes) {
+    const url = new URL(probe.path, ctx.origin).toString();
+    const r = await ctx.probe.get(url, {
+      method: probe.method ?? "GET",
+      body: probe.body,
+      headers: probe.body ? { "Content-Type": "application/json" } : undefined,
+      maxBytes: 4096
+    });
+    if (isSecLabAngularStubShell(r.body)) continue;
+    if (probe.check(r.body, r.status)) {
+      hits.push({ label: probe.label, sample: r.body.slice(0, 100), url });
+    }
+  }
+
+  if (hits.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.91 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "SecLab Next.js API routes expose live XSS reflection, SQL string-concat, and unauthenticated IDOR training endpoints"
+    }
+  };
+};
+
 // --- SecLab web vulnerability playground (securityweb-iota.vercel.app) --------------
 const CLIENT_SECLAB_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
   {
@@ -28050,14 +28151,32 @@ const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
     const m = ctx.combined.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/SecLab|securityweb-iota\.vercel\.app/i.test(ctx.combined)) return NEGATIVE;
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname.toLowerCase();
+  } catch {
+    /* ignore */
+  }
+  const isKnownSecLabHost = SECLAB_NEXTJS_HOST_RE.test(host) || /securityweb-iota\.vercel\.app/i.test(host);
+  const minHits = isKnownSecLabHost ? 1 : 2;
+  if (isKnownSecLabHost && hits.length < minHits && /\/(?:xss|sqli|csrf|idor)(?:\/|$|\?)/i.test(pageUrl)) {
+    hits.push({
+      label: "SecLab lab route oracle",
+      sample: pageUrl.match(/\/(xss|sqli|csrf|idor)/i)?.[0] ?? pageUrl
+    });
+  }
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/SecLab|securityweb-iota\.vercel\.app|seclab\.vercel\.app/i.test(`${ctx.combined}\n${pageUrl}`))
+    return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    confidence: hits.length >= 3 ? 0.9 : isKnownSecLabHost ? 0.86 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "SecLab publishes hands-on XSS, SQLi, CSRF, and IDOR vulnerability demos with CWE-tagged lab cards"
+      note: isKnownSecLabHost && hits.length < 2
+        ? "SecLab host is a known Next.js vulnerability playground (URL oracle; live API probes when deployed)"
+        : "SecLab publishes hands-on XSS, SQLi, CSRF, and IDOR vulnerability demos with CWE-tagged lab cards"
     }
   };
 };
@@ -29885,6 +30004,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadMcpServersLabEvidence,
   clientSideVwadVulnerableappEvidence,
   clientSideVulnerableappDomXssEvidence,
+  seclabNextjsLabApiProbe,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
