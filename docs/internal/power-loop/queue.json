@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://challenge-0726.intigriti.io/",
+      "source": "Intigriti July 2026 XSS challenge — monthly public security puzzle (intigriti.io challenge calendar)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf.hackthebox.com/",
+      "source": "Hack The Box CTF — public web security challenge hub (HTB platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.hackthissite.org/pages/index/index.php",
+      "source": "Hack This Site — mission challenge platform landing (www origin index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP Top 10 category hub (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://academy.hackthebox.com/module/details/88",
+      "source": "HTB Academy — Web Requests module with hands-on HTTP attack labs (web search)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://cybersec-lab.vercel.app/",
       "source": "CYBERSEC LAB — Spanish interactive OWASP training platform with 8 rooms / 16 challenges (web search)",
       "auth": "oss_deploy"
@@ -8020,5 +8045,5 @@
       "auth": "benchmark"
     }
   ],
-  "updated_at": "2026-07-23T05:07:00.000Z"
+  "updated_at": "2026-07-23T06:20:00.000Z"
 }
