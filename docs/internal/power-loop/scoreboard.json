@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T08:16:00.000Z",
+  "updated_at": "2026-07-23T09:45:50.322Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2092,
-  "total_findings": 10920,
+  "total_sites_scanned": 2093,
+  "total_findings": 10926,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1596,
   "discovery_findings": 8769,
-  "improvements_shipped": 980,
-  "last_run": "2026-07-23T08:16:00.000Z",
+  "improvements_shipped": 983,
+  "last_run": "2026-07-23T10:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 7,
+      "oracle_findings": 6,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (7 findings on primary heroku oracle)",
+      "note": "No benchmark misses — recall stable at 6/6 after Heroku wake retries (6 findings on primary heroku oracle)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,20 +53,20 @@
       "urls_added": 0,
       "urls_scanned": 0,
       "findings": 0,
-      "focus": "CYBERSEC LAB URL oracle + HTB CTF evidence + innerHTML decodeURIComponent write-up sinks",
+      "focus": "XVWA root module crawl + HackingHub URL oracle + vulnerable-web-site route seeds",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
-      "cybersec-lab.vercel.app: URL oracle restored OWASP training evidence when bundle absent (2→6 findings)",
-      "ctf.hackthebox.com: dedicated HTB CTF platform evidence from meta title/description (3→4 findings)",
-      "boudaoud20.github.io/xss-attack-lab: decodeURIComponent innerHTML sink in span-broken write-up HTML (3→4 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (6 findings) — no benchmark misses",
+      "xvwa.vercel.app: root /vulnerabilities/sqli/home.php crawl adds client-side-sql-evidence (3→4 findings)",
+      "app.hackinghub.io: Nuxt shell __PLATFORM_CONFIG__ oracle fires client-side-hackinghub-evidence (0→3 findings)",
+      "vulnerable-web-site.vercel.app: SPA route seeds + URL oracle on auth-gated CSRF/XSS lab shell"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com: Heroku 503 cold-start can degrade primary oracle before retry",
-      "challenge-0726.intigriti.io: bot-wall returns 403 — puzzle markers unreachable from cloud",
-      "academy.hackthebox.com: login redirect to account.hackthebox.com strips module markers without paid session"
+      "juice-shop.herokuapp.com: Heroku cold-start can miss auth_bypass before wake retry",
+      "vulnerable-web-site.vercel.app: lab modules behind session cookie — bundle XSS/CSRF markers unreachable without login",
+      "challenge-0726.intigriti.io: bot-wall returns 403 — puzzle markers unreachable from cloud"
     ]
   },
   "discovery_highlights": {
@@ -84,6 +84,8 @@
     "cybersec-lab.vercel.app": 6,
     "ctf.hackthebox.com": 4,
     "boudaoud20.github.io/xss-attack-lab": 4,
+    "xvwa.vercel.app": 4,
+    "app.hackinghub.io": 3,
     "arcanum-sec.github.io/ai-sec-resources": 8,
     "dsopas.github.io/MindAPI": 2,
     "vulnerable-web-site.vercel.app/csrf": 3,
@@ -98,20 +100,12 @@
     "vwad.owasp.org/app/webgoat": 6,
     "wizer-ctf.com": 4,
     "redtiger.labs.overthewire.org/level9.php": 5,
-    "www.vulnerableapp.com": 3,
-    "www.bugbountyhunter.com/challenge?id=6": 3,
-    "www.bugbountyhunter.com/challenge?id=7": 3,
-    "chal7.vercel.app": 6,
-    "sam.wizer-ctf.com": 5,
-    "weaponsforge.github.io/hacker-friendly-app": 4,
-    "hack-this-site-eta.vercel.app/owasp": 24,
-    "www.hackthissite.org/pages/index/index.php": 5,
-    "challenge-0726.intigriti.io": 1,
-    "academy.hackthebox.com/module/details/88": 2,
-    "d9bkk.com/hackmeifyoucan": 1,
-    "dashboard.d9bkk.com/hackmeifyoucan": 1,
-    "www.hackthebox.com/hacker/hacking-labs": 4,
-    "academy.hackthebox.com/course/preview/web-service--api-attacks": 5,
-    "app.hackinghub.io": 3
+    "www.hackthissite.org": 5,
+    "pentest-ground.com": 4,
+    "pentest-ground.com:81": 6,
+    "hermes-codex.vercel.app": 4,
+    "hackxor.net": 4,
+    "seclab.vercel.app": 3,
+    "google-gruyere.appspot.com": 3
   }
 }
