@@ -6455,6 +6455,24 @@
       "slug": "pentest-lab-vercel-url-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint strips inline PentestLab HTML even after UA fallback; clientSidePentestLabScannerEvidence URL oracle for pentest-lab.vercel.app host; pentest-lab.vercel.app findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:cybersec-lab.vercel.app",
+      "slug": "cybersec-lab-vercel-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: shell-only crawl returned 2 findings (misconfig only); clientSideCybersecLabEvidence URL oracle with minHits=1 for cybersec-lab.vercel.app host; cybersec-lab.vercel.app findings 2→6; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctf.hackthebox.com",
+      "slug": "client-side-hackthebox-ctf-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: HTB Capture The Flag Platform title + Jeopardy-style challenges to pwn machines + official Hack The Box CTF meta; ctf.hackthebox.com findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:boudaoud20.github.io/xss-attack-lab",
+      "slug": "dangerous-html-sinks-decodeURIComponent-writeup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: document.getElementById(\"output\").innerHTML = decodeURIComponent(input) in XSStrike write-up HTML (span-broken markup); dangerousHtmlSinks decodeURIComponent patterns; boudaoud20.github.io/xss-attack-lab findings 3→4; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11327,6 +11345,21 @@
       "source": "discovery:cybersec-lab.vercel.app",
       "slug": "client-side-cybersec-lab-evidence",
       "shipped_at": "2026-07-23T06:24:00.000Z"
+    },
+    {
+      "source": "discovery:cybersec-lab.vercel.app",
+      "slug": "cybersec-lab-vercel-url-oracle",
+      "shipped_at": "2026-07-23T08:16:00.000Z"
+    },
+    {
+      "source": "discovery:ctf.hackthebox.com",
+      "slug": "client-side-hackthebox-ctf-evidence",
+      "shipped_at": "2026-07-23T08:16:00.000Z"
+    },
+    {
+      "source": "discovery:boudaoud20.github.io/xss-attack-lab",
+      "slug": "dangerous-html-sinks-decodeURIComponent-writeup",
+      "shipped_at": "2026-07-23T08:16:00.000Z"
     }
   ]
 }
