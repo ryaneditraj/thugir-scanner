@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T01:08:28.817Z",
-  "total": 609,
-  "uniqueSlugs": 607,
+  "generatedAt": "2026-07-23T02:21:10.674Z",
+  "total": 612,
+  "uniqueSlugs": 610,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 591,
+    "generic": 594,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 537,
+    "deep": 540,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 155,
+    "Broken access control": 156,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -28,12 +28,12 @@
     "Security misconfiguration": 49,
     "Broken authentication": 44,
     "Injection": 125,
-    "Cross-site scripting": 105,
+    "Cross-site scripting": 106,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
     "Sensitive data exposure": 7,
-    "AI security": 31,
+    "AI security": 32,
     "XSS": 1
   },
   "slugs": [
@@ -198,6 +198,7 @@
     "client-side-hackthissite-evidence",
     "client-side-hackthissite-realistic-mission-evidence",
     "client-side-haozi-xss-challenge-evidence",
+    "client-side-hermes-codex-evidence",
     "client-side-hts-basic-mission-lab-evidence",
     "client-side-hts-login-gated-mission-hub-evidence",
     "client-side-hts-playlevel-hub-evidence",
@@ -303,6 +304,8 @@
     "client-side-owasp-vwad-evidence",
     "client-side-path-traversal-evidence",
     "client-side-pc-parts-store-lab-evidence",
+    "client-side-pentest-ground-guardian-leaks-evidence",
+    "client-side-pentest-ground-hub-evidence",
     "client-side-pentester-academy-lab-evidence",
     "client-side-pentesterlab-api-01-exercise-evidence",
     "client-side-pentesterlab-api-02-exercise-evidence",
