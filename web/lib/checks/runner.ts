@@ -1181,6 +1181,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideDatabricksSecurityAssessmentEvidence",
   "clientSideVulnlabA01AccessEvidence",
   "clientSideVulnlabIdorLabEvidence",
+  "clientSideVulnlabValidateApiEvidence",
   "clientSideVulnlabA02CryptoEvidence",
   "clientSideVulnlabA03InjectionEvidence",
   "clientSideVulnlabA06ComponentsEvidence",
@@ -5230,6 +5231,19 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** dsopas/MindAPI — hostname fallback when homepage omits nav on cold fetch. */
+function extractMindApiHostFallbackSeeds(pageUrl: string): string[] {
+  try {
+    const u = new URL(pageUrl);
+    if (!u.hostname.includes("dsopas.github.io")) return [];
+    return ["/MindAPI/about/", "/MindAPI/play/", "/MindAPI/references/"].map((p) =>
+      new URL(p, u.origin).toString()
+    );
+  } catch {
+    return [];
+  }
+}
+
 /** dsopas/MindAPI API security mindmap hub (dsopas.github.io/MindAPI) — seed about + play pages. */
 function extractMindApiSeeds(html: string, pageUrl: string): string[] {
   const host = new URL(pageUrl).hostname.toLowerCase();
@@ -6982,6 +6996,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
   const vulnerableWebSiteSeeds = extractVulnerableWebSiteSeeds(home.body, home.finalUrl);
   const mindApiSeeds = extractMindApiSeeds(home.body, home.finalUrl);
+  const mindApiHostFallbackSeeds = extractMindApiHostFallbackSeeds(home.finalUrl);
   const hermesCodexSeeds = extractHermesCodexSeeds(home.body, home.finalUrl);
   const arcanumAiSecHubSeeds = extractArcanumAiSecHubSeeds(home.body, home.finalUrl);
   const pentestGroundHubSeeds = extractPentestGroundHubSeeds(home.body, home.finalUrl);
@@ -7439,7 +7454,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/sqli/", home.finalUrl).toString(),
           new URL("/api/reflect", home.finalUrl).toString(),
           new URL("/api/sql", home.finalUrl).toString(),
-          new URL("/api/search", home.finalUrl).toString()
+          new URL("/api/search", home.finalUrl).toString(),
+          new URL("/api/validate/xss-reflected", home.finalUrl).toString(),
+          new URL("/api/validate/localstorage", home.finalUrl).toString(),
+          new URL("/api/validate/git-exposure", home.finalUrl).toString(),
+          new URL("/api/validate/sqli-error", home.finalUrl).toString(),
+          new URL("/api/validate/idor", home.finalUrl).toString()
         ]
       : [];
   const hackHealthTutorialPrioritySeeds =
@@ -7630,6 +7650,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vulnshopSeeds,
       ...vulnerableWebSiteSeeds,
       ...mindApiSeeds,
+      ...mindApiHostFallbackSeeds,
       ...hermesCodexSeeds,
       ...arcanumAiSecHubSeeds,
       ...pentestGroundHubSeeds,
