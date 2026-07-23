@@ -22,8 +22,17 @@ const DEFAULT_TIMEOUT_MS = 15000; // real sites (cold hosts, TLS + full body) ro
 const DEFAULT_MAX_BYTES = 1_500_000; // ~1.5MB cap on any single body
 // Present as a mainstream browser. Many hosts (Cloudflare, WAFs, some CDNs) reject or hang on
 // unknown bot user-agents, which previously surfaced as a false "target did not respond".
-const UA =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 ThugirScanner/1.0 (+https://thugirlabs.com/scanner)";
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
+const UA = `${BROWSER_UA} ThugirScanner/1.0 (+https://thugirlabs.com/scanner)`;
+
+/** Vercel Security Checkpoint blocks the ThugirScanner UA suffix — retry with a plain browser UA. */
+function isVercelSecurityCheckpoint(doc: FetchedDoc): boolean {
+  return (
+    doc.headers["x-vercel-mitigated"] === "challenge" ||
+    (doc.status === 403 && Boolean(doc.headers["x-vercel-challenge-token"]))
+  );
+}
 
 // Map a thrown fetch error to a short, user-facing reason.
 function describeFetchError(e: unknown): string {
@@ -95,17 +104,17 @@ export function normalizeTarget(input: string): URL {
   return u;
 }
 
-export async function fetchDoc(
+async function fetchDocOnce(
   url: string,
+  userAgent: string,
   opts: {
     timeoutMs?: number;
     maxBytes?: number;
     method?: string;
     body?: string;
     headers?: Record<string, string>;
-    /** When "manual", redirect responses are returned without following Location. */
     redirect?: RequestRedirect;
-  } = {}
+  }
 ): Promise<FetchedDoc> {
   const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const maxBytes = opts.maxBytes ?? DEFAULT_MAX_BYTES;
@@ -117,7 +126,7 @@ export async function fetchDoc(
       redirect: opts.redirect ?? "follow",
       signal: controller.signal,
       body: opts.body,
-      headers: { "User-Agent": UA, Accept: "*/*", ...(opts.headers ?? {}) }
+      headers: { "User-Agent": userAgent, Accept: "*/*", ...(opts.headers ?? {}) }
     });
     const headers: Record<string, string> = {};
     res.headers.forEach((v, k) => (headers[k.toLowerCase()] = v));
@@ -169,6 +178,25 @@ export async function fetchDoc(
   } finally {
     clearTimeout(timer);
   }
+}
+
+export async function fetchDoc(
+  url: string,
+  opts: {
+    timeoutMs?: number;
+    maxBytes?: number;
+    method?: string;
+    body?: string;
+    headers?: Record<string, string>;
+    /** When "manual", redirect responses are returned without following Location. */
+    redirect?: RequestRedirect;
+  } = {}
+): Promise<FetchedDoc> {
+  const first = await fetchDocOnce(url, UA, opts);
+  if (!isVercelSecurityCheckpoint(first)) return first;
+  const retry = await fetchDocOnce(url, BROWSER_UA, opts);
+  if (retry.status > 0 && !isVercelSecurityCheckpoint(retry)) return retry;
+  return first;
 }
 
 /** raw.githack.com deploy base: https://raw.githack.com/{owner}/{repo}/{branch}/ */

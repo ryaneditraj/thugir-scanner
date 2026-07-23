@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T06:15:02.092Z",
-  "total": 623,
-  "uniqueSlugs": 621,
+  "generatedAt": "2026-07-23T07:30:27.135Z",
+  "total": 624,
+  "uniqueSlugs": 622,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 605,
+    "generic": 606,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 551,
+    "deep": 552,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 158,
+    "Broken access control": 159,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
@@ -166,6 +166,7 @@
     "client-side-hackable-lab-evidence",
     "client-side-hackadvisor-lab-evidence",
     "client-side-hacker-friendly-firebase-evidence",
+    "client-side-hacker101-class-evidence",
     "client-side-hacker101-ctf-evidence",
     "client-side-hackersec-academy-evidence",
     "client-side-hacking-lab-evidence",

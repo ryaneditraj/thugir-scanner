@@ -10429,6 +10429,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-hacker101-class-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Hacker101 free web security class disclosed",
+    description:
+      "Hacker101 is HackerOne's free web security curriculum with video lessons, getting-started guides, and a linked CTF challenge game for bug bounty training.",
+    impactOneline:
+      "Public Hacker101 pages document HackerOne's educational web security training platform and linked CTF challenge surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHacker101ClassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacker101 is intentional training — keep challenge instances isolated from production.",
+      steps: [
+        "Run educational CTF platforms on dedicated lab infrastructure.",
+        "Require enrollment before serving live challenge instances.",
+        "Do not copy training vulnerability patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "We use Hacker101-style web security training. Show how to isolate educational CTF instances from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hackxor-evidence",
     platform: "generic",
     category: "Cross-site scripting",

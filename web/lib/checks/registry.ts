@@ -24841,20 +24841,24 @@ const CLIENT_PENTEST_LAB_SCANNER_RES: { label: string; re: RegExp }[] = [
 
 const clientSidePentestLabScannerEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownPentestLab = /pentest-lab\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_PENTEST_LAB_SCANNER_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
+  const minHits = isKnownPentestLab ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
   if (!/PentestLab|pentest-lab\.vercel\.app/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.89 : 0.86,
+    confidence: hits.length >= 3 ? 0.89 : isKnownPentestLab ? 0.84 : 0.86,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "PentestLab publishes an inline vulnerability scanner demo with SQL injection payload catalog and simulated SQLi/XSS findings"
+      note: isKnownPentestLab && hits.length < 3
+        ? "pentest-lab.vercel.app is a known inline vulnerability scanner training demo (URL oracle; Vercel checkpoint may strip HTML markers)"
+        : "PentestLab publishes an inline vulnerability scanner demo with SQL injection payload catalog and simulated SQLi/XSS findings"
     }
   };
 };
@@ -25037,6 +25041,54 @@ const clientSideHacker101CtfEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Hacker101 CTF is HackerOne's public web security challenge game with staged vulnerability flags"
+    }
+  };
+};
+
+// --- Hacker101 free web security class (hacker101.com — HackerOne educational hub) ---
+const CLIENT_HACKER101_CLASS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Hacker101 free web security class",
+    re: /Hacker101 is a free class for web security|free class for web security/i
+  },
+  {
+    label: "HackerOne educational attribution",
+    re: /Hacker101 is a free educational site for hackers, run by HackerOne|author["']\s*:\s*["']HackerOne/i
+  },
+  {
+    label: "Bug bounty and security professional audience",
+    re: /bug bounties or a seasoned security professional|programmer with an interest in bug bounties/i
+  },
+  {
+    label: "CTF challenge game link",
+    re: /ctf\.hacker101\.com|href=["']https:\/\/ctf\.hacker101\.com/i
+  },
+  {
+    label: "Getting started / video curriculum",
+    re: /href=["']\/start-here["']|href=["']\/videos["']|Getting Started/i
+  },
+  {
+    label: "hacker101.com host",
+    re: /hacker101\.com/i
+  }
+];
+
+const clientSideHacker101ClassEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKER101_CLASS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Hacker101|hacker101\.com/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.89 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Hacker101 is HackerOne's free web security curriculum with video lessons and a linked CTF challenge game"
     }
   };
 };
@@ -29067,6 +29119,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHackersecAcademyEvidence,
   clientSideEchoctfEvidence,
   clientSideHacker101CtfEvidence,
+  clientSideHacker101ClassEvidence,
   clientSideSockettomeEvidence,
   clientSideOwaspBricksEvidence,
   clientSideFvbLabEvidence,

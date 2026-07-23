@@ -6437,6 +6437,24 @@
       "slug": "client-side-cybersec-lab-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle Web Hacking SQL Injection/XSS OWASP Top 10 + login_bypass sqlAnswers admin'-- + THM{sql_injection_pwned}; cybersec-lab.vercel.app findings 5→6; benchmark juice-shop 8 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "vercel-checkpoint-ua-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: x-vercel-mitigated:challenge on ThugirScanner UA blocked FauxBank login HTML; fetchDoc retries with plain Chrome UA; pentest-fauxbank.vercel.app/lab findings 1→6 (+fauxbank lab/sqli/idor slugs); benchmark juice-shop-staging 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacker101.com",
+      "slug": "client-side-hacker101-class-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Hacker101 is a free class for web security + HackerOne author + ctf.hacker101.com CTF link; extractHacker101CtfSeeds cross-origin CTF crawl; hacker101.com findings 6→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-lab.vercel.app",
+      "slug": "pentest-lab-vercel-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint strips inline PentestLab HTML even after UA fallback; clientSidePentestLabScannerEvidence URL oracle for pentest-lab.vercel.app host; pentest-lab.vercel.app findings 1→2; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
