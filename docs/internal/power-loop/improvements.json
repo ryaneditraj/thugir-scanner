@@ -6581,6 +6581,24 @@
       "slug": "client-side-mindapi-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Bringing order to API hacking chaos + MindAPI RSS title; clientSideMindApiEvidence minHits=1 + extractMindApiHostFallbackSeeds /MindAPI/play; dsopas.github.io/MindAPI findings 2→6 pages 1→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-api-extended-labs",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/validate/security-headers returns {\"labId\":\"security-headers\",\"hint\":\"...Content-Security-Policy...\"}; VULNLAB_VALIDATE_LABS extended with security-headers/secret-scanner/cors/upload/input-validation; validate/security-headers gains client-side-vulnlab-validate-api-evidence on full crawl; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-audit-api-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/methods returns {\"audit\":\"HTTP Method Enumeration\",\"allowed\":[\"GET\",\"POST\",\"PUT\",\"DELETE\",\"OPTIONS\"]}; clientSideVulnlabAuditApiEvidence probes /api/methods|headers|cookies|cors; hack-this-site-eta.vercel.app/api/methods gains dedicated audit slug on full crawl; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:escape.tech/academy",
+      "slug": "escape-academy-broken-auth-lesson-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: broken-authentication lesson title Prevent Mutation Brute-Force Attacks + brute-force attacks targeting GraphQL authentication; CLIENT_ESCAPE_ACADEMY_RES extended; escape.tech/academy/broken-authentication findings 2→3 incl client-side-escape-academy-evidence; benchmark 9 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11528,6 +11546,21 @@
       "source": "discovery:dsopas.github.io/MindAPI",
       "slug": "mindapi-host-fallback-crawl",
       "shipped_at": "2026-07-23T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-api-extended-labs",
+      "shipped_at": "2026-07-23T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-audit-api-evidence",
+      "shipped_at": "2026-07-23T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:escape.tech/academy",
+      "slug": "escape-academy-broken-auth-lesson-markers",
+      "shipped_at": "2026-07-23T17:15:00.000Z"
     }
   ]
 }

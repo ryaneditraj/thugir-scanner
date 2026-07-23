@@ -25239,6 +25239,10 @@ const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
     re: /Validate JSON Inputs|arbitrary JSON input object|perform arbitrary SQL queries/i
   },
   {
+    label: "GraphQL brute-force authentication lesson",
+    re: /Prevent Mutation Brute-Force Attacks|brute-force attacks targeting GraphQL authentication/i
+  },
+  {
     label: "GraphQL CORS / CSRF lesson",
     re: /lessons\/cors\/|vulnerable GraphQL server[\s\S]{0,120}evil website|Understand the role of CORS/i
   },
@@ -26091,7 +26095,12 @@ const VULNLAB_VALIDATE_LABS = [
   "localstorage",
   "git-exposure",
   "sqli-error",
-  "idor"
+  "idor",
+  "security-headers",
+  "secret-scanner",
+  "cors",
+  "upload",
+  "input-validation"
 ] as const;
 
 const clientSideVulnlabValidateApiEvidence: Rule = async (ctx) => {
@@ -26128,6 +26137,52 @@ const clientSideVulnlabValidateApiEvidence: Rule = async (ctx) => {
     evidence: {
       labs: labs.slice(0, 5),
       note: `VulnLab /api/validate/* checker APIs expose ${labs.length} lab oracles (labId + hint JSON) for hands-on pentest validation`
+    }
+  };
+};
+
+// --- VulnLab /api/* audit training APIs (hack-this-site-eta.vercel.app) -----------------
+const VULNLAB_AUDIT_API_PATHS = [
+  "/api/methods",
+  "/api/headers",
+  "/api/cookies",
+  "/api/cors"
+] as const;
+
+const clientSideVulnlabAuditApiEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(pageUrl) &&
+    !/hack-this-site-eta\.vercel\.app/i.test(ctx.origin) &&
+    !/\/api\/(methods|headers|cookies|cors)(?:\?|$|\/)/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const audits: { audit: string; url: string; sample: string }[] = [];
+  for (const path of VULNLAB_AUDIT_API_PATHS) {
+    const url = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400 || !/"audit"\s*:/.test(doc.body)) continue;
+    try {
+      const parsed = JSON.parse(doc.body) as { audit?: string; note?: string; hint?: string };
+      if (parsed.audit) {
+        audits.push({
+          audit: parsed.audit,
+          url,
+          sample: String(parsed.note || parsed.hint || "").slice(0, 120)
+        });
+      }
+    } catch {
+      /* ignore malformed JSON */
+    }
+  }
+  if (audits.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: audits.length >= 3 ? 0.91 : audits.length >= 2 ? 0.89 : 0.87,
+    evidence: {
+      audits: audits.slice(0, 4),
+      note: `VulnLab /api/* audit endpoints expose ${audits.length} misconfiguration oracles (HTTP methods, headers, cookies, CORS)`
     }
   };
 };
@@ -29613,6 +29668,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA01AccessEvidence,
   clientSideVulnlabIdorLabEvidence,
   clientSideVulnlabValidateApiEvidence,
+  clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabA02CryptoEvidence,
   clientSideVulnlabA03InjectionEvidence,
   clientSideVulnlabA04InsecureDesignEvidence,

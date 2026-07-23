@@ -9733,7 +9733,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "VulnLab /api/validate lab checker APIs disclosed",
     description:
-      "VulnLab Academy exposes /api/validate/* JSON checker endpoints returning labId and hint fields for XSS, SQLi, IDOR, localStorage, and git-exposure labs.",
+      "VulnLab Academy exposes /api/validate/* JSON checker endpoints returning labId and hint fields for XSS, SQLi, IDOR, CORS, upload, security-headers, secret-scanner, localStorage, and git-exposure labs.",
     impactOneline:
       "Public validation APIs document per-lab exploit oracles for scanner benchmarking and hands-on pentest drills.",
     detectorKind: "rule_ref",
@@ -9749,6 +9749,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnLab exposes /api/validate/* checker APIs with labId hints. Show how to gate lab validation behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-audit-api-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnLab HTTP audit training APIs disclosed",
+    description:
+      "VulnLab Academy exposes /api/methods, /api/headers, /api/cookies, and /api/cors JSON audit endpoints documenting HTTP method enumeration, missing security headers, insecure cookies, and CORS misconfigurations.",
+    impactOneline:
+      "Public audit APIs return structured misconfiguration oracles for hands-on HTTP security training labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabAuditApiEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public audit APIs from production; training checkers belong behind auth.",
+      steps: [
+        "Gate /api/methods, /api/headers, /api/cookies, and /api/cors behind authenticated lab sessions.",
+        "Do not expose audit JSON that confirms misconfigurations to anonymous users.",
+        "Use server-side grading instead of client-visible audit endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our VulnLab exposes /api/* audit APIs with misconfiguration hints. Show how to gate lab audit endpoints behind authentication.",
     version: 1,
     enabled: true
   },

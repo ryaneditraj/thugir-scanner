@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-23T17:04:44.882Z",
+=======
+  "updated_at": "2026-07-23T17:15:00.000Z",
+>>>>>>> c298eef (engine: VulnLab validate+audit API probes, Escape auth lesson markers [17 UTC])
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 2174,
   "total_findings": 11563,
   "critical_findings": 37,
@@ -24,6 +29,17 @@
   "discovery_findings": 9249,
   "improvements_shipped": 989,
   "last_run": "2026-07-23T17:04:44.882Z",
+=======
+  "total_sites_scanned": 2164,
+  "total_findings": 11461,
+  "critical_findings": 37,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1631,
+  "discovery_findings": 9147,
+  "improvements_shipped": 992,
+  "last_run": "2026-07-23T17:15:00.000Z",
+>>>>>>> c298eef (engine: VulnLab validate+audit API probes, Escape auth lesson markers [17 UTC])
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
@@ -31,7 +47,11 @@
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
+<<<<<<< HEAD
       "note": "No benchmark misses — recall stable at 6/6 (9 findings, pages=6 probes=301)",
+=======
+      "note": "No benchmark misses — recall stable at 6/6 (9 findings)",
+>>>>>>> c298eef (engine: VulnLab validate+audit API probes, Escape auth lesson markers [17 UTC])
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,6 +70,7 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 10,
       "findings": 102,
@@ -69,10 +90,26 @@
       "vibe-eval.com: client-side-csrf-evidence + client-side-ssrf-evidence + client-side-api-security-lab-evidence (6 findings)",
       "jwtarsenal.com: dangerous-html-sinks + vibe-sitemap-sensitive-paths (4 findings)",
       "hack-this-site-eta.vercel.app/api/validate/cors: 17 findings; validate/upload: 15 findings via parent SPA deep crawl"
+=======
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
+      "dns_failures": [],
+      "focus": "VulnLab validate API extended labs + audit API probes; Escape Academy broken-auth lesson markers",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
+      "hack-this-site-eta.vercel.app/api/validate/security-headers: VULNLAB_VALIDATE_LABS now includes security-headers/secret-scanner/cors/upload/input-validation",
+      "hack-this-site-eta.vercel.app/api/methods: new client-side-vulnlab-audit-api-evidence via /api/methods|headers|cookies|cors JSON audit oracles",
+      "escape.tech/academy/broken-authentication: Prevent Mutation Brute-Force Attacks lesson marker (2→3 findings)"
+>>>>>>> c298eef (engine: VulnLab validate+audit API probes, Escape auth lesson markers [17 UTC])
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
+<<<<<<< HEAD
       "validate/input-validation + security-headers + secret-scanner: JSON-only responses — 1 finding each (missing-security-headers only)",
       "client-side lab HTML pages inherit full SPA bundle slugs — dedicated lab oracles need per-lab route markers"
     ]
@@ -108,5 +145,22 @@
     "hack-this-site-eta.vercel.app/labs/idor.html": 21,
     "vibe-eval.com": 6,
     "jwtarsenal.com": 4
+=======
+      "VulnLab Vercel Security Checkpoint intermittently blocks ThugirScanner UA — validate/audit API probes need plain-browser retry",
+      "validate/security-headers shallow crawl may still return 1 finding when checkpoint blocks sibling API probes"
+    ]
+  },
+  "discovery_highlights": {
+    "hack-this-site-eta.vercel.app/api/validate/security-headers": 17,
+    "hack-this-site-eta.vercel.app/api/validate/secret-scanner": 17,
+    "hack-this-site-eta.vercel.app/api/methods": 20,
+    "hack-this-site-eta.vercel.app/api/cors": 21,
+    "escape.tech/academy/broken-authentication": 3,
+    "escape.tech/academy/sql-injection": 2,
+    "oauthlabs.com": 5,
+    "auth0.oauthlabs.com": 5,
+    "dsopas.github.io/MindAPI": 6,
+    "juice-shop.herokuapp.com": 9
+>>>>>>> c298eef (engine: VulnLab validate+audit API probes, Escape auth lesson markers [17 UTC])
   }
 }
