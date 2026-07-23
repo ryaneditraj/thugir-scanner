@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T03:08:24.975Z",
+  "updated_at": "2026-07-23T03:13:42.210Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2047,
-  "total_findings": 10720,
+  "total_sites_scanned": 2055,
+  "total_findings": 10749,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1571,
-  "discovery_findings": 8601,
+  "discovery_urls_added": 1576,
+  "discovery_findings": 8630,
   "improvements_shipped": 962,
-  "last_run": "2026-07-23T03:08:24.975Z",
+  "last_run": "2026-07-23T03:13:42.210Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_findings": 9,
+      "primary_findings": 8,
       "primary_recall": "6/6",
       "primary_gap": [],
-      "note": "6/6 recall maintained (9 findings); no benchmark misses; 3 discovery rules shipped for Hermes Codex + Pentest-Ground",
+      "note": "6/6 recall maintained (8 findings, pages=1 probes=245); no benchmark misses on first pass",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,28 +52,39 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 24,
-      "skipped_48h": [],
+      "findings": 29,
+      "skipped_48h": [
+        "https://xvwa.vercel.app/",
+        "https://seclab.vercel.app/",
+        "https://hackxor.net/",
+        "https://public-firing-range.appspot.com/",
+        "https://google-gruyere.appspot.com/",
+        "https://ctf.hacker101.com/ctf"
+      ],
       "dns_failures": [],
-      "focus": "Hermes Codex AI prompt-injection + Pentest-Ground GuardianLeaks hub seeding",
-      "improvements_shipped_this_run": 3
+      "focus": "OWASP VWAD catalog seeding (PyGoat, DVNA×2, Peruggia, Hackxor) + queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 recall (9 findings) — no benchmark misses",
-      "hermes-codex.vercel.app: 4 findings — client-side-hermes-codex-evidence (was 3)",
-      "pentest-ground.com:81: 6 findings — guardian-leaks + postmessage XSS evidence (was 5)",
-      "pentest-ground.com: 4 findings — hub catalog cross-ref to :81/:4280/:9000 labs (was 0)",
-      "public-firing-range.appspot.com: 4 findings — reflected XSS + open redirect scanner oracles"
+      "juice-shop.herokuapp.com: benchmark 6/6 recall (8 findings) — juice-shop-forgotten-backup-disclosure present; no benchmark misses",
+      "vwad.owasp.org/app/pygoat: 3 findings — PyGoat VWAD catalog + Heroku demo oracle markers",
+      "vwad.owasp.org/app/peruggia: 4 findings — Peruggia image-gallery vuln catalog evidence",
+      "koadt.github.io/oss-oopssec-store/roadmap: 7 findings — 34-chapter CTF roadmap oracle",
+      "www.bugbountyhunter.com challenge?id=11/12: 3 findings each — public XSS challenge surfaces"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "seclab.vercel.app: source maps exposed but per-route SQLi/XSS labs need deeper path crawl",
-      "ctf.hacker101.com/ctf: shallow landing (2 findings) — challenge instances require authenticated CTF session",
-      "arcanum-sec hub is link-directory — exploit chains require following outbound lab URLs"
+      "VWAD catalog pages are metadata oracles — live exploit chains require following linked deploy URLs (pygoat Heroku, hackxor.net missions)",
+      "DVNA VWAD entries document offline-only Node labs — no public internet deploy per project warnings"
     ]
   },
   "discovery_highlights": {
+    "vwad.owasp.org/app/pygoat": 3,
+    "vwad.owasp.org/app/damn-vulnerable-node-application-dvna": 3,
+    "vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna": 3,
+    "vwad.owasp.org/app/peruggia": 4,
+    "vwad.owasp.org/app/hackxor": 3,
     "oauthlabs.com": 5,
     "auth0.oauthlabs.com": 5,
     "dsopas.github.io/MindAPI": 2,
