@@ -6509,6 +6509,24 @@
       "slug": "robots-subpath-probe",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: robotsSensitivePaths now probes ${pathname}/robots.txt for subpath deploys; SENSITIVE_PATH_NEEDLES extended with /back-office and the-back-office; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:middleware-vulnerability-cve-2025.vercel.app",
+      "slug": "client-side-nextjs-middleware-cve-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML CVE-2025-29927 Next.js Middleware Bypass POC + x-middleware-subrequest bypass payloads; URL oracle for middleware-vulnerability-cve-2025.vercel.app host; findings 1→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:escape.tech/academy/cors",
+      "slug": "client-side-escape-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: lessons/cors/ + vulnerable GraphQL server + evil website CSRF lesson markdown; escape.tech/academy/cors findings 1→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "client-side-hackthebox-academy-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Web Service & API Attacks Course + SOAP SQL Injection + XXE module list on course/preview path; academy.hackthebox.com/course/preview/web-service--api-attacks findings 0→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11411,6 +11429,21 @@
       "source": "discovery:dashboard.d9bkk.com",
       "slug": "robots-subpath-probe",
       "shipped_at": "2026-07-23T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:middleware-vulnerability-cve-2025.vercel.app",
+      "slug": "nextjs-middleware-cve-demo-url-oracle",
+      "shipped_at": "2026-07-23T12:01:00.000Z"
+    },
+    {
+      "source": "discovery:escape.tech/academy",
+      "slug": "escape-academy-cors-debug-lesson-markers",
+      "shipped_at": "2026-07-23T12:01:00.000Z"
+    },
+    {
+      "source": "discovery:academy.hackthebox.com",
+      "slug": "htb-academy-course-preview-markers",
+      "shipped_at": "2026-07-23T12:01:00.000Z"
     }
   ]
 }
