@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T05:07:20.556Z",
+  "updated_at": "2026-07-23T05:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2073,
-  "total_findings": 10826,
+  "total_findings": 10829,
   "critical_findings": 37,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1586,
-  "discovery_findings": 8693,
-  "improvements_shipped": 968,
-  "last_run": "2026-07-23T05:07:20.556Z",
+  "discovery_findings": 8696,
+  "improvements_shipped": 971,
+  "last_run": "2026-07-23T05:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
@@ -50,33 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 31,
-      "skipped_48h": [
-        "https://echoctf.red/",
-        "https://hackersec.academy/",
-        "https://cmdchallenge.com/",
-        "https://12days.cmdchallenge.com/",
-        "https://oops.cmdchallenge.com/"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 3,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "CYBERSEC LAB + PentestLab + XSS writeup oracle + SasanLabs DOM XSS + Hacker101 CTF; queue drain hit BugBountyHunter ch6/ch7 + chal7",
-      "improvements_shipped_this_run": 0
+      "focus": "CMD Challenge + HackerSec Academy + echoCTF.RED lab-platform evidence slugs from queue priority targets",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark 6/6 recall (9 findings) — juice-shop-forgotten-backup-disclosure + security-question-disclosure present; no benchmark misses",
-      "cybersec-lab.vercel.app: 5 findings — secret-private-key (critical) + client-side-sql-evidence on Spanish OWASP training platform",
-      "hacker101.com: 5 findings — exposed-source-maps + postmessage-dom-xss-evidence + sitemap sensitive paths",
-      "www.vulnerableapp.com: 3 findings — client-side-vulnerableapp-dom-xss-evidence on SasanLabs public DOM XSS demo",
-      "chal7.vercel.app: 6 findings — sql-error-disclosure + client-side-wizer-ctf-evidence (Wizer CTF challenge)"
+      "juice-shop.herokuapp.com: benchmark 6/6 recall (9 findings) — no benchmark misses",
+      "cmdchallenge.com: client-side-cmd-challenge-evidence from jquery.terminal shell puzzle markers (2→3 findings)",
+      "hackersec.academy: client-side-hackersec-academy-evidence from HCP V2 + 30+ CTF lab AI metadata (4→5 findings)",
+      "echoctf.red: client-side-echoctf-evidence from hacking laboratories + CVE target landing copy (4→5 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "pentest-lab.vercel.app: shallow scanner UI — misconfig/XSS bundle markers only; no live SQLi oracle from landing",
-      "boudaoud20.github.io/xss-attack-lab: static writeup page — client-side-security-writeup-evidence only; live PHP lab not hosted",
-      "hacker101.com: CTF challenge instances require authenticated session — landing markers + source maps only"
+      "echoctf.red: authenticated challenge instances still require login — landing markers only",
+      "hackersec.academy: injectable lab routes behind enrollment — marketing metadata oracles only",
+      "cmdchallenge.com: no live command-injection oracle from static terminal shell — platform disclosure only"
     ]
   },
   "discovery_highlights": {
@@ -98,39 +91,9 @@
     "vulnshop.vercel.app/register": 5,
     "server.vulnapp.id": 8,
     "www.bugbountyhunter.com/challenge?id=9": 3,
-    "www.bugbountyhunter.com/challenge?id=10": 3,
-    "www.bugbountyhunter.com/challenge?id=11": 3,
-    "www.bugbountyhunter.com/challenge?id=12": 3,
-    "www.bugbountyhunter.com/challenge?id=16": 3,
-    "juice-shop.herokuapp.com": 8,
-    "ai-security-platform-iota.vercel.app": 3,
-    "server.vulnapp.id/mutillidae": 7,
-    "urban-vampi-staging.up.railway.app": 4,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 11,
-    "brokencrystals.com/api/partners/searchPartners": 29,
-    "brokencrystals.com/api/partners/query": 28,
-    "brokencrystals.com/api/partners/testimonials": 28,
-    "pentest-fauxbank.vercel.app/api/search": 6,
-    "chal15.vercel.app": 6,
-    "shiny-computing-machine.vercel.app": 7,
-    "brokencrystals.com/marketplace": 24,
-    "brokencrystals.com/graphql": 25,
-    "brokencrystals.com/api/partners/partnerLogin": 25,
-    "hermes-codex.vercel.app": 4,
-    "pentest-ground.com:81": 6,
-    "pentest-ground.com": 4,
-    "public-firing-range.appspot.com": 4,
-    "google-gruyere.appspot.com": 3,
-    "hackxor.net": 3,
-    "xvwa.vercel.app": 4,
-    "seclab.vercel.app": 3,
-    "codeex-ai.vercel.app": 4,
-    "shield-dark-pattern-demo.vercel.app": 4,
-    "ctf.hacker101.com": 3,
-    "koadt.github.io/oss-oopssec-store/roadmap": 7,
-    "echoctf.red": 4,
-    "hackersec.academy": 4,
-    "cmdchallenge.com": 2,
+    "echoctf.red": 5,
+    "hackersec.academy": 5,
+    "cmdchallenge.com": 3,
     "12days.cmdchallenge.com": 2,
     "oops.cmdchallenge.com": 2,
     "vwad.owasp.org/app/webgoat": 6,
@@ -143,6 +106,7 @@
     "hacker101.com": 5,
     "www.bugbountyhunter.com/challenge?id=6": 3,
     "www.bugbountyhunter.com/challenge?id=7": 3,
-    "chal7.vercel.app": 6
+    "chal7.vercel.app": 6,
+    "sam.wizer-ctf.com": 5
   }
 }
