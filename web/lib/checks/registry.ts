@@ -2820,6 +2820,10 @@ const DANGEROUS_SINK_RES: { label: string; re: RegExp }[] = [
     re: /if\s*\(\s*div\s*\)\s*div\.innerHTML\s*=\s*val\b/
   },
   {
+    label: "innerHTML = decodeURIComponent(user input)",
+    re: /(?:getElementById|querySelector)\([^)]+\)\.innerHTML\s*=\s*decodeURIComponent\s*\(\s*(?:input|params?\.(?:name|q|query)|userInput)\b/
+  },
+  {
     label: "commentStore.map rendered via innerHTML (stored XSS)",
     re: /\.innerHTML\s*=\s*commentStore\.map\s*\(/
   },
@@ -17287,20 +17291,72 @@ const CLIENT_HACKTHEBOX_ACADEMY_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
-const clientSideHackTheBoxAcademyEvidence: Rule = async (ctx) => {
+// --- HTB Capture The Flag platform (ctf.hackthebox.com) -----------------------------
+const CLIENT_HACKTHEBOX_CTF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "HTB CTF platform title",
+    re: /HTB Capture The Flag Platform|HTB CTF Platform/i
+  },
+  {
+    label: "Official HTB CTF marketing copy",
+    re: /official Hack The Box Capture The Flag|Prove your cybersecurity skills on the official/i
+  },
+  {
+    label: "Jeopardy-style CTF challenge format",
+    re: /Jeopardy-style challenges to pwn machines|Play solo or as a team/i
+  },
+  {
+    label: "CTF challenge keywords",
+    re: /Capture The Flag,?\s*Challenges,?\s*Training|HTB,?\s*Hack The Box,?\s*Hackthebox/i
+  },
+  {
+    label: "ctf.hackthebox.com host",
+    re: /ctf\.hackthebox\.com/i
+  }
+];
+
+const clientSideHackTheBoxCtfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownHtbCtf = /ctf\.hackthebox\.com/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
-  for (const { label, re } of CLIENT_HACKTHEBOX_ACADEMY_RES) {
-    const m = ctx.combined.match(re);
+  for (const { label, re } of CLIENT_HACKTHEBOX_CTF_RES) {
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
-  if (!/academy\.hackthebox\.com|HTB Academy/i.test(ctx.combined)) return NEGATIVE;
+  const minHits = isKnownHtbCtf ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/ctf\.hackthebox\.com|HTB CTF|Capture The Flag Platform/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "HTB Academy publishes guided modules covering web exploitation, penetration testing, and hands-on lab exercises"
+      note: "Hack The Box CTF platform hosts jeopardy-style web exploitation challenges and machine-pwning events for penetration testers"
+    }
+  };
+};
+
+const clientSideHackTheBoxAcademyEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownHtbAcademy = /academy\.hackthebox\.com/i.test(pageUrl);
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKTHEBOX_ACADEMY_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownHtbAcademy ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/academy\.hackthebox\.com|HTB Academy/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : isKnownHtbAcademy ? 0.84 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownHtbAcademy && hits.length < 2
+        ? "academy.hackthebox.com is a known HTB Academy training catalogue (URL oracle; login redirect may strip module markers)"
+        : "HTB Academy publishes guided modules covering web exploitation, penetration testing, and hands-on lab exercises"
     }
   };
 };
@@ -24893,20 +24949,24 @@ const CLIENT_CYBERSEC_LAB_RES: { label: string; re: RegExp }[] = [
 
 const clientSideCybersecLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  const isKnownCybersecLab = /cybersec-lab\.vercel\.app/i.test(pageUrl);
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_CYBERSEC_LAB_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
-  if (hits.length < 2) return NEGATIVE;
+  const minHits = isKnownCybersecLab ? 1 : 2;
+  if (hits.length < minHits) return NEGATIVE;
   if (!/cybersec-lab\.vercel\.app|Web Hacking|OWASP Top 10/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    confidence: hits.length >= 4 ? 0.9 : isKnownCybersecLab ? 0.84 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
-      note: "CYBERSEC LAB is a Spanish interactive OWASP training SPA with SQLi login-bypass, XSS, buffer overflow, and CTF challenge modules"
+      note: isKnownCybersecLab && hits.length < 3
+        ? "cybersec-lab.vercel.app is a known Spanish OWASP training SPA (URL oracle; bundle markers may be absent when only the shell HTML is fetched)"
+        : "CYBERSEC LAB is a Spanish interactive OWASP training SPA with SQLi login-bypass, XSS, buffer overflow, and CTF challenge modules"
     }
   };
 };
@@ -29002,6 +29062,7 @@ export const RULES: Record<string, Rule> = {
   clientSideIstEduVulnPortalEvidence,
   noticesFileLfiProbe,
   clientSideHackTheBoxEvidence,
+  clientSideHackTheBoxCtfEvidence,
   clientSideHackTheBoxAcademyEvidence,
   clientSideHackThisSiteEvidence,
   clientSideHackThisSiteRealisticMissionEvidence,
