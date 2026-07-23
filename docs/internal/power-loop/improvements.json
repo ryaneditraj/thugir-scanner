@@ -6473,6 +6473,24 @@
       "slug": "dangerous-html-sinks-decodeURIComponent-writeup",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: document.getElementById(\"output\").innerHTML = decodeURIComponent(input) in XSStrike write-up HTML (span-broken markup); dangerousHtmlSinks decodeURIComponent patterns; boudaoud20.github.io/xss-attack-lab findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xvwa.vercel.app",
+      "slug": "xvwa-root-vuln-module-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/sqli/home.php returns $sql = \"select * from caffaine where itemid = \".$item string concat; extractXvwaVulnSeeds seeds root /vulnerabilities/*/home.php on xvwa.vercel.app mirrors; xvwa.vercel.app findings 3→4; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:app.hackinghub.io",
+      "slug": "client-side-hackinghub-url-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: window.__PLATFORM_CONFIG__ name HackingHub + ethical web application hacking meta on Nuxt shell; clientSideHackinghubEvidence minHits=1 for app.hackinghub.io; app.hackinghub.io findings 0→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-spa-route-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README CSRF/XSS/clickjacking/SSRF lab catalog + middleware auth gate on /xss; extractVulnerableWebSiteSeeds + URL oracle on vulnerable-web-site.vercel.app host; vulnerable-web-site.vercel.app/xss findings 3 maintained with dedicated slug on login shell; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
