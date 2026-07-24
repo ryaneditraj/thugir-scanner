@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T18:05:00.000Z",
+  "updated_at": "2026-07-24T19:13:25.777Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/redirect/pp?return_url=/",
+      "source": "BountySecurity/BurpBountyLab — parameter-pollution open-redirect profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ssti/render?template=Hello",
+      "source": "BountySecurity/BurpBountyLab — Jinja2 SSTI template-render profile (distinct from /ssti/preview)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/dwr/engine.js",
+      "source": "BountySecurity/BurpBountyLab — DWR engine.js misc-discovery profile trigger",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/graphql/ide",
+      "source": "BountySecurity/BurpBountyLab — GraphQL IDE introspection profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/collab/headers?param=test",
+      "source": "BountySecurity/BurpBountyLab — X-Headers injection collaborator profile practice endpoint",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/sqli/oob",
       "source": "BountySecurity/BurpBountyLab — out-of-band SQLi collaborator profile practice endpoint",
