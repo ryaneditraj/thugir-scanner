@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T23:10:00.000Z",
+  "updated_at": "2026-07-24T23:08:13.129953Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2438,
-  "total_findings": 15380,
+  "total_sites_scanned": 2446,
+  "total_findings": 15684,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1776,
-  "discovery_findings": 12557,
+  "discovery_urls_added": 1781,
+  "discovery_findings": 12851,
   "improvements_shipped": 1071,
-  "last_run": "2026-07-24T23:10:00.000Z",
+  "last_run": "2026-07-24T23:08:13.129953Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 (10 findings); no benchmark misses",
+      "note": "Benchmark recall stable at 6/6 (10 findings) \u2014 no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,27 +48,29 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 304,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty Lab route-specific oracles: outbound redirect, post-payment redirect, password-reset token disclosure",
+      "focus": "BurpBountyLab SQLi-by-ID, command-injection RCE, Linux path-traversal, XXE parser, passive tech fingerprints",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/redirect/out: outbound 302 open redirect oracle via /redirect/out?url= (29→39 findings)",
-      "burpbountylab.com/redirect/pp: post-payment redirect oracle via /redirect/pp?return_url= (26→39 findings)",
-      "burpbountylab.com/collab/forgot: password-reset token disclosure oracle via /collab/forgot?email= (28→40 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 stable first-pass deep crawl",
+      "burpbountylab.com/passive/tech: tech-stack-disclosure route-specific oracle (37 findings)",
+      "burpbountylab.com/sqli/id: hub fingerprint 36 findings \u2014 route-specific SQLi-by-ID oracle still absent",
+      "hack-this-site-eta.vercel.app/labs/git-exposure.html: vulnlab-git-head-live-oracle + 41 findings"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab.com/rce/blind: blind command execution — route-specific oracle still absent (no output/time signal)",
-      "wrongsecrets.onrender.com: service suspended by owner"
+      "burpbountylab.com/rce/cmd: command-injection \u2014 route-specific oracle still absent (hub fingerprint dominates)",
+      "burpbountylab.com/pt/linux: path-traversal file-read \u2014 route-specific oracle still absent",
+      "burpbountylab.com/xxe/parser: XML parser XXE \u2014 route-specific oracle still absent",
+      "burpbountylab.com/rce/blind: blind command execution \u2014 route-specific oracle still absent"
     ]
   },
   "discovery_highlights": {
@@ -242,6 +244,11 @@
     "burpbountylab.com/xss/tag": 29,
     "burpbountylab.com/ssrf/scheme": 30,
     "burpbountylab.com/redirect/out": 39,
-    "burpbountylab.com/xss/comment": 30
+    "burpbountylab.com/xss/comment": 30,
+    "burpbountylab.com/sqli/id": 36,
+    "burpbountylab.com/rce/cmd": 36,
+    "burpbountylab.com/pt/linux": 36,
+    "burpbountylab.com/xxe/parser": 36,
+    "burpbountylab.com/passive/tech": 37
   }
 }
