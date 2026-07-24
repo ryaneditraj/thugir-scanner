@@ -15317,6 +15317,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-redirect-out-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab outbound open redirect live oracle",
+    description:
+      "GET /redirect/out?url= returns HTTP 302 redirect to attacker-controlled URLs — the Burp Bounty outbound open redirect profile oracle.",
+    impactOneline:
+      "Live outbound redirect probe confirms open redirect distinct from /redirect/goto and login-form redirect routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRedirectOutLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist of trusted domains before issuing Location headers.",
+      steps: [
+        "Reject absolute URLs that do not match trusted redirect hosts.",
+        "Use relative paths or signed redirect tokens instead of raw url parameters.",
+        "Isolate Burp Bounty Lab redirect routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/out endpoint redirects to arbitrary url query values. Show open redirect mitigations and allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-redirect-pp-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab post-payment redirect live oracle",
+    description:
+      "GET /redirect/pp?return_url= returns HTTP 302 redirect to attacker-controlled URLs — the Burp Bounty post-payment open redirect profile oracle.",
+    impactOneline:
+      "Live post-payment redirect probe confirms open redirect via return_url parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRedirectPpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never redirect post-payment flows to attacker-supplied return_url values without validation.",
+      steps: [
+        "Allowlist trusted return_url hosts for payment completion redirects.",
+        "Use server-side session state instead of client-supplied return URLs.",
+        "Isolate Burp Bounty Lab redirect routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/pp endpoint redirects to arbitrary return_url values. Show post-payment redirect validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-collab-forgot-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Burp Bounty Lab password-reset token disclosure live oracle",
+    description:
+      "GET /collab/forgot?email= returns HTML disclosing the full password-reset URL with token and email — the Burp Bounty collaborator forgot-password profile oracle.",
+    impactOneline:
+      "Live forgot-password probe confirms reset tokens are disclosed in HTML responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCollabForgotLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never disclose password-reset URLs or tokens in HTTP responses — send reset links only via email.",
+      steps: [
+        "Return generic success messages without embedding reset tokens in HTML.",
+        "Use single-use, time-limited tokens delivered only through email channels.",
+        "Isolate Burp Bounty Lab collaborator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /collab/forgot endpoint leaks reset URLs with tokens in the HTML response. Show secure password-reset flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
