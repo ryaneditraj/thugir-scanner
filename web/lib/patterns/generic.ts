@@ -10247,6 +10247,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-platform-python-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab Python platform lab exposes Werkzeug debug mode",
+    description:
+      "GET /api/platform/python returns debug:true, Werkzeug debugger metadata, and a debugger PIN without authentication.",
+    impactOneline:
+      "Live Python platform probe confirms debug-mode disclosure for /platform/python.html lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabPlatformPythonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable debug mode and gate Python platform lab APIs behind authentication.",
+      steps: [
+        "Set debug=false in production Flask/Django deployments.",
+        "Remove public /api/platform/python debug metadata endpoints.",
+        "Rotate debugger PINs and restrict Werkzeug debugger access."
+      ]
+    },
+    fixPrompt:
+      "Our /api/platform/python leaks Werkzeug debug mode and a debugger PIN. Show how to disable debug in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-python-platform-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab Python/Django/Flask platform labs disclosed",
+    description:
+      "VulnLab Academy Python platform page documents PYTHON-001 debug-mode and PYTHON-002 Jinja2 SSTI training labs with /api/platform/python oracle paths.",
+    impactOneline:
+      "Python platform lab HTML documents debug disclosure and server-side template injection training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabPythonPlatformEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public Python platform lab documentation from production surfaces.",
+      steps: [
+        "Gate /platform/python.html behind authenticated lab sessions.",
+        "Do not expose SSTI template preview payloads in production HTML.",
+        "Restrict /api/platform/python to internal training environments."
+      ]
+    },
+    fixPrompt:
+      "Our Python platform lab page documents debug mode and Jinja2 SSTI exercises publicly. Show how to gate training content.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-utilities-hash-live-oracle",
     platform: "generic",
     category: "Information disclosure",
