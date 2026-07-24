@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T04:05:30.000Z",
+  "updated_at": "2026-07-24T05:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2274,
-  "total_findings": 13022,
+  "total_sites_scanned": 2275,
+  "total_findings": 13047,
   "critical_findings": 41,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1696,
-  "discovery_findings": 10600,
-  "improvements_shipped": 1019,
-  "last_run": "2026-07-24T04:10:00.000Z",
+  "discovery_findings": 10625,
+  "improvements_shipped": 1021,
+  "last_run": "2026-07-24T05:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "First-pass 6/6 recall on deep crawl (pages=6 probes=293; gap=[]). juice-shop-leaked-api-key present; secret-resend slug still absent.",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,29 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 164,
-      "skipped_48h": [
-        "hack-this-site-eta.vercel.app/platform/php.html",
-        "hack-this-site-eta.vercel.app/platform/node.html",
-        "hack-this-site-eta.vercel.app/platform/java.html"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 39,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "VulnLab utilities/recon page-specific live oracles; Fabraix prompt-injection-001 challenge slug",
-      "improvements_shipped_this_run": 3
+      "focus": "VulnLab Python platform live oracle + client-side PYTHON-001/002 evidence",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/utilities/index.html: POST /api/hash live oracle (36→38 findings when reachable)",
-      "hack-this-site-eta.vercel.app/recon/index.html: /api/internal/metrics + RECON-003 comment leak (36→38 findings)",
-      "playground.fabraix.com/challenges/prompt-injection-001: client-side-fabraix-challenge-evidence slug now fires"
+      "hack-this-site-eta.vercel.app/platform/python.html: vulnlab-platform-python-live-oracle + client-side-vulnlab-python-platform-evidence (14→39 findings)",
+      "GET /api/platform/python returns Werkzeug debug:true + pin 123-456-789 without auth"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "hack-this-site-eta Vercel Security Checkpoint intermittently blocks deep crawl (utilities 48h rescan 1 finding)",
-      "admin/auth/platform hubs inherit identical SPA bundle — page-specific oracles partially addressed via utilities/recon live probes",
-      "platform/python.html shallow (14 findings) vs php/node/java (31) — Python-specific cues not surfaced"
+      "hack-this-site-eta Vercel Security Checkpoint intermittently blocks deep crawl on some runs",
+      "admin/auth/platform hubs inherit identical SPA bundle — page-specific oracles partially addressed",
+      "juice-shop secret-resend slug still absent from benchmark oracle"
     ]
   },
   "discovery_highlights": {
@@ -139,6 +134,6 @@
     "hack-this-site-eta.vercel.app/admin/index.html": 36,
     "hack-this-site-eta.vercel.app/admin/users.html": 36,
     "hack-this-site-eta.vercel.app/platform/aspnet.html": 37,
-    "hack-this-site-eta.vercel.app/platform/python.html": 14
+    "hack-this-site-eta.vercel.app/platform/python.html": 39
   }
 }

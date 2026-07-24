@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T04:04:16.189Z",
-  "total": 658,
-  "uniqueSlugs": 656,
+  "generatedAt": "2026-07-24T05:03:57.164Z",
+  "total": 660,
+  "uniqueSlugs": 658,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 640,
+    "generic": 642,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 586,
+    "deep": 588,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 46,
-    "Security misconfiguration": 54,
+    "Security misconfiguration": 55,
     "Broken authentication": 48,
-    "Injection": 134,
+    "Injection": 135,
     "Cross-site scripting": 109,
     "general": 18,
     "SSRF": 1,
@@ -474,6 +474,7 @@
     "client-side-vulnlab-hands-on-lab-evidence",
     "client-side-vulnlab-idor-lab-evidence",
     "client-side-vulnlab-ml-threat-detector-evidence",
+    "client-side-vulnlab-python-platform-evidence",
     "client-side-vulnlab-validate-api-evidence",
     "client-side-vulnlab-verbose-404-evidence",
     "client-side-vulnscope-evidence",
@@ -682,6 +683,7 @@
     "vulnlab-jwt-decode-live-oracle",
     "vulnlab-platform-node-java-live-oracle",
     "vulnlab-platform-php-live-oracle",
+    "vulnlab-platform-python-live-oracle",
     "vulnlab-recon-internal-metrics-live-oracle",
     "vulnlab-rest-bola-live-oracle",
     "vulnlab-utilities-hash-live-oracle",
