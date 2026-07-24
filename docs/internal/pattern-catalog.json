@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T06:03:59.320Z",
-  "total": 663,
-  "uniqueSlugs": 661,
+  "generatedAt": "2026-07-24T07:02:40.827Z",
+  "total": 666,
+  "uniqueSlugs": 664,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 645,
+    "generic": 648,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 591,
+    "deep": 594,
     "continuous": 0
   },
   "byCategory": {
@@ -26,14 +26,14 @@
     "Information exposure": 1,
     "Information disclosure": 46,
     "Security misconfiguration": 56,
-    "Broken authentication": 48,
+    "Broken authentication": 49,
     "Injection": 135,
     "Cross-site scripting": 109,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
-    "Sensitive data exposure": 12,
-    "AI security": 36,
+    "Sensitive data exposure": 13,
+    "AI security": 37,
     "XSS": 1
   },
   "slugs": [
@@ -130,6 +130,7 @@
     "client-side-drag-security-flaws-evidence",
     "client-side-drag-security-flaws-lab-module-evidence",
     "client-side-dvna-evidence",
+    "client-side-dvrag-lab-evidence",
     "client-side-echoctf-evidence",
     "client-side-eks-goat-evidence",
     "client-side-epicdetect-evidence",
@@ -572,6 +573,8 @@
     "domgo-websocket-dom-xss-evidence",
     "domgo-window-name-dom-xss-evidence",
     "druid-monitor-exposed",
+    "dvrag-admin-config-live-oracle",
+    "dvrag-rag-pipeline-live-oracle",
     "exposed-api-config",
     "exposed-config-backup",
     "exposed-env-file",

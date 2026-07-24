@@ -6829,6 +6829,24 @@
       "validation": "SOURCE: discovery:url EVIDENCE: RUBY-002 Mass Assignment + RUBY-005 Rails Secret Finder + /api/platform/ruby on /platform/ruby.html; clientSideVulnlabRubyPlatformEvidence; platform/ruby.html findings 39→43; benchmark 6/6 maintained"
     },
     {
+      "source": "discovery:www.dvrag.com",
+      "slug": "client-side-dvrag-lab-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: inline HTML Damn Vulnerable RAG Pipeline + 25 DELIBERATE VULNERABILITIES + fetch('/query') attack lab; www.dvrag.com findings 4→7; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.dvrag.com",
+      "slug": "dvrag-admin-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://www.dvrag.com/admin/config returns systemPrompt+model JSON without auth; www.dvrag.com findings 4→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.dvrag.com",
+      "slug": "dvrag-rag-pipeline-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /query leaks sk-live/AKIA secrets; GET /corpus returns confidential tenant docs; POST /fetch returns SSRF simulation; www.dvrag.com findings 4→7; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.onrender.com",
       "slug": "client-side-wrongsecrets-evidence",
       "status": "rejected",
@@ -11955,6 +11973,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "client-side-vulnlab-ruby-platform-evidence",
       "shipped_at": "2026-07-24T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.dvrag.com",
+      "slug": "client-side-dvrag-lab-evidence",
+      "shipped_at": "2026-07-24T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.dvrag.com",
+      "slug": "dvrag-admin-config-live-oracle",
+      "shipped_at": "2026-07-24T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:www.dvrag.com",
+      "slug": "dvrag-rag-pipeline-live-oracle",
+      "shipped_at": "2026-07-24T07:10:00.000Z"
     }
   ]
 }
