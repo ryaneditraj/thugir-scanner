@@ -10403,6 +10403,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vulnlab-private-admin-bypass-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab hidden admin bypass route disclosed",
+    description:
+      "VulnLab /private/admin-bypass.html exposes a hidden admin bypass training page reachable without authentication.",
+    impactOneline:
+      "Public admin-bypass lab documents hidden privileged routes attackers enumerate via recon HTML comments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabPrivateAdminBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove hidden admin routes from public deploys and enforce auth on all admin paths.",
+      steps: [
+        "Delete /private/admin-bypass.html from production builds.",
+        "Require authentication before any /admin or /private route responds.",
+        "Scrub HTML comments that leak hidden admin paths."
+      ]
+    },
+    fixPrompt:
+      "Our /private/admin-bypass.html hidden route is public. Show how to enforce auth on admin paths and remove recon leaks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-utilities-hash-live-oracle",
     platform: "generic",
     category: "Information disclosure",
