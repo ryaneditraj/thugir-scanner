@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T15:05:00.000Z",
+  "updated_at": "2026-07-24T16:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/sqli/search?q=laptop",
+      "source": "BountySecurity/BurpBountyLab — error-based SQLi search-form profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/eval?code=1%2b1",
+      "source": "BountySecurity/BurpBountyLab — eval() RCE profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/spring/",
+      "source": "BountySecurity/BurpBountyLab — Spring Boot CVE fingerprint profiles (actuator/SpEL/Cloud)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/passive/cookies",
+      "source": "BountySecurity/BurpBountyLab — insecure-cookie passive detection trigger",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/drupal/user/1",
+      "source": "BountySecurity/BurpBountyLab — Drupal user-profile enumeration profile practice endpoint",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/crlf/set",
       "source": "BountySecurity/BurpBountyLab — CRLF injection profile practice endpoint (Set-Cookie header reflection)",
