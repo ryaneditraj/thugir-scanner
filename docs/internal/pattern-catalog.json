@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T14:25:24.767Z",
-  "total": 681,
-  "uniqueSlugs": 679,
+  "generatedAt": "2026-07-24T15:04:59.383Z",
+  "total": 684,
+  "uniqueSlugs": 682,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,25 +9,25 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 663,
+    "generic": 666,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 609,
+    "deep": 612,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 170,
+    "Broken access control": 171,
     "Exposed secret": 17,
     "Source exposure": 6,
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 47,
-    "Security misconfiguration": 56,
+    "Security misconfiguration": 57,
     "Broken authentication": 49,
-    "Injection": 141,
+    "Injection": 142,
     "Cross-site scripting": 111,
     "general": 18,
     "SSRF": 1,
@@ -39,7 +39,10 @@
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "burpbounty-cors-live-oracle",
+    "burpbounty-crlf-set-live-oracle",
     "burpbounty-dom-xss-live-oracle",
+    "burpbounty-pt-read-live-oracle",
     "burpbounty-rce-ping-live-oracle",
     "burpbounty-sqli-login-live-oracle",
     "burpbounty-ssrf-fetch-live-oracle",
