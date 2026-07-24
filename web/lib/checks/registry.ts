@@ -18556,6 +18556,14 @@ const FABRAIX_CHALLENGE_SLUGS: Record<string, { topic: string; res: RegExp[] }> 
   "data-exfil-001": {
     topic: "data exfiltration agent challenge",
     res: [/data-exfil-001/i, /data.exfil/i, /exfiltrat/i, /challenge-objective/i]
+  },
+  "prompt-injection-001": {
+    topic: "prompt injection agent challenge",
+    res: [
+      /prompt injection, social engineering/i,
+      /scored by a guardrail/i,
+      /break its rules/i
+    ]
   }
 };
 
@@ -26797,6 +26805,71 @@ const vulnlabPlatformPhpLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabUtilitiesHashLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/utilities\//i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const hashUrl = new URL("/api/hash", ctx.origin).toString();
+  const doc = await ctx.probe.get(hashUrl, {
+    method: "POST",
+    body: JSON.stringify({ input: "password123" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"md5"\s*:/.test(doc.body) || !/"sha256"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!/"input"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: hashUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnLab POST /api/hash returns MD5/SHA1/SHA256 digests for arbitrary input without authentication"
+    }
+  };
+};
+
+const vulnlabReconInternalMetricsLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/recon\//i.test(urlHint) &&
+    !/\/security-policy/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const metricsUrl = new URL("/api/internal/metrics", ctx.origin).toString();
+  const doc = await ctx.probe.get(metricsUrl, { maxBytes: 4096 });
+  const metricsOk =
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /"debug"\s*:\s*true/.test(doc.body) &&
+    /"uptime"\s*:/.test(doc.body);
+  const commentLeak =
+    /RECON-003.*\/staging\/backup\.zip.*\/private\/admin-bypass/i.test(ctx.combined) ||
+    /<!--[^>]*\/staging\/backup\.zip[^>]*admin-bypass/i.test(ctx.combined);
+  if (!metricsOk && !commentLeak) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: metricsOk && commentLeak ? 0.92 : 0.9,
+    evidence: {
+      metricsUrl: metricsOk ? metricsUrl : undefined,
+      metricsSnippet: metricsOk ? doc.body.slice(0, 180).trim() : undefined,
+      commentLeak: commentLeak ? "/staging/backup.zip | /private/admin-bypass.html" : undefined,
+      note: metricsOk
+        ? "VulnLab /api/internal/metrics exposes debug build metadata without authentication"
+        : "VulnLab recon page HTML comment leaks hidden staging and admin-bypass paths (RECON-003)"
+    }
+  };
+};
+
 const vulnlabPlatformNodeJavaLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
@@ -30661,6 +30734,8 @@ export const RULES: Record<string, Rule> = {
   vulnlabGitHeadLiveOracle,
   vulnlabPlatformPhpLiveOracle,
   vulnlabPlatformNodeJavaLiveOracle,
+  vulnlabUtilitiesHashLiveOracle,
+  vulnlabReconInternalMetricsLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,

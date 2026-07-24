@@ -10247,6 +10247,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-utilities-hash-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VulnLab utilities hash API exposes server-side digests",
+    description:
+      "POST /api/hash returns MD5, SHA1, and SHA256 digests for arbitrary input without authentication.",
+    impactOneline:
+      "Live hash API probe confirms server-side digest oracle for /utilities/ hub pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabUtilitiesHashLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate hash generation utilities behind authentication or remove from production.",
+      steps: [
+        "Require authentication before /api/hash responds.",
+        "Rate-limit hash generation endpoints.",
+        "Do not expose cryptographic utilities on public lab surfaces."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hash endpoint returns digests for any input without auth. Show how to gate or remove it.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-recon-internal-metrics-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnLab recon labs expose internal metrics and hidden paths",
+    description:
+      "GET /api/internal/metrics returns debug build metadata and recon HTML comments leak /staging/backup.zip and /private/admin-bypass.html paths.",
+    impactOneline:
+      "Live internal metrics probe and RECON-003 HTML comment oracle confirm recon hub information disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabReconInternalMetricsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove internal metrics endpoints and scrub HTML comments that leak hidden paths.",
+      steps: [
+        "Block /api/internal/* from anonymous access.",
+        "Remove HTML comments that disclose staging or admin paths.",
+        "Audit recon pages for PII and hidden endpoint hints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/internal/metrics and recon HTML comments leak hidden paths. Show how to remove them.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",
