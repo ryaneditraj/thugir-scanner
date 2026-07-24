@@ -8952,9 +8952,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "VulnShop route-specific vulnerability module disclosed",
     description:
-      "VulnShop SPA documents per-route OWASP labs — SQL injection on /products, IDOR on /orders, mass assignment on /register, and JWT is_admin broken access on /login.",
+      "VulnShop SPA documents per-route OWASP labs — SQL injection on /products, IDOR on /orders, mass assignment on /register and /profile, JWT is_admin bypass on /login, and zero-auth debug routes on /admin.",
     impactOneline:
-      "Route-specific VulnShop modules teach exploitable SQLi, IDOR, mass assignment, and JWT forgery patterns in one deployable SPA.",
+      "Route-specific VulnShop modules teach exploitable SQLi, IDOR, mass assignment, JWT forgery, and unauthenticated admin/debug API patterns in one deployable SPA.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "clientSideVulnshopModuleEvidence" },
     tierRequired: "deep",
@@ -8968,7 +8968,33 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "We host VulnShop pentest modules (SQLi search, IDOR orders, mass-assignment register, JWT login bypass). Show how to fix each route.",
+      "We host VulnShop pentest modules (SQLi search, IDOR orders, mass-assignment register/profile, JWT login bypass, admin debug routes). Show how to fix each route.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-debug-api-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnShop debug API exposes secrets without authentication",
+    description:
+      "GET /api/debug/config and /api/debug/users on the VulnShop Railway backend return secret_key, demo passwords, and admin flags without any auth challenge.",
+    impactOneline:
+      "Live cross-origin probe of vulnshop-production.up.railway.app confirms zero-auth debug endpoints leak secrets when the backend is reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopDebugApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate debug routes before deploying any API backend.",
+      steps: [
+        "Delete /api/debug/* routes from production and staging backends.",
+        "Rotate secret_key and all demo passwords if debug endpoints were publicly reachable.",
+        "Never expose debug config from a SPA-linked production API host."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop-style /api/debug/config and /api/debug/users leak secrets without auth. Show how to remove or gate these routes.",
     version: 1,
     enabled: true
   },

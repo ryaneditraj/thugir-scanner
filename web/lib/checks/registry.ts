@@ -22057,8 +22057,62 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Products search lab", re: /Search products/i }
     ],
     note: "VulnShop /products documents SQL injection via product search parameter"
+  },
+  {
+    pathRe: /\/admin\b/i,
+    markers: [
+      { label: "Admin panel title", re: /🔧 Admin Panel/i },
+      { label: "JWT is_admin admin gate", re: /is_admin/i },
+      { label: "Unauthenticated debug config route", re: /\/api\/debug\/config[\s\S]{0,160}No auth required|require zero authentication/i },
+      { label: "Plaintext password column in admin table", re: /Password \(plaintext!\)/i }
+    ],
+    note: "VulnShop /admin documents JWT is_admin bypass and zero-auth /api/debug/config + /api/debug/users exposing secrets"
+  },
+  {
+    pathRe: /\/profile\b/i,
+    markers: [
+      { label: "Mass Assignment vuln tag", re: /Mass Assignment \[A01\]/i },
+      { label: "Balance field mass-assignment", re: /balance.*field from the client|mass-assignment vuln/i }
+    ],
+    note: "VulnShop /profile documents mass-assignment via client-supplied balance field"
+  },
+  {
+    pathRe: /\/users\b/i,
+    markers: [
+      { label: "Admin users API route", re: /\/admin\/users/i },
+      { label: "Debug users plaintext passwords", re: /\/api\/debug\/users[\s\S]{0,160}plaintext passwords/i },
+      { label: "Admin user table columns", re: /Password \(plaintext!\).*Admin.*Balance/i }
+    ],
+    note: "VulnShop documents unauthenticated user enumeration with plaintext passwords via admin and debug routes"
   }
 ];
+
+const VULNSHOP_RAILWAY_API_RE = /https?:\/\/vulnshop-production\.up\.railway\.app/i;
+
+const vulnshopDebugApiLiveOracle: Rule = async (ctx) => {
+  if (!/VulnShop|vulnshop-production|vulnshop\.vercel\.app/i.test(ctx.combined + ctx.origin)) {
+    return NEGATIVE;
+  }
+  const baseMatch = ctx.combined.match(VULNSHOP_RAILWAY_API_RE);
+  if (!baseMatch) return NEGATIVE;
+  const base = baseMatch[0].replace(/\/$/, "");
+  for (const path of ["/api/debug/config", "/api/debug/users"]) {
+    const url = `${base}${path}`;
+    const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 12000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    if (!/secret_key|password|is_admin|plaintext/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `VulnShop Railway backend ${path} returns sensitive config without authentication`
+      }
+    };
+  }
+  return NEGATIVE;
+};
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -30923,6 +30977,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
   clientSideVulnshopModuleEvidence,
+  vulnshopDebugApiLiveOracle,
   clientSideBuggybuyEvidence,
   clientSideWebSecurityLearningLabsEvidence,
   clientSideJwtlensEvidence,
