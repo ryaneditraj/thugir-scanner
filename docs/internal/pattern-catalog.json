@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-23T23:10:07.624Z",
-  "total": 645,
-  "uniqueSlugs": 643,
+  "generatedAt": "2026-07-24T00:02:40.843Z",
+  "total": 648,
+  "uniqueSlugs": 646,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,22 +9,22 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 627,
+    "generic": 630,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 573,
+    "deep": 576,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 166,
+    "Broken access control": 167,
     "Exposed secret": 16,
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 42,
+    "Information disclosure": 43,
     "Security misconfiguration": 52,
     "Broken authentication": 48,
     "Injection": 133,
@@ -32,7 +32,7 @@
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
-    "Sensitive data exposure": 7,
+    "Sensitive data exposure": 8,
     "AI security": 36,
     "XSS": 1
   },
@@ -671,7 +671,10 @@
     "vibe-weak-csp",
     "vulnlab-auth-login-enumeration-live-oracle",
     "vulnlab-auth-session-live-oracle",
+    "vulnlab-backup-config-live-oracle",
+    "vulnlab-graphql-soap-live-oracle",
     "vulnlab-jwt-decode-live-oracle",
+    "vulnlab-rest-bola-live-oracle",
     "vulnlab-validate-idor-live-oracle",
     "vulnlab-validate-sqli-live-oracle",
     "vulnlab-validate-xss-live-oracle",
