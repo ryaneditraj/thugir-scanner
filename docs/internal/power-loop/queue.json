@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T09:12:00.000Z",
+  "updated_at": "2026-07-24T10:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vwad.owasp.org/app/yrprey/",
+      "source": "OWASP VWAD — Yrprey OWASP API Top 10 vuln framework catalog entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/burpbounty/",
+      "source": "OWASP VWAD — Burp Bounty Lab XSS/SQLi/RCE/SSRF/SSTI scanner-profile practice catalog (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/bugbait/",
+      "source": "OWASP VWAD — Blacklock BugBait vulnerable Node.js pen-test training app catalog (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/secure-by-design/",
+      "source": "OWASP VWAD — Secure by Design public demo instance catalog entry (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/ffufme/",
+      "source": "OWASP VWAD — adamtlangley/ffufme fuzzing target practice lab catalog (web search)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-fauxbank.vercel.app/accounts",
       "source": "FauxBank training sim — authenticated accounts dashboard with SQLi search + IDOR probes (GitHub README)",
