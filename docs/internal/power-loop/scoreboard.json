@@ -67,7 +67,8 @@
       "vampi-production.up.railway.app/ui/: 7 findings incl idor-sequential-ids + openapi-debug-password-exposure + vibe-unauthenticated-api-routes",
       "urban-vampi-production.up.railway.app/ui/: 7 findings — same VAmPI API oracle cluster on production Railway deploy",
       "burpbountylab.com/xss/reflect + /sqli/login + /ssti/preview: 6 findings each (phpinfo + graphql-introspection + spring-boot-actuator from hub crawl)",
-      "vwad.owasp.org/app/burpbounty + bugbait: cross-origin seeds from prior run (5 findings each)"
+      "vwad.owasp.org/app/burpbounty + bugbait: cross-origin seeds from prior run (5 findings each)",
+      "echoctf.red + hackersec.academy + cmdchallenge.com: queue drain 5+5+3 findings"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
