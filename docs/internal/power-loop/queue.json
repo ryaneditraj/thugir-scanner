@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T02:05:00.000Z",
+  "updated_at": "2026-07-24T03:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/utilities/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — encoding/hashing/timestamp utility lab hub (GitHub utilities/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/recon/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — passive/active recon artifact hub (GitHub recon/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/security-policy.html",
+      "source": "dkyazzentwatwa/hack-this-site — security policy disclosure page (GitHub security-policy.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/resource/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — education resource hub and learning path (GitHub resource/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/prompt-injection-001",
+      "source": "fabraix/playground — Show HN AI agent prompt-injection challenge (GitHub challenges/)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/platform/php.html",
       "source": "dkyazzentwatwa/hack-this-site — PHP platform-specific vulnerability cues (GitHub platform/php.html)",
