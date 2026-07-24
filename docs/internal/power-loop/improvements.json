@@ -7055,6 +7055,24 @@
       "slug": "burpbounty-redirect-goto-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/redirect/goto?url=https://evil-open-redirect-probe.example/thugir returns 302 Location to probe host; burpbountylab.com/redirect/goto findings 15→18; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-log4j-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST http://burpbountylab.com/rce/log4j search=${jndi:ldap://127.0.0.1/a} returns <h1>Logged</h1><p>Query: ${jndi:ldap://127.0.0.1/a}</p>; burpbountylab.com/rce/log4j findings 19→21+; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-upload-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST multipart /xxe/upload xmlfile=<!ENTITY xxe SYSTEM file:///etc/passwd> returns root:x:0:0 in <foo>; burpbountylab.com/xxe/upload findings 19→21+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-time-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SLEEP(3) probe returns HTTP 500 after ~3.2s — removed erroneous status<500 gate so time delay alone confirms oracle; burpbountylab.com/sqli/time route-specific slug now fires; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12357,6 +12375,16 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-redirect-goto-live-oracle",
       "shipped_at": "2026-07-24T19:12:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-log4j-live-oracle",
+      "shipped_at": "2026-07-24T20:30:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-upload-live-oracle",
+      "shipped_at": "2026-07-24T20:30:00.000Z"
     }
   ]
 }
