@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T21:32:21.520Z",
+  "updated_at": "2026-07-24T22:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2436,
-  "total_findings": 15360,
+  "total_sites_scanned": 2437,
+  "total_findings": 15370,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1776,
   "discovery_findings": 12547,
-  "improvements_shipped": 1062,
-  "last_run": "2026-07-24T21:32:21.520Z",
+  "improvements_shipped": 1068,
+  "last_run": "2026-07-24T22:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 cold-start gap=sqli (8 findings pages=1 probes=211); wake retry restored sql-error-disclosure → merged 6/6 (9 findings); secret-resend slug still absent",
+      "note": "Benchmark recall stable at 6/6 (10 findings); no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,31 +50,26 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 160,
-      "skipped_48h": [
-        "http://burpbountylab.com/collab/host?param=test",
-        "http://burpbountylab.com/collab/forgot?email=user@example.com",
-        "http://burpbountylab.com/xxe/soap"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab blind RCE, tag-context XSS, comment-context XSS, SSRF scheme bypass, outbound redirect profiles",
-      "improvements_shipped_this_run": 0
+      "focus": "Burp Bounty Lab route-specific oracles: tag-context XSS, HTML-comment XSS, file:// scheme SSRF",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 after sqli wake retry (pass1 gap=sqli → sql-error-disclosure on retry; merged 9 findings)",
-      "burpbountylab.com/rce/blind: hub fingerprint 30 findings — route-specific blind-RCE oracle still absent",
-      "burpbountylab.com/xss/tag: hub fingerprint 29 findings — route-specific tag-context XSS oracle still absent",
-      "burpbountylab.com/ssrf/scheme: hub fingerprint 30 findings — route-specific scheme-SSRF oracle still absent",
-      "burpbountylab.com/redirect/out: hub fingerprint 29 findings — route-specific outbound-redirect oracle still absent",
-      "burpbountylab.com/xss/comment: hub fingerprint 30 findings — route-specific comment-context XSS oracle still absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "burpbountylab.com/xss/tag: tag-context XSS oracle via /xss/tag?input= (33→36 findings)",
+      "burpbountylab.com/xss/comment: HTML-comment XSS oracle via /xss/comment?data= (33→36 findings)",
+      "burpbountylab.com/ssrf/scheme: file:// scheme SSRF oracle via /ssrf/scheme?url=file:///etc/passwd (33→36 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "juice-shop Heroku cold-start: pass1 sqli miss (no sql-error-disclosure) until wake retry",
-      "burpbountylab blind RCE, tag XSS, comment XSS, scheme SSRF, outbound redirect — route-specific oracles still absent (hub fingerprint dominates 29-30/route)"
+      "burpbountylab.com/rce/blind: blind command execution — route-specific oracle still absent (no output/time signal)",
+      "burpbountylab.com/redirect/out: outbound 302 redirect — route-specific oracle still absent",
+      "wrongsecrets.onrender.com: service suspended by owner"
     ]
   },
   "discovery_highlights": {
