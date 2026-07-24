@@ -6809,6 +6809,30 @@
       "slug": "client-side-vulnlab-python-platform-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: PYTHON-001 Debug Mode + PYTHON-002 SSTI (Jinja2) + {{ 7 * 7 }} template preview on /platform/python.html; clientSideVulnlabPythonPlatformEvidence; platform/python.html findings 14→39; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-ruby-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/platform/ruby returns {\"rails\":\"5.2.1\",\"secretKeyBase\":\"dev-rails-secret\"}; hack-this-site-eta.vercel.app/platform/ruby.html findings 39→43; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-aspnet-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/platform/aspnet returns viewState+debug:true + GET /backup/web.config.bak exposes compilation debug=true; platform/aspnet.html findings 37→42; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-ruby-platform-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: RUBY-002 Mass Assignment + RUBY-005 Rails Secret Finder + /api/platform/ruby on /platform/ruby.html; clientSideVulnlabRubyPlatformEvidence; platform/ruby.html findings 39→43; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.onrender.com",
+      "slug": "client-side-wrongsecrets-evidence",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecrets.onrender.com returns Service Suspended HTML — challenge oracles unreachable from cloud scans; use wrongsecrets.herokuapp.com instead"
     }
   ],
   "shipped": [
@@ -11916,6 +11940,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "client-side-vulnlab-python-platform-evidence",
       "shipped_at": "2026-07-24T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-ruby-live-oracle",
+      "shipped_at": "2026-07-24T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-aspnet-live-oracle",
+      "shipped_at": "2026-07-24T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-ruby-platform-evidence",
+      "shipped_at": "2026-07-24T06:10:00.000Z"
     }
   ]
 }

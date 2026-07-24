@@ -26899,6 +26899,76 @@ const vulnlabPlatformPythonLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabPlatformRubyLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/platform\/ruby\.html/i.test(urlHint) &&
+    !/\/api\/platform\/ruby/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const rubyUrl = new URL("/api/platform/ruby", ctx.origin).toString();
+  const doc = await ctx.probe.get(rubyUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const railsOk = /"rails"\s*:\s*"/.test(doc.body);
+  const secretOk = /"secretKeyBase"\s*:\s*"/.test(doc.body);
+  if (!railsOk && !secretOk) return NEGATIVE;
+  const labHint = /RUBY-00[25]|Rails Secret Finder|Mass Assignment/i.test(ctx.combined);
+  return {
+    fired: true,
+    confidence: railsOk && secretOk ? (labHint ? 0.92 : 0.9) : 0.88,
+    evidence: {
+      url: rubyUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      labHint: labHint ? "RUBY-005 Rails Secret Finder lab documented on /platform/ruby.html" : undefined,
+      note: "VulnLab Ruby/Rails platform lab exposes secret_key_base via GET /api/platform/ruby without authentication"
+    }
+  };
+};
+
+const vulnlabPlatformAspnetLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/platform\/aspnet\.html/i.test(urlHint) &&
+    !/\/api\/platform\/aspnet/i.test(urlHint) &&
+    !/\/backup\/web\.config\.bak/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const aspnetUrl = new URL("/api/platform/aspnet", ctx.origin).toString();
+  const webConfigUrl = new URL("/backup/web.config.bak", ctx.origin).toString();
+  const [aspnetDoc, webConfigDoc] = await Promise.all([
+    ctx.probe.get(aspnetUrl, { maxBytes: 4096 }),
+    ctx.probe.get(webConfigUrl, { maxBytes: 4096 })
+  ]);
+  const viewStateOk =
+    aspnetDoc.status >= 200 &&
+    aspnetDoc.status < 400 &&
+    /"viewState"\s*:\s*"/.test(aspnetDoc.body) &&
+    /"debug"\s*:\s*true/.test(aspnetDoc.body);
+  const webConfigOk =
+    webConfigDoc.status >= 200 &&
+    webConfigDoc.status < 400 &&
+    /<configuration>/i.test(webConfigDoc.body) &&
+    /compilation\s+debug\s*=\s*["']true["']/i.test(webConfigDoc.body);
+  if (!viewStateOk && !webConfigOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: viewStateOk && webConfigOk ? 0.92 : 0.9,
+    evidence: {
+      aspnetUrl: viewStateOk ? aspnetUrl : undefined,
+      webConfigUrl: webConfigOk ? webConfigUrl : undefined,
+      aspnetSnippet: viewStateOk ? aspnetDoc.body.slice(0, 180).trim() : undefined,
+      webConfigSnippet: webConfigOk ? webConfigDoc.body.slice(0, 180).trim() : undefined,
+      note: "VulnLab ASP.NET platform labs expose ViewState metadata and debug-enabled web.config backup without authentication"
+    }
+  };
+};
+
 const vulnlabPlatformNodeJavaLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
@@ -27597,6 +27667,34 @@ const CLIENT_VULNLAB_CMS_PLATFORM_RES: { label: string; re: RegExp }[] = [
     re: /Resource Hub[\s\S]{0,200}intentionally vulnerable/i
   }
 ];
+
+const clientSideVulnlabRubyPlatformEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isRubyPage = /\/platform\/ruby\.html/i.test(pageUrl) || /\/platform\/ruby\.html/i.test(ctx.scanUrl || "");
+  const hits: { label: string; sample: string }[] = [];
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "RUBY-002 mass assignment lab", re: /RUBY-002[\s\S]{0,120}Mass Assignment/i },
+    { label: "RUBY-005 Rails secret finder lab", re: /RUBY-005[\s\S]{0,120}Rails Secret Finder/i },
+    { label: "Ruby platform API oracle path", re: /\/api\/platform\/ruby/i },
+    { label: "Rails secret_key_base disclosure", re: /secretKeyBase|secret_key_base/i }
+  ];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isRubyPage ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Ruby \/ Rails|RUBY-00[25]|Pentest Toolkit/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : isRubyPage ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab Academy Ruby/Rails platform labs document mass-assignment and secret_key_base hunting training targets"
+    }
+  };
+};
 
 const clientSideVulnlabPythonPlatformEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -30795,6 +30893,8 @@ export const RULES: Record<string, Rule> = {
   vulnlabGitHeadLiveOracle,
   vulnlabPlatformPhpLiveOracle,
   vulnlabPlatformPythonLiveOracle,
+  vulnlabPlatformRubyLiveOracle,
+  vulnlabPlatformAspnetLiveOracle,
   vulnlabPlatformNodeJavaLiveOracle,
   vulnlabUtilitiesHashLiveOracle,
   vulnlabReconInternalMetricsLiveOracle,
@@ -30814,6 +30914,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA10SsrfEvidence,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
+  clientSideVulnlabRubyPlatformEvidence,
   clientSideVulnlabPythonPlatformEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
