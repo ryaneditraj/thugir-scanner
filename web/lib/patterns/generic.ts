@@ -10039,6 +10039,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-clickjacking-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnLab clickjacking lab lacks frame protection headers",
+    description:
+      "GET /labs/clickjacking.html is served without X-Frame-Options or CSP frame-ancestors and documents a UI redress vulnerability.",
+    impactOneline:
+      "Live clickjacking lab probe confirms missing frame-busting headers without relying on generic missing-security-headers alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabClickjackingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set X-Frame-Options or CSP frame-ancestors on all pages that should not be framed.",
+      steps: [
+        "Add Content-Security-Policy frame-ancestors 'self' or X-Frame-Options: DENY.",
+        "Gate clickjacking training labs behind authenticated sessions.",
+        "Use frame-busting JavaScript only as defense-in-depth, not primary protection."
+      ]
+    },
+    fixPrompt:
+      "Our clickjacking lab page lacks X-Frame-Options and CSP frame-ancestors. Show how to prevent UI redress attacks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-cms-drupal-joomla-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VulnLab CMS APIs expose Drupal and Joomla version metadata",
+    description:
+      "GET /api/cms/drupal and /api/cms/joomla return CMS name, version, and component lists without authentication.",
+    impactOneline:
+      "Live CMS version probes confirm Drupal/Joomla disclosure oracles for /cms/*.html lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabCmsDrupalJoomlaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove version disclosure from public CMS endpoints and gate lab APIs behind auth.",
+      steps: [
+        "Strip version and component metadata from public API responses.",
+        "Require authentication before /api/cms/* responds.",
+        "Use generic error pages instead of CMS-specific version banners."
+      ]
+    },
+    fixPrompt:
+      "Our /api/cms/drupal and /api/cms/joomla leak CMS versions. Show how to suppress version disclosure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",

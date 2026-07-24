@@ -1238,6 +1238,8 @@ const DEEP_RULES = new Set<string>([
   "vulnlabBackupConfigLiveOracle",
   "vulnlabRestBolaLiveOracle",
   "vulnlabGraphqlSoapLiveOracle",
+  "vulnlabClickjackingLiveOracle",
+  "vulnlabCmsDrupalJoomlaLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",

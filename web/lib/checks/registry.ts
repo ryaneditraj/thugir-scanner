@@ -23762,7 +23762,7 @@ const CLIENT_OAUTH_LABS_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
 
 const clientSideOauthLabsPlaygroundEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const corpus = `${ctx.combined}\n${ctx.home.body}\n${pageUrl}`;
   let host = "";
   try {
     host = new URL(pageUrl).hostname.toLowerCase();
@@ -23790,6 +23790,7 @@ const clientSideOauthLabsPlaygroundEvidence: Rule = async (ctx) => {
 
 const oauthOidcMetadataExposed: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}\n${ctx.origin}`;
   let host = "";
   try {
     host = new URL(pageUrl).hostname.toLowerCase();
@@ -23798,7 +23799,9 @@ const oauthOidcMetadataExposed: Rule = async (ctx) => {
   }
   const isTrainingAs =
     /^auth0\.oauthlabs\.com$/i.test(host) ||
-    (/oauthlabs\.com$/i.test(host) && /oauthlabs|OAuth 2\.0 Playground/i.test(ctx.combined));
+    /auth0\.oauthlabs\.com/i.test(urlHint) ||
+    (/(?:^|\.)oauthlabs\.com$/i.test(host) &&
+      /oauthlabs|OAuth 2\.0 Playground/i.test(`${ctx.combined}\n${ctx.home.body}`));
   if (!isTrainingAs) return NEGATIVE;
 
   const probeHost = /^auth0\.oauthlabs\.com$/i.test(host) ? host : "auth0.oauthlabs.com";
@@ -26553,6 +26556,77 @@ const vulnlabGraphqlSoapLiveOracle: Rule = async (ctx) => {
       schemaSnippet: schemaOk ? schemaDoc.body.slice(0, 180).trim() : undefined,
       wsdlSnippet: wsdlOk ? wsdlDoc.body.slice(0, 180).trim() : undefined,
       note: "VulnLab GraphQL/SOAP labs expose introspection schema JSON and WSDL without authentication"
+    }
+  };
+};
+
+const vulnlabClickjackingLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/labs\/clickjacking\.html/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const clickUrl = new URL("/labs/clickjacking.html", ctx.origin).toString();
+  const doc = await ctx.probe.get(clickUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const h = doc.headers;
+  const hasFrameProtection =
+    Boolean(h["x-frame-options"]) ||
+    /frame-ancestors/i.test(h["content-security-policy"] || "");
+  if (hasFrameProtection) return NEGATIVE;
+  if (!/No Clickjacking Protection|X-Frame-Options or CSP frame-ancestors/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: clickUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnLab clickjacking lab page lacks X-Frame-Options/CSP frame-ancestors and documents UI redress vulnerability"
+    }
+  };
+};
+
+const vulnlabCmsDrupalJoomlaLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/cms\/(?:drupal|joomla)\.html/i.test(urlHint) &&
+    !/\/api\/cms\/(?:drupal|joomla)/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const drupalUrl = new URL("/api/cms/drupal", ctx.origin).toString();
+  const joomlaUrl = new URL("/api/cms/joomla", ctx.origin).toString();
+  const [drupalDoc, joomlaDoc] = await Promise.all([
+    ctx.probe.get(drupalUrl, { maxBytes: 4096 }),
+    ctx.probe.get(joomlaUrl, { maxBytes: 4096 })
+  ]);
+  const drupalOk =
+    drupalDoc.status >= 200 &&
+    drupalDoc.status < 400 &&
+    /"name"\s*:\s*"Vulnerable Drupal"/.test(drupalDoc.body) &&
+    /"version"\s*:\s*"8\./.test(drupalDoc.body);
+  const joomlaOk =
+    joomlaDoc.status >= 200 &&
+    joomlaDoc.status < 400 &&
+    /"name"\s*:\s*"Vulnerable Joomla"/.test(joomlaDoc.body) &&
+    /"version"\s*:\s*"3\./.test(joomlaDoc.body);
+  if (!drupalOk && !joomlaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: drupalOk && joomlaOk ? 0.91 : 0.89,
+    evidence: {
+      drupalUrl: drupalOk ? drupalUrl : undefined,
+      joomlaUrl: joomlaOk ? joomlaUrl : undefined,
+      drupalSnippet: drupalOk ? drupalDoc.body.slice(0, 180).trim() : undefined,
+      joomlaSnippet: joomlaOk ? joomlaDoc.body.slice(0, 180).trim() : undefined,
+      note: "VulnLab CMS lab APIs expose Drupal/Joomla version and component metadata without authentication"
     }
   };
 };
@@ -30374,6 +30448,8 @@ export const RULES: Record<string, Rule> = {
   vulnlabBackupConfigLiveOracle,
   vulnlabRestBolaLiveOracle,
   vulnlabGraphqlSoapLiveOracle,
+  vulnlabClickjackingLiveOracle,
+  vulnlabCmsDrupalJoomlaLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,
