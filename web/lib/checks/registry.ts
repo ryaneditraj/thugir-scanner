@@ -7398,6 +7398,82 @@ const burpbountySsrfSchemeLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyRedirectOutLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/redirect/out", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      status: doc.status,
+      location,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab GET /redirect/out?url= returns HTTP redirect to attacker URL — outbound open redirect profile oracle distinct from /redirect/goto and /redirect/login"
+    }
+  };
+};
+
+const burpbountyRedirectPpLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/redirect/pp", ctx.origin);
+  probeUrl.searchParams.set("return_url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      status: doc.status,
+      location,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab GET /redirect/pp?return_url= returns HTTP redirect to attacker URL — post-payment open redirect profile oracle"
+    }
+  };
+};
+
+const burpbountyCollabForgotLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeEmail = "thugir-reset-probe@example.com";
+  const probeUrl = new URL("/collab/forgot", ctx.origin);
+  probeUrl.searchParams.set("email", probeEmail);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const resetTokenLeak =
+    /Password Reset/i.test(doc.body) &&
+    new RegExp(`Reset link sent to\\s+${probeEmail.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(
+      doc.body
+    ) &&
+    /Reset URL:\s*https?:\/\/[^<]+\/reset\?token=[^&\s"']+&email=/i.test(doc.body);
+  if (!resetTokenLeak) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /TESTDEMO/i.test(doc.body) ? 0.93 : 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      email: probeEmail,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /collab/forgot?email= discloses password-reset URL with token and email in HTML response — collaborator/forgot-password profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32299,6 +32375,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyXssTagLiveOracle,
   burpbountyXssCommentLiveOracle,
   burpbountySsrfSchemeLiveOracle,
+  burpbountyRedirectOutLiveOracle,
+  burpbountyRedirectPpLiveOracle,
+  burpbountyCollabForgotLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
