@@ -9961,6 +9961,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-backup-config-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnLab backup config exposes database credentials",
+    description:
+      "GET /backup/config.old returns plaintext DB_USER, DB_PASS, and JWT_SECRET values without authentication.",
+    impactOneline:
+      "Live backup file probe confirms sensitive_data oracle for env-file and A05 misconfig lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabBackupConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove backup config files from public web roots and rotate exposed secrets.",
+      steps: [
+        "Block access to /backup/, *.old, and .env paths at the edge.",
+        "Store secrets in a vault — never commit them to backup archives.",
+        "Rotate any credentials that were exposed in backup files."
+      ]
+    },
+    fixPrompt:
+      "Our /backup/config.old leaks DB_PASS and JWT_SECRET. Show how to block backup exposure and rotate secrets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-rest-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab REST APIs expose BOLA and broken access control",
+    description:
+      "GET /api/admin/users returns admin role users and GET /api/orders/1001 returns another user's order without authentication.",
+    impactOneline:
+      "Live REST API probes confirm BOLA/IDOR oracles for /api-labs/rest.html without relying on HTML markers alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabRestBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on every API route.",
+      steps: [
+        "Require authentication and authorize the caller against the requested object ID.",
+        "Deny /api/admin/* routes to non-admin roles.",
+        "Gate lab APIs behind authenticated training sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/users and /api/orders/{id} lack authorization. Show object-level access control patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-graphql-soap-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnLab GraphQL schema and SOAP WSDL exposed",
+    description:
+      "GET /data/graphql-schema.json returns full introspection schema and GET /data/service.wsdl exposes SOAP definitions without authentication.",
+    impactOneline:
+      "Live GraphQL/SOAP probes confirm API disclosure oracles for /api-labs/graphql.html and soap.html.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabGraphqlSoapLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection and restrict WSDL exposure in production.",
+      steps: [
+        "Disable introspection on public GraphQL endpoints.",
+        "Require authentication before serving WSDL or schema files.",
+        "Gate lab schema endpoints behind authenticated training sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /data/graphql-schema.json and /data/service.wsdl are public. Show how to restrict schema and WSDL exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",
