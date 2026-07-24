@@ -6779,6 +6779,24 @@
       "slug": "vulnlab-platform-node-java-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/platform/node returns vulnerable-node-app express 4.16.0 + GET /api/platform/java returns /actuator/env log4j 2.14.1; platform/node.html+java.html findings 31→32+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-utilities-hash-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/hash {\"input\":\"password123\"} returns md5+sha256 JSON; hack-this-site-eta.vercel.app/utilities/index.html findings 36→38; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-recon-internal-metrics-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/internal/metrics returns {\"debug\":true,\"uptime\":...} + RECON-003 HTML comment leaks /staging/backup.zip|/private/admin-bypass.html; recon/index.html findings 36→38; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "client-side-fabraix-challenge-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle prompt injection, social engineering + scored by a guardrail + break its rules; prompt-injection-001 added to FABRAIX_CHALLENGE_SLUGS; playground.fabraix.com/challenges/prompt-injection-001 gains client-side-fabraix-challenge-evidence slug; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11861,6 +11879,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-platform-node-java-live-oracle",
       "shipped_at": "2026-07-24T03:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-utilities-hash-live-oracle",
+      "shipped_at": "2026-07-24T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-recon-internal-metrics-live-oracle",
+      "shipped_at": "2026-07-24T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "client-side-fabraix-challenge-evidence",
+      "shipped_at": "2026-07-24T04:10:00.000Z"
     }
   ]
 }
