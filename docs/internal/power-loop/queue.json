@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T06:07:00.000Z",
+  "updated_at": "2026-07-24T07:02:59.847Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/admin",
+      "source": "yashasrnair/VulnShop — admin panel JWT bypass + env dump + command injection (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/profile",
+      "source": "yashasrnair/VulnShop — profile JWT decoder + plaintext password + priv-esc (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/users",
+      "source": "yashasrnair/VulnShop — all users with passwords + IDOR field editor (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/drupal.html",
+      "source": "dkyazzentwatwa/hack-this-site — Drupal CMS vulnerability training page (GitHub cms/)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/joomla.html",
+      "source": "dkyazzentwatwa/hack-this-site — Joomla CMS vulnerability training page (GitHub cms/)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/owasp/index.html",
       "source": "dkyazzentwatwa/hack-this-site — OWASP Top 10 challenge hub index (GitHub sitemap /owasp/)",
@@ -159,16 +184,6 @@
     {
       "url": "https://hack-this-site-eta.vercel.app/api-labs/soap.html",
       "source": "dkyazzentwatwa/hack-this-site — SOAP/XML API security testing lab (GitHub api-labs/soap.html)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://hack-this-site-eta.vercel.app/cms/drupal.html",
-      "source": "dkyazzentwatwa/hack-this-site — Drupal CMS vulnerability training surface (GitHub cms/ tree)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://hack-this-site-eta.vercel.app/cms/joomla.html",
-      "source": "dkyazzentwatwa/hack-this-site — Joomla CMS vulnerability training surface (GitHub cms/ tree)",
       "auth": "oss_deploy"
     },
     {
@@ -8595,6 +8610,5 @@
       "source": "NeuraLegion/brokencrystals — prototype pollution / insecure deserialization oracle (README)",
       "auth": "benchmark"
     }
-  ],
-  "updated_at": "2026-07-23T12:20:21.460Z"
+  ]
 }

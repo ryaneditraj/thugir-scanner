@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T06:08:35.654Z",
+  "updated_at": "2026-07-24T07:03:32.140Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2292,
-  "total_findings": 13432,
+  "total_sites_scanned": 2301,
+  "total_findings": 13548,
   "critical_findings": 41,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1706,
   "discovery_findings": 10990,
-  "improvements_shipped": 1021,
-  "last_run": "2026-07-24T06:08:35.654Z",
+  "improvements_shipped": 1024,
+  "last_run": "2026-07-24T07:03:32.140Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -52,29 +52,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 181,
+      "findings": 106,
       "skipped_48h": [
-        "hack-this-site-eta.vercel.app/home/index.html",
-        "hack-this-site-eta.vercel.app/platform/index.html",
-        "hack-this-site-eta.vercel.app/platform/ruby.html"
+        "hack-this-site-eta.vercel.app/owasp/index.html",
+        "hack-this-site-eta.vercel.app/cms/index.html",
+        "www.dvrag.com",
+        "playhacklab.com",
+        "platform.sixhackacademy.com"
       ],
       "dns_failures": [],
-      "focus": "OWASP Top 10 hub + CMS hub + DVRAG RAG pipeline + PlayHackLab + SixHack platform; queue drain hit quick/index + api-labs/graphql + soap",
+      "focus": "VulnShop route-specific oracles (admin/profile/users) + HackThisSite CMS pages (drupal/joomla); queue drain hit xss-attacker/api/collect + vulnshop login/products",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/owasp/index.html: 37 findings — OWASP Top 10 hub surfaces academy bundle",
-      "hack-this-site-eta.vercel.app/cms/index.html: 39 findings — CMS hub matches platform/ruby depth",
-      "www.dvrag.com: 4 findings — RAG pipeline live mode (cross-tenant/SSRF oracles shallow)",
-      "playhacklab.com: 1 finding — browser terminal game; SPA shell thin",
-      "platform.sixhackacademy.com: 3 findings — CTF platform landing shallow",
-      "hack-this-site-eta.vercel.app/api-labs/graphql.html: 40 findings — richest API lab page this run"
+      "hack-this-site-eta.vercel.app/cms/drupal.html: 41 findings — CMS-specific page matches hub bundle depth",
+      "hack-this-site-eta.vercel.app/cms/joomla.html: 41 findings — CMS-specific page matches hub bundle depth",
+      "vulnshop.vercel.app/admin: 4 findings — shallow vs documented JWT bypass/RCE demo panels",
+      "vulnshop.vercel.app/profile: 4 findings — JWT decoder + priv-esc oracles shallow",
+      "vulnshop.vercel.app/users: 4 findings — IDOR/password disclosure oracles shallow",
+      "vulnshop.vercel.app/login: 5 findings — NoSQL injection demo panel not surfaced as slug"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "www.dvrag.com: 25 documented RAG vulns but scanner only 4 findings — AI/RAG oracles needed",
-      "playhacklab.com + platform.sixhackacademy.com: shallow 1–3 findings — SPA/game shells need page-specific oracles",
+      "vulnshop.vercel.app/* routes: 4–5 findings vs 10 OWASP demo panels — route-specific oracles needed",
+      "hack-this-site cms/drupal+joomla: 41 findings but same SPA bundle as cms/index — page-specific CMS oracles missing",
       "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
@@ -108,16 +110,21 @@
     "hack-this-site-eta.vercel.app/labs/env-file.html": 3,
     "hack-this-site-eta.vercel.app/labs/clickjacking.html": 2,
     "hack-this-site-eta.vercel.app/api-labs/rest.html": 3,
-    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 27,
-    "hack-this-site-eta.vercel.app/api-labs/soap.html": 27,
+    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 40,
+    "hack-this-site-eta.vercel.app/api-labs/soap.html": 18,
     "brokencrystals.com/api/render": 28,
     "brokencrystals.com/api/spawn": 29,
     "brokencrystals.com/api/file": 29,
     "brokencrystals.com/marketplace": 29,
     "brokencrystals.com/graphql": 30,
     "brokencrystals.com/api/partners/partnerLogin": 29,
-    "hack-this-site-eta.vercel.app/cms/drupal.html": 26,
-    "hack-this-site-eta.vercel.app/cms/joomla.html": 26,
+    "hack-this-site-eta.vercel.app/cms/drupal.html": 41,
+    "hack-this-site-eta.vercel.app/cms/joomla.html": 41,
+    "vulnshop.vercel.app/admin": 4,
+    "vulnshop.vercel.app/profile": 4,
+    "vulnshop.vercel.app/users": 4,
+    "vulnshop.vercel.app/login": 5,
+    "vulnshop.vercel.app/products": 5,
     "xss-attacker.vercel.app/api/collect": 2,
     "pentesterlab.com/exercises/xss-and-mysql-file": 5,
     "www.hackthissite.org/playlevel/34": 6,
@@ -152,8 +159,6 @@
     "hack-this-site-eta.vercel.app/cms/index.html": 39,
     "www.dvrag.com": 4,
     "playhacklab.com": 1,
-    "platform.sixhackacademy.com": 3,
-    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 40,
-    "hack-this-site-eta.vercel.app/api-labs/soap.html": 18
+    "platform.sixhackacademy.com": 3
   }
 }
