@@ -8868,6 +8868,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-ssti-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop seller preview SSTI oracle (PWN-040)",
+    description:
+      "Pwnshop documents GET /seller/preview?template= passing raw query input to ejs.render() with no sandbox — confirm with <%= 7*7 %> rendering 49.",
+    impactOneline:
+      "Pwnshop seller storefront preview enables server-side template injection escalating to Node.js RCE when seller access is obtained.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopSstiOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to template render functions — Pwnshop PWN-040 is intentional lab software.",
+      steps: [
+        "Use a logic-less template engine or strict allow-list for preview HTML.",
+        "Sandbox EJS rendering in an isolated worker with no child_process access.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /seller/preview?template= endpoint passes user input to ejs.render(). Show how to sandbox template rendering and block RCE.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pwnshop-path-traversal-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop invoice download path traversal oracle (PWN-038)",
+    description:
+      "Pwnshop documents GET /download?file= joining the file parameter onto a base directory via path.join() without resolved-path validation — traversal sequences escape to /etc/passwd.",
+    impactOneline:
+      "Pwnshop invoice download endpoint allows directory traversal to read arbitrary server files when authenticated.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopPathTraversalOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate resolved paths stay within the intended base directory — Pwnshop PWN-038 is intentional lab software.",
+      steps: [
+        "Resolve canonical paths and reject any result outside the invoices/ base directory.",
+        "Allow-list permitted filenames instead of accepting arbitrary path segments.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /download?file= endpoint is vulnerable to path traversal via path.join(). Show how to canonicalize paths and block ../ escapes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -9099,6 +9151,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host XVWA for application security training. Show how to keep it isolated in a lab Docker network.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-xvwa-php-module-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "XVWA PHP vulnerability module source disclosed",
+    description:
+      "XVWA /vulnerabilities/*/home.php PHP source documents error-based SQLi, reflected XSS, IDOR, CSRF, SSTI (Twig), and SSRF training modules served as raw PHP on Vercel mirrors.",
+    impactOneline:
+      "Public XVWA mirrors expose complete PHP lab source for 15+ attack modules including unescaped echo $_GET and mysqli string concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideXvwaPhpModuleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XVWA is intentional training software — never deploy PHP lab source to production hosts.",
+      steps: [
+        "Run XVWA only in isolated Docker/VM lab environments.",
+        "Do not expose /vulnerabilities/*/home.php PHP source publicly.",
+        "Use XVWA to validate scanner detection rules, not as a production pattern."
+      ]
+    },
+    fixPrompt:
+      "We host XVWA PHP lab modules at /vulnerabilities/*/home.php. Show how to keep them isolated in a lab Docker network.",
     version: 1,
     enabled: true
   },
