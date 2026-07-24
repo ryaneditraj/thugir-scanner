@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-24T12:06:56.053Z",
-=======
   "updated_at": "2026-07-24T12:10:00.000Z",
->>>>>>> 7e7c03b (engine: Burp Bounty Lab route-specific XSS/SQLi/SSTI live oracles)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,7 +15,6 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 2346,
   "total_findings": 13811,
   "critical_findings": 44,
@@ -27,19 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1731,
   "discovery_findings": 11204,
-  "improvements_shipped": 1036,
-  "last_run": "2026-07-24T12:06:56.053Z",
-=======
-  "total_sites_scanned": 2337,
-  "total_findings": 13757,
-  "critical_findings": 44,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1726,
-  "discovery_findings": 11160,
   "improvements_shipped": 1040,
   "last_run": "2026-07-24T12:10:00.000Z",
->>>>>>> 7e7c03b (engine: Burp Bounty Lab route-specific XSS/SQLi/SSTI live oracles)
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
@@ -47,11 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-<<<<<<< HEAD
-      "note": "Stable 6/6 first-pass recall with deep crawl (pages=6 probes=294; gap=[]); secret-resend slug still absent",
-=======
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
->>>>>>> 7e7c03b (engine: Burp Bounty Lab route-specific XSS/SQLi/SSTI live oracles)
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -70,24 +50,6 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-<<<<<<< HEAD
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 53,
-      "skipped_48h": 0,
-      "dns_failures": [],
-      "focus": "Pwnshop route-specific oracles (/vulnerabilities, /debug/info, /api/v1/events); VulnShop /orders IDOR module; OAuth Labs OIDC metadata",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) first-pass deep crawl — secret-resend slug still absent",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 13 findings incl sql-error-disclosure + reflected-xss + vibe-unauthenticated-api-routes",
-      "pwnshop.ctfsecurity.com/api/v1/events: 11 findings — unauthenticated audit-log API (PWN-005) + client-side-pwnshop-* oracles",
-      "pwnshop.ctfsecurity.com/debug/info: 9 findings — PWN-018 debug endpoint oracle cluster",
-      "vulnshop.vercel.app/orders: 5 findings incl client-side-vulnshop-module-evidence (route-specific IDOR module)",
-      "oauthlabs.com: 5 findings incl client-side-oauth-labs-playground-evidence + oauth-oidc-metadata-exposed",
-      "hackthissite.org/pages/index: 5 findings incl reflected-xss-query-param + client-side-hackthissite-evidence"
-=======
       "urls_added": 0,
       "urls_scanned": 3,
       "findings": 27,
@@ -100,18 +62,15 @@
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
       "burpbountylab.com/xss/reflect: reflected XSS live oracle (6→9 findings)",
       "burpbountylab.com/sqli/login: SQLi login bypass live oracle (6→9 findings)",
-      "burpbountylab.com/ssti/preview: SSTI render live oracle via /ssti/render?template={{7*7}} (6→9 findings)"
->>>>>>> 7e7c03b (engine: Burp Bounty Lab route-specific XSS/SQLi/SSTI live oracles)
+      "burpbountylab.com/ssti/preview: SSTI render live oracle via /ssti/render?template={{7*7}} (6→9 findings)",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 13 findings incl sql-error-disclosure + reflected-xss",
+      "oauthlabs.com: 5 findings incl oauth-oidc-metadata-exposed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-<<<<<<< HEAD
-      "pwnshop /debug/info and /api/v1/events route pages shallow (pages=4) — PWN-018/PWN-005 live exploit oracles not distinct from hub bundle fingerprint",
-      "challenge-0726.intigriti.io shallow (1 finding) — Intigriti XSS challenge oracles require challenge-specific crawl"
-=======
-      "primary Heroku 503 on first pass — wake retry may be required for sqli/idor categories"
->>>>>>> 7e7c03b (engine: Burp Bounty Lab route-specific XSS/SQLi/SSTI live oracles)
+      "primary Heroku 503 on first pass — wake retry may be required for sqli/idor categories",
+      "pwnshop /debug/info route pages shallow — PWN-018/PWN-005 live exploit oracles not distinct from hub bundle fingerprint"
     ]
   },
   "discovery_highlights": {
@@ -124,6 +83,9 @@
     "urban-vampi-production.up.railway.app/ui": 7,
     "pwnshop.ctfsecurity.com/seller/preview": 13,
     "pwnshop.ctfsecurity.com/download": 11,
+    "pwnshop.ctfsecurity.com/vulnerabilities": 13,
+    "pwnshop.ctfsecurity.com/debug/info": 9,
+    "pwnshop.ctfsecurity.com/api/v1/events": 11,
     "xvwa.vercel.app": 6,
     "vwad.owasp.org/app/burpbounty": 5,
     "vwad.owasp.org/app/bugbait": 5,
@@ -172,6 +134,7 @@
     "vulnshop.vercel.app/users": 5,
     "vulnshop.vercel.app/login": 5,
     "vulnshop.vercel.app/products": 5,
+    "vulnshop.vercel.app/orders": 5,
     "xss-attacker.vercel.app/api/collect": 2,
     "pentesterlab.com/exercises/xss-and-mysql-file": 5,
     "www.hackthissite.org/playlevel/34": 6,
@@ -222,10 +185,6 @@
     "hermes-codex.vercel.app": 4,
     "pentest-ground.com:81": 6,
     "codeex-ai.vercel.app": 4,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 13,
-    "pwnshop.ctfsecurity.com/debug/info": 9,
-    "pwnshop.ctfsecurity.com/api/v1/events": 11,
-    "vulnshop.vercel.app/orders": 5,
     "oauthlabs.com": 5,
     "ctf.hackthebox.com": 4,
     "www.hackthissite.org/pages/index/index.php": 5
