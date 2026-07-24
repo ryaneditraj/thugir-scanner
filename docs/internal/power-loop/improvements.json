@@ -6929,6 +6929,24 @@
       "slug": "burpbounty-ssti-render-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssti/render?template={{7*7}} returns <div class=\"output\">49</div>; burpbountylab.com/ssti/preview findings 6→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-fetch-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/fetch?url=http://example.com returns Example Domain HTML in <pre>; burpbountylab.com hub findings 13→15; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/dom?msg=thugirDOMcanary sets innerHTML=document.write from msg param; burpbountylab.com hub findings 13→15; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-info-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://pwnshop.ctfsecurity.com/debug/info returns {\"sessionSecret\":\"weak-secret-123\",\"CHAT_OVERRIDE_TOKEN\":\"PSH-INT-ADM-9X7K\"}; pwnshop.ctfsecurity.com/debug/info findings 9→13; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12126,6 +12144,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ssti-render-live-oracle",
       "shipped_at": "2026-07-24T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-fetch-live-oracle",
+      "shipped_at": "2026-07-24T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-dom-xss-live-oracle",
+      "shipped_at": "2026-07-24T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-info-live-oracle",
+      "shipped_at": "2026-07-24T13:10:00.000Z"
     }
   ]
 }
