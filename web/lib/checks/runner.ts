@@ -251,6 +251,24 @@ function isJuiceShopHost(url: string): boolean {
   }
 }
 
+const JUICE_SHOP_COUPON_BOT_HISTORY_URL =
+  "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/4fb203e/lib/currentCoupons.ts";
+const JUICE_SHOP_COUPON_BOT_CURRENT_URL =
+  "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/master/lib/currentCoupons.ts";
+
+/** Fetch juicy-coupon-bot source (incl. git history commit with hardcoded AWS API key). */
+async function fetchJuiceShopCouponBotOracleBodies(probe: ProbeCache): Promise<string> {
+  const docs = await probe.getMany(
+    [JUICE_SHOP_COUPON_BOT_HISTORY_URL, JUICE_SHOP_COUPON_BOT_CURRENT_URL],
+    { maxBytes: 8192, timeoutMs: 12000 },
+    2
+  );
+  return [...docs.values()]
+    .map((d) => d.body)
+    .filter((b) => b.length > 0)
+    .join("\n");
+}
+
 /** Fetch Bluesky/Mastodon public feeds from Juice Shop social URLs (Leaked API Key challenge oracle). */
 async function fetchJuiceShopSocialFeedBodies(
   configBody: string,
@@ -1236,6 +1254,8 @@ const DEEP_RULES = new Set<string>([
   "vulnlabAuthSessionLiveOracle",
   "vulnlabAuthLoginEnumerationLiveOracle",
   "vulnlabBackupConfigLiveOracle",
+  "vulnlabBackupDbSqlLiveOracle",
+  "vulnlabAdminSecretsLiveOracle",
   "vulnlabRestBolaLiveOracle",
   "vulnlabGraphqlSoapLiveOracle",
   "vulnlabClickjackingLiveOracle",
@@ -1260,6 +1280,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideDarkPatternLabEvidence",
   "clientSideAiSecurityPlatformEvidence",
   "juiceShopForgottenBackupDisclosure",
+  "juiceShopLeakedApiKeyOracle",
   "clientSideEksGoatEvidence",
   "clientSideCtflearnEvidence",
   "clientSideCybenchEvidence",
@@ -7598,7 +7619,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           new URL("/api/validate/localstorage", home.finalUrl).toString(),
           new URL("/api/validate/git-exposure", home.finalUrl).toString(),
           new URL("/api/validate/sqli-error", home.finalUrl).toString(),
-          new URL("/api/validate/idor", home.finalUrl).toString()
+          new URL("/api/validate/idor", home.finalUrl).toString(),
+          new URL("/admin/console.html", home.finalUrl).toString(),
+          new URL("/backup/db.sql", home.finalUrl).toString(),
+          new URL("/private/admin-bypass.html", home.finalUrl).toString(),
+          new URL("/staging/index.html", home.finalUrl).toString(),
+          new URL("/quick/index.html", home.finalUrl).toString()
         ]
       : [];
   const hackHealthTutorialPrioritySeeds =
@@ -8029,9 +8055,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       }
     }
     const configBody = bootDocs.get(bootstrapUrls[1]!)?.body ?? "";
-    const socialFeedBodies = configBody
-      ? await fetchJuiceShopSocialFeedBodies(configBody, probe)
-      : "";
+    const [socialFeedBodies, couponBotBodies] = await Promise.all([
+      configBody ? fetchJuiceShopSocialFeedBodies(configBody, probe) : Promise.resolve(""),
+      fetchJuiceShopCouponBotOracleBodies(probe)
+    ]);
     juiceShopBootstrap = [
       ...[...bootDocs.values()]
         .filter((d) => {
@@ -8041,7 +8068,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           return d.status === 500 && /SQLITE_ERROR|syntax error|sequelize/i.test(d.body);
         })
         .map((d) => d.body),
-      socialFeedBodies
+      socialFeedBodies,
+      couponBotBodies
     ]
       .filter(Boolean)
       .join("\n");

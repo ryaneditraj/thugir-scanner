@@ -10091,6 +10091,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-leaked-api-key",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "Juice Shop coupon-bot AWS API key leaked in git history",
+    description:
+      "The juicy-coupon-bot repository once hardcoded an AWS API Gateway key (commit 4fb203e) that still authenticates the public JuicyCouponFunc endpoint used for scheduled social-media coupon posts.",
+    impactOneline:
+      "Leaked API key from coupon-bot git history still validates live coupon API — Juice Shop Leaked API Key challenge oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopLeakedApiKeyOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate the AWS API Gateway key and revoke the exposed credential immediately.",
+      steps: [
+        "Rotate the AWS API Gateway key and invalidate the leaked value.",
+        "Never commit API keys — use secrets management in CI/CD.",
+        "Audit git history for other hardcoded credentials."
+      ]
+    },
+    fixPrompt:
+      "Our juicy-coupon-bot AWS API key was committed to git history and still works. Show how to rotate it and prevent future leaks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-backup-db-sql-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnLab backup SQL dump exposes admin credentials",
+    description:
+      "GET /backup/db.sql returns a CREATE TABLE + INSERT INTO users statement with admin credentials without authentication.",
+    impactOneline:
+      "Live backup SQL probe confirms sensitive_data oracle for /backup/db.sql and admin console recon paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabBackupDbSqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove database backup files from public web roots.",
+      steps: [
+        "Block access to /backup/*.sql at the edge.",
+        "Never serve database exports from the web root.",
+        "Rotate any credentials exposed in backup files."
+      ]
+    },
+    fixPrompt:
+      "Our /backup/db.sql is publicly reachable with admin credentials. Show how to block backup file exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-admin-secrets-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnLab admin secrets API exposes credentials without auth",
+    description:
+      "GET /api/admin/secrets returns apiKey, jwtSecret, and dbPassword JSON without authentication.",
+    impactOneline:
+      "Live /api/admin/secrets probe confirms secret exposure for admin console and staging recon entry paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabAdminSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication before returning secret metadata.",
+      steps: [
+        "Remove /api/admin/secrets from anonymous access.",
+        "Store secrets in a vault, not in API responses.",
+        "Rotate any credentials exposed by the endpoint."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/secrets returns apiKey and jwtSecret without auth. Show how to gate admin secret endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",

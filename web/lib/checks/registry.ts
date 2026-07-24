@@ -20700,6 +20700,47 @@ const juiceShopForgottenBackupDisclosure: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const JUICE_SHOP_COUPON_BOT_HISTORY_URL =
+  "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/4fb203e/lib/currentCoupons.ts";
+const JUICE_SHOP_COUPON_API_ENDPOINT_RE =
+  /https:\/\/[a-z0-9.-]+\.execute-api\.[a-z0-9-]+\.amazonaws\.com\/[^\s'"]+/i;
+const JUICE_SHOP_COUPON_API_KEY_RE = /apiKey:\s*string\s*=\s*['"]([A-Za-z0-9]{20,})['"]/;
+
+const juiceShopLeakedApiKeyOracle: Rule = async (ctx) => {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const historyDoc = await ctx.probe.get(JUICE_SHOP_COUPON_BOT_HISTORY_URL, {
+    maxBytes: 8192,
+    timeoutMs: 12000
+  });
+  const corpus = `${historyDoc.body}\n${ctx.combined}`;
+  const keyMatch = corpus.match(JUICE_SHOP_COUPON_API_KEY_RE);
+  if (!keyMatch) return NEGATIVE;
+  const apiKey = keyMatch[1]!;
+  const endpointMatch = corpus.match(JUICE_SHOP_COUPON_API_ENDPOINT_RE);
+  if (!endpointMatch) return NEGATIVE;
+  const endpoint = endpointMatch[0];
+  const verifyDoc = await ctx.probe.get(endpoint, {
+    maxBytes: 4096,
+    timeoutMs: 12000,
+    headers: { "X-API-Key": apiKey }
+  });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
+  if (!/"discountCodes"\s*:/.test(verifyDoc.body) || !/"expiryDate"\s*:/.test(verifyDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      endpoint,
+      historyUrl: JUICE_SHOP_COUPON_BOT_HISTORY_URL,
+      sampleRedacted: `${apiKey.slice(0, 6)}...${apiKey.slice(-4)}`,
+      couponSnippet: verifyDoc.body.slice(0, 160).trim(),
+      note: "Juice Shop juicy-coupon-bot git history (commit 4fb203e) hardcoded AWS API Gateway key still validates coupon API — Leaked API Key challenge oracle"
+    }
+  };
+};
+
 async function probeJuiceShopProductsSearchApi(ctx: RuleContext): Promise<RuleResult | null> {
   if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return null;
   const url = new URL("/rest/products/search?q=apple", ctx.origin).toString();
@@ -26323,7 +26364,8 @@ async function probeVulnlabValidateLabOracle(
   if (
     !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
     !new RegExp(`/api/validate/${spec.labId}(?:\\?|$|/)`, "i").test(urlHint) &&
-    !new RegExp(`/labs/${spec.labId}\\.html`, "i").test(urlHint)
+    !new RegExp(`/labs/${spec.labId}\\.html`, "i").test(urlHint) &&
+    !/\/quick\//i.test(urlHint)
   ) {
     return NEGATIVE;
   }
@@ -26461,7 +26503,10 @@ const vulnlabBackupConfigLiveOracle: Rule = async (ctx) => {
   if (
     !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
     !/\/labs\/env-file\.html/i.test(urlHint) &&
-    !/\/backup\/config\.old/i.test(urlHint)
+    !/\/backup\/config\.old/i.test(urlHint) &&
+    !/\/backup\/db\.sql/i.test(urlHint) &&
+    !/\/admin\/console/i.test(urlHint) &&
+    !/\/staging\//i.test(urlHint)
   ) {
     return NEGATIVE;
   }
@@ -26486,7 +26531,9 @@ const vulnlabRestBolaLiveOracle: Rule = async (ctx) => {
   if (
     !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
     !/\/api-labs\/rest\.html/i.test(urlHint) &&
-    !/\/api\/(admin\/users|orders\/)/i.test(urlHint)
+    !/\/api\/(admin\/users|orders\/)/i.test(urlHint) &&
+    !/\/admin\/console/i.test(urlHint) &&
+    !/\/private\/admin-bypass/i.test(urlHint)
   ) {
     return NEGATIVE;
   }
@@ -26556,6 +26603,59 @@ const vulnlabGraphqlSoapLiveOracle: Rule = async (ctx) => {
       schemaSnippet: schemaOk ? schemaDoc.body.slice(0, 180).trim() : undefined,
       wsdlSnippet: wsdlOk ? wsdlDoc.body.slice(0, 180).trim() : undefined,
       note: "VulnLab GraphQL/SOAP labs expose introspection schema JSON and WSDL without authentication"
+    }
+  };
+};
+
+const vulnlabBackupDbSqlLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/backup\/db\.sql/i.test(urlHint) &&
+    !/\/admin\/console/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const backupUrl = new URL("/backup/db.sql", ctx.origin).toString();
+  const doc = await ctx.probe.get(backupUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/CREATE TABLE users/i.test(doc.body) || !/INSERT INTO users/i.test(doc.body)) return NEGATIVE;
+  if (!/admin/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: backupUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnLab /backup/db.sql exposes sample database export with admin credentials without authentication"
+    }
+  };
+};
+
+const vulnlabAdminSecretsLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/admin\/console/i.test(urlHint) &&
+    !/\/private\/admin-bypass/i.test(urlHint) &&
+    !/\/staging\//i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const secretsUrl = new URL("/api/admin/secrets", ctx.origin).toString();
+  const doc = await ctx.probe.get(secretsUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"audit"\s*:\s*"Secret Exposure"/.test(doc.body)) return NEGATIVE;
+  if (!/"apiKey"\s*:/.test(doc.body) || !/"jwtSecret"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: secretsUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnLab /api/admin/secrets returns apiKey, jwtSecret, and dbPassword without authentication"
     }
   };
 };
@@ -30446,6 +30546,8 @@ export const RULES: Record<string, Rule> = {
   vulnlabAuthSessionLiveOracle,
   vulnlabAuthLoginEnumerationLiveOracle,
   vulnlabBackupConfigLiveOracle,
+  vulnlabBackupDbSqlLiveOracle,
+  vulnlabAdminSecretsLiveOracle,
   vulnlabRestBolaLiveOracle,
   vulnlabGraphqlSoapLiveOracle,
   vulnlabClickjackingLiveOracle,
@@ -30471,6 +30573,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDarkPatternLabEvidence,
   clientSideAiSecurityPlatformEvidence,
   juiceShopForgottenBackupDisclosure,
+  juiceShopLeakedApiKeyOracle,
   clientSideEksGoatEvidence,
   clientSideCtflearnEvidence,
   clientSideCybenchEvidence,
