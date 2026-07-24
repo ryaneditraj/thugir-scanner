@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T21:30:00.000Z",
+  "updated_at": "2026-07-24T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/sqli/id?id=1",
+      "source": "BountySecurity/BurpBountyLab — SQLi-by-ID error-based profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/cmd?input=id",
+      "source": "BountySecurity/BurpBountyLab — command-injection RCE profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/pt/linux?file=../../../etc/passwd",
+      "source": "BountySecurity/BurpBountyLab — Linux path-traversal file-read profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xxe/parser",
+      "source": "BountySecurity/BurpBountyLab — XML parser XXE profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/passive/tech",
+      "source": "BountySecurity/BurpBountyLab — technology-fingerprint passive-detection profile trigger",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/rce/blind?input=test",
       "source": "BountySecurity/BurpBountyLab — blind RCE collaborator profile practice endpoint",
