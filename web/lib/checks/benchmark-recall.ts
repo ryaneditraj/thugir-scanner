@@ -10,6 +10,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "unauthenticated-admin-endpoint": ["auth_bypass"],
   "security-question-disclosure": ["sensitive_data"],
   "juice-shop-forgotten-backup-disclosure": ["sensitive_data"],
+  "juice-shop-leaked-api-key": ["sensitive_data"],
   "dangerous-html-sinks": ["xss"],
   "dom-eval-xss": ["xss"],
   "idor-sequential-ids": ["idor"],
