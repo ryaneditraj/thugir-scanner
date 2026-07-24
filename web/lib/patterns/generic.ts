@@ -14875,6 +14875,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-rce-eval-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab RCE eval endpoint executes attacker code",
+    description:
+      "GET /rce/eval?code= evaluates attacker-supplied expressions server-side and returns the computed result (e.g. 7*7→49).",
+    impactOneline:
+      "Live code-eval probe confirms remote code execution oracle for Burp Bounty scanner profile calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRceEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user-supplied code — remove eval/exec endpoints from production.",
+      steps: [
+        "Delete or sandbox any endpoint that evaluates attacker-controlled expressions.",
+        "Use safe expression parsers with strict allow-lists if computation is required.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/eval endpoint evaluates user code (code=7*7 returns 49). Show how to remove unsafe eval endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-drupal-user-disclosure-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Drupal user profile exposed without auth",
+    description:
+      "GET /drupal/user/1 returns admin user profile details (username, member-since) without authentication or authorization checks.",
+    impactOneline:
+      "Live Drupal user enumeration probe confirms IDOR/BOLA profile oracle for Burp Bounty scanner profile calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDrupalUserDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and object-level authorization before returning user profiles.",
+      steps: [
+        "Enforce session checks on all /user/{id} routes.",
+        "Return 404 for unauthorized profile lookups instead of leaking usernames.",
+        "Isolate Burp Bounty Lab CMS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /drupal/user/1 endpoint exposes admin profile without login. Show how to enforce IDOR protections on user routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-passive-secrets-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab passive secrets page leaks API keys",
+    description:
+      "GET /passive/secrets embeds AWS access keys, Stripe live secrets, RSA private keys, and Slack tokens in client-side JavaScript.",
+    impactOneline:
+      "Live passive secret scanner oracle on Burp Bounty Lab confirms credential exposure profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPassiveSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed secrets in client-side JavaScript or HTML.",
+      steps: [
+        "Move API keys to server-side environment variables.",
+        "Rotate any credentials that were exposed in page source.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /passive/secrets page embeds AWS and Stripe keys in JavaScript. Show how to keep secrets server-side only.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
