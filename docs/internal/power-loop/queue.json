@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T00:00:00.000Z",
+  "updated_at": "2026-07-24T01:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/admin/console.html",
+      "source": "dkyazzentwatwa/hack-this-site — hidden admin console recon surface (GitHub admin/console.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/backup/db.sql",
+      "source": "dkyazzentwatwa/hack-this-site — exposed database backup artifact (GitHub backup/db.sql)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/private/admin-bypass.html",
+      "source": "dkyazzentwatwa/hack-this-site — private admin-bypass auth lab (GitHub private/admin-bypass.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/staging/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — staging environment misconfig oracle (GitHub staging/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/quick/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — quick-start vulnerability hub (GitHub quick/index.html)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/api-labs/graphql.html",
       "source": "dkyazzentwatwa/hack-this-site — GraphQL introspection/injection API lab (GitHub api-labs/graphql.html)",
