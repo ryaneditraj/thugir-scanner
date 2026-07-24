@@ -6743,7 +6743,8 @@ function extractXvwaVulnSeeds(html: string, origin: string): string[] {
     "xpath",
     "fileupload"
   ];
-  for (const mod of modules) {
+  const priority = ["sqli", "reflected_xss", "idor", "csrf", "ssti", "ssrf_xspa"];
+  for (const mod of [...priority, ...modules.filter((m) => !priority.includes(m))]) {
     try {
       out.add(new URL(`${basePath}/vulnerabilities/${mod}/home.php`, origin).toString());
       out.add(new URL(`/vulnerabilities/${mod}/home.php`, origin).toString());

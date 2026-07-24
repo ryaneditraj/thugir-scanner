@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T10:06:55.929Z",
+  "updated_at": "2026-07-24T10:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1721,
   "discovery_findings": 11106,
-  "improvements_shipped": 1030,
-  "last_run": "2026-07-24T10:07:00.000Z",
+  "improvements_shipped": 1034,
+  "last_run": "2026-07-24T10:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
@@ -51,38 +51,36 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
+      "urls_scanned": 11,
       "findings": 31,
       "skipped_48h": [
         "https://pentest-fauxbank.vercel.app/accounts",
         "https://vulnshop.vercel.app/checkout",
-        "https://vulnshop.vercel.app/products/1",
-        "https://pwnshop.ctfsecurity.com/seller/preview",
-        "https://pwnshop.ctfsecurity.com/download"
+        "https://vulnshop.vercel.app/products/1"
       ],
       "dns_failures": [],
-      "focus": "OWASP VWAD catalog entries (yrprey, burpbounty, bugbait, secure-by-design, ffufme) + PyGoat/DVNA first scans",
-      "improvements_shipped_this_run": 0
+      "focus": "Pwnshop PWN-040 SSTI + PWN-038 path-traversal route oracles; XVWA PHP home.php module evidence; OWASP VWAD catalog entries",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, pages=6 probes=281) — no benchmark misses; secret-resend slug still absent",
-      "vwad.owasp.org/app/pygoat: 4 findings — client-side-pygoat-evidence + OWASP VWAD markers",
-      "vwad.owasp.org/app/damn-vulnerable-node-application-dvna: 4 findings — client-side-dvna-evidence",
-      "vwad.owasp.org/app/burpbounty: 4 findings — VWAD listing 404 (client-side-vwad-app-not-found-evidence)",
-      "vwad.owasp.org/app/yrprey: 3 findings — shallow VWAD catalog only (no yrprey.com live-oracle seed)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses; secret-resend slug still absent",
+      "pwnshop.ctfsecurity.com/seller/preview: 10→13 findings (+client-side-pwnshop-ssti-oracle, +path-traversal-oracle from /vulnerabilities catalog)",
+      "pwnshop.ctfsecurity.com/download: 9→11 findings (+route-specific PWN-038 oracle)",
+      "xvwa.vercel.app: 4→6 findings when reachable (+client-side-xss-evidence, +client-side-xvwa-php-module-evidence)",
+      "vwad.owasp.org/app/pygoat: 4 findings — client-side-pygoat-evidence + OWASP VWAD markers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vwad burpbounty/bugbait/secure-by-design/ffufme: catalog slugs 404 — need live-instance cross-origin seeds like grpc-goat/wrongsecrets pattern",
-      "yrprey VWAD page: 3 findings vs yrprey.com OWASP API Top 10 framework — live lab oracles not reached from catalog-only crawl",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "vibe-unauthenticated-api-routes absent this juice-shop pass (6/6 via other slugs)"
+      "xvwa.vercel.app: Vercel Security Checkpoint intermittently blocks module page crawls from cloud agent",
+      "pwnshop /seller/preview and /download require auth for live SSTI/traversal probes — catalog oracles used instead",
+      "vwad burpbounty/bugbait/secure-by-design/ffufme: catalog slugs 404 — need live-instance cross-origin seeds",
+      "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
   "discovery_highlights": {
-    "pwnshop.ctfsecurity.com/seller/preview": 10,
-    "pwnshop.ctfsecurity.com/download": 9,
-    "xvwa.vercel.app": 4,
+    "pwnshop.ctfsecurity.com/seller/preview": 13,
+    "pwnshop.ctfsecurity.com/download": 11,
+    "xvwa.vercel.app": 6,
     "arcanum-sec.github.io/ai-sec-resources": 8,
     "webchal1.vercel.app": 6,
     "playground.fabraix.com/challenges/01-guardrail-bypass": 3,

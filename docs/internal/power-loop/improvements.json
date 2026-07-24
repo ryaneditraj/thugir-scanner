@@ -6875,6 +6875,24 @@
       "slug": "client-side-vulnlab-private-admin-bypass-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /private/admin-bypass.html Admin Bypass + Hidden test endpoint: /private/admin-bypass.html; private/admin-bypass.html findings 1→42 when reachable; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com/seller/preview",
+      "slug": "client-side-pwnshop-ssti-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities PWN-040 SSTI→RCE Seller Storefront Preview + GET /seller/preview?template= + ejs.render(); pwnshop.ctfsecurity.com/seller/preview findings 10→13; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com/download",
+      "slug": "client-side-pwnshop-path-traversal-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities PWN-038 Path Traversal Invoice Download + GET /download?file= + path.join() traversal payload docs; pwnshop.ctfsecurity.com/download findings 9→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xvwa.vercel.app",
+      "slug": "client-side-xvwa-php-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/sqli/home.php mysqli_report + /reflected_xss/home.php echo $_GET['item']; clientSideXvwaPhpModuleEvidence + bare echo $_GET XSS pattern; xvwa.vercel.app findings 4→6 when reachable (Vercel checkpoint may block cloud rescans); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12027,6 +12045,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-debug-api-live-oracle",
       "shipped_at": "2026-07-24T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-ssti-oracle",
+      "shipped_at": "2026-07-24T10:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-path-traversal-oracle",
+      "shipped_at": "2026-07-24T10:20:00.000Z"
+    },
+    {
+      "source": "discovery:xvwa.vercel.app",
+      "slug": "client-side-xvwa-php-module-evidence",
+      "shipped_at": "2026-07-24T10:20:00.000Z"
     }
   ]
 }
