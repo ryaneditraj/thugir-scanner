@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T01:02:29.486Z",
+  "updated_at": "2026-07-24T01:04:16.395Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2239,
-  "total_findings": 12401,
+  "total_sites_scanned": 2247,
+  "total_findings": 12537,
   "critical_findings": 39,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1676,
-  "discovery_findings": 10008,
+  "discovery_urls_added": 1681,
+  "discovery_findings": 10144,
   "improvements_shipped": 1007,
-  "last_run": "2026-07-24T01:02:29.486Z",
+  "last_run": "2026-07-24T01:04:16.395Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
@@ -52,30 +52,30 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 196,
+      "findings": 136,
       "skipped_48h": [
-        "hack-this-site-eta.vercel.app/api/auth/* (login, reset, session)",
-        "hack-this-site-eta.vercel.app/labs/* (env-file, clickjacking, git-exposure, upload)"
+        "hack-this-site-eta.vercel.app/api-labs/graphql.html",
+        "hack-this-site-eta.vercel.app/api-labs/soap.html",
+        "hack-this-site-eta.vercel.app/cms/drupal.html"
       ],
       "dns_failures": [],
-      "focus": "VulnLab backup config + REST BOLA + GraphQL/SOAP live oracles; api-labs GraphQL/SOAP crawl",
-      "improvements_shipped_this_run": 3
+      "focus": "HackThisSite hidden recon surfaces — admin/console, backup/db.sql, private/admin-bypass, staging, quick hub",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, pages=6 probes=290) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/backup/config.old: DB_PASS+JWT_SECRET exposed (live oracle shipped)",
-      "hack-this-site-eta.vercel.app/api/admin/users: Broken Access Control BOLA oracle shipped",
-      "hack-this-site-eta.vercel.app/data/graphql-schema.json: introspection schema without auth",
-      "hack-this-site-eta.vercel.app/api-labs/graphql.html: 27 findings — graphql-introspection + SPA vuln bundle",
-      "hack-this-site-eta.vercel.app/api-labs/soap.html: 27 findings — SOAP/XML API lab inherits full bundle",
-      "brokencrystals.com/marketplace|graphql|api/partners/partnerLogin: 29-30 findings each"
+      "hack-this-site-eta.vercel.app/admin/console.html: 29 findings — vulnlab-backup-config-live-oracle + vulnlab-rest-bola-live-oracle + JWT/session live oracles",
+      "hack-this-site-eta.vercel.app/backup/db.sql: 29 findings — same SPA bundle; backup path triggers vulnlab-backup-config-live-oracle",
+      "hack-this-site-eta.vercel.app/private/admin-bypass.html: 29 findings — unauthenticated-admin-endpoint + auth bypass bundle",
+      "hack-this-site-eta.vercel.app/quick/index.html: 17 findings — shallower crawl, missing live validate oracles",
+      "hack-this-site-eta.vercel.app/api-labs/graphql.html: 1 finding (48h rescan shallow) — graphql-introspection only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes)",
-      "hack-this-site-eta.vercel.app: Vercel Security Checkpoint may block cloud scanner IP from /api/* live probes",
-      "clickjacking.html still relies on missing-security-headers — no dedicated live oracle",
-      "cms/drupal + joomla pages mirror wordpress.html bundle fingerprint — CMS-specific oracles still missing"
+      "hack-this-site admin/backup/private/staging pages inherit identical 29-finding SPA bundle — path-specific oracles still missing",
+      "quick/index.html shallow (17 vs 29) — validate API live probes not reached from quick hub entry",
+      "api-labs/graphql+soap 48h rescans degraded to 1 finding — Vercel checkpoint or cold SPA shell"
     ]
   },
   "discovery_highlights": {
@@ -122,6 +122,11 @@
     "pentesterlab.com/exercises/xss-and-mysql-file": 5,
     "www.hackthissite.org/playlevel/34": 6,
     "vwad.owasp.org/app/voice-goat": 4,
-    "juice-shop.herokuapp.com": 9
+    "juice-shop.herokuapp.com": 9,
+    "hack-this-site-eta.vercel.app/admin/console.html": 29,
+    "hack-this-site-eta.vercel.app/backup/db.sql": 29,
+    "hack-this-site-eta.vercel.app/private/admin-bypass.html": 29,
+    "hack-this-site-eta.vercel.app/staging/index.html": 29,
+    "hack-this-site-eta.vercel.app/quick/index.html": 17
   }
 }
