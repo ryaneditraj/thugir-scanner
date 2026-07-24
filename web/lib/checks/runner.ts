@@ -308,6 +308,20 @@ async function fetchJuiceShopSocialFeedBodies(
         }
       }
     }
+
+    const redditUrl = social.redditUrl;
+    if (redditUrl) {
+      const subMatch = redditUrl.match(/reddit\.com\/r\/([^/?#]+)/i);
+      if (subMatch) {
+        const feedUrl = `https://www.reddit.com/r/${encodeURIComponent(subMatch[1]!)}/new.json?limit=25`;
+        const feed = await probe.get(feedUrl, {
+          maxBytes: 96_000,
+          timeoutMs: 12000,
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+        });
+        if (feed.status >= 200 && feed.status < 400) chunks.push(feed.body);
+      }
+    }
   } catch {
     /* ignore malformed config or feed fetch errors */
   }
@@ -1400,6 +1414,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideEpicdetectEvidence",
   "clientSideAlfServiceworkerEvidence",
   "clientSideBurpBountyLabEvidence",
+  "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
   "clientSidePcPartsStoreLabEvidence",
@@ -5317,6 +5332,28 @@ function extractVwadGinJuiceLiveSeed(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** VWAD catalog slugs whose /app/{slug}/ listing 404s — seed known live demo instances. */
+function extractVwadCatalogLiveSeed(html: string, pageUrl: string): string[] {
+  const slug = pageUrl.match(/vwad\.owasp\.org\/app\/([^/?#]+)/i)?.[1]?.toLowerCase();
+  if (!slug) return [];
+  const liveBySlug: Record<string, string> = {
+    burpbounty: "http://burpbountylab.com/",
+    bugbait: "https://bugbait.io/",
+    ffufme: "https://ffuf.me/",
+    "secure-by-design": "https://tempehs.github.io/The_Unsecure_PWA/"
+  };
+  const live = liveBySlug[slug];
+  if (!live) return [];
+  if (!/vwad\.owasp\.org\/app\//i.test(pageUrl) && !/OWASP Vulnerable Web Applications Directory/i.test(html)) {
+    return [];
+  }
+  try {
+    return [new URL(live).toString()];
+  } catch {
+    return [];
+  }
+}
+
 /** VulnForge attack-surface SPA (vulnforge.vercel.app) — seed login routes + main JS bundle. */
 function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnForge|vulnforge-backend|AI-Guided Web Attack Surface Explorer/i.test(html)) return [];
@@ -7185,6 +7222,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
   const vwadHackxorLiveSeeds = extractVwadHackxorLiveSeed(home.body, home.finalUrl);
+  const vwadCatalogLiveSeeds = extractVwadCatalogLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
   const ffufMeSeeds = extractFfufMeSeeds(home.body, home.finalUrl);
   const bergerCyberLabSeeds = extractBergerCyberLabSeeds(home.body, home.finalUrl);
@@ -7696,6 +7734,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/hackxor/i.test(home.finalUrl)
       ? ["https://hackxor.net/"]
       : [];
+  const vwadCatalogPrioritySeeds = (() => {
+    const slug = home.finalUrl.match(/vwad\.owasp\.org\/app\/([^/?#]+)/i)?.[1]?.toLowerCase();
+    const liveBySlug: Record<string, string> = {
+      burpbounty: "http://burpbountylab.com/",
+      bugbait: "https://bugbait.io/",
+      ffufme: "https://ffuf.me/",
+      "secure-by-design": "https://tempehs.github.io/The_Unsecure_PWA/"
+    };
+    return slug && liveBySlug[slug] ? [liveBySlug[slug]!] : [];
+  })();
   const vwadScannerBenchPrioritySeeds =
     /vwad\.owasp\.org\/app\/(?:wackopicko|bodgeit-store|owasp-vulnerableapp)/i.test(home.finalUrl)
       ? [
@@ -7744,6 +7792,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadGinJuiceLiveSeeds,
       ...vwadHackxorPrioritySeeds,
       ...vwadHackxorLiveSeeds,
+      ...vwadCatalogPrioritySeeds,
+      ...vwadCatalogLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
       ...owaspTop10IntroHubPrioritySeeds,

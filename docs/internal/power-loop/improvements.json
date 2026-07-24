@@ -6893,6 +6893,24 @@
       "slug": "client-side-xvwa-php-module-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/sqli/home.php mysqli_report + /reflected_xss/home.php echo $_GET['item']; clientSideXvwaPhpModuleEvidence + bare echo $_GET XSS pattern; xvwa.vercel.app findings 4→6 when reachable (Vercel checkpoint may block cloud rescans); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/burpbounty",
+      "slug": "vwad-catalog-live-cross-origin-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VWAD /app/burpbounty/ 404 listing; extractVwadCatalogLiveSeed + vwadCatalogPrioritySeeds cross-origin crawl http://burpbountylab.com/; vwad.owasp.org/app/burpbounty findings 4→5 (+client-side-burp-bounty-lab-evidence); benchmark juice-shop-staging 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/bugbait",
+      "slug": "client-side-bugbait-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BugBait bundle intentionally vulnerable web application + Look for SQLi, XSS, SSRF, LFI + BlackLock markers; vwad.owasp.org/app/bugbait cross-origin crawl https://bugbait.io/ findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugbait.io",
+      "slug": "insecure-tls-lab-host-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugbait.io CERT_HAS_EXPIRED blocked reachTarget; fetchInsecureHttpsDoc allowlist enables VWAD cross-origin BugBait crawl; benchmark juice-shop-staging 10 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current social feeds)"
     }
   ],
   "shipped": [
@@ -12060,6 +12078,21 @@
       "source": "discovery:xvwa.vercel.app",
       "slug": "client-side-xvwa-php-module-evidence",
       "shipped_at": "2026-07-24T10:20:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/burpbounty",
+      "slug": "vwad-catalog-live-cross-origin-seeds",
+      "shipped_at": "2026-07-24T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:vwad.owasp.org/app/bugbait",
+      "slug": "client-side-bugbait-evidence",
+      "shipped_at": "2026-07-24T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:bugbait.io",
+      "slug": "insecure-tls-lab-host-retry",
+      "shipped_at": "2026-07-24T11:30:00.000Z"
     }
   ]
 }
