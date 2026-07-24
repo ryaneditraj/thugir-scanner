@@ -6947,6 +6947,24 @@
       "slug": "pwnshop-debug-info-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET https://pwnshop.ctfsecurity.com/debug/info returns {\"sessionSecret\":\"weak-secret-123\",\"CHAT_OVERRIDE_TOKEN\":\"PSH-INT-ADM-9X7K\"}; pwnshop.ctfsecurity.com/debug/info findings 9→13; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-ping-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/rce/ping?host=127.0.0.1 returns PING 127.0.0.1 icmp_seq output; burpbountylab.com/rce/ping findings 9→13; benchmark juice-shop-staging 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST http://burpbountylab.com/xxe/parse with external entity returns root:x:0:0:/etc/passwd; burpbountylab.com/xxe/parse findings 9→13; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-events-audit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://pwnshop.ctfsecurity.com/api/v1/events returns {\"count\":N,\"logs\":[{\"action\":\"...\",\"detail\":\"...\"}]} without auth; pwnshop.ctfsecurity.com/api/v1/events findings 15; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12159,6 +12177,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-debug-info-live-oracle",
       "shipped_at": "2026-07-24T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-ping-live-oracle",
+      "shipped_at": "2026-07-24T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-parse-live-oracle",
+      "shipped_at": "2026-07-24T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-events-audit-live-oracle",
+      "shipped_at": "2026-07-24T14:10:00.000Z"
     }
   ]
 }
