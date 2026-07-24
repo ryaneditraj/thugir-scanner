@@ -7073,6 +7073,24 @@
       "slug": "burpbounty-sqli-time-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SLEEP(3) probe returns HTTP 500 after ~3.2s — removed erroneous status<500 gate so time delay alone confirms oracle; burpbountylab.com/sqli/time route-specific slug now fires; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-soap-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST http://burpbountylab.com/xxe/soap with <!ENTITY xxe SYSTEM file:///etc/passwd> returns root:x:0:0 inside <GetUserResponse>; burpbountylab.com/xxe/soap findings 27→30; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-blind-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/blind?feedback=<script>canary</script> stores script in #admin-review; burpbountylab.com/xss/blind findings 19→22; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pt-readwin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/pt/readwin?file=..\\..\\windows\\win.ini returns [fonts] and MAPI=1; burpbountylab.com/pt/readwin findings 27→30; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12385,6 +12403,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-xxe-upload-live-oracle",
       "shipped_at": "2026-07-24T20:30:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-soap-live-oracle",
+      "shipped_at": "2026-07-24T21:16:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-blind-live-oracle",
+      "shipped_at": "2026-07-24T21:16:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pt-readwin-live-oracle",
+      "shipped_at": "2026-07-24T21:16:00.000Z"
     }
   ]
 }
