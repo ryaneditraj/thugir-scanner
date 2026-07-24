@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T19:13:25.777Z",
+  "updated_at": "2026-07-24T20:31:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/collab/host?param=test",
+      "source": "BountySecurity/BurpBountyLab — Host header injection collaborator profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/collab/forgot?email=user@example.com",
+      "source": "BountySecurity/BurpBountyLab — password-reset header injection collaborator profile",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xxe/soap",
+      "source": "BountySecurity/BurpBountyLab — SOAP XXE XML parser profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/react2shell",
+      "source": "BountySecurity/BurpBountyLab — React2Shell RCE profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/pt/readwin?file=config.txt",
+      "source": "BountySecurity/BurpBountyLab — Windows path-traversal file-read profile practice endpoint",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/redirect/pp?return_url=/",
       "source": "BountySecurity/BurpBountyLab — parameter-pollution open-redirect profile practice endpoint",
