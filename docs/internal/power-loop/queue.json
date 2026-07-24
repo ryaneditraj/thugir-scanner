@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T14:25:00.000Z",
+  "updated_at": "2026-07-24T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/crlf/set",
+      "source": "BountySecurity/BurpBountyLab — CRLF injection profile practice endpoint (Set-Cookie header reflection)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ai/v1/chat/completions",
+      "source": "BountySecurity/BurpBountyLab — OpenAI-compatible API + AI/LLM disclosure headers (chat completions)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/actuator/env",
+      "source": "BountySecurity/BurpBountyLab — Spring Boot Actuator env endpoint (sensitive config exposure)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/swagger-ui.html",
+      "source": "BountySecurity/BurpBountyLab — Swagger UI + OpenAPI docs exposure (misc module)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/.git/HEAD",
+      "source": "BountySecurity/BurpBountyLab — exposed .git/HEAD source-control disclosure trigger",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/xss/dom",
       "source": "BountySecurity/BurpBountyLab — DOM-context XSS profile practice endpoint (innerHTML/document.write/eval sinks)",
