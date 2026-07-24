@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T02:24:00.000Z",
+  "updated_at": "2026-07-24T03:04:55.813Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2256,
-  "total_findings": 12688,
+  "total_sites_scanned": 2265,
+  "total_findings": 12848,
   "critical_findings": 41,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1686,
-  "discovery_findings": 10286,
+  "discovery_urls_added": 1691,
+  "discovery_findings": 10436,
   "improvements_shipped": 1013,
-  "last_run": "2026-07-24T02:24:00.000Z",
+  "last_run": "2026-07-24T03:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 missed sqli (no sql-error-disclosure); 12s wake retry restored sql-error-disclosure for 6/6 recall (9 findings merged, pages=6 probes=125). Parallel run shipped juice-shop-leaked-api-key oracle.",
+      "note": "First-pass 6/6 recall on deep crawl (pages=6 probes=293; gap=[]). juice-shop-leaked-api-key present; secret-resend slug still absent.",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,30 +52,29 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 142,
+      "findings": 150,
       "skipped_48h": [
-        "hack-this-site-eta.vercel.app/staging/index.html",
-        "hack-this-site-eta.vercel.app/quick/index.html",
-        "hack-this-site-eta.vercel.app/api-labs/graphql.html"
+        "hack-this-site-eta.vercel.app/platform/php.html",
+        "hack-this-site-eta.vercel.app/platform/node.html",
+        "hack-this-site-eta.vercel.app/platform/java.html"
       ],
       "dns_failures": [],
-      "focus": "HackThisSite platform/* cues, api-labs hub index, exposed git/HEAD artifact",
-      "improvements_shipped_this_run": 3
+      "focus": "HackThisSite utilities/recon/resource hubs + fabraix prompt-injection challenge; staging/quick/graphql 48h rescans",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — pass1 sqli miss recovered on wake retry",
-      "hack-this-site-eta.vercel.app/platform/php.html: 31 findings — full SPA bundle (identical to node/java)",
-      "hack-this-site-eta.vercel.app/platform/node.html: 31 findings — platform page inherits global SPA fingerprint",
-      "hack-this-site-eta.vercel.app/api-labs/index.html: 31 findings — API lab hub same bundle as graphql/soap",
-      "hack-this-site-eta.vercel.app/git/HEAD: 15 findings — exposed git artifact, shallower than platform pages",
-      "hack-this-site-eta.vercel.app/admin/console.html: 1 finding (48h rescan regression from 33) — Vercel checkpoint stub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — first-pass deep crawl, no gap",
+      "hack-this-site-eta.vercel.app/resource/index.html: 40 findings — education hub richest SPA bundle this run",
+      "hack-this-site-eta.vercel.app/utilities/index.html: 33 findings — encoding/hashing utility hub inherits global SPA fingerprint",
+      "playground.fabraix.com/challenges/prompt-injection-001: 3 findings — client-side-prompt-injection-evidence + fabraix challenge oracle",
+      "hack-this-site-eta.vercel.app/staging/index.html: 6 findings (48h rescan regression from 33) — partial oracle recovery"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent — Juice Shop Leaked API Key is AWS API Gateway key (juice-shop-leaked-api-key), not Resend format",
-      "juice-shop pass1 sqli miss on shallow crawl (pages=1) — sql-error-disclosure needs wake retry",
-      "platform/php+node+java inherit identical 31-finding SPA bundle — platform-specific oracles still missing",
-      "admin/backup/private 48h rescans degraded to 1 finding each — prior live-oracle bundle not reached"
+      "secret-resend slug still absent — sensitive_data via security-question-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes",
+      "utilities/recon/security-policy inherit identical 33-finding SPA bundle — page-specific oracles still missing",
+      "staging/quick/graphql 48h rescans degraded to 1–6 findings — Vercel checkpoint intermittently blocks deep crawl",
+      "fabraix prompt-injection challenge shallow (3 findings) — agentic exploit chains need interactive session"
     ]
   },
   "discovery_highlights": {
@@ -132,6 +131,11 @@
     "hack-this-site-eta.vercel.app/platform/node.html": 31,
     "hack-this-site-eta.vercel.app/platform/java.html": 31,
     "hack-this-site-eta.vercel.app/api-labs/index.html": 31,
-    "hack-this-site-eta.vercel.app/git/HEAD": 15
+    "hack-this-site-eta.vercel.app/git/HEAD": 15,
+    "hack-this-site-eta.vercel.app/utilities/index.html": 33,
+    "hack-this-site-eta.vercel.app/recon/index.html": 33,
+    "hack-this-site-eta.vercel.app/security-policy.html": 33,
+    "hack-this-site-eta.vercel.app/resource/index.html": 40,
+    "playground.fabraix.com/challenges/prompt-injection-001": 3
   }
 }
