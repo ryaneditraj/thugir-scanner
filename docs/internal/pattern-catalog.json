@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T10:06:31.373Z",
-  "total": 671,
-  "uniqueSlugs": 669,
+  "generatedAt": "2026-07-24T11:09:08.388Z",
+  "total": 672,
+  "uniqueSlugs": 670,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 653,
+    "generic": 654,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 599,
+    "deep": 600,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 169,
+    "Broken access control": 170,
     "Exposed secret": 17,
     "Source exposure": 6,
     "Misconfiguration": 2,
@@ -73,6 +73,7 @@
     "client-side-brutelogic-xss-gym-evidence",
     "client-side-brutelogic-xss-test-page-evidence",
     "client-side-bug-collection-evidence",
+    "client-side-bugbait-evidence",
     "client-side-bugbountyhunter-challenge-scenario-evidence",
     "client-side-bugbountyhunter-evidence",
     "client-side-bugforge-lab-evidence",

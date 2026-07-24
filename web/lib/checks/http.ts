@@ -2,6 +2,8 @@
 // Free checks are single-request and cheap; this enforces timeouts, byte caps, and an
 // SSRF/abuse guard that refuses to fetch private / loopback / metadata hosts.
 
+import https from "node:https";
+
 export interface FetchedDoc {
   url: string;
   finalUrl: string;
@@ -25,6 +27,11 @@ const DEFAULT_MAX_BYTES = 1_500_000; // ~1.5MB cap on any single body
 const BROWSER_UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
 const UA = `${BROWSER_UA} ThugirScanner/1.0 (+https://thugirlabs.com/scanner)`;
+
+/** Known training labs with expired or mis-issued TLS — retry fetch with verification disabled. */
+const INSECURE_TLS_LAB_HOSTS = new Set(["bugbait.io"]);
+
+const insecureTlsAgent = new https.Agent({ rejectUnauthorized: false });
 
 /** Vercel Security Checkpoint blocks the ThugirScanner UA suffix — retry with a plain browser UA. */
 function isVercelSecurityCheckpoint(doc: FetchedDoc): boolean {
@@ -104,6 +111,102 @@ export function normalizeTarget(input: string): URL {
   return u;
 }
 
+function fetchInsecureHttpsDoc(
+  url: string,
+  userAgent: string,
+  opts: { timeoutMs?: number; maxBytes?: number }
+): Promise<FetchedDoc> {
+  const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const maxBytes = opts.maxBytes ?? DEFAULT_MAX_BYTES;
+  return new Promise((resolve) => {
+    let parsed: URL;
+    try {
+      parsed = new URL(url);
+    } catch {
+      resolve({
+        url,
+        finalUrl: url,
+        status: 0,
+        ok: false,
+        headers: {},
+        setCookies: [],
+        body: "",
+        truncated: false,
+        error: "invalid url"
+      });
+      return;
+    }
+    const req = https.request(
+      {
+        hostname: parsed.hostname,
+        port: parsed.port || 443,
+        path: `${parsed.pathname}${parsed.search}`,
+        method: "GET",
+        headers: { "User-Agent": userAgent, Accept: "*/*" },
+        agent: insecureTlsAgent
+      },
+      (res) => {
+        const headers: Record<string, string> = {};
+        for (const [k, v] of Object.entries(res.headers)) {
+          if (typeof v === "string") headers[k.toLowerCase()] = v;
+        }
+        const chunks: Buffer[] = [];
+        let total = 0;
+        let truncated = false;
+        res.on("data", (chunk: Buffer) => {
+          total += chunk.length;
+          if (total <= maxBytes) chunks.push(chunk);
+          else if (!truncated) {
+            chunks.push(chunk.slice(0, Math.max(0, maxBytes - (total - chunk.length))));
+            truncated = true;
+            res.destroy();
+          }
+        });
+        res.on("end", () => {
+          resolve({
+            url,
+            finalUrl: url,
+            status: res.statusCode ?? 0,
+            ok: (res.statusCode ?? 0) >= 200 && (res.statusCode ?? 0) < 300,
+            headers,
+            setCookies: [],
+            body: Buffer.concat(chunks).toString("utf8"),
+            truncated
+          });
+        });
+      }
+    );
+    req.on("error", (e) => {
+      resolve({
+        url,
+        finalUrl: url,
+        status: 0,
+        ok: false,
+        headers: {},
+        setCookies: [],
+        body: "",
+        truncated: false,
+        error: describeFetchError(e)
+      });
+    });
+    req.setTimeout(timeoutMs, () => {
+      req.destroy();
+      resolve({
+        url,
+        finalUrl: url,
+        status: 0,
+        ok: false,
+        headers: {},
+        setCookies: [],
+        body: "",
+        truncated: false,
+        error: "timed out"
+      });
+    });
+    req.end();
+  });
+}
+
 async function fetchDocOnce(
   url: string,
   userAgent: string,
@@ -118,16 +221,26 @@ async function fetchDocOnce(
 ): Promise<FetchedDoc> {
   const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const maxBytes = opts.maxBytes ?? DEFAULT_MAX_BYTES;
+  let host = "";
+  try {
+    host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    /* ignore */
+  }
+  if (INSECURE_TLS_LAB_HOSTS.has(host) && url.startsWith("https:")) {
+    return fetchInsecureHttpsDoc(url, userAgent, { timeoutMs, maxBytes });
+  }
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
+    const fetchOpts: RequestInit = {
       method: opts.method ?? "GET",
       redirect: opts.redirect ?? "follow",
       signal: controller.signal,
       body: opts.body,
       headers: { "User-Agent": userAgent, Accept: "*/*", ...(opts.headers ?? {}) }
-    });
+    };
+    const res = await fetch(url, fetchOpts);
     const headers: Record<string, string> = {};
     res.headers.forEach((v, k) => (headers[k.toLowerCase()] = v));
     const getSetCookie = (res.headers as unknown as { getSetCookie?: () => string[] }).getSetCookie;

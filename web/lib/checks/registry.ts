@@ -6591,6 +6591,44 @@ const clientSideBurpBountyLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
+const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BugBait vulnerable web application title",
+    re: /Welcome to BugBait \(Vulnerable Web Application\)|BugBait \(Vulnerable Web Application\) by BlackLock/i
+  },
+  {
+    label: "intentionally vulnerable web application",
+    re: /intentionally vulnerable web application/i
+  },
+  {
+    label: "SQLi XSS SSRF LFI training tip",
+    re: /Look for SQLi, XSS, SSRF, LFI, Business Logic Issues/i
+  },
+  {
+    label: "BlackLock security vendor",
+    re: /blacklock\.io|by BlackLock/i
+  }
+];
+
+const clientSideBugbaitEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BUGBAIT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/bugbait\.io|BugBait/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "BugBait documents an intentionally vulnerable Node.js web application for SQLi, XSS, SSRF, and business-logic training"
+    }
+  };
+};
+
 // --- ArtemisKit open-source LLM reliability / red-team toolkit (artemiskit.vercel.app)
 const CLIENT_ARTEMIS_KIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -31369,6 +31407,7 @@ export const RULES: Record<string, Rule> = {
   clientSideEpicdetectEvidence,
   clientSideAlfServiceworkerEvidence,
   clientSideBurpBountyLabEvidence,
+  clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
   clientSidePcPartsStoreLabEvidence,

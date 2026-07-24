@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T10:20:00.000Z",
+  "updated_at": "2026-07-24T11:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,22 +16,22 @@
     }
   },
   "total_sites_scanned": 2328,
-  "total_findings": 13693,
+  "total_findings": 13696,
   "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1721,
-  "discovery_findings": 11106,
-  "improvements_shipped": 1034,
-  "last_run": "2026-07-24T10:20:00.000Z",
+  "discovery_findings": 11109,
+  "improvements_shipped": 1037,
+  "last_run": "2026-07-24T11:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings, pages=6 probes=281)",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent (Resend key not in Bluesky/Mastodon/Reddit feeds)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,37 +50,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 31,
-      "skipped_48h": [
-        "https://pentest-fauxbank.vercel.app/accounts",
-        "https://vulnshop.vercel.app/checkout",
-        "https://vulnshop.vercel.app/products/1"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 3,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Pwnshop PWN-040 SSTI + PWN-038 path-traversal route oracles; XVWA PHP home.php module evidence; OWASP VWAD catalog entries",
+      "focus": "VWAD 404 catalog slugs → live-instance cross-origin seeds (burpbounty/bugbait/ffufme/secure-by-design); BugBait TLS retry for expired cert",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses; secret-resend slug still absent",
-      "pwnshop.ctfsecurity.com/seller/preview: 10→13 findings (+client-side-pwnshop-ssti-oracle, +path-traversal-oracle from /vulnerabilities catalog)",
-      "pwnshop.ctfsecurity.com/download: 9→11 findings (+route-specific PWN-038 oracle)",
-      "xvwa.vercel.app: 4→6 findings when reachable (+client-side-xss-evidence, +client-side-xvwa-php-module-evidence)",
-      "vwad.owasp.org/app/pygoat: 4 findings — client-side-pygoat-evidence + OWASP VWAD markers"
+      "juice-shop-staging: benchmark recall 6/6 (10 findings) — no category misses; secret-resend slug still absent",
+      "vwad.owasp.org/app/burpbounty: 4→5 findings (+client-side-burp-bounty-lab-evidence via burpbountylab.com cross-origin crawl)",
+      "vwad.owasp.org/app/bugbait: 4→5 findings (+client-side-bugbait-evidence via bugbait.io cross-origin crawl with insecure TLS retry)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "xvwa.vercel.app: Vercel Security Checkpoint intermittently blocks module page crawls from cloud agent",
-      "pwnshop /seller/preview and /download require auth for live SSTI/traversal probes — catalog oracles used instead",
-      "vwad burpbounty/bugbait/secure-by-design/ffufme: catalog slugs 404 — need live-instance cross-origin seeds",
-      "secret-resend slug still absent on juice-shop benchmark"
+      "secret-resend slug still absent on juice-shop benchmark — Resend API key not present in current Bluesky/Mastodon/Reddit feeds",
+      "ffuf.me connection reset from cloud agent — VWAD ffufme seed wired but live host unreachable",
+      "xvwa.vercel.app: Vercel Security Checkpoint intermittently blocks module page crawls from cloud agent"
     ]
   },
   "discovery_highlights": {
     "pwnshop.ctfsecurity.com/seller/preview": 13,
     "pwnshop.ctfsecurity.com/download": 11,
     "xvwa.vercel.app": 6,
+    "vwad.owasp.org/app/burpbounty": 5,
+    "vwad.owasp.org/app/bugbait": 5,
     "arcanum-sec.github.io/ai-sec-resources": 8,
     "webchal1.vercel.app": 6,
     "playground.fabraix.com/challenges/01-guardrail-bypass": 3,
@@ -134,11 +129,12 @@
     "vwad.owasp.org/app/damn-vulnerable-node-application-dvna": 4,
     "vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna": 4,
     "vwad.owasp.org/app/yrprey": 3,
-    "vwad.owasp.org/app/burpbounty": 4,
-    "vwad.owasp.org/app/bugbait": 4,
+    "vwad.owasp.org/app/burpbounty": 5,
+    "vwad.owasp.org/app/bugbait": 5,
     "vwad.owasp.org/app/secure-by-design": 4,
     "vwad.owasp.org/app/ffufme": 4,
     "juice-shop.herokuapp.com": 9,
+    "juice-shop-staging.herokuapp.com": 10,
     "hack-this-site-eta.vercel.app/admin/console.html": 33,
     "hack-this-site-eta.vercel.app/backup/db.sql": 33,
     "hack-this-site-eta.vercel.app/private/admin-bypass.html": 42,

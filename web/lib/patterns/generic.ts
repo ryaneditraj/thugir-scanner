@@ -12821,6 +12821,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-bugbait-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "BugBait vulnerable Node.js training app disclosed",
+    description:
+      "BugBait by BlackLock advertises an intentionally vulnerable web application for SQLi, XSS, SSRF, LFI, and business-logic training.",
+    impactOneline:
+      "Public BugBait instances document deliberate security flaw training surfaces for penetration-test education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBugbaitEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugBait is intentional training — isolate vulnerable lab apps from production networks.",
+      steps: [
+        "Require authentication before serving BugBait lab instances.",
+        "Do not reuse BugBait vulnerability patterns against production without authorization.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host BugBait-style vulnerable Node.js training apps. Show how to isolate lab backends from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-yrprey-evidence",
     platform: "generic",
     category: "Broken access control",
