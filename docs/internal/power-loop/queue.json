@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T16:05:00.000Z",
+  "updated_at": "2026-07-24T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/wp/wp-json/wp/v2/users",
+      "source": "BountySecurity/BurpBountyLab — WordPress REST API user-enumeration profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/sqli/time",
+      "source": "BountySecurity/BurpBountyLab — time-based blind SQLi profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xss/blind",
+      "source": "BountySecurity/BurpBountyLab — blind XSS callback profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xxe/upload",
+      "source": "BountySecurity/BurpBountyLab — XXE file-upload profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/log4j",
+      "source": "BountySecurity/BurpBountyLab — Log4j JNDI injection RCE profile practice endpoint",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/sqli/search?q=laptop",
       "source": "BountySecurity/BurpBountyLab — error-based SQLi search-form profile practice endpoint",
