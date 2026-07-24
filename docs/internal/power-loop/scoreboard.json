@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T15:10:00.000Z",
+  "updated_at": "2026-07-24T16:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2373,
-  "total_findings": 14240,
+  "total_sites_scanned": 2390,
+  "total_findings": 14468,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1746,
-  "discovery_findings": 11603,
-  "improvements_shipped": 1049,
-  "last_run": "2026-07-24T15:10:00.000Z",
+  "discovery_urls_added": 1751,
+  "discovery_findings": 11711,
+  "improvements_shipped": 1048,
+  "last_run": "2026-07-24T16:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings, pages=6 probes=295); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,31 +52,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 191,
+      "findings": 108,
       "skipped_48h": [
-        "http://burpbountylab.com/xss/dom",
-        "http://burpbountylab.com/xss/js",
-        "http://burpbountylab.com/redirect/goto",
-        "http://burpbountylab.com/cors/api/data",
-        "http://burpbountylab.com/passive/secrets"
+        "http://burpbountylab.com/crlf/set",
+        "http://burpbountylab.com/ai/v1/chat/completions",
+        "http://burpbountylab.com/actuator/env",
+        "http://burpbountylab.com/swagger-ui.html",
+        "http://burpbountylab.com/.git/HEAD"
       ],
       "dns_failures": [],
-      "focus": "BurpBountyLab route-specific CORS, path traversal, and CRLF live oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab SQLi search, RCE eval, Spring CVE, passive cookies, Drupal user profile",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/cors/api/data: burpbounty-cors-live-oracle — reflects evil Origin with credentials (12→17 findings)",
-      "burpbountylab.com/pt/read: burpbounty-pt-read-live-oracle — /etc/passwd via ../../../ traversal (9→16 findings)",
-      "burpbountylab.com/crlf/set: burpbounty-crlf-set-live-oracle — unsanitized lang in Set-Cookie + X-Custom-Lang (13→16 findings)",
-      "burpbountylab.com/actuator/env: 14 findings incl spring-boot-actuator-exposed route hit",
-      "hack-this-site-eta.vercel.app/api/cors: 42 findings (queue drain)"
+      "burpbountylab.com/sqli/search: 17 findings — richest new route (hub fingerprint + reflected-xss-query-param)",
+      "burpbountylab.com/rce/eval: 16 findings — hub fingerprint; route-specific eval-RCE oracle still absent",
+      "burpbountylab.com/cve/spring: 16 findings incl spring-boot-actuator-exposed",
+      "burpbountylab.com/passive/cookies: 16 findings — insecure-cookie passive trigger",
+      "pentest-fauxbank.vercel.app/scanner+instructor+report: 9 findings each (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds",
-      "burpbountylab AI/LLM disclosure routes still share hub fingerprint — route-specific oracles not yet distinct"
+      "burpbountylab route-specific oracles (rce/eval, drupal/user) not yet distinct from hub fingerprint",
+      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds"
     ]
   },
   "discovery_highlights": {
@@ -99,6 +99,14 @@
     "burpbountylab.com/actuator/env": 14,
     "burpbountylab.com/swagger-ui.html": 13,
     "burpbountylab.com/.git/HEAD": 13,
+    "burpbountylab.com/sqli/search": 17,
+    "burpbountylab.com/rce/eval": 16,
+    "burpbountylab.com/cve/spring": 16,
+    "burpbountylab.com/passive/cookies": 16,
+    "burpbountylab.com/drupal/user/1": 16,
+    "pentest-fauxbank.vercel.app/scanner": 9,
+    "pentest-fauxbank.vercel.app/instructor": 9,
+    "pentest-fauxbank.vercel.app/report": 9,
     "hack-this-site-eta.vercel.app/api/headers": 41,
     "hack-this-site-eta.vercel.app/api/cookies": 42,
     "hack-this-site-eta.vercel.app/api/cors": 42,
