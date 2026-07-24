@@ -6797,6 +6797,18 @@
       "slug": "client-side-fabraix-challenge-evidence",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle prompt injection, social engineering + scored by a guardrail + break its rules; prompt-injection-001 added to FABRAIX_CHALLENGE_SLUGS; playground.fabraix.com/challenges/prompt-injection-001 gains client-side-fabraix-challenge-evidence slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-python-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/platform/python returns {\"debug\":true,\"debugger\":\"Werkzeug\",\"pin\":\"123-456-789\"}; hack-this-site-eta.vercel.app/platform/python.html findings 14→39; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-python-platform-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PYTHON-001 Debug Mode + PYTHON-002 SSTI (Jinja2) + {{ 7 * 7 }} template preview on /platform/python.html; clientSideVulnlabPythonPlatformEvidence; platform/python.html findings 14→39; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11894,6 +11906,16 @@
       "source": "discovery:playground.fabraix.com",
       "slug": "client-side-fabraix-challenge-evidence",
       "shipped_at": "2026-07-24T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-python-live-oracle",
+      "shipped_at": "2026-07-24T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-python-platform-evidence",
+      "shipped_at": "2026-07-24T05:10:00.000Z"
     }
   ]
 }
