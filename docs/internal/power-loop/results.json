@@ -1,309 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-23T01:15:31.895Z",
-      "url": "https://oauthlabs.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 290,
-      "status": "ok",
-      "scanned_at": "2026-07-23T01:15:31.895Z"
-    },
-    {
-      "run_id": "2026-07-23T01:15:35.038Z",
-      "url": "https://auth0.oauthlabs.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 284,
-      "status": "ok",
-      "scanned_at": "2026-07-23T01:15:35.038Z"
-    },
-    {
-      "run_id": "2026-07-23T01:15:42.106Z",
-      "url": "https://dsopas.github.io/MindAPI/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 283,
-      "status": "ok",
-      "scanned_at": "2026-07-23T01:15:42.106Z"
-    },
-    {
-      "run_id": "2026-07-23T02:01:12.104Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 245,
-      "status": "ok",
-      "scanned_at": "2026-07-23T02:01:12.104Z"
-    },
-    {
-      "run_id": "2026-07-23T02:11:49.922Z",
-      "url": "https://xvwa.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-xvwa-evidence",
-          "title": "XVWA deliberately vulnerable web application disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 295,
-      "status": "ok",
-      "scanned_at": "2026-07-23T02:11:49.922Z"
-    },
-    {
-      "run_id": "2026-07-23T02:11:52.500Z",
-      "url": "https://seclab.vercel.app/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 299,
-      "status": "ok",
-      "scanned_at": "2026-07-23T02:11:52.500Z"
-    },
-    {
-      "run_id": "2026-07-23T02:12:12.211Z",
-      "url": "https://hackxor.net/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 289,
-      "status": "ok",
-      "scanned_at": "2026-07-23T02:12:12.211Z"
-    },
-    {
-      "run_id": "2026-07-23T02:12:26.828Z",
-      "url": "https://public-firing-range.appspot.com/",
-      "auth": "benchmark",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "open-redirect-query-param",
-          "title": "Open redirect via query parameter",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 293,
-      "status": "ok",
-      "scanned_at": "2026-07-23T02:12:26.828Z"
-    },
-    {
       "run_id": "2026-07-23T02:12:44.884Z",
       "url": "https://google-gruyere.appspot.com/",
       "auth": "public_demo",
@@ -17687,6 +17384,385 @@
       "probes_run": 293,
       "status": "ok",
       "scanned_at": "2026-07-24T08:01:12.978Z"
+    },
+    {
+      "run_id": "2026-07-24T08:04:04.349Z",
+      "url": "https://vulnshop.vercel.app/checkout",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vulnshop-evidence",
+          "title": "VulnShop pentest practice lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 317,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:04:04.349Z"
+    },
+    {
+      "run_id": "2026-07-24T08:04:09.747Z",
+      "url": "https://vulnshop.vercel.app/products/1",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vulnshop-evidence",
+          "title": "VulnShop pentest practice lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vulnshop-module-evidence",
+          "title": "VulnShop route-specific vulnerability module disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 317,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:04:09.747Z"
+    },
+    {
+      "run_id": "2026-07-24T08:04:13.051Z",
+      "url": "https://red-team-one.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 319,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:04:13.051Z"
+    },
+    {
+      "run_id": "2026-07-24T08:05:03.101Z",
+      "url": "https://ansede.onrender.com/scan",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 290,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:05:03.101Z"
+    },
+    {
+      "run_id": "2026-07-24T08:05:25.764Z",
+      "url": "https://pentest-fauxbank.vercel.app/accounts",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 9,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-fauxbank-lab-evidence",
+          "title": "FauxBank OWASP banking pentest training lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-authenticated-sqli-search",
+          "title": "Authenticated SQL injection via FauxBank search API",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "fauxbank-idor-accounts-probe",
+          "title": "FauxBank account IDOR via predictable account IDs",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-csrf-transfer-probe",
+          "title": "FauxBank transfer API missing CSRF protection",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-stored-xss-support-probe",
+          "title": "FauxBank support tickets store unescaped HTML (stored XSS)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 325,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:05:25.764Z"
+    },
+    {
+      "run_id": "2026-07-24T08:05:32.324Z",
+      "url": "https://hermes-codex.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": "windsurf",
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-hermes-codex-evidence",
+          "title": "Hermes Codex AI security research hub disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "AI security"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:05:32.324Z"
+    },
+    {
+      "run_id": "2026-07-24T08:05:36.231Z",
+      "url": "https://pentest-ground.com:81/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pentest-ground-guardian-leaks-evidence",
+          "title": "Pentest-Ground GuardianLeaks vulnerable lab disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 300,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:05:36.231Z"
+    },
+    {
+      "run_id": "2026-07-24T08:05:52.308Z",
+      "url": "https://codeex-ai.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": "firebase",
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 323,
+      "status": "ok",
+      "scanned_at": "2026-07-24T08:05:52.308Z"
     }
   ],
   "teacher_delta_runs": [
@@ -18239,6 +18315,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (vulnshop admin/profile/users, hack-this-site cms/drupal+joomla).",
       "scanned_at": "2026-07-24T07:02:59.850Z"
+    },
+    {
+      "run_id": "2026-07-24T08:06:30.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
+      "teacher_delta": [],
+      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs; pentest-fauxbank/accounts 9 findings with route-specific fauxbank-* oracles; vulnshop/products/1 gained client-side-vulnshop-module-evidence.",
+      "scanned_at": "2026-07-24T08:06:30.000Z"
     }
   ]
 }
