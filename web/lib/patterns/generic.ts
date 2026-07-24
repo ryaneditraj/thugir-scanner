@@ -15031,6 +15031,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-sqli-oob-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab blind/OOB SQLi live oracle",
+    description:
+      "GET /sqli/oob?id= returns differential User/Error responses (id=1→admin, id=2→john, id=1'→Error) — the Burp Bounty out-of-band/blind SQLi profile oracle.",
+    impactOneline:
+      "Live differential-response probe confirms blind SQLi oracle distinct from error-based /sqli/search.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliOobLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and avoid differential user lookup by untrusted id.",
+      steps: [
+        "Bind id parameters with prepared statements.",
+        "Return generic errors instead of User/Error differentiation.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/oob endpoint leaks user names via id and returns Error on quote injection. Show parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-time-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab time-based blind SQLi live oracle",
+    description:
+      "GET /sqli/time?id=1 AND SLEEP(3) delays response ~3 seconds — the Burp Bounty time-based blind SQLi profile oracle.",
+    impactOneline:
+      "Live timing probe confirms SLEEP() oracle distinct from error-based /sqli/search disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries to block time-based blind SQLi payloads.",
+      steps: [
+        "Bind id parameters with prepared statements.",
+        "Set query timeouts and monitor for anomalous response latency.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/time endpoint is vulnerable to SLEEP(3) timing attacks. Show parameterized query and timeout mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-redirect-goto-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab HTTP open redirect live oracle",
+    description:
+      "GET /redirect/goto?url= returns HTTP 302 Location to attacker URL — the Burp Bounty goto open-redirect profile oracle.",
+    impactOneline:
+      "Live 302 redirect probe confirms goto open-redirect oracle distinct from /redirect/login form-action phishing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRedirectGotoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist before issuing HTTP redirects.",
+      steps: [
+        "Allowlist permitted redirect hosts and paths.",
+        "Reject absolute URLs to external domains.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/goto endpoint reflects attacker URLs in 302 Location headers. Show redirect validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
