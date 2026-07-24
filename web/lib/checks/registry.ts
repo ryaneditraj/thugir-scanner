@@ -26452,6 +26452,111 @@ const vulnlabAuthLoginEnumerationLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabBackupConfigLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/labs\/env-file\.html/i.test(urlHint) &&
+    !/\/backup\/config\.old/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const backupUrl = new URL("/backup/config.old", ctx.origin).toString();
+  const doc = await ctx.probe.get(backupUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/DB_PASS\s*=/.test(doc.body) || !/JWT_SECRET\s*=/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: backupUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnLab /backup/config.old exposes DB credentials and JWT secret without authentication"
+    }
+  };
+};
+
+const vulnlabRestBolaLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/api-labs\/rest\.html/i.test(urlHint) &&
+    !/\/api\/(admin\/users|orders\/)/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const adminUrl = new URL("/api/admin/users", ctx.origin).toString();
+  const orderUrl = new URL("/api/orders/1001", ctx.origin).toString();
+  const [adminDoc, orderDoc] = await Promise.all([
+    ctx.probe.get(adminUrl, { maxBytes: 4096 }),
+    ctx.probe.get(orderUrl, { maxBytes: 4096 })
+  ]);
+  const adminOk =
+    adminDoc.status >= 200 &&
+    adminDoc.status < 400 &&
+    /"audit"\s*:\s*"Broken Access Control"/.test(adminDoc.body) &&
+    /"role"\s*:\s*"admin"/.test(adminDoc.body);
+  const orderOk =
+    orderDoc.status >= 200 &&
+    orderDoc.status < 400 &&
+    /"audit"\s*:\s*"IDOR Orders"/.test(orderDoc.body) &&
+    /"requestedId"\s*:\s*"1001"/.test(orderDoc.body);
+  if (!adminOk && !orderOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: adminOk && orderOk ? 0.92 : 0.9,
+    evidence: {
+      adminUrl: adminOk ? adminUrl : undefined,
+      orderUrl: orderOk ? orderUrl : undefined,
+      adminSnippet: adminOk ? adminDoc.body.slice(0, 180).trim() : undefined,
+      orderSnippet: orderOk ? orderDoc.body.slice(0, 180).trim() : undefined,
+      note: "VulnLab REST lab APIs expose unauthenticated admin user list and cross-user order lookup (BOLA/IDOR oracles)"
+    }
+  };
+};
+
+const vulnlabGraphqlSoapLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/api-labs\/(?:graphql|soap)\.html/i.test(urlHint) &&
+    !/\/data\/(?:graphql-schema\.json|service\.wsdl)/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const schemaUrl = new URL("/data/graphql-schema.json", ctx.origin).toString();
+  const wsdlUrl = new URL("/data/service.wsdl", ctx.origin).toString();
+  const [schemaDoc, wsdlDoc] = await Promise.all([
+    ctx.probe.get(schemaUrl, { maxBytes: 8192 }),
+    ctx.probe.get(wsdlUrl, { maxBytes: 4096 })
+  ]);
+  const schemaOk =
+    schemaDoc.status >= 200 &&
+    schemaDoc.status < 400 &&
+    /"__schema"\s*:/.test(schemaDoc.body) &&
+    /no auth required/i.test(schemaDoc.body);
+  const wsdlOk =
+    wsdlDoc.status >= 200 &&
+    wsdlDoc.status < 400 &&
+    /<definitions[\s>]/i.test(wsdlDoc.body) &&
+    /VulnerableService|targetNamespace/i.test(wsdlDoc.body);
+  if (!schemaOk && !wsdlOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: schemaOk && wsdlOk ? 0.91 : 0.89,
+    evidence: {
+      schemaUrl: schemaOk ? schemaUrl : undefined,
+      wsdlUrl: wsdlOk ? wsdlUrl : undefined,
+      schemaSnippet: schemaOk ? schemaDoc.body.slice(0, 180).trim() : undefined,
+      wsdlSnippet: wsdlOk ? wsdlDoc.body.slice(0, 180).trim() : undefined,
+      note: "VulnLab GraphQL/SOAP labs expose introspection schema JSON and WSDL without authentication"
+    }
+  };
+};
+
 // --- VulnLab /api/* audit training APIs (hack-this-site-eta.vercel.app) -----------------
 const VULNLAB_AUDIT_API_PATHS = [
   "/api/methods",
@@ -30266,6 +30371,9 @@ export const RULES: Record<string, Rule> = {
   vulnlabJwtDecodeLiveOracle,
   vulnlabAuthSessionLiveOracle,
   vulnlabAuthLoginEnumerationLiveOracle,
+  vulnlabBackupConfigLiveOracle,
+  vulnlabRestBolaLiveOracle,
+  vulnlabGraphqlSoapLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,
