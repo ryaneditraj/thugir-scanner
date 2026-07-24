@@ -6983,6 +6983,24 @@
       "slug": "burpbounty-crlf-set-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/crlf/set?lang=canary reflects unsanitized value in Set-Cookie and X-Custom-Lang headers; burpbountylab.com/crlf/set findings 0→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-js-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/js?value=thugirJS echoes canary inside JavaScript string literals; burpbountylab.com/xss/js findings 11→19; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-search-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/sqli/search?q=' returns 500 with You have an error in your SQL syntax + ORA-00933 + Microsoft OLE DB Provider; burpbountylab.com/sqli/search findings 9→20; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/v1/chat/completions returns X-AI-Backend vllm-0.6.3 + X-LLM-Provider openai + X-MCP-Enabled true + chat.completion JSON; burpbountylab.com/ai/v1/chat/completions findings 13→19; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12225,6 +12243,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-crlf-set-live-oracle",
       "shipped_at": "2026-07-24T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-js-live-oracle",
+      "shipped_at": "2026-07-24T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-search-live-oracle",
+      "shipped_at": "2026-07-24T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-disclosure-live-oracle",
+      "shipped_at": "2026-07-24T16:10:00.000Z"
     }
   ]
 }
