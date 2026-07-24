@@ -7093,6 +7093,98 @@ const burpbountyRedirectLoginLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySqliOobLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const adminUrl = new URL("/sqli/oob", ctx.origin);
+  adminUrl.searchParams.set("id", "1");
+  const johnUrl = new URL("/sqli/oob", ctx.origin);
+  johnUrl.searchParams.set("id", "2");
+  const errorUrl = new URL("/sqli/oob", ctx.origin);
+  errorUrl.searchParams.set("id", "1'");
+  const docs = await ctx.probe.getMany(
+    [adminUrl.toString(), johnUrl.toString(), errorUrl.toString()],
+    { maxBytes: 2048 },
+    3
+  );
+  const admin = docs.get(adminUrl.toString());
+  const john = docs.get(johnUrl.toString());
+  const err = docs.get(errorUrl.toString());
+  if (!admin || !john || !err) return NEGATIVE;
+  if (admin.status < 200 || admin.status >= 500) return NEGATIVE;
+  const adminOk = /<h1>\s*User:\s*admin\s*<\/h1>/i.test(admin.body);
+  const johnOk = /<h1>\s*User:\s*john\s*<\/h1>/i.test(john.body);
+  const errorOk = /<h1>\s*Error\s*<\/h1>/i.test(err.body);
+  if (!adminOk || !johnOk || !errorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: adminUrl.toString(),
+      adminProbe: "id=1 → User: admin",
+      johnProbe: "id=2 → User: john",
+      errorProbe: "id=1' → Error",
+      snippet: admin.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab /sqli/oob?id= returns differential user/error responses — blind/OOB SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountySqliTimeLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/sqli/time", ctx.origin);
+  baselineUrl.searchParams.set("id", "1");
+  const t0 = Date.now();
+  const baseline = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 4096, timeoutMs: 8000 });
+  const baselineMs = Date.now() - t0;
+  if (baseline.status < 200 || baseline.status >= 500) return NEGATIVE;
+  if (!/User:\s*admin/i.test(baseline.body)) return NEGATIVE;
+  const sleepUrl = new URL("/sqli/time", ctx.origin);
+  sleepUrl.searchParams.set("id", "1 AND SLEEP(3)");
+  const t1 = Date.now();
+  const sleepDoc = await ctx.probe.get(sleepUrl.toString(), { maxBytes: 4096, timeoutMs: 10000 });
+  const sleepMs = Date.now() - t1;
+  if (sleepDoc.status < 200 || sleepDoc.status >= 500) return NEGATIVE;
+  const delayOk = sleepMs >= baselineMs + 2500 && sleepMs >= 2800;
+  if (!delayOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sleepMs >= 2900 ? 0.92 : 0.9,
+    evidence: {
+      url: sleepUrl.toString(),
+      baselineMs,
+      sleepMs,
+      payload: "1 AND SLEEP(3)",
+      snippet: sleepDoc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab /sqli/time?id= responds to SLEEP(3) with ~3s delay — time-based blind SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountyRedirectGotoLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/redirect/goto", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      status: doc.status,
+      location,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab GET /redirect/goto?url= returns HTTP redirect to attacker URL — open redirect profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -31983,6 +32075,9 @@ export const RULES: Record<string, Rule> = {
   burpbountySsrfProxyLiveOracle,
   burpbountyXssAttributeLiveOracle,
   burpbountyRedirectLoginLiveOracle,
+  burpbountySqliOobLiveOracle,
+  burpbountySqliTimeLiveOracle,
+  burpbountyRedirectGotoLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
