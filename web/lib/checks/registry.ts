@@ -26870,6 +26870,35 @@ const vulnlabReconInternalMetricsLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabPlatformPythonLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/platform\/python\.html/i.test(urlHint) &&
+    !/\/api\/platform\/python/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const pythonUrl = new URL("/api/platform/python", ctx.origin).toString();
+  const doc = await ctx.probe.get(pythonUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const debugOk = /"debug"\s*:\s*true/.test(doc.body) && /Werkzeug/i.test(doc.body);
+  const pinOk = /"pin"\s*:\s*"/.test(doc.body);
+  if (!debugOk && !pinOk) return NEGATIVE;
+  const sstiHint = /PYTHON-002|SSTI \(Jinja2\)|\{\{\s*7\s*\*\s*7\s*\}\}/i.test(ctx.combined);
+  return {
+    fired: true,
+    confidence: debugOk && pinOk ? (sstiHint ? 0.92 : 0.9) : 0.88,
+    evidence: {
+      url: pythonUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      sstiLabHint: sstiHint ? "PYTHON-002 Jinja2 SSTI lab documented on /platform/python.html" : undefined,
+      note: "VulnLab Python platform lab exposes Werkzeug debug mode and debugger PIN via GET /api/platform/python without authentication"
+    }
+  };
+};
+
 const vulnlabPlatformNodeJavaLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
@@ -27549,7 +27578,11 @@ const CLIENT_VULNLAB_CMS_PLATFORM_RES: { label: string; re: RegExp }[] = [
   },
   {
     label: "Platform stack lab cards",
-    re: /ASP\.NET \/ IIS|PHP \/ Apache|Node\.js \/ Express|Java \/ Spring|Ruby \/ Rails/i
+    re: /ASP\.NET \/ IIS|PHP \/ Apache|Node\.js \/ Express|Java \/ Spring|Python \/ Django|Ruby \/ Rails/i
+  },
+  {
+    label: "Python Django Flask platform lab",
+    re: /PYTHON-001|PYTHON-002|Python \/ Django \/ Flask|SSTI \(Jinja2\)/i
   },
   {
     label: "ASP.NET ViewState analyzer lab",
@@ -27564,6 +27597,34 @@ const CLIENT_VULNLAB_CMS_PLATFORM_RES: { label: string; re: RegExp }[] = [
     re: /Resource Hub[\s\S]{0,200}intentionally vulnerable/i
   }
 ];
+
+const clientSideVulnlabPythonPlatformEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const isPythonPage = /\/platform\/python\.html/i.test(pageUrl) || /\/platform\/python\.html/i.test(ctx.scanUrl || "");
+  const hits: { label: string; sample: string }[] = [];
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "PYTHON-001 debug mode lab", re: /PYTHON-001[\s\S]{0,120}Debug Mode/i },
+    { label: "PYTHON-002 Jinja2 SSTI lab", re: /PYTHON-002[\s\S]{0,120}SSTI \(Jinja2\)/i },
+    { label: "Python platform API oracle path", re: /\/api\/platform\/python/i },
+    { label: "Jinja2 template injection preview", re: /\{\{\s*7\s*\*\s*7\s*\}\}/ }
+  ];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isPythonPage ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/Python \/ Django \/ Flask|PYTHON-00[12]|Pentest Toolkit/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : isPythonPage ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "VulnLab Academy Python/Django/Flask platform labs document debug-mode disclosure and Jinja2 SSTI training targets"
+    }
+  };
+};
 
 const clientSideVulnlabCmsPlatformEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
@@ -30733,6 +30794,7 @@ export const RULES: Record<string, Rule> = {
   vulnlabCmsDrupalJoomlaLiveOracle,
   vulnlabGitHeadLiveOracle,
   vulnlabPlatformPhpLiveOracle,
+  vulnlabPlatformPythonLiveOracle,
   vulnlabPlatformNodeJavaLiveOracle,
   vulnlabUtilitiesHashLiveOracle,
   vulnlabReconInternalMetricsLiveOracle,
@@ -30752,6 +30814,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA10SsrfEvidence,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
+  clientSideVulnlabPythonPlatformEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
   clientSideDarkPatternLabEvidence,
