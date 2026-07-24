@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T04:03:18.778Z",
+  "updated_at": "2026-07-24T04:05:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2266,
-  "total_findings": 12858,
+  "total_sites_scanned": 2274,
+  "total_findings": 13022,
   "critical_findings": 41,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1691,
-  "discovery_findings": 10436,
+  "discovery_urls_added": 1696,
+  "discovery_findings": 10600,
   "improvements_shipped": 1016,
-  "last_run": "2026-07-24T04:03:18.778Z",
+  "last_run": "2026-07-24T04:05:30.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -52,29 +52,30 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 150,
+      "findings": 164,
       "skipped_48h": [
         "hack-this-site-eta.vercel.app/platform/php.html",
         "hack-this-site-eta.vercel.app/platform/node.html",
         "hack-this-site-eta.vercel.app/platform/java.html"
       ],
       "dns_failures": [],
-      "focus": "HackThisSite utilities/recon/resource hubs + fabraix prompt-injection challenge; staging/quick/graphql 48h rescans",
+      "focus": "HackThisSite admin/auth/platform hubs (new GitHub tree pages) + utilities/recon/security-policy 48h rescans",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — first-pass deep crawl, no gap",
-      "hack-this-site-eta.vercel.app/resource/index.html: 40 findings — education hub richest SPA bundle this run",
-      "hack-this-site-eta.vercel.app/utilities/index.html: 33 findings — encoding/hashing utility hub inherits global SPA fingerprint",
-      "playground.fabraix.com/challenges/prompt-injection-001: 3 findings — client-side-prompt-injection-evidence + fabraix challenge oracle",
-      "hack-this-site-eta.vercel.app/staging/index.html: 6 findings (48h rescan regression from 33) — partial oracle recovery"
+      "hack-this-site-eta.vercel.app/auth/index.html: 38 findings — auth lab hub richest SPA bundle this run",
+      "hack-this-site-eta.vercel.app/admin/index.html: 36 findings — admin hub inherits global SPA fingerprint + graphql-introspection-enabled",
+      "hack-this-site-eta.vercel.app/platform/aspnet.html: 37 findings — ASP.NET platform page same bundle as admin/auth hubs",
+      "hack-this-site-eta.vercel.app/platform/python.html: 14 findings — shallower than php/node/java (31) — platform-specific oracles still missing",
+      "hack-this-site-eta.vercel.app/utilities/index.html: 1 finding (48h rescan regression from 33) — Vercel checkpoint blocks deep crawl"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent — sensitive_data via security-question-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes",
-      "utilities/recon/security-policy inherit identical 33-finding SPA bundle — page-specific oracles still missing",
-      "staging/quick/graphql 48h rescans degraded to 1–6 findings — Vercel checkpoint intermittently blocks deep crawl",
-      "fabraix prompt-injection challenge shallow (3 findings) — agentic exploit chains need interactive session"
+      "admin/auth/platform hubs inherit identical 36–38 finding SPA bundle — page-specific oracles still missing",
+      "platform/python.html shallow (14 findings) vs php/node/java (31) — Python-specific cues not surfaced",
+      "utilities/recon/security-policy 48h rescans degraded to 1 finding — Vercel checkpoint intermittently blocks deep crawl"
     ]
   },
   "discovery_highlights": {
@@ -136,6 +137,11 @@
     "hack-this-site-eta.vercel.app/recon/index.html": 33,
     "hack-this-site-eta.vercel.app/security-policy.html": 33,
     "hack-this-site-eta.vercel.app/resource/index.html": 40,
-    "playground.fabraix.com/challenges/prompt-injection-001": 3
+    "playground.fabraix.com/challenges/prompt-injection-001": 3,
+    "hack-this-site-eta.vercel.app/auth/index.html": 38,
+    "hack-this-site-eta.vercel.app/admin/index.html": 36,
+    "hack-this-site-eta.vercel.app/admin/users.html": 36,
+    "hack-this-site-eta.vercel.app/platform/aspnet.html": 37,
+    "hack-this-site-eta.vercel.app/platform/python.html": 14
   }
 }
