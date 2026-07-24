@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T05:05:00.000Z",
+  "updated_at": "2026-07-24T06:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/owasp/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — OWASP Top 10 challenge hub index (GitHub sitemap /owasp/)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — CMS vulnerability training hub (GitHub cms/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.dvrag.com/",
+      "source": "DVRAG — Damn Vulnerable RAG Pipeline public live mode (DEV.to + dvrag.com; 25 AI/RAG vulns)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playhacklab.com/",
+      "source": "HackLab — browser-based OWASP Top 10 terminal security game (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://platform.sixhackacademy.com/",
+      "source": "SixHack Academy platform — OWASP Top 10 CTF labs (sixhackacademy.com platform subdomain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/home/index.html",
       "source": "dkyazzentwatwa/hack-this-site — main testing hub and Tier 1 lab index (GitHub home/index.html)",
