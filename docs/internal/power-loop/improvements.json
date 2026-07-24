@@ -6725,6 +6725,24 @@
       "slug": "vulnlab-graphql-soap-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /data/graphql-schema.json exposes __schema types (no auth required) + GET /data/service.wsdl VulnerableService WSDL; api-labs/graphql.html findings 1→3+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-clickjacking-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/clickjacking.html lacks X-Frame-Options/CSP frame-ancestors + body No Clickjacking Protection; clickjacking.html findings 2→31; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-cms-drupal-joomla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/cms/drupal returns Vulnerable Drupal 8.6.10 + GET /api/cms/joomla returns Vulnerable Joomla 3.9.0; cms/drupal.html and cms/joomla.html gain dedicated CMS version oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:oauthlabs.com",
+      "slug": "oauth-oidc-metadata-exposed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: auth0.oauthlabs.com/.well-known/openid-configuration returns issuer+token_endpoint; oauthOidcMetadataExposed now matches auth0 redirect via scanUrl hint; oauthlabs.com findings 2→5, auth0.oauthlabs.com 1→5; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11762,6 +11780,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-graphql-soap-live-oracle",
       "shipped_at": "2026-07-24T00:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-clickjacking-live-oracle",
+      "shipped_at": "2026-07-24T01:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-cms-drupal-joomla-live-oracle",
+      "shipped_at": "2026-07-24T01:17:38.000Z"
+    },
+    {
+      "source": "discovery:oauthlabs.com",
+      "slug": "oauth-oidc-metadata-exposed",
+      "shipped_at": "2026-07-24T01:17:38.000Z"
     }
   ]
 }
