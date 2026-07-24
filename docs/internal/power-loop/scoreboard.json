@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T08:01:34.376Z",
+  "updated_at": "2026-07-24T08:06:01.270Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2302,
-  "total_findings": 13561,
+  "total_sites_scanned": 2310,
+  "total_findings": 13598,
   "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1706,
-  "discovery_findings": 10993,
+  "discovery_urls_added": 1711,
+  "discovery_findings": 11030,
   "improvements_shipped": 1027,
-  "last_run": "2026-07-24T08:01:34.376Z",
+  "last_run": "2026-07-24T08:06:01.270Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings, pages=6 probes=293)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,25 +50,25 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 7,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 37,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "DVRAG RAG pipeline live oracles (admin config, query/corpus SSRF)",
-      "improvements_shipped_this_run": 3
+      "focus": "VulnShop route depth (checkout/products), FauxBank accounts live oracles, RedTeam AI auditor samples",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "www.dvrag.com: 4→7 findings — client-side-dvrag-lab-evidence + dvrag-admin-config-live-oracle + dvrag-rag-pipeline-live-oracle",
-      "GET /admin/config exposes LLM systemPrompt without auth on DVRAG live mode",
-      "POST /query returns sk-live/AKIA secrets; GET /corpus leaks cross-tenant confidential docs"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses; secret-resend slug still absent",
+      "pentest-fauxbank.vercel.app/accounts: 9 findings — fauxbank-authenticated-sqli-search + fauxbank-idor-accounts-probe + fauxbank-csrf-transfer-probe + fauxbank-stored-xss-support-probe",
+      "vulnshop.vercel.app/products/1: 5 findings — client-side-vulnshop-module-evidence (route-specific oracle hit)",
+      "red-team-one.vercel.app: 4 findings — client-side-sql-evidence + dangerous-html-sinks on OWASP sample loader",
+      "pentest-ground.com:81: 6 findings — postmessage-dom-xss-evidence + GuardianLeaks lab markers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnshop.vercel.app/* routes: 4–5 findings vs 10 OWASP demo panels — route-specific oracles needed",
-      "playhacklab.com: Vercel 404 Application not found — no deploy to scan",
-      "platform.sixhackacademy.com: login-gated CTF shell — challenge APIs behind auth",
+      "vulnshop.vercel.app/checkout: 4 findings — CSRF demo panel oracle still missing vs README",
+      "ansede.onrender.com/scan: shallow 1 finding — Render cold-start; static analyzer playground oracles not mapped",
       "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
@@ -151,6 +151,14 @@
     "hack-this-site-eta.vercel.app/cms/index.html": 39,
     "www.dvrag.com": 7,
     "playhacklab.com": 1,
-    "platform.sixhackacademy.com": 3
+    "platform.sixhackacademy.com": 3,
+    "vulnshop.vercel.app/checkout": 4,
+    "vulnshop.vercel.app/products/1": 5,
+    "red-team-one.vercel.app": 4,
+    "ansede.onrender.com/scan": 1,
+    "pentest-fauxbank.vercel.app/accounts": 9,
+    "hermes-codex.vercel.app": 4,
+    "pentest-ground.com:81": 6,
+    "codeex-ai.vercel.app": 4
   }
 }
