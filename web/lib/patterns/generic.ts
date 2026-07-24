@@ -14953,6 +14953,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ssrf-proxy-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SSRF proxy fetches attacker URL",
+    description:
+      "GET /ssrf/proxy?target= fetches the supplied URL server-side and returns the proxied response body — the Burp Bounty SSRF proxy profile oracle.",
+    impactOneline:
+      "Live SSRF proxy probe confirms server-side fetch oracle distinct from /ssrf/fetch hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySsrfProxyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to attacker-controlled URLs.",
+      steps: [
+        "Allowlist outbound fetch destinations.",
+        "Disable URL parameters that trigger server-side HTTP clients.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/proxy endpoint fetches arbitrary URLs server-side. Show how to prevent SSRF in proxy endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xss-attribute-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab attribute-context XSS live oracle",
+    description:
+      "GET /xss/attribute?name= reflects the query parameter unescaped in input value, href, img src, and data attributes — the Burp Bounty attribute-context XSS profile oracle.",
+    impactOneline:
+      "Live attribute-context XSS probe confirms multi-sink reflection oracle distinct from reflected HTML XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssAttributeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode output for the specific HTML attribute context.",
+      steps: [
+        "HTML-encode attribute values before rendering.",
+        "Use Content-Security-Policy to mitigate inline XSS.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/attribute endpoint reflects user input in href and value attributes. Show attribute-context XSS prevention.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-redirect-login-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab login form open redirect live oracle",
+    description:
+      "GET /redirect/login?url= sets the login form POST action and post-login redirect message to an attacker-controlled URL — the Burp Bounty login open-redirect profile oracle.",
+    impactOneline:
+      "Live login redirect probe confirms credential-phishing form action oracle distinct from HTTP 302 redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRedirectLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets and never set form actions from user input.",
+      steps: [
+        "Allowlist post-login redirect destinations.",
+        "Use relative paths only for form actions.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/login endpoint sets form action to attacker URLs. Show how to validate login redirect parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
