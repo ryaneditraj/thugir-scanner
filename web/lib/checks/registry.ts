@@ -22491,23 +22491,27 @@ const clientSideXvwaEvidence: Rule = async (ctx) => {
 const CLIENT_XVWA_PHP_MODULE_RES: { label: string; re: RegExp }[] = [
   {
     label: "XVWA IDOR item lookup module",
-    re: /Insecure Direct Object Reference[\s\S]{0,700}select itemid from caffaine/i
+    re: /Insecure Direct Object Reference[\s\S]{0,1200}select itemid from caffaine/i
   },
   {
     label: "XVWA CSRF password change form",
-    re: /Cross Site Request Forgery \(CSRF\)[\s\S]{0,700}name=["']passwd["']/i
+    re: /Cross Site Request Forgery \(CSRF\)[\s\S]{0,1200}name=["']passwd["']/i
   },
   {
     label: "XVWA SSTI Twig template engine",
-    re: /Server Side Template Injection \(SSTI\)[\s\S]{0,700}Twig_Loader_String/i
+    re: /Server Side Template Injection \(SSTI\)[\s\S]{0,1200}Twig_Loader_String/i
   },
   {
-    label: "XVWA SQLi error-based search form",
-    re: /SQL Injection[\s\S]{0,200}Error Based[\s\S]{0,500}mysqli_report/i
+    label: "XVWA SQLi error-based mysqli module",
+    re: /SQL Injection[\s\S]{0,80}Error Based[\s\S]{0,2000}mysqli_report/i
+  },
+  {
+    label: "XVWA reflected XSS echo GET item",
+    re: /Cross Site Scripting \(XSS\)[\s\S]{0,1200}echo\s+\$_GET\s*\[\s*['"]item['"]\s*\]/i
   },
   {
     label: "XVWA SSRF URL grabber module",
-    re: /SSRF\s*\/\s*XSPA[\s\S]{0,500}(?:curl_exec|file_get_contents)\s*\(/i
+    re: /SSRF\s*\/\s*XSPA[\s\S]{0,1200}(?:curl_exec|file_get_contents)\s*\(/i
   }
 ];
 

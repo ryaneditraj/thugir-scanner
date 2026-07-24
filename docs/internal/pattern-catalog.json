@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T09:15:04.714Z",
-  "total": 668,
-  "uniqueSlugs": 666,
+  "generatedAt": "2026-07-24T10:06:31.373Z",
+  "total": 671,
+  "uniqueSlugs": 669,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 650,
+    "generic": 653,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 596,
+    "deep": 599,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 168,
+    "Broken access control": 169,
     "Exposed secret": 17,
     "Source exposure": 6,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 46,
     "Security misconfiguration": 56,
     "Broken authentication": 49,
-    "Injection": 135,
+    "Injection": 137,
     "Cross-site scripting": 109,
     "general": 18,
     "SSRF": 1,
@@ -394,6 +394,8 @@
     "client-side-pwnedlabs-git-secrets-evidence",
     "client-side-pwning-juice-shop-companion-evidence",
     "client-side-pwnshop-evidence",
+    "client-side-pwnshop-path-traversal-oracle",
+    "client-side-pwnshop-ssti-oracle",
     "client-side-pygoat-evidence",
     "client-side-qamax-adversary-evidence",
     "client-side-railsgoat-evidence",
@@ -547,6 +549,7 @@
     "client-side-xss-quiz-evidence",
     "client-side-xss-victim-bank-evidence",
     "client-side-xvwa-evidence",
+    "client-side-xvwa-php-module-evidence",
     "client-side-xxe-evidence",
     "client-side-yogsec-xss-lab-module-evidence",
     "client-side-yogsec-xss-labs-evidence",
