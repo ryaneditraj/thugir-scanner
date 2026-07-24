@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T12:04:28.412Z",
+  "updated_at": "2026-07-24T13:05:30.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/ssrf/fetch",
+      "source": "BountySecurity/BurpBountyLab — SSRF URL-fetch profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/ping",
+      "source": "BountySecurity/BurpBountyLab — command-injection RCE ping profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/pt/read",
+      "source": "BountySecurity/BurpBountyLab — Linux path-traversal file-read profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/graphql",
+      "source": "BountySecurity/BurpBountyLab — GraphQL introspection/injection profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xxe/parse",
+      "source": "BountySecurity/BurpBountyLab — XXE XML parser profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
       "source": "r007sec/pwnshop README — interactive 45-vuln index at /vulnerabilities (OSS deploy)",

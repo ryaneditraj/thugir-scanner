@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T13:03:51.422Z",
+  "updated_at": "2026-07-24T13:08:31.919Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2347,
-  "total_findings": 13821,
+  "total_sites_scanned": 2355,
+  "total_findings": 13917,
   "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1731,
-  "discovery_findings": 11204,
+  "discovery_urls_added": 1736,
+  "discovery_findings": 11300,
   "improvements_shipped": 1039,
-  "last_run": "2026-07-24T13:03:51.422Z",
+  "last_run": "2026-07-24T13:08:31.919Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings, pages=6 probes=295); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,35 +50,45 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 27,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 96,
+      "skipped_48h": [
+        "https://pwnshop.ctfsecurity.com/vulnerabilities",
+        "https://pwnshop.ctfsecurity.com/debug/info",
+        "https://pwnshop.ctfsecurity.com/api/v1/events",
+        "https://vulnshop.vercel.app/orders",
+        "https://oauthlabs.com/"
+      ],
       "dns_failures": [],
-      "focus": "Burp Bounty Lab route-specific XSS/SQLi/SSTI live oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "Burp Bounty Lab SSRF/RCE/path-traversal/GraphQL/XXE route oracles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/xss/reflect: reflected XSS live oracle (6→9 findings)",
-      "burpbountylab.com/sqli/login: SQLi login bypass live oracle (6→9 findings)",
-      "burpbountylab.com/ssti/preview: SSTI render live oracle via /ssti/render?template={{7*7}} (6→9 findings)",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 13 findings incl sql-error-disclosure + reflected-xss",
-      "oauthlabs.com: 5 findings incl oauth-oidc-metadata-exposed"
+      "burpbountylab.com/ssrf/fetch: 9 findings incl burpbounty-xss/sqli/ssti live oracles + graphql-introspection-enabled",
+      "burpbountylab.com/rce/ping: 9 findings — hub bundle fingerprint; route-specific RCE oracle not yet distinct",
+      "burpbountylab.com/pt/read: 9 findings — path-traversal route shares hub passive triggers",
+      "burpbountylab.com/graphql: 9 findings incl graphql-introspection-enabled",
+      "burpbountylab.com/xxe/parse: 9 findings — XXE route-specific slug not yet distinct",
+      "hack-this-site-eta.vercel.app/owasp: 46 findings incl exposed-source-maps + vibe-unauthenticated-api-routes"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "primary Heroku 503 on first pass — wake retry may be required for sqli/idor categories",
-      "pwnshop /debug/info route pages shallow — PWN-018/PWN-005 live exploit oracles not distinct from hub bundle fingerprint"
+      "burpbountylab route pages share hub fingerprint — SSRF/RCE/XXE route-specific live oracles not yet distinct from XSS/SQLi/SSTI slugs",
+      "pwnshop/oauthlabs/vulnshop queue head skipped 48h — deeper queue drain reached escape.tech + HTB Academy"
     ]
   },
   "discovery_highlights": {
-    "burpbountylab.com/xss/reflect": 9,
-    "burpbountylab.com/sqli/login": 9,
-    "burpbountylab.com/ssti/preview": 9,
-    "burpbountylab.com/ssti/render": 9,
-    "burpbountylab.com": 10,
+    "burpbountylab.com/ssrf/fetch": 9,
+    "burpbountylab.com/rce/ping": 9,
+    "burpbountylab.com/pt/read": 9,
+    "burpbountylab.com/graphql": 9,
+    "burpbountylab.com/xxe/parse": 9,
+    "hack-this-site-eta.vercel.app/owasp": 46,
+    "escape.tech/academy/sql-injection": 2,
+    "academy.hackthebox.com/module/details/88": 3,
     "vampi-production.up.railway.app/ui": 7,
     "urban-vampi-production.up.railway.app/ui": 7,
     "pwnshop.ctfsecurity.com/seller/preview": 13,
