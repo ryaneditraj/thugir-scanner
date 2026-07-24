@@ -6965,6 +6965,24 @@
       "slug": "pwnshop-events-audit-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET https://pwnshop.ctfsecurity.com/api/v1/events returns {\"count\":N,\"logs\":[{\"action\":\"...\",\"detail\":\"...\"}]} without auth; pwnshop.ctfsecurity.com/api/v1/events findings 15; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-cors-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cors/api/data with Origin https://evil-cors-probe.example returns ACAO echo + credentials + user JSON; burpbountylab.com/cors/api/data findings 12→17; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pt-read-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/pt/read?file=../../../etc/passwd returns root:x:0:0: passwd lines; burpbountylab.com/pt/read findings 9→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crlf-set-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/crlf/set?lang=canary reflects unsanitized value in Set-Cookie and X-Custom-Lang headers; burpbountylab.com/crlf/set findings 0→16; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12192,6 +12210,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-events-audit-live-oracle",
       "shipped_at": "2026-07-24T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-cors-live-oracle",
+      "shipped_at": "2026-07-24T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pt-read-live-oracle",
+      "shipped_at": "2026-07-24T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crlf-set-live-oracle",
+      "shipped_at": "2026-07-24T15:10:00.000Z"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T15:05:43.398Z",
+  "updated_at": "2026-07-24T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1746,
   "discovery_findings": 11603,
-  "improvements_shipped": 1045,
-  "last_run": "2026-07-24T15:05:43.398Z",
+  "improvements_shipped": 1049,
+  "last_run": "2026-07-24T15:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall with deep crawl (pages=6 probes=295); secret-resend slug still absent",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -61,30 +61,29 @@
         "http://burpbountylab.com/passive/secrets"
       ],
       "dns_failures": [],
-      "focus": "BurpBountyLab CRLF, AI/LLM disclosure, Spring actuator, Swagger, .git exposure + HackThisSite API labs",
-      "improvements_shipped_this_run": 0
+      "focus": "BurpBountyLab route-specific CORS, path traversal, and CRLF live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 first-pass (10 findings pages=6 probes=295)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "burpbountylab.com/cors/api/data: burpbounty-cors-live-oracle — reflects evil Origin with credentials (12→17 findings)",
+      "burpbountylab.com/pt/read: burpbounty-pt-read-live-oracle — /etc/passwd via ../../../ traversal (9→16 findings)",
+      "burpbountylab.com/crlf/set: burpbounty-crlf-set-live-oracle — unsanitized lang in Set-Cookie + X-Custom-Lang (13→16 findings)",
       "burpbountylab.com/actuator/env: 14 findings incl spring-boot-actuator-exposed route hit",
-      "burpbountylab.com/ai/v1/chat/completions: 13 findings — hub fingerprint + vibe-openapi-docs-exposed",
-      "burpbountylab.com/swagger-ui.html: 13 findings incl vibe-openapi-docs-exposed",
-      "burpbountylab.com/.git/HEAD: 13 findings — git exposure via hub crawl",
-      "burpbountylab.com/crlf/set: 13 findings — route-specific CRLF oracle still absent (hub fingerprint)",
       "hack-this-site-eta.vercel.app/api/cors: 42 findings (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab route pages still share hub fingerprint — CRLF/AI route-specific oracles not yet distinct",
-      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds"
+      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds",
+      "burpbountylab AI/LLM disclosure routes still share hub fingerprint — route-specific oracles not yet distinct"
     ]
   },
   "discovery_highlights": {
     "burpbountylab.com": 15,
     "burpbountylab.com/ssrf/fetch": 9,
     "burpbountylab.com/rce/ping": 13,
-    "burpbountylab.com/pt/read": 9,
+    "burpbountylab.com/pt/read": 16,
     "burpbountylab.com/graphql": 9,
     "burpbountylab.com/xxe/parse": 13,
     "burpbountylab.com/xss/reflect": 9,
@@ -93,9 +92,9 @@
     "burpbountylab.com/xss/dom": 12,
     "burpbountylab.com/xss/js": 11,
     "burpbountylab.com/redirect/goto": 15,
-    "burpbountylab.com/cors/api/data": 12,
+    "burpbountylab.com/cors/api/data": 17,
+    "burpbountylab.com/crlf/set": 16,
     "burpbountylab.com/passive/secrets": 16,
-    "burpbountylab.com/crlf/set": 13,
     "burpbountylab.com/ai/v1/chat/completions": 13,
     "burpbountylab.com/actuator/env": 14,
     "burpbountylab.com/swagger-ui.html": 13,
