@@ -6761,6 +6761,24 @@
       "slug": "vulnlab-admin-secrets-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/secrets returns audit Secret Exposure + apiKey/jwtSecret/dbPassword JSON; admin/console.html findings 29→33; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-git-head-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /git/HEAD returns ref: refs/heads/main (distinct from /.git/HEAD http_probe); hack-this-site-eta.vercel.app/git/HEAD findings 15→16+ when reachable; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-php-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/platform/phpinfo returns PHP Version 5.6.40 + GET /api/include?page=../../etc/passwd returns /etc/passwd root:x:0:0; platform/php.html findings 31→32+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-node-java-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/platform/node returns vulnerable-node-app express 4.16.0 + GET /api/platform/java returns /actuator/env log4j 2.14.1; platform/node.html+java.html findings 31→32+; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11828,6 +11846,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-admin-secrets-live-oracle",
       "shipped_at": "2026-07-24T02:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-git-head-live-oracle",
+      "shipped_at": "2026-07-24T03:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-php-live-oracle",
+      "shipped_at": "2026-07-24T03:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-platform-node-java-live-oracle",
+      "shipped_at": "2026-07-24T03:17:38.000Z"
     }
   ]
 }
