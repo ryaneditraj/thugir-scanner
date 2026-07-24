@@ -10273,6 +10273,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-platform-ruby-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VulnLab Ruby platform lab exposes Rails secret_key_base",
+    description:
+      "GET /api/platform/ruby returns rails version and secretKeyBase without authentication — confirming Rails secret disclosure training oracle.",
+    impactOneline:
+      "Live Ruby platform probe confirms secret_key_base leak for /platform/ruby.html lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabPlatformRubyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose secret_key_base and gate Ruby platform lab APIs behind authentication.",
+      steps: [
+        "Store secret_key_base in environment variables only.",
+        "Remove public /api/platform/ruby metadata endpoints.",
+        "Rotate compromised Rails signing secrets immediately."
+      ]
+    },
+    fixPrompt:
+      "Our /api/platform/ruby leaks secretKeyBase. Show how to protect Rails credentials in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-platform-aspnet-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab ASP.NET platform labs expose ViewState and debug web.config",
+    description:
+      "GET /api/platform/aspnet returns ViewState metadata with debug:true and GET /backup/web.config.bak exposes compilation debug=true without authentication.",
+    impactOneline:
+      "Live ASP.NET platform probes confirm ViewState analyzer and web.config backup oracles for /platform/aspnet.html lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabPlatformAspnetLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable debug compilation and restrict ViewState metadata exposure.",
+      steps: [
+        "Set compilation debug=false in production web.config.",
+        "Remove public /backup/web.config.bak from the web root.",
+        "Gate /api/platform/aspnet behind authenticated lab sessions."
+      ]
+    },
+    fixPrompt:
+      "Our ASP.NET platform lab leaks ViewState and a debug web.config backup. Show secure IIS/ASP.NET hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-vulnlab-ruby-platform-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VulnLab Ruby/Rails platform labs disclosed",
+    description:
+      "VulnLab Academy Ruby platform page documents RUBY-002 mass assignment and RUBY-005 Rails Secret Finder training labs with /api/platform/ruby oracle paths.",
+    impactOneline:
+      "Ruby platform lab HTML documents mass assignment and secret_key_base hunting training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVulnlabRubyPlatformEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public Ruby platform lab documentation from production surfaces.",
+      steps: [
+        "Gate /platform/ruby.html behind authenticated lab sessions.",
+        "Do not expose secret_key_base hunting walkthroughs in production HTML.",
+        "Restrict /api/platform/ruby to internal training environments."
+      ]
+    },
+    fixPrompt:
+      "Our Ruby platform lab page documents mass assignment and secret_key_base exercises publicly. Show how to gate training content.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-python-platform-evidence",
     platform: "generic",
     category: "Injection",
