@@ -6871,6 +6871,86 @@ const burpbountyCrlfSetLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyXssJsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirJS${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/js", ctx.origin);
+  probeUrl.searchParams.set("value", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  const inJsString = new RegExp(
+    `["']${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`
+  ).test(doc.body);
+  if (!inJsString) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /xss/js?value= reflects query parameter unescaped inside JavaScript string literals — JS-context XSS profile oracle"
+    }
+  };
+};
+
+const burpbountySqliSearchLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/sqli/search", ctx.origin);
+  probeUrl.searchParams.set("q", "'");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 600) return NEGATIVE;
+  const sqlMarker = SQL_ERROR_MARKERS.find((re) => re.test(doc.body));
+  if (!sqlMarker) return NEGATIVE;
+  const match = doc.body.match(sqlMarker);
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /sqli/search?q=' returns multi-database SQL syntax errors — error-based SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountyAiDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/v1/chat/completions", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const h = doc.headers;
+  const aiHeaders: Record<string, string> = {};
+  for (const key of [
+    "x-ai-backend",
+    "x-llm-provider",
+    "x-rag-provider",
+    "x-mcp-enabled",
+    "x-openai-model",
+    "x-api-key"
+  ]) {
+    const val = (h[key] || "").trim();
+    if (val) aiHeaders[key] = val.slice(0, 80);
+  }
+  if (Object.keys(aiHeaders).length < 2) return NEGATIVE;
+  const hasChatJson =
+    /"object"\s*:\s*"chat\.completion"/i.test(doc.body) ||
+    /"choices"\s*:\s*\[/.test(doc.body);
+  if (!hasChatJson && !aiHeaders["x-ai-backend"]) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: aiHeaders["x-api-key"] ? 0.94 : 0.91,
+    evidence: {
+      url: probeUrl,
+      headers: aiHeaders,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /ai/v1/chat/completions exposes LLM gateway headers (backend, provider, MCP/RAG metadata) and chat completion JSON — AI infrastructure disclosure profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -31752,6 +31832,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyCorsLiveOracle,
   burpbountyPtReadLiveOracle,
   burpbountyCrlfSetLiveOracle,
+  burpbountyXssJsLiveOracle,
+  burpbountySqliSearchLiveOracle,
+  burpbountyAiDisclosureLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

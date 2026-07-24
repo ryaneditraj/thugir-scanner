@@ -14797,6 +14797,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-xss-js-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab JavaScript-context XSS live oracle",
+    description:
+      "GET /xss/js?value= reflects the query parameter unescaped inside JavaScript string literals (var userData = \"...\").",
+    impactOneline:
+      "Live JS-context XSS oracle on Burp Bounty Lab confirms attribute/script injection profile coverage beyond reflected HTML XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssJsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before embedding in JavaScript string literals.",
+      steps: [
+        "Use JSON.stringify() when injecting dynamic values into script blocks.",
+        "Avoid reflecting query parameters directly into inline JavaScript.",
+        "Isolate Burp Bounty Lab JS-context XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/js endpoint reflects value= into JavaScript strings without encoding. Show how to prevent JS-context XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-search-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab error-based SQLi search live oracle",
+    description:
+      "GET /sqli/search?q=' returns multi-database SQL syntax error messages (MySQL, Oracle, PostgreSQL, MSSQL).",
+    impactOneline:
+      "Live error-based SQLi oracle on Burp Bounty Lab confirms search-parameter injection profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliSearchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and suppress database error messages in production.",
+      steps: [
+        "Bind search parameters with prepared statements.",
+        "Return generic error pages instead of SQL syntax details.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/search endpoint leaks SQL syntax errors on q='. Show how to use parameterized queries and hide DB errors.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ai-disclosure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI/LLM gateway headers disclosed",
+    description:
+      "GET /ai/v1/chat/completions returns OpenAI-compatible JSON plus X-AI-Backend, X-LLM-Provider, X-RAG-Provider, and X-MCP-Enabled response headers.",
+    impactOneline:
+      "Live AI infrastructure disclosure oracle on Burp Bounty Lab confirms LLM gateway fingerprinting profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal LLM gateway headers from public API responses.",
+      steps: [
+        "Remove X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled from outward-facing responses.",
+        "Do not expose API keys in response headers.",
+        "Isolate Burp Bounty Lab AI disclosure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/v1/chat/completions endpoint leaks LLM gateway headers. Show how to strip internal AI metadata from API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

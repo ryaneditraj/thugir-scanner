@@ -1426,6 +1426,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountyCorsLiveOracle",
   "burpbountyPtReadLiveOracle",
   "burpbountyCrlfSetLiveOracle",
+  "burpbountyXssJsLiveOracle",
+  "burpbountySqliSearchLiveOracle",
+  "burpbountyAiDisclosureLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
@@ -4199,12 +4202,15 @@ function extractBurpBountyLabSeeds(html: string, pageUrl: string): string[] {
   for (const p of [
     "/xss/reflect?q=test",
     "/xss/dom?msg=test",
+    "/xss/js?value=test",
     "/sqli/search?q=laptop",
     "/sqli/user?id=1",
     "/sqli/login",
     "/ssrf/fetch?url=http://example.com",
     "/ssti/render?template={{7*7}}",
-    "/ssti/preview"
+    "/ssti/preview",
+    "/ai/v1/chat/completions",
+    "/redirect/goto?url=/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
