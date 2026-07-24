@@ -6951,6 +6951,78 @@ const burpbountyAiDisclosureLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyRceEvalLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/rce/eval", ctx.origin);
+  probeUrl.searchParams.set("code", "7*7");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const evaluated =
+    /<pre>\s*49\s*<\/pre>/i.test(doc.body) ||
+    (/Result/i.test(doc.body) && /<pre>\s*49\b/.test(doc.body));
+  if (!evaluated) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      probe: "7*7",
+      result: "49",
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /rce/eval?code= evaluates attacker-supplied expressions (7*7→49) — code injection/RCE profile oracle"
+    }
+  };
+};
+
+const burpbountyDrupalUserDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/drupal/user/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const adminProfile =
+    /<h1>\s*User:\s*admin\s*<\/h1>/i.test(doc.body) &&
+    /Member since:/i.test(doc.body);
+  if (!adminProfile) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /drupal/user/1 exposes admin user profile (username + member-since) without authentication — IDOR/user enumeration profile oracle"
+    }
+  };
+};
+
+const burpbountyPassiveSecretsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/passive/secrets", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const secretMarkers: { label: string; re: RegExp }[] = [
+    { label: "AWS access key", re: /AKIA[0-9A-Z]{16}/ },
+    { label: "Stripe live secret", re: /sk_live_[0-9a-zA-Z]{20,}/ },
+    { label: "RSA private key", re: /-----BEGIN RSA PRIVATE KEY-----/ },
+    { label: "Slack token", re: /xox[a-z]-[0-9-]+/i },
+    { label: "Google API key", re: /AIza[0-9A-Za-z_-]{20,}/ }
+  ];
+  const hits = secretMarkers
+    .filter(({ re }) => re.test(doc.body))
+    .map(({ label }) => label);
+  if (hits.length < 2) return NEGATIVE;
+  if (!/Configuration Panel|aws_config|secretAccessKey/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.93 : 0.9,
+    evidence: {
+      url: probeUrl,
+      secretTypes: hits.slice(0, 5),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /passive/secrets embeds AWS, Stripe, SSH, and Slack credentials in client-side JavaScript — passive secret scanner profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -31835,6 +31907,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyXssJsLiveOracle,
   burpbountySqliSearchLiveOracle,
   burpbountyAiDisclosureLiveOracle,
+  burpbountyRceEvalLiveOracle,
+  burpbountyDrupalUserDisclosureLiveOracle,
+  burpbountyPassiveSecretsLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
