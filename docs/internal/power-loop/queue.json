@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-23T23:09:00.000Z",
+  "updated_at": "2026-07-24T00:00:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api-labs/graphql.html",
+      "source": "dkyazzentwatwa/hack-this-site — GraphQL introspection/injection API lab (GitHub api-labs/graphql.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api-labs/soap.html",
+      "source": "dkyazzentwatwa/hack-this-site — SOAP/XML API security testing lab (GitHub api-labs/soap.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/drupal.html",
+      "source": "dkyazzentwatwa/hack-this-site — Drupal CMS vulnerability training surface (GitHub cms/ tree)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/cms/joomla.html",
+      "source": "dkyazzentwatwa/hack-this-site — Joomla CMS vulnerability training surface (GitHub cms/ tree)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xss-attacker.vercel.app/api/collect",
+      "source": "Swarnadip-Kar/xss-attacker — XSS C2 cookie-collect API endpoint paired with xss-victim bank (GitHub README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/api/auth/login",
       "source": "dkyazzentwatwa/hack-this-site — weak login API oracle (README api/auth/login)",
