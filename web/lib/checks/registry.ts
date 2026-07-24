@@ -7326,6 +7326,78 @@ const burpbountyPtReadwinLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyXssTagLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirTag${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/tag", ctx.origin);
+  probeUrl.searchParams.set("input", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const inDiv = new RegExp(`<div>\\s*${escaped}\\s*<\\/div>`, "i").test(doc.body);
+  const inParagraph = new RegExp(`More content after:\\s*${escaped}`, "i").test(doc.body);
+  if (!inDiv && !inParagraph) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: inDiv && inParagraph ? 0.92 : 0.9,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /xss/tag?input= reflects query param unescaped inside div and paragraph tags — tag-context XSS profile oracle"
+    }
+  };
+};
+
+const burpbountyXssCommentLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirComment${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/comment", ctx.origin);
+  probeUrl.searchParams.set("data", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const inDebugComment = new RegExp(`<!--\\s*Debug info:\\s*${escaped}`, "i").test(doc.body);
+  const inUserComment = new RegExp(`<!--\\s*User input:\\s*${escaped}`, "i").test(doc.body);
+  if (!inDebugComment && !inUserComment) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: inDebugComment && inUserComment ? 0.92 : 0.9,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /xss/comment?data= reflects query param unescaped inside HTML comments — comment-context XSS profile oracle"
+    }
+  };
+};
+
+const burpbountySsrfSchemeLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssrf/scheme", ctx.origin);
+  probeUrl.searchParams.set("url", "file:///etc/passwd");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const passwdLeak =
+    /root:x:0:0:/.test(doc.body) &&
+    /\/bin\/(?:bash|sh|false)/.test(doc.body) &&
+    /daemon:x:/.test(doc.body);
+  if (!passwdLeak) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      param: "url",
+      scheme: "file://",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /ssrf/scheme?url=file:///etc/passwd fetches local /etc/passwd via scheme bypass — SSRF profile oracle distinct from /ssrf/fetch http-only routes"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32224,6 +32296,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyXxeSoapLiveOracle,
   burpbountyXssBlindLiveOracle,
   burpbountyPtReadwinLiveOracle,
+  burpbountyXssTagLiveOracle,
+  burpbountyXssCommentLiveOracle,
+  burpbountySsrfSchemeLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

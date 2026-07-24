@@ -15239,6 +15239,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-xss-tag-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab tag-context XSS live oracle",
+    description:
+      "GET /xss/tag?input= reflects attacker input unescaped inside div and paragraph tags — the Burp Bounty tag-context XSS profile oracle.",
+    impactOneline:
+      "Live tag-context XSS probe confirms reflected XSS in HTML element text nodes distinct from attribute or script routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssTagLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode user input before inserting into tag text content.",
+      steps: [
+        "Encode <, >, and & in reflected query parameters before rendering in div/p elements.",
+        "Use a context-aware output encoding library for HTML text nodes.",
+        "Isolate Burp Bounty Lab XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/tag endpoint reflects the input parameter unescaped in div tags. Show HTML text-node encoding mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xss-comment-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab HTML-comment XSS live oracle",
+    description:
+      "GET /xss/comment?data= reflects attacker input unescaped inside HTML comments — the Burp Bounty comment-context XSS profile oracle.",
+    impactOneline:
+      "Live comment-context XSS probe confirms reflected XSS inside <!-- --> blocks distinct from body or attribute routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssCommentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input inside HTML comments without encoding -- sequences.",
+      steps: [
+        "Reject or encode -- and > characters in data reflected into HTML comments.",
+        "Avoid placing user input inside comment blocks entirely.",
+        "Isolate Burp Bounty Lab XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/comment endpoint reflects the data parameter inside HTML comments. Show comment-context XSS mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssrf-scheme-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab scheme-bypass SSRF live oracle",
+    description:
+      "GET /ssrf/scheme?url=file:///etc/passwd fetches local /etc/passwd via file:// scheme — the Burp Bounty scheme-bypass SSRF profile oracle.",
+    impactOneline:
+      "Live file:// SSRF probe confirms scheme bypass distinct from /ssrf/fetch http-only routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySsrfSchemeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict outbound fetchers to http/https schemes and block file://, gopher://, and other dangerous protocols.",
+      steps: [
+        "Allowlist http and https schemes before fetching attacker-supplied URLs.",
+        "Reject file://, gopher://, dict://, and localhost targets.",
+        "Isolate Burp Bounty Lab SSRF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/scheme endpoint fetches file:///etc/passwd. Show scheme allowlisting and SSRF mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

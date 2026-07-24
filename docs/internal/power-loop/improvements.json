@@ -7091,6 +7091,24 @@
       "slug": "burpbounty-pt-readwin-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/pt/readwin?file=..\\..\\windows\\win.ini returns [fonts] and MAPI=1; burpbountylab.com/pt/readwin findings 27→30; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-tag-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/tag?input=canary echoes unescaped in <div> and <p>More content after:; burpbountylab.com/xss/tag findings 33→36; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-comment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/comment?data=canary reflects inside <!-- Debug info: --> and <!-- User input: --> HTML comments; burpbountylab.com/xss/comment findings 33→36; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-scheme-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/scheme?url=file:///etc/passwd returns root:x:0:0:/root:/bin/bash in <pre>; burpbountylab.com/ssrf/scheme findings 33→36; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12418,6 +12436,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-pt-readwin-live-oracle",
       "shipped_at": "2026-07-24T21:16:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-tag-live-oracle",
+      "shipped_at": "2026-07-24T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-comment-live-oracle",
+      "shipped_at": "2026-07-24T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-scheme-live-oracle",
+      "shipped_at": "2026-07-24T22:10:00.000Z"
     }
   ]
 }
