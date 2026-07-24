@@ -2393,6 +2393,23 @@ async function probePostLoginSqlBypass(ctx: RuleContext): Promise<RuleResult | n
           }
         };
       }
+      if (
+        r.status === 200 &&
+        /Welcome\s+admin|logged in as admin|login successful/i.test(r.body) &&
+        !/invalid|failed|incorrect/i.test(r.body.slice(0, 400))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.91,
+          evidence: {
+            url: action,
+            method: "POST",
+            payload: username.slice(0, 40),
+            snippet: r.body.slice(0, 200).trim(),
+            note: "POST login accepted SQLi payload — authentication bypass confirmed in response body"
+          }
+        };
+      }
     }
   }
   return null;
@@ -2449,11 +2466,18 @@ async function probePostFormSqlDisclosure(ctx: RuleContext): Promise<RuleResult 
 // --- Server-side template injection (SSTI) via arithmetic probe ----------------
 const SSTI_PROBE_EXPR = "7*7";
 const SSTI_PROBE_RESULT = "49";
-const SSTI_FALLBACK_PATHS = ["/SSTI/lab1.php", "/ssti/lab1.php", "/ssti", "/template"];
+const SSTI_FALLBACK_PATHS = [
+  "/SSTI/lab1.php",
+  "/ssti/lab1.php",
+  "/ssti/render",
+  "/ssti",
+  "/template"
+];
 
 function extractSstiGetEndpoints(html: string, origin: string): { url: string; param: string }[] {
   const out: { url: string; param: string }[] = [];
-  const re = /<form[^>]*method\s*=\s*["']get["'][^>]*(?:action\s*=\s*["']([^"']*)["'])?[^>]*>([\s\S]*?)<\/form>/gi;
+  const re =
+    /<form(?![^>]*method\s*=\s*["']post["'])[^>]*(?:action\s*=\s*["']([^"']*)["'])?[^>]*>([\s\S]*?)<\/form>/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(html)) && out.length < 6) {
     const block = m[2];
@@ -2499,7 +2523,10 @@ const sstiTemplateInjection: Rule = async (ctx) => {
 
   const endpoints = [
     ...extractSstiGetEndpoints(ctx.combined, ctx.origin),
-    ...SSTI_FALLBACK_PATHS.map((p) => ({ url: new URL(p, ctx.origin).toString(), param: "name" }))
+    ...SSTI_FALLBACK_PATHS.map((p) => ({
+      url: new URL(p, ctx.origin).toString(),
+      param: /\/render$/i.test(p) ? "template" : "name"
+    }))
   ];
   const seen = new Set<string>();
   for (const { url, param } of endpoints) {
@@ -2513,7 +2540,8 @@ const sstiTemplateInjection: Rule = async (ctx) => {
     if (!r.body.includes(SSTI_PROBE_RESULT)) continue;
     const evaluatedInOutput =
       /Rendered output:[\s\S]{0,240}Hello,\s*49[!\s<]/i.test(r.body) ||
-      /Hello,\s*49[!\s<]/i.test(r.body.replace(/value\s*=\s*["'][^"']*["']/gi, ""));
+      /Hello,\s*49[!\s<]/i.test(r.body.replace(/value\s*=\s*["'][^"']*["']/gi, "")) ||
+      /class=["']output["'][^>]*>\s*49\s*</i.test(r.body);
     if (!evaluatedInOutput) continue;
     return {
       fired: true,
@@ -6587,6 +6615,93 @@ const clientSideBurpBountyLabEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Burp Bounty Lab catalogs XSS, SQLi, SSRF, SSTI, and XXE routes for testing Burp Bounty scanner profiles"
+    }
+  };
+};
+
+function isBurpBountyLabHost(ctx: RuleContext): boolean {
+  return /burpbountylab\.com/i.test(ctx.origin);
+}
+
+const burpbountyXssReflectLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/reflect", ctx.origin);
+  probeUrl.searchParams.set("q", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /xss/reflect echoes query parameter unescaped in HTML — reflected XSS profile oracle"
+    }
+  };
+};
+
+const burpbountySqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const action = new URL("/sqli/login", ctx.origin).toString();
+  const body = new URLSearchParams({ username: "admin' OR '1'='1", password: "x" }).toString();
+  const doc = await ctx.probe.get(action, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const sqlMarker = SQL_ERROR_MARKERS.find((re) => re.test(doc.body));
+  if (sqlMarker) {
+    const match = doc.body.match(sqlMarker);
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: action,
+        method: "POST",
+        sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+        snippet: doc.body.slice(0, 240).trim(),
+        note: "Burp Bounty Lab /sqli/login POST reflects SQL syntax error — SQLi profile oracle"
+      }
+    };
+  }
+  if (!/Welcome\s+admin/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: action,
+      method: "POST",
+      payload: "admin' OR '1'='1",
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /sqli/login accepts SQLi payload and returns Welcome admin — authentication bypass oracle"
+    }
+  };
+};
+
+const burpbountySstiRenderLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssti/render", ctx.origin);
+  probeUrl.searchParams.set("template", "{{7*7}}");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const evaluated =
+    /class=["']output["'][^>]*>\s*49\s*</i.test(doc.body) ||
+    /Hello,\s*49[!\s<]/i.test(doc.body.replace(/value\s*=\s*["'][^"']*["']/gi, ""));
+  if (!doc.body.includes("49") || !evaluated) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      probe: "{{7*7}}",
+      result: "49",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /ssti/render evaluates template={{7*7}} to 49 — SSTI profile oracle"
     }
   };
 };
@@ -31407,6 +31522,9 @@ export const RULES: Record<string, Rule> = {
   clientSideEpicdetectEvidence,
   clientSideAlfServiceworkerEvidence,
   clientSideBurpBountyLabEvidence,
+  burpbountyXssReflectLiveOracle,
+  burpbountySqliLoginLiveOracle,
+  burpbountySstiRenderLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

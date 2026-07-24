@@ -14485,6 +14485,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-xss-reflect-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab reflected XSS live oracle",
+    description:
+      "GET /xss/reflect?q= echoes the query parameter unescaped in HTML — the Burp Bounty reflected-XSS profile practice endpoint.",
+    impactOneline:
+      "Live reflected XSS oracle on Burp Bounty Lab training routes confirms scanner profile coverage without hub-only fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssReflectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Burp Bounty Lab is intentional scanner training — isolate XSS routes from production.",
+      steps: [
+        "Run Burp Bounty Lab only on isolated lab networks.",
+        "Encode or sanitize all reflected query parameters in production apps.",
+        "Use Burp Bounty profiles only against authorized staging targets."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/reflect endpoint echoes user input. Show how to HTML-encode reflected search terms.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SQLi login live oracle",
+    description:
+      "POST /sqli/login with admin' OR '1'='1 returns Welcome admin or SQL syntax errors — the Burp Bounty SQLi login-form profile oracle.",
+    impactOneline:
+      "Live SQLi login oracle on Burp Bounty Lab confirms authentication-bypass and error-based injection profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never concatenate login input into SQL.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements.",
+        "Return generic login failure messages without SQL error details.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our login form builds SQL from username/password. Show parameterized queries and generic error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssti-render-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab SSTI render live oracle",
+    description:
+      "GET /ssti/render?template={{7*7}} evaluates arithmetic to 49 in the output div — the Burp Bounty SSTI template-render profile oracle.",
+    impactOneline:
+      "Live SSTI oracle on Burp Bounty Lab confirms server-side template injection profile coverage beyond hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySstiRenderLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines without a strict sandbox.",
+      steps: [
+        "Use logic-less templates or sandboxed rendering contexts.",
+        "Reject template syntax characters in user-controlled fields.",
+        "Isolate Burp Bounty Lab SSTI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssti/render endpoint evaluates user templates. Show how to sandbox template rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

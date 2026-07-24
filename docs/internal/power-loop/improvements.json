@@ -6911,6 +6911,24 @@
       "slug": "insecure-tls-lab-host-retry",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bugbait.io CERT_HAS_EXPIRED blocked reachTarget; fetchInsecureHttpsDoc allowlist enables VWAD cross-origin BugBait crawl; benchmark juice-shop-staging 10 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current social feeds)"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-reflect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/reflect?q=thugirXSScanary echoes canary in <p>You searched for:; burpbountylab.com/xss/reflect findings 6→9; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST http://burpbountylab.com/sqli/login username=admin' OR '1'='1 returns <h1>Welcome admin!</h1>; burpbountylab.com/sqli/login findings 6→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-render-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssti/render?template={{7*7}} returns <div class=\"output\">49</div>; burpbountylab.com/ssti/preview findings 6→9; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12093,6 +12111,21 @@
       "source": "discovery:bugbait.io",
       "slug": "insecure-tls-lab-host-retry",
       "shipped_at": "2026-07-24T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-reflect-live-oracle",
+      "shipped_at": "2026-07-24T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-login-live-oracle",
+      "shipped_at": "2026-07-24T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-render-live-oracle",
+      "shipped_at": "2026-07-24T12:10:00.000Z"
     }
   ]
 }

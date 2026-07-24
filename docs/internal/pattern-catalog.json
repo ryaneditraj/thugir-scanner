@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T11:09:08.388Z",
-  "total": 672,
-  "uniqueSlugs": 670,
+  "generatedAt": "2026-07-24T12:05:28.944Z",
+  "total": 675,
+  "uniqueSlugs": 673,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 654,
+    "generic": 657,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 600,
+    "deep": 603,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 46,
     "Security misconfiguration": 56,
     "Broken authentication": 49,
-    "Injection": 137,
-    "Cross-site scripting": 109,
+    "Injection": 139,
+    "Cross-site scripting": 110,
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
@@ -39,6 +39,9 @@
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "burpbounty-sqli-login-live-oracle",
+    "burpbounty-ssti-render-live-oracle",
+    "burpbounty-xss-reflect-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
