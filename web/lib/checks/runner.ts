@@ -1192,6 +1192,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopEvidence",
   "clientSidePwnshopSstiOracle",
   "clientSidePwnshopPathTraversalOracle",
+  "pwnshopDebugInfoLiveOracle",
   "clientSideVulnforgeAcademyEvidence",
   "clientSideVulnforgeEvidence",
   "clientSideVulnshopEvidence",
@@ -1417,6 +1418,8 @@ const DEEP_RULES = new Set<string>([
   "burpbountyXssReflectLiveOracle",
   "burpbountySqliLoginLiveOracle",
   "burpbountySstiRenderLiveOracle",
+  "burpbountySsrfFetchLiveOracle",
+  "burpbountyDomXssLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
@@ -3655,7 +3658,7 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
   }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const path of ["/vulnerabilities", "/seller/preview", "/download"]) {
+  for (const path of ["/vulnerabilities", "/seller/preview", "/download", "/debug/info", "/api/v1/events"]) {
     try {
       const u = new URL(path, pageUrl);
       if (u.origin !== pageOrigin) continue;

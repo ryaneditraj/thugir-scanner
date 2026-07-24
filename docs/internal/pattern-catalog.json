@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T12:05:28.944Z",
-  "total": 675,
-  "uniqueSlugs": 673,
+  "generatedAt": "2026-07-24T13:03:18.383Z",
+  "total": 678,
+  "uniqueSlugs": 676,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 657,
+    "generic": 660,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 603,
+    "deep": 606,
     "continuous": 0
   },
   "byCategory": {
@@ -28,18 +28,20 @@
     "Security misconfiguration": 56,
     "Broken authentication": 49,
     "Injection": 139,
-    "Cross-site scripting": 110,
+    "Cross-site scripting": 111,
     "general": 18,
     "SSRF": 1,
-    "Server-side request forgery": 8,
-    "Sensitive data exposure": 14,
+    "Server-side request forgery": 9,
+    "Sensitive data exposure": 15,
     "AI security": 37,
     "XSS": 1
   },
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "burpbounty-dom-xss-live-oracle",
     "burpbounty-sqli-login-live-oracle",
+    "burpbounty-ssrf-fetch-live-oracle",
     "burpbounty-ssti-render-live-oracle",
     "burpbounty-xss-reflect-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
@@ -621,6 +623,7 @@
     "phpmyadmin-exposed",
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
+    "pwnshop-debug-info-live-oracle",
     "redtiger-blind-login-form-evidence",
     "redtiger-classic-login-sql-evidence",
     "redtiger-command-injection-evidence",
