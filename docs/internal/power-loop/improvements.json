@@ -6707,6 +6707,24 @@
       "slug": "vulnlab-auth-login-enumeration-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login returns Invalid username vs Invalid password for unknown user vs wrong password; auth/login.html findings 22→28; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-backup-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /backup/config.old returns DB_USER=admin DB_PASS=passw0rd! JWT_SECRET=weaksecret; env-file.html sensitive_data recall 2→3+ when reachable; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-rest-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/users audit Broken Access Control + GET /api/orders/1001 audit IDOR Orders without auth; api-labs/rest.html findings 1→3+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-graphql-soap-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /data/graphql-schema.json exposes __schema types (no auth required) + GET /data/service.wsdl VulnerableService WSDL; api-labs/graphql.html findings 1→3+; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11729,6 +11747,21 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-auth-login-enumeration-live-oracle",
       "shipped_at": "2026-07-23T23:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-backup-config-live-oracle",
+      "shipped_at": "2026-07-24T00:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-rest-bola-live-oracle",
+      "shipped_at": "2026-07-24T00:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-graphql-soap-live-oracle",
+      "shipped_at": "2026-07-24T00:17:38.000Z"
     }
   ]
 }
