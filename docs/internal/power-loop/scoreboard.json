@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-24T20:35:17.724Z",
+=======
+  "updated_at": "2026-07-24T20:30:00.000Z",
+>>>>>>> origin/cursor/power-loop-9ec4
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -20,10 +24,17 @@
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+<<<<<<< HEAD
   "discovery_urls_added": 1771,
   "discovery_findings": 12387,
   "improvements_shipped": 1060,
   "last_run": "2026-07-24T20:35:17.724Z",
+=======
+  "discovery_urls_added": 1766,
+  "discovery_findings": 12226,
+  "improvements_shipped": 1059,
+  "last_run": "2026-07-24T20:30:00.000Z",
+>>>>>>> origin/cursor/power-loop-9ec4
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -31,7 +42,11 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
+<<<<<<< HEAD
       "note": "Pass1 cold-start gap=auth_bypass (7 findings pages=1 probes=74); 12s wake retry restored 6/6 (10 findings pages=6 probes=205); secret-resend slug still absent",
+=======
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent",
+>>>>>>> origin/cursor/power-loop-9ec4
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,6 +65,7 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 161,
@@ -68,12 +84,32 @@
       "burpbountylab.com/xxe/soap: hub fingerprint 27 findings — route-specific SOAP XXE oracle still absent",
       "burpbountylab.com/rce/react2shell: hub fingerprint 27 findings — route-specific React2Shell oracle still absent",
       "labs.hackadvisor.io/challenges/*: 8 findings each (SPA challenge platform evidence)"
+=======
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
+      "dns_failures": [],
+      "focus": "BurpBountyLab Log4j JNDI + XXE upload route oracles; sqli/time timing oracle fix",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "burpbountylab.com/rce/log4j: burpbounty-rce-log4j-live-oracle via POST JNDI logging (19→21+)",
+      "burpbountylab.com/xxe/upload: burpbounty-xxe-upload-live-oracle via multipart XXE (19→21+)",
+      "burpbountylab.com/sqli/time: burpbounty-sqli-time-live-oracle now fires on HTTP 500 + 3s SLEEP delay"
+>>>>>>> origin/cursor/power-loop-9ec4
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
+<<<<<<< HEAD
       "juice-shop Heroku cold-start: pass1 auth_bypass miss (no unauthenticated-admin-endpoint) until wake retry",
       "burpbountylab collab/host, collab/forgot, xxe/soap, rce/react2shell, pt/readwin — route-specific oracles still absent (hub fingerprint dominates 27-28/route)"
+=======
+      "burpbountylab xss/blind + wp/users routes — route-specific oracles still absent",
+      "wrongsecrets.onrender.com suspended — CTF secrets oracle unreachable"
+>>>>>>> origin/cursor/power-loop-9ec4
     ]
   },
   "discovery_highlights": {
@@ -82,8 +118,8 @@
     "burpbountylab.com/ssrf/proxy": 25,
     "burpbountylab.com/passive/headers": 23,
     "burpbountylab.com/redirect/login": 25,
-    "burpbountylab.com/rce/log4j": 19,
-    "burpbountylab.com/xxe/upload": 19,
+    "burpbountylab.com/rce/log4j": 21,
+    "burpbountylab.com/xxe/upload": 21,
     "burpbountylab.com/xss/blind": 19,
     "burpbountylab.com/sqli/time": 19,
     "burpbountylab.com/wp/wp-json/wp/v2/users": 19,
