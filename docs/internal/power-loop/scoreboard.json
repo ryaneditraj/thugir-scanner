@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-24T05:10:00.000Z",
-=======
-  "updated_at": "2026-07-24T05:04:50.465Z",
->>>>>>> 42acb6f (power-scan: benchmark + 5 discovery, 209 findings [05 UTC])
+  "updated_at": "2026-07-24T06:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,22 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2283,
-  "total_findings": 13241,
+  "total_sites_scanned": 2284,
+  "total_findings": 13251,
   "critical_findings": 41,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1701,
+  "discovery_urls_added": 1706,
   "discovery_findings": 10809,
-<<<<<<< HEAD
   "improvements_shipped": 1021,
-  "last_run": "2026-07-24T05:10:00.000Z",
-=======
-  "improvements_shipped": 1019,
-  "last_run": "2026-07-24T05:04:50.465Z",
->>>>>>> 42acb6f (power-scan: benchmark + 5 discovery, 209 findings [05 UTC])
+  "last_run": "2026-07-24T06:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -60,42 +51,19 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 209,
-      "skipped_48h": [
-        "hack-this-site-eta.vercel.app/admin/index.html",
-        "hack-this-site-eta.vercel.app/admin/users.html",
-        "hack-this-site-eta.vercel.app/auth/index.html"
-      ],
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
       "dns_failures": [],
-<<<<<<< HEAD
-      "focus": "HackThisSite home/platform hubs + OWASP WrongSecrets Render + Archon curriculum; parallel run shipped platform/python live oracle",
-      "improvements_shipped_this_run": 2
-=======
-      "focus": "HackThisSite home/platform hubs + OWASP WrongSecrets Render + Archon curriculum",
+      "focus": "OWASP Top 10 hub + CMS hub + DVRAG RAG pipeline + PlayHackLab + SixHack platform",
       "improvements_shipped_this_run": 0
->>>>>>> 42acb6f (power-scan: benchmark + 5 discovery, 209 findings [05 UTC])
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/home/index.html: 40 findings — richest hub SPA bundle (exposed-source-maps + graphql-introspection)",
-<<<<<<< HEAD
-      "hack-this-site-eta.vercel.app/platform/python.html: vulnlab-platform-python-live-oracle shipped (14→39 findings; GET /api/platform/python Werkzeug debug)",
-      "hack-this-site-eta.vercel.app/platform/ruby.html: 39 findings — Ruby platform cues surface",
-=======
-      "hack-this-site-eta.vercel.app/platform/ruby.html: 39 findings vs platform/python.html 14 — Ruby cues surface, Python still shallow",
->>>>>>> 42acb6f (power-scan: benchmark + 5 discovery, 209 findings [05 UTC])
-      "knowledge-vault-five.vercel.app/cybersecurity/: 13 findings incl client-side-archon-api-security-curriculum-evidence",
-      "wrongsecrets.onrender.com: shallow 1 finding (misconfig only) — secrets CTF oracles missed despite pages=6"
+      "secret-resend slug still absent on juice-shop benchmark"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "wrongsecrets.onrender.com: OWASP secrets CTF challenges not surfaced — only missing-security-headers on deep crawl",
-      "hack-this-site-eta home/platform hubs inherit identical SPA bundle — page-specific oracles still missing",
-<<<<<<< HEAD
-=======
-      "platform/python.html shallow (14) vs ruby/php/node/java (31–39) — Python-specific cues not surfaced",
->>>>>>> 42acb6f (power-scan: benchmark + 5 discovery, 209 findings [05 UTC])
       "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
@@ -163,11 +131,7 @@
     "hack-this-site-eta.vercel.app/admin/index.html": 36,
     "hack-this-site-eta.vercel.app/admin/users.html": 36,
     "hack-this-site-eta.vercel.app/platform/aspnet.html": 37,
-<<<<<<< HEAD
     "hack-this-site-eta.vercel.app/platform/python.html": 39,
-=======
-    "hack-this-site-eta.vercel.app/platform/python.html": 14,
->>>>>>> 42acb6f (power-scan: benchmark + 5 discovery, 209 findings [05 UTC])
     "hack-this-site-eta.vercel.app/home/index.html": 40,
     "hack-this-site-eta.vercel.app/platform/index.html": 40,
     "hack-this-site-eta.vercel.app/platform/ruby.html": 39,
