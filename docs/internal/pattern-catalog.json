@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-24T01:03:29.955Z",
-  "total": 650,
-  "uniqueSlugs": 648,
+  "generatedAt": "2026-07-24T02:15:14.972Z",
+  "total": 653,
+  "uniqueSlugs": 651,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 632,
+    "generic": 635,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 578,
+    "deep": 581,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 167,
-    "Exposed secret": 16,
+    "Exposed secret": 17,
     "Source exposure": 5,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -32,7 +32,7 @@
     "general": 18,
     "SSRF": 1,
     "Server-side request forgery": 8,
-    "Sensitive data exposure": 8,
+    "Sensitive data exposure": 10,
     "AI security": 36,
     "XSS": 1
   },
@@ -592,6 +592,7 @@
     "inline-state-secrets",
     "insecure-cookies",
     "juice-shop-forgotten-backup-disclosure",
+    "juice-shop-leaked-api-key",
     "leaky-jar-recipe-review-stored-xss",
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",
@@ -669,9 +670,11 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
+    "vulnlab-admin-secrets-live-oracle",
     "vulnlab-auth-login-enumeration-live-oracle",
     "vulnlab-auth-session-live-oracle",
     "vulnlab-backup-config-live-oracle",
+    "vulnlab-backup-db-sql-live-oracle",
     "vulnlab-clickjacking-live-oracle",
     "vulnlab-cms-drupal-joomla-live-oracle",
     "vulnlab-graphql-soap-live-oracle",

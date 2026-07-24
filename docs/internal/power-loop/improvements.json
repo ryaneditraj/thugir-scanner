@@ -6743,6 +6743,24 @@
       "slug": "oauth-oidc-metadata-exposed",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: auth0.oauthlabs.com/.well-known/openid-configuration returns issuer+token_endpoint; oauthOidcMetadataExposed now matches auth0 redirect via scanUrl hint; oauthlabs.com findings 2→5, auth0.oauthlabs.com 1→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-leaked-api-key",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juicy-coupon-bot commit 4fb403e currentCoupons.ts hardcodes apiKey 6PPi37DBxP4lDwlriuaxP15HaDJpsUXY5TspVmie; GET JuicyCouponFunc with X-API-Key returns discountCodes matching Bluesky [🤖] coupon posts; juice-shop.herokuapp.com findings 9→10, benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-backup-db-sql-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /backup/db.sql returns CREATE TABLE users + INSERT admin credentials; hack-this-site-eta.vercel.app/backup/db.sql findings 29→33; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-admin-secrets-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/secrets returns audit Secret Exposure + apiKey/jwtSecret/dbPassword JSON; admin/console.html findings 29→33; benchmark juice-shop 10 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11795,6 +11813,21 @@
       "source": "discovery:oauthlabs.com",
       "slug": "oauth-oidc-metadata-exposed",
       "shipped_at": "2026-07-24T01:17:38.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-leaked-api-key",
+      "shipped_at": "2026-07-24T02:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-backup-db-sql-live-oracle",
+      "shipped_at": "2026-07-24T02:17:38.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-admin-secrets-live-oracle",
+      "shipped_at": "2026-07-24T02:17:38.000Z"
     }
   ]
 }
