@@ -10429,6 +10429,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-dvrag-lab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "DVRAG Damn Vulnerable RAG Pipeline lab disclosed",
+    description:
+      "DVRAG publishes 25 deliberate RAG pipeline vulnerabilities with live unauthenticated /query, /fetch, and /admin/config API endpoints for security education.",
+    impactOneline:
+      "Public RAG attack lab documents cross-tenant retrieval, prompt injection, and SSRF oracles on www.dvrag.com.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvragLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not deploy deliberately vulnerable RAG pipelines on public internet hosts.",
+      steps: [
+        "Host RAG security labs on isolated training infrastructure.",
+        "Require authentication before any retrieval or admin API responds.",
+        "Remove live attack endpoints from marketing pages."
+      ]
+    },
+    fixPrompt:
+      "Our DVRAG lab exposes 25 RAG vulnerabilities with live /query and /fetch endpoints. Show how to isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvrag-admin-config-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "DVRAG admin LLM config exposed without authentication",
+    description:
+      "GET /admin/config returns system prompt, model parameters, and pipeline settings without authentication on DVRAG live mode.",
+    impactOneline:
+      "Live admin config probe confirms unauthenticated access to LLM system prompt and RAG pipeline configuration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvragAdminConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and authorization before exposing admin configuration APIs.",
+      steps: [
+        "Gate /admin/* behind authenticated admin sessions.",
+        "Never expose system prompts or model config to anonymous callers.",
+        "Audit RAG admin endpoints for broken access control."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/config returns LLM system prompt without auth. Show how to require admin authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvrag-rag-pipeline-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "DVRAG RAG pipeline leaks secrets via live query and corpus APIs",
+    description:
+      "POST /query returns confidential salaries and API keys; GET /corpus exposes cross-tenant documents; POST /fetch performs unvalidated server-side URL fetch.",
+    impactOneline:
+      "Live RAG pipeline probes confirm sensitive retrieval, cross-tenant corpus exposure, and SSRF on www.dvrag.com.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvragRagPipelineLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce tenant isolation, input validation, and authentication on all RAG pipeline endpoints.",
+      steps: [
+        "Require auth before /query and /corpus respond.",
+        "Validate and blocklist URLs in server-side fetch handlers.",
+        "Filter confidential chunks from retrieval results per tenant."
+      ]
+    },
+    fixPrompt:
+      "Our RAG /query and /corpus APIs leak confidential data without tenant checks. Show how to enforce isolation and auth.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",
