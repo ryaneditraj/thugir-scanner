@@ -1,358 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-23T03:13:01.407Z",
-      "url": "https://www.bugbountyhunter.com/challenge?id=11",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-evidence",
-          "title": "BugBountyHunter zseano challenge platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
-          "title": "BugBountyHunter numbered challenge scenario disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 292,
-      "status": "ok",
-      "scanned_at": "2026-07-23T03:13:01.407Z"
-    },
-    {
-      "run_id": "2026-07-23T03:13:21.138Z",
-      "url": "https://www.bugbountyhunter.com/challenge?id=12",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-evidence",
-          "title": "BugBountyHunter zseano challenge platform disclosed",
-          "severity": "medium",
-          "confidence": 0.89,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-bugbountyhunter-challenge-scenario-evidence",
-          "title": "BugBountyHunter numbered challenge scenario disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 292,
-      "status": "ok",
-      "scanned_at": "2026-07-23T03:13:21.138Z"
-    },
-    {
-      "run_id": "2026-07-23T03:13:39.251Z",
-      "url": "https://koadt.github.io/oss-oopssec-store/roadmap/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-csrf-evidence",
-          "title": "Client bundle documents CSRF-vulnerable transfer flows",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-oopssec-store-evidence",
-          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-oopssec-xff-sqli-evidence",
-          "title": "OopsSec Store X-Forwarded-For SQLi walkthrough disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 297,
-      "status": "ok",
-      "scanned_at": "2026-07-23T03:13:39.251Z"
-    },
-    {
-      "run_id": "2026-07-23T04:01:56.529Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 258,
-      "status": "ok",
-      "scanned_at": "2026-07-23T04:01:56.529Z"
-    },
-    {
-      "run_id": "2026-07-23T04:08:28.809Z",
-      "url": "https://echoctf.red/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 5,
-      "probes_run": 317,
-      "status": "ok",
-      "scanned_at": "2026-07-23T04:08:28.809Z"
-    },
-    {
-      "run_id": "2026-07-23T04:08:54.201Z",
-      "url": "https://hackersec.academy/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 319,
-      "status": "ok",
-      "scanned_at": "2026-07-23T04:08:54.201Z"
-    },
-    {
-      "run_id": "2026-07-23T04:09:04.398Z",
-      "url": "https://cmdchallenge.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 307,
-      "status": "ok",
-      "scanned_at": "2026-07-23T04:09:04.398Z"
-    },
-    {
-      "run_id": "2026-07-23T04:09:24.111Z",
-      "url": "https://12days.cmdchallenge.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 307,
-      "status": "ok",
-      "scanned_at": "2026-07-23T04:09:24.111Z"
-    },
-    {
       "run_id": "2026-07-23T04:09:44.650Z",
       "url": "https://oops.cmdchallenge.com/",
       "auth": "public_demo",
@@ -17967,6 +17615,343 @@
       "probes_run": 281,
       "status": "ok",
       "scanned_at": "2026-07-24T10:01:16.332Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:28.273Z",
+      "url": "https://vwad.owasp.org/app/yrprey/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:28.273Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:32.610Z",
+      "url": "https://vwad.owasp.org/app/burpbounty/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vwad-app-not-found-evidence",
+          "title": "OWASP VWAD app listing returns 404",
+          "severity": "low",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:32.610Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:35.895Z",
+      "url": "https://vwad.owasp.org/app/bugbait/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vwad-app-not-found-evidence",
+          "title": "OWASP VWAD app listing returns 404",
+          "severity": "low",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:35.895Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:38.819Z",
+      "url": "https://vwad.owasp.org/app/secure-by-design/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vwad-app-not-found-evidence",
+          "title": "OWASP VWAD app listing returns 404",
+          "severity": "low",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:38.819Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:42.287Z",
+      "url": "https://vwad.owasp.org/app/ffufme/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vwad-app-not-found-evidence",
+          "title": "OWASP VWAD app listing returns 404",
+          "severity": "low",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:42.287Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:45.744Z",
+      "url": "https://vwad.owasp.org/app/pygoat/",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-pygoat-evidence",
+          "title": "PyGoat Django OWASP Top 10 training lab disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:45.744Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:49.107Z",
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-node-application-dvna/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-dvna-evidence",
+          "title": "DVNA Node.js vulnerable application lab disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:49.107Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:52.639Z",
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-dvna-evidence",
+          "title": "DVNA Node.js vulnerable application lab disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:52.639Z"
     }
   ],
   "teacher_delta_runs": [
@@ -18541,6 +18526,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available. 09 UTC run: shallow crawl but full 6/6 recall; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (fauxbank/accounts, vulnshop checkout/products/1, pwnshop SSTI/download); pwnshop/seller/preview 10 + /download 9 findings; xvwa.vercel.app first scan 4 findings.",
       "scanned_at": "2026-07-24T09:15:19.696Z"
+    },
+    {
+      "run_id": "2026-07-24T10:07:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=281; gap=[])",
+      "teacher_delta": [],
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key present; vibe-unauthenticated-api-routes absent this pass but recall still 6/6; secret-resend slug still absent. Discovery: +5 VWAD catalog URLs (yrprey, burpbounty, bugbait, secure-by-design, ffufme) → 31 findings across 8 URLs; burpbounty/bugbait/secure-by-design/ffufme VWAD listings 404; pygoat + DVNA gained route-specific client-side-* oracles.",
+      "scanned_at": "2026-07-24T10:07:00.000Z"
     }
   ]
 }
