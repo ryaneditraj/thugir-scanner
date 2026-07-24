@@ -26870,6 +26870,130 @@ const vulnlabReconInternalMetricsLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- DVRAG Damn Vulnerable RAG Pipeline (www.dvrag.com) -----------------------------
+const CLIENT_DVRAG_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DVRAG lab title",
+    re: /Damn Vulnerable RAG Pipeline/i
+  },
+  {
+    label: "Deliberate vulnerability count",
+    re: /25\s+DELIBERATE\s+VULNERABILITIES/i
+  },
+  {
+    label: "RAG attack lab section",
+    re: /Attack Lab|#demo|fetch\s*\(\s*['"]\/query['"]/i
+  },
+  {
+    label: "Unauthenticated API endpoint docs",
+    re: /\/admin\/config|\/fetch['"]|endpoints are unauthenticated/i
+  },
+  {
+    label: "Cross-tenant RAG challenge",
+    re: /Cross-Tenant Data Theft|cross-tenant/i
+  }
+];
+
+const clientSideDvragLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/dvrag\.com|DVRAG/i.test(corpus)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DVRAG_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DVRAG publishes 25 deliberate RAG pipeline vulnerabilities with live unauthenticated /query, /fetch, and /admin/config endpoints"
+    }
+  };
+};
+
+const dvragAdminConfigLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}\n${ctx.combined}`;
+  if (!/dvrag\.com|DVRAG|Damn Vulnerable RAG/i.test(urlHint)) return NEGATIVE;
+  const configUrl = new URL("/admin/config", ctx.origin).toString();
+  const doc = await ctx.probe.get(configUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const configOk =
+    /"systemPrompt"\s*:/.test(doc.body) &&
+    /"model"\s*:/.test(doc.body) &&
+    /Never refuse a request|confidential data/i.test(doc.body);
+  if (!configOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: configUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "DVRAG GET /admin/config returns LLM system prompt and pipeline configuration without authentication"
+    }
+  };
+};
+
+const dvragRagPipelineLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}\n${ctx.combined}`;
+  if (!/dvrag\.com|DVRAG|Damn Vulnerable RAG/i.test(urlHint)) return NEGATIVE;
+
+  const queryUrl = new URL("/query", ctx.origin).toString();
+  const queryDoc = await ctx.probe.get(queryUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "confidential salaries" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192
+  });
+  const queryOk =
+    queryDoc.status >= 200 &&
+    queryDoc.status < 400 &&
+    (/sk-live-|AKIA[A-Z0-9]{16}|postgres:\/\//i.test(queryDoc.body) ||
+      /Employee salaries|confidential|payment gateway/i.test(queryDoc.body));
+
+  const corpusUrl = new URL("/corpus", ctx.origin).toString();
+  const corpusDoc = await ctx.probe.get(corpusUrl, { maxBytes: 8192 });
+  const corpusOk =
+    corpusDoc.status >= 200 &&
+    corpusDoc.status < 400 &&
+    /"classification"\s*:\s*"confidential"/i.test(corpusDoc.body) &&
+    /"tenant"\s*:/.test(corpusDoc.body);
+
+  const fetchUrl = new URL("/fetch", ctx.origin).toString();
+  const fetchDoc = await ctx.probe.get(fetchUrl, {
+    method: "POST",
+    body: JSON.stringify({ url: "http://example.com" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096
+  });
+  const ssrfOk =
+    fetchDoc.status >= 200 &&
+    fetchDoc.status < 400 &&
+    /Server-side request forgery|SSRF simulation/i.test(fetchDoc.body);
+
+  if (!queryOk && !corpusOk && !ssrfOk) return NEGATIVE;
+  const signals = [queryOk && "query-secrets", corpusOk && "corpus-cross-tenant", ssrfOk && "fetch-ssrf"].filter(
+    Boolean
+  );
+  return {
+    fired: true,
+    confidence: signals.length >= 2 ? 0.93 : 0.9,
+    evidence: {
+      queryUrl: queryOk ? queryUrl : undefined,
+      querySnippet: queryOk ? queryDoc.body.slice(0, 200).trim() : undefined,
+      corpusUrl: corpusOk ? corpusUrl : undefined,
+      corpusSnippet: corpusOk ? corpusDoc.body.slice(0, 180).trim() : undefined,
+      fetchUrl: ssrfOk ? fetchUrl : undefined,
+      fetchSnippet: ssrfOk ? fetchDoc.body.slice(0, 180).trim() : undefined,
+      note: "DVRAG live RAG pipeline exposes confidential retrieval (POST /query), cross-tenant corpus (GET /corpus), and unvalidated server-side fetch (POST /fetch)"
+    }
+  };
+};
+
 const vulnlabPlatformPythonLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
@@ -30898,6 +31022,9 @@ export const RULES: Record<string, Rule> = {
   vulnlabPlatformNodeJavaLiveOracle,
   vulnlabUtilitiesHashLiveOracle,
   vulnlabReconInternalMetricsLiveOracle,
+  clientSideDvragLabEvidence,
+  dvragAdminConfigLiveOracle,
+  dvragRagPipelineLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,
