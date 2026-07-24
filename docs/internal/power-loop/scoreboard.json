@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T09:11:58.463Z",
+  "updated_at": "2026-07-24T09:15:19.696Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2311,
-  "total_findings": 13607,
+  "total_sites_scanned": 2319,
+  "total_findings": 13653,
   "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1711,
-  "discovery_findings": 11030,
-  "improvements_shipped": 1030,
-  "last_run": "2026-07-24T09:11:58.463Z",
+  "discovery_urls_added": 1716,
+  "discovery_findings": 11075,
+  "improvements_shipped": 1031,
+  "last_run": "2026-07-24T09:15:19.696Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -52,30 +52,36 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 37,
-      "skipped_48h": [],
+      "findings": 45,
+      "skipped_48h": [
+        "https://pentest-fauxbank.vercel.app/accounts",
+        "https://vulnshop.vercel.app/checkout",
+        "https://vulnshop.vercel.app/products/1"
+      ],
       "dns_failures": [],
-      "focus": "VulnShop /admin /profile /users route oracles + FauxBank/RedTeam discovery queue",
-      "improvements_shipped_this_run": 3
+      "focus": "Pwnshop SSTI/download route oracles + XVWA first scan + classic labs (seclab, hackxor, firing-range, gruyere)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses; secret-resend slug still absent",
-      "vulnshop.vercel.app/admin: 4→5 findings — client-side-vulnshop-module-evidence (JWT is_admin + debug routes)",
-      "vulnshop.vercel.app/profile: 4→5 findings — mass-assignment [A01] module oracle",
-      "vulnshop.vercel.app/users: 4→5 findings — admin users/debug plaintext password module oracle",
-      "pentest-fauxbank.vercel.app/accounts: 9 findings — fauxbank-authenticated-sqli-search + fauxbank-idor-accounts-probe",
-      "vulnshop.vercel.app/products/1: 5 findings — client-side-vulnshop-module-evidence (route-specific oracle hit)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings, pages=6 probes=293) — no benchmark misses; secret-resend slug still absent",
+      "pwnshop.ctfsecurity.com/seller/preview: 10 findings — client-side-pwnshop-evidence + sql-error-disclosure + prototype-pollution (SSTI route shallow)",
+      "pwnshop.ctfsecurity.com/download: 9 findings — path-traversal route inherits pwnshop bundle oracles, no download-specific slug",
+      "xvwa.vercel.app: 4 findings — first scan shallow vs full Xtreme Vulnerable Web Application PHP lab",
+      "arcanum-sec.github.io/ai-sec-resources: 8 findings — AI security hub with prompt-injection + OWASP GenAI lab markers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnshop-production.up.railway.app: backend Application not found — debug API live oracle blocked until redeploy",
-      "vulnshop.vercel.app/checkout: 4 findings — CSRF demo panel oracle still missing vs README",
-      "playhacklab.com: Vercel 404 Application not found — no deploy to scan",
-      "wrongsecrets.onrender.com: Service Suspended — use wrongsecrets.herokuapp.com",
+      "pwnshop/seller/preview: SSTI PWN-040 entry point — no pwnshop-ssti-template-oracle slug despite 10 findings",
+      "pwnshop/download: path traversal PWN-038 — no route-specific path-traversal slug",
+      "xvwa.vercel.app: 4 findings vs documented SQLi/XSS/CSRF/IDOR modules — PHP lab oracles missed",
       "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/seller/preview": 10,
+    "pwnshop.ctfsecurity.com/download": 9,
+    "xvwa.vercel.app": 4,
+    "arcanum-sec.github.io/ai-sec-resources": 8,
     "webchal1.vercel.app": 6,
     "playground.fabraix.com/challenges/01-guardrail-bypass": 3,
     "playground.fabraix.com/challenges/access-code-001": 3,
