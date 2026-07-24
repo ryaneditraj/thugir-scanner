@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T03:04:00.000Z",
+  "updated_at": "2026-07-24T04:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/admin/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — admin panel hub and access-control lab index (GitHub admin/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/admin/users.html",
+      "source": "dkyazzentwatwa/hack-this-site — admin user-management IDOR/privilege oracle (GitHub admin/users.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/auth/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — authentication lab hub (login/session/JWT index; GitHub auth/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/aspnet.html",
+      "source": "dkyazzentwatwa/hack-this-site — ASP.NET platform-specific vulnerability cues (GitHub platform/aspnet.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/python.html",
+      "source": "dkyazzentwatwa/hack-this-site — Python platform-specific vulnerability cues (GitHub platform/python.html)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/utilities/index.html",
       "source": "dkyazzentwatwa/hack-this-site — encoding/hashing/timestamp utility lab hub (GitHub utilities/index.html)",
