@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 2391,
-  "total_findings": 14478,
+  "total_sites_scanned": 2399,
+  "total_findings": 14623,
   "critical_findings": 45,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1751,
-  "discovery_findings": 11711,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1756,
+  "discovery_findings": 11856,
   "improvements_shipped": 1055,
   "last_run": "2026-07-24T17:10:00.000Z",
   "last_run_summary": {
@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings, pages=6 probes=295); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,31 +48,36 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 145,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab route-specific oracles: rce/eval code injection, drupal user IDOR, passive secrets scanner",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab WordPress user enum, blind SQLi/XSS, XXE upload, and Log4j RCE route profiles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/rce/eval: burpbounty-rce-eval-live-oracle — code=7*7 evaluates to 49 (16→22 findings)",
-      "burpbountylab.com/drupal/user/1: burpbounty-drupal-user-disclosure-live-oracle — admin profile without auth (16→21 findings)",
-      "burpbountylab.com/passive/secrets: burpbounty-passive-secrets-live-oracle — AWS/Stripe/SSH keys in page source (16→27 findings)"
+      "burpbountylab.com/wp/wp-json/wp/v2/users: 19 findings — hub fingerprint dominates; no wordpress-user-enum oracle yet",
+      "burpbountylab.com/sqli/time: 19 findings — hub fingerprint; time-based blind SQLi route oracle still absent",
+      "burpbountylab.com/xss/blind: 19 findings — hub fingerprint; blind XSS callback oracle still absent",
+      "hack-this-site-eta.vercel.app/api/validate/sqli-error: 40 findings incl sql-error-disclosure"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab.com/passive/cookies insecure Set-Cookie headers — cookie scanner oracle not yet distinct",
-      "wrongsecrets.onrender.com suspended — secrets CTF oracles unreachable"
+      "burpbountylab route-specific oracles (xxe/upload, rce/log4j, sqli/time, xss/blind, wp/users) not yet distinct from hub fingerprint",
+      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds"
     ]
   },
   "discovery_highlights": {
-    "burpbountylab.com": 15,
+    "burpbountylab.com/rce/log4j": 19,
+    "burpbountylab.com/xxe/upload": 19,
+    "burpbountylab.com/xss/blind": 19,
+    "burpbountylab.com/sqli/time": 19,
+    "burpbountylab.com/wp/wp-json/wp/v2/users": 19,
     "burpbountylab.com/ssrf/fetch": 9,
     "burpbountylab.com/rce/ping": 13,
     "burpbountylab.com/pt/read": 16,
@@ -126,7 +131,7 @@
     "web-security-lab.vercel.app/learn/xss": 5,
     "web-security-lab.vercel.app/learn/csrf": 5,
     "web-security-lab.vercel.app/learn/cookies-samesite": 5,
-    "hack-this-site-eta.vercel.app/api/validate/sqli-error": 19,
+    "hack-this-site-eta.vercel.app/api/validate/sqli-error": 40,
     "hack-this-site-eta.vercel.app/api/validate/idor": 19,
     "hack-this-site-eta.vercel.app/api/validate/xss-reflected": 17,
     "hack-this-site-eta.vercel.app/api/validate/localstorage": 19,
