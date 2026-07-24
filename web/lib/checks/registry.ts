@@ -27902,6 +27902,47 @@ const clientSideVulnlabPythonPlatformEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnLab /private/admin-bypass.html hidden admin route (hack-this-site-eta.vercel.app)
+const CLIENT_VULNLAB_PRIVATE_ADMIN_BYPASS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Admin bypass lab title",
+    re: /Admin Bypass/i
+  },
+  {
+    label: "Hidden admin-bypass endpoint disclosed",
+    re: /Hidden test endpoint:\s*\/private\/admin-bypass\.html/i
+  },
+  {
+    label: "Private bypass page path",
+    re: /\/private\/admin-bypass\.html/i
+  }
+];
+
+const clientSideVulnlabPrivateAdminBypassEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}${ctx.scanUrl && ctx.scanUrl !== pageUrl ? `\n${ctx.scanUrl}` : ""}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(corpus) &&
+    !/\/private\/admin-bypass/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VULNLAB_PRIVATE_ADMIN_BYPASS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "VulnLab /private/admin-bypass.html discloses a hidden admin bypass training route reachable without authentication"
+    }
+  };
+};
+
 const clientSideVulnlabCmsPlatformEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_VULNLAB_CMS_PLATFORM_RES) {
@@ -31098,6 +31139,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
   clientSideVulnlabPythonPlatformEvidence,
+  clientSideVulnlabPrivateAdminBypassEvidence,
   clientSideVulnerableWebSiteEvidence,
   clientSideNivaraSecurityEvidence,
   clientSideDarkPatternLabEvidence,

@@ -6869,6 +6869,12 @@
       "slug": "vulnshop-debug-api-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bundle wires vulnshop-production.up.railway.app; GET /api/debug/config|/users live probe rule shipped (Railway 404 during validation — fires when backend reachable); vulnshop.vercel.app/users findings 4→5 via module oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "client-side-vulnlab-private-admin-bypass-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /private/admin-bypass.html Admin Bypass + Hidden test endpoint: /private/admin-bypass.html; private/admin-bypass.html findings 1→42 when reachable; benchmark juice-shop 10 findings 6/6 maintained"
     }
   ],
   "shipped": [
