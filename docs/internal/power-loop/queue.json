@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T01:05:00.000Z",
+  "updated_at": "2026-07-24T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/php.html",
+      "source": "dkyazzentwatwa/hack-this-site — PHP platform-specific vulnerability cues (GitHub platform/php.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/node.html",
+      "source": "dkyazzentwatwa/hack-this-site — Node.js platform-specific vulnerability cues (GitHub platform/node.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/java.html",
+      "source": "dkyazzentwatwa/hack-this-site — Java platform-specific vulnerability cues (GitHub platform/java.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api-labs/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — API security lab hub index (GitHub api-labs/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/git/HEAD",
+      "source": "dkyazzentwatwa/hack-this-site — exposed .git artifact oracle (GitHub git/HEAD)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/admin/console.html",
       "source": "dkyazzentwatwa/hack-this-site — hidden admin console recon surface (GitHub admin/console.html)",
