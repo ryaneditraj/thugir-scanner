@@ -7109,6 +7109,24 @@
       "slug": "burpbounty-ssrf-scheme-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/scheme?url=file:///etc/passwd returns root:x:0:0:/root:/bin/bash in <pre>; burpbountylab.com/ssrf/scheme findings 33→36; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-out-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/redirect/out?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns 302 Location to probe host; burpbountylab.com/redirect/out findings 29→39; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-pp-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/redirect/pp?return_url=https://evil-open-redirect-probe.example/thugir-redirect-test returns 302 Location to probe host; burpbountylab.com/redirect/pp findings 26→39; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-collab-forgot-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/collab/forgot?email=user@example.com returns Reset URL with token=abc123&email= in HTML; burpbountylab.com/collab/forgot findings 28→40; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12451,6 +12469,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ssrf-scheme-live-oracle",
       "shipped_at": "2026-07-24T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-out-live-oracle",
+      "shipped_at": "2026-07-24T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-pp-live-oracle",
+      "shipped_at": "2026-07-24T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-collab-forgot-live-oracle",
+      "shipped_at": "2026-07-24T23:10:00.000Z"
     }
   ]
 }

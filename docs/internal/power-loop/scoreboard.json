@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T22:10:00.000Z",
+  "updated_at": "2026-07-24T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2437,
-  "total_findings": 15370,
+  "total_sites_scanned": 2438,
+  "total_findings": 15380,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1776,
-  "discovery_findings": 12547,
-  "improvements_shipped": 1068,
-  "last_run": "2026-07-24T22:10:00.000Z",
+  "discovery_findings": 12557,
+  "improvements_shipped": 1071,
+  "last_run": "2026-07-24T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -55,20 +55,19 @@
       "findings": 0,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty Lab route-specific oracles: tag-context XSS, HTML-comment XSS, file:// scheme SSRF",
+      "focus": "Burp Bounty Lab route-specific oracles: outbound redirect, post-payment redirect, password-reset token disclosure",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/xss/tag: tag-context XSS oracle via /xss/tag?input= (33→36 findings)",
-      "burpbountylab.com/xss/comment: HTML-comment XSS oracle via /xss/comment?data= (33→36 findings)",
-      "burpbountylab.com/ssrf/scheme: file:// scheme SSRF oracle via /ssrf/scheme?url=file:///etc/passwd (33→36 findings)"
+      "burpbountylab.com/redirect/out: outbound 302 open redirect oracle via /redirect/out?url= (29→39 findings)",
+      "burpbountylab.com/redirect/pp: post-payment redirect oracle via /redirect/pp?return_url= (26→39 findings)",
+      "burpbountylab.com/collab/forgot: password-reset token disclosure oracle via /collab/forgot?email= (28→40 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
       "burpbountylab.com/rce/blind: blind command execution — route-specific oracle still absent (no output/time signal)",
-      "burpbountylab.com/redirect/out: outbound 302 redirect — route-specific oracle still absent",
       "wrongsecrets.onrender.com: service suspended by owner"
     ]
   },
@@ -181,7 +180,7 @@
     "vwad.owasp.org/app/yrprey": 3,
     "vwad.owasp.org/app/secure-by-design": 4,
     "vwad.owasp.org/app/ffufme": 4,
-    "juice-shop.herokuapp.com": 9,
+    "juice-shop.herokuapp.com": 10,
     "juice-shop-staging.herokuapp.com": 10,
     "hack-this-site-eta.vercel.app/admin/console.html": 33,
     "hack-this-site-eta.vercel.app/backup/db.sql": 33,
@@ -224,13 +223,13 @@
     "oauthlabs.com": 5,
     "ctf.hackthebox.com": 4,
     "www.hackthissite.org/pages/index/index.php": 5,
-    "burpbountylab.com/redirect/pp": 26,
+    "burpbountylab.com/redirect/pp": 39,
     "burpbountylab.com/ssti/render": 25,
     "burpbountylab.com/dwr/engine.js": 25,
     "burpbountylab.com/graphql/ide": 25,
     "burpbountylab.com/collab/headers": 25,
     "burpbountylab.com/collab/host": 28,
-    "burpbountylab.com/collab/forgot": 28,
+    "burpbountylab.com/collab/forgot": 40,
     "burpbountylab.com/xxe/soap": 27,
     "burpbountylab.com/rce/react2shell": 27,
     "burpbountylab.com/pt/readwin": 27,
@@ -242,7 +241,7 @@
     "burpbountylab.com/rce/blind": 30,
     "burpbountylab.com/xss/tag": 29,
     "burpbountylab.com/ssrf/scheme": 30,
-    "burpbountylab.com/redirect/out": 29,
+    "burpbountylab.com/redirect/out": 39,
     "burpbountylab.com/xss/comment": 30
   }
 }
