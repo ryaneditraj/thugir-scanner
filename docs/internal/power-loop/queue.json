@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T07:02:59.847Z",
+  "updated_at": "2026-07-24T09:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-fauxbank.vercel.app/accounts",
+      "source": "FauxBank training sim — authenticated accounts dashboard with SQLi search + IDOR probes (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/checkout",
+      "source": "yashasrnair/VulnShop — checkout CSRF demo panel route (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/products/1",
+      "source": "yashasrnair/VulnShop — product detail stored XSS + SSRF demo panel (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnshop.vercel.app/admin",
       "source": "yashasrnair/VulnShop — admin panel JWT bypass + env dump + command injection (GitHub README)",
