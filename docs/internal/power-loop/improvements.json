@@ -7019,6 +7019,24 @@
       "slug": "burpbounty-passive-secrets-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/passive/secrets embeds AKIA..., sk_live_, BEGIN RSA PRIVATE KEY in page JS; burpbountylab.com/passive/secrets findings 16→27; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-proxy-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/proxy?target=http://example.com returns Example Domain HTML; burpbountylab.com/ssrf/proxy findings 22→25; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-attribute-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/attribute?name=thugirAttr canary reflects in value/href/src attributes; burpbountylab.com/xss/attribute findings 22→25; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/redirect/login?url=http://evil-open-redirect-probe.example/thugir sets form action + redirect message to probe host; burpbountylab.com/redirect/login findings 22→25; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12291,6 +12309,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-passive-secrets-live-oracle",
       "shipped_at": "2026-07-24T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-proxy-live-oracle",
+      "shipped_at": "2026-07-24T18:25:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-attribute-live-oracle",
+      "shipped_at": "2026-07-24T18:25:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-login-live-oracle",
+      "shipped_at": "2026-07-24T18:25:00.000Z"
     }
   ]
 }

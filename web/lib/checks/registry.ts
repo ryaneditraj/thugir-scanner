@@ -7023,6 +7023,76 @@ const burpbountyPassiveSecretsLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySsrfProxyLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssrf/proxy", ctx.origin);
+  probeUrl.searchParams.set("target", SSRF_CANARY_URL);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!bodyReflectsSsrfCanary(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      param: "target",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /ssrf/proxy?target= fetches attacker URL and returns proxied Example Domain HTML — SSRF proxy profile oracle"
+    }
+  };
+};
+
+const burpbountyXssAttributeLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirAttr${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/attribute", ctx.origin);
+  probeUrl.searchParams.set("name", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const inValue = new RegExp(`value\\s*=\\s*["']${escaped}["']`, "i").test(doc.body);
+  const inHref = new RegExp(`href\\s*=\\s*["']${escaped}["']`, "i").test(doc.body);
+  const inSrc = new RegExp(`src\\s*=\\s*["']${escaped}["']`, "i").test(doc.body);
+  if (!inValue && !inHref && !inSrc) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: inValue && (inHref || inSrc) ? 0.92 : 0.9,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /xss/attribute?name= reflects query param unescaped in input value, href, and img src attributes — attribute-context XSS profile oracle"
+    }
+  };
+};
+
+const BURPBOUNTY_LOGIN_REDIRECT_PROBE = "http://evil-open-redirect-probe.example/thugir-login-redirect";
+
+const burpbountyRedirectLoginLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/redirect/login", ctx.origin);
+  probeUrl.searchParams.set("url", BURPBOUNTY_LOGIN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const host = "evil-open-redirect-probe.example";
+  const formAction = new RegExp(
+    `<form[^>]+action\\s*=\\s*["']https?:\\/\\/${host.replace(/\./g, "\\.")}[^"']*["']`,
+    "i"
+  ).test(doc.body);
+  const redirectNote = new RegExp(`redirected to:\\s*https?:\\/\\/${host}`, "i").test(doc.body);
+  if (!formAction && !redirectNote) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: formAction && redirectNote ? 0.93 : 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      probe: BURPBOUNTY_LOGIN_REDIRECT_PROBE,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /redirect/login?url= sets login form action and post-login redirect to attacker URL — open redirect / credential phishing profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -31910,6 +31980,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyRceEvalLiveOracle,
   burpbountyDrupalUserDisclosureLiveOracle,
   burpbountyPassiveSecretsLiveOracle,
+  burpbountySsrfProxyLiveOracle,
+  burpbountyXssAttributeLiveOracle,
+  burpbountyRedirectLoginLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
