@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings, pages=6 probes=293)",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -133,7 +133,7 @@
     "juice-shop.herokuapp.com": 10,
     "hack-this-site-eta.vercel.app/admin/console.html": 33,
     "hack-this-site-eta.vercel.app/backup/db.sql": 33,
-    "hack-this-site-eta.vercel.app/private/admin-bypass.html": 33,
+    "hack-this-site-eta.vercel.app/private/admin-bypass.html": 42,
     "hack-this-site-eta.vercel.app/staging/index.html": 33,
     "hack-this-site-eta.vercel.app/quick/index.html": 33,
     "hack-this-site-eta.vercel.app/platform/php.html": 31,

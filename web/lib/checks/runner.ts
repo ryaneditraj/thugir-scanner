@@ -1285,6 +1285,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnlabCmsPlatformEvidence",
   "clientSideVulnlabRubyPlatformEvidence",
   "clientSideVulnlabPythonPlatformEvidence",
+  "clientSideVulnlabPrivateAdminBypassEvidence",
   "clientSideVulnlabA09LoggingEvidence",
   "clientSideVulnlabVerbose404Evidence",
   "clientSideVulnlabA10SsrfEvidence",
