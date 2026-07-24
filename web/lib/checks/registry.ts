@@ -6706,6 +6706,49 @@ const burpbountySstiRenderLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySsrfFetchLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssrf/fetch", ctx.origin);
+  probeUrl.searchParams.set("url", SSRF_CANARY_URL);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!bodyReflectsSsrfCanary(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      param: "url",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /ssrf/fetch?url= fetches attacker URL and echoes Example Domain HTML — SSRF profile oracle"
+    }
+  };
+};
+
+const burpbountyDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirDOM${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/dom", ctx.origin);
+  probeUrl.searchParams.set("msg", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  const hasDomSink =
+    /getElementById\s*\(\s*["']output["']\s*\)\s*\.innerHTML\s*=\s*msg/i.test(doc.body) ||
+    /document\.write\s*\(/i.test(doc.body);
+  if (!hasDomSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /xss/dom?msg= assigns query param to innerHTML/document.write — DOM XSS profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -22097,6 +22140,39 @@ const clientSidePwnshopPathTraversalOracle: Rule = async (ctx) =>
     "Pwnshop GET /download?file= joins user input via path.join() without resolved-path validation (PWN-038)"
   );
 
+function isPwnshopHost(ctx: RuleContext): boolean {
+  return /pwnshop|ctfsecurity\.com/i.test(ctx.origin);
+}
+
+const pwnshopDebugInfoLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/debug/info", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const ct = doc.headers["content-type"] || "";
+  if (!/json/i.test(ct) && !/^\s*\{/.test(doc.body.trim())) return NEGATIVE;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "sessionSecret in debug JSON", re: /"sessionSecret"\s*:\s*"[^"]{6,}"/i },
+    { label: "CHAT_OVERRIDE_TOKEN in debug JSON", re: /"CHAT_OVERRIDE_TOKEN"\s*:\s*"[^"]{6,}"/i },
+    { label: "dbConfig credentials in debug JSON", re: /"dbConfig"\s*:\s*\{[^}]*"user"\s*:/i }
+  ]) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 80) });
+  }
+  if (markers.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      markers: markers.slice(0, 3),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Pwnshop GET /debug/info returns session secrets and override tokens without authentication (PWN-018)"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -31278,6 +31354,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopEvidence,
   clientSidePwnshopSstiOracle,
   clientSidePwnshopPathTraversalOracle,
+  pwnshopDebugInfoLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
@@ -31525,6 +31602,8 @@ export const RULES: Record<string, Rule> = {
   burpbountyXssReflectLiveOracle,
   burpbountySqliLoginLiveOracle,
   burpbountySstiRenderLiveOracle,
+  burpbountySsrfFetchLiveOracle,
+  burpbountyDomXssLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
