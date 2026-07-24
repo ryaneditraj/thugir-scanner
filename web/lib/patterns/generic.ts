@@ -8920,6 +8920,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-debug-info-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Pwnshop debug info endpoint leaks secrets (PWN-018)",
+    description:
+      "GET /debug/info returns JSON with sessionSecret, CHAT_OVERRIDE_TOKEN, and dbConfig without authentication — the Pwnshop public debug endpoint oracle.",
+    impactOneline:
+      "Unauthenticated debug endpoints expose session signing keys and admin override tokens enabling session forgery and privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopDebugInfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate debug endpoints — Pwnshop PWN-018 is intentional lab software.",
+      steps: [
+        "Delete /debug/info and all diagnostic routes from production builds.",
+        "Rotate sessionSecret and override tokens if debug endpoints were publicly reachable.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /debug/info endpoint returns sessionSecret and override tokens without auth. Show how to remove debug routes in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -14559,6 +14585,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /ssti/render endpoint evaluates user templates. Show how to sandbox template rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssrf-fetch-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SSRF fetch live oracle",
+    description:
+      "GET /ssrf/fetch?url= fetches an attacker-controlled URL and echoes the response body — the Burp Bounty SSRF profile oracle.",
+    impactOneline:
+      "Live SSRF oracle on Burp Bounty Lab confirms server-side fetch profile coverage beyond hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySsrfFetchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks and validate outbound URL allow-lists.",
+      steps: [
+        "Deny private IP ranges and link-local addresses in server-side fetch handlers.",
+        "Use an egress proxy with an explicit URL allow-list.",
+        "Isolate Burp Bounty Lab SSRF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/fetch endpoint fetches user-supplied URLs server-side. Show how to block SSRF to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab DOM XSS live oracle",
+    description:
+      "GET /xss/dom?msg= assigns the query parameter to innerHTML and document.write — the Burp Bounty DOM XSS profile oracle.",
+    impactOneline:
+      "Live DOM XSS oracle on Burp Bounty Lab confirms client-side sink profile coverage without hub-only fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign untrusted input to innerHTML or eval — use textContent and strict encoding.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled strings.",
+        "Remove document.write and eval sinks from client-side code paths.",
+        "Isolate Burp Bounty Lab DOM XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/dom page writes the msg query param to innerHTML. Show safe DOM APIs and encoding.",
     version: 1,
     enabled: true
   },
