@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T11:56:19.598Z",
+  "updated_at": "2026-07-24T12:02:45.923Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2337,
-  "total_findings": 13748,
+  "total_sites_scanned": 2338,
+  "total_findings": 13758,
   "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1726,
   "discovery_findings": 11151,
-  "improvements_shipped": 1037,
-  "last_run": "2026-07-24T11:56:19.598Z",
+  "improvements_shipped": 1036,
+  "last_run": "2026-07-24T12:02:45.923Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
@@ -141,8 +141,6 @@
     "vwad.owasp.org/app/damn-vulnerable-node-application-dvna": 4,
     "vwad.owasp.org/app/damn-vulnerable-nodejs-application-dvna": 4,
     "vwad.owasp.org/app/yrprey": 3,
-    "vwad.owasp.org/app/burpbounty": 5,
-    "vwad.owasp.org/app/bugbait": 5,
     "vwad.owasp.org/app/secure-by-design": 4,
     "vwad.owasp.org/app/ffufme": 4,
     "juice-shop.herokuapp.com": 10,
