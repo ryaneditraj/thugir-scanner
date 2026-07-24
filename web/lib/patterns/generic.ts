@@ -15161,6 +15161,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-xxe-soap-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab SOAP XXE live oracle",
+    description:
+      "POST /xxe/soap parses attacker XML with external entities and returns /etc/passwd inside a SOAP GetUserResponse — the Burp Bounty SOAP XXE profile oracle.",
+    impactOneline:
+      "Live SOAP XXE probe confirms XML external-entity resolution distinct from /xxe/parse and /xxe/upload inline probes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXxeSoapLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in SOAP/XML parsers.",
+      steps: [
+        "Set disallow-doctype-decl and disable external entities in SOAP handlers.",
+        "Validate SOAP payloads against a strict schema before parsing.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /xxe/soap endpoint resolves external entities in SOAP requests. Show secure XML parser configuration for SOAP services.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xss-blind-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab blind/stored XSS live oracle",
+    description:
+      "GET /xss/blind?feedback= stores attacker script tags in the admin-review panel without sanitization — the Burp Bounty blind XSS profile oracle.",
+    impactOneline:
+      "Live blind XSS probe confirms stored script injection in simulated admin panels distinct from reflected XSS routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssBlindLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize all user feedback before rendering in admin or review panels.",
+      steps: [
+        "HTML-encode user feedback before inserting into admin-review DOM nodes.",
+        "Use Content-Security-Policy to block inline script execution.",
+        "Isolate Burp Bounty Lab blind XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/blind endpoint stores feedback in an admin panel without sanitization. Show output encoding and CSP mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-pt-readwin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Windows path traversal live oracle",
+    description:
+      "GET /pt/readwin?file=..\\..\\windows\\win.ini returns Windows win.ini contents — the Burp Bounty Windows path-traversal profile oracle.",
+    impactOneline:
+      "Live Windows traversal probe confirms backslash path bypass distinct from /pt/read Unix /etc/passwd oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPtReadwinLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Canonicalize file paths and reject Windows parent-directory traversal sequences.",
+      steps: [
+        "Resolve paths against a fixed base directory and reject .. and backslash segments.",
+        "Use OS-agnostic path normalization before file reads.",
+        "Isolate Burp Bounty Lab traversal routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /pt/readwin endpoint reads arbitrary Windows paths via backslash traversal. Show path canonicalization and base-directory enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
