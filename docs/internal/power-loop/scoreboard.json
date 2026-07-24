@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T11:30:00.000Z",
+  "updated_at": "2026-07-24T11:56:19.598Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2328,
-  "total_findings": 13696,
+  "total_sites_scanned": 2337,
+  "total_findings": 13748,
   "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1721,
-  "discovery_findings": 11109,
+  "discovery_urls_added": 1726,
+  "discovery_findings": 11151,
   "improvements_shipped": 1037,
-  "last_run": "2026-07-24T11:30:00.000Z",
+  "last_run": "2026-07-24T11:56:19.598Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings); secret-resend slug still absent (Resend key not in Bluesky/Mastodon/Reddit feeds)",
+      "note": "Cold-start pass1 4 findings gap=sqli,idor (Heroku 503 wake); merged retry restored 6/6 (10 findings, pages=6 probes=207)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,27 +50,38 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 3,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 45,
+      "skipped_48h": [
+        "https://vwad.owasp.org/app/yrprey/",
+        "https://vwad.owasp.org/app/burpbounty/",
+        "https://vwad.owasp.org/app/bugbait/"
+      ],
       "dns_failures": [],
-      "focus": "VWAD 404 catalog slugs → live-instance cross-origin seeds (burpbounty/bugbait/ffufme/secure-by-design); BugBait TLS retry for expired cert",
-      "improvements_shipped_this_run": 3
+      "focus": "Burp Bounty Lab route-specific oracles (XSS/SQLi/SSTI); VAmPI Railway /ui/ entry points with live IDOR + OpenAPI password exposure",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (10 findings) — no category misses; secret-resend slug still absent",
-      "vwad.owasp.org/app/burpbounty: 4→5 findings (+client-side-burp-bounty-lab-evidence via burpbountylab.com cross-origin crawl)",
-      "vwad.owasp.org/app/bugbait: 4→5 findings (+client-side-bugbait-evidence via bugbait.io cross-origin crawl with insecure TLS retry)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) after Heroku cold-start wake — secret-resend slug still absent",
+      "vampi-production.up.railway.app/ui/: 7 findings incl idor-sequential-ids + openapi-debug-password-exposure + vibe-unauthenticated-api-routes",
+      "urban-vampi-production.up.railway.app/ui/: 7 findings — same VAmPI API oracle cluster on production Railway deploy",
+      "burpbountylab.com/xss/reflect + /sqli/login + /ssti/preview: 6 findings each (phpinfo + graphql-introspection + spring-boot-actuator from hub crawl)",
+      "vwad.owasp.org/app/burpbounty + bugbait: cross-origin seeds from prior run (5 findings each)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark — Resend API key not present in current Bluesky/Mastodon/Reddit feeds",
-      "ffuf.me connection reset from cloud agent — VWAD ffufme seed wired but live host unreachable",
-      "xvwa.vercel.app: Vercel Security Checkpoint intermittently blocks module page crawls from cloud agent"
+      "burpbountylab route pages shallow (pages=1) — route-specific XSS/SQLi/SSTI oracles not yet distinct from hub fingerprint",
+      "secret-resend slug still absent on juice-shop benchmark",
+      "primary Heroku 503 on first pass — wake retry required for sqli/idor categories"
     ]
   },
   "discovery_highlights": {
+    "burpbountylab.com/xss/reflect": 6,
+    "burpbountylab.com/sqli/login": 6,
+    "burpbountylab.com/ssti/preview": 6,
+    "vampi-production.up.railway.app/ui": 7,
+    "urban-vampi-production.up.railway.app/ui": 7,
     "pwnshop.ctfsecurity.com/seller/preview": 13,
     "pwnshop.ctfsecurity.com/download": 11,
     "xvwa.vercel.app": 6,
@@ -133,7 +144,7 @@
     "vwad.owasp.org/app/bugbait": 5,
     "vwad.owasp.org/app/secure-by-design": 4,
     "vwad.owasp.org/app/ffufme": 4,
-    "juice-shop.herokuapp.com": 9,
+    "juice-shop.herokuapp.com": 10,
     "juice-shop-staging.herokuapp.com": 10,
     "hack-this-site-eta.vercel.app/admin/console.html": 33,
     "hack-this-site-eta.vercel.app/backup/db.sql": 33,
