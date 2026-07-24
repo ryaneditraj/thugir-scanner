@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T13:05:30.000Z",
+  "updated_at": "2026-07-24T14:25:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/xss/dom",
+      "source": "BountySecurity/BurpBountyLab — DOM-context XSS profile practice endpoint (innerHTML/document.write/eval sinks)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xss/js",
+      "source": "BountySecurity/BurpBountyLab — JavaScript-context XSS profile practice endpoint (userData/config string injection)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/redirect/goto",
+      "source": "BountySecurity/BurpBountyLab — open-redirect profile practice endpoint (unvalidated url param)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cors/api/data",
+      "source": "BountySecurity/BurpBountyLab — CORS misconfiguration profile practice endpoint (reflects Origin + credentials)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/passive/secrets",
+      "source": "BountySecurity/BurpBountyLab — passive secret-leak triggers page (AWS/Google/Stripe/SSH key samples)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/ssrf/fetch",
       "source": "BountySecurity/BurpBountyLab — SSRF URL-fetch profile practice endpoint (burpbountylab.com hub)",
