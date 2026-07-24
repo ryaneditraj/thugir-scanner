@@ -3301,6 +3301,10 @@ const CLIENT_XSS_RES: { label: string; re: RegExp }[] = [
     re: /(?:echo|print)\s*\(?\s*['"][^'"]*['"]\s*\.\s*\$_(?:GET|REQUEST|POST)\s*\[/
   },
   {
+    label: "PHP echoes $_GET param directly without encoding",
+    re: /echo\s+\$_GET\s*\[\s*['"][^'"]+['"]\s*\]\s*;/
+  },
+  {
     label: "DVWA reflected XSS source low.php name param",
     re: /Hello\s*['"]\s*\.\s*\$_GET\s*\[\s*['"]name['"]\s*\]/
   },
@@ -21885,6 +21889,61 @@ const clientSidePwnshopEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Pwnshop route-specific oracles (PWN-040 SSTI, PWN-038 path traversal) ---------
+const PWNSHOP_SSTI_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-040 SSTI registry ID", re: /PWN-040/i },
+  { label: "Seller preview template endpoint", re: /\/seller\/preview\?template=/i },
+  { label: "EJS render SSTI oracle", re: /ejs\.render\s*\(\s*\)|&lt;%= 7\*7 %&gt;[\s\S]{0,120}49/i },
+  { label: "SSTI storefront preview title", re: /SSTI\s*(?:→|->)?\s*RCE[\s\S]{0,80}Seller Storefront Preview/i }
+];
+
+const PWNSHOP_PATH_TRAVERSAL_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-038 path traversal registry ID", re: /PWN-038/i },
+  { label: "Invoice download file param endpoint", re: /GET \/download\?file=/i },
+  { label: "path.join traversal payload docs", re: /path\.join\s*\(\s*\)|invoices\/\.\.\/\.\.\//i },
+  { label: "Path Traversal Invoice Download title", re: /Path Traversal[\s\S]{0,80}Invoice Download/i }
+];
+
+function pwnshopRouteOracle(
+  ctx: RuleContext,
+  pathRe: RegExp,
+  markers: { label: string; re: RegExp }[],
+  note: string
+): RuleResult {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
+  if (!/pwnshop|ctfsecurity\.com/i.test(ctx.combined + urlCorpus)) return NEGATIVE;
+  const onRoute = pathRe.test(urlCorpus);
+  const hits: { label: string; sample: string }[] = [];
+  for (const m of markers) {
+    const match = ctx.combined.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  if (!onRoute && hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: onRoute && hits.length >= 2 ? 0.91 : hits.length >= 3 ? 0.9 : 0.87,
+    evidence: { markers: hits.slice(0, 4), note }
+  };
+}
+
+const clientSidePwnshopSstiOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/seller\/preview\b/i,
+    PWNSHOP_SSTI_MARKERS,
+    "Pwnshop /seller/preview?template= passes raw query input to ejs.render() — SSTI (PWN-040)"
+  );
+
+const clientSidePwnshopPathTraversalOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/download\b/i,
+    PWNSHOP_PATH_TRAVERSAL_MARKERS,
+    "Pwnshop GET /download?file= joins user input via path.join() without resolved-path validation (PWN-038)"
+  );
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -22424,6 +22483,52 @@ const clientSideXvwaEvidence: Rule = async (ctx) => {
       note: isKnownXvwa && hits.length < 2
         ? "xvwa.vercel.app is a known XVWA mirror (URL oracle; crawl /vulnerabilities/*/home.php for PHP SQLi/XSS source)"
         : "XVWA documents 15+ deliberately vulnerable attack modules (SQLi, XSS, SSRF, IDOR, SSTI, CSRF)"
+    }
+  };
+};
+
+// --- XVWA PHP module source oracles (xvwa.vercel.app serves raw home.php) ---------
+const CLIENT_XVWA_PHP_MODULE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XVWA IDOR item lookup module",
+    re: /Insecure Direct Object Reference[\s\S]{0,700}select itemid from caffaine/i
+  },
+  {
+    label: "XVWA CSRF password change form",
+    re: /Cross Site Request Forgery \(CSRF\)[\s\S]{0,700}name=["']passwd["']/i
+  },
+  {
+    label: "XVWA SSTI Twig template engine",
+    re: /Server Side Template Injection \(SSTI\)[\s\S]{0,700}Twig_Loader_String/i
+  },
+  {
+    label: "XVWA SQLi error-based search form",
+    re: /SQL Injection[\s\S]{0,200}Error Based[\s\S]{0,500}mysqli_report/i
+  },
+  {
+    label: "XVWA SSRF URL grabber module",
+    re: /SSRF\s*\/\s*XSPA[\s\S]{0,500}(?:curl_exec|file_get_contents)\s*\(/i
+  }
+];
+
+const clientSideXvwaPhpModuleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/XVWA|Xtreme Vulnerable Web Application|xvwa\.vercel\.app/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XVWA_PHP_MODULE_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 2 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "XVWA /vulnerabilities/*/home.php PHP source documents live SQLi, XSS, IDOR, CSRF, and SSTI training modules"
     }
   };
 };
@@ -31014,6 +31119,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnerableappEvidence,
   clientSideRestVulnwebEvidence,
   clientSidePwnshopEvidence,
+  clientSidePwnshopSstiOracle,
+  clientSidePwnshopPathTraversalOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
@@ -31025,6 +31132,7 @@ export const RULES: Record<string, Rule> = {
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
   clientSideXvwaEvidence,
+  clientSideXvwaPhpModuleEvidence,
   clientSideOpenRedirectEvidence,
   clientSideHackmyvmEvidence,
   clientSideXssVictimBankEvidence,

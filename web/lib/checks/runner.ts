@@ -1176,6 +1176,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnerableappEvidence",
   "clientSideRestVulnwebEvidence",
   "clientSidePwnshopEvidence",
+  "clientSidePwnshopSstiOracle",
+  "clientSidePwnshopPathTraversalOracle",
   "clientSideVulnforgeAcademyEvidence",
   "clientSideVulnforgeEvidence",
   "clientSideVulnshopEvidence",
@@ -1191,6 +1193,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
+  "clientSideXvwaPhpModuleEvidence",
   "clientSideOpenRedirectEvidence",
   "clientSideHackmyvmEvidence",
   "clientSideXssVictimBankEvidence",
@@ -3625,10 +3628,16 @@ function extractCahyodVulnerableLabSeeds(html: string, pageUrl: string): string[
 
 /** Pwnshop OWASP Top 10 2025 e-commerce lab (pwnshop.ctfsecurity.com). */
 function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
-  if (!/pwnshop|ctfsecurity\.com/i.test(html) && !/Pwnshop/i.test(html)) return [];
+  if (
+    !/pwnshop|ctfsecurity\.com/i.test(html) &&
+    !/Pwnshop/i.test(html) &&
+    !/pwnshop|ctfsecurity\.com/i.test(pageUrl)
+  ) {
+    return [];
+  }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const path of ["/vulnerabilities"]) {
+  for (const path of ["/vulnerabilities", "/seller/preview", "/download"]) {
     try {
       const u = new URL(path, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -6735,14 +6744,11 @@ function extractXvwaVulnSeeds(html: string, origin: string): string[] {
     "fileupload"
   ];
   for (const mod of modules) {
-    for (const suffix of ["", "/home.php"]) {
-      for (const prefix of isRootDeploy ? ["", basePath] : [basePath]) {
-        try {
-          out.add(new URL(`${prefix}/vulnerabilities/${mod}${suffix}`, origin).toString());
-        } catch {
-          /* ignore */
-        }
-      }
+    try {
+      out.add(new URL(`${basePath}/vulnerabilities/${mod}/home.php`, origin).toString());
+      out.add(new URL(`/vulnerabilities/${mod}/home.php`, origin).toString());
+    } catch {
+      /* ignore */
     }
   }
   for (const m of html.matchAll(/href\s*=\s*["'](\/xvwa\/vulnerabilities\/[^"'#]+)["']/gi)) {
