@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T19:12:28.400Z",
+  "updated_at": "2026-07-24T19:24:02.359Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2410,
-  "total_findings": 14881,
+  "total_sites_scanned": 2418,
+  "total_findings": 15020,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1761,
-  "discovery_findings": 12087,
+  "discovery_urls_added": 1766,
+  "discovery_findings": 12226,
   "improvements_shipped": 1057,
-  "last_run": "2026-07-24T19:12:28.400Z",
+  "last_run": "2026-07-24T19:24:02.359Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings, shallow crawl pages=1 probes=271); secret-resend slug still absent",
+      "note": "No benchmark misses — recall stable at 6/6 (9 findings, shallow crawl pages=1 probes=220); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,26 +48,27 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 231,
+      "findings": 139,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab SSRF proxy, attribute XSS, and login redirect route-specific live oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab redirect/pp, SSTI render, DWR engine, GraphQL IDE, collab/headers routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "burpbountylab.com/ssrf/proxy: burpbounty-ssrf-proxy-live-oracle — GET ?target= fetches Example Domain (22→25 findings)",
-      "burpbountylab.com/xss/attribute: burpbounty-xss-attribute-live-oracle — name param in value/href/src sinks (22→25 findings)",
-      "burpbountylab.com/redirect/login: burpbounty-redirect-login-live-oracle — form action set to attacker URL (22→25 findings)"
+      "burpbountylab.com/redirect/pp: open-redirect-query-param + hub fingerprint (26 findings)",
+      "burpbountylab.com/ssti/render: burpbounty-ssti-render-live-oracle + hub fingerprint (25 findings)",
+      "burpbountylab.com/graphql/ide: graphql-introspection-enabled + hub fingerprint (25 findings)",
+      "seclab.vercel.app/xss + /sqli: exposed-source-maps + permissive-cors (4 each)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab sqli/oob route still shares hub fingerprint — OOB SQLi oracle pending",
+      "burpbountylab redirect/pp, dwr/engine.js, collab/headers — route-specific oracles still absent (hub fingerprint dominates)",
       "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds"
     ]
   },
@@ -222,6 +223,13 @@
     "codeex-ai.vercel.app": 4,
     "oauthlabs.com": 5,
     "ctf.hackthebox.com": 4,
-    "www.hackthissite.org/pages/index/index.php": 5
+    "www.hackthissite.org/pages/index/index.php": 5,
+    "burpbountylab.com/redirect/pp": 26,
+    "burpbountylab.com/ssti/render": 25,
+    "burpbountylab.com/dwr/engine.js": 25,
+    "burpbountylab.com/graphql/ide": 25,
+    "burpbountylab.com/collab/headers": 25,
+    "seclab.vercel.app/xss": 4,
+    "seclab.vercel.app/sqli": 4
   }
 }
