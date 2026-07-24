@@ -8946,6 +8946,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-events-audit-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+    description:
+      "GET /api/v1/events returns JSON with count and logs array containing action, detail, and IP fields without authentication.",
+    impactOneline:
+      "Unauthenticated audit log API leaks security event history enabling attacker reconnaissance of admin actions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopEventsAuditLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning audit logs — Pwnshop PWN-005 is intentional lab software.",
+      steps: [
+        "Gate /api/v1/events behind admin authentication.",
+        "Redact IP addresses and usernames from audit responses for non-admin roles.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/events endpoint returns audit logs without auth. Show how to protect security event APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -14637,6 +14663,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /xss/dom page writes the msg query param to innerHTML. Show safe DOM APIs and encoding.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-rce-ping-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab RCE ping endpoint executes shell commands",
+    description:
+      "GET /rce/ping?host= runs ping against attacker-supplied hosts and returns raw icmp output without sanitization.",
+    impactOneline:
+      "Live RCE ping probe confirms OS command injection oracle for Burp Bounty scanner profile calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRcePingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — use parameterized network libraries.",
+      steps: [
+        "Replace shell ping invocations with safe network diagnostic libraries.",
+        "Validate and allowlist host parameters.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/ping endpoint executes ping with user-supplied host. Show how to prevent OS command injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xxe-parse-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab XXE parser resolves external entities",
+    description:
+      "POST /xxe/parse accepts XML with external entities and returns /etc/passwd contents without disabling DTD resolution.",
+    impactOneline:
+      "Live XXE probe confirms external entity injection oracle for Burp Bounty scanner profile calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXxeParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers.",
+      steps: [
+        "Set disallow-doctype-decl and disable external entities in the XML parser.",
+        "Use JSON instead of XML for untrusted input.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /xxe/parse endpoint resolves external XML entities to /etc/passwd. Show how to disable XXE in XML parsers.",
     version: 1,
     enabled: true
   },
