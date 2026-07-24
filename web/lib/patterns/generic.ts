@@ -10169,6 +10169,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-git-head-live-oracle",
+    platform: "generic",
+    category: "Source exposure",
+    severityDefault: "high",
+    title: "VulnLab exposed git HEAD artifact reachable",
+    description:
+      "GET /git/HEAD returns ref: refs/heads/* metadata without authentication — a recon oracle distinct from the standard /.git/HEAD http_probe.",
+    impactOneline:
+      "Live /git/HEAD probe confirms version-control artifact exposure for git-exposure lab paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabGitHeadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to git metadata artifacts under /git/.",
+      steps: [
+        "Remove /git/HEAD and related artifacts from the web root.",
+        "Deny requests to /git/* at the edge.",
+        "Audit for other exposed VCS paths (.git, .svn)."
+      ]
+    },
+    fixPrompt:
+      "Our /git/HEAD is publicly reachable with ref: refs/heads/*. Show how to block exposed git artifacts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-platform-php-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab PHP platform labs expose phpinfo and LFI",
+    description:
+      "GET /api/platform/phpinfo returns simulated phpinfo output and GET /api/include?page=../../etc/passwd returns /etc/passwd contents without authentication.",
+    impactOneline:
+      "Live PHP platform probes confirm phpinfo disclosure and path traversal for /platform/php.html lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabPlatformPhpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo and file-inclusion lab endpoints from anonymous access.",
+      steps: [
+        "Disable phpinfo in production and gate lab endpoints behind auth.",
+        "Validate and sanitize include/page parameters.",
+        "Block path traversal sequences at the application layer."
+      ]
+    },
+    fixPrompt:
+      "Our /api/platform/phpinfo and /api/include LFI lab are public. Show how to disable phpinfo and prevent path traversal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-platform-node-java-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab Node/Java platform labs expose dependency and actuator metadata",
+    description:
+      "GET /api/platform/node returns outdated express/jsonwebtoken manifests and GET /api/platform/java exposes Spring actuator paths and log4j version without authentication.",
+    impactOneline:
+      "Live Node/Java platform probes confirm dependency disclosure and actuator/log4j oracles for /platform/*.html lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabPlatformNodeJavaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate platform lab APIs behind authentication and suppress dependency/actuator metadata.",
+      steps: [
+        "Remove public /api/platform/* dependency manifests.",
+        "Disable actuator endpoints in production.",
+        "Upgrade log4j and other flagged dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /api/platform/node and /api/platform/java leak dependency and actuator metadata. Show how to suppress them.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-audit-api-evidence",
     platform: "generic",
     category: "Security misconfiguration",

@@ -26731,6 +26731,112 @@ const vulnlabCmsDrupalJoomlaLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabGitHeadLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/git\/HEAD/i.test(urlHint) &&
+    !/\/api\/validate\/git-exposure/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const gitHeadUrl = new URL("/git/HEAD", ctx.origin).toString();
+  const doc = await ctx.probe.get(gitHeadUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/^ref:\s+refs\/heads\//m.test(doc.body.trim())) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: gitHeadUrl,
+      snippet: doc.body.trim().slice(0, 120),
+      note: "VulnLab /git/HEAD exposes git ref metadata (ref: refs/heads/*) without authentication — distinct from /.git/HEAD http_probe"
+    }
+  };
+};
+
+const vulnlabPlatformPhpLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/platform\/php\.html/i.test(urlHint) &&
+    !/\/api\/platform\/phpinfo/i.test(urlHint) &&
+    !/\/api\/include/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const phpinfoUrl = new URL("/api/platform/phpinfo", ctx.origin).toString();
+  const lfiUrl = new URL("/api/include?page=../../etc/passwd", ctx.origin).toString();
+  const [phpinfoDoc, lfiDoc] = await Promise.all([
+    ctx.probe.get(phpinfoUrl, { maxBytes: 4096 }),
+    ctx.probe.get(lfiUrl, { maxBytes: 4096 })
+  ]);
+  const phpinfoOk =
+    phpinfoDoc.status >= 200 &&
+    phpinfoDoc.status < 400 &&
+    /phpinfo\(\)/i.test(phpinfoDoc.body) &&
+    /PHP Version/i.test(phpinfoDoc.body);
+  const lfiOk =
+    lfiDoc.status >= 200 &&
+    lfiDoc.status < 400 &&
+    /root:x:0:0:/.test(lfiDoc.body) &&
+    /\/bin\/(?:bash|sh)/.test(lfiDoc.body);
+  if (!phpinfoOk && !lfiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: phpinfoOk && lfiOk ? 0.92 : 0.9,
+    evidence: {
+      phpinfoUrl: phpinfoOk ? phpinfoUrl : undefined,
+      lfiUrl: lfiOk ? lfiUrl : undefined,
+      phpinfoSnippet: phpinfoOk ? phpinfoDoc.body.slice(0, 160).trim() : undefined,
+      lfiSnippet: lfiOk ? lfiDoc.body.slice(0, 160).trim() : undefined,
+      note: "VulnLab PHP platform labs expose simulated phpinfo and local file inclusion (/api/include?page=../../etc/passwd) without authentication"
+    }
+  };
+};
+
+const vulnlabPlatformNodeJavaLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/platform\/(?:node|java)\.html/i.test(urlHint) &&
+    !/\/api\/platform\/(?:node|java)/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const nodeUrl = new URL("/api/platform/node", ctx.origin).toString();
+  const javaUrl = new URL("/api/platform/java", ctx.origin).toString();
+  const [nodeDoc, javaDoc] = await Promise.all([
+    ctx.probe.get(nodeUrl, { maxBytes: 4096 }),
+    ctx.probe.get(javaUrl, { maxBytes: 4096 })
+  ]);
+  const nodeOk =
+    nodeDoc.status >= 200 &&
+    nodeDoc.status < 400 &&
+    /vulnerable-node-app/i.test(nodeDoc.body) &&
+    /"express"\s*:\s*"4\./.test(nodeDoc.body);
+  const javaOk =
+    javaDoc.status >= 200 &&
+    javaDoc.status < 400 &&
+    /\/actuator\/(?:env|heapdump)/.test(javaDoc.body) &&
+    /log4j/i.test(javaDoc.body);
+  if (!nodeOk && !javaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: nodeOk && javaOk ? 0.91 : 0.89,
+    evidence: {
+      nodeUrl: nodeOk ? nodeUrl : undefined,
+      javaUrl: javaOk ? javaUrl : undefined,
+      nodeSnippet: nodeOk ? nodeDoc.body.slice(0, 180).trim() : undefined,
+      javaSnippet: javaOk ? javaDoc.body.slice(0, 180).trim() : undefined,
+      note: "VulnLab Node/Java platform labs expose outdated dependency manifests and Spring actuator/log4j metadata without authentication"
+    }
+  };
+};
+
 // --- VulnLab /api/* audit training APIs (hack-this-site-eta.vercel.app) -----------------
 const VULNLAB_AUDIT_API_PATHS = [
   "/api/methods",
@@ -30552,6 +30658,9 @@ export const RULES: Record<string, Rule> = {
   vulnlabGraphqlSoapLiveOracle,
   vulnlabClickjackingLiveOracle,
   vulnlabCmsDrupalJoomlaLiveOracle,
+  vulnlabGitHeadLiveOracle,
+  vulnlabPlatformPhpLiveOracle,
+  vulnlabPlatformNodeJavaLiveOracle,
   clientSideVulnlabAuditApiEvidence,
   clientSideVulnlabHandsOnLabEvidence,
   clientSideVibeEvalEvidence,
