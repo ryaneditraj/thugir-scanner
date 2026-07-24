@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-07-24T14:23:43.189Z",
-=======
-  "updated_at": "2026-07-24T14:23:50.553Z",
->>>>>>> ba00cab (engine: Burp Bounty RCE/XXE + Pwnshop events audit live oracles [14 UTC])
+  "updated_at": "2026-07-24T14:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,28 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2356,
-  "total_findings": 13927,
+  "total_sites_scanned": 2364,
+  "total_findings": 14039,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1736,
-  "discovery_findings": 11300,
-<<<<<<< HEAD
-  "improvements_shipped": 1042,
-  "last_run": "2026-07-24T14:23:43.189Z",
-=======
+  "discovery_urls_added": 1741,
+  "discovery_findings": 11412,
   "improvements_shipped": 1046,
   "last_run": "2026-07-24T14:30:00.000Z",
->>>>>>> ba00cab (engine: Burp Bounty RCE/XXE + Pwnshop events audit live oracles [14 UTC])
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings). secret-resend slug still absent.",
+      "pass1_gap": ["xss", "sqli", "auth_bypass"],
+      "pass1_findings": 5,
+      "note": "Heroku cold-start degraded pass1 (5 findings, pages=1 probes=85); 12s retry merged to 6/6 (10 findings, pages=6); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -59,34 +52,53 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 41,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 112,
+      "skipped_48h": [
+        "http://burpbountylab.com/ssrf/fetch",
+        "http://burpbountylab.com/rce/ping",
+        "http://burpbountylab.com/pt/read",
+        "http://burpbountylab.com/graphql",
+        "http://burpbountylab.com/xxe/parse"
+      ],
       "dns_failures": [],
-      "focus": "Burp Bounty RCE/XXE route-specific live oracles + Pwnshop PWN-005 events audit oracle",
+      "focus": "BurpBountyLab DOM/JS XSS, open-redirect, CORS, passive secrets routes + engine RCE/XXE/Pwnshop oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku cold-start retry (pass1 gap=xss,sqli,auth_bypass)",
+      "burpbountylab.com/passive/secrets: 16 findings incl secret-aws-akid + secret-stripe-live + secret-private-key + secret-slack",
+      "burpbountylab.com/redirect/goto: 15 findings incl open-redirect-query-param live oracle",
+      "burpbountylab.com/xss/dom: 12 findings incl dangerous-html-sinks (DOM context)",
       "burpbountylab.com/rce/ping: burpbounty-rce-ping-live-oracle — ping 127.0.0.1 icmp output (9→13 findings)",
       "burpbountylab.com/xxe/parse: burpbounty-xxe-parse-live-oracle — /etc/passwd via external entity (9→13 findings)",
-      "pwnshop.ctfsecurity.com/api/v1/events: pwnshop-events-audit-live-oracle — unauthenticated audit logs (15 findings)"
+      "pwnshop.ctfsecurity.com/api/v1/events: pwnshop-events-audit-live-oracle — unauthenticated audit logs (15 findings)",
+      "hack-this-site-eta.vercel.app/api/methods: 41 findings (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds"
+      "Heroku cold-start still splits categories across pass1/retry — pass1 gap=xss,sqli,auth_bypass",
+      "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds",
+      "burpbountylab route pages still share hub fingerprint — route-specific CORS/CRLF oracles not yet distinct"
     ]
   },
   "discovery_highlights": {
     "burpbountylab.com": 15,
     "burpbountylab.com/ssrf/fetch": 9,
     "burpbountylab.com/rce/ping": 13,
+    "burpbountylab.com/pt/read": 9,
+    "burpbountylab.com/graphql": 9,
     "burpbountylab.com/xxe/parse": 13,
     "burpbountylab.com/xss/reflect": 9,
     "burpbountylab.com/sqli/login": 9,
     "burpbountylab.com/ssti/preview": 9,
+    "burpbountylab.com/xss/dom": 12,
+    "burpbountylab.com/xss/js": 11,
+    "burpbountylab.com/redirect/goto": 15,
+    "burpbountylab.com/cors/api/data": 12,
+    "burpbountylab.com/passive/secrets": 16,
     "hack-this-site-eta.vercel.app/owasp": 46,
     "escape.tech/academy/sql-injection": 2,
     "academy.hackthebox.com/module/details/88": 3,
@@ -119,7 +131,7 @@
     "hack-this-site-eta.vercel.app/labs/secret-scanner.html": 21,
     "hack-this-site-eta.vercel.app/api/validate/cors": 19,
     "hack-this-site-eta.vercel.app/api/validate/upload": 19,
-    "hack-this-site-eta.vercel.app/api/methods": 20,
+    "hack-this-site-eta.vercel.app/api/methods": 41,
     "hack-this-site-eta.vercel.app/auth/jwt.html": 29,
     "hack-this-site-eta.vercel.app/auth/session.html": 27,
     "hack-this-site-eta.vercel.app/auth/login.html": 28,

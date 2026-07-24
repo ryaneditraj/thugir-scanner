@@ -1,659 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-23T12:20:38.775Z",
-      "url": "https://hack-this-site-eta.vercel.app/api/headers",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 20,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.84,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "dom-eval-xss",
-          "title": "DOM XSS via eval() on user input",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-vulnlab-verbose-404-evidence",
-          "title": "VulnLab verbose 404 credential leak disclosed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-vulnlab-academy-evidence",
-          "title": "VulnLab Academy pentest training platform disclosed",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vulnlab-a01-access-evidence",
-          "title": "VulnLab A01 broken access control lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-idor-lab-evidence",
-          "title": "VulnLab IDOR hands-on lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-a03-injection-evidence",
-          "title": "VulnLab A03 injection lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 226,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:20:38.775Z"
-    },
-    {
-      "run_id": "2026-07-23T12:20:42.891Z",
-      "url": "https://hack-this-site-eta.vercel.app/api/cookies",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 21,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.84,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "dom-eval-xss",
-          "title": "DOM XSS via eval() on user input",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-vulnlab-verbose-404-evidence",
-          "title": "VulnLab verbose 404 credential leak disclosed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-vulnlab-academy-evidence",
-          "title": "VulnLab Academy pentest training platform disclosed",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vulnlab-a01-access-evidence",
-          "title": "VulnLab A01 broken access control lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-idor-lab-evidence",
-          "title": "VulnLab IDOR hands-on lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-a03-injection-evidence",
-          "title": "VulnLab A03 injection lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 226,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:20:42.891Z"
-    },
-    {
-      "run_id": "2026-07-23T12:20:46.959Z",
-      "url": "https://hack-this-site-eta.vercel.app/api/cors",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 21,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.84,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "dom-eval-xss",
-          "title": "DOM XSS via eval() on user input",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-idor-evidence",
-          "title": "Client bundle documents IDOR-prone API routes",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-vulnlab-verbose-404-evidence",
-          "title": "VulnLab verbose 404 credential leak disclosed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-vulnlab-academy-evidence",
-          "title": "VulnLab Academy pentest training platform disclosed",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vulnlab-a01-access-evidence",
-          "title": "VulnLab A01 broken access control lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-idor-lab-evidence",
-          "title": "VulnLab IDOR hands-on lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnlab-a03-injection-evidence",
-          "title": "VulnLab A03 injection lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 225,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:20:46.959Z"
-    },
-    {
-      "run_id": "2026-07-23T12:20:50.401Z",
-      "url": "https://escape.tech/academy/broken-function-level-authorization",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-escape-academy-evidence",
-          "title": "Escape API Security Academy GraphQL lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 286,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:20:50.401Z"
-    },
-    {
-      "run_id": "2026-07-23T12:21:18.132Z",
-      "url": "https://escape.tech/academy/disable-debug-mode",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-escape-academy-evidence",
-          "title": "Escape API Security Academy GraphQL lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 286,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:21:18.132Z"
-    },
-    {
-      "run_id": "2026-07-23T12:21:47.421Z",
-      "url": "https://escape.tech/academy/unrestricted-resource-consumption",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-graphql-security-hub-evidence",
-          "title": "GraphQL security assessment hub disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-escape-academy-evidence",
-          "title": "Escape API Security Academy GraphQL lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 297,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:21:47.421Z"
-    },
-    {
-      "run_id": "2026-07-23T12:22:16.987Z",
-      "url": "https://escape.tech/academy/broken-object-property-level-authorization",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-escape-academy-evidence",
-          "title": "Escape API Security Academy GraphQL lessons disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 287,
-      "status": "ok",
-      "scanned_at": "2026-07-23T12:22:16.987Z"
-    },
-    {
-      "run_id": "2026-07-23T13:01:34.530Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 80,
-      "status": "ok",
-      "scanned_at": "2026-07-23T13:01:34.530Z"
-    },
-    {
       "run_id": "2026-07-23T13:16:54.338Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -18586,6 +17933,910 @@
       "probes_run": 295,
       "status": "ok",
       "scanned_at": "2026-07-24T14:23:23.911Z"
+    },
+    {
+      "run_id": "2026-07-24T14:24:58.497Z",
+      "url": "http://burpbountylab.com/xss/dom",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 12,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 291,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:24:58.497Z"
+    },
+    {
+      "run_id": "2026-07-24T14:25:17.858Z",
+      "url": "http://burpbountylab.com/xss/js",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 11,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 292,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:25:17.858Z"
+    },
+    {
+      "run_id": "2026-07-24T14:25:36.239Z",
+      "url": "http://burpbountylab.com/redirect/goto",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "open-redirect-query-param",
+          "title": "Open redirect via query parameter",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-burp-bounty-lab-evidence",
+          "title": "Burp Bounty Lab scanner profile testbed disclosed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 276,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:25:36.239Z"
+    },
+    {
+      "run_id": "2026-07-24T14:25:52.668Z",
+      "url": "http://burpbountylab.com/cors/api/data",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 12,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 292,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:25:52.668Z"
+    },
+    {
+      "run_id": "2026-07-24T14:26:11.083Z",
+      "url": "http://burpbountylab.com/passive/secrets",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "secret-stripe-live",
+          "title": "Stripe live secret key exposed in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "secret-aws-akid",
+          "title": "AWS access key id exposed in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "secret-slack",
+          "title": "Slack token exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "secret-private-key",
+          "title": "Private key block exposed in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 292,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:26:11.083Z"
+    },
+    {
+      "run_id": "2026-07-24T14:26:28.995Z",
+      "url": "https://hack-this-site-eta.vercel.app/api/methods",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 41,
+      "findings": [
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.84,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "dom-eval-xss",
+          "title": "DOM XSS via eval() on user input",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-xss-evidence",
+          "title": "Source or bundle documents reflected XSS via unescaped input",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-vulnlab-verbose-404-evidence",
+          "title": "VulnLab verbose 404 credential leak disclosed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-vulnlab-validate-api-evidence",
+          "title": "VulnLab /api/validate lab checker APIs disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnlab-validate-sqli-live-oracle",
+          "title": "VulnLab SQLi validate API live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "vulnlab-validate-xss-live-oracle",
+          "title": "VulnLab reflected XSS validate API live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vulnlab-validate-idor-live-oracle",
+          "title": "VulnLab IDOR validate API live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnlab-jwt-decode-live-oracle",
+          "title": "VulnLab JWT decode API accepts alg=none without validation",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnlab-auth-session-live-oracle",
+          "title": "VulnLab session API exposes predictable session IDs",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnlab-auth-login-enumeration-live-oracle",
+          "title": "VulnLab login API enables username enumeration",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnlab-backup-config-live-oracle",
+          "title": "VulnLab backup config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnlab-rest-bola-live-oracle",
+          "title": "VulnLab REST APIs expose BOLA and broken access control",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnlab-graphql-soap-live-oracle",
+          "title": "VulnLab GraphQL schema and SOAP WSDL exposed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnlab-clickjacking-live-oracle",
+          "title": "VulnLab clickjacking lab lacks frame protection headers",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vulnlab-cms-drupal-joomla-live-oracle",
+          "title": "VulnLab CMS APIs expose Drupal and Joomla version metadata",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnlab-backup-db-sql-live-oracle",
+          "title": "VulnLab backup SQL dump exposes admin credentials",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnlab-admin-secrets-live-oracle",
+          "title": "VulnLab admin secrets API exposes credentials without auth",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnlab-git-head-live-oracle",
+          "title": "VulnLab exposed git HEAD artifact reachable",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "vulnlab-platform-php-live-oracle",
+          "title": "VulnLab PHP platform labs expose phpinfo and LFI",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vulnlab-platform-node-java-live-oracle",
+          "title": "VulnLab Node/Java platform labs expose dependency and actuator metadata",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vulnlab-platform-python-live-oracle",
+          "title": "VulnLab Python platform lab exposes Werkzeug debug mode",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vulnlab-platform-ruby-live-oracle",
+          "title": "VulnLab Ruby platform lab exposes Rails secret_key_base",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnlab-platform-aspnet-live-oracle",
+          "title": "VulnLab ASP.NET platform labs expose ViewState and debug web.config",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vulnlab-utilities-hash-live-oracle",
+          "title": "VulnLab utilities hash API exposes server-side digests",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnlab-recon-internal-metrics-live-oracle",
+          "title": "VulnLab recon labs expose internal metrics and hidden paths",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-vulnlab-audit-api-evidence",
+          "title": "VulnLab HTTP audit training APIs disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-vulnlab-hands-on-lab-evidence",
+          "title": "VulnLab hands-on OWASP exercise page disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-vulnlab-academy-evidence",
+          "title": "VulnLab Academy pentest training platform disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-vulnlab-a03-injection-evidence",
+          "title": "VulnLab A03 injection lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 270,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:26:28.995Z"
+    },
+    {
+      "run_id": "2026-07-24T14:26:34.321Z",
+      "url": "https://escape.tech/academy/broken-object-level-authorization",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-escape-academy-evidence",
+          "title": "Escape API Security Academy GraphQL lessons disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:26:34.321Z"
+    },
+    {
+      "run_id": "2026-07-24T14:27:23.234Z",
+      "url": "https://escape.tech/academy/broken-authentication",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-escape-academy-evidence",
+          "title": "Escape API Security Academy GraphQL lessons disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 297,
+      "status": "ok",
+      "scanned_at": "2026-07-24T14:27:23.234Z"
     }
   ],
   "teacher_delta_runs": [
@@ -19204,6 +19455,17 @@
       "teacher_delta": [],
       "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 Burp Bounty Lab routes (SSRF/RCE/path-traversal/GraphQL/XXE) → 96 findings across 8 URLs; burpbountylab hub fingerprint dominates (9/route); hack-this-site-eta/owasp 46 findings.",
       "scanned_at": "2026-07-24T13:08:00.000Z"
+    },
+    {
+      "run_id": "2026-07-24T14:28:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 5 findings gap=xss,sqli,auth_bypass pages=1 probes=85; pass2: 10 findings pages=6; gap=[])",
+      "teacher_delta": [],
+      "notes": "No teacher tools available. 14 UTC run: pass1 cold-start 5 findings gap=xss,sqli,auth_bypass (Heroku wake); 12s retry restored 6/6 with sql-error-disclosure + unauthenticated-admin-endpoint + dangerous-html-sinks + security-question-disclosure; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (DOM/JS XSS, redirect, CORS, passive secrets) → 112 findings across 8 URLs; passive/secrets 16 incl secret-aws-akid + secret-stripe-live; redirect/goto 15 incl open-redirect-query-param.",
+      "scanned_at": "2026-07-24T14:28:00.000Z"
     }
   ]
 }
