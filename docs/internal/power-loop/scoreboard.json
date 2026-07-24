@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 2275,
-  "total_findings": 13047,
+  "total_sites_scanned": 2283,
+  "total_findings": 13241,
   "critical_findings": 41,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1696,
-  "discovery_findings": 10625,
+  "discovery_urls_added": 1701,
+  "discovery_findings": 10809,
   "improvements_shipped": 1021,
   "last_run": "2026-07-24T05:10:00.000Z",
   "last_run_summary": {
@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
+      "note": "First-pass 6/6 recall on deep crawl (pages=6 probes=293; gap=[]). juice-shop-leaked-api-key present; secret-resend slug still absent.",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 39,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 209,
+      "skipped_48h": [
+        "hack-this-site-eta.vercel.app/admin/index.html",
+        "hack-this-site-eta.vercel.app/admin/users.html",
+        "hack-this-site-eta.vercel.app/auth/index.html"
+      ],
       "dns_failures": [],
-      "focus": "VulnLab Python platform live oracle + client-side PYTHON-001/002 evidence",
+      "focus": "HackThisSite home/platform hubs + OWASP WrongSecrets Render + Archon curriculum; parallel run shipped platform/python live oracle",
       "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/platform/python.html: vulnlab-platform-python-live-oracle + client-side-vulnlab-python-platform-evidence (14→39 findings)",
-      "GET /api/platform/python returns Werkzeug debug:true + pin 123-456-789 without auth"
+      "hack-this-site-eta.vercel.app/home/index.html: 40 findings — richest hub SPA bundle (exposed-source-maps + graphql-introspection)",
+      "hack-this-site-eta.vercel.app/platform/python.html: vulnlab-platform-python-live-oracle shipped (14→39 findings; GET /api/platform/python Werkzeug debug)",
+      "hack-this-site-eta.vercel.app/platform/ruby.html: 39 findings — Ruby platform cues surface",
+      "knowledge-vault-five.vercel.app/cybersecurity/: 13 findings incl client-side-archon-api-security-curriculum-evidence",
+      "wrongsecrets.onrender.com: shallow 1 finding (misconfig only) — secrets CTF oracles missed despite pages=6"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "hack-this-site-eta Vercel Security Checkpoint intermittently blocks deep crawl on some runs",
-      "admin/auth/platform hubs inherit identical SPA bundle — page-specific oracles partially addressed",
-      "juice-shop secret-resend slug still absent from benchmark oracle"
+      "wrongsecrets.onrender.com: OWASP secrets CTF challenges not surfaced — only missing-security-headers on deep crawl",
+      "hack-this-site-eta home/platform hubs inherit identical SPA bundle — page-specific oracles still missing",
+      "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
   "discovery_highlights": {
@@ -128,12 +135,17 @@
     "hack-this-site-eta.vercel.app/utilities/index.html": 38,
     "hack-this-site-eta.vercel.app/recon/index.html": 38,
     "hack-this-site-eta.vercel.app/security-policy.html": 33,
-    "hack-this-site-eta.vercel.app/resource/index.html": 40,
+    "hack-this-site-eta.vercel.app/resource/index.html": 45,
     "playground.fabraix.com/challenges/prompt-injection-001": 3,
     "hack-this-site-eta.vercel.app/auth/index.html": 38,
     "hack-this-site-eta.vercel.app/admin/index.html": 36,
     "hack-this-site-eta.vercel.app/admin/users.html": 36,
     "hack-this-site-eta.vercel.app/platform/aspnet.html": 37,
-    "hack-this-site-eta.vercel.app/platform/python.html": 39
+    "hack-this-site-eta.vercel.app/platform/python.html": 39,
+    "hack-this-site-eta.vercel.app/home/index.html": 40,
+    "hack-this-site-eta.vercel.app/platform/index.html": 40,
+    "hack-this-site-eta.vercel.app/platform/ruby.html": 39,
+    "wrongsecrets.onrender.com": 1,
+    "knowledge-vault-five.vercel.app/cybersecurity": 13
   }
 }

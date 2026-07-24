@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T04:05:00.000Z",
+  "updated_at": "2026-07-24T05:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/home/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — main testing hub and Tier 1 lab index (GitHub home/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/index.html",
+      "source": "dkyazzentwatwa/hack-this-site — platform-specific vulnerability hub (GitHub platform/index.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/platform/ruby.html",
+      "source": "dkyazzentwatwa/hack-this-site — Ruby platform-specific vulnerability cues (GitHub platform/ruby.html)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.onrender.com/",
+      "source": "OWASP WrongSecrets — official Render.io public demo (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://knowledge-vault-five.vercel.app/cybersecurity/",
+      "source": "Archon cybersecurity engineering path — OWASP Top 10 training curriculum (web search)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hack-this-site-eta.vercel.app/admin/index.html",
       "source": "dkyazzentwatwa/hack-this-site — admin panel hub and access-control lab index (GitHub admin/index.html)",
