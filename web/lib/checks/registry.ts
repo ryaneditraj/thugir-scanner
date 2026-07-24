@@ -6799,6 +6799,78 @@ const burpbountyXxeParseLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyCorsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeOrigin = "https://evil-cors-probe.example";
+  const probeUrl = new URL("/cors/api/data", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    maxBytes: 2048,
+    headers: { Origin: probeOrigin }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== probeOrigin) return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!/"status"\s*:\s*"success"/i.test(doc.body) || !/"users"\s*:/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: creds ? 0.94 : 0.9,
+    evidence: {
+      url: probeUrl,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /cors/api/data reflects arbitrary Origin with credentials and returns user JSON — CORS misconfiguration profile oracle"
+    }
+  };
+};
+
+const burpbountyPtReadLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/pt/read", ctx.origin);
+  probeUrl.searchParams.set("file", "../../../etc/passwd");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const passwdOk =
+    /root:x:0:0:/.test(doc.body) &&
+    /daemon:x:1:1:daemon:/i.test(doc.body) &&
+    /\/bin\/(?:bash|sh)/.test(doc.body);
+  if (!passwdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /pt/read?file=../../../etc/passwd returns /etc/passwd contents — path traversal profile oracle"
+    }
+  };
+};
+
+const burpbountyCrlfSetLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirCRLF${Date.now().toString(36)}`;
+  const probeUrl = new URL("/crlf/set", ctx.origin);
+  probeUrl.searchParams.set("lang", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const customLang = (doc.headers["x-custom-lang"] || "").trim();
+  const setCookie = (doc.headers["set-cookie"] || "").trim();
+  if (customLang !== canary) return NEGATIVE;
+  if (!new RegExp(`lang=${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`).test(setCookie)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      xCustomLang: customLang,
+      setCookie: setCookie.slice(0, 120),
+      note: "Burp Bounty Lab /crlf/set?lang= reflects unsanitized input into Set-Cookie and X-Custom-Lang response headers — CRLF/header injection profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -31677,6 +31749,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyDomXssLiveOracle,
   burpbountyRcePingLiveOracle,
   burpbountyXxeParseLiveOracle,
+  burpbountyCorsLiveOracle,
+  burpbountyPtReadLiveOracle,
+  burpbountyCrlfSetLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

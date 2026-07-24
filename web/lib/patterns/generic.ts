@@ -14719,6 +14719,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-cors-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab CORS API reflects arbitrary Origin",
+    description:
+      "GET /cors/api/data echoes the Origin header in Access-Control-Allow-Origin with credentials enabled and returns user JSON without authentication.",
+    impactOneline:
+      "Live CORS misconfiguration oracle on Burp Bounty Lab confirms credentialed cross-origin data theft profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCorsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect arbitrary Origin values with Access-Control-Allow-Credentials: true.",
+      steps: [
+        "Use a strict allow-list of trusted origins instead of echoing the Origin header.",
+        "Disable credentials on cross-origin API responses unless strictly required.",
+        "Isolate Burp Bounty Lab CORS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/api/data endpoint reflects any Origin with credentials. Show how to implement a strict CORS allow-list.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-pt-read-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab path traversal reads /etc/passwd",
+    description:
+      "GET /pt/read?file=../../../etc/passwd returns Linux passwd file contents without path canonicalization.",
+    impactOneline:
+      "Live path traversal oracle on Burp Bounty Lab confirms local file inclusion profile coverage beyond hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPtReadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Canonicalize file paths and deny parent-directory traversal sequences.",
+      steps: [
+        "Resolve paths against a fixed base directory and reject .. segments.",
+        "Use an allow-list of readable filenames instead of user-supplied paths.",
+        "Isolate Burp Bounty Lab path-traversal routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /pt/read endpoint accepts ../../../etc/passwd. Show how to prevent path traversal in file readers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-crlf-set-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab CRLF endpoint reflects input into response headers",
+    description:
+      "GET /crlf/set?lang= copies the query parameter unsanitized into Set-Cookie and X-Custom-Lang response headers.",
+    impactOneline:
+      "Live CRLF/header injection oracle on Burp Bounty Lab confirms response-header injection profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrlfSetLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF characters from values placed in HTTP response headers.",
+      steps: [
+        "Reject or encode newline characters in header values.",
+        "Use framework APIs that sanitize header injection by default.",
+        "Isolate Burp Bounty Lab CRLF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /crlf/set endpoint reflects lang into Set-Cookie without sanitizing CRLF. Show how to prevent HTTP response splitting.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
