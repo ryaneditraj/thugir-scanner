@@ -15109,6 +15109,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-rce-log4j-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Log4j JNDI lookup live oracle",
+    description:
+      "POST /rce/log4j logs attacker-supplied ${jndi:ldap://...} strings without sanitization — the Burp Bounty Log4Shell profile oracle.",
+    impactOneline:
+      "Live Log4j probe confirms JNDI lookup strings are logged unsafely on the /rce/log4j training route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRceLog4jLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Log4j and disable JNDI lookups in logging pipelines.",
+      steps: [
+        "Patch Log4j to 2.17.1+ and set log4j2.formatMsgNoLookups=true.",
+        "Sanitize user input before writing to logs.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/log4j endpoint logs unsanitized JNDI lookup strings. Show Log4Shell mitigations and safe logging.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xxe-upload-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab XXE file-upload live oracle",
+    description:
+      "POST /xxe/upload parses attacker-uploaded XML with external entities and returns /etc/passwd — the Burp Bounty XXE upload profile oracle.",
+    impactOneline:
+      "Live multipart upload probe confirms XXE file-upload oracle distinct from /xxe/parse inline XML POST.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXxeUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers used for file uploads.",
+      steps: [
+        "Set disallow-doctype-decl and external-general-entities to false.",
+        "Validate uploaded XML against a strict schema before parsing.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /xxe/upload endpoint resolves external entities in uploaded XML. Show secure XML parser configuration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
