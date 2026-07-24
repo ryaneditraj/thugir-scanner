@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T10:05:00.000Z",
+  "updated_at": "2026-07-24T11:55:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/xss/reflect",
+      "source": "Burp Bounty Lab — reflected XSS profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/sqli/login",
+      "source": "Burp Bounty Lab — SQLi login-form profile practice endpoint (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ssti/preview",
+      "source": "Burp Bounty Lab — SSTI template-render content-preview lab (burpbountylab.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/ui/",
+      "source": "erev0s/VAmPI — OWASP API Top 10 REST API lab UI entry point (Railway public deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/ui/",
+      "source": "apisec-inc/urban-VAmPI — OWASP API Top 10 production Railway UI entry (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vwad.owasp.org/app/yrprey/",
       "source": "OWASP VWAD — Yrprey OWASP API Top 10 vuln framework catalog entry (web search)",
