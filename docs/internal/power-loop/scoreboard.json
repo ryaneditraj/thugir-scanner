@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T07:03:32.140Z",
+  "updated_at": "2026-07-24T07:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2301,
-  "total_findings": 13548,
-  "critical_findings": 41,
+  "total_findings": 13551,
+  "critical_findings": 44,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1706,
-  "discovery_findings": 10990,
+  "discovery_findings": 10993,
   "improvements_shipped": 1024,
-  "last_run": "2026-07-24T07:03:32.140Z",
+  "last_run": "2026-07-24T07:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "First-pass 6/6 recall on deep crawl (pages=6 probes=293; gap=[]). juice-shop-leaked-api-key present; secret-resend slug still absent.",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,33 +50,25 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 106,
-      "skipped_48h": [
-        "hack-this-site-eta.vercel.app/owasp/index.html",
-        "hack-this-site-eta.vercel.app/cms/index.html",
-        "www.dvrag.com",
-        "playhacklab.com",
-        "platform.sixhackacademy.com"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 7,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "VulnShop route-specific oracles (admin/profile/users) + HackThisSite CMS pages (drupal/joomla); queue drain hit xss-attacker/api/collect + vulnshop login/products",
-      "improvements_shipped_this_run": 0
+      "focus": "DVRAG RAG pipeline live oracles (admin config, query/corpus SSRF)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/cms/drupal.html: 41 findings — CMS-specific page matches hub bundle depth",
-      "hack-this-site-eta.vercel.app/cms/joomla.html: 41 findings — CMS-specific page matches hub bundle depth",
-      "vulnshop.vercel.app/admin: 4 findings — shallow vs documented JWT bypass/RCE demo panels",
-      "vulnshop.vercel.app/profile: 4 findings — JWT decoder + priv-esc oracles shallow",
-      "vulnshop.vercel.app/users: 4 findings — IDOR/password disclosure oracles shallow",
-      "vulnshop.vercel.app/login: 5 findings — NoSQL injection demo panel not surfaced as slug"
+      "www.dvrag.com: 4→7 findings — client-side-dvrag-lab-evidence + dvrag-admin-config-live-oracle + dvrag-rag-pipeline-live-oracle",
+      "GET /admin/config exposes LLM systemPrompt without auth on DVRAG live mode",
+      "POST /query returns sk-live/AKIA secrets; GET /corpus leaks cross-tenant confidential docs"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "vulnshop.vercel.app/* routes: 4–5 findings vs 10 OWASP demo panels — route-specific oracles needed",
-      "hack-this-site cms/drupal+joomla: 41 findings but same SPA bundle as cms/index — page-specific CMS oracles missing",
+      "playhacklab.com: Vercel 404 Application not found — no deploy to scan",
+      "platform.sixhackacademy.com: login-gated CTF shell — challenge APIs behind auth",
       "secret-resend slug still absent on juice-shop benchmark"
     ]
   },
@@ -157,7 +149,7 @@
     "knowledge-vault-five.vercel.app/cybersecurity": 13,
     "hack-this-site-eta.vercel.app/owasp/index.html": 37,
     "hack-this-site-eta.vercel.app/cms/index.html": 39,
-    "www.dvrag.com": 4,
+    "www.dvrag.com": 7,
     "playhacklab.com": 1,
     "platform.sixhackacademy.com": 3
   }
