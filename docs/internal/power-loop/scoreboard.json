@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T21:16:00.000Z",
+  "updated_at": "2026-07-24T21:32:21.520Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2427,
-  "total_findings": 15191,
+  "total_sites_scanned": 2436,
+  "total_findings": 15360,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1771,
-  "discovery_findings": 12387,
+  "discovery_urls_added": 1776,
+  "discovery_findings": 12547,
   "improvements_shipped": 1062,
-  "last_run": "2026-07-24T21:16:00.000Z",
+  "last_run": "2026-07-24T21:32:21.520Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings); secret-resend slug still absent",
+      "note": "Pass1 cold-start gap=sqli (8 findings pages=1 probes=211); wake retry restored sql-error-disclosure → merged 6/6 (9 findings); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,26 +50,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 0,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 160,
+      "skipped_48h": [
+        "http://burpbountylab.com/collab/host?param=test",
+        "http://burpbountylab.com/collab/forgot?email=user@example.com",
+        "http://burpbountylab.com/xxe/soap"
+      ],
       "dns_failures": [],
-      "focus": "BurpBountyLab SOAP XXE + blind XSS + Windows path-traversal route oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab blind RCE, tag-context XSS, comment-context XSS, SSRF scheme bypass, outbound redirect profiles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "burpbountylab.com/xxe/soap: burpbounty-xxe-soap-live-oracle via POST SOAP XXE → /etc/passwd in GetUserResponse",
-      "burpbountylab.com/xss/blind: burpbounty-xss-blind-live-oracle via feedback param stored in admin-review",
-      "burpbountylab.com/pt/readwin: burpbounty-pt-readwin-live-oracle via ..\\..\\windows\\win.ini traversal"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 after sqli wake retry (pass1 gap=sqli → sql-error-disclosure on retry; merged 9 findings)",
+      "burpbountylab.com/rce/blind: hub fingerprint 30 findings — route-specific blind-RCE oracle still absent",
+      "burpbountylab.com/xss/tag: hub fingerprint 29 findings — route-specific tag-context XSS oracle still absent",
+      "burpbountylab.com/ssrf/scheme: hub fingerprint 30 findings — route-specific scheme-SSRF oracle still absent",
+      "burpbountylab.com/redirect/out: hub fingerprint 29 findings — route-specific outbound-redirect oracle still absent",
+      "burpbountylab.com/xss/comment: hub fingerprint 30 findings — route-specific comment-context XSS oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab collab/host, collab/forgot, rce/react2shell — route-specific oracles still absent",
-      "burpbountylab xss/blind + wp/users routes — wp/users oracle still absent",
-      "wrongsecrets.onrender.com suspended — CTF secrets oracle unreachable"
+      "juice-shop Heroku cold-start: pass1 sqli miss (no sql-error-disclosure) until wake retry",
+      "burpbountylab blind RCE, tag XSS, comment XSS, scheme SSRF, outbound redirect — route-specific oracles still absent (hub fingerprint dominates 29-30/route)"
     ]
   },
   "discovery_highlights": {
@@ -80,14 +85,12 @@
     "burpbountylab.com/redirect/login": 25,
     "burpbountylab.com/rce/log4j": 21,
     "burpbountylab.com/xxe/upload": 21,
-    "burpbountylab.com/xxe/soap": 30,
-    "burpbountylab.com/xss/blind": 22,
+    "burpbountylab.com/xss/blind": 19,
     "burpbountylab.com/sqli/time": 19,
     "burpbountylab.com/wp/wp-json/wp/v2/users": 19,
     "burpbountylab.com/ssrf/fetch": 9,
     "burpbountylab.com/rce/ping": 13,
     "burpbountylab.com/pt/read": 16,
-    "burpbountylab.com/pt/readwin": 30,
     "burpbountylab.com/graphql": 9,
     "burpbountylab.com/xxe/parse": 13,
     "burpbountylab.com/xss/reflect": 9,
@@ -233,11 +236,18 @@
     "burpbountylab.com/collab/headers": 25,
     "burpbountylab.com/collab/host": 28,
     "burpbountylab.com/collab/forgot": 28,
+    "burpbountylab.com/xxe/soap": 27,
     "burpbountylab.com/rce/react2shell": 27,
+    "burpbountylab.com/pt/readwin": 27,
     "labs.hackadvisor.io/challenges/sql-injection": 8,
     "labs.hackadvisor.io/challenges/xss": 8,
     "labs.hackadvisor.io/challenges/idor": 8,
     "seclab.vercel.app/xss": 4,
-    "seclab.vercel.app/sqli": 4
+    "seclab.vercel.app/sqli": 4,
+    "burpbountylab.com/rce/blind": 30,
+    "burpbountylab.com/xss/tag": 29,
+    "burpbountylab.com/ssrf/scheme": 30,
+    "burpbountylab.com/redirect/out": 29,
+    "burpbountylab.com/xss/comment": 30
   }
 }
