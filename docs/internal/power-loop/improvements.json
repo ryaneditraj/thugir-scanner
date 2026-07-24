@@ -6851,6 +6851,24 @@
       "slug": "client-side-wrongsecrets-evidence",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: wrongsecrets.onrender.com returns Service Suspended HTML — challenge oracles unreachable from cloud scans; use wrongsecrets.herokuapp.com instead"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "client-side-vulnshop-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /admin bundle has Admin Panel + is_admin JWT + Password (plaintext!) columns; vulnshop.vercel.app/admin findings 4→5; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "client-side-vulnshop-module-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile bundle has Mass Assignment [A01] + balance mass-assignment vuln field; vulnshop.vercel.app/profile findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-debug-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle wires vulnshop-production.up.railway.app; GET /api/debug/config|/users live probe rule shipped (Railway 404 during validation — fires when backend reachable); vulnshop.vercel.app/users findings 4→5 via module oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -11988,6 +12006,21 @@
       "source": "discovery:www.dvrag.com",
       "slug": "dvrag-rag-pipeline-live-oracle",
       "shipped_at": "2026-07-24T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-profile-module-oracles",
+      "shipped_at": "2026-07-24T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-users-module-oracle",
+      "shipped_at": "2026-07-24T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-debug-api-live-oracle",
+      "shipped_at": "2026-07-24T08:10:00.000Z"
     }
   ]
 }
