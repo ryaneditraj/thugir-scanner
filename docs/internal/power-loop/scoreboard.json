@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T18:02:41.269Z",
+  "updated_at": "2026-07-24T18:07:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2400,
-  "total_findings": 14632,
+  "total_sites_scanned": 2408,
+  "total_findings": 14863,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1756,
-  "discovery_findings": 11856,
+  "discovery_urls_added": 1761,
+  "discovery_findings": 12087,
   "improvements_shipped": 1054,
-  "last_run": "2026-07-24T18:02:41.269Z",
+  "last_run": "2026-07-24T18:07:30.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings, pages=6 probes=295); secret-resend slug still absent",
+      "note": "No benchmark misses — recall stable at 6/6 (9 findings, shallow crawl pages=1 probes=271); secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,31 +48,36 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 145,
+      "findings": 231,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab WordPress user enum, blind SQLi/XSS, XXE upload, and Log4j RCE route profiles",
+      "focus": "BurpBountyLab OOB SQLi, attribute XSS, SSRF proxy, passive headers, and login redirect route profiles",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/wp/wp-json/wp/v2/users: 19 findings — hub fingerprint dominates; no wordpress-user-enum oracle yet",
-      "burpbountylab.com/sqli/time: 19 findings — hub fingerprint; time-based blind SQLi route oracle still absent",
-      "burpbountylab.com/xss/blind: 19 findings — hub fingerprint; blind XSS callback oracle still absent",
-      "hack-this-site-eta.vercel.app/api/validate/sqli-error: 40 findings incl sql-error-disclosure"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings, shallow crawl) — no benchmark misses",
+      "burpbountylab.com/sqli/oob: 22 findings — hub fingerprint + burpbounty-* live oracles; OOB SQLi route oracle still absent",
+      "burpbountylab.com/passive/headers: 23 findings — richest new route; passive header triggers present",
+      "burpbountylab.com/redirect/login: 22 findings — hub fingerprint; login open-redirect route oracle still absent",
+      "hack-this-site-eta.vercel.app/api/validate/xss-reflected: 40 findings incl reflected-xss-query-param"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab route-specific oracles (xxe/upload, rce/log4j, sqli/time, xss/blind, wp/users) not yet distinct from hub fingerprint",
+      "burpbountylab route-specific oracles (sqli/oob, xss/attribute, ssrf/proxy, redirect/login) not yet distinct from hub fingerprint",
       "burpbountylab.com requires http:// (https returns empty) — scanner must preserve scheme from seeds"
     ]
   },
   "discovery_highlights": {
+    "burpbountylab.com/sqli/oob": 22,
+    "burpbountylab.com/xss/attribute": 22,
+    "burpbountylab.com/ssrf/proxy": 22,
+    "burpbountylab.com/passive/headers": 23,
+    "burpbountylab.com/redirect/login": 22,
     "burpbountylab.com/rce/log4j": 19,
     "burpbountylab.com/xxe/upload": 19,
     "burpbountylab.com/xss/blind": 19,
@@ -133,9 +138,9 @@
     "web-security-lab.vercel.app/learn/cookies-samesite": 5,
     "hack-this-site-eta.vercel.app/api/validate/sqli-error": 40,
     "hack-this-site-eta.vercel.app/api/validate/idor": 19,
-    "hack-this-site-eta.vercel.app/api/validate/xss-reflected": 17,
-    "hack-this-site-eta.vercel.app/api/validate/localstorage": 19,
-    "hack-this-site-eta.vercel.app/api/validate/git-exposure": 19,
+    "hack-this-site-eta.vercel.app/api/validate/xss-reflected": 40,
+    "hack-this-site-eta.vercel.app/api/validate/localstorage": 40,
+    "hack-this-site-eta.vercel.app/api/validate/git-exposure": 40,
     "hack-this-site-eta.vercel.app/labs/secret-scanner.html": 21,
     "hack-this-site-eta.vercel.app/api/validate/cors": 19,
     "hack-this-site-eta.vercel.app/api/validate/upload": 19,
@@ -176,7 +181,7 @@
     "vwad.owasp.org/app/yrprey": 3,
     "vwad.owasp.org/app/secure-by-design": 4,
     "vwad.owasp.org/app/ffufme": 4,
-    "juice-shop.herokuapp.com": 10,
+    "juice-shop.herokuapp.com": 9,
     "juice-shop-staging.herokuapp.com": 10,
     "hack-this-site-eta.vercel.app/admin/console.html": 33,
     "hack-this-site-eta.vercel.app/backup/db.sql": 33,
