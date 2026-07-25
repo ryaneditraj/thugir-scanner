@@ -7487,6 +7487,24 @@
       "slug": "brokencrystals-partner-login-xpath-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/partners/partnerLogin?username=anyuser&password=' or '1'='1 returns multiple <password> elements (Walter White/Jesse Pinkman credentials); brokencrystals.com/api/partners/partnerLogin findings 37→43; benchmark juice-shop-staging 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-raw-lfi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/raw?path=package.json returns {\"name\":\"broken-crystals\",\"scripts\":{\"build\":\"nest build\"}}; brokencrystals.com/api/file/raw findings 39→46; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle reads searchParams.get('maptitle') into iframe mapTitle + decodeURIComponent(window.location.search) into dangerous-html; brokencrystals.com/?maptitle=test findings 40→45 adds route-specific DOM XSS slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-completions-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/v1/completions returns {\"object\":\"text_completion\"} + X-AI-Backend/X-LLM-Provider headers; burpbountylab.com/ai/v1/completions findings 87→89; benchmark juice-shop 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13129,6 +13147,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-partner-login-xpath-live-oracle",
       "shipped_at": "2026-07-25T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-raw-lfi-live-oracle",
+      "shipped_at": "2026-07-25T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-dom-xss-evidence",
+      "shipped_at": "2026-07-25T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-completions-live-oracle",
+      "shipped_at": "2026-07-25T20:10:00.000Z"
     }
   ]
 }
