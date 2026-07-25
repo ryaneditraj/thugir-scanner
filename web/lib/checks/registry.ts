@@ -9036,6 +9036,67 @@ const burpbountyWpLfiCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySharefileCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/citrix/sharefile/download", ctx.origin);
+  probeUrl.searchParams.set("path", "../../../windows/win.ini");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const winIniOk =
+    /\[fonts\]/i.test(doc.body) &&
+    /\[extensions\]/i.test(doc.body) &&
+    /for 16-bit app support/i.test(doc.body);
+  if (!winIniOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /citrix/sharefile/download?path=../../../windows/win.ini returns win.ini contents — Citrix ShareFile path-traversal CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyArticaCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/artica/fw.login.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const articaOk =
+    /Artica\s+Web\s+Proxy/i.test(doc.body) &&
+    /<input[^>]+name=["']apikey["']/i.test(doc.body);
+  if (!articaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/artica/fw.login.php returns Artica Web Proxy login with apikey field — Artica proxy CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyMagmiCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/magmi/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const magmiOk =
+    /MAGMI\s+Utils\s+JS/i.test(doc.body) && /var\s+magmi\s*=/i.test(doc.body);
+  if (!magmiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/magmi/ returns MAGMI Utils JS — Magento MAGMI plugin CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -34046,6 +34107,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyZohoCveLiveOracle,
   burpbountyRubyCveLiveOracle,
   burpbountyWpLfiCveLiveOracle,
+  burpbountySharefileCveLiveOracle,
+  burpbountyArticaCveLiveOracle,
+  burpbountyMagmiCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
