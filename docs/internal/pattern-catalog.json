@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T08:02:06.455Z",
-  "total": 734,
-  "uniqueSlugs": 732,
+  "generatedAt": "2026-07-25T09:04:58.639Z",
+  "total": 737,
+  "uniqueSlugs": 735,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 716,
+    "generic": 719,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 662,
+    "deep": 665,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 59,
-    "Security misconfiguration": 59,
+    "Security misconfiguration": 60,
     "Broken authentication": 51,
-    "Injection": 157,
+    "Injection": 159,
     "Cross-site scripting": 118,
     "general": 18,
     "SSRF": 1,
@@ -63,6 +63,7 @@
     "burpbounty-rce-expect-live-oracle",
     "burpbounty-rce-log4j-live-oracle",
     "burpbounty-rce-ping-live-oracle",
+    "burpbounty-react2shell-live-oracle",
     "burpbounty-redirect-goto-live-oracle",
     "burpbounty-redirect-login-live-oracle",
     "burpbounty-redirect-meta-live-oracle",
@@ -71,6 +72,7 @@
     "burpbounty-source-app-backup-live-oracle",
     "burpbounty-source-config-bak-live-oracle",
     "burpbounty-source-disclosure-live-oracle",
+    "burpbounty-spring-cloud-config-live-oracle",
     "burpbounty-sqli-length-live-oracle",
     "burpbounty-sqli-login-live-oracle",
     "burpbounty-sqli-oob-live-oracle",
@@ -85,6 +87,7 @@
     "burpbounty-ssrf-scheme-live-oracle",
     "burpbounty-ssti-preview-live-oracle",
     "burpbounty-ssti-render-live-oracle",
+    "burpbounty-text4shell-live-oracle",
     "burpbounty-tomcat-cve-live-oracle",
     "burpbounty-wp-login-live-oracle",
     "burpbounty-xmlrpc-live-oracle",
