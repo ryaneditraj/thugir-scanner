@@ -7187,6 +7187,24 @@
       "slug": "burpbounty-ssrf-img-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/img?src=http://example.com/img.png returns Example Domain HTML (not No image source); burpbountylab.com/ssrf/img findings 42→48; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-preview-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssti/preview?content={{7*7}} returns <div>49</div>; burpbountylab.com/ssti/preview findings 9→50; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-url-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/url?link=javascript:thugirUrlXss reflects in href/src/action attributes; burpbountylab.com/xss/url findings 48→51; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-user-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/sqli/user?id=1 returns Username: admin + id=1' triggers MySQL syntax error; burpbountylab.com/sqli/user findings 48→52; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12589,6 +12607,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ssrf-img-live-oracle",
       "shipped_at": "2026-07-25T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-preview-live-oracle",
+      "shipped_at": "2026-07-25T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-url-live-oracle",
+      "shipped_at": "2026-07-25T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-user-live-oracle",
+      "shipped_at": "2026-07-25T06:10:00.000Z"
     }
   ]
 }
