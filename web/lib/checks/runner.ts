@@ -4227,6 +4227,7 @@ function extractBurpBountyLabSeeds(html: string, pageUrl: string): string[] {
   const pageOrigin = new URL(pageUrl).origin;
   for (const p of [
     "/xss/reflect?q=test",
+    "/xss/encoded?q=test",
     "/xss/dom?msg=test",
     "/xss/js?value=test",
     "/xss/tag?input=test",
@@ -4240,7 +4241,9 @@ function extractBurpBountyLabSeeds(html: string, pageUrl: string): string[] {
     "/sqli/login",
     "/pt/include?page=home",
     "/redirect/goto?url=/",
+    "/redirect/meta?url=/",
     "/ssrf/fetch?url=http://example.com",
+    "/ssrf/img?src=http://example.com/img.png",
     "/ssrf/scheme?url=file:///etc/passwd",
     "/ssti/render?template={{7*7}}",
     "/ssti/preview",
