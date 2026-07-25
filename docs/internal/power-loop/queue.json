@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T05:20:00.000Z",
+  "updated_at": "2026-07-25T06:04:51.130Z",
   "discovery_urls": [
+    {
+      "url": "https://edward-playground.github.io/top10-showcase/",
+      "source": "edward-playground/top10-showcase — OWASP LLM Top 10 (2025) interactive attack showcase (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xss/url?link=http://example.com",
+      "source": "BountySecurity/BurpBountyLab — XSS URL-parameter profile practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/xss/discover?page=1&search=test",
+      "source": "BountySecurity/BurpBountyLab — XSS multi-param discovery profile practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/text4shell?input=test",
+      "source": "BountySecurity/BurpBountyLab — Apache Text4Shell CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ai/mcp/tools",
+      "source": "BountySecurity/BurpBountyLab — AI MCP tools disclosure profile practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/cve/forti/",
       "source": "BountySecurity/BurpBountyLab — FortiOS CVE practice endpoint (cves.py)",
