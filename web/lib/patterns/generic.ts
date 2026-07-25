@@ -15473,6 +15473,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-sqli-status-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab status-code SQLi live oracle",
+    description:
+      "GET /sqli/status?id=1 returns 200 Found 1 users but id=1' returns 500 Internal Server Error — the Burp Bounty status-code SQLi profile oracle.",
+    impactOneline:
+      "Live status-code differential probe confirms boolean/error SQLi oracle distinct from error-message and time-based routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliStatusLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and return consistent HTTP status codes for invalid input.",
+      steps: [
+        "Bind id parameters with prepared statements.",
+        "Return generic 400 responses instead of 500 database errors.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/status endpoint returns HTTP 500 on id=1' but 200 on id=1. Show parameterized queries and consistent error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-length-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab content-length blind SQLi live oracle",
+    description:
+      "GET /sqli/length?q=admin' returns a larger HTML response than q=admin — the Burp Bounty content-length blind SQLi profile oracle.",
+    impactOneline:
+      "Live response-length differential confirms blind SQLi oracle when error messages and timing probes are unavailable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliLengthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries so injected SQL cannot change result-set cardinality.",
+      steps: [
+        "Bind search parameters with prepared statements.",
+        "Normalize response sizes or paginate results to reduce length-based oracles.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/length endpoint returns different response sizes for q=admin vs q=admin'. Show how to prevent blind SQLi via length differentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-pt-include-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab PHP include reads /etc/passwd",
+    description:
+      "GET /pt/include?page=../../../etc/passwd returns Linux passwd file contents via PHP include without path canonicalization.",
+    impactOneline:
+      "Live PHP include probe confirms LFI oracle distinct from /pt/read file-read route on Burp Bounty Lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPtIncludeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to PHP include/require and deny parent-directory traversal.",
+      steps: [
+        "Use a fixed allow-list of includable templates instead of user-supplied page paths.",
+        "Resolve paths against a base directory and reject .. segments.",
+        "Isolate Burp Bounty Lab LFI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /pt/include endpoint includes ../../../etc/passwd via the page parameter. Show how to prevent PHP local file inclusion.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

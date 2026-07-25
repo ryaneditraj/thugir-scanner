@@ -7541,6 +7541,92 @@ const burpbountySourceDisclosureLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySqliStatusLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const okUrl = new URL("/sqli/status", ctx.origin);
+  okUrl.searchParams.set("id", "1");
+  const errUrl = new URL("/sqli/status", ctx.origin);
+  errUrl.searchParams.set("id", "1'");
+  const [okDoc, errDoc] = await Promise.all([
+    ctx.probe.get(okUrl.toString(), { maxBytes: 2048 }),
+    ctx.probe.get(errUrl.toString(), { maxBytes: 2048 })
+  ]);
+  const okHit =
+    okDoc.status >= 200 &&
+    okDoc.status < 300 &&
+    /Found\s+1\s+users/i.test(okDoc.body);
+  const errHit =
+    errDoc.status >= 500 &&
+    /Internal Server Error/i.test(errDoc.body);
+  if (!okHit || !errHit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: errUrl.toString(),
+      baselineStatus: okDoc.status,
+      injectStatus: errDoc.status,
+      snippet: errDoc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab /sqli/status?id=1 returns 200 Found 1 users but id=1' returns 500 Internal Server Error — status-code SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountySqliLengthLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const narrowUrl = new URL("/sqli/length", ctx.origin);
+  narrowUrl.searchParams.set("q", "admin");
+  const wideUrl = new URL("/sqli/length", ctx.origin);
+  wideUrl.searchParams.set("q", "admin'");
+  const [narrowDoc, wideDoc] = await Promise.all([
+    ctx.probe.get(narrowUrl.toString(), { maxBytes: 16384 }),
+    ctx.probe.get(wideUrl.toString(), { maxBytes: 16384 })
+  ]);
+  if (narrowDoc.status < 200 || narrowDoc.status >= 400) return NEGATIVE;
+  if (wideDoc.status < 200 || wideDoc.status >= 400) return NEGATIVE;
+  const narrowCards = (narrowDoc.body.match(/class=["']user-card["']/gi) || []).length;
+  const wideCards = (wideDoc.body.match(/class=["']user-card["']/gi) || []).length;
+  const narrowLen = narrowDoc.body.length;
+  const wideLen = wideDoc.body.length;
+  const lengthDelta = wideLen - narrowLen;
+  const cardsDelta = wideCards - narrowCards;
+  if (!(narrowCards >= 1 && wideCards >= narrowCards + 2 && lengthDelta >= 700)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: cardsDelta >= 2 && lengthDelta >= 800 ? 0.92 : 0.9,
+    evidence: {
+      url: wideUrl.toString(),
+      narrowProbe: `q=admin → ${narrowLen} bytes, ${narrowCards} user-card(s)`,
+      wideProbe: `q=admin' → ${wideLen} bytes, ${wideCards} user-card(s)`,
+      lengthDelta,
+      snippet: wideDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab /sqli/length?q=admin' returns a larger response than q=admin — content-length blind SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountyPtIncludeLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/pt/include", ctx.origin);
+  probeUrl.searchParams.set("page", "../../../etc/passwd");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const includeOk =
+    /root:x:0:0:/.test(doc.body) &&
+    /daemon:x:1:1:daemon:/i.test(doc.body) &&
+    /\/bin\/(?:bash|sh)/.test(doc.body);
+  if (!includeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /pt/include?page=../../../etc/passwd returns /etc/passwd via PHP include — local file inclusion profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32448,6 +32534,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyRceExpectLiveOracle,
   burpbountyRceEchoLiveOracle,
   burpbountySourceDisclosureLiveOracle,
+  burpbountySqliStatusLiveOracle,
+  burpbountySqliLengthLiveOracle,
+  burpbountyPtIncludeLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
