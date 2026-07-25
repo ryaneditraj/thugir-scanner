@@ -7313,6 +7313,24 @@
       "slug": "burpbounty-text4shell-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/text4shell?input=canary echoes Processed: canary; burpbountylab.com/cve/text4shell findings 57→69; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pulse-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/pulse/ returns <h1>Pulse Secure</h1>; burpbountylab.com/cve/pulse findings 63→72; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-cisco-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/cisco/ returns <h1>Cisco</h1>; burpbountylab.com/cve/cisco findings 63→72; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-n8n-settings-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/n8n/rest/settings returns {\"n8nVersion\":\"1.71.2\",\"authenticationMethod\":\"email\"}; burpbountylab.com/cve/n8n/rest/settings findings 63→72; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12820,6 +12838,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-text4shell-live-oracle",
       "shipped_at": "2026-07-25T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pulse-cve-live-oracle",
+      "shipped_at": "2026-07-25T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-cisco-cve-live-oracle",
+      "shipped_at": "2026-07-25T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-n8n-settings-cve-live-oracle",
+      "shipped_at": "2026-07-25T10:10:00.000Z"
     }
   ]
 }

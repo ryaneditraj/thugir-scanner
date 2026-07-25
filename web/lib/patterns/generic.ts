@@ -16175,6 +16175,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-pulse-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Pulse Secure CVE live oracle",
+    description:
+      "GET /cve/pulse/ returns a Pulse Secure appliance heading — the Burp Bounty Pulse Connect Secure CVE profile oracle.",
+    impactOneline:
+      "Live Pulse Secure fingerprint probe confirms route-specific VPN appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPulseCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Pulse Connect Secure and restrict VPN admin interfaces to trusted networks.",
+      steps: [
+        "Apply vendor security advisories for Pulse Connect Secure CVEs.",
+        "Require MFA and network segmentation for VPN management consoles.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/pulse/ endpoint exposes a Pulse Secure appliance fingerprint. Show Pulse Connect Secure hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-cisco-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Cisco CVE live oracle",
+    description:
+      "GET /cve/cisco/ returns a Cisco appliance heading — the Burp Bounty Cisco network appliance CVE profile oracle.",
+    impactOneline:
+      "Live Cisco fingerprint probe confirms route-specific network appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCiscoCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Cisco appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Cisco PSIRT advisories promptly on exposed appliances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/cisco/ endpoint exposes a Cisco appliance fingerprint. Show Cisco management interface hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-n8n-settings-cve-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab n8n settings CVE live oracle",
+    description:
+      "GET /cve/n8n/rest/settings returns JSON with n8nVersion, releaseChannel, and authenticationMethod — the Burp Bounty n8n workflow automation CVE profile oracle.",
+    impactOneline:
+      "Live n8n settings probe confirms unauthenticated workflow automation configuration disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyN8nSettingsCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose n8n /rest/settings without authentication on public networks.",
+      steps: [
+        "Require authentication for all n8n REST API routes.",
+        "Patch n8n CVEs and restrict admin UI to internal networks.",
+        "Isolate Burp Bounty Lab n8n CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/n8n/rest/settings endpoint leaks n8nVersion and authenticationMethod without auth. Show n8n hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
