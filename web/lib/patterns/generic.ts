@@ -13601,6 +13601,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-file-lfi-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file local file inclusion oracle",
+    description:
+      "GET /api/file?path=package.json returns the application package.json from the server filesystem — the Broken Crystals /api/file local file inclusion oracle distinct from /api/file/raw.",
+    impactOneline:
+      "Unauthenticated path traversal/LFI endpoints let attackers read application source, configuration, and host files.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileLfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file?path= endpoint reads arbitrary server files like package.json. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals mass-assignment privilege escalation oracle",
+    description:
+      "POST /api/users/basic accepts hidden isAdmin:true in the JSON body and GET /api/users/one/{email}/adminpermission confirms admin privileges — the Broken Crystals mass-assignment oracle.",
+    impactOneline:
+      "Mass-assignment lets attackers bind privileged fields like isAdmin during signup and escalate to administrator access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes and reject unknown fields — Broken Crystals is intentional lab software.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin and other privileged fields on create/update.",
+        "Enforce role changes only through authenticated admin workflows.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/basic endpoint accepts isAdmin:true during signup. Show mass-assignment remediation for NestJS user creation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mass-assignment-put-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals PUT profile mass-assignment oracle",
+    description:
+      "PUT /api/users/one/{email}/info accepts hidden isAdmin:true and escalates an existing user to administrator — the Broken Crystals profile-update mass-assignment oracle.",
+    impactOneline:
+      "Mass-assignment on profile updates lets authenticated users escalate privileges by binding hidden admin fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentPutLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist updatable profile fields and reject privileged attributes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Filter isAdmin and role fields out of user profile update DTOs.",
+        "Verify admin permission changes only through audited admin endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /api/users/one/{email}/info endpoint accepts isAdmin:true. Show mass-assignment remediation for profile updates.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-brokencrystals-dom-xss-evidence",
     platform: "generic",
     category: "Cross-site scripting",
