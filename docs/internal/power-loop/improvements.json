@@ -7367,6 +7367,24 @@
       "slug": "burpbounty-netsweeper-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/netsweeper/ returns <h1>Netsweeper WebAdmin</h1>; burpbountylab.com/cve/netsweeper/ findings 72→77; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-zoho-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/zoho/ returns <h1>ManageEngine</h1>; burpbountylab.com/cve/zoho/ findings 75→83; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ruby-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/ruby/ returns <h1>Ruby on Rails App</h1>; burpbountylab.com/cve/ruby/ findings 75→83; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-lfi-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/wp/local-file-inclusion?file=../../../etc/passwd returns root:x:0:0:/etc/passwd; burpbountylab.com/cve/wp/local-file-inclusion findings 75→80; benchmark juice-shop 14 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12919,6 +12937,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-netsweeper-cve-live-oracle",
       "shipped_at": "2026-07-25T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-zoho-cve-live-oracle",
+      "shipped_at": "2026-07-25T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ruby-cve-live-oracle",
+      "shipped_at": "2026-07-25T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-lfi-cve-live-oracle",
+      "shipped_at": "2026-07-25T13:10:00.000Z"
     }
   ]
 }
