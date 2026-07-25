@@ -7879,6 +7879,94 @@ const burpbountyTomcatCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyWpLoginLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/wp/wp-login.php", ctx.origin).toString();
+  const formDoc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (formDoc.status < 200 || formDoc.status >= 400) return NEGATIVE;
+  const hasLoginForm =
+    /WordPress Login/i.test(formDoc.body) &&
+    /<form[^>]+method\s*=\s*["']POST["'][^>]*action\s*=\s*["']\/wp\/wp-login\.php["']/i.test(formDoc.body) &&
+    /name\s*=\s*["']log["']/i.test(formDoc.body) &&
+    /name\s*=\s*["']pwd["']/i.test(formDoc.body);
+  if (!hasLoginForm) return NEGATIVE;
+  const authDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: "log=admin&pwd=wrongpassword",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 1024
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Invalid username or password/i.test(authDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: authDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /wp/wp-login.php exposes WordPress log/pwd form and POST returns Invalid username or password — WordPress login profile oracle"
+    }
+  };
+};
+
+const burpbountyGrafanaCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const candidatePaths = ["/cve/grafana/", "/grafana/"];
+  for (const path of candidatePaths) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const grafanaHit =
+      /<title>\s*Grafana\s*<\/title>/i.test(doc.body) &&
+      /your home dashboard/i.test(doc.body) &&
+      /LoadingGrafana/i.test(doc.body);
+    if (!grafanaHit) continue;
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: probeUrl,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "Burp Bounty Lab Grafana route returns title Grafana with home dashboard shell — Grafana CVE/profile oracle distinct from generic hub fingerprinting"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const burpbountyPassiveApiPathLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/passive/api/v1/data", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { data?: unknown; total?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { data?: unknown; total?: unknown };
+  } catch {
+    return NEGATIVE;
+  }
+  const rows = parsed.data;
+  const total = parsed.total;
+  const rowOk =
+    Array.isArray(rows) &&
+    rows.length > 0 &&
+    typeof rows[0] === "object" &&
+    rows[0] !== null &&
+    "id" in (rows[0] as Record<string, unknown>) &&
+    "name" in (rows[0] as Record<string, unknown>);
+  if (!rowOk || typeof total !== "number") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      total,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /passive/api/v1/data returns JSON data array with id/name objects and total counter — API path passive-detection profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32798,6 +32886,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyXmlrpcLiveOracle,
   burpbountySqliUserEnumLiveOracle,
   burpbountyTomcatCveLiveOracle,
+  burpbountyWpLoginLiveOracle,
+  burpbountyGrafanaCveLiveOracle,
+  burpbountyPassiveApiPathLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

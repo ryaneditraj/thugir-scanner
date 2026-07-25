@@ -1464,6 +1464,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountyXmlrpcLiveOracle",
   "burpbountySqliUserEnumLiveOracle",
   "burpbountyTomcatCveLiveOracle",
+  "burpbountyWpLoginLiveOracle",
+  "burpbountyGrafanaCveLiveOracle",
+  "burpbountyPassiveApiPathLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
@@ -4260,6 +4263,9 @@ function extractBurpBountyLabSeeds(html: string, pageUrl: string): string[] {
     "/ai/health",
     "/ai/metrics",
     "/source/app.py~",
+    "/wp/wp-login.php",
+    "/grafana/",
+    "/passive/api/v1/data",
     "/redirect/goto?url=/"
   ]) {
     try {
