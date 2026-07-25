@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 2591,
-  "total_findings": 21730,
-  "critical_findings": 50,
+  "total_sites_scanned": 2594,
+  "total_findings": 21993,
+  "critical_findings": 48,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1856,
-  "discovery_findings": 18045,
-  "improvements_shipped": 1119,
+  "discovery_urls_added": 1861,
+  "discovery_findings": 18294,
+  "improvements_shipped": 1116,
   "last_run": "2026-07-25T15:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
@@ -31,7 +31,7 @@
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall on primary Heroku (14 findings, pages=6 probes=535); no benchmark misses",
+      "note": "Stable 6/6 first-pass recall on primary Heroku (14 findings, pages=6 probes=459); jwt-alg-none-accepted + reflexion-escalated-ssti + thugir-dir-discovery present",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,57 +51,51 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 5,
-      "findings": 90,
-      "skipped_48h": [],
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 339,
+      "skipped_48h": [
+        "http://burpbountylab.com/cve/firebase/.json"
+      ],
       "dns_failures": [
         "https://brokencrystals.com/api/goto"
       ],
-      "focus": "Pwnshop PWN-037 email enumeration + Broken Crystals /api/goto redirect + /api/file/aws AWS metadata SSRF",
-      "improvements_shipped_this_run": 3
+      "focus": "brokencrystals upload/SSRF oracles + pwnshop chat/init enumeration + burpbounty route drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses; secret-resend slug still absent",
-      "pwnshop.ctfsecurity.com/api/v1/chat/init: 14→16 findings — pwnshop-chat-init-email-enumeration-live-oracle shipped (found:true/false JSON)",
-      "brokencrystals.com/api/file/aws: 34→36 findings — brokencrystals-goto-open-redirect-live-oracle + brokencrystals-aws-metadata-ssrf-live-oracle shipped",
-      "brokencrystals.com/api/hidden-upload: 35 findings — unrestricted upload returns 201 (route-specific hidden-upload oracle still absent)"
+      "brokencrystals.com/api/hidden-upload: 33 findings — brokencrystals dir-discovery fingerprint; no route-specific unrestricted-upload oracle",
+      "brokencrystals.com/api/file/aws: 34 findings — brokencrystals dir-discovery fingerprint; no route-specific AWS-metadata SSRF oracle",
+      "pwnshop.ctfsecurity.com/api/v1/chat/init: 11 findings — client-side-pwnshop evidence; PWN-037 username-enumeration oracle still absent",
+      "burpbountylab.com/ssrf/fetch: 86 findings — hub fingerprint; route-specific SSRF-fetch oracle still absent",
+      "burpbountylab.com/rce/ping: 86 findings — hub fingerprint; route-specific cmd-injection oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed still not triggered (burpbounty-firebase-cve-live-oracle covers JSON oracle)",
-      "brokencrystals.com/api/hidden-upload: unrestricted file upload (201) — route-specific upload oracle still absent",
-      "brokencrystals.com/api/goto: bare-path scan intermittently unreachable; oracle validated via same-origin /api/file/aws scan"
+      "brokencrystals.com/api/goto: DNS/connect failure — hidden-upload + file/aws scanned but route-specific upload/SSRF oracles still absent",
+      "pwnshop/forgot-password + lab-stats + admin: queued this run but not yet scanned (queue drain priority)",
+      "burpbountylab symfony profiler / f5 bash / netsweeper systemstatus: added to queue, pending next drain"
     ]
   },
   "discovery_highlights": {
-    "pwnshop.ctfsecurity.com/vulnerabilities": 13,
-    "pwnshop.ctfsecurity.com/debug/info": 12,
-    "pwnshop.ctfsecurity.com/api/v1/events": 11,
-    "pwnshop.ctfsecurity.com/api/v1/chat/init": 16,
-    "vulnshop.vercel.app/orders": 7,
-    "oauthlabs.com": 8,
-    "vampi-production.up.railway.app/ui": 8,
-    "urban-vampi-production.up.railway.app/ui": 8,
-    "vwad.owasp.org/app/burpbounty": 8,
-    "burpbountylab.com/cve/zoho/": 83,
-    "burpbountylab.com/cve/ruby/": 83,
-    "burpbountylab.com/cve/wp/local-file-inclusion": 80,
+    "juice-shop.herokuapp.com": 14,
+    "brokencrystals.com/api/hidden-upload": 33,
+    "brokencrystals.com/api/file/aws": 34,
+    "pwnshop.ctfsecurity.com/api/v1/chat/init": 11,
+    "damnvulnerablecryptoapp.github.io/DamnVulnerableCryptoApp": 3,
+    "burpbountylab.com/ssrf/fetch": 86,
+    "burpbountylab.com/rce/ping": 86,
+    "burpbountylab.com/pt/read": 86,
     "burpbountylab.com/citrix/sharefile/": 85,
     "burpbountylab.com/cve/artica/fw.login.php": 86,
     "burpbountylab.com/cve/magmi/": 86,
-    "burpbountylab.com/cve/couchdb/_users/_all_docs": 75,
-    "burpbountylab.com/cve/crowd/": 78,
+    "burpbountylab.com/cve/zoho/": 83,
+    "burpbountylab.com/cve/ruby/": 83,
     "burpbountylab.com/cve/firebase/.json": 79,
-    "burpbountylab.com/cve/netsweeper/": 77,
-    "juice-shop.herokuapp.com": 14,
-    "brokencrystals.com/api/hidden-upload": 35,
-    "brokencrystals.com/api/file/aws": 36,
-    "pwnshop.ctfsecurity.com/api/v1/chat/init": 16,
-    "damnvulnerablecryptoapp.github.io/DamnVulnerableCryptoApp": 3,
-    "burpbountylab.com/ssrf/fetch": 83,
-    "burpbountylab.com/rce/ping": 83,
-    "burpbountylab.com/pt/read": 83
+    "pwnshop.ctfsecurity.com/vulnerabilities": 13,
+    "pwnshop.ctfsecurity.com/debug/info": 12,
+    "pwnshop.ctfsecurity.com/api/v1/events": 11
   }
 }
