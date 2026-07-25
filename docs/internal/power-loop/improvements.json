@@ -7523,6 +7523,24 @@
       "slug": "brokencrystals-file-lfi-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file?path=package.json returns broken-crystals nest build package.json; distinct from /api/file/raw; brokencrystals.com/api/file findings 44→48; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/testimonials/count?query=thugirXSScanary returns unescaped canary in SQL syntax-error body; brokencrystals.com/api/testimonials/count findings 49→51; benchmark recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-subscriptions-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/subscriptions?email=thugirXSScanary echoes canary unescaped (HTTP 201); brokencrystals.com/api/subscriptions findings 47→49; benchmark recall maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /forgot-password admin@pwnshop.com → 'password reset link has been sent'; unknown email → 'No account found'; pwnshop.ctfsecurity.com/forgot-password findings 16 incl new slug; benchmark recall maintained"
     }
   ],
   "shipped": [
@@ -13195,6 +13213,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-file-lfi-live-oracle",
       "shipped_at": "2026-07-25T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-xss-live-oracle",
+      "shipped_at": "2026-07-25T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-subscriptions-xss-live-oracle",
+      "shipped_at": "2026-07-25T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+      "shipped_at": "2026-07-25T22:10:00.000Z"
     }
   ]
 }
