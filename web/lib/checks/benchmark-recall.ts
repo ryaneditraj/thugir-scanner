@@ -2,15 +2,20 @@
 
 const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "sql-error-disclosure": ["sqli"],
+  "post-login-sql-bypass": ["sqli", "auth_bypass"],
   "client-side-sql-evidence": ["sqli"],
   "client-side-nosql-evidence": ["sqli"],
   "client-side-xxe-evidence": ["sqli"],
   "client-side-api-security-lab-evidence": ["idor", "auth_bypass"],
   "unauthenticated-admin-endpoint": ["auth_bypass"],
+  "security-question-disclosure": ["sensitive_data"],
+  "juice-shop-forgotten-backup-disclosure": ["sensitive_data"],
+  "juice-shop-leaked-api-key": ["sensitive_data"],
   "dangerous-html-sinks": ["xss"],
   "dom-eval-xss": ["xss"],
   "idor-sequential-ids": ["idor"],
   "spring-boot-actuator-exposed": ["misconfig"],
+  "secret-resend": ["sensitive_data"],
   "vibe-unauthenticated-api-routes": ["idor", "sensitive_data"]
 };
 

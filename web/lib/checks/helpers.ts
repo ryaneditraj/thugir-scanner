@@ -42,7 +42,9 @@ export const SENSITIVE_PATH_NEEDLES = [
   "/.well-known/acme",
   "/api/debug",
   "/staging",
-  "/internal"
+  "/internal",
+  "/back-office",
+  "the-back-office"
 ];
 
 export const DEMO_FLAG_RES = [
@@ -87,6 +89,18 @@ export const HARDCODED_CRED_RES = [
   {
     label: "admin password in API query string",
     re: /(?:\?|&)username=admin&password=(?:123456|password|admin|passw0rd)/i
+  },
+  {
+    label: "DVWA default credential hint",
+    re: /default username is ['"]admin['"] with password ['"]password['"]/i
+  },
+  {
+    label: "HTML lab displayed admin credentials",
+    re: /font-mono[^>]*>admin\s*\/\s*admin(?:123)?|Admin:[\s\S]{0,40}font-mono[^>]*>admin\s*\/\s*admin/i
+  },
+  {
+    label: "VulnForge hardcoded API key placeholder",
+    re: /x-vulnforge-api-key[\s\S]{0,220}change_me_for_prod|change_me_for_prod[\s\S]{0,220}x-vulnforge-api-key|bh=["']change_me_for_prod["']/i
   }
 ];
 

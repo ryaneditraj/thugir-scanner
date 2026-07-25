@@ -4,6 +4,11 @@
     {
       "id": "juice-shop",
       "url": "https://juice-shop.herokuapp.com",
+      "fallback_url": "https://juice-shop-staging.herokuapp.com",
+      "fallback_urls": [
+        "https://juice-shop-staging.herokuapp.com",
+        "https://juice-shop.demo.escape.tech"
+      ],
       "auth": "public_benchmark",
       "expected_categories": [
         "xss",
