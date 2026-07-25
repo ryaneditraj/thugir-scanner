@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T00:05:00.000Z",
+  "updated_at": "2026-07-25T01:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/xss/encoded?q=test",
+      "source": "BountySecurity/BurpBountyLab — encoded-context reflected XSS profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/echo?input=hello",
+      "source": "BountySecurity/BurpBountyLab — command-echo RCE profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/rce/expect?cmd=id",
+      "source": "BountySecurity/BurpBountyLab — PHP expect:// wrapper RCE profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ssrf/img?src=http://example.com/img.png",
+      "source": "BountySecurity/BurpBountyLab — SSRF via image src attribute profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/jira/dashboard",
+      "source": "BountySecurity/BurpBountyLab — CVE-2019-11581 Jira template-injection practice endpoint",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/sqli/status?id=1",
       "source": "BountySecurity/BurpBountyLab — status-code differential SQLi profile practice endpoint",
