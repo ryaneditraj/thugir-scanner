@@ -7169,6 +7169,24 @@
       "slug": "burpbounty-pt-include-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/pt/include?page=../../../etc/passwd returns root:x:0:0 passwd via PHP include; burpbountylab.com/pt/include findings 39→45; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-meta-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/redirect/meta?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns meta refresh content=0;url=probe + location.replace(probe); burpbountylab.com/redirect/meta findings 39→52; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-encoded-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/xss/encoded?q=<script>alert(1)</script> echoes raw script in <p>Results for:</p> and input value=; burpbountylab.com/xss/encoded findings 41→48; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-img-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/img?src=http://example.com/img.png returns Example Domain HTML (not No image source); burpbountylab.com/ssrf/img findings 42→48; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12556,6 +12574,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-pt-include-live-oracle",
       "shipped_at": "2026-07-25T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-redirect-meta-live-oracle",
+      "shipped_at": "2026-07-25T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xss-encoded-live-oracle",
+      "shipped_at": "2026-07-25T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-img-live-oracle",
+      "shipped_at": "2026-07-25T02:10:00.000Z"
     }
   ]
 }
