@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T10:05:00.000Z",
+  "updated_at": "2026-07-25T11:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/cve/crowd/",
+      "source": "BountySecurity/BurpBountyLab — Atlassian Crowd CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/firebase/.json",
+      "source": "BountySecurity/BurpBountyLab — Firebase realtime DB exposure CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/netsweeper/",
+      "source": "BountySecurity/BurpBountyLab — Netsweeper webadmin CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/artica/fw.login.php",
+      "source": "BountySecurity/BurpBountyLab — Artica Proxy fw.login.php CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/magmi/",
+      "source": "BountySecurity/BurpBountyLab — MAGMI Magento plugin CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/actuator/heapdump",
       "source": "BountySecurity/BurpBountyLab — Spring Boot actuator heapdump memory dump endpoint (hub scrape)",
