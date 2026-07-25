@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T02:06:00.000Z",
+  "updated_at": "2026-07-25T03:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/wp/xmlrpc.php",
+      "source": "BountySecurity/BurpBountyLab — WordPress XML-RPC endpoint profile practice (wordpress.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/passive/graphql",
+      "source": "BountySecurity/BurpBountyLab — GraphQL path detection passive trigger (passive.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/tomcat/",
+      "source": "BountySecurity/BurpBountyLab — CVE Tomcat practice endpoint (cves.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/sqli/user?id=1",
+      "source": "BountySecurity/BurpBountyLab — SQLi user enumeration profile practice endpoint (sqli.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/source/config.bak",
+      "source": "BountySecurity/BurpBountyLab — source-code disclosure via .bak backup suffix (misc.py)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/ai/health",
       "source": "BountySecurity/BurpBountyLab — AI/LLM health endpoint with RAG/MCP metadata disclosure (ai_endpoints.py)",
