@@ -7421,6 +7421,24 @@
       "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/aws?path=http://169.254.169.254/latest/meta-data/&type=image/jpg returns ami-id+instance-id metadata listing; brokencrystals.com/api/file/aws findings 34→36; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-hidden-upload-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/hidden-upload multipart image returns {\"content\":\"data:image/png;base64,...\"}; brokencrystals.com/api/hidden-upload findings 33→36; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-f5-bash-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/f5/ returns <h1>F5 BIG-IP</h1> and POST /mgmt/tm/util/bash returns Unauthorized; burpbountylab.com/cve/f5/ findings 75→87; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/webadmin/tools/systemstatus_remote.php returns <h1>System Status</h1>; burpbountylab.com/webadmin/tools/systemstatus_remote.php findings 75→88; benchmark juice-shop 14 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13018,6 +13036,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
       "shipped_at": "2026-07-25T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-hidden-upload-live-oracle",
+      "shipped_at": "2026-07-25T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-f5-bash-cve-live-oracle",
+      "shipped_at": "2026-07-25T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+      "shipped_at": "2026-07-25T16:10:00.000Z"
     }
   ]
 }
