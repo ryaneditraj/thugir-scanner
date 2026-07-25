@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T01:06:00.000Z",
+  "updated_at": "2026-07-25T02:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/ai/health",
+      "source": "BountySecurity/BurpBountyLab — AI/LLM health endpoint with RAG/MCP metadata disclosure (ai_endpoints.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ai/metrics",
+      "source": "BountySecurity/BurpBountyLab — Prometheus-style AI token metrics endpoint (ai_endpoints.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/source/app.py~",
+      "source": "BountySecurity/BurpBountyLab — source-code disclosure via backup tilde suffix (misc.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/robots.txt",
+      "source": "BountySecurity/BurpBountyLab — robots.txt misc discovery with admin/backup paths (misc.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/confluence/",
+      "source": "BountySecurity/BurpBountyLab — CVE-2022-26134 Confluence OGNL RCE practice endpoint (cves.py)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/xss/encoded?q=test",
       "source": "BountySecurity/BurpBountyLab — encoded-context reflected XSS profile practice endpoint",
