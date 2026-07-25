@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T16:10:00.000Z",
+  "updated_at": "2026-07-25T16:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2597,
-  "total_findings": 22110,
+  "total_sites_scanned": 2605,
+  "total_findings": 22715,
   "critical_findings": 49,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1861,
-  "discovery_findings": 18411,
+  "discovery_urls_added": 1866,
+  "discovery_findings": 19004,
   "improvements_shipped": 1119,
-  "last_run": "2026-07-25T16:10:00.000Z",
+  "last_run": "2026-07-25T16:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall on primary Heroku (14 findings, pages=6 probes=295); no benchmark misses",
+      "note": "Primary Heroku 6/6 (14 findings, pages=6 probes=295); staging fallback also scanned 12 findings when primary briefly unreachable earlier in hour; secret-resend slug still absent",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -51,30 +51,44 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 211,
+      "urls_added": 5,
+      "urls_scanned": 10,
+      "findings": 824,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "brokencrystals hidden-upload + burpbounty F5 bash + Netsweeper systemstatus route oracles",
+      "dns_failures": [
+        "https://brokencrystals.com/api/goto"
+      ],
+      "focus": "oracle improvements (hidden-upload, F5 bash, netsweeper) + BurpBountyLab route drain (xss/dom, xss/js, redirect/goto, cors, passive/secrets, graphql, xxe/parse) + brokencrystals LDAP/adminpermission + vuln-expose API oracles queued",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses; secret-resend slug still absent",
-      "brokencrystals.com/api/hidden-upload: 36 findings — brokencrystals-hidden-upload-live-oracle now fires (POST multipart → base64 data URI)",
-      "burpbountylab.com/cve/f5/: 87 findings — burpbounty-f5-bash-cve-live-oracle (F5 BIG-IP heading + /mgmt/tm/util/bash Unauthorized)",
+      "brokencrystals.com/api/hidden-upload: 36 findings — brokencrystals-hidden-upload-live-oracle now fires",
+      "burpbountylab.com/cve/f5/: 87 findings — burpbounty-f5-bash-cve-live-oracle",
       "burpbountylab.com/webadmin/tools/systemstatus_remote.php: 88 findings — burpbounty-netsweeper-systemstatus-cve-live-oracle",
-      "pwnshop.ctfsecurity.com/api/v1/chat/init: pwnshop-chat-init-email-enumeration-live-oracle confirmed at POST /chat/init (11→12 findings on re-scan)"
+      "pwnshop.ctfsecurity.com/api/v1/chat/init: pwnshop-chat-init-email-enumeration-live-oracle confirmed (12 findings)",
+      "burpbountylab.com/xss/dom: 87 findings — hub fingerprint with burpbounty-xss-dom-live-oracle",
+      "burpbountylab.com/redirect/goto: 91 findings — open-redirect oracle present",
+      "burpbountylab.com/xxe/parse: 85 findings — route-specific XXE-parse oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop/forgot-password + lab-stats + admin: queued, pending next drain",
-      "burpbountylab symfony profiler empty/search/results: 404 — phpinfo route already covered by phpinfo-exposed"
+      "brokencrystals.com/api/goto: DNS/connect failure (repeat)",
+      "brokencrystals LDAP + adminpermission + vuln-expose API oracles: queued end, pending drain",
+      "pwnshop/forgot-password + lab-stats + admin: still queued, not yet scanned"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 14,
+    "juice-shop-staging.herokuapp.com": 12,
+    "burpbountylab.com/xss/dom": 87,
+    "burpbountylab.com/xss/js": 86,
+    "burpbountylab.com/redirect/goto": 91,
+    "burpbountylab.com/cors/api/data": 87,
+    "burpbountylab.com/passive/secrets": 90,
+    "burpbountylab.com/graphql": 87,
+    "burpbountylab.com/xxe/parse": 85,
     "brokencrystals.com/api/hidden-upload": 36,
     "burpbountylab.com/cve/f5/": 87,
     "burpbountylab.com/webadmin/tools/systemstatus_remote.php": 88,
