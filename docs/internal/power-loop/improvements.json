@@ -7349,6 +7349,24 @@
       "slug": "burpbounty-citrix-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/citrix/ returns <h1>Citrix</h1>; burpbountylab.com/cve/citrix findings 63→75; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crowd-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/crowd/ returns <h1>Atlassian Crowd</h1>; burpbountylab.com/cve/crowd/ findings 71→78; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-firebase-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/firebase/.json returns {\"users\":{\"user1\":{\"email\":\"admin@example.com\"}},\"config\":{\"debug\":true}}; burpbountylab.com/cve/firebase/.json findings 73→79; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/netsweeper/ returns <h1>Netsweeper WebAdmin</h1>; burpbountylab.com/cve/netsweeper/ findings 72→77; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12886,6 +12904,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-citrix-cve-live-oracle",
       "shipped_at": "2026-07-25T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crowd-cve-live-oracle",
+      "shipped_at": "2026-07-25T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-firebase-cve-live-oracle",
+      "shipped_at": "2026-07-25T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-cve-live-oracle",
+      "shipped_at": "2026-07-25T12:10:00.000Z"
     }
   ]
 }
