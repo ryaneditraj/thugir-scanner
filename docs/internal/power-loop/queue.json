@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T07:02:53.902015Z",
+  "updated_at": "2026-07-25T08:03:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/cve/pulse/",
+      "source": "BountySecurity/BurpBountyLab — Pulse Secure CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/citrix/",
+      "source": "BountySecurity/BurpBountyLab — Citrix ADC CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/f5/",
+      "source": "BountySecurity/BurpBountyLab — F5 BIG-IP CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/apache/",
+      "source": "BountySecurity/BurpBountyLab — Apache CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/symfony/profiler/phpinfo",
+      "source": "BountySecurity/BurpBountyLab — Symfony profiler/phpinfo CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/dwr/interface",
       "source": "BountySecurity/BurpBountyLab \u2014 DWR interface disclosure profile (hub scrape)",
