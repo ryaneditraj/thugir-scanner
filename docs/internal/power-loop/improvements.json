@@ -7541,6 +7541,24 @@
       "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /forgot-password admin@pwnshop.com → 'password reset link has been sent'; unknown email → 'No account found'; pwnshop.ctfsecurity.com/forgot-password findings 16 incl new slug; benchmark recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/azure?path=http://169.254.169.254/metadata/instance?api-version=2021-02-01 returns Azure IMDS compute metadata (azEnvironment, location); brokencrystals.com/api/file/azure findings 45→51; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/api/ai/chat/anonymous {\"message\":\"...\"} returns mode:anonymous status:success with no-auth warning and deepseek-chat response; vulnbank.org/api/ai/chat/anonymous findings 6→7; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-git-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/.git/config returns [core] repositoryformatversion + remote origin URL (Content-Type text/html bypasses exposed-git-dir http_probe); burpbountylab.com/.git/config findings 89→90; benchmark juice-shop 10 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13228,6 +13246,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
       "shipped_at": "2026-07-25T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+      "shipped_at": "2026-07-25T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+      "shipped_at": "2026-07-25T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-git-config-live-oracle",
+      "shipped_at": "2026-07-25T23:10:00.000Z"
     }
   ]
 }
