@@ -16487,6 +16487,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-sharefile-cve-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Citrix ShareFile path-traversal live oracle",
+    description:
+      "GET /citrix/sharefile/download?path=../../../windows/win.ini returns win.ini contents — the Burp Bounty Citrix ShareFile path-traversal CVE profile oracle.",
+    impactOneline:
+      "Live ShareFile download probe confirms arbitrary file read distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySharefileCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ShareFile and validate path parameters before serving files.",
+      steps: [
+        "Apply Citrix ShareFile security advisories for path-traversal CVEs.",
+        "Canonicalize and reject download paths containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab ShareFile routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /citrix/sharefile/download endpoint reads win.ini via path=../../../windows/win.ini. Show ShareFile path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-artica-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Artica Web Proxy CVE live oracle",
+    description:
+      "GET /cve/artica/fw.login.php returns an Artica Web Proxy login form with apikey field — the Burp Bounty Artica proxy CVE profile oracle.",
+    impactOneline:
+      "Live Artica fingerprint probe confirms route-specific proxy appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyArticaCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Artica Web Proxy appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Artica security advisories for proxy management CVEs.",
+        "Disable unused management services and enforce strong API keys.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/artica/fw.login.php endpoint exposes an Artica Web Proxy login. Show Artica proxy hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-magmi-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Magento MAGMI CVE live oracle",
+    description:
+      "GET /cve/magmi/ returns MAGMI Utils JS — the Burp Bounty Magento MAGMI plugin CVE profile oracle.",
+    impactOneline:
+      "Live MAGMI fingerprint probe confirms route-specific Magento plugin CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyMagmiCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch or remove MAGMI Magento plugins and restrict web access to admin utilities.",
+      steps: [
+        "Upgrade MAGMI to patched versions or uninstall unused Magento plugins.",
+        "Block public access to MAGMI web utilities behind authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/magmi/ endpoint exposes MAGMI Utils JS. Show Magento MAGMI plugin hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
