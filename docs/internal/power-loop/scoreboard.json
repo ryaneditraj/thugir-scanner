@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T11:10:00.000Z",
+  "updated_at": "2026-07-25T12:06:23.863Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2559,
-  "total_findings": 20583,
+  "total_sites_scanned": 2568,
+  "total_findings": 21193,
   "critical_findings": 46,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1841,
-  "discovery_findings": 17280,
+  "discovery_urls_added": 1846,
+  "discovery_findings": 17880,
   "improvements_shipped": 1107,
-  "last_run": "2026-07-25T11:10:00.000Z",
+  "last_run": "2026-07-25T12:06:23.863Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall (10 findings, pages=6 probes=314) — no benchmark misses",
+      "note": "Stable 6/6 first-pass recall (10 findings, pages=6 probes=295) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,37 +52,43 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 507,
+      "findings": 600,
       "skipped_48h": [
-        "http://burpbountylab.com/actuator/heapdump",
-        "http://burpbountylab.com/cve/couchdb/_all_dbs",
-        "http://burpbountylab.com/cve/traefik/",
-        "http://burpbountylab.com/cve/solarwinds/",
-        "http://burpbountylab.com/.svn/entries"
+        "http://burpbountylab.com/cve/crowd/",
+        "http://burpbountylab.com/cve/firebase/.json",
+        "http://burpbountylab.com/cve/netsweeper/",
+        "http://burpbountylab.com/cve/artica/fw.login.php",
+        "http://burpbountylab.com/cve/magmi/"
       ],
       "dns_failures": [],
-      "focus": "BurpBountyLab CVE oracles (Crowd, Firebase, Netsweeper, Artica, MAGMI) + queue drain (k8s, n8n, VWAD)",
+      "focus": "BurpBountyLab CVE oracles (Zoho, Ruby/Rails, WP LFI, Citrix ShareFile, CouchDB _users) + queue drain (xss/reflect, sqli/login, ssti/preview)",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses; secret-resend slug still absent",
-      "burpbountylab.com/cve/crowd/: hub fingerprint 71 findings — no route-specific Crowd CVE oracle",
-      "burpbountylab.com/cve/firebase/.json: hub fingerprint 73 findings — firebase-config-exposed oracle still absent",
-      "burpbountylab.com/cve/netsweeper/: hub fingerprint 72 findings — no route-specific Netsweeper oracle",
-      "burpbountylab.com/cve/n8n/rest/settings: burpbounty-n8n-settings-cve-live-oracle present (72 findings)",
-      "vwad.owasp.org/app/yrprey/: client-side-owasp-vwad-evidence (3 findings)"
+      "burpbountylab.com/cve/zoho/: 75 findings — full hub fingerprint with 70+ burpbounty-*-live-oracle slugs; no route-specific Zoho CVE oracle",
+      "burpbountylab.com/cve/ruby/: 75 findings — hub fingerprint; no route-specific Rails path-traversal CVE oracle",
+      "burpbountylab.com/cve/wp/local-file-inclusion: 75 findings — hub fingerprint; no route-specific WordPress Duplicator LFI oracle",
+      "burpbountylab.com/citrix/sharefile/: 75 findings — burpbounty-citrix-cve-live-oracle present but ShareFile-specific path-traversal oracle still absent",
+      "burpbountylab.com/cve/couchdb/_users/_all_docs: burpbounty-couchdb-all-dbs-live-oracle present (75 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "burpbountylab CVE routes (crowd/firebase/netsweeper/artica/magmi): hub fingerprint dominates (~71-73/route); route-specific CVE oracles still absent",
-      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed not triggered despite Firebase JSON endpoint",
-      "burpbountylab.com/cve/kubernetes/api/v1: no route-specific Kubernetes API CVE oracle (hub fingerprint only)",
-      "burpbountylab.com/cve/confluence: route returns 404 — no positive-proof Confluence OGNL oracle",
-      "wrongsecrets.onrender.com: service suspended — use wrongsecrets.herokuapp.com for challenge crawl"
+      "burpbountylab CVE routes (zoho/ruby/wp-lfi/sharefile): hub fingerprint now 75/route with expanded live-oracle set; route-specific Zoho/Rails/WP-LFI/ShareFile CVE oracles still absent",
+      "burpbountylab hub pages list all endpoints — every route triggers full oracle fingerprint regardless of path-specific vulnerability",
+      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed still not triggered (queued, skipped 48h)"
     ]
   },
   "discovery_highlights": {
+    "burpbountylab.com/cve/zoho/": 75,
+    "burpbountylab.com/cve/ruby/": 75,
+    "burpbountylab.com/cve/wp/local-file-inclusion": 75,
+    "burpbountylab.com/citrix/sharefile/": 75,
+    "burpbountylab.com/cve/couchdb/_users/_all_docs": 75,
+    "burpbountylab.com/xss/reflect": 75,
+    "burpbountylab.com/sqli/login": 75,
+    "burpbountylab.com/ssti/preview": 75,
     "burpbountylab.com/cve/crowd/": 71,
     "burpbountylab.com/cve/firebase/.json": 73,
     "burpbountylab.com/cve/netsweeper/": 72,
