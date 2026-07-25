@@ -8972,6 +8972,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-chat-init-email-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop chat init API enables email enumeration (PWN-037)",
+    description:
+      "POST /chat/init returns {\"found\":true,\"user\":{...}} for registered emails and {\"found\":false} for unknown addresses — enabling bulk account enumeration.",
+    impactOneline:
+      "Distinct JSON responses on chat init leak whether an email is registered, aiding credential-stuffing attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatInitEmailEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for forgot-password and chat-init lookups — PWN-037 is intentional lab software.",
+      steps: [
+        "Use identical success messages for registered and unregistered emails on /forgot-password.",
+        "Remove found:true/false from /chat/init or require authentication before email lookup.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /chat/init returns found:true/false for email lookup. Show how to prevent username enumeration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -13311,6 +13337,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host a Broken Crystals-style API security benchmark. Show how to isolate it from production and fix SSRF/XSS patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-goto-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Broken Crystals /api/goto open redirect oracle",
+    description:
+      "GET /api/goto?url= returns HTTP 302 Location to an attacker-controlled URL without validation — the Broken Crystals unvalidated redirect oracle.",
+    impactOneline:
+      "Unvalidated redirect endpoints enable phishing by sending victims to attacker-controlled domains via trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGotoOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allow-list — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject external URLs in redirect parameters or validate against a fixed allow-list.",
+        "Use relative-path-only redirects where possible.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/goto?url= endpoint redirects to arbitrary external URLs. Show how to validate redirect destinations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-aws-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals AWS metadata SSRF oracle",
+    description:
+      "GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns AWS instance metadata (ami-id, instance-id) — the Broken Crystals cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to cloud metadata endpoints can expose IAM credentials and compromise the hosting account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAwsMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to link-local and cloud metadata addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254 and other link-local/metadata IP ranges.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/aws endpoint fetches AWS metadata via the path parameter. Show how to block cloud metadata SSRF.",
     version: 1,
     enabled: true
   },

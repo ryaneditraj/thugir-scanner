@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T14:02:12.619Z",
-  "total": 770,
-  "uniqueSlugs": 768,
+  "generatedAt": "2026-07-25T15:05:05.617Z",
+  "total": 773,
+  "uniqueSlugs": 771,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 752,
+    "generic": 755,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 685,
+    "deep": 688,
     "continuous": 0
   },
   "byCategory": {
@@ -26,20 +26,23 @@
     "Information exposure": 1,
     "Information disclosure": 62,
     "Security misconfiguration": 71,
-    "Broken authentication": 53,
+    "Broken authentication": 54,
     "Injection": 162,
     "Cross-site scripting": 118,
     "general": 20,
-    "SSRF": 1,
+    "SSRF": 2,
     "Server-side request forgery": 12,
     "Sensitive data exposure": 16,
     "AI security": 37,
+    "Open redirect": 1,
     "Path traversal": 2,
     "XSS": 1
   },
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "brokencrystals-aws-metadata-ssrf-live-oracle",
+    "brokencrystals-goto-open-redirect-live-oracle",
     "burpbounty-ai-disclosure-live-oracle",
     "burpbounty-ai-gateway-live-oracle",
     "burpbounty-ai-health-live-oracle",
@@ -700,6 +703,7 @@
     "phpmyadmin-exposed",
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
+    "pwnshop-chat-init-email-enumeration-live-oracle",
     "pwnshop-debug-info-live-oracle",
     "pwnshop-events-audit-live-oracle",
     "redtiger-blind-login-form-evidence",

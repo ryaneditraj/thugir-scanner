@@ -7403,6 +7403,24 @@
       "slug": "burpbounty-magmi-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/magmi/ returns MAGMI Utils JS var magmi={}; burpbountylab.com/cve/magmi/ findings 75→86; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pwnshop.ctfsecurity.com/chat/init admin@pwnshop.com→found:true+user; unknown email→found:false; pwnshop.ctfsecurity.com/api/v1/chat/init findings 14→16; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/goto?url=https://evil-open-redirect-probe.example/ returns HTTP 302 Location to probe host; brokencrystals.com/api/file/aws findings 34→36; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/aws?path=http://169.254.169.254/latest/meta-data/&type=image/jpg returns ami-id+instance-id metadata listing; brokencrystals.com/api/file/aws findings 34→36; benchmark juice-shop 14 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12985,6 +13003,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-magmi-cve-live-oracle",
       "shipped_at": "2026-07-25T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+      "shipped_at": "2026-07-25T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-open-redirect-live-oracle",
+      "shipped_at": "2026-07-25T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+      "shipped_at": "2026-07-25T15:10:00.000Z"
     }
   ]
 }
