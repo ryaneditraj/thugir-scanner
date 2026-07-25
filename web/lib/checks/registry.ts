@@ -8179,6 +8179,77 @@ const burpbountySourceConfigBakLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyReact2shellLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/rce/react2shell", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: "0=[]",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Next-Action": "test"
+    },
+    maxBytes: 1024,
+    redirect: "manual"
+  });
+  if (doc.status !== 303) return NEGATIVE;
+  const actionRedirect =
+    doc.headers["x-action-redirect"] ?? doc.headers["X-Action-Redirect"] ?? "";
+  if (!/\/login\?a=\d+/.test(actionRedirect)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      status: doc.status,
+      xActionRedirect: actionRedirect,
+      note: "Burp Bounty Lab POST /rce/react2shell with Next-Action returns 303 x-action-redirect — Next.js RSC react2shell profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountySpringCloudConfigLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const candidatePaths = ["/cve/spring/actuator", "/cve/spring/cloud", "/cve/spring/actuator/env"];
+  for (const path of candidatePaths) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/Spring Cloud Config/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: probeUrl,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "Burp Bounty Lab GET /cve/spring/actuator returns Spring Cloud Config body — Spring Cloud CVE/profile oracle distinct from generic /actuator hub fingerprinting"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const burpbountyText4shellLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirText4${Date.now().toString(36)}`;
+  const probeUrl = new URL("/cve/text4shell", ctx.origin);
+  probeUrl.searchParams.set("input", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!new RegExp(`Processed:\\s*${escaped}`, "i").test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/text4shell?input= reflects attacker input in Processed output — Apache Commons Text (Text4Shell) CVE profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -33110,6 +33181,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyAiMcpToolsLiveOracle,
   burpbountyApiDocsLiveOracle,
   burpbountySourceConfigBakLiveOracle,
+  burpbountyReact2shellLiveOracle,
+  burpbountySpringCloudConfigLiveOracle,
+  burpbountyText4shellLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

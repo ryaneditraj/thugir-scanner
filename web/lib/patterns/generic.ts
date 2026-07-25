@@ -16097,6 +16097,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-react2shell-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab react2shell RSC live oracle",
+    description:
+      "POST /rce/react2shell with Next-Action returns 303 x-action-redirect to /login?a= — the Burp Bounty Next.js RSC react2shell profile oracle.",
+    impactOneline:
+      "Live react2shell probe confirms Next.js Server Action redirect oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyReact2shellLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js RSC CVEs and never expose unauthenticated Server Action endpoints.",
+      steps: [
+        "Upgrade Next.js to a version that fixes react2shell / RSC deserialization CVEs.",
+        "Authenticate all Server Action endpoints and validate action payloads.",
+        "Isolate Burp Bounty Lab RCE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/react2shell endpoint accepts Next-Action POSTs and returns x-action-redirect. Show Next.js RSC hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-spring-cloud-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Spring Cloud Config live oracle",
+    description:
+      "GET /cve/spring/actuator returns a Spring Cloud Config body — the Burp Bounty Spring Cloud CVE/profile oracle.",
+    impactOneline:
+      "Live Spring Cloud Config probe confirms route-specific Spring CVE oracle distinct from generic /actuator hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySpringCloudConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Spring Cloud Config actuator endpoints without authentication.",
+      steps: [
+        "Restrict /actuator and Spring Cloud Config routes behind auth.",
+        "Patch Spring Cloud CVEs and disable env/actuator exposure in production.",
+        "Isolate Burp Bounty Lab Spring CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/spring/actuator endpoint exposes Spring Cloud Config. Show Spring Cloud hardening and actuator lockdown.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-text4shell-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Text4Shell live oracle",
+    description:
+      "GET /cve/text4shell?input= reflects attacker input in a Processed output block — the Burp Bounty Apache Commons Text (Text4Shell) CVE profile oracle.",
+    impactOneline:
+      "Live Text4Shell interpolation probe confirms Commons Text CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyText4shellLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Apache Commons Text and disable dangerous string interpolation in production.",
+      steps: [
+        "Patch to Commons Text 1.10+ or remove interpolator usage.",
+        "Never pass untrusted input to StringSubstitutor or similar interpolators.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/text4shell endpoint reflects input via Commons Text interpolation. Show Text4Shell (CVE-2022-42889) mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
