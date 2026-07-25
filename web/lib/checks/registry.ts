@@ -16239,6 +16239,52 @@ const CLIENT_VULN_EXPOSE_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+const vulnExposeAuthBypassApiLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const payload = JSON.stringify({ username: "admin' OR '1'='1", password: "x" });
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"success"\s*:\s*true/i.test(doc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(doc.body)) return NEGATIVE;
+  if (!/"username"\s*:\s*"admin"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnSite POST /api/auth/login accepts SQLi username admin' OR '1'='1 and returns authenticated admin session — authentication-bypass API oracle"
+    }
+  };
+};
+
+const vulnExposeSqliSearchApiLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", "test");
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  if (!/"vulnerabilities"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!/"union_select"|union_based|boolean_based/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "VulnSite GET /api/search?q=test echoes raw SQL query and documents UNION/boolean injection vectors — SQL injection search API oracle"
+    }
+  };
+};
+
 const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}`;
@@ -32299,6 +32345,36 @@ const brokencrystalsAwsMetadataSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const ldapUrl = new URL("/api/users/ldap", ctx.origin);
+  ldapUrl.searchParams.set("query", "(&(objectClass=person)(objectClass=user)(email=*))");
+  const doc = await ctx.probe.get(ldapUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!body.startsWith("[")) return NEGATIVE;
+  let parsed: unknown[];
+  try {
+    parsed = JSON.parse(body) as unknown[];
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(parsed) || parsed.length < 5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: ldapUrl.toString(),
+      resultCount: parsed.length,
+      snippet: body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries — LDAP injection oracle"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -33818,6 +33894,8 @@ export const RULES: Record<string, Rule> = {
   redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
   clientSideVulnExposeLabModuleEvidence,
+  vulnExposeAuthBypassApiLiveOracle,
+  vulnExposeSqliSearchApiLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
@@ -34131,6 +34209,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsPrototypePollutionEvidence,
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
+  brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,

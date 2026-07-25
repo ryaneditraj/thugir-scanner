@@ -13419,6 +13419,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-ldap-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals LDAP injection oracle",
+    description:
+      "GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries without sanitizing user-supplied filter fragments — the Broken Crystals LDAP injection oracle.",
+    impactOneline:
+      "LDAP injection lets attackers enumerate directory users and extract sensitive identity attributes from corporate directories.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsLdapInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize LDAP queries and escape filter metacharacters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into LDAP filter strings.",
+        "Use parameterized LDAP APIs or strict allow-list validation on query fragments.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/ldap endpoint accepts raw LDAP filter fragments in the query parameter. Show LDAP injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-auth-bypass-api-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "critical",
+    title: "VulnSite SQLi authentication-bypass API oracle",
+    description:
+      "POST /api/auth/login accepts SQL injection in the username field (admin' OR '1'='1) and returns an authenticated admin session — the VulnSite authentication-bypass API oracle.",
+    impactOneline:
+      "SQL injection in login APIs bypasses authentication and grants attacker-controlled admin sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeAuthBypassApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements.",
+        "Return generic authentication failures without revealing SQL structure.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login endpoint is vulnerable to SQLi auth bypass via admin' OR '1'='1. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-sqli-search-api-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite SQL injection search API oracle",
+    description:
+      "GET /api/search?q=test echoes the raw SQL query in the JSON response and documents UNION/boolean injection vectors — the VulnSite data-extraction search API oracle.",
+    impactOneline:
+      "SQL injection in search APIs exposes database contents and leaks query structure to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeSqliSearchApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL to clients — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search endpoint echoes raw SQL and documents UNION injection vectors. Show SQL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-api-config",
     platform: "generic",
     category: "Sensitive data exposure",
