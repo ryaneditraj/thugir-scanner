@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T21:25:00.000Z",
+  "updated_at": "2026-07-25T21:31:11.098Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2638,
-  "total_findings": 24359,
+  "total_sites_scanned": 2645,
+  "total_findings": 24769,
   "critical_findings": 51,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1886,
-  "discovery_findings": 20589,
+  "discovery_urls_added": 1891,
+  "discovery_findings": 20997,
   "improvements_shipped": 1134,
-  "last_run": "2026-07-25T21:25:00.000Z",
+  "last_run": "2026-07-25T21:31:11.098Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall (10 findings, pages=6 probes=295) — no benchmark misses",
+      "pages_crawled": 1,
+      "probes_run": 418,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,34 +47,57 @@
             "misconfig"
           ]
         }
-      }
+      },
+      "note": "Stable 6/6 first-pass recall (12 findings, pages=1 probes=418) — no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "Ship queued brokencrystals mass-assignment + /api/file LFI oracles from 20 UTC learning gaps",
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 408,
+      "skipped_48h": [
+        "https://brokencrystals.com/api/testimonials/count?query=test",
+        "https://brokencrystals.com/api/file?path=/etc/hosts",
+        "https://brokencrystals.com/api/users/basic",
+        "https://vulnbank.org/api/transfer",
+        "https://vulnbank.org/api/auth/login"
+      ],
+      "dns_failures": [
+        "https://brokencrystals.com/api/goto"
+      ],
+      "focus": "brokencrystals Azure SSRF + adminpermission + subscriptions DOM XSS; vulnbank AI anonymous chat; burpbounty .git/config; drain redirect/pp + ssti/render",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses; secret-resend slug still absent",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
       "brokencrystals.com: deep scan 48 findings — brokencrystals-mass-assignment-live-oracle + brokencrystals-mass-assignment-put-live-oracle + brokencrystals-file-lfi-live-oracle shipped",
-      "brokencrystals.com/api/users/basic: mass-assignment isAdmin oracle now present (was 42 findings generic only)",
-      "brokencrystals.com/api/file?path=package.json: /api/file LFI oracle now distinct from /api/file/raw"
+      "brokencrystals.com/api/file/azure: 45 findings — shared brokencrystals fingerprint; route-specific Azure SSRF oracle absent",
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: 45 findings — shared fingerprint; adminpermission mass-assignment oracle absent",
+      "brokencrystals.com/api/subscriptions?email=test: 44 findings — shared fingerprint; DOM XSS subscription oracle absent",
+      "vulnbank.org/api/ai/chat/anonymous: 6 findings — thin vulnbank API fingerprint; LLM prompt-injection oracle absent",
+      "burpbountylab.com/.git/config: 89 findings — hub fingerprint with exposed-infra-artifacts; route-specific .git/config oracle absent",
+      "burpbountylab.com/redirect/pp: 90 findings — hub fingerprint; route-specific parameter-pollution redirect oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "brokencrystals API routes (azure/adminpermission/subscriptions): shared ~44-45 finding fingerprint — route-specific Azure SSRF, adminpermission, DOM XSS subscription oracles absent",
       "brokencrystals testimonials reflective XSS oracle still absent",
-      "vulnbank.org API endpoints: low signal — needs dedicated banking/LLM transfer+auth oracles",
-      "burpbountylab sqli/oob + xss/attribute: hub fingerprint ~87-88/route; path-specific OOB SQLi and attribute XSS oracles still absent",
+      "vulnbank.org/api/ai/chat/anonymous: thin 6-finding fingerprint — needs dedicated LLM prompt-injection oracle",
+      "burpbountylab .git/config + redirect/pp: hub fingerprint ~89-90/route; path-specific git-config and PP-redirect oracles absent",
       "brokencrystals.com/api/goto: DNS/connect failure (repeat)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 10,
+    "juice-shop.herokuapp.com": 12,
     "brokencrystals.com": 48,
+    "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 45,
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 45,
+    "brokencrystals.com/api/subscriptions?email=test": 44,
+    "vulnbank.org/api/ai/chat/anonymous": 6,
+    "burpbountylab.com/.git/config": 89,
+    "burpbountylab.com/redirect/pp?return_url=/": 90,
+    "burpbountylab.com/ssti/render?template=Hello": 89,
     "brokencrystals.com/api/file/raw?path=package.json": 46,
     "brokencrystals.com/api/file?path=package.json": 48,
     "brokencrystals.com/api/users/basic": 48,
