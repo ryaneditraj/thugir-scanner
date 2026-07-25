@@ -7469,6 +7469,24 @@
       "slug": "brokencrystals-safe-files-rfi-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/safe-files {\"name\":\"test\",\"url\":\"https://filedealer.nexploit.app/rfi.md5.txt\"} returns content 245cc0a508bf7f0ff754c84c0fe0b5bc; brokencrystals.com/api/safe-files findings 36→39; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-search-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/users/search/ returns cardNumber+phoneNumber for 50 users without auth; brokencrystals.com/api/users/search findings 37→44; benchmark juice-shop-staging 6/6 recall maintained (primary Heroku unreachable)"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/testimonials/count?query=select count(table_name) as count from information_schema.tables returns 216; brokencrystals.com/api/testimonials/count findings 37→44; benchmark juice-shop-staging 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-partner-login-xpath-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/partners/partnerLogin?username=anyuser&password=' or '1'='1 returns multiple <password> elements (Walter White/Jesse Pinkman credentials); brokencrystals.com/api/partners/partnerLogin findings 37→43; benchmark juice-shop-staging 6/6 recall maintained"
     }
   ],
   "shipped": [
@@ -13096,6 +13114,21 @@
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-sqli-search-api-live-oracle",
       "shipped_at": "2026-07-25T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-search-exposure-live-oracle",
+      "shipped_at": "2026-07-25T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-sqli-live-oracle",
+      "shipped_at": "2026-07-25T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-partner-login-xpath-live-oracle",
+      "shipped_at": "2026-07-25T19:10:00.000Z"
     }
   ]
 }

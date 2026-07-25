@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T18:05:01.243Z",
-  "total": 781,
-  "uniqueSlugs": 779,
+  "generatedAt": "2026-07-25T19:04:07.525Z",
+  "total": 784,
+  "uniqueSlugs": 782,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 763,
+    "generic": 766,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 696,
+    "deep": 699,
     "continuous": 0
   },
   "byCategory": {
@@ -27,12 +27,12 @@
     "Information disclosure": 62,
     "Security misconfiguration": 72,
     "Broken authentication": 54,
-    "Injection": 165,
+    "Injection": 167,
     "Cross-site scripting": 118,
     "general": 20,
     "SSRF": 2,
     "Server-side request forgery": 13,
-    "Sensitive data exposure": 16,
+    "Sensitive data exposure": 17,
     "AI security": 37,
     "Open redirect": 1,
     "Authentication bypass": 1,
@@ -46,8 +46,11 @@
     "brokencrystals-goto-open-redirect-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
     "brokencrystals-ldap-injection-live-oracle",
+    "brokencrystals-partner-login-xpath-live-oracle",
     "brokencrystals-safe-files-rfi-live-oracle",
     "brokencrystals-secrets-live-oracle",
+    "brokencrystals-testimonials-sqli-live-oracle",
+    "brokencrystals-users-search-exposure-live-oracle",
     "burpbounty-ai-disclosure-live-oracle",
     "burpbounty-ai-gateway-live-oracle",
     "burpbounty-ai-health-live-oracle",
