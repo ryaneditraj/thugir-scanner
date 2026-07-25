@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T20:11:17.811Z",
+  "updated_at": "2026-07-25T21:25:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/file/azure?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — Azure metadata SSRF oracle /api/file/azure (README cloud endpoints)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
+      "source": "NeuraLegion/brokencrystals — admin permission probe oracle GET /api/users/one/{email}/adminpermission (README mass-assignment)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/subscriptions?email=test",
+      "source": "NeuraLegion/brokencrystals — DOM XSS mailing-list subscription oracle /api/subscriptions email param (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/api/ai/chat/anonymous",
+      "source": "Commando-X/vuln-bank — anonymous AI customer-support chatbot endpoint (OpenAPI ai-agent tag)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/.git/config",
+      "source": "BountySecurity/BurpBountyLab — .git/config exposure passive trigger (misc module)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/testimonials/count?query=test",
       "source": "NeuraLegion/brokencrystals — reflective XSS oracle on testimonials count query param (README)",
