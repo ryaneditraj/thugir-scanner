@@ -8313,6 +8313,97 @@ const burpbountyN8nSettingsCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyCouchdbAllDbsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/couchdb/_all_dbs", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(doc.body);
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(parsed)) return NEGATIVE;
+  const dbs = parsed.map((entry) => String(entry));
+  const couchOk =
+    dbs.includes("_replicator") &&
+    dbs.includes("_users") &&
+    (dbs.includes("mydb") || dbs.includes("testdb"));
+  if (!couchOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      databases: dbs,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/couchdb/_all_dbs returns CouchDB database list JSON with _replicator and _users — CouchDB CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyKubernetesApiLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/kubernetes/api/v1/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const kind = String(parsed.kind ?? "");
+  const apiVersion = String(parsed.apiVersion ?? "");
+  const resources = parsed.resources;
+  const resourceNames =
+    Array.isArray(resources) ?
+      resources
+        .map((entry) =>
+          entry && typeof entry === "object" && "name" in entry ?
+            String((entry as { name?: unknown }).name ?? "")
+          : ""
+        )
+        .filter(Boolean)
+    : [];
+  const k8sOk =
+    kind === "APIResourceList" &&
+    apiVersion === "v1" &&
+    resourceNames.includes("pods") &&
+    resourceNames.includes("services");
+  if (!k8sOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      kind,
+      apiVersion,
+      resources: resourceNames,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /cve/kubernetes/api/v1/ returns Kubernetes APIResourceList with pods and services — Kubernetes API CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyCitrixCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/citrix/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Citrix\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/citrix/ returns Citrix heading — Citrix ADC CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -33250,6 +33341,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyPulseCveLiveOracle,
   burpbountyCiscoCveLiveOracle,
   burpbountyN8nSettingsCveLiveOracle,
+  burpbountyCouchdbAllDbsLiveOracle,
+  burpbountyKubernetesApiLiveOracle,
+  burpbountyCitrixCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

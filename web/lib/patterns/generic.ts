@@ -16253,6 +16253,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-couchdb-all-dbs-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab CouchDB _all_dbs CVE live oracle",
+    description:
+      "GET /cve/couchdb/_all_dbs returns a JSON database list including _replicator and _users — the Burp Bounty CouchDB CVE profile oracle.",
+    impactOneline:
+      "Live CouchDB _all_dbs probe confirms unauthenticated database enumeration distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCouchdbAllDbsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose CouchDB _all_dbs without authentication on public networks.",
+      steps: [
+        "Require authentication for all CouchDB HTTP API routes.",
+        "Bind CouchDB to internal interfaces and apply network ACLs.",
+        "Isolate Burp Bounty Lab CouchDB CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/couchdb/_all_dbs endpoint leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-kubernetes-api-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Kubernetes API CVE live oracle",
+    description:
+      "GET /cve/kubernetes/api/v1/ returns a Kubernetes APIResourceList with pods and services — the Burp Bounty Kubernetes API CVE profile oracle.",
+    impactOneline:
+      "Live Kubernetes API probe confirms unauthenticated cluster API disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyKubernetesApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose the Kubernetes API server without authentication and network controls.",
+      steps: [
+        "Enable RBAC and require client certificates or bearer tokens for API access.",
+        "Restrict kube-apiserver to private networks and authorized IP ranges.",
+        "Isolate Burp Bounty Lab Kubernetes CVE routes from production clusters."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/kubernetes/api/v1/ endpoint exposes an APIResourceList without auth. Show Kubernetes API server hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-citrix-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Citrix CVE live oracle",
+    description:
+      "GET /cve/citrix/ returns a Citrix appliance heading — the Burp Bounty Citrix ADC CVE profile oracle.",
+    impactOneline:
+      "Live Citrix fingerprint probe confirms route-specific ADC appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCitrixCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ADC appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Citrix security advisories for ADC and Gateway CVEs.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/citrix/ endpoint exposes a Citrix appliance fingerprint. Show Citrix ADC hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
