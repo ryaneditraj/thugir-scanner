@@ -7223,6 +7223,24 @@
       "slug": "burpbounty-tomcat-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/tomcat/ returns Apache Tomcat and Cookie JSESSIONID=../groovy triggers PersistentManagerBase: swapping out session; burpbountylab.com/cve/tomcat findings 47→54; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /wp/wp-login.php exposes WordPress log/pwd form and POST returns Invalid username or password; burpbountylab.com/wp/wp-login.php findings 51→57; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-grafana-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /grafana/ returns <title>Grafana</title> + your home dashboard + LoadingGrafana (hub /cve/grafana/ is 404); burpbountylab.com/cve/grafana findings 51→57; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-passive-api-path-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /passive/api/v1/data returns {\"data\":[{\"id\":1,\"name\":\"test\"}],\"total\":1}; burpbountylab.com/passive/api/v1/data findings 51→57; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12655,6 +12673,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-tomcat-cve-live-oracle",
       "shipped_at": "2026-07-25T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-login-live-oracle",
+      "shipped_at": "2026-07-25T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-grafana-cve-live-oracle",
+      "shipped_at": "2026-07-25T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-passive-api-path-live-oracle",
+      "shipped_at": "2026-07-25T05:10:00.000Z"
     }
   ]
 }
