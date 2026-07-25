@@ -7493,6 +7493,42 @@ const burpbountyAiDisclosureLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyAiCompletionsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/v1/completions", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const h = doc.headers;
+  const aiHeaders: Record<string, string> = {};
+  for (const key of [
+    "x-ai-backend",
+    "x-llm-provider",
+    "x-rag-provider",
+    "x-mcp-enabled",
+    "x-openai-model",
+    "x-anthropic-model",
+    "x-embedding-model"
+  ]) {
+    const val = (h[key] || "").trim();
+    if (val) aiHeaders[key] = val.slice(0, 80);
+  }
+  if (Object.keys(aiHeaders).length < 2) return NEGATIVE;
+  const hasLegacyCompletion =
+    /"object"\s*:\s*"text_completion"/i.test(doc.body) ||
+    (/"choices"\s*:\s*\[/.test(doc.body) && /"text"\s*:/.test(doc.body));
+  if (!hasLegacyCompletion) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      headers: aiHeaders,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /ai/v1/completions returns legacy text_completion JSON plus LLM gateway headers — OpenAI completions disclosure profile oracle distinct from /ai/v1/chat/completions"
+    }
+  };
+};
+
 const burpbountyRceEvalLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/rce/eval", ctx.origin);
@@ -32543,6 +32579,37 @@ const brokencrystalsPartnerLoginXpathLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsFileRawLfiLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const packageUrl = new URL("/api/file/raw", ctx.origin);
+  packageUrl.searchParams.set("path", "package.json");
+  const doc = await ctx.probe.get(packageUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { name?: unknown; scripts?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { name?: unknown; scripts?: unknown };
+  } catch {
+    return NEGATIVE;
+  }
+  const scripts = parsed.scripts;
+  const hasNestBuild =
+    parsed.name === "broken-crystals" &&
+    typeof scripts === "object" &&
+    scripts !== null &&
+    typeof (scripts as Record<string, unknown>).build === "string" &&
+    /nest build/i.test(String((scripts as Record<string, unknown>).build));
+  if (!hasNestBuild) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: packageUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/raw?path=package.json returns application package.json — local file inclusion oracle"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -32897,6 +32964,45 @@ const clientSideBrokencrystalsPrototypePollutionEvidence: Rule = async (ctx) => 
     evidence: {
       markers: hits.slice(0, 4),
       note: "Broken Crystals /marketplace parses URI params into objects via __proto__, enabling prototype pollution and DOM XSS via prototypePollutionDomXss script gadget"
+    }
+  };
+};
+
+// --- Broken Crystals homepage DOM XSS via maptitle + search reflection (brokencrystals.com) -
+const CLIENT_BROKENCRYSTALS_DOM_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "maptitle query param reader",
+    re: /searchParams[\s\S]{0,120}get\(["']maptitle["']\)/i
+  },
+  {
+    label: "iframe mapTitle attribute injection",
+    re: /mapTitle[\s\S]{0,160}outerHTML[\s\S]{0,160}<iframe/i
+  },
+  {
+    label: "dangerous-html search reflection",
+    re: /dangerous-html[\s\S]{0,160}decodeURIComponent\(window\.location\.search\)/i
+  },
+  {
+    label: "home nav maptitle seed path",
+    re: /\/\?maptitle=map|path:"\/\?maptitle=map"/i
+  }
+];
+
+const clientSideBrokencrystalsDomXssEvidence: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin) && !/Broken Crystals|brokencrystals\.com/i.test(ctx.combined))
+    return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BROKENCRYSTALS_DOM_XSS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Broken Crystals homepage reflects maptitle into iframe title and decodeURIComponent(window.location.search) into dangerous-html sinks — DOM XSS oracle for ?maptitle= and ?__dummy= query params"
     }
   };
 };
@@ -34375,6 +34481,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
+  clientSideBrokencrystalsDomXssEvidence,
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
@@ -34384,6 +34491,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsUsersSearchExposureLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
   brokencrystalsPartnerLoginXpathLiveOracle,
+  brokencrystalsFileRawLfiLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -34465,6 +34573,7 @@ export const RULES: Record<string, Rule> = {
   burpbountyXssJsLiveOracle,
   burpbountySqliSearchLiveOracle,
   burpbountyAiDisclosureLiveOracle,
+  burpbountyAiCompletionsLiveOracle,
   burpbountyRceEvalLiveOracle,
   burpbountyRceLog4jLiveOracle,
   burpbountyDrupalUserDisclosureLiveOracle,

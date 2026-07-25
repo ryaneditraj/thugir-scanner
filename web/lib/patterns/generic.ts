@@ -13575,6 +13575,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-file-raw-lfi-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/raw local file inclusion oracle",
+    description:
+      "GET /api/file/raw?path=package.json returns the application package.json from the server filesystem — the Broken Crystals local file inclusion oracle.",
+    impactOneline:
+      "Unauthenticated path traversal/LFI endpoints let attackers read application source, configuration, and host files.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileRawLfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/raw?path= endpoint reads arbitrary server files like package.json. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-brokencrystals-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals homepage DOM XSS via maptitle and search reflection",
+    description:
+      "Broken Crystals homepage reads maptitle into iframe title attributes and decodeURIComponent(window.location.search) into dangerous-html sinks — enabling DOM XSS via ?maptitle= and arbitrary query params like ?__dummy=.",
+    impactOneline:
+      "DOM XSS via URL parameters on the homepage lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBrokencrystalsDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw URL parameters into innerHTML or iframe title attributes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Sanitize or allowlist maptitle values before injecting into iframe title attributes.",
+        "Remove decodeURIComponent(window.location.search) reflection into dangerous-html sinks.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our homepage reflects maptitle and window.location.search into dangerous-html sinks. Show DOM XSS remediation for URL-driven client-side injection.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-auth-bypass-api-live-oracle",
     platform: "generic",
     category: "Authentication bypass",
@@ -15183,6 +15235,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /ai/v1/chat/completions endpoint leaks LLM gateway headers. Show how to strip internal AI metadata from API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ai-completions-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab legacy OpenAI completions endpoint disclosed",
+    description:
+      "GET /ai/v1/completions returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled response headers — distinct from the chat/completions route.",
+    impactOneline:
+      "Live legacy completions disclosure oracle on Burp Bounty Lab confirms OpenAI-compatible text_completion fingerprinting profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiCompletionsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal LLM gateway headers from public API responses.",
+      steps: [
+        "Remove X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled from outward-facing responses.",
+        "Disable legacy /v1/completions routes on production gateways.",
+        "Isolate Burp Bounty Lab AI disclosure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/v1/completions endpoint leaks LLM gateway headers and legacy completion JSON. Show how to strip internal AI metadata from API responses.",
     version: 1,
     enabled: true
   },
