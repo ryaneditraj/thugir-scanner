@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T02:12:00.000Z",
+  "updated_at": "2026-07-25T06:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2473,
-  "total_findings": 16722,
+  "total_sites_scanned": 2474,
+  "total_findings": 16732,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1796,
-  "discovery_findings": 13861,
-  "improvements_shipped": 1080,
-  "last_run": "2026-07-25T02:12:00.000Z",
+  "discovery_urls_added": 1798,
+  "discovery_findings": 13871,
+  "improvements_shipped": 1083,
+  "last_run": "2026-07-25T06:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 356,
+      "urls_added": 2,
+      "urls_scanned": 3,
+      "findings": 153,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty meta-refresh redirect, encoded XSS, image-proxy SSRF oracles",
+      "focus": "Burp Bounty Lab SSTI preview, URL-context XSS, SQLi user-profile oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "burpbountylab.com/redirect/meta: meta refresh + location.replace to evil-open-redirect-probe.example (39→52 findings)",
-      "burpbountylab.com/xss/encoded: URL-decoded q echoes raw <script> in paragraph and value attribute (41→48 findings)",
-      "burpbountylab.com/ssrf/img: src=http://example.com/img.png returns Example Domain HTML via image proxy (42→48 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "burpbountylab.com/ssti/preview: content={{7*7}} evaluates to 49 (9→50 findings)",
+      "burpbountylab.com/xss/url: javascript: link reflected in href/img/form/iframe (48→51 findings)",
+      "burpbountylab.com/sqli/user: id=1 admin profile + id=1' MySQL syntax error (48→52 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "burpbountylab.com/cve/jira/dashboard: route returns 404 — no positive-proof CVE-Jira oracle",
-      "burpbountylab.com/cve/confluence: Confluence OGNL RCE route-specific oracle still absent",
+      "burpbountylab.com/cve/confluence: route returns 404 — Confluence OGNL RCE oracle unreachable",
       "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
@@ -91,7 +91,7 @@
     "burpbountylab.com/xss/reflect": 9,
     "burpbountylab.com/sqli/login": 9,
     "burpbountylab.com/sqli/search": 20,
-    "burpbountylab.com/ssti/preview": 9,
+    "burpbountylab.com/ssti/preview": 50,
     "burpbountylab.com/xss/dom": 12,
     "burpbountylab.com/xss/js": 19,
     "burpbountylab.com/redirect/goto": 15,
@@ -262,6 +262,9 @@
     "burpbountylab.com/rce/echo": 44,
     "burpbountylab.com/rce/expect": 45,
     "burpbountylab.com/ssrf/img": 48,
-    "burpbountylab.com/cve/jira/dashboard": 42
+    "burpbountylab.com/cve/jira/dashboard": 42,
+    "burpbountylab.com/ssti/preview": 50,
+    "burpbountylab.com/xss/url": 51,
+    "burpbountylab.com/sqli/user": 52
   }
 }
