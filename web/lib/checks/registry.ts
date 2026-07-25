@@ -24758,6 +24758,40 @@ const pwnshopChatInitEmailEnumerationLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopForgotPasswordEmailEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/forgot-password", ctx.origin).toString();
+  const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
+  const missingDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: `email=${encodeURIComponent(missingEmail)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192
+  });
+  if (missingDoc.status < 200 || missingDoc.status >= 400) return NEGATIVE;
+  if (!/no account found/i.test(missingDoc.body)) return NEGATIVE;
+  const knownDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: "email=admin%40pwnshop.com",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192
+  });
+  if (knownDoc.status < 200 || knownDoc.status >= 400) return NEGATIVE;
+  if (!/password reset link has been sent/i.test(knownDoc.body)) return NEGATIVE;
+  if (!/admin@pwnshop\.com/i.test(knownDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      missingEmail,
+      missingSnippet: missingDoc.body.match(/alert-err[^<]*<\/i>\s*([^<]+)/i)?.[1]?.trim() ?? "",
+      knownSnippet: knownDoc.body.match(/alert-ok[^<]*<\/i>\s*([^<]+)/i)?.[1]?.trim() ?? "",
+      note: "Pwnshop POST /forgot-password returns distinct success vs no-account messages for registered vs unknown emails — password-reset enumeration oracle"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -32557,6 +32591,52 @@ const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsTestimonialsXssLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const url = new URL("/api/testimonials/count", ctx.origin);
+  url.searchParams.set("query", canary);
+  const doc = await ctx.probe.get(url.toString(), { maxBytes: 512 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  if (!/syntax error/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: url.toString(),
+      canary,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/testimonials/count reflects attacker input unescaped in SQL syntax-error responses — reflected XSS oracle"
+    }
+  };
+};
+
+const brokencrystalsSubscriptionsXssLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const url = new URL("/api/subscriptions", ctx.origin);
+  url.searchParams.set("email", canary);
+  const doc = await ctx.probe.get(url.toString(), {
+    method: "POST",
+    body: "{}",
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: url.toString(),
+      canary,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/subscriptions?email= echoes the email parameter unescaped in the response body — mailing-list reflected XSS oracle"
+    }
+  };
+};
+
 const brokencrystalsPartnerLoginXpathLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/partners/partnerLogin", ctx.origin);
@@ -34481,6 +34561,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopDebugInfoLiveOracle,
   pwnshopEventsAuditLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
+  pwnshopForgotPasswordEmailEnumerationLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
@@ -34667,6 +34748,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsSafeFilesRfiLiveOracle,
   brokencrystalsUsersSearchExposureLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
+  brokencrystalsTestimonialsXssLiveOracle,
+  brokencrystalsSubscriptionsXssLiveOracle,
   brokencrystalsPartnerLoginXpathLiveOracle,
   brokencrystalsFileRawLfiLiveOracle,
   brokencrystalsFileLfiLiveOracle,
