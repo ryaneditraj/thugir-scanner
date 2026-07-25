@@ -1,129 +1,154 @@
 {
-  "updated_at": "2026-07-25T12:05:00.000Z",
+  "updated_at": "2026-07-25T14:05:00.000Z",
   "discovery_urls": [
     {
+      "url": "https://brokencrystals.com/api/goto",
+      "source": "NeuraLegion/brokencrystals \u2014 unvalidated redirect via url query param (README /api/goto oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/hidden-upload",
+      "source": "NeuraLegion/brokencrystals \u2014 unrestricted file upload endpoint (README hidden-upload oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/aws",
+      "source": "NeuraLegion/brokencrystals \u2014 AWS metadata SSRF oracle via /api/file/aws (README cloud provider endpoints)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/init",
+      "source": "ctfsec/pwnshop \u2014 username enumeration via chat/init POST (README PWN-037 companion to forgot-password)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://damnvulnerablecryptoapp.github.io/DamnVulnerableCryptoApp/",
+      "source": "DamnVulnerableCryptoApp \u2014 weak crypto training lab docs + challenge oracle metadata (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "http://burpbountylab.com/cve/zoho/",
-      "source": "BountySecurity/BurpBountyLab — Zoho ManageEngine CVE practice endpoint (cves.py hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Zoho ManageEngine CVE practice endpoint (cves.py hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/ruby/",
-      "source": "BountySecurity/BurpBountyLab — Ruby on Rails path-traversal CVE practice endpoint (cves.py hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Ruby on Rails path-traversal CVE practice endpoint (cves.py hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/wp/local-file-inclusion",
-      "source": "BountySecurity/BurpBountyLab — WordPress Duplicator plugin LFI CVE practice endpoint (cves.py hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 WordPress Duplicator plugin LFI CVE practice endpoint (cves.py hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/citrix/sharefile/",
-      "source": "BountySecurity/BurpBountyLab — Citrix ShareFile path-traversal CVE practice endpoint (cves.py hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Citrix ShareFile path-traversal CVE practice endpoint (cves.py hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/couchdb/_users/_all_docs",
-      "source": "BountySecurity/BurpBountyLab — CouchDB _users/_all_docs disclosure CVE practice endpoint (cves.py hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 CouchDB _users/_all_docs disclosure CVE practice endpoint (cves.py hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/crowd/",
-      "source": "BountySecurity/BurpBountyLab — Atlassian Crowd CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Atlassian Crowd CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/firebase/.json",
-      "source": "BountySecurity/BurpBountyLab — Firebase realtime DB exposure CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Firebase realtime DB exposure CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/netsweeper/",
-      "source": "BountySecurity/BurpBountyLab — Netsweeper webadmin CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Netsweeper webadmin CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/artica/fw.login.php",
-      "source": "BountySecurity/BurpBountyLab — Artica Proxy fw.login.php CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Artica Proxy fw.login.php CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/magmi/",
-      "source": "BountySecurity/BurpBountyLab — MAGMI Magento plugin CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 MAGMI Magento plugin CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/actuator/heapdump",
-      "source": "BountySecurity/BurpBountyLab — Spring Boot actuator heapdump memory dump endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Spring Boot actuator heapdump memory dump endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/couchdb/_all_dbs",
-      "source": "BountySecurity/BurpBountyLab — CouchDB _all_dbs CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 CouchDB _all_dbs CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/traefik/",
-      "source": "BountySecurity/BurpBountyLab — Traefik reverse-proxy CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Traefik reverse-proxy CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/solarwinds/",
-      "source": "BountySecurity/BurpBountyLab — SolarWinds Orion CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 SolarWinds Orion CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/.svn/entries",
-      "source": "BountySecurity/BurpBountyLab — SVN metadata exposure passive trigger (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 SVN metadata exposure passive trigger (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/actuator/loggers",
-      "source": "BountySecurity/BurpBountyLab — Spring Boot actuator loggers endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Spring Boot actuator loggers endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/ai/v1/models",
-      "source": "BountySecurity/BurpBountyLab — OpenAI-compatible models listing disclosure profile (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 OpenAI-compatible models listing disclosure profile (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/cisco/",
-      "source": "BountySecurity/BurpBountyLab — Cisco CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Cisco CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/kubernetes/api/v1/",
-      "source": "BountySecurity/BurpBountyLab — Kubernetes API CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Kubernetes API CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/n8n/rest/settings",
-      "source": "BountySecurity/BurpBountyLab — n8n workflow automation CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 n8n workflow automation CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/pulse/",
-      "source": "BountySecurity/BurpBountyLab — Pulse Secure CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Pulse Secure CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/citrix/",
-      "source": "BountySecurity/BurpBountyLab — Citrix ADC CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Citrix ADC CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/f5/",
-      "source": "BountySecurity/BurpBountyLab — F5 BIG-IP CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 F5 BIG-IP CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/apache/",
-      "source": "BountySecurity/BurpBountyLab — Apache CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Apache CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
       "url": "http://burpbountylab.com/cve/symfony/profiler/phpinfo",
-      "source": "BountySecurity/BurpBountyLab — Symfony profiler/phpinfo CVE practice endpoint (hub scrape)",
+      "source": "BountySecurity/BurpBountyLab \u2014 Symfony profiler/phpinfo CVE practice endpoint (hub scrape)",
       "auth": "public_demo"
     },
     {
