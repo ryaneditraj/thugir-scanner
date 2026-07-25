@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T07:02:22.362Z",
+  "updated_at": "2026-07-25T07:05:26.573174Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2513,
-  "total_findings": 18397,
+  "total_sites_scanned": 2521,
+  "total_findings": 18711,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1816,
-  "discovery_findings": 15456,
+  "discovery_urls_added": 1821,
+  "discovery_findings": 15770,
   "improvements_shipped": 1092,
-  "last_run": "2026-07-25T07:02:22.362Z",
+  "last_run": "2026-07-25T07:05:26.573174Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -48,31 +48,30 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 374,
+      "findings": 314,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty Lab SSTI preview, URL-context XSS, SQLi user-profile error-based oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab DWR/actuator/backup/AI-gateway/OpenAPI oracles + vulnshop admin routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/ssti/preview: content={{7*7}} evaluates to 49 (9→50 findings)",
-      "burpbountylab.com/xss/url: javascript: link reflected in href/img/form/iframe (57→60 findings)",
-      "burpbountylab.com/sqli/user: id=1 admin profile + id=1' MySQL syntax error (55→58 findings)",
-      "edward-playground.github.io/top10-showcase: client-side-prompt-injection-evidence (3 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 no benchmark misses",
+      "burpbountylab.com/api-docs: vibe-openapi-docs-exposed on OpenAPI surface (60 findings)",
+      "burpbountylab.com/actuator/beans: spring-boot-actuator-exposed (60 findings)",
+      "burpbountylab.com/backup/: directory listing + hub fingerprint (60 findings)",
+      "vulnshop.vercel.app/admin: client-side-vulnshop-evidence (5 findings)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "burpbountylab.com/xss/discover: multi-param XSS discovery oracle still absent",
-      "burpbountylab.com/cve/text4shell: Text4Shell CVE route-specific oracle still absent",
-      "burpbountylab.com/ai/mcp/tools: MCP tools disclosure route-specific oracle still absent",
-      "burpbountylab.com/cve/jira/dashboard: Jira CVE route returns 404 — no positive-proof oracle",
-      "top10-showcase: LLM attack chains require interactive scenario navigation beyond shallow crawl"
+      "burpbountylab.com/dwr/interface: DWR interface route-specific oracle still absent",
+      "burpbountylab.com/ai/gateway: AI gateway disclosure route-specific oracle still absent",
+      "burpbountylab.com/backup/: backup directory listing route-specific oracle still absent",
+      "hub fingerprint dominates burpbountylab routes (~59-60/route)"
     ]
   },
   "discovery_highlights": {
@@ -286,6 +285,11 @@
     "burpbountylab.com/xss/discover": 57,
     "burpbountylab.com/cve/text4shell": 57,
     "burpbountylab.com/ai/mcp/tools": 57,
-    "hack-this-site-eta.vercel.app/cms": 41
+    "hack-this-site-eta.vercel.app/cms": 41,
+    "burpbountylab.com/dwr/interface": 60,
+    "burpbountylab.com/actuator/beans": 60,
+    "burpbountylab.com/backup/": 60,
+    "burpbountylab.com/ai/gateway": 59,
+    "burpbountylab.com/api-docs": 60
   }
 }
