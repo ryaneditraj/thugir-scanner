@@ -7277,6 +7277,24 @@
       "slug": "burpbounty-backup-listing-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/backup/ returns Index of /backup/ with db_backup.sql + site_backup.tar.gz links; burpbountylab.com/backup/ findings 60→63; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-mcp-tools-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/mcp/tools returns {\"mcp_enabled\":true,\"tools\":[{\"name\":\"fetch_url\"}]}; burpbountylab.com/ai/mcp/tools findings 57→65; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-api-docs-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/api-docs returns OpenAPI 3.0 VulnApp API with /api/v1/users + /api/v1/products; burpbountylab.com/api-docs findings 60→66; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-source-config-bak-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/source/config.bak returns PHP $db_pass='password123' mysqli_connect config; burpbountylab.com/source/config.bak findings 47→66; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12754,6 +12772,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-backup-listing-live-oracle",
       "shipped_at": "2026-07-25T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-mcp-tools-live-oracle",
+      "shipped_at": "2026-07-25T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-api-docs-live-oracle",
+      "shipped_at": "2026-07-25T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-source-config-bak-live-oracle",
+      "shipped_at": "2026-07-25T08:10:00.000Z"
     }
   ]
 }
