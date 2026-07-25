@@ -1,6 +1,7 @@
 import { getServiceSupabase } from "@/lib/supabase/server";
 import { IS_DEV_MODE } from "@/lib/devmode";
 import { STATIC_PATTERNS } from "@/lib/patterns";
+import { agentAvailability } from "@/lib/agent";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,8 @@ export default async function AdminOverview() {
     supabaseOk = false;
   }
 
+  const agent = agentAvailability();
+
   const health: [string, "ok" | "warn" | "bad", string][] = [
     [
       "Supabase",
@@ -60,13 +63,32 @@ export default async function AdminOverview() {
     ],
     [
       "Worker",
-      envStatus("WORKER_URL") === "ok" ? "ok" : "warn",
-      process.env.WORKER_URL ? "Configured" : "WORKER_URL unset (inline deep-run still works)"
+      IS_DEV_MODE || envStatus("WORKER_URL") === "ok" ? "ok" : "warn",
+      IS_DEV_MODE
+        ? "Inline deep-run (dev — no worker needed)"
+        : process.env.WORKER_URL
+          ? "Configured"
+          : "WORKER_URL unset — queued Deep Scans need the Python worker"
     ],
     [
       "AI analyst",
-      envStatus("OPENROUTER_API_KEY") === "ok" ? "ok" : "warn",
-      process.env.OPENROUTER_API_KEY ? "OpenRouter ready" : "Optional — scans work without it"
+      envStatus("OPENROUTER_API_KEY") === "ok" ||
+      envStatus("OPENAI_API_KEY") === "ok" ||
+      envStatus("ANTHROPIC_API_KEY") === "ok"
+        ? "ok"
+        : "warn",
+      process.env.OPENROUTER_API_KEY
+        ? "OpenRouter ready"
+        : process.env.OPENAI_API_KEY
+          ? "OpenAI ready"
+          : process.env.ANTHROPIC_API_KEY
+            ? "Anthropic ready"
+            : "Optional — set an API key in env or Settings"
+    ],
+    [
+      "Agent engine",
+      agent.available ? "ok" : "warn",
+      agent.available ? `Python ready (${agent.python})` : agent.reason || "Optional — local/worker only"
     ]
   ];
 
@@ -78,19 +100,19 @@ export default async function AdminOverview() {
       </p>
       <div className="grid">
         <div className="card">
-          <b>{scanCount ?? 0}</b>
+          <b className="stat">{scanCount ?? 0}</b>
           <p className="kv">total scans</p>
         </div>
         <div className="card">
-          <b>{patternCount ?? 0}</b>
+          <b className="stat">{patternCount ?? 0}</b>
           <p className="kv">active patterns</p>
         </div>
         <div className="card">
-          <b>{openCrit ?? 0}</b>
+          <b className="stat">{openCrit ?? 0}</b>
           <p className="kv">open critical findings</p>
         </div>
         <div className="card">
-          <b>{userCount ?? 0}</b>
+          <b className="stat">{userCount ?? 0}</b>
           <p className="kv">profiles</p>
         </div>
       </div>

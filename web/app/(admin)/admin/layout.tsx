@@ -2,18 +2,9 @@ import { redirect } from "next/navigation";
 import { getAdminContext } from "@/lib/auth/admin";
 import { getPreviewTier } from "@/lib/admin/preview-tier";
 import TierPreview from "@/components/admin/TierPreview";
+import AdminNav from "@/components/admin/AdminNav";
 
 export const dynamic = "force-dynamic";
-
-const NAV: [string, string][] = [
-  ["Overview", "/admin"],
-  ["Settings", "/admin/settings"],
-  ["Patterns", "/admin/patterns"],
-  ["Scans", "/admin/scans"],
-  ["Users", "/admin/users"],
-  ["API keys", "/admin/keys"],
-  ["Audit log", "/admin/audit"]
-];
 
 // Second auth gate on top of normal user auth. If the signed-in user is not an active row in
 // admin_users, we redirect away. The panel is robots-disallowed and no-store.
@@ -30,13 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </span>
         <TierPreview initialOverride={previewTier} />
       </div>
-      <nav className="admin-nav">
-        {NAV.map(([label, href]) => (
-          <a key={href} href={href}>
-            {label}
-          </a>
-        ))}
-      </nav>
+      <AdminNav />
       {children}
     </div>
   );

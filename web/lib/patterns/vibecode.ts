@@ -261,6 +261,56 @@ export const vibecodePatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vibe-algolia-admin-in-client",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Algolia admin API key in client bundle",
+    description:
+      "Algolia's admin API key grants full index control (create, delete, settings, browse all records). AI search integrations often copy the admin key into NEXT_PUBLIC_ or VITE_ env vars instead of the restricted search-only key.",
+    impactOneline: "Your Algolia admin key in JS lets anyone rewrite indexes and exfiltrate all search data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "algoliaAdminKeyInClient" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Use the search-only API key client-side and rotate the admin key.",
+      steps: [
+        "Replace client-side admin keys with the Algolia search-only API key.",
+        "Keep admin operations (reindex, settings) in server routes or Edge Functions only.",
+        "Rotate the admin API key in the Algolia dashboard → API Keys."
+      ]
+    },
+    fixPrompt:
+      "My client bundle exposes an Algolia admin API key (ALGOLIA_ADMIN_API_KEY or adminApiKey). Switch the browser to the search-only key, move admin/index operations server-side, and tell me to rotate the admin key.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vibe-auth0-secret-in-client",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Auth0 client secret referenced in client bundle",
+    description:
+      "Auth0 quickstarts and NextAuth Auth0Provider configs often assign AUTH0_CLIENT_SECRET or clientSecret in modules that ship to the browser. Only the client ID belongs client-side; the secret enables token exchange and session forgery.",
+    impactOneline: "Your Auth0 client secret in JS enables OAuth token theft and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "auth0SecretInClient" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Move Auth0 secret usage server-side and rotate the client secret.",
+      steps: [
+        "Remove AUTH0_CLIENT_SECRET from all client code and client-exposed env vars (NEXT_PUBLIC_*, VITE_*).",
+        "Handle Auth0 token exchange only in server routes or Edge Functions.",
+        "Rotate the client secret in Auth0 Dashboard → Applications → Settings."
+      ]
+    },
+    fixPrompt:
+      "My frontend references an Auth0 client secret (AUTH0_CLIENT_SECRET or clientSecret). Move all Auth0 secret usage to server-side API routes, remove it from client-exposed env vars, and tell me to rotate the client secret in Auth0.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vibe-clerk-secret-in-client",
     platform: "generic",
     category: "Exposed secret",
@@ -341,6 +391,56 @@ export const vibecodePatterns: Pattern[] = [
     },
     fixPrompt:
       "My Next.js __NEXT_DATA__ contains sensitive env key names with values. Remove them from page props so they never reach the client, and list what I must rotate.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vibe-public-cloud-storage-bucket",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Public cloud storage bucket lists objects without auth",
+    description:
+      "Your JavaScript references an S3, Google Cloud Storage, or Cloudflare R2 bucket URL, and a read-only list request returns real object names without credentials. AI upload scaffolds often hardcode bucket URLs and leave buckets world-readable.",
+    impactOneline: "Anyone can list and download files from your cloud storage bucket.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "publicCloudStorageBucket" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Block public list/read on the bucket and use signed URLs for uploads.",
+      steps: [
+        "Set the bucket to private and remove public ListBucket/GetObject permissions.",
+        "Use pre-signed URLs or a server-side upload proxy instead of public bucket URLs in the client.",
+        "Audit existing objects for sensitive uploads and rotate any exposed access keys."
+      ]
+    },
+    fixPrompt:
+      "My app references a public S3/GCS/R2 bucket that lists objects without authentication. Make the bucket private, remove public list/read ACLs, switch uploads to signed URLs or a server proxy, and show the IAM/policy changes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vibe-exposed-admin-panel",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Admin panel reachable without authentication",
+    description:
+      "A common admin path (/admin, /dashboard, /manage) returns an admin UI with management tables or copy — without redirecting to a login page. AI scaffolds often ship admin dashboards as client-only routes with no server-side gate.",
+    impactOneline: "Anyone can open your admin panel URL and use management features without signing in.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "exposedAdminPanel" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Protect every admin route with server-side authentication.",
+      steps: [
+        "Add middleware or server layout checks that return 401/redirect for unauthenticated requests.",
+        "Never rely on client-side route guards alone for /admin or /dashboard.",
+        "Audit admin mutations to require a verified session on the server."
+      ]
+    },
+    fixPrompt:
+      "My /admin or /dashboard route is reachable without authentication — visitors see the admin UI without logging in. Add server-side auth middleware on every admin route, redirect unauthenticated users to login, and show me the middleware/config changes.",
     version: 1,
     enabled: true
   }

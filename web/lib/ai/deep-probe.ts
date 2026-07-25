@@ -6,7 +6,13 @@ import type { PatternFinding, Severity } from "../patterns/types";
 import { loadSettings } from "../settings/store";
 import type { TierName } from "../settings/schema";
 import { callAiProvider, envKeyFor, parseAiJson, tierAiConfig } from "./client";
-import { triageSeverity, WEB_SCANNER_SYSTEM_PREFIX } from "../methodology";
+import {
+  triageSeverity,
+  WEB_SCANNER_SYSTEM_PREFIX,
+  REFLEXION_PROMPT,
+  loadCoreOracleSummaries,
+  loadAgentOracleSummaries
+} from "../methodology";
 
 export interface DeepProbeContext {
   target: string;
@@ -27,7 +33,15 @@ interface AiDeepHit {
   suggestedFix?: string;
 }
 
+const ORACLE_CONTEXT = `${loadCoreOracleSummaries(2200)}
+
+${loadAgentOracleSummaries(1800)}
+
+${REFLEXION_PROMPT}`;
+
 const SYSTEM = `${WEB_SCANNER_SYSTEM_PREFIX}
+
+${ORACLE_CONTEXT}
 
 You receive HTML and JavaScript excerpts from a crawl of ONE target.
 
@@ -35,6 +49,7 @@ Find REAL security issues visible in the source. Quote EXACT substrings as evide
 
 Priority classes: injection, XSS, IDOR/BOLA, auth bypass, exposed secrets/API keys, SSRF sinks,
 dangerous sinks (eval, innerHTML, dangerouslySetInnerHTML), missing auth on state-changing fetches.
+When a class looks blocked by WAF/filter, note which reflexion encoding level might bypass it.
 
 AI-built app misconfigs are secondary — report if visible in source.
 

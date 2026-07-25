@@ -5,7 +5,15 @@
 // (idorProbe, clientOnlyAuth, serverActionAuthz) intentionally do not run on the free path;
 // they exist so the worker / future deep flow can share the same registry keys.
 
-import { fetchDoc, type FetchedDoc } from "./http";
+import {
+  thugirJwtClaims,
+  thugirJsEndpoints,
+  thugirDirEnum,
+  reflexionEscalatedXss,
+  reflexionEscalatedSqli,
+  reflexionEscalatedSsti
+} from "./agent-power";
+import { fetchDoc, looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import {
   extractApiPaths,
@@ -15,12 +23,31 @@ import {
 } from "./extract-api";
 import {
   extractSupabaseFromText,
+  extractConvexFromText,
+  extractConvexFunctionPaths,
+  extractCloudStorageBuckets,
+  extractStripeLiveKey,
+  extractOpenAiKey,
+  extractAnthropicKey,
   jwtPayload,
   looksOpenApiBody,
+  looksPublicBucketListing,
   matchDemoFlags,
   HARDCODED_CRED_RES,
   parseRobotsDisallowApiPaths,
-  SENSITIVE_PATH_NEEDLES
+  SENSITIVE_PATH_NEEDLES,
+  redactSecretSample,
+  isLikelyTwilioAuthToken,
+  isConvexOpenQueryResponse,
+  isLikelyConvexQueryPath,
+  buildAlgNoneJwt,
+  looksAuthChallenge,
+  looksAuthGatedJson,
+  ADMIN_PANEL_PATHS,
+  ADMIN_PANEL_MARKERS,
+  looksLikeAdminPanel,
+  redirectedToLogin,
+  isSameSpaShell
 } from "./helpers";
 
 export interface RuleContext {
@@ -737,7 +764,11 @@ const INLINE_SECRET_RES: { name: string; re: RegExp }[] = [
   { name: "OpenAI key", re: /sk-[A-Za-z0-9]{20,}/ },
   { name: "Private key block", re: /-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/ },
   { name: "Slack token", re: /xox[baprs]-[A-Za-z0-9-]{10,}/ },
-  { name: "GitHub token", re: /gh[pousr]_[A-Za-z0-9]{36,}/ }
+  { name: "GitHub token", re: /gh[pousr]_[A-Za-z0-9]{36,}/ },
+  {
+    name: "Convex deploy key",
+    re: /(?:dev|prod):[a-z0-9-]+\|[A-Za-z0-9+/=_-]{20,}|(?:preview|project):[a-z0-9-]+:[a-z0-9-]+\|[A-Za-z0-9+/=_-]{20,}/
+  }
 ];
 const inlineStateSecrets: Rule = async (ctx) => {
   const html = ctx.home.body || "";
@@ -1029,6 +1060,90 @@ const errorDisclosure: Rule = async (ctx) => {
         };
       }
     }
+  }
+  return NEGATIVE;
+};
+
+// --- Infra / DevOps artifact files exposed over HTTP ------------------------
+const INFRA_ARTIFACT_PROBES: {
+  path: string;
+  label: string;
+  test: (body: string) => boolean;
+}[] = [
+  {
+    path: "/terraform.tfstate",
+    label: "Terraform state",
+    test: (b) => /"version"\s*:\s*\d/.test(b) && /"resources"|"terraform_version"/.test(b)
+  },
+  {
+    path: "/terraform.tfstate.backup",
+    label: "Terraform state backup",
+    test: (b) => /"version"\s*:\s*\d/.test(b) && /"resources"|"terraform_version"/.test(b)
+  },
+  {
+    path: "/.aws/credentials",
+    label: "AWS credentials file",
+    test: (b) => /aws_access_key_id|aws_secret_access_key/i.test(b) && /\[(default|profile[^\]]+)\]/i.test(b)
+  },
+  {
+    path: "/actuator/env",
+    label: "Spring Boot actuator /env",
+    test: (b) => /"propertySources"|"systemEnvironment"/.test(b) && /"activeProfiles"|"server\.port"/.test(b)
+  },
+  {
+    path: "/.docker/config.json",
+    label: "Docker client config",
+    test: (b) => /"auths"\s*:|"credsStore"/.test(b)
+  },
+  {
+    path: "/fly.toml",
+    label: "Fly.io deploy config",
+    test: (b) => /^\s*app\s*=/m.test(b) && (/\[env\]/m.test(b) || /primary_region/.test(b))
+  },
+  {
+    path: "/.kube/config",
+    label: "Kubernetes kubeconfig",
+    test: (b) => /apiVersion:\s*v1/.test(b) && /clusters:|users:|contexts:/.test(b)
+  },
+  {
+    path: "/wp-config.php",
+    label: "WordPress config",
+    test: (b) => /DB_PASSWORD|DB_USER|define\s*\(\s*['"]DB_/i.test(b)
+  },
+  {
+    path: "/wp-config.php.bak",
+    label: "WordPress config backup",
+    test: (b) => /DB_PASSWORD|DB_USER|define\s*\(\s*['"]DB_/i.test(b)
+  },
+  {
+    path: "/settings.py",
+    label: "Django/Python settings",
+    test: (b) => /SECRET_KEY\s*=|DATABASES\s*=|DEBUG\s*=\s*True/.test(b)
+  },
+  {
+    path: "/settings.py.bak",
+    label: "Django settings backup",
+    test: (b) => /SECRET_KEY\s*=|DATABASES\s*=/.test(b)
+  }
+];
+const exposedInfraArtifacts: Rule = async (ctx) => {
+  const urls = INFRA_ARTIFACT_PROBES.map((p) => new URL(p.path, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 4);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 400) continue;
+    if (looksHtml(r.headers, r.body)) continue;
+    const probe = INFRA_ARTIFACT_PROBES.find((p) => url.endsWith(p.path) || url.includes(p.path));
+    if (!probe || !probe.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        artifact: probe.label,
+        status: r.status,
+        snippet: r.body.slice(0, 200).trim()
+      }
+    };
   }
   return NEGATIVE;
 };
@@ -1466,6 +1581,291 @@ const hardcodedCredentials: Rule = async (ctx) => {
   return { fired: true, confidence: 0.88, evidence: { hardcoded: hits.slice(0, 5) } };
 };
 
+const TWILIO_SID_RE = /AC[a-f0-9]{32}/gi;
+const twilioCredentialsInClient: Rule = async (ctx) => {
+  const publicAuthEnv =
+    /(?:NEXT_PUBLIC_|VITE_)?TWILIO_AUTH_TOKEN\s*[=:]\s*["']([a-f0-9]{32})["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = publicAuthEnv.exec(ctx.combined))) {
+    if (isLikelyTwilioAuthToken(m[1])) {
+      return {
+        fired: true,
+        confidence: 0.95,
+        evidence: {
+          note: "TWILIO_AUTH_TOKEN exposed in client bundle",
+          sampleRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+
+  for (const sidMatch of ctx.combined.matchAll(TWILIO_SID_RE)) {
+    const sid = sidMatch[0];
+    const idx = sidMatch.index ?? 0;
+    const window = ctx.combined.slice(Math.max(0, idx - 220), idx + sid.length + 420);
+
+    const authNear = window.match(
+      /(?:authToken|auth_token|TWILIO_AUTH_TOKEN)\s*[=:]\s*["']([a-f0-9]{32})["']/i
+    );
+    if (authNear && isLikelyTwilioAuthToken(authNear[1], sid)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          note: "Twilio accountSid + authToken pair in client bundle",
+          accountSidRedacted: redactSecretSample(sid),
+          authTokenRedacted: redactSecretSample(authNear[1])
+        }
+      };
+    }
+
+    const callPat = new RegExp(
+      `twilio\\s*\\(\\s*["']${sid}["']\\s*,\\s*["']([a-f0-9]{32})["']`,
+      "i"
+    );
+    const callM = window.match(callPat);
+    if (callM && isLikelyTwilioAuthToken(callM[1], sid)) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          note: "twilio(accountSid, authToken) call in client bundle",
+          accountSidRedacted: redactSecretSample(sid),
+          authTokenRedacted: redactSecretSample(callM[1])
+        }
+      };
+    }
+  }
+
+  if (!/twilio/i.test(ctx.combined)) return NEGATIVE;
+  const genericAuth = /(?:authToken|auth_token)\s*[=:]\s*["']([a-f0-9]{32})["']/gi;
+  while ((m = genericAuth.exec(ctx.combined))) {
+    const start = Math.max(0, (m.index ?? 0) - 320);
+    const end = (m.index ?? 0) + m[0].length + 320;
+    const nearby = ctx.combined.slice(start, end);
+    const sid = nearby.match(/AC[a-f0-9]{32}/i)?.[0];
+    if (sid && isLikelyTwilioAuthToken(m[1], sid)) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          note: "Twilio auth token near accountSid in client bundle",
+          accountSidRedacted: redactSecretSample(sid),
+          authTokenRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
+const stripeLiveKeyProbe: Rule = async (ctx) => {
+  const secretKey = extractStripeLiveKey(ctx.combined);
+  if (!secretKey) return NEGATIVE;
+
+  const url = "https://api.stripe.com/v1/balance";
+  const basic = Buffer.from(`${secretKey}:`).toString("base64");
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 8000,
+    headers: { Authorization: `Basic ${basic}` }
+  });
+  if (doc.status !== 200) return NEGATIVE;
+
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      object?: string;
+      available?: { amount?: number; currency?: string }[];
+      livemode?: boolean;
+    };
+    if (parsed.object !== "balance") return NEGATIVE;
+    const currencies = (parsed.available ?? [])
+      .map((b) => b.currency)
+      .filter(Boolean)
+      .slice(0, 4);
+    return {
+      fired: true,
+      confidence: 0.97,
+      evidence: {
+        note: "Live Stripe secret key in client bundle — validated via Balance API read",
+        secretKeyRedacted: redactSecretSample(secretKey),
+        livemode: parsed.livemode,
+        balanceCurrencies: currencies,
+        validationEndpoint: url
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const openaiLiveKeyProbe: Rule = async (ctx) => {
+  const apiKey = extractOpenAiKey(ctx.combined);
+  if (!apiKey) return NEGATIVE;
+
+  const url = "https://api.openai.com/v1/models";
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 8000,
+    headers: { Authorization: `Bearer ${apiKey}` }
+  });
+  if (doc.status !== 200) return NEGATIVE;
+
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      object?: string;
+      data?: { id?: string }[];
+    };
+    if (parsed.object !== "list" || !Array.isArray(parsed.data) || parsed.data.length === 0) {
+      return NEGATIVE;
+    }
+    const modelIds = parsed.data
+      .map((m) => m.id)
+      .filter(Boolean)
+      .slice(0, 4) as string[];
+    return {
+      fired: true,
+      confidence: 0.97,
+      evidence: {
+        note: "OpenAI API key in client bundle — validated via Models API read",
+        secretKeyRedacted: redactSecretSample(apiKey),
+        modelSample: modelIds,
+        validationEndpoint: url
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const anthropicLiveKeyProbe: Rule = async (ctx) => {
+  const apiKey = extractAnthropicKey(ctx.combined);
+  if (!apiKey) return NEGATIVE;
+
+  const url = "https://api.anthropic.com/v1/models";
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 8000,
+    headers: {
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01"
+    }
+  });
+  if (doc.status !== 200) return NEGATIVE;
+
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      data?: { id?: string; display_name?: string }[];
+    };
+    if (!Array.isArray(parsed.data) || parsed.data.length === 0) return NEGATIVE;
+    const modelIds = parsed.data
+      .map((m) => m.id)
+      .filter(Boolean)
+      .slice(0, 4) as string[];
+    return {
+      fired: true,
+      confidence: 0.97,
+      evidence: {
+        note: "Anthropic API key in client bundle — validated via Models API read",
+        secretKeyRedacted: redactSecretSample(apiKey),
+        modelSample: modelIds,
+        validationEndpoint: url
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const PLACEHOLDER_API_KEY =
+  /^(?:your[-_]?|my[-_]?)?(?:admin[-_]?)?(?:api[-_]?)?key(?:[-_]?here)?$|^(?:changeme|placeholder|example|xxx+|test|dummy|fake|null|undefined|insert[-_]?here)$/i;
+
+function isLikelyRealAlgoliaKey(value: string): boolean {
+  if (value.length < 16) return false;
+  if (PLACEHOLDER_API_KEY.test(value)) return false;
+  if (/^[*x]+$/i.test(value)) return false;
+  return /^[a-f0-9]{16,}$/i.test(value);
+}
+
+const algoliaAdminKeyInClient: Rule = async (ctx) => {
+  const hits: { note: string; sampleRedacted: string }[] = [];
+
+  const adminEnvRe =
+    /(?:NEXT_PUBLIC_|VITE_)?ALGOLIA_ADMIN(?:_API)?_KEY\s*[=:]\s*["']([^"']+)["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = adminEnvRe.exec(ctx.combined))) {
+    if (isLikelyRealAlgoliaKey(m[1])) {
+      hits.push({
+        note: "Algolia admin API key env var exposed in client bundle",
+        sampleRedacted: redactSecretSample(m[1])
+      });
+    }
+  }
+
+  if (/algolia|instantsearch/i.test(ctx.combined)) {
+    const propRe = /(?:adminApiKey|algoliaAdminKey)\s*[=:]\s*["']([^"']+)["']/gi;
+    while ((m = propRe.exec(ctx.combined))) {
+      if (isLikelyRealAlgoliaKey(m[1])) {
+        hits.push({
+          note: "Algolia adminApiKey assigned in client-side config",
+          sampleRedacted: redactSecretSample(m[1])
+        });
+      }
+    }
+  }
+
+  if (hits.length === 0) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: { hits: hits.slice(0, 4) }
+  };
+};
+
+const PLACEHOLDER_SECRET =
+  /^(?:your[-_]?|my[-_]?)?(?:client[-_]?)?secret(?:[-_]?here)?$|^(?:changeme|placeholder|example|xxx+|test|dummy|fake|null|undefined|insert[-_]?here)$/i;
+
+function isLikelyRealOAuthSecret(value: string): boolean {
+  if (value.length < 16) return false;
+  if (PLACEHOLDER_SECRET.test(value)) return false;
+  if (/^[*x]+$/i.test(value)) return false;
+  return true;
+}
+
+const auth0SecretInClient: Rule = async (ctx) => {
+  const envRe =
+    /(?:NEXT_PUBLIC_|VITE_)?AUTH0_(?:M2M_)?(?:CLIENT_)?SECRET(?:_KEY)?\s*[=:]\s*["']([^"']{8,})["']/gi;
+  let m: RegExpExecArray | null;
+  while ((m = envRe.exec(ctx.combined))) {
+    if (isLikelyRealOAuthSecret(m[1])) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          note: "Auth0 secret env var exposed in client bundle",
+          sampleRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+
+  if (!/auth0/i.test(ctx.combined)) return NEGATIVE;
+  const cfgRe = /(?:clientSecret|client_secret)\s*[=:]\s*["']([A-Za-z0-9_\-/.+]{20,})["']/gi;
+  while ((m = cfgRe.exec(ctx.combined))) {
+    if (isLikelyRealOAuthSecret(m[1])) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          note: "OAuth client_secret near Auth0 config in client bundle",
+          sampleRedacted: redactSecretSample(m[1])
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- Clerk secret key in client bundle --------------------------------------
 const clerkSecretInClient: Rule = async (ctx) => {
   if (!/clerk/i.test(ctx.combined)) return NEGATIVE;
@@ -1800,6 +2200,110 @@ const nextDataSensitiveKeys: Rule = async (ctx) => {
     confidence: 0.88,
     evidence: { location: "__NEXT_DATA__", sensitiveKeys: hits, note: "server-secret key names with values in Next.js page payload" }
   };
+};
+
+const CONVEX_QUERY_FALLBACKS = [
+  "users:list",
+  "messages:list",
+  "todos:list",
+  "tasks:list",
+  "notes:list",
+  "posts:list",
+  "profiles:list",
+  "items:list"
+];
+const convexOpenQuery: Rule = async (ctx) => {
+  const cv = extractConvexFromText(ctx.combined);
+  if (!cv) return NEGATIVE;
+  const { deploymentUrl } = cv;
+
+  const extracted = extractConvexFunctionPaths(ctx.combined, 6).filter(isLikelyConvexQueryPath);
+  const paths = [...new Set([...extracted, ...CONVEX_QUERY_FALLBACKS])].slice(0, 8);
+  const queryUrl = `${deploymentUrl}/api/query`;
+
+  const openQueries: { path: string; rowHint: string }[] = [];
+  for (const path of paths) {
+    const body = JSON.stringify({ path, args: {}, format: "json" });
+    const r = await ctx.probe.get(queryUrl, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      maxBytes: 8192
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    const check = isConvexOpenQueryResponse(r.body);
+    if (check.open) {
+      openQueries.push({ path, rowHint: check.rowHint || "data" });
+      break;
+    }
+  }
+
+  if (openQueries.length === 0) {
+    return { fired: false, confidence: 0, evidence: { deploymentUrl, probedPaths: paths.slice(0, 4) } };
+  }
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      deploymentUrl,
+      openQueries,
+      note: "Convex query returned data to unauthenticated POST /api/query — missing ctx.auth check"
+    }
+  };
+};
+
+const publicCloudStorageBucket: Rule = async (ctx) => {
+  const buckets = extractCloudStorageBuckets(ctx.combined);
+  if (buckets.length === 0) return NEGATIVE;
+  const urls = buckets.map((b) => b.listUrl);
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 3);
+  for (const bucket of buckets) {
+    const doc = docs.get(bucket.listUrl);
+    if (!doc || doc.status < 200 || doc.status >= 300) continue;
+    if (!looksPublicBucketListing(doc.body, bucket.provider)) continue;
+    const objectHint =
+      bucket.provider === "gcs"
+        ? doc.body.match(/"name"\s*:\s*"([^"]+)"/)?.[1]
+        : doc.body.match(/<Key>([^<]+)<\/Key>/)?.[1];
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        provider: bucket.provider,
+        bucket: bucket.bucket,
+        listUrl: bucket.listUrl,
+        sourceHint: bucket.sourceHint,
+        sampleObject: objectHint || undefined,
+        note: "read-only list returned object names without authentication"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const exposedAdminPanel: Rule = async (ctx) => {
+  const urls = ADMIN_PANEL_PATHS.map((path) => new URL(path, ctx.origin).toString());
+  const docs = await ctx.probe.getMany(urls, { maxBytes: 16_384 }, 4);
+  for (const [url, r] of docs) {
+    if (r.status < 200 || r.status >= 300) continue;
+    const path = new URL(url).pathname;
+    if (redirectedToLogin(path, r.finalUrl, r.body)) continue;
+    if (isSameSpaShell(ctx.home.body, r.body)) continue;
+    if (!looksLikeAdminPanel(r.body)) continue;
+    const markers = ADMIN_PANEL_MARKERS.filter((re) => re.test(r.body)).map((re) => re.source).slice(0, 4);
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: r.finalUrl,
+        status: r.status,
+        markers: markers.length ? markers : ["sidebar+table"],
+        snippet: r.body.replace(/\s+/g, " ").slice(0, 220).trim(),
+        note: "Admin panel HTML returned without redirect to login"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 // --- SQL error disclosure on search/query endpoints (deep) --------------------
@@ -22754,6 +23258,59 @@ const unauthenticatedApiRoutes: Rule = async (ctx) => {
   };
 };
 
+const jwtAlgNoneProbe: Rule = async (ctx) => {
+  const usesJwt =
+    /Bearer\s+|Authorization.*(?:jwt|token)|jsonwebtoken|jose\.|jwt\.(?:sign|verify|decode)/i.test(
+      ctx.combined
+    );
+  const paths = new Set(extractApiPaths(ctx.combined, 6));
+  for (const p of ["/api/me", "/api/user", "/api/profile", "/api/auth/session", "/api/users"]) {
+    paths.add(p);
+  }
+  if (paths.size === 0 && !usesJwt) return NEGATIVE;
+
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({
+    sub: "thugir-probe-user",
+    role: "admin",
+    iat: now,
+    exp: now + 3600
+  });
+  const badToken = "thugir.invalid.probe.token";
+
+  for (const path of [...paths].slice(0, 6)) {
+    const url = new URL(path, ctx.origin).toString();
+    const [noAuth, badAuth, noneAuth] = await Promise.all([
+      ctx.probe.get(url, { maxBytes: 4096 }),
+      ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
+      ctx.probe.get(url, {
+        maxBytes: 4096,
+        headers: { Authorization: `Bearer ${algNoneToken}` }
+      })
+    ]);
+
+    if (
+      looksAuthChallenge(noAuth) &&
+      looksAuthChallenge(badAuth) &&
+      looksAuthGatedJson(noneAuth)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.88,
+        evidence: {
+          path,
+          note: "Endpoint rejected unauthenticated and malformed tokens but accepted a forged alg:none JWT",
+          statusWithoutAuth: noAuth.status,
+          statusWithMalformedToken: badAuth.status,
+          statusWithAlgNone: noneAuth.status,
+          responseSample: noneAuth.body.slice(0, 150).trim()
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- Client-side prompt-injection lab / scanner evidence in bundle ------------
 // Detects intentional AI red-team UIs (Fabraix Playground, agent/probe, etc.) from
 // shipped JS or SSR HTML — positive proof the app trains or automates prompt attacks.
@@ -32694,6 +33251,7 @@ export const RULES: Record<string, Rule> = {
   errorDisclosure,
   openApiDocs,
   weakApiDefaultCredentials,
+  exposedInfraArtifacts,
   demoModeFlags,
   supabaseStoragePublic,
   supabaseServiceRoleClient,
@@ -32701,6 +33259,12 @@ export const RULES: Record<string, Rule> = {
   sitemapListedSensitiveFileProbe,
   weakCsp,
   hardcodedCredentials,
+  twilioCredentialsInClient,
+  stripeLiveKeyProbe,
+  openaiLiveKeyProbe,
+  anthropicLiveKeyProbe,
+  algoliaAdminKeyInClient,
+  auth0SecretInClient,
   clerkSecretInClient,
   firebaseFirestoreOpen,
   clientOnlyAuth,
@@ -32737,7 +33301,11 @@ export const RULES: Record<string, Rule> = {
   clientSideOwaspTop10IntroHubEvidence,
   serverSideEvalEvidence,
   nextDataSensitiveKeys,
+  convexOpenQuery,
+  publicCloudStorageBucket,
+  exposedAdminPanel,
   unauthenticatedApiRoutes,
+  jwtAlgNoneProbe,
   sqlErrorDisclosure,
   invictiNslookupCommandInjectionProbe,
   postLoginSqlBypass,
@@ -33377,7 +33945,13 @@ export const RULES: Record<string, Rule> = {
   clientSidePovzaydXssLabsEvidence,
   clientSideJuiceShopVaptEvidence,
   clientSideRogueStudioEvidence,
-  clientSideOverthewireLeviathanEvidence
+  clientSideOverthewireLeviathanEvidence,
+  thugirJwtClaims,
+  thugirJsEndpoints,
+  thugirDirEnum,
+  reflexionEscalatedXss,
+  reflexionEscalatedSqli,
+  reflexionEscalatedSsti
 };
 
 // Free-tier rules must produce POSITIVE PROOF, not a guess. webhookSignature is a static
@@ -33394,6 +33968,8 @@ export const FREE_RULES = new Set([
   "permissiveCors",
   "corsReflectOrigin",
   "openRedirect",
+  "thugirJwtClaims",
+  "thugirJsEndpoints",
   "robotsSensitivePaths",
   "techDisclosure",
   // read-only, positive-proof additions — safe to confirm on the free pass
@@ -33406,6 +33982,7 @@ export const FREE_RULES = new Set([
   "phpMyAdminExposed",
   "openApiDocs",
   "weakApiDefaultCredentials",
+  "exposedInfraArtifacts",
   "demoModeFlags",
   "supabaseStoragePublic",
   "supabaseServiceRoleClient",
@@ -33413,9 +33990,18 @@ export const FREE_RULES = new Set([
   "sitemapListedSensitiveFileProbe",
   "weakCsp",
   "hardcodedCredentials",
+  "twilioCredentialsInClient",
+  "stripeLiveKeyProbe",
+  "openaiLiveKeyProbe",
+  "anthropicLiveKeyProbe",
+  "algoliaAdminKeyInClient",
+  "auth0SecretInClient",
   "clerkSecretInClient",
   "firebaseFirestoreOpen",
   "nextDataSensitiveKeys",
+  "convexOpenQuery",
+  "publicCloudStorageBucket",
+  "exposedAdminPanel",
   "unauthenticatedAdminEndpoint",
   "securityQuestionDisclosure",
   "dangerousHtmlSinks",

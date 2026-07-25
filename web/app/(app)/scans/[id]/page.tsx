@@ -1,4 +1,9 @@
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import FindingCard from "@/components/scan/FindingCard";
+import ScanResultsPanel from "@/components/scan/ScanResultsPanel";
+import ScanShareBar from "@/components/scan/ScanShareBar";
+import type { ScanFinding } from "@/components/scan/types";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { resolveUserTier } from "@/lib/entitlements";
 import { serializeDbFinding, type DbFindingRow } from "@/lib/findings/gate";
@@ -12,10 +17,9 @@ export default async function ScanDetailPage({ params }: { params: { id: string 
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // RLS ensures the user can only read their own scan.
   const { data: scan } = await supabase
     .from("scans")
-    .select("id, target_url, tier, status, detected_platform, created_at")
+    .select("id, target_url, tier, status, detected_platform, created_at, finished_at, error")
     .eq("id", params.id)
     .maybeSingle();
   if (!scan) notFound();
@@ -28,61 +32,90 @@ export default async function ScanDetailPage({ params }: { params: { id: string 
     )
     .eq("scan_id", scan.id);
 
-  const findings = (rows ?? []).map((r) => serializeDbFinding(r as DbFindingRow, tier));
-  const locked = findings.filter((f) => !f.unlocked);
-  const visible = findings.filter((f) => f.unlocked);
+  const findings: ScanFinding[] = (rows ?? []).map((r) => {
+    const s = serializeDbFinding(r as DbFindingRow, tier);
+    return {
+      id: s.id,
+      category: s.category,
+      title: s.title,
+      severity: s.severity,
+      tierRequired: s.tierRequired,
+      impactOneline: s.impactOneline,
+      maxDamageOneline: "maxDamageOneline" in s ? s.maxDamageOneline : undefined,
+      unlocked: s.unlocked,
+      evidence: "evidence" in s && s.evidence ? s.evidence : undefined,
+      remediation: "remediation" in s && s.remediation ? s.remediation : undefined,
+      fixPrompt: "fixPrompt" in s && s.fixPrompt ? s.fixPrompt : undefined,
+      status: s.status
+    };
+  });
+
+  const visible = findings.filter((f) => f.unlocked !== false);
+  const locked = findings.filter((f) => f.unlocked === false);
+  const critCount = visible.filter((f) => f.severity === "critical").length;
 
   return (
-    <article>
-      <h1 style={{ fontFamily: "var(--display)" }}>Scan report</h1>
-      <p className="kv">
-        <b>{scan.target_url}</b> - {scan.tier} scan - {scan.status}
-        {scan.detected_platform ? ` - ${scan.detected_platform}` : ""}
-      </p>
+    <article className="scan-report-page">
+      <Link href="/dashboard" className="back-link">
+        ← Back to dashboard
+      </Link>
 
-      <h2 style={{ fontFamily: "var(--display)" }}>Findings</h2>
-      {visible.length === 0 && <p className="muted">No unlocked findings.</p>}
-      {visible.map((f: any) => (
-        <div className="finding" key={f.id}>
-          <h3>
-            <span className={`badge ${f.severity}`}>{f.severity}</span>
-            {f.title}
-          </h3>
-          <p className="impact">{f.impactOneline}</p>
-          {f.maxDamageOneline && (
-            <div className="max-damage">
-              <span className="max-damage-label">Worst case for your company</span>
-              <p>{f.maxDamageOneline}</p>
-            </div>
-          )}
-          {f.remediation && (
-            <details>
-              <summary>How to fix</summary>
-              <p className="kv">{f.remediation.summary}</p>
-              <ol>{f.remediation.steps?.map((s: string, i: number) => <li key={i} className="kv">{s}</li>)}</ol>
-              {f.fixPrompt && <pre className="code">{f.fixPrompt}</pre>}
-            </details>
-          )}
+      <header className="scan-report-header">
+        <div>
+          <p className="dash-eyebrow">Scan report</p>
+          <h1>{scan.target_url}</h1>
         </div>
-      ))}
+        <div className="scan-report-badges">
+          <span className={`dash-plan-badge tier-${scan.tier}`}>{scan.tier}</span>
+          <span className={`status-pill status-${scan.status}`}>{scan.status}</span>
+        </div>
+      </header>
+
+      <div className="scan-report-meta">
+        <span>
+          Scanned <b>{new Date(scan.finished_at ?? scan.created_at).toLocaleString()}</b>
+        </span>
+        {scan.detected_platform && (
+          <span>
+            Stack:{" "}
+            <Link href={`/platforms/${scan.detected_platform}`}>
+              <b>{scan.detected_platform}</b>
+            </Link>
+          </span>
+        )}
+        {critCount > 0 && (
+          <span>
+            <b>{critCount}</b> critical open
+          </span>
+        )}
+      </div>
+
+      {scan.error && (
+        <p className="notice" style={{ marginBottom: 16 }}>
+          Scan ended with error: {scan.error}
+        </p>
+      )}
+
+      <ScanShareBar scanId={scan.id} target={scan.target_url} />
+
+      <ScanResultsPanel
+        scanId={scan.id}
+        target={scan.target_url}
+        tierLabel={scan.tier}
+        detectedPlatform={scan.detected_platform}
+        findings={visible}
+        showShare={false}
+        hideHeader
+      />
 
       {locked.length > 0 && (
-        <>
-          <h2 style={{ fontFamily: "var(--display)", marginTop: 24 }}>Locked findings</h2>
-          {locked.map((f: any) => (
-            <div className="finding locked" key={f.id}>
-              <h3>
-                <span className={`badge ${f.severity}`}>{f.severity}</span>
-                {f.title}
-              </h3>
-              <p className="impact">{f.impactOneline}</p>
-              <div className="lock-row">
-                <span className="lockicon">[locked]</span>
-                <span>Unlock full evidence + fix with a {f.tierRequired} scan.</span>
-              </div>
-            </div>
+        <section className="scan-locked-section" style={{ marginTop: 28 }}>
+          <h2 className="scan-section-title">Locked findings</h2>
+          <p className="result-head">Upgrade to unlock evidence and fix prompts</p>
+          {locked.map((f) => (
+            <FindingCard key={f.id ?? f.title} finding={f} locked />
           ))}
-        </>
+        </section>
       )}
     </article>
   );

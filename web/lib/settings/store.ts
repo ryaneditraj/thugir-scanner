@@ -4,10 +4,13 @@ import {
   DEFAULT_SETTINGS,
   mergeSettings,
   maskSettings,
+  AI_PROVIDERS,
+  PROVIDER_ENDPOINTS,
   type PlatformSettings,
   type PlatformSettingsMasked,
   type DeepPartial,
-  type TierName
+  type TierName,
+  type AiProvider
 } from "./schema";
 import { IS_DEV_MODE } from "../devmode";
 
@@ -17,10 +20,24 @@ const SINGLETON_ID = "singleton";
 
 let memoryCache: PlatformSettings | null = null;
 
+/** Coerce unknown/retired AI providers to openrouter so saved settings stay valid. */
+function normalizeSettings(s: PlatformSettings): PlatformSettings {
+  const out = structuredClone(s);
+  for (const tier of Object.keys(out.ai.tiers) as TierName[]) {
+    const t = out.ai.tiers[tier];
+    if (!AI_PROVIDERS.includes(t.provider as AiProvider)) {
+      t.provider = "openrouter";
+      t.baseUrl = "";
+      t.model = PROVIDER_ENDPOINTS.openrouter.defaultModel;
+    }
+  }
+  return out;
+}
+
 async function readDevFile(): Promise<PlatformSettings> {
   try {
     const raw = await fs.readFile(DEV_FILE, "utf8");
-    return mergeSettings(DEFAULT_SETTINGS, JSON.parse(raw) as DeepPartial<PlatformSettings>);
+    return normalizeSettings(mergeSettings(DEFAULT_SETTINGS, JSON.parse(raw) as DeepPartial<PlatformSettings>));
   } catch {
     return structuredClone(DEFAULT_SETTINGS);
   }
@@ -35,7 +52,7 @@ async function readSupabase(): Promise<PlatformSettings> {
   const { getServiceSupabase } = await import("../supabase/server");
   const svc = getServiceSupabase();
   const { data } = await svc.from("platform_settings").select("data").eq("id", SINGLETON_ID).single();
-  if (data?.data) return mergeSettings(DEFAULT_SETTINGS, data.data as DeepPartial<PlatformSettings>);
+  if (data?.data) return normalizeSettings(mergeSettings(DEFAULT_SETTINGS, data.data as DeepPartial<PlatformSettings>));
   return structuredClone(DEFAULT_SETTINGS);
 }
 

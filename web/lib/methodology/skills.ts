@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const REF = join(__dir, "../../../docs/internal/security-skills");
+const AGENT_SKILLS = join(__dir, "../../../services/thugir-agent/vulnclaw/skills");
 
 interface SkillIndexEntry {
   id: string;
@@ -53,6 +54,34 @@ export function searchSkills(query: string, limit = 10): SkillIndexEntry[] {
         e.owasp_id.toLowerCase().includes(q)
     )
     .slice(0, limit);
+}
+
+/** Thugir Agent Engine pentest skills (recon, exploitation, playbooks). */
+export const AGENT_ORACLE_SKILLS = [
+  "core/recon",
+  "core/vuln-discovery",
+  "core/exploitation",
+  "core/waf-bypass",
+  "specialized/ctf-web/SKILL",
+  "specialized/pentest-tools/SKILL"
+] as const;
+
+/** Load an agent skill markdown by relative path under the agent skills tree. */
+export function loadAgentSkill(relativePath: string): string | null {
+  const normalized = relativePath.replace(/^\/+/, "");
+  const p = join(AGENT_SKILLS, normalized.endsWith(".md") ? normalized : `${normalized}.md`);
+  if (!existsSync(p)) return null;
+  return readFileSync(p, "utf8");
+}
+
+export function loadAgentOracleSummaries(maxCharsPerSkill = 3500): string {
+  const parts: string[] = [];
+  for (const rel of AGENT_ORACLE_SKILLS) {
+    const text = loadAgentSkill(rel);
+    if (!text) continue;
+    parts.push(`### thugir-agent:${rel}\n${text.slice(0, maxCharsPerSkill)}`);
+  }
+  return parts.join("\n\n");
 }
 
 /** Core web oracle set for benchmark / power-loop runs. */
