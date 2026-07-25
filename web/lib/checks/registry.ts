@@ -8047,6 +8047,70 @@ const burpbountyPassiveApiPathLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyDwrInterfaceLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/dwr/interface/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const dwrOk =
+    /\/\/\s*DWR Interface/i.test(doc.body) &&
+    /DWREngine\._execute\s*=\s*function/i.test(doc.body) &&
+    /dwr\.engine\._execute\s*=\s*function/i.test(doc.body) &&
+    /Available classes/i.test(doc.body);
+  if (!dwrOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /dwr/interface/ returns DWR interface JavaScript with DWREngine._execute — Direct Web Remoting profile oracle distinct from /dwr/engine.js"
+    }
+  };
+};
+
+const burpbountyAiGatewayLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/gateway", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const gatewayOk =
+    /<h1>\s*Behind Kong \+ Envoy\s*<\/h1>/i.test(doc.body) ||
+    (/Behind Kong/i.test(doc.body) && /Envoy/i.test(doc.body));
+  if (!gatewayOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /ai/gateway returns Behind Kong + Envoy disclosure — AI gateway infrastructure profile oracle"
+    }
+  };
+};
+
+const burpbountyBackupListingLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/backup/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const listingOk =
+    /Index of \/backup\//i.test(doc.body) &&
+    /db_backup\.sql/i.test(doc.body) &&
+    /site_backup\.tar\.gz/i.test(doc.body) &&
+    /<a\s+href=["']db_backup\.sql["']/i.test(doc.body);
+  if (!listingOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /backup/ exposes directory listing with db_backup.sql and site_backup.tar.gz — backup directory listing profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32972,6 +33036,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyWpLoginLiveOracle,
   burpbountyGrafanaCveLiveOracle,
   burpbountyPassiveApiPathLiveOracle,
+  burpbountyDwrInterfaceLiveOracle,
+  burpbountyAiGatewayLiveOracle,
+  burpbountyBackupListingLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

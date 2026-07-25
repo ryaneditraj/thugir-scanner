@@ -15941,6 +15941,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-dwr-interface-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab DWR interface JavaScript live oracle",
+    description:
+      "GET /dwr/interface/ returns DWR interface JavaScript exposing DWREngine._execute and dwr.engine._execute stubs.",
+    impactOneline:
+      "Live DWR interface probe confirms Direct Web Remoting endpoint oracle distinct from /dwr/engine.js hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDwrInterfaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict DWR endpoints in production and require authentication on remoting interfaces.",
+      steps: [
+        "Remove DWR servlet mappings from public web apps.",
+        "Authenticate all /dwr/* routes at the gateway.",
+        "Run Burp Bounty Lab DWR routes only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /dwr/interface/ endpoint exposes DWR remoting JavaScript publicly. Show how to disable or secure Direct Web Remoting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ai-gateway-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
+    description:
+      "GET /ai/gateway returns HTML disclosing Kong + Envoy reverse-proxy infrastructure behind the AI service.",
+    impactOneline:
+      "Live AI gateway probe confirms Kong/Envoy infrastructure disclosure oracle distinct from /ai/health JSON metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiGatewayLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid exposing reverse-proxy vendor names and gateway topology on public AI routes.",
+      steps: [
+        "Return generic health responses without Kong/Envoy branding.",
+        "Strip gateway disclosure headers from public AI endpoints.",
+        "Place AI gateways behind authenticated API management layers."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/gateway endpoint discloses Kong + Envoy infrastructure. Show how to harden AI gateway health endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-backup-listing-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab backup directory listing live oracle",
+    description:
+      "GET /backup/ returns an HTML directory index listing db_backup.sql and site_backup.tar.gz without authentication.",
+    impactOneline:
+      "Live backup listing probe confirms sensitive backup file enumeration oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyBackupListingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory listings and block public access to /backup/ paths.",
+      steps: [
+        "Turn off autoindex for backup directories at the web server.",
+        "Store backups outside the web root or behind authentication.",
+        "Remove db_backup.sql and site_backup.tar.gz from publicly reachable paths."
+      ]
+    },
+    fixPrompt:
+      "Our /backup/ directory is browsable and lists db_backup.sql. Show how to disable directory listing and secure backup files.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
