@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T14:05:00.000Z",
+  "updated_at": "2026-07-25T15:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/api/goto",
@@ -9304,6 +9304,31 @@
       "url": "https://brokencrystals.com/api/users/search/",
       "source": "NeuraLegion/brokencrystals \u2014 GET /api/users/search/ exposes cardNumber+phoneNumber (README excessive data exposure)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/lab-stats",
+      "source": "ctfsec/pwnshop \u2014 JSON lab visitor counts + dirty-state endpoint (README Key URLs)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin",
+      "source": "ctfsec/pwnshop \u2014 admin panel broken-access-control oracle (README Key URLs)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/symfony/profiler/empty/search/results",
+      "source": "BountySecurity/BurpBountyLab \u2014 Symfony profiler search CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/mgmt/tm/util/bash",
+      "source": "BountySecurity/BurpBountyLab \u2014 F5 BIG-IP bash RCE CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/webadmin/tools/systemstatus_remote.php",
+      "source": "BountySecurity/BurpBountyLab \u2014 Netsweeper systemstatus_remote.php CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
     }
   ]
 }
