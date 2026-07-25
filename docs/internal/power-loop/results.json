@@ -1,6 +1,357 @@
 {
   "runs": [
     {
+      "run_id": "2026-07-24T09:14:48.197Z",
+      "url": "https://public-firing-range.appspot.com/",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "open-redirect-query-param",
+          "title": "Open redirect via query parameter",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-xss-evidence",
+          "title": "Source or bundle documents reflected XSS via unescaped input",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 298,
+      "status": "ok",
+      "scanned_at": "2026-07-24T09:14:48.197Z"
+    },
+    {
+      "run_id": "2026-07-24T09:15:10.915Z",
+      "url": "https://google-gruyere.appspot.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-google-gruyere-codelab-evidence",
+          "title": "Google Gruyere web security codelab disclosed",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 255,
+      "status": "ok",
+      "scanned_at": "2026-07-24T09:15:10.915Z"
+    },
+    {
+      "run_id": "2026-07-24T09:15:17.840Z",
+      "url": "https://arcanum-sec.github.io/ai-sec-resources/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": "generic",
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-kontra-application-security-evidence",
+          "title": "Kontra application security training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-agentic-ai-ctf-evidence",
+          "title": "Agentic AI security CTF platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-llm-sec-evidence",
+          "title": "LLM Security Labs OWASP Top 10 training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-arcanum-ai-sec-hub-evidence",
+          "title": "Arcanum AI security resource hub disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-owasp-genai-lab-evidence",
+          "title": "OWASP GenAI Security Lab disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "AI security"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 295,
+      "status": "ok",
+      "scanned_at": "2026-07-24T09:15:17.840Z"
+    },
+    {
+      "run_id": "2026-07-24T10:01:16.332Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 9,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 281,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:01:16.332Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:28.273Z",
+      "url": "https://vwad.owasp.org/app/yrprey/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 304,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:28.273Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:32.610Z",
+      "url": "https://vwad.owasp.org/app/burpbounty/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vwad-app-not-found-evidence",
+          "title": "OWASP VWAD app listing returns 404",
+          "severity": "low",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:32.610Z"
+    },
+    {
+      "run_id": "2026-07-24T10:06:35.895Z",
+      "url": "https://vwad.owasp.org/app/bugbait/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vwad-app-not-found-evidence",
+          "title": "OWASP VWAD app listing returns 404",
+          "severity": "low",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 305,
+      "status": "ok",
+      "scanned_at": "2026-07-24T10:06:35.895Z"
+    },
+    {
       "run_id": "2026-07-24T10:06:38.819Z",
       "url": "https://vwad.owasp.org/app/secure-by-design/",
       "auth": "public_demo",
@@ -675,7 +1026,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -718,7 +1069,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -761,7 +1112,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12839,7 +13190,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF \u2014 server fetches attacker-controlled URL",
+          "title": "SSRF — server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.91,
           "category": "Server-side request forgery"
@@ -35625,7 +35976,7 @@
       "scanned_at": "2026-07-25T08:06:18.409Z"
     },
     {
-      "run_id": "2026-07-25T04:03:20.867Z",
+      "run_id": "2026-07-25T09:04:59.513Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -35708,2386 +36059,16 @@
       "pages_crawled": 6,
       "probes_run": 295,
       "status": "ok",
-      "scanned_at": "2026-07-25T04:03:20.867Z"
+      "scanned_at": "2026-07-25T09:04:59.513Z"
     },
     {
-      "run_id": "2026-07-25T09:04:24.106Z",
-      "url": "http://burpbountylab.com/actuator/loggers",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
+      "run_id": "2026-07-25T09:07:41.975Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 65,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 354,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:04:24.106Z"
-    },
-    {
-      "run_id": "2026-07-25T09:04:49.810Z",
-      "url": "http://burpbountylab.com/ai/v1/models",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 66,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 355,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:04:49.810Z"
-    },
-    {
-      "run_id": "2026-07-25T09:05:15.582Z",
-      "url": "http://burpbountylab.com/cve/cisco/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 66,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 355,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:05:15.582Z"
-    },
-    {
-      "run_id": "2026-07-25T09:05:41.424Z",
-      "url": "http://burpbountylab.com/cve/kubernetes/api/v1/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 65,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 354,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:05:41.424Z"
-    },
-    {
-      "run_id": "2026-07-25T09:06:07.327Z",
-      "url": "http://burpbountylab.com/cve/n8n/rest/settings",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 66,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 355,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:06:07.327Z"
-    },
-    {
-      "run_id": "2026-07-25T09:06:32.863Z",
-      "url": "https://pentest-fauxbank.vercel.app/accounts",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
+      "finding_count": 10,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -38104,96 +36085,11 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "weak-api-default-credentials",
-          "title": "JSON login API accepts common default credentials",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-fauxbank-lab-evidence",
-          "title": "FauxBank OWASP banking pentest training lab disclosed",
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
           "severity": "high",
           "confidence": 0.9,
           "category": "Broken access control"
-        },
-        {
-          "slug": "fauxbank-authenticated-sqli-search",
-          "title": "Authenticated SQL injection via FauxBank search API",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "fauxbank-idor-accounts-probe",
-          "title": "FauxBank account IDOR via predictable account IDs",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "fauxbank-csrf-transfer-probe",
-          "title": "FauxBank transfer API missing CSRF protection",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "fauxbank-stored-xss-support-probe",
-          "title": "FauxBank support tickets store unescaped HTML (stored XSS)",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 327,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:06:32.863Z"
-    },
-    {
-      "run_id": "2026-07-25T09:06:37.571Z",
-      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 15,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
         },
         {
           "slug": "sql-error-disclosure",
@@ -38203,66 +36099,38 @@
           "category": "Injection"
         },
         {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
         },
         {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
           "severity": "high",
-          "confidence": 0.9,
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
           "category": "Cross-site scripting"
         },
         {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
           "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-debug-info-live-oracle",
-          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
-          "severity": "critical",
           "confidence": 0.93,
-          "category": "Sensitive data exposure"
+          "category": "Exposed secret"
         },
         {
-          "slug": "pwnshop-events-audit-live-oracle",
-          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
           "severity": "high",
-          "confidence": 0.92,
+          "confidence": 0.91,
           "category": "Information disclosure"
         },
         {
@@ -38275,105 +36143,9 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 290,
+      "probes_run": 295,
       "status": "ok",
-      "scanned_at": "2026-07-25T09:06:37.571Z"
-    },
-    {
-      "run_id": "2026-07-25T09:06:52.579Z",
-      "url": "https://pwnshop.ctfsecurity.com/download",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 324,
-      "status": "ok",
-      "scanned_at": "2026-07-25T09:06:52.579Z"
-    },
-    {
-      "run_id": "2026-07-25T09:07:15.471490Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
-      "teacher_delta": [],
-      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (actuator/loggers, ai/v1/models, cve/cisco, cve/kubernetes/api/v1, cve/n8n/rest/settings) + drained pentest-fauxbank /accounts, pwnshop seller/preview + download \u2192 362 findings across 8 URLs; actuator/loggers has spring-boot-actuator-exposed; hub fingerprint dominates burpbountylab routes (~65-66/route); route-specific Cisco/Kubernetes/n8n CVE oracles still absent.",
-      "scanned_at": "2026-07-25T09:07:15.471490Z"
+      "scanned_at": "2026-07-25T09:07:41.975Z"
     }
   ],
   "teacher_delta_runs": [
@@ -38383,9 +36155,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (sqli/search, rce/eval, cve/spring, passive/cookies, drupal/user) \u2192 108 findings across 8 URLs; sqli/search richest at 17 (hub fingerprint + reflected-xss-query-param); route-specific rce/eval and drupal oracles still absent."
+      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (sqli/search, rce/eval, cve/spring, passive/cookies, drupal/user) → 108 findings across 8 URLs; sqli/search richest at 17 (hub fingerprint + reflected-xss-query-param); route-specific rce/eval and drupal oracles still absent."
     },
     {
       "run_id": "2026-07-21T04:06:00.000Z",
@@ -38393,7 +36165,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 04 UTC run: stable 6/6 recall on first pass; secret-resend slug still absent.",
       "scanned_at": "2026-07-21T04:06:00.000Z"
@@ -38404,7 +36176,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 05 UTC run: stable 6/6 recall; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T05:06:26.897Z"
@@ -38415,7 +36187,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after Heroku wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=2; pass2: 3 findings gap=xss,sqli,sensitive_data pages=1 probes=31; final retry merged to 6 findings pages=1 probes=22)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retries (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=2; pass2: 3 findings gap=xss,sqli,sensitive_data pages=1 probes=31; final retry merged to 6 findings pages=1 probes=22)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 only misconfig while Heroku asleep (probes=2); 12s retry added idor+auth_bypass; 25s final wake retry restored sql-error-disclosure+dangerous-html-sinks+vibe-unauthenticated-api-routes for 6/6 recall. secret-resend slug absent.",
       "scanned_at": "2026-07-21T08:02:53.464Z"
@@ -38426,9 +36198,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall via juice-shop-staging fallback (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=7; pass2: 1 finding pages=1 probes=48; pass3: 4 findings gap=idor,sensitive_data pages=1 probes=147; staging fallback merged to 7 findings pages=6 probes=242)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall via juice-shop-staging fallback (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=7; pass2: 1 finding pages=1 probes=48; pass3: 4 findings gap=idor,sensitive_data pages=1 probes=147; staging fallback merged to 7 findings pages=6 probes=242)",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: primary Heroku never fully woke (pass1-2 probes\u226448 pages=1); pass3 recovered xss+sqli+auth_bypass; juice-shop-staging fallback restored idor+sensitive_data for 6/6 recall. secret-resend slug absent.",
+      "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: primary Heroku never fully woke (pass1-2 probes≤48 pages=1); pass3 recovered xss+sqli+auth_bypass; juice-shop-staging fallback restored idor+sensitive_data for 6/6 recall. secret-resend slug absent.",
       "scanned_at": "2026-07-21T09:58:33.000Z"
     },
     {
@@ -38437,7 +36209,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 11 UTC run: first-pass full recall with deep crawl (6 pages, 265 probes); idor-sequential-ids + sql-error-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug absent.",
       "scanned_at": "2026-07-21T11:06:03.000Z"
@@ -38448,7 +36220,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 12 UTC run: stable 6/6 first-pass recall; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T12:08:48.732Z"
@@ -38459,7 +36231,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 14 UTC run: stable 6/6 first-pass recall; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T14:05:00.000Z"
@@ -38472,7 +36244,7 @@
       "benchmark_url": "https://juice-shop.herokuapp.com",
       "benchmark_status": "degraded primary Heroku 503 Application Error (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=20); staging fallback 7 findings 6/6 recall",
       "teacher_delta": [],
-      "notes": "No teacher tools available. High-value miss signal: juice-shop.herokuapp.com returns Heroku 503 stub \u2014 only misconfig on primary; idor partial on retries; staging fallback restored 6/6. secret-resend slug absent.",
+      "notes": "No teacher tools available. High-value miss signal: juice-shop.herokuapp.com returns Heroku 503 stub — only misconfig on primary; idor partial on retries; staging fallback restored 6/6. secret-resend slug absent.",
       "scanned_at": "2026-07-21T16:35:00.000Z"
     },
     {
@@ -38492,7 +36264,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 18 UTC run: stable 6/6 first-pass recall on primary Heroku (no wake retries needed); idor-sequential-ids + sql-error-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T18:05:00.000Z"
@@ -38503,7 +36275,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sqli,auth_bypass pages=6 probes=67; pass2: 7 findings pages=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sqli,auth_bypass pages=6 probes=67; pass2: 7 findings pages=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. Cold-start miss signal: pass1 gap=sqli,auth_bypass before 12s wake retry; retry restored sql-error-disclosure + unauthenticated-admin-endpoint for 6/6 recall. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T19:22:25.000Z"
@@ -38514,7 +36286,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=172; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=172; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 20 UTC run: stable 6/6 first-pass recall on primary Heroku (no wake retries needed); idor-sequential-ids + sql-error-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T20:12:52.699Z"
@@ -38525,7 +36297,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=210; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=210; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 21 UTC run: shallow crawl (pages=1) but full 6/6 category recall; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T21:09:52.884Z"
@@ -38536,7 +36308,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 22 UTC run: stable 6/6 first-pass recall with deep crawl; idor-sequential-ids + sql-error-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T22:10:00.000Z"
@@ -38547,7 +36319,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=265; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 23 UTC run: stable 6/6 first-pass recall with deep crawl; secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-21T23:05:00.000Z"
@@ -38558,7 +36330,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "degraded primary \u2014 pass1: 4 findings gap=auth_bypass,sensitive_data pages=1 probes=45; pass2: 5 findings gap=sensitive_data pages=1 probes=183; pass3: 2 findings pages=1 probes=50; staging fallback 7 findings 6/6 recall pages=6 probes=247",
+      "benchmark_status": "degraded primary — pass1: 4 findings gap=auth_bypass,sensitive_data pages=1 probes=45; pass2: 5 findings gap=sensitive_data pages=1 probes=183; pass3: 2 findings pages=1 probes=50; staging fallback 7 findings 6/6 recall pages=6 probes=247",
       "teacher_delta": [],
       "notes": "No teacher tools available. High-value miss signal: primary Heroku cold-start missed auth_bypass+sensitive_data on pass1; pass2 recovered auth_bypass; pass3 regressed; juice-shop-staging restored full 6/6. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T00:54:00.000Z"
@@ -38569,7 +36341,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=0; pass2: 2 findings gap=xss,sqli,auth_bypass,sensitive_data pages=1 probes=0; pass3: 7 findings pages=6 probes=270; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=0; pass2: 2 findings gap=xss,sqli,auth_bypass,sensitive_data pages=1 probes=0; pass3: 7 findings pages=6 probes=270; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1+pass2 only misconfig+idor while Heroku asleep (probes=0); 25s final wake retry restored full 6/6 recall on primary without staging fallback. secret-resend slug absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T01:55:00.000Z"
@@ -38580,7 +36352,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sensitive_data pages=6 probes=138; pass2: 2 findings pages=1 probes=55; pass3 final wake: 6 findings gap=0 pages=1 probes=181 merged to 7 findings; no staging fallback)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sensitive_data pages=6 probes=138; pass2: 2 findings pages=1 probes=55; pass3 final wake: 6 findings gap=0 pages=1 probes=181 merged to 7 findings; no staging fallback)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 02 UTC run: pass1 missed sensitive_data (no vibe-unauthenticated-api-routes); pass2 Heroku 503 regression; pass3 final 25s wake retry restored sensitive_data via vibe-unauthenticated-api-routes for 6/6 recall. secret-resend slug still absent.",
       "scanned_at": "2026-07-22T02:47:58.842Z"
@@ -38591,7 +36363,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=224; pass2: 5 findings pages=1 probes=216; pass3: 6 findings pages=1 probes=223; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=224; pass2: 5 findings pages=1 probes=216; pass3: 6 findings pages=1 probes=223; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 03 UTC run: pass1+pass2 missed sensitive_data on shallow Heroku cold-start; final 25s wake retry restored vibe-unauthenticated-api-routes for 6/6 recall. secret-resend slug still absent.",
       "scanned_at": "2026-07-22T03:32:01.501Z"
@@ -38602,7 +36374,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sqli pages=6 probes=157; pass2: 7 findings pages=6 probes=181; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sqli pages=6 probes=157; pass2: 7 findings pages=6 probes=181; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 04 UTC run: pass1 missed sql-error-disclosure (sqli gap) on deep crawl pages=6; 12s wake retry restored sql-error-disclosure for 6/6 recall without staging fallback. secret-resend slug still absent (sensitive_data via vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T04:25:52.635Z"
@@ -38613,7 +36385,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=115; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=115; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 05 UTC run: first-pass full 6/6 recall on shallow crawl; security-question-disclosure present (sensitive_data); secret-resend slug still absent.",
       "scanned_at": "2026-07-22T05:17:14.000Z"
@@ -38624,7 +36396,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sensitive_data pages=6 probes=67; pass2: 6 findings pages=6 probes=144 merged to 7; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 6 findings gap=sensitive_data pages=6 probes=67; pass2: 6 findings pages=6 probes=144 merged to 7; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 08 UTC run: pass1 missed sensitive_data (no security-question-disclosure); 12s wake retry restored security-question-disclosure for 6/6 recall. secret-resend slug still absent.",
       "scanned_at": "2026-07-22T08:30:32.843Z"
@@ -38635,7 +36407,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "degraded primary unreachable \u2014 juice-shop.herokuapp.com DNS/connect error; staging fallback 8 findings 6/6 recall (pages=6 probes=243; no gap)",
+      "benchmark_status": "degraded primary unreachable — juice-shop.herokuapp.com DNS/connect error; staging fallback 8 findings 6/6 recall (pages=6 probes=243; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available. High-value miss signal: primary Heroku completely unreachable from cloud agent; juice-shop-staging fallback restored full 6/6 on first pass with security-question-disclosure. secret-resend slug absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T09:05:00.000Z"
@@ -38646,7 +36418,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=267; no gap)",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=267; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 10 UTC run: stable 6/6 first-pass recall on primary Heroku with deep crawl; security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T10:02:00.000Z"
@@ -38657,7 +36429,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "degraded primary cold-start \u2014 pass1: 2 findings gap=xss,sqli,auth_bypass,sensitive_data pages=1 probes=1; pass2: 2 findings pages=1 probes=25; pass3: 3 findings pages=1 probes=181; staging fallback 8 findings 6/6 recall (pages=6 probes=244; no gap)",
+      "benchmark_status": "degraded primary cold-start — pass1: 2 findings gap=xss,sqli,auth_bypass,sensitive_data pages=1 probes=1; pass2: 2 findings pages=1 probes=25; pass3: 3 findings pages=1 probes=181; staging fallback 8 findings 6/6 recall (pages=6 probes=244; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available. High-value miss signal: primary Heroku cold-start shallow crawl missed 4/6 categories before staging fallback. Staging restored security-question-disclosure + sql-error-disclosure + dangerous-html-sinks for 6/6. secret-resend slug still absent.",
       "scanned_at": "2026-07-22T12:15:00.000Z"
@@ -38668,7 +36440,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=267; no gap)",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=267; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 14 UTC run: stable 6/6 first-pass recall on primary Heroku with deep crawl; security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T14:05:00.000Z"
@@ -38679,7 +36451,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=267; no gap)",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=267; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 15 UTC run: stable 6/6 first-pass recall on primary Heroku with deep crawl; security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T15:05:00.000Z"
@@ -38690,9 +36462,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "primary Heroku 503 dead \u2014 pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=1; retries also shallow; staging oracle 8 findings 6/6 recall (pages=6 probes=253; no gap)",
+      "benchmark_status": "primary Heroku 503 dead — pass1: 1 finding gap=xss,sqli,idor,auth_bypass,sensitive_data pages=1 probes=1; retries also shallow; staging oracle 8 findings 6/6 recall (pages=6 probes=253; no gap)",
       "teacher_delta": [],
-      "notes": "No teacher tools available. High-value miss signal: juice-shop.herokuapp.com returned HTTP 503 all warm attempts \u2014 scanner only hit misconfig on shallow cold passes. Staging fallback restored full 6/6 recall. secret-resend slug still absent.",
+      "notes": "No teacher tools available. High-value miss signal: juice-shop.herokuapp.com returned HTTP 503 all warm attempts — scanner only hit misconfig on shallow cold passes. Staging fallback restored full 6/6 recall. secret-resend slug still absent.",
       "scanned_at": "2026-07-22T18:25:00.000Z"
     },
     {
@@ -38701,9 +36473,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=226; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=226; no gap)",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. 19 UTC run: shallow crawl (pages=1) but full 6/6 recall \u2014 security-question-disclosure present (sensitive_data); secret-resend slug still absent; vibe-unauthenticated-api-routes absent this pass.",
+      "notes": "No teacher tools available to diff against local scanner findings. 19 UTC run: shallow crawl (pages=1) but full 6/6 recall — security-question-disclosure present (sensitive_data); secret-resend slug still absent; vibe-unauthenticated-api-routes absent this pass.",
       "scanned_at": "2026-07-22T19:12:00.000Z"
     },
     {
@@ -38712,7 +36484,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=80; pass2: 7 findings pages=1 probes=250; no gap)",
+      "benchmark_status": "ok — 7 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=80; pass2: 7 findings pages=1 probes=250; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 missed sensitive_data (no security-question-disclosure) before 12s wake retry; pass2 restored full 6/6 recall. secret-resend slug still absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-22T20:20:00.000Z"
@@ -38723,9 +36495,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=97; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=97; no gap)",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. 21 UTC run: shallow crawl (pages=1) but full 6/6 recall \u2014 sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure absent; secret-resend slug still absent.",
+      "notes": "No teacher tools available to diff against local scanner findings. 21 UTC run: shallow crawl (pages=1) but full 6/6 recall — sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure absent; secret-resend slug still absent.",
       "scanned_at": "2026-07-22T21:12:00.000Z"
     },
     {
@@ -38734,7 +36506,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=201; no gap)",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=201; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 22 UTC run: first-pass 6/6 recall on shallow crawl; security-question-disclosure present (sensitive_data); vibe-unauthenticated-api-routes absent; secret-resend slug still absent.",
       "scanned_at": "2026-07-22T22:16:00.000Z"
@@ -38745,7 +36517,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall after Heroku wake retry (pass1: 3 findings gap=sqli,auth_bypass,sensitive_data pages=1 probes=107; pass2: 5 findings pages=1 probes=57; pass3: 8 findings pages=6 probes=279; no gap)",
+      "benchmark_status": "ok — 8 findings, 6/6 recall after Heroku wake retry (pass1: 3 findings gap=sqli,auth_bypass,sensitive_data pages=1 probes=107; pass2: 5 findings pages=1 probes=57; pass3: 8 findings pages=6 probes=279; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 only 3/6 categories (xss,idor,misconfig) on 503 Heroku; wake retries restored sqli via sql-error-disclosure, auth_bypass via unauthenticated-admin-endpoint, sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes. secret-resend slug still absent.",
       "scanned_at": "2026-07-22T23:43:51.000Z"
@@ -38756,7 +36528,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=245; no gap)",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=245; no gap)",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 02 UTC run: stable 6/6 first-pass recall on shallow crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T02:16:00.000Z"
@@ -38767,7 +36539,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=245; gap=[])",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=245; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 03 UTC run: stable 6/6 first-pass recall; juice-shop-forgotten-backup-disclosure + security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent (sensitive_data via security-question-disclosure + vibe-unauthenticated-api-routes).",
       "scanned_at": "2026-07-23T03:10:00.000Z"
@@ -38778,7 +36550,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=258; gap=[])",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=258; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 04 UTC run: stable 6/6 first-pass recall on shallow crawl; juice-shop-forgotten-backup-disclosure + security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T04:12:00.000Z"
@@ -38789,7 +36561,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=282; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=282; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 06 UTC run: stable 6/6 recall with full crawl (pages=6 probes=282); security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T06:14:00.000Z"
@@ -38800,9 +36572,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "degraded primary Heroku 503 \u2014 pass1: 4 findings gap=xss,sensitive_data pages=1 probes=38; pass2: 3 findings pages=1 probes=29; pass3: 1 finding pages=1 probes=18; staging fallback 9 findings 6/6 recall (pages=6 probes=264; no gap)",
+      "benchmark_status": "degraded primary Heroku 503 — pass1: 4 findings gap=xss,sensitive_data pages=1 probes=38; pass2: 3 findings pages=1 probes=29; pass3: 1 finding pages=1 probes=18; staging fallback 9 findings 6/6 recall (pages=6 probes=264; no gap)",
       "teacher_delta": [],
-      "notes": "No teacher tools available. High-value miss signal: primary juice-shop.herokuapp.com returned HTTP 503 on all warm attempts \u2014 pass1 missed xss+sensitive_data, pass2 lost sqli, pass3 only misconfig. Staging fallback restored full 6/6 with security-question-disclosure + dangerous-html-sinks + juice-shop-forgotten-backup-disclosure. secret-resend slug still absent.",
+      "notes": "No teacher tools available. High-value miss signal: primary juice-shop.herokuapp.com returned HTTP 503 on all warm attempts — pass1 missed xss+sensitive_data, pass2 lost sqli, pass3 only misconfig. Staging fallback restored full 6/6 with security-question-disclosure + dangerous-html-sinks + juice-shop-forgotten-backup-disclosure. secret-resend slug still absent.",
       "scanned_at": "2026-07-23T10:12:00.000Z"
     },
     {
@@ -38811,9 +36583,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=104; gap=[])",
+      "benchmark_status": "ok — 6 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=104; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. 12 UTC run: shallow crawl (pages=1) but full 6/6 recall \u2014 sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure + juice-shop-forgotten-backup-disclosure absent; secret-resend slug still absent.",
+      "notes": "No teacher tools available to diff against local scanner findings. 12 UTC run: shallow crawl (pages=1) but full 6/6 recall — sensitive_data via vibe-unauthenticated-api-routes only; security-question-disclosure + juice-shop-forgotten-backup-disclosure absent; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T12:16:00.000Z"
     },
     {
@@ -38822,7 +36594,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=80; pass2: 8 findings pages=1 probes=258; gap=[])",
+      "benchmark_status": "ok — 8 findings, 6/6 recall after Heroku wake retry (pass1: 5 findings gap=sensitive_data pages=1 probes=80; pass2: 8 findings pages=1 probes=258; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. Cold-start miss signal: pass1 missed sensitive_data (no security-question-disclosure) before 12s wake retry; pass2 restored security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes for 6/6 recall. secret-resend slug still absent.",
       "scanned_at": "2026-07-23T13:20:00.000Z"
@@ -38833,7 +36605,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=282; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=282; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 14 UTC run: full 6/6 first-pass recall with deep crawl (pages=6); security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T14:07:00.000Z"
@@ -38844,7 +36616,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (pages_crawled=1 probes=206; gap=[])",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (pages_crawled=1 probes=206; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 15 UTC run: shallow crawl but full 6/6 recall; security-question-disclosure + juice-shop-forgotten-backup-disclosure present; secret-resend slug still absent. scoreboard merge conflict fixed mid-run.",
       "scanned_at": "2026-07-23T15:15:00.000Z"
@@ -38855,7 +36627,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku (pages_crawled=1 probes=258; gap=[])",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku (pages_crawled=1 probes=258; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 18 UTC run: stable 6/6 recall on shallow crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T18:06:00.000Z"
@@ -38866,7 +36638,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=282; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=282; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 20 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T20:06:00.000Z"
@@ -38877,7 +36649,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=282; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=282; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 21 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T21:06:00.000Z"
@@ -38888,9 +36660,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=287; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=287; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. 22 UTC run: stable 6/6 first-pass recall with deep crawl (pages=6 probes=287); security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: HackThisSite auth/* pages show same SPA bundle fingerprint \u2014 auth/jwt.html missing JWT-specific slug.",
+      "notes": "No teacher tools available to diff against local scanner findings. 22 UTC run: stable 6/6 first-pass recall with deep crawl (pages=6 probes=287); security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: HackThisSite auth/* pages show same SPA bundle fingerprint — auth/jwt.html missing JWT-specific slug.",
       "scanned_at": "2026-07-23T22:06:00.000Z"
     },
     {
@@ -38899,7 +36671,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=250; gap=[])",
+      "benchmark_status": "ok — 8 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=250; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available to diff against local scanner findings. 23 UTC run: stable 6/6 shallow crawl recall; security-question-disclosure + juice-shop-forgotten-backup-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-23T23:09:00.000Z"
@@ -38910,9 +36682,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. 04 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: auth/index.html richest new SPA bundle (38 findings); platform/python.html shallower (14) \u2014 platform-specific oracles still missing.",
+      "notes": "No teacher tools available to diff against local scanner findings. 04 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: auth/index.html richest new SPA bundle (38 findings); platform/python.html shallower (14) — platform-specific oracles still missing.",
       "scanned_at": "2026-07-24T04:05:30.000Z"
     },
     {
@@ -38921,9 +36693,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available to diff against local scanner findings. 05 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: home/index.html 40 findings (richest hub); platform/ruby.html 39 vs python 14; wrongsecrets.onrender.com shallow (1 finding) \u2014 secrets CTF oracles missed.",
+      "notes": "No teacher tools available to diff against local scanner findings. 05 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: home/index.html 40 findings (richest hub); platform/ruby.html 39 vs python 14; wrongsecrets.onrender.com shallow (1 finding) — secrets CTF oracles missed.",
       "scanned_at": "2026-07-24T05:05:00.000Z"
     },
     {
@@ -38932,7 +36704,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (vulnshop admin/profile/users, hack-this-site cms/drupal+joomla).",
       "scanned_at": "2026-07-24T07:02:59.850Z"
@@ -38943,7 +36715,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=293; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs; pentest-fauxbank/accounts 9 findings with route-specific fauxbank-* oracles; vulnshop/products/1 gained client-side-vulnshop-module-evidence.",
       "scanned_at": "2026-07-24T08:06:30.000Z"
@@ -38954,7 +36726,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=232; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=232; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 09 UTC run: shallow crawl but full 6/6 recall; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (fauxbank/accounts, vulnshop checkout/products/1, pwnshop SSTI/download); pwnshop/seller/preview 10 + /download 9 findings; xvwa.vercel.app first scan 4 findings.",
       "scanned_at": "2026-07-24T09:15:19.696Z"
@@ -38965,9 +36737,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=281; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=281; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key present; vibe-unauthenticated-api-routes absent this pass but recall still 6/6; secret-resend slug still absent. Discovery: +5 VWAD catalog URLs (yrprey, burpbounty, bugbait, secure-by-design, ffufme) \u2192 31 findings across 8 URLs; burpbounty/bugbait/secure-by-design/ffufme VWAD listings 404; pygoat + DVNA gained route-specific client-side-* oracles.",
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key present; vibe-unauthenticated-api-routes absent this pass but recall still 6/6; secret-resend slug still absent. Discovery: +5 VWAD catalog URLs (yrprey, burpbounty, bugbait, secure-by-design, ffufme) → 31 findings across 8 URLs; burpbounty/bugbait/secure-by-design/ffufme VWAD listings 404; pygoat + DVNA gained route-specific client-side-* oracles.",
       "scanned_at": "2026-07-24T10:07:00.000Z"
     },
     {
@@ -38976,7 +36748,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=207; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=207; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 11 UTC run: pass1 cold-start 4 findings gap=sqli,idor (Heroku 503 wake); merged retry restored 6/6 with idor-sequential-ids + sql-error-disclosure + security-question-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes; secret-resend slug still absent.",
       "scanned_at": "2026-07-24T11:55:00.000Z"
@@ -38987,9 +36759,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=294; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=294; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (pwnshop /vulnerabilities /debug/info /api/v1/events, vulnshop /orders, oauthlabs) \u2192 53 findings across 8 URLs; pwnshop/vulnerabilities 13 incl sql-error-disclosure + reflected-xss.",
+      "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (pwnshop /vulnerabilities /debug/info /api/v1/events, vulnshop /orders, oauthlabs) → 53 findings across 8 URLs; pwnshop/vulnerabilities 13 incl sql-error-disclosure + reflected-xss.",
       "scanned_at": "2026-07-24T12:07:00.000Z"
     },
     {
@@ -38998,9 +36770,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 Burp Bounty Lab routes (SSRF/RCE/path-traversal/GraphQL/XXE) \u2192 96 findings across 8 URLs; burpbountylab hub fingerprint dominates (9/route); hack-this-site-eta/owasp 46 findings.",
+      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 Burp Bounty Lab routes (SSRF/RCE/path-traversal/GraphQL/XXE) → 96 findings across 8 URLs; burpbountylab hub fingerprint dominates (9/route); hack-this-site-eta/owasp 46 findings.",
       "scanned_at": "2026-07-24T13:08:00.000Z"
     },
     {
@@ -39009,9 +36781,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 5 findings gap=xss,sqli,auth_bypass pages=1 probes=85; pass2: 10 findings pages=6; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 5 findings gap=xss,sqli,auth_bypass pages=1 probes=85; pass2: 10 findings pages=6; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 14 UTC run: pass1 cold-start 5 findings gap=xss,sqli,auth_bypass (Heroku wake); 12s retry restored 6/6 with sql-error-disclosure + unauthenticated-admin-endpoint + dangerous-html-sinks + security-question-disclosure; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (DOM/JS XSS, redirect, CORS, passive secrets) \u2192 112 findings across 8 URLs; passive/secrets 16 incl secret-aws-akid + secret-stripe-live; redirect/goto 15 incl open-redirect-query-param.",
+      "notes": "No teacher tools available. 14 UTC run: pass1 cold-start 5 findings gap=xss,sqli,auth_bypass (Heroku wake); 12s retry restored 6/6 with sql-error-disclosure + unauthenticated-admin-endpoint + dangerous-html-sinks + security-question-disclosure; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (DOM/JS XSS, redirect, CORS, passive secrets) → 112 findings across 8 URLs; passive/secrets 16 incl secret-aws-akid + secret-stripe-live; redirect/goto 15 incl open-redirect-query-param.",
       "scanned_at": "2026-07-24T14:28:00.000Z"
     },
     {
@@ -39020,9 +36792,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 15 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (CRLF, AI chat completions, Spring actuator/env, Swagger UI, .git/HEAD) \u2192 191 findings across 8 URLs; actuator/env 14 incl spring-boot-actuator-exposed; CRLF/AI route-specific oracles still absent (hub fingerprint dominates).",
+      "notes": "No teacher tools available. 15 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (CRLF, AI chat completions, Spring actuator/env, Swagger UI, .git/HEAD) → 191 findings across 8 URLs; actuator/env 14 incl spring-boot-actuator-exposed; CRLF/AI route-specific oracles still absent (hub fingerprint dominates).",
       "scanned_at": "2026-07-24T15:05:00.000Z"
     },
     {
@@ -39031,9 +36803,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 17 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/users, sqli/time, xss/blind, xxe/upload, rce/log4j) \u2192 145 findings across 8 URLs; hub fingerprint dominates (19/route); route-specific WordPress/blind-SQLi/blind-XSS/XXE-upload/Log4j oracles still absent; hack-this-site-eta/api/validate/sqli-error 40 findings incl sql-error-disclosure.",
+      "notes": "No teacher tools available. 17 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/users, sqli/time, xss/blind, xxe/upload, rce/log4j) → 145 findings across 8 URLs; hub fingerprint dominates (19/route); route-specific WordPress/blind-SQLi/blind-XSS/XXE-upload/Log4j oracles still absent; hack-this-site-eta/api/validate/sqli-error 40 findings incl sql-error-disclosure.",
       "scanned_at": "2026-07-24T17:08:00.000Z"
     },
     {
@@ -39042,7 +36814,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=271; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall on primary heroku first pass (pages_crawled=1 probes=271; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 18 UTC run: shallow crawl but full 6/6 recall; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-24T18:05:00.000Z"
@@ -39053,7 +36825,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 9 findings, 6/6 recall (pages_crawled=1 probes=220; gap=[])",
+      "benchmark_status": "ok — 9 findings, 6/6 recall (pages_crawled=1 probes=220; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 19 UTC run: shallow crawl but full 6/6 recall; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent.",
       "scanned_at": "2026-07-24T19:13:25.791Z"
@@ -39064,7 +36836,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 7 findings gap=auth_bypass pages=1 probes=74; pass2: 10 findings pages=6 probes=205; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 7 findings gap=auth_bypass pages=1 probes=74; pass2: 10 findings pages=6 probes=205; gap=[])",
       "teacher_delta": [],
       "notes": "No teacher tools available. 20 UTC run: pass1 cold-start missed auth_bypass (no unauthenticated-admin-endpoint) before 12s wake retry; retry restored full 6/6 with security-question-disclosure + unauthenticated-admin-endpoint; secret-resend slug still absent.",
       "scanned_at": "2026-07-24T20:30:53.000Z"
@@ -39075,9 +36847,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=314; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=314; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 23 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (sqli/id, rce/cmd, pt/linux, xxe/parser, passive/tech) \u2192 304 findings across 8 URLs; passive/tech gained tech-stack-disclosure; route-specific cmd-injection/path-traversal/XXE oracles still absent.",
+      "notes": "No teacher tools available. 23 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (sqli/id, rce/cmd, pt/linux, xxe/parser, passive/tech) → 304 findings across 8 URLs; passive/tech gained tech-stack-disclosure; route-specific cmd-injection/path-traversal/XXE oracles still absent.",
       "scanned_at": "2026-07-24T23:07:47.774023Z"
     },
     {
@@ -39086,9 +36858,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=314; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=314; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 00 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (sqli/status, sqli/length, pt/include, redirect/meta, passive/params) \u2192 322 findings across 8 URLs; passive/params gained reflected-xss-query-param; route-specific status-code SQLi, content-length SQLi, PHP-include, meta-redirect oracles still absent.",
+      "notes": "No teacher tools available. 00 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (sqli/status, sqli/length, pt/include, redirect/meta, passive/params) → 322 findings across 8 URLs; passive/params gained reflected-xss-query-param; route-specific status-code SQLi, content-length SQLi, PHP-include, meta-redirect oracles still absent.",
       "scanned_at": "2026-07-25T00:06:00.000Z"
     },
     {
@@ -39097,9 +36869,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 03 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/xmlrpc, passive/graphql, cve/tomcat, sqli/user, source/config.bak) \u2192 383 findings across 8 URLs; source/config.bak has burpbounty-source-disclosure-live-oracle; passive/graphql has graphql-introspection-enabled; route-specific WordPress XML-RPC, CVE-Tomcat, SQLi-user oracles still absent; hub fingerprint dominates (~47-49/route).",
+      "notes": "No teacher tools available. 03 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/xmlrpc, passive/graphql, cve/tomcat, sqli/user, source/config.bak) → 383 findings across 8 URLs; source/config.bak has burpbounty-source-disclosure-live-oracle; passive/graphql has graphql-introspection-enabled; route-specific WordPress XML-RPC, CVE-Tomcat, SQLi-user oracles still absent; hub fingerprint dominates (~47-49/route).",
       "scanned_at": "2026-07-25T03:09:00.000Z"
     },
     {
@@ -39108,9 +36880,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/wp-login, actuator/health, cve/grafana, drupal/autocomplete, passive/api/v1/data) \u2192 408 findings across 8 URLs; drupal/autocomplete has burpbounty-drupal-user-disclosure-live-oracle; actuator/health has spring-boot-actuator-exposed; hub fingerprint dominates (~51/route); WordPress-login, Grafana CVE, API-path passive route-specific oracles still absent.",
+      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/wp-login, actuator/health, cve/grafana, drupal/autocomplete, passive/api/v1/data) → 408 findings across 8 URLs; drupal/autocomplete has burpbounty-drupal-user-disclosure-live-oracle; actuator/health has spring-boot-actuator-exposed; hub fingerprint dominates (~51/route); WordPress-login, Grafana CVE, API-path passive route-specific oracles still absent.",
       "scanned_at": "2026-07-25T04:06:00.000Z"
     },
     {
@@ -39119,9 +36891,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 8 findings gap=sqli pages=6 probes=295; pass2: 10 findings; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 8 findings gap=sqli pages=6 probes=295; pass2: 10 findings; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 05 UTC run: pass1 cold-start missed sqli before 12s wake retry; retry restored full 6/6 with sql-error-disclosure + security-question-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (cve/forti, cve/weblogic, actuator/mappings, graphql/query, ai/status) + drained rce/echo, rce/expect, ssrf/img \u2192 430 findings across 8 URLs; rce/echo+expect+ssrf/img route-specific oracles present; actuator/mappings has spring-boot-actuator-exposed; FortiOS/WebLogic/GraphQL-query route-specific oracles still absent; hub fingerprint dominates (~53-54/route).",
+      "notes": "No teacher tools available. 05 UTC run: pass1 cold-start missed sqli before 12s wake retry; retry restored full 6/6 with sql-error-disclosure + security-question-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (cve/forti, cve/weblogic, actuator/mappings, graphql/query, ai/status) + drained rce/echo, rce/expect, ssrf/img → 430 findings across 8 URLs; rce/echo+expect+ssrf/img route-specific oracles present; actuator/mappings has spring-boot-actuator-exposed; FortiOS/WebLogic/GraphQL-query route-specific oracles still absent; hub fingerprint dominates (~53-54/route).",
       "scanned_at": "2026-07-25T05:23:00.000Z"
     },
     {
@@ -39130,9 +36902,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 06 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (top10-showcase LLM, xss/url, xss/discover, cve/text4shell, ai/mcp/tools) + drained cve/jira, hack-this-site owasp/cms \u2192 374 findings across 8 URLs; top10-showcase has client-side-prompt-injection-evidence; hub fingerprint dominates burpbountylab routes (~56-57/route); route-specific XSS-URL, Text4Shell CVE, MCP-tools, Jira CVE oracles still absent.",
+      "notes": "No teacher tools available. 06 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (top10-showcase LLM, xss/url, xss/discover, cve/text4shell, ai/mcp/tools) + drained cve/jira, hack-this-site owasp/cms → 374 findings across 8 URLs; top10-showcase has client-side-prompt-injection-evidence; hub fingerprint dominates burpbountylab routes (~56-57/route); route-specific XSS-URL, Text4Shell CVE, MCP-tools, Jira CVE oracles still absent.",
       "scanned_at": "2026-07-25T06:07:24.554Z"
     },
     {
@@ -39141,9 +36913,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (dwr/interface, actuator/beans, backup/, ai/gateway, api-docs) + drained vulnshop /admin /profile /users \u2192 314 findings across 8 URLs; api-docs has vibe-openapi-docs-exposed; actuator/beans has spring-boot-actuator-exposed; hub fingerprint dominates burpbountylab routes (~59-60/route); route-specific DWR-interface, backup-listing, AI-gateway oracles still absent.",
+      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (dwr/interface, actuator/beans, backup/, ai/gateway, api-docs) + drained vulnshop /admin /profile /users → 314 findings across 8 URLs; api-docs has vibe-openapi-docs-exposed; actuator/beans has spring-boot-actuator-exposed; hub fingerprint dominates burpbountylab routes (~59-60/route); route-specific DWR-interface, backup-listing, AI-gateway oracles still absent.",
       "scanned_at": "2026-07-25T07:05:26.573174Z"
     },
     {
@@ -39152,9 +36924,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab CVE routes (pulse, citrix, f5, apache, symfony/profiler/phpinfo) + drained vulnshop checkout/products/1, hack-this-site cms/drupal \u2192 365 findings across 8 URLs; symfony/profiler/phpinfo has phpinfo-exposed; hub fingerprint dominates burpbountylab routes (~63/route); route-specific Pulse/Citrix/F5/Apache CVE oracles still absent.",
+      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab CVE routes (pulse, citrix, f5, apache, symfony/profiler/phpinfo) + drained vulnshop checkout/products/1, hack-this-site cms/drupal → 365 findings across 8 URLs; symfony/profiler/phpinfo has phpinfo-exposed; hub fingerprint dominates burpbountylab routes (~63/route); route-specific Pulse/Citrix/F5/Apache CVE oracles still absent.",
       "scanned_at": "2026-07-25T08:06:30.000Z"
     }
   ]
