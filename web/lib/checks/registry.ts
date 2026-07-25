@@ -32664,17 +32664,24 @@ async function brokencrystalsLoginToken(
 async function brokencrystalsAdminPermissionIsTrue(
   ctx: RuleContext,
   email: string,
-  token: string
+  token: string,
+  opts: { bypassCache?: boolean } = {}
 ): Promise<{ ok: boolean; url: string; snippet: string }> {
   const permUrl = new URL(
     `/api/users/one/${encodeURIComponent(email)}/adminpermission`,
     ctx.origin
   ).toString();
-  const permDoc = await ctx.probe.get(permUrl, {
-    headers: { authorization: token },
-    maxBytes: 512,
-    timeoutMs: 15000
-  });
+  const permDoc = opts.bypassCache
+    ? await fetchDoc(permUrl, {
+        headers: { authorization: token },
+        maxBytes: 512,
+        timeoutMs: 15000
+      })
+    : await ctx.probe.get(permUrl, {
+        headers: { authorization: token },
+        maxBytes: 512,
+        timeoutMs: 15000
+      });
   const snippet = permDoc.body.slice(0, 120).trim();
   const ok =
     permDoc.status >= 200 &&
@@ -32685,7 +32692,7 @@ async function brokencrystalsAdminPermissionIsTrue(
 
 const brokencrystalsMassAssignmentLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
-  const email = `thugir-ma-${Date.now()}@thugir-probe.invalid`;
+  const email = `thugir-ma-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
   const password = "ThugirProbe123!";
   const createUrl = new URL("/api/users/basic", ctx.origin).toString();
   const createPayload = JSON.stringify({
@@ -32709,7 +32716,7 @@ const brokencrystalsMassAssignmentLiveOracle: Rule = async (ctx) => {
   if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
   const token = await brokencrystalsLoginToken(ctx, email, password);
   if (!token) return NEGATIVE;
-  const perm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token);
+  const perm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token, { bypassCache: true });
   if (!perm.ok) return NEGATIVE;
   return {
     fired: true,
@@ -32725,7 +32732,7 @@ const brokencrystalsMassAssignmentLiveOracle: Rule = async (ctx) => {
 
 const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
-  const email = `thugir-put-${Date.now()}@thugir-probe.invalid`;
+  const email = `thugir-put-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
   const password = "ThugirProbe123!";
   const createUrl = new URL("/api/users/basic", ctx.origin).toString();
   const createPayload = JSON.stringify({
@@ -32764,7 +32771,9 @@ const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   if (putDoc.status < 200 || putDoc.status >= 300) return NEGATIVE;
-  const afterPerm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token);
+  const afterPerm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token, {
+    bypassCache: true
+  });
   if (!afterPerm.ok) return NEGATIVE;
   return {
     fired: true,
