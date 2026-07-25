@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T02:12:00.000Z",
+  "updated_at": "2026-07-25T03:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2473,
-  "total_findings": 16722,
+  "total_sites_scanned": 2474,
+  "total_findings": 16732,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1796,
-  "discovery_findings": 13861,
-  "improvements_shipped": 1080,
-  "last_run": "2026-07-25T02:12:00.000Z",
+  "discovery_findings": 13864,
+  "improvements_shipped": 1083,
+  "last_run": "2026-07-25T03:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (9 findings)",
+      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,24 +50,24 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 356,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 153,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty meta-refresh redirect, encoded XSS, image-proxy SSRF oracles",
+      "focus": "BurpBountyLab AI health/metrics and app.py backup source-disclosure oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "burpbountylab.com/redirect/meta: meta refresh + location.replace to evil-open-redirect-probe.example (39→52 findings)",
-      "burpbountylab.com/xss/encoded: URL-decoded q echoes raw <script> in paragraph and value attribute (41→48 findings)",
-      "burpbountylab.com/ssrf/img: src=http://example.com/img.png returns Example Domain HTML via image proxy (42→48 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "burpbountylab.com/ai/health: JSON model_provider + vector_db + rag_enabled token usage (44→51 findings)",
+      "burpbountylab.com/ai/metrics: Prometheus prompt_tokens/completion_tokens counters (45→51 findings)",
+      "burpbountylab.com/source/app.py~: PHP backup source with $db_pass credential leak (route-specific oracle shipped)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "burpbountylab.com/cve/confluence: route returns 404 — no positive-proof Confluence OGNL oracle",
       "burpbountylab.com/cve/jira/dashboard: route returns 404 — no positive-proof CVE-Jira oracle",
-      "burpbountylab.com/cve/confluence: Confluence OGNL RCE route-specific oracle still absent",
       "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
@@ -253,9 +253,9 @@
     "burpbountylab.com/pt/include": 45,
     "burpbountylab.com/redirect/meta": 52,
     "burpbountylab.com/passive/params": 39,
-    "burpbountylab.com/ai/health": 44,
-    "burpbountylab.com/ai/metrics": 45,
-    "burpbountylab.com/source/app.py~": 45,
+    "burpbountylab.com/ai/health": 51,
+    "burpbountylab.com/ai/metrics": 51,
+    "burpbountylab.com/source/app.py~": 51,
     "burpbountylab.com/robots.txt": 44,
     "burpbountylab.com/cve/confluence": 45,
     "burpbountylab.com/xss/encoded": 48,

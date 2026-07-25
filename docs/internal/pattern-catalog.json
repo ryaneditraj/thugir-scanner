@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T02:11:04.400Z",
-  "total": 716,
-  "uniqueSlugs": 714,
+  "generatedAt": "2026-07-25T03:02:43.542Z",
+  "total": 719,
+  "uniqueSlugs": 717,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 698,
+    "generic": 701,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 644,
+    "deep": 647,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 6,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 49,
+    "Information disclosure": 52,
     "Security misconfiguration": 57,
     "Broken authentication": 50,
     "Injection": 153,
@@ -40,6 +40,8 @@
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "burpbounty-ai-disclosure-live-oracle",
+    "burpbounty-ai-health-live-oracle",
+    "burpbounty-ai-metrics-live-oracle",
     "burpbounty-collab-forgot-live-oracle",
     "burpbounty-cors-live-oracle",
     "burpbounty-crlf-set-live-oracle",
@@ -59,6 +61,7 @@
     "burpbounty-redirect-meta-live-oracle",
     "burpbounty-redirect-out-live-oracle",
     "burpbounty-redirect-pp-live-oracle",
+    "burpbounty-source-app-backup-live-oracle",
     "burpbounty-source-disclosure-live-oracle",
     "burpbounty-sqli-length-live-oracle",
     "burpbounty-sqli-login-live-oracle",
