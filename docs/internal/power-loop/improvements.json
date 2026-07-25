@@ -7151,6 +7151,24 @@
       "slug": "burpbounty-rce-blind-live-oracle",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /rce/blind returns Processed with no timing/OOB observable without Burp Collaborator; /rce/cmd /sqli/id /pt/linux /xxe/parser return 404 — no positive-proof oracle path"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-status-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/sqli/status?id=1 returns 200 Found 1 users but id=1' returns 500 Internal Server Error; burpbountylab.com/sqli/status findings 39→45; benchmark juice-shop 9 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-length-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/sqli/length?q=admin (5458 bytes, 1 user-card) vs q=admin' OR 1=1-- (6276 bytes, 3 user-cards); burpbountylab.com/sqli/length findings 39→45; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pt-include-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/pt/include?page=../../../etc/passwd returns root:x:0:0 passwd via PHP include; burpbountylab.com/pt/include findings 39→45; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12523,6 +12541,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-source-disclosure-live-oracle",
       "shipped_at": "2026-07-25T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-status-live-oracle",
+      "shipped_at": "2026-07-25T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-length-live-oracle",
+      "shipped_at": "2026-07-25T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pt-include-live-oracle",
+      "shipped_at": "2026-07-25T01:10:00.000Z"
     }
   ]
 }

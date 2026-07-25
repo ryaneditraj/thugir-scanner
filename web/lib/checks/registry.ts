@@ -7577,7 +7577,7 @@ const burpbountySqliLengthLiveOracle: Rule = async (ctx) => {
   const narrowUrl = new URL("/sqli/length", ctx.origin);
   narrowUrl.searchParams.set("q", "admin");
   const wideUrl = new URL("/sqli/length", ctx.origin);
-  wideUrl.searchParams.set("q", "admin'");
+  wideUrl.searchParams.set("q", "admin' OR 1=1--");
   const [narrowDoc, wideDoc] = await Promise.all([
     ctx.probe.get(narrowUrl.toString(), { maxBytes: 16384 }),
     ctx.probe.get(wideUrl.toString(), { maxBytes: 16384 })
@@ -7597,10 +7597,10 @@ const burpbountySqliLengthLiveOracle: Rule = async (ctx) => {
     evidence: {
       url: wideUrl.toString(),
       narrowProbe: `q=admin → ${narrowLen} bytes, ${narrowCards} user-card(s)`,
-      wideProbe: `q=admin' → ${wideLen} bytes, ${wideCards} user-card(s)`,
+      wideProbe: `q=admin' OR 1=1-- → ${wideLen} bytes, ${wideCards} user-card(s)`,
       lengthDelta,
       snippet: wideDoc.body.slice(0, 160).trim(),
-      note: "Burp Bounty Lab /sqli/length?q=admin' returns a larger response than q=admin — content-length blind SQLi profile oracle"
+      note: "Burp Bounty Lab /sqli/length?q=admin' OR 1=1-- returns a larger response than q=admin — content-length blind SQLi profile oracle"
     }
   };
 };

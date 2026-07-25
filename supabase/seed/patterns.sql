@@ -5048,7 +5048,7 @@ values
    true),
   ('burpbounty-sqli-length-live-oracle', 'generic', 'Injection', 'high',
    'Burp Bounty Lab content-length blind SQLi live oracle',
-   'GET /sqli/length?q=admin'' returns a larger HTML response than q=admin.',
+   'GET /sqli/length?q=admin'' OR 1=1-- returns a larger HTML response than q=admin.',
    'Live response-length differential confirms blind SQLi oracle when error messages are suppressed.',
    'rule_ref',
    '{"rule":"burpbountySqliLengthLiveOracle"}'::jsonb,
