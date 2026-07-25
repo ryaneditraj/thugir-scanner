@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T02:08:40.268Z",
+  "updated_at": "2026-07-25T02:12:51.932Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2465,
-  "total_findings": 16366,
+  "total_sites_scanned": 2473,
+  "total_findings": 16722,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1791,
-  "discovery_findings": 13505,
+  "discovery_urls_added": 1796,
+  "discovery_findings": 13861,
   "improvements_shipped": 1077,
-  "last_run": "2026-07-25T02:08:40.268Z",
+  "last_run": "2026-07-25T02:12:51.932Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 (9 findings) — no benchmark misses; security-question-disclosure absent but sensitive_data via juice-shop-leaked-api-key + vibe-unauthenticated-api-routes",
+      "note": "Benchmark recall stable at 6/6 (9 findings) — no benchmark misses; shallow crawl (pages=1) but all categories hit",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,24 +52,25 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 332,
+      "findings": 356,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty Lab status-code SQLi, content-length blind SQLi, PHP include LFI oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "Burp Bounty Lab AI/LLM disclosure, source-backup, RCE echo/expect, encoded XSS oracles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
-      "burpbountylab.com/sqli/status: status 200 vs 500 differential on id=1 vs id=1'",
-      "burpbountylab.com/sqli/length: q=admin 5458 bytes vs q=admin' OR 1=1-- 6276 bytes",
-      "burpbountylab.com/pt/include: PHP include reads /etc/passwd via page=../../../etc/passwd"
+      "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle — command output reflected in response",
+      "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle — PHP expect:// wrapper executes commands",
+      "burpbountylab.com/ai/health: burpbounty-ai-disclosure-live-oracle — RAG/MCP/gateway headers disclosed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab.com/redirect/meta: meta-refresh open redirect oracle still absent",
-      "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
-      "burpbountylab route pages: encoded-XSS, SSRF-img, CVE-Jira route-specific oracles still absent"
+      "burpbountylab.com/xss/encoded: encoded-context XSS route-specific oracle still absent",
+      "burpbountylab.com/ssrf/img: SSRF-via-img-src route-specific oracle still absent",
+      "burpbountylab.com/cve/confluence: Confluence OGNL RCE route-specific oracle still absent",
+      "burpbountylab.com/source/app.py~: backup-file source disclosure oracle still absent"
     ]
   },
   "discovery_highlights": {
@@ -254,9 +255,14 @@
     "burpbountylab.com/pt/include": 45,
     "burpbountylab.com/redirect/meta": 39,
     "burpbountylab.com/passive/params": 39,
-    "burpbountylab.com/xss/encoded": 41,
-    "burpbountylab.com/rce/echo": 42,
-    "burpbountylab.com/rce/expect": 42,
+    "burpbountylab.com/ai/health": 44,
+    "burpbountylab.com/ai/metrics": 45,
+    "burpbountylab.com/source/app.py~": 45,
+    "burpbountylab.com/robots.txt": 44,
+    "burpbountylab.com/cve/confluence": 45,
+    "burpbountylab.com/xss/encoded": 44,
+    "burpbountylab.com/rce/echo": 44,
+    "burpbountylab.com/rce/expect": 45,
     "burpbountylab.com/ssrf/img": 42,
     "burpbountylab.com/cve/jira/dashboard": 42
   }
