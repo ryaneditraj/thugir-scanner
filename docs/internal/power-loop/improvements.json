@@ -7505,6 +7505,24 @@
       "slug": "burpbounty-ai-completions-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/v1/completions returns {\"object\":\"text_completion\"} + X-AI-Backend/X-LLM-Provider headers; burpbountylab.com/ai/v1/completions findings 87→89; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/users/basic {\"isAdmin\":true,...} → 201; login authorization JWT; GET /api/users/one/{email}/adminpermission → {\"isAdmin\":true}; brokencrystals.com findings 48 incl mass-assignment oracle; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-put-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT https://brokencrystals.com/api/users/one/{email}/info {\"isAdmin\":true} escalates regular user; GET adminpermission → {\"isAdmin\":true}; brokencrystals.com deep scan fires all 3 new oracles; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-lfi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file?path=package.json returns broken-crystals nest build package.json; distinct from /api/file/raw; brokencrystals.com/api/file findings 44→48; benchmark juice-shop 10 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13162,6 +13180,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ai-completions-live-oracle",
       "shipped_at": "2026-07-25T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-live-oracle",
+      "shipped_at": "2026-07-25T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-put-live-oracle",
+      "shipped_at": "2026-07-25T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-lfi-live-oracle",
+      "shipped_at": "2026-07-25T21:25:00.000Z"
     }
   ]
 }
