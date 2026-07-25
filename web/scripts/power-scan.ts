@@ -279,7 +279,10 @@ async function main() {
   const benchmarkRecall: Record<string, ReturnType<typeof computeBenchmarkRecall>> = {};
 
   for (const { entry, kind } of slice) {
-    const scanOptions = { agent: useAgent, agentMode };
+    const scanOptions: { agent: boolean; agentMode: "quick" | "standard" | "deep" } = {
+      agent: useAgent,
+      agentMode
+    };
     let result = await scanOne(entry, kind, scanOptions);
     saveResults(result);
 
