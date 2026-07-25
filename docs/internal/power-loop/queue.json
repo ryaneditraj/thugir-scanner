@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T08:03:00.000Z",
+  "updated_at": "2026-07-25T09:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/actuator/loggers",
+      "source": "BountySecurity/BurpBountyLab — Spring Boot actuator loggers endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ai/v1/models",
+      "source": "BountySecurity/BurpBountyLab — OpenAI-compatible models listing disclosure profile (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/cisco/",
+      "source": "BountySecurity/BurpBountyLab — Cisco CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/kubernetes/api/v1/",
+      "source": "BountySecurity/BurpBountyLab — Kubernetes API CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/n8n/rest/settings",
+      "source": "BountySecurity/BurpBountyLab — n8n workflow automation CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/cve/pulse/",
       "source": "BountySecurity/BurpBountyLab — Pulse Secure CVE practice endpoint (hub scrape)",
