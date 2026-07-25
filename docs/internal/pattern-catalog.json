@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T03:02:43.542Z",
-  "total": 719,
-  "uniqueSlugs": 717,
+  "generatedAt": "2026-07-25T04:03:58.777Z",
+  "total": 722,
+  "uniqueSlugs": 720,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 701,
+    "generic": 704,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 647,
+    "deep": 650,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 52,
-    "Security misconfiguration": 57,
+    "Security misconfiguration": 58,
     "Broken authentication": 50,
-    "Injection": 153,
+    "Injection": 155,
     "Cross-site scripting": 117,
     "general": 18,
     "SSRF": 1,
@@ -69,11 +69,14 @@
     "burpbounty-sqli-search-live-oracle",
     "burpbounty-sqli-status-live-oracle",
     "burpbounty-sqli-time-live-oracle",
+    "burpbounty-sqli-user-enum-live-oracle",
     "burpbounty-ssrf-fetch-live-oracle",
     "burpbounty-ssrf-img-live-oracle",
     "burpbounty-ssrf-proxy-live-oracle",
     "burpbounty-ssrf-scheme-live-oracle",
     "burpbounty-ssti-render-live-oracle",
+    "burpbounty-tomcat-cve-live-oracle",
+    "burpbounty-xmlrpc-live-oracle",
     "burpbounty-xss-attribute-live-oracle",
     "burpbounty-xss-blind-live-oracle",
     "burpbounty-xss-comment-live-oracle",
