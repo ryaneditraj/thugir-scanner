@@ -8980,6 +8980,62 @@ const burpbountyNetsweeperCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyZohoCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/zoho/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*ManageEngine\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/zoho/ returns ManageEngine heading — Zoho ManageEngine CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyRubyCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/ruby/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Ruby\s+on\s+Rails\s+App\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/ruby/ returns Ruby on Rails App heading — Rails path-traversal CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyWpLfiCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/wp/local-file-inclusion", ctx.origin);
+  probeUrl.searchParams.set("file", "../../../etc/passwd");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const passwdOk =
+    /root:x:0:0:/.test(doc.body) &&
+    /daemon:x:1:1:daemon:/i.test(doc.body) &&
+    /\/bin\/(?:bash|sh)/.test(doc.body);
+  if (!passwdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/wp/local-file-inclusion?file=../../../etc/passwd returns /etc/passwd contents — WordPress Duplicator LFI CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -33987,6 +34043,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyCrowdCveLiveOracle,
   burpbountyFirebaseCveLiveOracle,
   burpbountyNetsweeperCveLiveOracle,
+  burpbountyZohoCveLiveOracle,
+  burpbountyRubyCveLiveOracle,
+  burpbountyWpLfiCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

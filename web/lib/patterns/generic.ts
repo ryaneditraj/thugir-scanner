@@ -16409,6 +16409,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-zoho-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Zoho ManageEngine CVE live oracle",
+    description:
+      "GET /cve/zoho/ returns a ManageEngine heading — the Burp Bounty Zoho ManageEngine CVE profile oracle.",
+    impactOneline:
+      "Live ManageEngine fingerprint probe confirms route-specific Zoho CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyZohoCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Zoho ManageEngine appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Zoho ManageEngine security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/zoho/ endpoint exposes a ManageEngine fingerprint. Show Zoho ManageEngine hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ruby-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Ruby on Rails CVE live oracle",
+    description:
+      "GET /cve/ruby/ returns a Ruby on Rails App heading — the Burp Bounty Rails path-traversal CVE profile oracle.",
+    impactOneline:
+      "Live Rails fingerprint probe confirms route-specific path-traversal CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRubyCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Ruby on Rails and restrict file-serving endpoints that accept traversal sequences.",
+      steps: [
+        "Upgrade Rails to patched versions for known path-traversal CVEs.",
+        "Validate and canonicalize file paths before serving static assets.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/ruby/ endpoint exposes a Ruby on Rails fingerprint. Show Rails path-traversal hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-lfi-cve-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab WordPress LFI CVE live oracle",
+    description:
+      "GET /cve/wp/local-file-inclusion?file=../../../etc/passwd returns /etc/passwd contents — the Burp Bounty WordPress Duplicator LFI CVE profile oracle.",
+    impactOneline:
+      "Live WordPress LFI probe confirms arbitrary file read distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLfiCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WordPress plugins with known LFI flaws and block traversal sequences in file parameters.",
+      steps: [
+        "Upgrade Duplicator and other file-handling plugins to patched versions.",
+        "Reject file parameters containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/wp/local-file-inclusion endpoint reads /etc/passwd via file=../../../etc/passwd. Show WordPress LFI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
