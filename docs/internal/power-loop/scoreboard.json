@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1791,
   "discovery_findings": 13505,
-  "improvements_shipped": 1074,
-  "last_run": "2026-07-25T01:07:57.210Z",
+  "improvements_shipped": 1077,
+  "last_run": "2026-07-25T01:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -55,22 +55,21 @@
       "findings": 332,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab encoded XSS, RCE echo/expect, SSRF img, CVE Jira dashboard; hack-this-site auth/reset + env-file + clickjacking labs",
-      "improvements_shipped_this_run": 0
+      "focus": "Burp Bounty Lab status-code SQLi, content-length blind SQLi, PHP include LFI oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — stable first-pass deep crawl pages=6 probes=295",
-      "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle present (hub fingerprint + route echo)",
-      "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle present",
-      "burpbountylab.com/xss/encoded: hub fingerprint dominates (~41/route); encoded-XSS route-specific oracle still absent",
-      "burpbountylab.com/cve/jira/dashboard: hub fingerprint only — CVE-2019-11581 Jira SSTI oracle still absent",
-      "hack-this-site-eta.vercel.app/labs/clickjacking.html: vulnlab-clickjacking-live-oracle present"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — no benchmark misses",
+      "burpbountylab.com/sqli/status: status 200 vs 500 differential on id=1 vs id=1'",
+      "burpbountylab.com/sqli/length: q=admin 5458 bytes vs q=admin' OR 1=1-- 6276 bytes",
+      "burpbountylab.com/pt/include: PHP include reads /etc/passwd via page=../../../etc/passwd"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab route pages: hub fingerprint dominates (~41/route); encoded-XSS, SSRF-img, CVE-Jira route-specific oracles still absent",
-      "hack-this-site-eta SPA routes share same bundle fingerprint — per-route oracles collapse to hub markers"
+      "burpbountylab.com/redirect/meta: meta-refresh open redirect oracle still absent",
+      "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
+      "burpbountylab route pages: encoded-XSS, SSRF-img, CVE-Jira route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
@@ -250,9 +249,9 @@
     "burpbountylab.com/pt/linux": 36,
     "burpbountylab.com/xxe/parser": 36,
     "burpbountylab.com/passive/tech": 37,
-    "burpbountylab.com/sqli/status": 39,
-    "burpbountylab.com/sqli/length": 39,
-    "burpbountylab.com/pt/include": 39,
+    "burpbountylab.com/sqli/status": 45,
+    "burpbountylab.com/sqli/length": 45,
+    "burpbountylab.com/pt/include": 45,
     "burpbountylab.com/redirect/meta": 39,
     "burpbountylab.com/passive/params": 39,
     "burpbountylab.com/xss/encoded": 41,

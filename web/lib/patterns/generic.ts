@@ -15505,7 +15505,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Burp Bounty Lab content-length blind SQLi live oracle",
     description:
-      "GET /sqli/length?q=admin' returns a larger HTML response than q=admin — the Burp Bounty content-length blind SQLi profile oracle.",
+      "GET /sqli/length?q=admin' OR 1=1-- returns a larger HTML response than q=admin — the Burp Bounty content-length blind SQLi profile oracle.",
     impactOneline:
       "Live response-length differential confirms blind SQLi oracle when error messages and timing probes are unavailable.",
     detectorKind: "rule_ref",
