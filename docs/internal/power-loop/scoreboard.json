@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T14:02:15.076Z",
+  "updated_at": "2026-07-25T14:07:10.087615Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2579,
-  "total_findings": 21307,
+  "total_sites_scanned": 2586,
+  "total_findings": 21640,
   "critical_findings": 48,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1851,
+  "discovery_urls_added": 1856,
   "discovery_findings": 17955,
   "improvements_shipped": 1113,
-  "last_run": "2026-07-25T14:02:15.076Z",
+  "last_run": "2026-07-25T14:07:10.087615Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall (13 findings, pages=6 probes=474) — reflexion-escalated-ssti + thugir-dir-discovery new vs 10-finding baseline",
+      "note": "Primary Heroku unreachable \u2014 6/6 recall via staging fallback (12 findings, pages=6 probes=456)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,39 +46,37 @@
             "misconfig"
           ]
         }
-      }
+      },
+      "primary_status": "error \u2014 unreachable"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 75,
+      "urls_scanned": 7,
+      "findings": 333,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "Pwnshop vulns/debug/events + vulnshop orders + OAuth Labs + VaMPI×2 + VWAD burpbounty; BurpBountyLab route-specific CVE oracles (zoho, ruby, wp-lfi) shipped",
-      "improvements_shipped_this_run": 3
+      "dns_failures": [
+        "https://brokencrystals.com/api/goto"
+      ],
+      "focus": "BrokenCrystals goto/upload/SSRF-aws + Pwnshop chat/init + DVCA docs + BurpBountyLab queue drain (ssrf/fetch, rce/ping, pt/read)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — reflexion-escalated-ssti + thugir-dir-discovery new; secret-resend slug still absent",
-      "burpbountylab.com/cve/zoho/: 75→83 findings — burpbounty-zoho-cve-live-oracle shipped",
-      "burpbountylab.com/cve/ruby/: 75→83 findings — burpbounty-ruby-cve-live-oracle shipped",
-      "burpbountylab.com/cve/wp/local-file-inclusion: 75→80 findings — burpbounty-wp-lfi-cve-live-oracle shipped (LFI via file=../../../etc/passwd)",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 13 findings — pwnshop-debug-info-live-oracle + client-side-pwnshop-ssti-oracle + path-traversal oracle",
-      "pwnshop.ctfsecurity.com/debug/info: 12 findings — sql-error-disclosure + reflected-xss-query-param + thugir-dir-discovery",
-      "pwnshop.ctfsecurity.com/api/v1/events: 11 findings — unauthenticated audit log JSON feed",
-      "oauthlabs.com: 8 findings — client-side-oauth-labs-playground-evidence + dangerous-html-sinks",
-      "vampi-production.up.railway.app/ui: 8 findings — idor-sequential-ids + exposed-source-maps",
-      "urban-vampi-production.up.railway.app/ui: 8 findings — idor-sequential-ids + exposed-source-maps",
-      "vwad.owasp.org/app/burpbounty: 8 findings — client-side-burp-bounty-lab-evidence + OWASP VWAD"
+      "juice-shop: benchmark recall 6/6 (12 findings on juice-shop-staging.herokuapp.com) \u2014 primary Heroku unreachable; secret-resend slug still absent",
+      "brokencrystals.com/api/hidden-upload: 33 findings \u2014 thugir-dir-discovery noise; route-specific unrestricted-upload oracle still absent",
+      "brokencrystals.com/api/file/aws: 34 findings \u2014 thugir-dir-discovery noise; route-specific AWS-metadata SSRF oracle still absent",
+      "brokencrystals.com/api/goto: 0 findings \u2014 endpoint error/unreachable; open-redirect oracle not exercised",
+      "pwnshop.ctfsecurity.com/api/v1/chat/init: 14 findings \u2014 client-side-pwnshop-evidence; route-specific username-enumeration oracle (PWN-037) still absent",
+      "damnvulnerablecryptoapp.github.io: 3 findings \u2014 shallow GitHub Pages docs only; no crypto-challenge oracles",
+      "burpbountylab.com/ssrf/fetch + rce/ping + pt/read: 83 findings each \u2014 full hub fingerprint; route-specific SSRF/cmd/PT oracles still absent"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "burpbountylab citrix/sharefile, artica, magmi route-specific CVE oracles still absent",
-      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed still not triggered (burpbounty-firebase-cve-live-oracle covers JSON oracle)",
-      "pwnshop/forgot-password: email-enumeration oracle (PWN-037) queued but not yet scanned",
-      "brokencrystals/testimonials iframe-injection + adminpage excessive-data-exposure queued for next run",
-      "vaultapp.vercel.app 10-IDOR lab queued — no route-specific IDOR oracles yet"
+      "juice-shop.herokuapp.com primary oracle unreachable from cloud agent \u2014 staging fallback required",
+      "brokencrystals /api/goto unreachable; hidden-upload + /api/file/aws trigger dir-discovery fingerprint not route-specific SSRF/upload oracles",
+      "pwnshop chat/init: no email/username enumeration slug despite forgot-password queued",
+      "burpbountylab hub fingerprint dominates (~83/route); route-specific ssrf/fetch, rce/ping, pt/read oracles still absent"
     ]
   },
   "discovery_highlights": {
@@ -98,6 +96,13 @@
     "burpbountylab.com/cve/crowd/": 78,
     "burpbountylab.com/cve/firebase/.json": 79,
     "burpbountylab.com/cve/netsweeper/": 77,
-    "juice-shop.herokuapp.com": 14
+    "juice-shop.herokuapp.com": 14,
+    "brokencrystals.com/api/hidden-upload": 33,
+    "brokencrystals.com/api/file/aws": 34,
+    "pwnshop.ctfsecurity.com/api/v1/chat/init": 14,
+    "damnvulnerablecryptoapp.github.io/DamnVulnerableCryptoApp": 3,
+    "burpbountylab.com/ssrf/fetch": 83,
+    "burpbountylab.com/rce/ping": 83,
+    "burpbountylab.com/pt/read": 83
   }
 }
