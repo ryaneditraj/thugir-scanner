@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2569,
-  "total_findings": 21207,
-  "critical_findings": 46,
+  "total_sites_scanned": 2578,
+  "total_findings": 21295,
+  "critical_findings": 48,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1846,
-  "discovery_findings": 17880,
+  "discovery_urls_added": 1851,
+  "discovery_findings": 17955,
   "improvements_shipped": 1110,
   "last_run": "2026-07-25T13:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall (14 findings) — no benchmark misses",
+      "note": "Stable 6/6 first-pass recall (13 findings, pages=6 probes=474) — reflexion-escalated-ssti + thugir-dir-discovery new vs 10-finding baseline",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,23 +50,46 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "BurpBountyLab route-specific CVE oracles (zoho, ruby, wp-lfi)",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 75,
+      "skipped_48h": [],
+      "dns_failures": [],
+      "focus": "Pwnshop vulns/debug/events + vulnshop orders + OAuth Labs + VaMPI×2 + VWAD burpbounty; BurpBountyLab route-specific CVE oracles (zoho, ruby, wp-lfi) shipped",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — reflexion-escalated-ssti + thugir-dir-discovery new; secret-resend slug still absent",
       "burpbountylab.com/cve/zoho/: 75→83 findings — burpbounty-zoho-cve-live-oracle shipped",
       "burpbountylab.com/cve/ruby/: 75→83 findings — burpbounty-ruby-cve-live-oracle shipped",
-      "burpbountylab.com/cve/wp/local-file-inclusion: 75→80 findings — burpbounty-wp-lfi-cve-live-oracle shipped (LFI via file=../../../etc/passwd)"
+      "burpbountylab.com/cve/wp/local-file-inclusion: 75→80 findings — burpbounty-wp-lfi-cve-live-oracle shipped (LFI via file=../../../etc/passwd)",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 13 findings — pwnshop-debug-info-live-oracle + client-side-pwnshop-ssti-oracle + path-traversal oracle",
+      "pwnshop.ctfsecurity.com/debug/info: 12 findings — sql-error-disclosure + reflected-xss-query-param + thugir-dir-discovery",
+      "pwnshop.ctfsecurity.com/api/v1/events: 11 findings — unauthenticated audit log JSON feed",
+      "oauthlabs.com: 8 findings — client-side-oauth-labs-playground-evidence + dangerous-html-sinks",
+      "vampi-production.up.railway.app/ui: 8 findings — idor-sequential-ids + exposed-source-maps",
+      "urban-vampi-production.up.railway.app/ui: 8 findings — idor-sequential-ids + exposed-source-maps",
+      "vwad.owasp.org/app/burpbounty: 8 findings — client-side-burp-bounty-lab-evidence + OWASP VWAD"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "burpbountylab citrix/sharefile, artica, magmi route-specific CVE oracles still absent",
-      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed still not triggered (burpbounty-firebase-cve-live-oracle covers JSON oracle)"
+      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed still not triggered (burpbounty-firebase-cve-live-oracle covers JSON oracle)",
+      "pwnshop/forgot-password: email-enumeration oracle (PWN-037) queued but not yet scanned",
+      "brokencrystals/testimonials iframe-injection + adminpage excessive-data-exposure queued for next run",
+      "vaultapp.vercel.app 10-IDOR lab queued — no route-specific IDOR oracles yet"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/vulnerabilities": 13,
+    "pwnshop.ctfsecurity.com/debug/info": 12,
+    "pwnshop.ctfsecurity.com/api/v1/events": 11,
+    "vulnshop.vercel.app/orders": 7,
+    "oauthlabs.com": 8,
+    "vampi-production.up.railway.app/ui": 8,
+    "urban-vampi-production.up.railway.app/ui": 8,
+    "vwad.owasp.org/app/burpbounty": 8,
     "burpbountylab.com/cve/zoho/": 83,
     "burpbountylab.com/cve/ruby/": 83,
     "burpbountylab.com/cve/wp/local-file-inclusion": 80,

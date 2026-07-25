@@ -9254,6 +9254,31 @@
       "url": "https://brokencrystals.com/marketplace",
       "source": "NeuraLegion/brokencrystals \u2014 prototype pollution / insecure deserialization oracle (README)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/testimonials",
+      "source": "NeuraLegion/brokencrystals \u2014 iframe injection via videosrc URL param (README/Docker docs)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vaultapp.vercel.app",
+      "source": "MRMcyber/vaultapp \u2014 10 IDOR challenges fintech training lab (GitHub Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/forgot-password",
+      "source": "ctfsec/pwnshop \u2014 username enumeration via forgot-password + chat/init (README PWN-037)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/adminpage",
+      "source": "NeuraLegion/brokencrystals \u2014 excessive data exposure /api/users/search cardNumber leak (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/search/",
+      "source": "NeuraLegion/brokencrystals \u2014 GET /api/users/search/ exposes cardNumber+phoneNumber (README excessive data exposure)",
+      "auth": "benchmark"
     }
   ]
 }
