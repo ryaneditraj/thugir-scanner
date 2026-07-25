@@ -307,6 +307,11 @@
     "burpbountylab.com/ai/v1/models": 66,
     "burpbountylab.com/cve/cisco": 72,
     "burpbountylab.com/cve/kubernetes/api/v1": 65,
-    "burpbountylab.com/cve/n8n/rest/settings": 72
+    "burpbountylab.com/cve/n8n/rest/settings": 72,
+    "burpbountylab.com/actuator/heapdump": 69,
+    "burpbountylab.com/cve/couchdb/_all_dbs": 69,
+    "burpbountylab.com/cve/traefik/": 69,
+    "burpbountylab.com/cve/solarwinds/": 69,
+    "burpbountylab.com/.svn/entries": 69
   }
 }
