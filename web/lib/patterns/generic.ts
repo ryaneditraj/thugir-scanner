@@ -13419,6 +13419,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-azure-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals Azure metadata SSRF oracle",
+    description:
+      "GET /api/file/azure?path=http://169.254.169.254/metadata/instance?api-version=2021-02-01 returns Azure IMDS compute metadata (azEnvironment, location) — the Broken Crystals Azure cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to Azure instance metadata can expose managed identity tokens and compromise the hosting subscription.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAzureMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to Azure IMDS and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254/metadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/azure endpoint fetches Azure IMDS metadata via the path parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -13831,6 +13857,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/search endpoint echoes raw SQL and documents UNION injection vectors. Show SQL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-anonymous-chat-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank unauthenticated AI customer-support chat oracle",
+    description:
+      "POST /api/ai/chat/anonymous accepts unauthenticated chat messages and returns mode:anonymous LLM responses with an explicit no-authentication warning — the Vuln Bank AI customer-support oracle.",
+    impactOneline:
+      "Unauthenticated AI chat endpoints enable prompt-injection, data exfiltration, and abuse of LLM-backed banking support without user identity controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiAnonymousChatLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and rate limits on AI customer-support endpoints — Vuln Bank is intentional training software.",
+      steps: [
+        "Authenticate all AI chat routes and bind sessions to verified customer accounts.",
+        "Apply prompt-injection guardrails and block sensitive data retrieval without authorization.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/chat/anonymous endpoint accepts unauthenticated LLM chat requests. Show AI endpoint authentication and prompt-injection hardening.",
     version: 1,
     enabled: true
   },
@@ -15911,6 +15963,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /redirect/pp endpoint redirects to arbitrary return_url values. Show post-payment redirect validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-git-config-live-oracle",
+    platform: "generic",
+    category: "Source exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab .git/config source exposure live oracle",
+    description:
+      "GET /.git/config returns live git repository configuration with [core] and remote origin URL — the Burp Bounty passive git exposure profile oracle.",
+    impactOneline:
+      "Live .git/config probe confirms source repository exposure distinct from generic hub fingerprinting (Content-Type text/html bypasses exposed-git-dir http_probe).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGitConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never serve .git directories from production web roots.",
+      steps: [
+        "Exclude .git from deployed artifacts and add deny rules for /.git/*.",
+        "Audit repository history for committed secrets and rotate them.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.git/config endpoint exposes repository configuration. Show how to block .git directory access in production.",
     version: 1,
     enabled: true
   },

@@ -7988,6 +7988,28 @@ const burpbountyRedirectPpLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyGitConfigLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/.git/config", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const gitConfigOk =
+    /\[core\]/i.test(doc.body) &&
+    /repositoryformatversion/i.test(doc.body) &&
+    /\[remote\s+"origin"\]/i.test(doc.body) &&
+    /url\s*=\s*https?:\/\//i.test(doc.body);
+  if (!gitConfigOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /.git/config returns live git repository configuration with remote origin URL — source exposure oracle distinct from generic hub fingerprinting (Content-Type text/html bypasses exposed-git-dir http_probe)"
+    }
+  };
+};
+
 const burpbountyCollabForgotLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeEmail = "thugir-reset-probe@example.com";
@@ -16317,6 +16339,46 @@ const vulnExposeSqliSearchApiLiveOracle: Rule = async (ctx) => {
       url: searchUrl.toString(),
       snippet: doc.body.slice(0, 280).trim(),
       note: "VulnSite GET /api/search?q=test echoes raw SQL query and documents UNION/boolean injection vectors — SQL injection search API oracle"
+    }
+  };
+};
+
+const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const chatUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
+  const payload = JSON.stringify({ message: "What banking services do you offer?" });
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const mode = String(parsed.mode ?? "");
+  const status = String(parsed.status ?? "");
+  const warning = String(parsed.warning ?? "");
+  const aiResponse = parsed.ai_response;
+  if (mode !== "anonymous" || status !== "success") return NEGATIVE;
+  if (!/no authentication|demo purposes only/i.test(warning)) return NEGATIVE;
+  if (!aiResponse || typeof aiResponse !== "object") return NEGATIVE;
+  const model = String((aiResponse as { model?: unknown }).model ?? "");
+  const response = String((aiResponse as { response?: unknown }).response ?? "");
+  if (!model || response.length < 8) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: chatUrl,
+      model,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/ai/chat/anonymous returns mode:anonymous success with LLM response and no-auth warning — unauthenticated AI customer-support oracle"
     }
   };
 };
@@ -32415,6 +32477,31 @@ const brokencrystalsAwsMetadataSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsAzureMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/azure", ctx.origin);
+  probeUrl.searchParams.set(
+    "path",
+    "http://169.254.169.254/metadata/instance?api-version=2021-02-01"
+  );
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /"compute"\s*:/i.test(doc.body) &&
+    /azEnvironment/i.test(doc.body) &&
+    /AZUREPUBLICCLOUD|location/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/azure?path=http://169.254.169.254/metadata/instance returns Azure IMDS compute metadata — cloud SSRF oracle distinct from AWS /api/file/aws"
+    }
+  };
+};
+
 const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const ldapUrl = new URL("/api/users/ldap", ctx.origin);
@@ -34427,6 +34514,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnExposeLabModuleEvidence,
   vulnExposeAuthBypassApiLiveOracle,
   vulnExposeSqliSearchApiLiveOracle,
+  vulnbankAiAnonymousChatLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
@@ -34742,6 +34830,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsDomXssEvidence,
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
+  brokencrystalsAzureMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsSecretsLiveOracle,
@@ -34855,6 +34944,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySsrfSchemeLiveOracle,
   burpbountyRedirectOutLiveOracle,
   burpbountyRedirectPpLiveOracle,
+  burpbountyGitConfigLiveOracle,
   burpbountyCollabForgotLiveOracle,
   burpbountyRceExpectLiveOracle,
   burpbountyRceEchoLiveOracle,
