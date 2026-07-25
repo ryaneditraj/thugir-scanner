@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T16:12:00.000Z",
+  "updated_at": "2026-07-25T17:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/secrets",
+      "source": "NeuraLegion/brokencrystals — exposed API keys / config secrets oracle GET /api/secrets (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/safe-files",
+      "source": "NeuraLegion/brokencrystals — remote file inclusion via POST /api/safe-files (README safe-files oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/search?name=test",
+      "source": "NeuraLegion/brokencrystals — SQLi in products search name param (README /api/products/search oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/me",
+      "source": "NeuraLegion/brokencrystals — BOPLA mass-assignment on authenticated user object GET/PUT /api/users/me (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/hidden-upload",
+      "source": "NeuraLegion/brokencrystals — DOM XSS + unrestricted SVG upload page /hidden-upload (README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/goto",
       "source": "NeuraLegion/brokencrystals — unvalidated redirect via url query param (README /api/goto oracle)",
