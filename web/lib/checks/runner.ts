@@ -1364,6 +1364,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsAwsMetadataSsrfLiveOracle",
   "brokencrystalsLdapInjectionLiveOracle",
   "brokencrystalsHiddenUploadLiveOracle",
+  "brokencrystalsSecretsLiveOracle",
+  "brokencrystalsSafeFilesRfiLiveOracle",
   "vulnExposeAuthBypassApiLiveOracle",
   "vulnExposeSqliSearchApiLiveOracle",
   "exposedApiConfig",

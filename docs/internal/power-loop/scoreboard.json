@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T17:30:00.000Z",
+  "updated_at": "2026-07-25T18:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,16 +16,16 @@
     }
   },
   "total_sites_scanned": 2613,
-  "total_findings": 23089,
-  "critical_findings": 49,
+  "total_findings": 23095,
+  "critical_findings": 51,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1871,
-  "discovery_findings": 19365,
-  "improvements_shipped": 1122,
-  "last_run": "2026-07-25T17:30:00.000Z",
+  "discovery_findings": 19371,
+  "improvements_shipped": 1124,
+  "last_run": "2026-07-25T18:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 12,
@@ -51,46 +51,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 361,
-      "skipped_48h": [
-        "https://brokencrystals.com/api/hidden-upload",
-        "https://brokencrystals.com/api/file/aws",
-        "https://pwnshop.ctfsecurity.com/api/v1/chat/init",
-        "https://damnvulnerablecryptoapp.github.io/DamnVulnerableCryptoApp/"
-      ],
-      "dns_failures": [
-        "https://brokencrystals.com/api/goto"
-      ],
-      "focus": "brokencrystals LDAP injection + vuln-expose API oracles (auth bypass, SQLi search)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "skipped_48h": [],
+      "dns_failures": [],
+      "focus": "brokencrystals /api/secrets + /api/safe-files route-specific oracles",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
-      "brokencrystals.com/api/users/ldap: brokencrystals-ldap-injection-live-oracle now fires (37→38 findings)",
-      "vulns-expose.jveltri.com.ar/api/auth/login: vuln-expose-auth-bypass-api-live-oracle confirmed (SQLi admin bypass)",
-      "vulns-expose.jveltri.com.ar/api/search: vuln-expose-sqli-search-api-live-oracle confirmed (SQL query echo + UNION hints)",
-      "brokencrystals.com/api/secrets: 38 findings — route-specific /api/secrets token oracle still absent",
-      "burpbountylab.com/crlf/set: 88 findings — hub fingerprint"
+      "brokencrystals.com/api/secrets: brokencrystals-secrets-live-oracle now fires (38→41 findings)",
+      "brokencrystals.com/api/safe-files: brokencrystals-safe-files-rfi-live-oracle now fires (36→39 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (no Resend key in bundle; sensitive_data covered via other slugs)",
-      "vuln-expose.vercel.app primary host intermittently behind Vercel Security Checkpoint — mirror vulns-expose.jveltri.com.ar used for validation",
-      "brokencrystals.com/api/goto: DNS/connect failure (repeat)",
+      "brokencrystals /api/products/search and /api/users/me return HTTP 403 on production — route-specific SQLi/BOPLA oracles blocked",
       "brokencrystals adminpermission oracle: requires authenticated session; still queued",
-      "brokencrystals API oracles (secrets/safe-files/products-search/users-me): route-specific oracles still absent",
       "pwnshop/forgot-password + lab-stats + admin: still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 12,
+    "brokencrystals.com/api/secrets": 41,
+    "brokencrystals.com/api/safe-files": 39,
     "brokencrystals.com/api/users/ldap": 38,
     "vulns-expose.jveltri.com.ar/api/auth/login": 10,
     "vulns-expose.jveltri.com.ar/api/search": 10,
-    "brokencrystals.com/api/secrets": 38,
-    "brokencrystals.com/api/hidden-upload": 36,
     "burpbountylab.com/cve/f5/": 87,
     "burpbountylab.com/webadmin/tools/systemstatus_remote.php": 88,
     "pwnshop.ctfsecurity.com/api/v1/chat/init": 12

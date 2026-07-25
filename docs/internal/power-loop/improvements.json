@@ -7457,6 +7457,18 @@
       "slug": "vuln-expose-sqli-search-api-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET https://vulns-expose.jveltri.com.ar/api/search?q=test echoes \"query\":\"SELECT * FROM products...\" plus vulnerabilities.union_select hints; vuln-expose.vercel.app/api/search gains oracle on reachable mirror; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/secrets returns Slack xoxo-, Facebook EAAC, Google OAuth, PayPal access_token, CodeClimate tokens; brokencrystals.com/api/secrets findings 38→41; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-safe-files-rfi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/safe-files {\"name\":\"test\",\"url\":\"https://filedealer.nexploit.app/rfi.md5.txt\"} returns content 245cc0a508bf7f0ff754c84c0fe0b5bc; brokencrystals.com/api/safe-files findings 36→39; benchmark juice-shop 12 findings 6/6 maintained"
     }
   ],
   "shipped": [
