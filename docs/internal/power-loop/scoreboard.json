@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T06:10:00.000Z",
+  "updated_at": "2026-07-25T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2474,
-  "total_findings": 16732,
+  "total_sites_scanned": 2512,
+  "total_findings": 18387,
   "critical_findings": 45,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1798,
-  "discovery_findings": 13871,
-  "improvements_shipped": 1083,
-  "last_run": "2026-07-25T06:10:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1816,
+  "discovery_findings": 15456,
+  "improvements_shipped": 1092,
+  "last_run": "2026-07-25T06:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "No benchmark misses — recall stable at 6/6 (10 findings)",
+      "note": "Stable 6/6 first-pass recall with deep crawl (pages=6 probes=295)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,28 +48,31 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 3,
-      "findings": 153,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 374,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "Burp Bounty Lab SSTI preview, URL-context XSS, SQLi user-profile oracles",
+      "focus": "Burp Bounty Lab SSTI preview, URL-context XSS, SQLi user-profile error-based oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
       "burpbountylab.com/ssti/preview: content={{7*7}} evaluates to 49 (9→50 findings)",
-      "burpbountylab.com/xss/url: javascript: link reflected in href/img/form/iframe (48→51 findings)",
-      "burpbountylab.com/sqli/user: id=1 admin profile + id=1' MySQL syntax error (48→52 findings)"
+      "burpbountylab.com/xss/url: javascript: link reflected in href/img/form/iframe (57→60 findings)",
+      "burpbountylab.com/sqli/user: id=1 admin profile + id=1' MySQL syntax error (55→58 findings)",
+      "edward-playground.github.io/top10-showcase: client-side-prompt-injection-evidence (3 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "burpbountylab.com/cve/jira/dashboard: route returns 404 — no positive-proof CVE-Jira oracle",
-      "burpbountylab.com/cve/confluence: route returns 404 — Confluence OGNL RCE oracle unreachable",
-      "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "burpbountylab.com/xss/discover: multi-param XSS discovery oracle still absent",
+      "burpbountylab.com/cve/text4shell: Text4Shell CVE route-specific oracle still absent",
+      "burpbountylab.com/ai/mcp/tools: MCP tools disclosure route-specific oracle still absent",
+      "burpbountylab.com/cve/jira/dashboard: Jira CVE route returns 404 — no positive-proof oracle",
+      "top10-showcase: LLM attack chains require interactive scenario navigation beyond shallow crawl"
     ]
   },
   "discovery_highlights": {
@@ -203,8 +206,8 @@
     "hack-this-site-eta.vercel.app/admin/users.html": 36,
     "hack-this-site-eta.vercel.app/platform/aspnet.html": 37,
     "hack-this-site-eta.vercel.app/platform/python.html": 39,
-    "hack-this-site-eta.vercel.app/home/index.html": 40,
     "hack-this-site-eta.vercel.app/platform/index.html": 40,
+    "hack-this-site-eta.vercel.app/home/index.html": 40,
     "hack-this-site-eta.vercel.app/platform/ruby.html": 39,
     "wrongsecrets.onrender.com": 1,
     "knowledge-vault-five.vercel.app/cybersecurity": 13,
@@ -253,18 +256,36 @@
     "burpbountylab.com/pt/include": 45,
     "burpbountylab.com/redirect/meta": 52,
     "burpbountylab.com/passive/params": 39,
-    "burpbountylab.com/ai/health": 44,
-    "burpbountylab.com/ai/metrics": 45,
-    "burpbountylab.com/source/app.py~": 45,
+    "burpbountylab.com/ai/health": 51,
+    "burpbountylab.com/ai/metrics": 51,
+    "burpbountylab.com/source/app.py~": 51,
     "burpbountylab.com/robots.txt": 44,
     "burpbountylab.com/cve/confluence": 45,
     "burpbountylab.com/xss/encoded": 48,
-    "burpbountylab.com/rce/echo": 44,
-    "burpbountylab.com/rce/expect": 45,
-    "burpbountylab.com/ssrf/img": 48,
-    "burpbountylab.com/cve/jira/dashboard": 42,
-    "burpbountylab.com/ssti/preview": 50,
-    "burpbountylab.com/xss/url": 51,
-    "burpbountylab.com/sqli/user": 52
+    "burpbountylab.com/rce/echo": 54,
+    "burpbountylab.com/rce/expect": 54,
+    "burpbountylab.com/ssrf/img": 53,
+    "burpbountylab.com/cve/jira/dashboard": 56,
+    "burpbountylab.com/passive/graphql": 48,
+    "burpbountylab.com/source/config.bak": 47,
+    "burpbountylab.com/wp/xmlrpc.php": 53,
+    "burpbountylab.com/sqli/user": 58,
+    "burpbountylab.com/cve/tomcat": 54,
+    "burpbountylab.com/wp/wp-login.php": 57,
+    "burpbountylab.com/actuator/health": 51,
+    "burpbountylab.com/cve/grafana": 57,
+    "burpbountylab.com/drupal/user/autocomplete/admin": 51,
+    "burpbountylab.com/passive/api/v1/data": 57,
+    "burpbountylab.com/cve/forti": 54,
+    "burpbountylab.com/cve/weblogic": 54,
+    "burpbountylab.com/actuator/mappings": 54,
+    "burpbountylab.com/graphql/query": 53,
+    "burpbountylab.com/ai/status": 54,
+    "edward-playground.github.io/top10-showcase": 3,
+    "burpbountylab.com/xss/url": 60,
+    "burpbountylab.com/xss/discover": 57,
+    "burpbountylab.com/cve/text4shell": 57,
+    "burpbountylab.com/ai/mcp/tools": 57,
+    "hack-this-site-eta.vercel.app/cms": 41
   }
 }
