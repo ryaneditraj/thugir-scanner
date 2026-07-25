@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T17:17:19.209Z",
+  "updated_at": "2026-07-25T17:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -23,15 +23,15 @@
   "discovery_urls_added": 1871,
   "discovery_findings": 19365,
   "improvements_shipped": 1122,
-  "last_run": "2026-07-25T17:17:19.209Z",
+  "last_run": "2026-07-25T17:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 first-pass recall (13 findings, pages=6 probes=369); jwt-alg-none-accepted + reflexion-escalated-ssti + thugir-dir-discovery present; secret-resend slug still absent",
+      "note": "Stable 6/6 recall (12 findings); no benchmark misses; secret-resend slug still absent (sensitive_data via juice-shop-leaked-api-key + vibe-unauthenticated-api-routes)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -63,35 +63,36 @@
       "dns_failures": [
         "https://brokencrystals.com/api/goto"
       ],
-      "focus": "brokencrystals route-specific oracles (secrets, safe-files RFI, products/search SQLi, users/me BOPLA, hidden-upload page) + queue drain (crlf/set, ai/chat/completions)",
-      "improvements_shipped_this_run": 0
+      "focus": "brokencrystals LDAP injection + vuln-expose API oracles (auth bypass, SQLi search)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses; secret-resend slug still absent",
-      "brokencrystals.com/api/secrets: 38 findings — brokencrystals dir-discovery fingerprint; route-specific /api/secrets token oracle still absent",
-      "brokencrystals.com/api/safe-files: 36 findings — RFI oracle not triggered; goto/aws/hidden-upload live-oracles fire on every brokencrystals route",
-      "brokencrystals.com/api/products/search?name=test: 37 findings — sqli-query-param-injection present but route-specific products/search SQLi oracle absent",
-      "brokencrystals.com/hidden-upload: 37 findings — brokencrystals-hidden-upload-live-oracle fires but DOM-XSS upload page oracle still absent",
-      "burpbountylab.com/crlf/set: 88 findings — hub fingerprint",
-      "burpbountylab.com/ai/v1/chat/completions: 88 findings — hub fingerprint"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
+      "brokencrystals.com/api/users/ldap: brokencrystals-ldap-injection-live-oracle now fires (37→38 findings)",
+      "vulns-expose.jveltri.com.ar/api/auth/login: vuln-expose-auth-bypass-api-live-oracle confirmed (SQLi admin bypass)",
+      "vulns-expose.jveltri.com.ar/api/search: vuln-expose-sqli-search-api-live-oracle confirmed (SQL query echo + UNION hints)",
+      "brokencrystals.com/api/secrets: 38 findings — route-specific /api/secrets token oracle still absent",
+      "burpbountylab.com/crlf/set: 88 findings — hub fingerprint"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop (no Resend key in bundle; sensitive_data covered via other slugs)",
+      "vuln-expose.vercel.app primary host intermittently behind Vercel Security Checkpoint — mirror vulns-expose.jveltri.com.ar used for validation",
       "brokencrystals.com/api/goto: DNS/connect failure (repeat)",
-      "brokencrystals API oracles (secrets/safe-files/products-search/users-me): hub fingerprint ~37/route fires goto/aws/hidden-upload live-oracles regardless of endpoint — route-specific secrets/RFI/SQLi/BOPLA oracles still absent",
-      "brokencrystals LDAP + adminpermission + vuln-expose API oracles: still queued end, pending drain",
-      "pwnshop/forgot-password + lab-stats + admin: still queued, not yet scanned"
+      "brokencrystals adminpermission oracle: requires authenticated session; still queued",
+      "brokencrystals API oracles (secrets/safe-files/products-search/users-me): route-specific oracles still absent",
+      "pwnshop/forgot-password + lab-stats + admin: still queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 13,
+    "juice-shop.herokuapp.com": 12,
+    "brokencrystals.com/api/users/ldap": 38,
+    "vulns-expose.jveltri.com.ar/api/auth/login": 10,
+    "vulns-expose.jveltri.com.ar/api/search": 10,
     "brokencrystals.com/api/secrets": 38,
-    "brokencrystals.com/api/safe-files": 36,
-    "brokencrystals.com/api/products/search?name=test": 37,
-    "brokencrystals.com/api/users/me": 37,
-    "brokencrystals.com/hidden-upload": 37,
-    "burpbountylab.com/crlf/set": 88,
-    "burpbountylab.com/ai/v1/chat/completions": 88,
+    "brokencrystals.com/api/hidden-upload": 36,
+    "burpbountylab.com/cve/f5/": 87,
+    "burpbountylab.com/webadmin/tools/systemstatus_remote.php": 88,
+    "pwnshop.ctfsecurity.com/api/v1/chat/init": 12
   }
 }
