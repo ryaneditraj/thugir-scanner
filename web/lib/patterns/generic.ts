@@ -13393,6 +13393,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-hidden-upload-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals unrestricted file upload oracle",
+    description:
+      "POST /api/hidden-upload accepts image file uploads and returns the file as a base64 data URI without authentication — the Broken Crystals unrestricted upload oracle.",
+    impactOneline:
+      "Unauthenticated file upload endpoints let attackers store malicious content and chain into XSS or remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHiddenUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and strict file validation on upload endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Authenticate all file upload routes and enforce role-based access control.",
+        "Validate file types with magic-byte inspection, not just Content-Type headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hidden-upload endpoint accepts unauthenticated image uploads and returns base64 content. Show upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-api-config",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -16639,6 +16665,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/magmi/ endpoint exposes MAGMI Utils JS. Show Magento MAGMI plugin hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-f5-bash-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab F5 BIG-IP bash RCE CVE live oracle",
+    description:
+      "GET /cve/f5/ returns an F5 BIG-IP heading and /mgmt/tm/util/bash exposes the management bash API — the Burp Bounty F5 bash RCE CVE profile oracle.",
+    impactOneline:
+      "Live F5 BIG-IP fingerprint and management API probe confirms route-specific bash RCE CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyF5BashCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch F5 BIG-IP appliances and restrict /mgmt/tm/util/bash to trusted management networks.",
+      steps: [
+        "Apply F5 security advisories for tm.util.bash RCE CVEs.",
+        "Block public access to BIG-IP management interfaces.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/f5/ endpoint fingerprints F5 BIG-IP and /mgmt/tm/util/bash exposes bash RCE. Show BIG-IP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Netsweeper systemstatus CVE live oracle",
+    description:
+      "GET /webadmin/tools/systemstatus_remote.php returns a System Status heading — the Burp Bounty Netsweeper systemstatus_remote.php CVE profile oracle.",
+    impactOneline:
+      "Live Netsweeper systemstatus probe confirms route-specific webadmin CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperSystemstatusCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict webadmin tools to trusted management networks.",
+      steps: [
+        "Apply Netsweeper security advisories for systemstatus_remote.php CVEs.",
+        "Block public access to /webadmin/tools/ management endpoints.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /webadmin/tools/systemstatus_remote.php endpoint exposes Netsweeper system status. Show appliance hardening.",
     version: 1,
     enabled: true
   },

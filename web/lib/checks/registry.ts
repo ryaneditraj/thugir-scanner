@@ -9097,6 +9097,54 @@ const burpbountyMagmiCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyF5BashCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/f5/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*F5\s+BIG-IP\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  const bashUrl = new URL("/mgmt/tm/util/bash", ctx.origin).toString();
+  const bashDoc = await ctx.probe.get(bashUrl, {
+    method: "POST",
+    body: JSON.stringify({ command: "id" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512
+  });
+  const bashMgmtOk =
+    bashDoc.status === 401 ||
+    /Unauthorized/i.test(bashDoc.body) ||
+    /BIG-IP|tm\.util\.bash/i.test(bashDoc.body);
+  if (!bashMgmtOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      bashUrl,
+      bashStatus: bashDoc.status,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab GET /cve/f5/ returns F5 BIG-IP heading and /mgmt/tm/util/bash exposes management API — F5 bash RCE CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyNetsweeperSystemstatusCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/webadmin/tools/systemstatus_remote.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*System\s+Status\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /webadmin/tools/systemstatus_remote.php returns System Status heading — Netsweeper systemstatus CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32251,6 +32299,39 @@ const brokencrystalsAwsMetadataSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
+  const boundary = `----ThugirBcUpload${Date.now().toString(36)}`;
+  const fileContent = "\x89PNG\r\n\x1a\n";
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="file"; filename="probe.png"',
+    "Content-Type: image/png",
+    "",
+    fileContent,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"content"\s*:\s*"data:image\/png;base64,/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: uploadUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/hidden-upload accepts image uploads and returns base64 data URI content — unrestricted file upload oracle"
+    }
+  };
+};
+
 // --- Unauthenticated /api/config exposing DB credentials (brokencrystals.com) -----------
 const EXPOSED_CONFIG_PATHS = ["/api/config", "/config.json", "/api/configuration"];
 const SENSITIVE_CONFIG_MARKERS: { label: string; re: RegExp }[] = [
@@ -34050,6 +34131,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsPrototypePollutionEvidence,
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
+  brokencrystalsHiddenUploadLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -34195,6 +34277,8 @@ export const RULES: Record<string, Rule> = {
   burpbountySharefileCveLiveOracle,
   burpbountyArticaCveLiveOracle,
   burpbountyMagmiCveLiveOracle,
+  burpbountyF5BashCveLiveOracle,
+  burpbountyNetsweeperSystemstatusCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
