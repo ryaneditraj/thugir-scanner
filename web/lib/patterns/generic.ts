@@ -15395,6 +15395,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-rce-expect-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab expect RCE executes shell commands",
+    description:
+      "GET /rce/expect?cmd= runs attacker-supplied commands via PHP expect and returns uid/gid output without sanitization.",
+    impactOneline:
+      "Live expect/RCE probe confirms OS command execution oracle for Burp Bounty scanner profile calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRceExpectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable expect wrappers and never pass user input to shell execution.",
+      steps: [
+        "Remove expect-based command execution from web-facing code paths.",
+        "Use parameterized APIs instead of shelling out with user input.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/expect endpoint executes shell commands from the cmd query parameter. Show how to prevent OS command injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-rce-echo-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab echo RCE reflects command output",
+    description:
+      "GET /rce/echo?input= echoes attacker-controlled values inside a command-output pre block without sanitization.",
+    impactOneline:
+      "Live echo/RCE probe confirms unsanitized command output reflection for Burp Bounty scanner profile calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRceEchoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo unsanitized user input into command output contexts.",
+      steps: [
+        "Remove shell echo wrappers that reflect user input.",
+        "Encode or reject metacharacters in any command-adjacent parameters.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/echo endpoint reflects user input in command output. Show how to prevent command injection and output reflection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-source-disclosure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab backup file exposes PHP source code",
+    description:
+      "GET /source/test.php~ returns PHP source with mysqli_connect credentials from an editor backup file.",
+    impactOneline:
+      "Live backup/source probe confirms source-code disclosure oracle with embedded database credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySourceDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove editor backup files (~) from web roots and block access to source artifacts.",
+      steps: [
+        "Delete *.php~, *.bak, and similar backup files from public directories.",
+        "Deny requests for tilde-suffixed paths at the web server.",
+        "Rotate any credentials exposed in disclosed source files."
+      ]
+    },
+    fixPrompt:
+      "Our /source/test.php~ backup exposes PHP source with database passwords. Show how to block backup disclosure and rotate secrets.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

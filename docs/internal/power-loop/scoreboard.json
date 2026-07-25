@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T00:05:53.034Z",
+  "updated_at": "2026-07-25T00:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1786,
   "discovery_findings": 13173,
-  "improvements_shipped": 1071,
-  "last_run": "2026-07-25T00:06:00.000Z",
+  "improvements_shipped": 1074,
+  "last_run": "2026-07-25T00:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -55,22 +55,22 @@
       "findings": 322,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab status-code SQLi, content-length SQLi, PHP include traversal, meta-redirect, passive vuln-params; hack-this-site-eta auth routes",
-      "improvements_shipped_this_run": 0
+      "focus": "BurpBountyLab hub RCE expect/echo + source disclosure oracles; prior queue status-code SQLi, PHP-include, meta-redirect routes",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — stable first-pass deep crawl (pages=6 probes=314)",
-      "burpbountylab.com/passive/params: reflected-xss-query-param route-specific oracle (39 findings)",
-      "burpbountylab.com/sqli/status: hub fingerprint 39 findings — route-specific status-code SQLi oracle still absent",
-      "burpbountylab.com/sqli/length: hub fingerprint 39 findings — route-specific content-length SQLi oracle still absent",
-      "burpbountylab.com/pt/include: hub fingerprint 39 findings — route-specific PHP-include traversal oracle still absent",
-      "burpbountylab.com/redirect/meta: hub fingerprint 39 findings — route-specific meta-refresh redirect oracle still absent",
-      "hack-this-site-eta.vercel.app/auth/jwt.html: 44 findings incl client-side auth lab evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — stable first-pass deep crawl",
+      "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle uid=999(appuser) command output",
+      "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle reflects canary in pre block",
+      "burpbountylab.com/source/test.php~: burpbounty-source-disclosure-live-oracle mysqli_connect credentials",
+      "hack-this-site-eta.vercel.app/auth/jwt.html: 44 findings incl vulnlab-jwt-decode-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab route pages: hub fingerprint dominates (~39/route); route-specific status-code SQLi, content-length SQLi, PHP-include, meta-redirect oracles still absent"
+      "secret-resend slug still absent on juice-shop benchmark (Resend key not in social feeds or FTP backups)",
+      "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
+      "burpbountylab.com/rce/cmd /sqli/id /pt/linux /xxe/parser: routes return 404 (lab paths removed or renamed)",
+      "burpbountylab route pages: hub fingerprint dominates (~39/route); status-code SQLi, content-length SQLi, PHP-include, meta-redirect oracles still absent"
     ]
   },
   "discovery_highlights": {
