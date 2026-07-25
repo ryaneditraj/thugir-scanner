@@ -7385,6 +7385,24 @@
       "slug": "burpbounty-wp-lfi-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/wp/local-file-inclusion?file=../../../etc/passwd returns root:x:0:0:/etc/passwd; burpbountylab.com/cve/wp/local-file-inclusion findings 75→80; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sharefile-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/citrix/sharefile/download?path=../../../windows/win.ini returns [fonts] win.ini; burpbountylab.com/citrix/sharefile/ findings 75→85; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-artica-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/artica/fw.login.php returns Artica Web Proxy with apikey field; burpbountylab.com/cve/artica/fw.login.php findings 75→86; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-magmi-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/magmi/ returns MAGMI Utils JS var magmi={}; burpbountylab.com/cve/magmi/ findings 75→86; benchmark juice-shop 13 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12952,6 +12970,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-wp-lfi-cve-live-oracle",
       "shipped_at": "2026-07-25T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sharefile-cve-live-oracle",
+      "shipped_at": "2026-07-25T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-artica-cve-live-oracle",
+      "shipped_at": "2026-07-25T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-magmi-cve-live-oracle",
+      "shipped_at": "2026-07-25T14:10:00.000Z"
     }
   ]
 }
