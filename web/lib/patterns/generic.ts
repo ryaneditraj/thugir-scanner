@@ -13497,6 +13497,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-users-search-exposure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/search excessive data exposure oracle",
+    description:
+      "GET /api/users/search/ returns cardNumber and phoneNumber for multiple users without authentication — the Broken Crystals excessive data exposure oracle.",
+    impactOneline:
+      "Unauthenticated user search APIs leak payment card numbers and phone numbers attackers can use for fraud and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUsersSearchExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers or phone numbers via unauthenticated search APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning user profile data.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/search/ endpoint returns cardNumber and phoneNumber without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/testimonials/count SQL injection oracle",
+    description:
+      "GET /api/testimonials/count?query= executes attacker-controlled SQL — an information_schema table-count probe returns a numeric count, proving unsanitized SQL execution.",
+    impactOneline:
+      "SQL injection in count endpoints lets attackers read or modify database contents via the query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all SQL — Broken Crystals is intentional lab software.",
+      steps: [
+        "Replace dynamic SQL string building with prepared statements or ORM bindings.",
+        "Restrict count endpoints to predefined safe operations.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count endpoint executes SQL from the query parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-partner-login-xpath-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/partners/partnerLogin XPATH injection oracle",
+    description:
+      "GET /api/partners/partnerLogin with boolean XPATH injection (' or '1'='1) returns multiple <password> elements in the XML response — the Broken Crystals credential disclosure oracle.",
+    impactOneline:
+      "XPATH injection in login endpoints lets attackers extract other users' passwords from XML responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPartnerLoginXpathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize XPATH queries and escape user input — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into XPATH filter strings.",
+        "Use parameterized XPATH APIs or strict allow-list validation on credentials.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/partners/partnerLogin endpoint is vulnerable to XPATH injection that leaks passwords. Show XPATH hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-auth-bypass-api-live-oracle",
     platform: "generic",
     category: "Authentication bypass",
