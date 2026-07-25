@@ -7704,6 +7704,97 @@ const burpbountySsrfImgLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyAiHealthLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/health", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const modelProvider = String(parsed.model_provider ?? parsed.llm_provider ?? "");
+  const vectorDb = String(parsed.vector_db ?? "");
+  const ragEnabled = parsed.rag_enabled;
+  const usage = parsed.usage;
+  const usageOk =
+    usage &&
+    typeof usage === "object" &&
+    "prompt_tokens" in (usage as Record<string, unknown>) &&
+    "completion_tokens" in (usage as Record<string, unknown>);
+  if (
+    status !== "ok" ||
+    !modelProvider ||
+    !vectorDb ||
+    typeof ragEnabled !== "boolean" ||
+    !usageOk
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      modelProvider,
+      vectorDb,
+      ragEnabled,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Burp Bounty Lab GET /ai/health returns JSON with model_provider, vector_db, rag_enabled, and token usage — AI infrastructure health disclosure profile oracle distinct from /ai/v1/chat/completions"
+    }
+  };
+};
+
+const burpbountyAiMetricsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/metrics", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasHelp =
+    /# HELP prompt_tokens/i.test(doc.body) &&
+    /# HELP completion_tokens/i.test(doc.body) &&
+    /# TYPE total_tokens counter/i.test(doc.body);
+  const hasSeries =
+    /prompt_tokens\{model_name=/i.test(doc.body) &&
+    /completion_tokens\{model_name=/i.test(doc.body) &&
+    /service_info\{service_version=/i.test(doc.body);
+  if (!hasHelp || !hasSeries) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /ai/metrics exposes Prometheus counters for prompt_tokens, completion_tokens, and service_info — AI observability metrics disclosure profile oracle"
+    }
+  };
+};
+
+const burpbountySourceAppBackupLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/source/app.py~", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sourceOk =
+    /<\?php/i.test(doc.body) &&
+    /mysqli_connect|mysql_connect/i.test(doc.body) &&
+    /\$db_pass\s*=\s*['"][^'"]+['"]/i.test(doc.body) &&
+    /Database configuration/i.test(doc.body);
+  if (!sourceOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /source/app.py~ returns PHP source with database credentials via editor backup suffix — source-disclosure profile oracle distinct from /source/test.php~"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32617,6 +32708,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyRedirectMetaLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
+  burpbountyAiHealthLiveOracle,
+  burpbountyAiMetricsLiveOracle,
+  burpbountySourceAppBackupLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

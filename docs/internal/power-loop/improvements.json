@@ -7187,6 +7187,24 @@
       "slug": "burpbounty-ssrf-img-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ssrf/img?src=http://example.com/img.png returns Example Domain HTML (not No image source); burpbountylab.com/ssrf/img findings 42→48; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-health-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/health returns {\"status\":\"ok\",\"model_provider\":\"openai\",\"vector_db\":\"pinecone\",\"rag_enabled\":true,\"usage\":{\"prompt_tokens\":12345}}; burpbountylab.com/ai/health findings 44→51; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-metrics-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/metrics returns Prometheus # HELP prompt_tokens + completion_tokens counters with model_name=gpt-4o-mini; burpbountylab.com/ai/metrics findings 45→51; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-source-app-backup-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/source/app.py~ returns PHP source with $db_pass='password123' via editor backup suffix; burpbountylab.com/source/app.py~ gains route-specific oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12589,6 +12607,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ssrf-img-live-oracle",
       "shipped_at": "2026-07-25T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-health-live-oracle",
+      "shipped_at": "2026-07-25T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-metrics-live-oracle",
+      "shipped_at": "2026-07-25T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-source-app-backup-live-oracle",
+      "shipped_at": "2026-07-25T03:10:00.000Z"
     }
   ]
 }

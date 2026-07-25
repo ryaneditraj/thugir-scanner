@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T03:08:52.721Z",
+  "updated_at": "2026-07-25T03:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1801,
   "discovery_findings": 14244,
-  "improvements_shipped": 1080,
+  "improvements_shipped": 1083,
   "last_run": "2026-07-25T03:09:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
@@ -56,12 +56,15 @@
       "skipped_48h": [],
       "dns_failures": [],
       "focus": "BurpBountyLab WordPress XML-RPC, GraphQL path detection, CVE Tomcat, SQLi user enum, config.bak source disclosure",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
       "burpbountylab.com/source/config.bak: burpbounty-source-disclosure-live-oracle — PHP config backup exposed (47 findings)",
       "burpbountylab.com/passive/graphql: graphql-introspection-enabled on GraphQL path detection route (48 findings)",
+      "burpbountylab.com/ai/health: JSON model_provider + vector_db + rag_enabled token usage (51 findings)",
+      "burpbountylab.com/ai/metrics: Prometheus prompt_tokens/completion_tokens counters (51 findings)",
+      "burpbountylab.com/source/app.py~: PHP backup source with $db_pass credential leak (51 findings)",
       "burpbountylab.com/sqli/user?id=1: hub fingerprint dominates (49 findings); route-specific user-enum SQLi oracle still absent",
       "burpbountylab.com/wp/xmlrpc.php: hub fingerprint dominates (48 findings); WordPress XML-RPC route-specific oracle still absent",
       "burpbountylab.com/cve/tomcat/: hub fingerprint dominates (47 findings); CVE-Tomcat route-specific oracle still absent"
@@ -71,6 +74,7 @@
       "burpbountylab.com/wp/xmlrpc.php: WordPress XML-RPC route-specific oracle still absent",
       "burpbountylab.com/cve/tomcat: CVE-Tomcat route-specific oracle still absent",
       "burpbountylab.com/sqli/user: user-enumeration SQLi route-specific oracle still absent",
+      "burpbountylab.com/cve/confluence: route returns 404 — no positive-proof Confluence OGNL oracle",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
@@ -255,9 +259,9 @@
     "burpbountylab.com/pt/include": 45,
     "burpbountylab.com/redirect/meta": 52,
     "burpbountylab.com/passive/params": 39,
-    "burpbountylab.com/ai/health": 44,
-    "burpbountylab.com/ai/metrics": 45,
-    "burpbountylab.com/source/app.py~": 45,
+    "burpbountylab.com/ai/health": 51,
+    "burpbountylab.com/ai/metrics": 51,
+    "burpbountylab.com/source/app.py~": 51,
     "burpbountylab.com/robots.txt": 44,
     "burpbountylab.com/cve/confluence": 45,
     "burpbountylab.com/xss/encoded": 48,
