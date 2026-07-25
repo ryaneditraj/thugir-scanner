@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T01:04:12.371Z",
+  "updated_at": "2026-07-25T01:07:57.210Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2456,
-  "total_findings": 16025,
+  "total_sites_scanned": 2464,
+  "total_findings": 16357,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1786,
-  "discovery_findings": 13173,
+  "discovery_urls_added": 1791,
+  "discovery_findings": 13505,
   "improvements_shipped": 1074,
-  "last_run": "2026-07-25T01:04:12.371Z",
+  "last_run": "2026-07-25T01:07:57.210Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 (10 findings) — no benchmark misses",
+      "note": "Benchmark recall stable at 6/6 (9 findings) — no benchmark misses; security-question-disclosure absent but sensitive_data via juice-shop-leaked-api-key + vibe-unauthenticated-api-routes",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,25 +52,25 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 322,
+      "findings": 332,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab hub RCE expect/echo + source disclosure oracles; prior queue status-code SQLi, PHP-include, meta-redirect routes",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab encoded XSS, RCE echo/expect, SSRF img, CVE Jira dashboard; hack-this-site auth/reset + env-file + clickjacking labs",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — stable first-pass deep crawl",
-      "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle uid=999(appuser) command output",
-      "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle reflects canary in pre block",
-      "burpbountylab.com/source/test.php~: burpbounty-source-disclosure-live-oracle mysqli_connect credentials",
-      "hack-this-site-eta.vercel.app/auth/jwt.html: 44 findings incl vulnlab-jwt-decode-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (9 findings) — stable first-pass deep crawl pages=6 probes=295",
+      "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle present (hub fingerprint + route echo)",
+      "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle present",
+      "burpbountylab.com/xss/encoded: hub fingerprint dominates (~41/route); encoded-XSS route-specific oracle still absent",
+      "burpbountylab.com/cve/jira/dashboard: hub fingerprint only — CVE-2019-11581 Jira SSTI oracle still absent",
+      "hack-this-site-eta.vercel.app/labs/clickjacking.html: vulnlab-clickjacking-live-oracle present"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (Resend key not in social feeds or FTP backups)",
-      "burpbountylab.com/rce/blind: collaborator-only blind RCE — no positive-proof oracle without OOB callback",
-      "burpbountylab.com/rce/cmd /sqli/id /pt/linux /xxe/parser: routes return 404 (lab paths removed or renamed)",
-      "burpbountylab route pages: hub fingerprint dominates (~39/route); status-code SQLi, content-length SQLi, PHP-include, meta-redirect oracles still absent"
+      "secret-resend slug still absent on juice-shop benchmark",
+      "burpbountylab route pages: hub fingerprint dominates (~41/route); encoded-XSS, SSRF-img, CVE-Jira route-specific oracles still absent",
+      "hack-this-site-eta SPA routes share same bundle fingerprint — per-route oracles collapse to hub markers"
     ]
   },
   "discovery_highlights": {
@@ -254,6 +254,11 @@
     "burpbountylab.com/sqli/length": 39,
     "burpbountylab.com/pt/include": 39,
     "burpbountylab.com/redirect/meta": 39,
-    "burpbountylab.com/passive/params": 39
+    "burpbountylab.com/passive/params": 39,
+    "burpbountylab.com/xss/encoded": 41,
+    "burpbountylab.com/rce/echo": 42,
+    "burpbountylab.com/rce/expect": 42,
+    "burpbountylab.com/ssrf/img": 42,
+    "burpbountylab.com/cve/jira/dashboard": 42
   }
 }
