@@ -16248,7 +16248,7 @@ const vulnExposeAuthBypassApiLiveOracle: Rule = async (ctx) => {
     body: payload,
     headers: { "Content-Type": "application/json" },
     maxBytes: 4096,
-    timeoutMs: 12000
+    timeoutMs: 60000
   });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   if (!/"success"\s*:\s*true/i.test(doc.body)) return NEGATIVE;
@@ -16269,7 +16269,7 @@ const vulnExposeSqliSearchApiLiveOracle: Rule = async (ctx) => {
   if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
   const searchUrl = new URL("/api/search", ctx.origin);
   searchUrl.searchParams.set("q", "test");
-  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 8192, timeoutMs: 60000 });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
   if (!/"vulnerabilities"\s*:/.test(doc.body)) return NEGATIVE;
