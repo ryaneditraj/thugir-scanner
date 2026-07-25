@@ -3,6 +3,7 @@ import type { TierName } from "../settings/schema";
 import { analyzeScan, type AiAnalysis } from "../ai/analyze";
 import { aiDeepProbe } from "../ai/deep-probe";
 import { applyStaticMaxDamage, overlayAiMaxDamage } from "../findings/max-damage";
+import { runAgentScan, agentAvailability, mapAgentFindings } from "../agent";
 
 export interface EnrichScanArgs {
   findings: PatternFinding[];
@@ -20,6 +21,7 @@ export interface EnrichedScan {
   ai: AiAnalysis | null;
   stats: {
     aiFindingsAdded: number;
+    agentFindingsAdded: number;
     totalFindings: number;
   };
 }
@@ -28,6 +30,7 @@ export interface EnrichedScan {
 export async function enrichScanResults(args: EnrichScanArgs): Promise<EnrichedScan> {
   let findings = [...args.findings];
   const baseCount = findings.length;
+  let agentAdded = 0;
 
   if (args.isDeep && args.combined && args.origin) {
     const aiHits = await aiDeepProbe({
@@ -43,6 +46,31 @@ export async function enrichScanResults(args: EnrichScanArgs): Promise<EnrichedS
         seen.add(hit.title.toLowerCase());
         findings.push(hit);
       }
+    }
+  }
+
+  const agentEnabled =
+    process.env.THUGIR_AGENT_SCAN_ENABLED === "1" ||
+    process.env.NODE_ENV === "development";
+  if (args.isDeep && agentEnabled && agentAvailability().available) {
+    try {
+      const agent = runAgentScan({
+        url: args.target,
+        scan_mode: process.env.THUGIR_AGENT_SCAN_MODE === "deep" ? "deep" : "quick"
+      });
+      if (agent.ok && agent.findings?.length) {
+        const mapped = mapAgentFindings(agent.findings, args.target);
+        const seen = new Set(findings.map((f) => f.patternSlug));
+        for (const hit of mapped) {
+          if (!seen.has(hit.patternSlug)) {
+            seen.add(hit.patternSlug);
+            findings.push(hit);
+            agentAdded++;
+          }
+        }
+      }
+    } catch {
+      /* agent layer optional */
     }
   }
 
@@ -69,7 +97,8 @@ export async function enrichScanResults(args: EnrichScanArgs): Promise<EnrichedS
     findings,
     ai,
     stats: {
-      aiFindingsAdded: findings.length - baseCount,
+      aiFindingsAdded: findings.length - baseCount - agentAdded,
+      agentFindingsAdded: agentAdded,
       totalFindings: findings.length
     }
   };

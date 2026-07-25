@@ -31,13 +31,16 @@ worker/.venv/
 worker/venv/
 .venv/
 
-# ---- local runtime data ----
-.data/
-web/.data/
+# ---- Thugir Agent Engine runtime ----
+services/thugir-agent/.thugir-runs/
+services/thugir-agent/.thugir-config/
+services/thugir-agent/**/__pycache__/
 
-# ---- engine submodule build artifacts (if vendored at engine/) ----
-engine/**/__pycache__/
-engine/**/*.pyc
+
+# ---- TCSF engine (scripts/sync-engine.sh → ./engine) ----
+# Ignore synced tree; keep the placeholder tracked.
+engine/*
+!engine/.gitkeep
 
 # ---- OS / editor ----
 .DS_Store

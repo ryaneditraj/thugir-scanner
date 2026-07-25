@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AI_PROVIDERS, PROVIDER_ENDPOINTS, type PlatformSettingsMasked, type TierName } from "@/lib/settings/schema";
+import { AI_PROVIDERS, PROVIDER_ENDPOINTS, type AiProvider, type PlatformSettingsMasked, type TierName } from "@/lib/settings/schema";
 
 const TIERS: TierName[] = ["free", "deep", "continuous"];
 
@@ -43,6 +43,10 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
   }
   function patchTier(tier: TierName, p: Partial<PlatformSettingsMasked["ai"]["tiers"][TierName]>) {
     setS((v) => ({ ...v, ai: { ...v.ai, tiers: { ...v.ai.tiers, [tier]: { ...v.ai.tiers[tier], ...p } } } }));
+  }
+  function setTierProvider(tier: TierName, provider: AiProvider) {
+    const defaults = PROVIDER_ENDPOINTS[provider];
+    patchTier(tier, { provider, baseUrl: "", model: defaults.defaultModel });
   }
   function patchPricing(tier: TierName, p: Partial<PlatformSettingsMasked["pricing"][TierName]>) {
     setS((v) => ({ ...v, pricing: { ...v.pricing, [tier]: { ...v.pricing[tier], ...p } } }));
@@ -133,7 +137,10 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
       {/* AI MODELS — per tier */}
       <section className="aset-group">
         <h2>AI models &amp; keys</h2>
-        <p className="aset-note">Each tier can use a different provider, model, and API key. Leave a key blank to keep the stored one. Keys are never shown again after saving.</p>
+        <p className="aset-note">
+          Each tier can use a different provider, model, and API key.
+          Change the <b>Model</b> field per tier — saved settings apply immediately to scans. Leave a key blank to keep the stored one or use the env fallback.
+        </p>
         <Toggle label="AI analyst layer enabled (master switch)" checked={s.ai.analystEnabled} onChange={(v) => setS((x) => ({ ...x, ai: { ...x.ai, analystEnabled: v } }))} />
         <Toggle label="AI Deep Scan (LLM reads crawled source for auth/logic bugs)" checked={s.ai.deepScanAiEnabled ?? true} onChange={(v) => setS((x) => ({ ...x, ai: { ...x.ai, deepScanAiEnabled: v } }))} />
         {TIERS.map((t) => {
@@ -158,7 +165,7 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
               <div className="aset-grid">
                 <label className="fld">
                   <span>Provider</span>
-                  <select value={cfg.provider} onChange={(e) => patchTier(t, { provider: e.target.value as typeof cfg.provider })}>
+                  <select value={cfg.provider} onChange={(e) => setTierProvider(t, e.target.value as AiProvider)}>
                     {AI_PROVIDERS.map((p) => (
                       <option key={p} value={p}>{p}</option>
                     ))}
@@ -170,7 +177,13 @@ export default function SettingsForm({ initial }: { initial: PlatformSettingsMas
                 </label>
                 <label className="fld">
                   <span>Model</span>
-                  <input value={cfg.model} onChange={(e) => patchTier(t, { model: e.target.value })} placeholder="provider/model-id" />
+                  <input
+                    value={cfg.model}
+                    onChange={(e) => patchTier(t, { model: e.target.value })}
+                    placeholder={PROVIDER_ENDPOINTS[cfg.provider].defaultModel}
+                    spellCheck={false}
+                    autoCapitalize="off"
+                  />
                 </label>
                 <label className="fld">
                   <span>API key {cfg.apiKeySet ? <em className="keyset">set · ••••{cfg.apiKeyLast4}</em> : <em className="keyunset">not set</em>}</span>

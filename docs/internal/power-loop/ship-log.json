@@ -7,6 +7,15 @@
       "commit": "d47420f",
       "gate": "pass",
       "notes": "141 security skills, methodology engine, PR triage, power-loop automations"
+    },
+    {
+      "shipped_at": "2026-07-09T19:15:00Z",
+      "method": "manual_merge",
+      "pr_number": 35,
+      "gate": "pass",
+      "patterns_shipped": 8,
+      "patterns_upgraded": 4,
+      "notes": "Recovered dead PR detections; close-orphan-prs tooling; PR #1 branch deleted"
     }
   ]
 }

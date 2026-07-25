@@ -7,12 +7,15 @@
  *   cd web && npx tsx scripts/power-scan.ts
  *   cd web && npx tsx scripts/power-scan.ts --benchmarks
  *   cd web && npx tsx scripts/power-scan.ts --queue
+ *   cd web && npx tsx scripts/power-scan.ts --benchmarks --agent
+ *   cd web && npx tsx scripts/power-scan.ts --agent --agent-deep
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runDeepScan } from "../lib/checks/runner";
 import { aiDeepProbe } from "../lib/ai/deep-probe";
+import { runAgentScan, agentAvailability, mapAgentFindings } from "../lib/agent";
 import { computeBenchmarkRecall } from "../lib/checks/benchmark-recall";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -73,6 +76,8 @@ interface ScanRunResult {
     category: string;
   }>;
   ai_findings_added: number;
+  agent_findings_added?: number;
+  agent_scan_mode?: string;
   pages_crawled: number;
   probes_run: number;
   status: "ok" | "error";
@@ -132,7 +137,11 @@ function saveResults(run: ScanRunResult) {
   writeFileSync(resultsPath, JSON.stringify(data, null, 2));
 }
 
-async function scanOne(entry: ScanEntry, kind: "benchmark" | "discovery"): Promise<ScanRunResult> {
+async function scanOne(
+  entry: ScanEntry,
+  kind: "benchmark" | "discovery",
+  opts?: { agent?: boolean; agentMode?: "quick" | "standard" | "deep" }
+): Promise<ScanRunResult> {
   const run_id = new Date().toISOString();
   const base: ScanRunResult = {
     run_id,
@@ -177,6 +186,35 @@ async function scanOne(entry: ScanEntry, kind: "benchmark" | "discovery"): Promi
       /* AI layer optional */
     }
 
+    // Thugir Agent Engine layer (Python) — max power when available
+    if (opts?.agent) {
+      const avail = agentAvailability();
+      if (avail.available) {
+        try {
+          const agent = runAgentScan({
+            url: entry.url,
+            scan_mode: opts.agentMode || "quick"
+          });
+          if (agent.ok && agent.findings?.length) {
+            const mapped = mapAgentFindings(agent.findings, entry.url);
+            const slugs = new Set(findings.map((f) => f.patternSlug));
+            let added = 0;
+            for (const h of mapped) {
+              if (!slugs.has(h.patternSlug)) {
+                findings.push(h);
+                slugs.add(h.patternSlug);
+                added++;
+              }
+            }
+            base.agent_findings_added = added;
+            base.agent_scan_mode = agent.scan_mode;
+          }
+        } catch {
+          /* agent optional */
+        }
+      }
+    }
+
     base.platform = deep.detectedPlatform;
     base.pages_crawled = deep.pagesCrawled.length;
     base.probes_run = deep.probesRun;
@@ -200,6 +238,12 @@ async function main() {
   const args = new Set(process.argv.slice(2));
   const useBenchmarks = args.has("--benchmarks") || args.size === 0;
   const useQueue = args.has("--queue");
+  const useAgent = args.has("--agent") || args.has("--vulnclaw");
+  const agentMode = args.has("--agent-deep") || args.has("--vulnclaw-deep")
+    ? "deep"
+    : args.has("--agent-standard") || args.has("--vulnclaw-standard")
+      ? "standard"
+      : "quick";
   const limit = Number(process.env.POWER_SCAN_LIMIT || "8");
 
   const targets: Array<{ entry: ScanEntry; kind: "benchmark" | "discovery" }> = [];
@@ -235,7 +279,8 @@ async function main() {
   const benchmarkRecall: Record<string, ReturnType<typeof computeBenchmarkRecall>> = {};
 
   for (const { entry, kind } of slice) {
-    let result = await scanOne(entry, kind);
+    const scanOptions = { agent: useAgent, agentMode };
+    let result = await scanOne(entry, kind, scanOptions);
     saveResults(result);
 
     if (kind === "benchmark" && entry.id) {
@@ -248,7 +293,7 @@ async function main() {
         target.fallback_url !== entry.url
       ) {
         console.log(`benchmark error ${entry.url} — fallback ${target.fallback_url}`);
-        const fallback = await scanOne({ ...entry, url: target.fallback_url }, kind);
+        const fallback = await scanOne({ ...entry, url: target.fallback_url }, kind, scanOptions);
         saveResults(fallback);
         result = fallback;
       }
@@ -270,7 +315,7 @@ async function main() {
           `benchmark degraded ${entry.url} findings=${result.finding_count} gap=${recall?.gap.join(",") ?? ""} — retrying`
         );
         await new Promise((r) => setTimeout(r, BENCHMARK_RETRY_DELAY_MS));
-        const retry = await scanOne(entry, kind);
+        const retry = await scanOne(entry, kind, scanOptions);
         saveResults(retry);
         if (retry.status === "ok") {
           const merged = mergeBenchmarkFindings(result.findings, retry.findings);
@@ -303,7 +348,7 @@ async function main() {
         if (stillDegraded && /juice-shop|owasp-juice/i.test(entry.url)) {
           console.log(`benchmark still degraded ${entry.url} — final Heroku wake retry`);
           await new Promise((r) => setTimeout(r, BENCHMARK_FINAL_RETRY_DELAY_MS));
-          const finalRetry = await scanOne(entry, kind);
+          const finalRetry = await scanOne(entry, kind, scanOptions);
           saveResults(finalRetry);
           if (finalRetry.status === "ok") {
             const merged = mergeBenchmarkFindings(result.findings, finalRetry.findings);

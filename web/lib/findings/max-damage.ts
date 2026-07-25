@@ -6,10 +6,14 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Full account takeover across every service in the file — database wiped or sold, Stripe drained, email domain used for fraud, GDPR/CCPA breach notification to all users.",
   "exposed-config-backup":
     "Complete database dump downloadable: all customer PII, passwords, and payment records exfiltrated in one request — lawsuit, regulator fines, and forced shutdown.",
+  "exposed-infra-artifacts":
+    "Terraform state and cloud credential files grant instant AWS/GCP/Azure takeover — production wiped, crypto-mining bills, and total data exfiltration.",
   "exposed-git-dir":
     "Entire source history stolen including every secret ever committed; attacker replays old API keys and finds unpublished admin backdoors.",
   "secret-stripe-live":
     "Unlimited charges and refunds on your merchant account, every customer's card data readable, business blacklisted by payment networks.",
+  "secret-convex-deploy-key":
+    "Full Convex backend compromise: deploy malicious functions, read/write every document, and exfiltrate all user data.",
   "secret-supabase-service-role":
     "Every row in your database readable, writable, and deletable without login — full customer data breach and ransomware-style wipe.",
   "supabase-service-role-in-bundle":
@@ -44,6 +48,14 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Six-figure API bill overnight and your keys used to host phishing or malware campaigns tied to your account.",
   "secret-anthropic":
     "Runaway API spend and abuse of your account for malicious content generation.",
+  "secret-mapbox-sk":
+    "Attackers run up Mapbox usage charges, exfiltrate private geospatial datasets, and modify production map styles.",
+  "secret-sentry-auth":
+    "Full Sentry org access: every stack trace, user email, and internal error payload scraped and sold.",
+  "secret-posthog-personal":
+    "Complete product analytics and user-behavior data exported — competitors clone your funnel and target your users.",
+  "secret-shopify-admin":
+    "Every customer order, address, and payment detail readable; store settings changed to redirect payouts.",
   "graphql-introspection-enabled":
     "Internal admin mutations discovered and invoked — privilege escalation and data exfil at scale.",
   "cors-reflect-origin":
@@ -52,6 +64,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "Cross-site data theft from authenticated users' browsers — cookie/session abuse and API abuse.",
   "vibe-clerk-secret-in-client":
     "Full auth system compromise: create admin users, reset passwords, impersonate any customer.",
+  "vibe-algolia-admin-in-client":
+    "Attackers delete or poison your entire search index, scrape every indexed record (PII, prices, internal docs), and burn your Algolia quota overnight.",
   "vibe-next-data-sensitive-keys":
     "Every page load ships secret config to the browser — full credential breach and mandatory rotation.",
   "vibe-unauthenticated-api-routes":
@@ -64,6 +78,8 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
     "XSS on any page becomes full session theft — attackers drain accounts while users browse normally.",
   "vibe-streamlit-secrets-exposed":
     "Secrets in Streamlit config are scraped from the client — cloud keys and DB passwords compromised instantly.",
+  "vibe-public-cloud-storage-bucket":
+    "Every upload (IDs, invoices, private media) is harvestable and sold — mandatory breach disclosure and cloud bill abuse.",
   "lovable-supabase-storage-public":
     "All user uploads in Supabase Storage harvested without authentication — PII leak and extortion risk.",
   "v0-server-action-no-authz":
@@ -71,7 +87,19 @@ export const MAX_DAMAGE_BY_SLUG: Record<string, string> = {
   "lovable-client-only-auth":
     "Attackers bypass the UI entirely and read/write data via Supabase/API — total account takeover at scale.",
   "exposed-source-maps":
-    "Unminified source reveals hidden admin routes, hardcoded secrets, and business logic flaws attackers chain into full breach."
+    "Unminified source reveals hidden admin routes, hardcoded secrets, and business logic flaws attackers chain into full breach.",
+  "thugir-jwt-weak-claims":
+    "Forged JWTs mint admin sessions — every account impersonated, data exfiltrated, and irreversible trust collapse.",
+  "thugir-sensitive-js-endpoints":
+    "Hidden admin and debug APIs are hit first — faster full compromise before you can patch or rotate credentials.",
+  "thugir-dir-discovery":
+    "Exposed actuator/swagger/.git paths hand attackers live config, credentials, and a roadmap to RCE.",
+  "reflexion-escalated-xss":
+    "WAF-bypass XSS steals every logged-in session — mass account takeover and fraudulent actions as victims.",
+  "reflexion-escalated-sqli":
+    "Database fully dumped or destroyed — customer PII sold, ransomware deployed, and regulators notified.",
+  "reflexion-escalated-ssti":
+    "Template injection becomes remote code execution — production servers owned and secrets exfiltrated."
 };
 
 const SEVERITY_FALLBACK: Record<Severity, string> = {

@@ -19,7 +19,6 @@ export default function SiteHeader() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Reveal-on-scroll + the orchestrated "case file confirms" moment both ride this observer.
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -38,6 +37,20 @@ export default function SiteHeader() {
       io.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
     <>
@@ -63,7 +76,7 @@ export default function SiteHeader() {
             <button
               className="nav-toggle"
               type="button"
-              aria-label="Menu"
+              aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
             >
@@ -79,19 +92,27 @@ export default function SiteHeader() {
         </div>
       </header>
       {open && (
-        <div className="mobile-menu">
-          {LINKS.map(([label, href]) => (
-            <a key={href} href={href} onClick={() => setOpen(false)}>
-              {label}
+        <>
+          <button
+            type="button"
+            className="mobile-menu-backdrop"
+            aria-label="Close menu"
+            onClick={() => setOpen(false)}
+          />
+          <div className="mobile-menu" role="dialog" aria-label="Mobile navigation">
+            {LINKS.map(([label, href]) => (
+              <a key={href} href={href} onClick={() => setOpen(false)}>
+                {label}
+              </a>
+            ))}
+            <a href="/dashboard" onClick={() => setOpen(false)}>
+              Account
             </a>
-          ))}
-          <a href="/dashboard" onClick={() => setOpen(false)}>
-            Account
-          </a>
-          <a href="/#scan" onClick={() => setOpen(false)}>
-            Run a free scan
-          </a>
-        </div>
+            <a href="/#scan" onClick={() => setOpen(false)}>
+              Run a free scan
+            </a>
+          </div>
+        </>
       )}
     </>
   );

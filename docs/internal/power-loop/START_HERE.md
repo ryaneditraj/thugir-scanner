@@ -1,34 +1,36 @@
 # Power Loop — Start Here
 
-**Four automations** — hourly learning, PR hygiene, 12h ship to production.
+**Four automations** on branch **`main`** (production).
 
-| # | Automation | Cron (UTC) | Branch | Job |
-|---|------------|------------|--------|-----|
-| 1 | **Power Scan** | `0 * * * *` | `cursor/power-loop-9ec4` | Benchmarks + discover + scan |
-| 2 | **Engine Evolve** | `30 * * * *` | `cursor/power-loop-9ec4` | Improve scanner (commit only, no PR spam) |
-| 3 | **PR Triage** | `45 * * * *` | **`main`** | Dedupe ~25 open PRs, sync backlog, close shells |
-| 4 | **Ship to Main** | `0 */12 * * *` | `cursor/power-loop-9ec4` | Gate → merge power-loop + batch detection PRs |
+| # | Automation | Cron (UTC) | Job |
+|---|------------|------------|-----|
+| 1 | **Power Scan** | `0 * * * *` | Benchmarks + discover + scan |
+| 2 | **Engine Evolve** | `30 * * * *` | Improve scanner (commit to main) |
+| 3 | **PR Triage** | `45 * * * *` | Dedupe open PRs, sync backlog |
+| 4 | **Ship to Main** | `0 */12 * * *` | Gate checks (main already = prod) |
 
 ```
-:00 Power Scan      → power-loop branch learns
-:30 Engine Evolve   → commits to power-loop (no new PR each hour)
-:45 PR Triage       → cleans open PR backlog on main
-:00 every 12h Ship  → main = production
+:00 Power Scan      → scan + learn
+:30 Engine Evolve   → improve detection engine
+:45 PR Triage       → clean PR backlog
+:00 every 12h Ship  → validate + log (main is production)
 ```
 
 ---
 
-## Many pending PRs?
+## Security skills library (141 playbooks)
 
-You already have ~25 open PRs from detection automations. **PR Triage** + `manage-pr-integrity.mjs` handles this:
-
-```bash
-cd web && node scripts/manage-pr-integrity.mjs --audit
+```
+docs/internal/security-skills/
+├── index.json              ← searchable catalog
+├── skills/WEB/OWASP_WSTG_4.2/   ← 125 WSTG tests
+└── skills/attack-*/        ← 16 attack playbooks
 ```
 
-See `docs/AUTOMATION_BACKLOG.md` — single source of truth for what's open.
+Loader: `web/lib/methodology/skills.ts`  
+Methodology: `web/lib/methodology/` (3-gate, severity triage, coverage)
 
-**Typical cleanup:** close retired shells `#11, #14, #16, #17, #18, #19, #21` (branches already deleted).
+**Agent engine:** `services/thugir-agent/` — Thugir AI pentest agent. See `docs/internal/agent-engine.md`.
 
 ---
 
@@ -36,12 +38,14 @@ See `docs/AUTOMATION_BACKLOG.md` — single source of truth for what's open.
 
 [cursor.com/automations/new](https://cursor.com/automations/new)
 
-| Automation | Branch | Prompt |
-|------------|--------|--------|
-| Power Scan | `cursor/power-loop-9ec4` | [AUTOMATION_1](./AUTOMATION_1_POWER_SCAN.md) |
-| Engine Evolve | `cursor/power-loop-9ec4` | [AUTOMATION_2](./AUTOMATION_2_ENGINE_EVOLVE.md) |
+| Automation | Branch | Prompt file |
+|------------|--------|-------------|
+| Power Scan | **`main`** | [AUTOMATION_1](./AUTOMATION_1_POWER_SCAN.md) |
+| Engine Evolve | **`main`** | [AUTOMATION_2](./AUTOMATION_2_ENGINE_EVOLVE.md) |
 | PR Triage | **`main`** | [AUTOMATION_4](./AUTOMATION_4_PR_TRIAGE.md) |
-| Ship to Main | `cursor/power-loop-9ec4` | [AUTOMATION_3](./AUTOMATION_3_SHIP_TO_MAIN.md) |
+| Ship to Main | **`main`** | [AUTOMATION_3](./AUTOMATION_3_SHIP_TO_MAIN.md) |
+
+**Important:** Scheduled automations default to no repo — you must pick **repo + branch `main`** on each one.
 
 Toggle all ON at [cursor.com/automations](https://cursor.com/automations).
 
@@ -49,11 +53,12 @@ Toggle all ON at [cursor.com/automations](https://cursor.com/automations).
 
 ## Scripts
 
-| Command | Purpose |
-|---------|---------|
-| `npm run power-scan -- --benchmarks` | Local max scan |
-| `npm run ship-gate` | Block merge if billing touched / typecheck fails |
-| `npm run pr-integrity` | Audit open PR collisions |
+```bash
+cd web && npm run power-scan -- --benchmarks
+cd web && npm run ship-gate
+cd web && npm run pr-integrity
+node docs/internal/security-skills/build-index.mjs
+```
 
 ---
 
@@ -63,10 +68,28 @@ Toggle all ON at [cursor.com/automations](https://cursor.com/automations).
 
 ---
 
+## PR backlog cleanup (manual — one time)
+
+Open PRs with **deleted branches** must be closed on GitHub UI (automations cannot close PRs):
+
+Close orphaned PR shells on GitHub UI (automations cannot close PRs):
+
+```bash
+cd web && npm run close-orphan-prs -- --close
+```
+
+Or close manually: **#1–#26** plus integrity shells **#11, #14, #16–#21, #25**
+
+Then run: `cd web && node scripts/manage-pr-integrity.mjs --audit`
+
+See `docs/AUTOMATION_BACKLOG.md` for current truth.
+
+---
+
 ## Your job
 
 | When | Action |
 |------|--------|
-| Once | Merge PR #25 (brings `manage-pr-integrity.mjs` to main) if not already there |
-| Daily | Glance at Ship automation merges |
-| If PR count grows | Check PR Triage ran at :45 |
+| Once | Close orphaned PR shells on GitHub (list above) |
+| Daily | Glance at automation commits on `main` |
+| Weekly | Check Vercel deployed latest `main` |

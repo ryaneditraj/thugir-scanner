@@ -38,10 +38,13 @@ Read output. Fix:
 ## PHASE 2 — Cleanup
 
 ```bash
+node web/scripts/manage-pr-integrity.mjs --retire-superseded --dry-run
 node web/scripts/manage-pr-integrity.mjs --retire-superseded
 node web/scripts/manage-pr-integrity.mjs --prune-branches
 node web/scripts/manage-pr-integrity.mjs --fix-backlog
 ```
+
+**Safe default:** `--retire-superseded` only deletes superseded **integrity** PR branches and branches listed in backlog **Retired**. It does **not** delete detection PR branches. Add `--retire-detection-duplicates` only when you explicitly want slug-dedupe branch deletion.
 
 Then update `docs/AUTOMATION_BACKLOG.md`:
 - **Open PRs** table — current truth (number, slug, branch)
@@ -98,8 +101,9 @@ If you changed backlog or scripts on main:
 1. **Never** open a new detection PR — detection automations do that
 2. **Never** duplicate slugs already in an open PR or on main
 3. Run `--audit` before any other automation opens a PR (document in backlog)
-4. Prefer **deleting superseded branches** over leaving 25 open PRs
-5. Detection PRs stay separate until merged — do not bundle into one mega-PR
+4. Prefer **deleting superseded integrity branches** over leaving many open integrity PRs
+5. **Never** pass `--retire-detection-duplicates` unless human-approved — it deletes detection PR branches
+6. Detection PRs stay separate until merged — do not bundle into one mega-PR
 
 ---
 

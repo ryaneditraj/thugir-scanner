@@ -122,5 +122,37 @@ assert("38 supabase url only no jwt", extractSupabaseFromText("https://abcdefghi
 assert("39 openapi swagger", looksOpenApiBody('{"swagger":"2.0","paths":{"/a":{"patch":{}}}}'));
 assert("40 extract fetch api", extractApiPaths("axios.get('/api/health')").includes("/api/health"));
 
-console.log(`\nRBT harness: ${passed}/${passed + failed} passed (40 cycles)`);
+// High-precision SaaS secret regexes (Mapbox sk., Sentry sntrys_, PostHog phx_, Shopify shpat_)
+const SECRET_REGEX_TESTS = [
+  {
+    name: "41 mapbox secret sk.",
+    re: /sk\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/,
+    hit: "sk.eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4ifQ.abc123def456",
+    miss: "sk-proj-abcdefghijklmnopqrstuvwxyz"
+  },
+  {
+    name: "42 sentry auth sntrys_",
+    re: /sntrys_[A-Za-z0-9_=-]{20,}/,
+    hit: "sntrys_eyJpYXQiOjE3MDAwMDAwMDB9abcdefghij",
+    miss: "sentry_dsn=https://public@o123.ingest.sentry.io/1"
+  },
+  {
+    name: "43 posthog personal phx_",
+    re: /phx_[A-Za-z0-9]{32,}/,
+    hit: "phx_" + "a".repeat(32),
+    miss: "phc_" + "b".repeat(32)
+  },
+  {
+    name: "44 shopify admin shpat_",
+    re: /shpat_[a-fA-F0-9]{32}/,
+    hit: "shpat_" + "a".repeat(32),
+    miss: "shpss_" + "b".repeat(32)
+  }
+];
+for (const t of SECRET_REGEX_TESTS) {
+  assert(`${t.name} matches`, t.re.test(t.hit));
+  assert(`${t.name} rejects lookalike`, !t.re.test(t.miss));
+}
+
+console.log(`\nRBT harness: ${passed}/${passed + failed} passed (48 cycles)`);
 process.exit(failed > 0 ? 1 : 0);

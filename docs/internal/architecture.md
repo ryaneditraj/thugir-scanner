@@ -60,15 +60,20 @@ Reused for normalization so Deep Scan findings inherit the trust model:
 Loosely coupled (needs a synthetic `TaskNode` + context dict; best-effort, guarded in the runner):
 - `nexus/specialists/injection_specialist.py::InjectionSpecialist.run(node, context)` (SQLi/XSS/SSRF/traversal)
 
-Deliberately NOT reused (too heavy/expensive for a capped commercial scan):
-- `tcsf/kernel/research_loop.py::TcsfKernel.run_investigation()` and
-  `tcsf/planning/profile_runner.py::ProfileRunner.run()` - the 20+ stage autonomous loop.
-- `dashboard/server.py` Flask routes - tied to their own app context.
+Deliberately NOT reused as a product surface (too heavy for the vibe-app ICP):
+- Full Flask TCSF Mission Control (`dashboard/server.py`), campaigns, Neo4j export,
+  distributed Pi workers, multi-day hibernation.
 
-Severity model: `thugir-node` has no numeric tier enum. Proof level = `severity` +
-`validation_status`/`status` + `impact_tier` + `is_exploit_verified_finding()`. Our product maps
-engine findings onto its own `tier_required` (free/deep) in
-[worker/runner.py](../../worker/runner.py) `_classify_tier`.
+**Is reused for Deep Scan** (commercial SLA caps — see [worker/README.md](../../worker/README.md)):
+- `tcsf/power/max_power_run.py::run_max_power_investigation` (aggressive mode, precision gate ON)
+- `tcsf/runtime::TcsfRuntime` when present (portable embed API from thugirlabs.com)
+- `tcsf/evidence/verdict.py::assign_verdicts` → `engine_status` + proof on findings
+- `tcsf/kernel` + Strike / VulnClaw power stages when shipped in the synced engine
+- Precision gate: High/Critical without exploit proof are demoted / marked inconclusive
+
+Severity model: proof level = `severity` + `evidence_verdict` / `validation_status` +
+`is_exploit_verified_finding()`. Our product maps engine findings onto its own
+`tier_required` (free/deep) in [worker/runner.py](../../worker/runner.py) `_classify_tier`.
 
 ## Free-tier execution (Vercel)
 
@@ -85,8 +90,12 @@ engine findings onto its own `tier_required` (free/deep) in
 
 ## Deep Scan execution (worker)
 
-See [worker/README.md](../../worker/README.md). QStash -> `/run` -> `runner.run_deep_scan`
-(capped) -> `finalize_findings` -> Supabase. Cooperative cancel via `scans.status='killed'`.
+See [worker/README.md](../../worker/README.md). Sync the engine with
+`./scripts/sync-engine.sh` (pulls `thugir-node` from thugirlabs.com). Then:
+
+QStash → `/run` → `runner.run_deep_scan` (TcsfRuntime or max-power, capped) →
+`assign_verdicts` → `finalize_findings` → Supabase. Cooperative cancel via
+`scans.status='killed'`.
 
 ## The blur mechanic (server-side gate)
 

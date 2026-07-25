@@ -859,6 +859,7 @@ const DEEP_RULES = new Set<string>([
   "serverActionAuthz",
   "idorProbe",
   "unauthenticatedApiRoutes",
+  "jwtAlgNoneProbe",
   "sqlErrorDisclosure",
   "sqliQueryParamInjection",
   "sqliHeaderErrorDisclosure",
@@ -1521,7 +1522,11 @@ const DEEP_RULES = new Set<string>([
   "clientSideDotnetSerializationLabEvidence",
   "clientSidePovzaydXssLabsEvidence",
   "clientSideJuiceShopVaptEvidence",
-  "clientSideRogueStudioEvidence"
+  "clientSideRogueStudioEvidence",
+  "thugirDirEnum",
+  "reflexionEscalatedXss",
+  "reflexionEscalatedSqli",
+  "reflexionEscalatedSsti"
 ]);
 const DEEP_MIN_CONFIDENCE = 0.5; // deep tier surfaces strong heuristics, not just hard proof
 const DEEP_MAX_PAGES = 6;

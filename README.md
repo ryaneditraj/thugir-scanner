@@ -20,6 +20,7 @@ thugir-scanner/
 │                  all API routes, and SEO/marketing pages.
 ├── worker/        Python (FastAPI) → deploys to Render/Fly.
 │                  Deep Scan executor. Imports the thugir-node engine with hard caps.
+├── services/thugir-agent/  Thugir Agent Engine (Python AI pentester, optional).
 ├── supabase/      SQL migrations (0001–0006) + optional pattern seed.
 ├── docs/
 │   ├── internal/  architecture, pattern-library spec, admin runbook, incident
@@ -53,7 +54,7 @@ added **as data, not code**. Inventory the catalog with `node web/scripts/patter
 - **Razorpay** keys (test is fine) — optional in dev
 - (Deep Scan only) access to the **`thugir-node`** engine
 
-## Quick start (web, free tier)
+## Quick start (web)
 
 ```bash
 cd web
@@ -95,21 +96,19 @@ Every table, RLS policy, and the `findings_visible` gating view is defined in
 
 ## Deep Scan engine
 
-The Deep Scan `worker/` imports the private **`thugir-node`** framework. It resolves the engine in
-this order (`worker/runner.py`):
+The Deep Scan `worker/` embeds **TCSF** from private **`thugir-node`** (lives in
+[thugirlabs.com](https://github.com/ryaneditraj/thugirlabs.com)). Resolution order
+(`worker/runner.py`):
 
-1. `THUGIR_ENGINE_ROOT` env var (used in production/containers), then
-2. a git submodule at `engine/` (the split-repo layout), then
-3. a sibling `thugir-node/` checkout (monorepo layout).
-
-To run Deep Scans from this standalone repo, either add `thugir-node` as a submodule at `engine/`:
+1. `THUGIR_ENGINE_ROOT` (production/containers), then
+2. `./engine` after `./scripts/sync-engine.sh`, then
+3. `~/THUGIR LABS/thugir-node` (local Labs checkout).
 
 ```bash
-git submodule add <thugir-node-repo-url> engine
+./scripts/sync-engine.sh          # sparse-checkout thugir-node → ./engine
 ```
 
-or point `THUGIR_ENGINE_ROOT` at a local checkout. The **free tier does not need the engine.** See
-[worker/README.md](worker/README.md).
+The **free tier does not need the engine.** See [worker/README.md](worker/README.md).
 
 ## Deployment
 
@@ -132,11 +131,13 @@ or point `THUGIR_ENGINE_ROOT` at a local checkout. The **free tier does not need
 
 | Doc | Purpose |
 |---|---|
+| **[everything.md](everything.md)** | **Complete A–Z reference for everything implemented** |
 | [docs/internal/dev-setup.md](docs/internal/dev-setup.md) | Local development from scratch |
 | [docs/internal/environment-variables.md](docs/internal/environment-variables.md) | Every environment variable |
 | [docs/internal/architecture.md](docs/internal/architecture.md) | System architecture & data flow |
 | [docs/internal/pattern-library-spec.md](docs/internal/pattern-library-spec.md) | How patterns are authored |
 | [docs/internal/admin-runbook.md](docs/internal/admin-runbook.md) | Operating the admin panel |
+| [docs/internal/agent-engine.md](docs/internal/agent-engine.md) | Thugir Agent Engine integration |
 | [docs/internal/incident-response.md](docs/internal/incident-response.md) | Incident response |
 | [docs/internal/MOAT_AND_ROADMAP.md](docs/internal/MOAT_AND_ROADMAP.md) | Product moat & roadmap |
 | [docs/internal/decisions.md](docs/internal/decisions.md) | Architecture decision log |

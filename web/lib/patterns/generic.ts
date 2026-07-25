@@ -18071,5 +18071,207 @@ export const genericPatterns: Pattern[] = [
       "We maintain a Pentest-Ground vulnerable-app catalog. Show how to restrict automated scanning to authorized lab hosts only.",
     version: 1,
     enabled: true
+  },
+{
+    slug: "exposed-infra-artifacts",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Infrastructure artifact reachable over HTTP",
+    description:
+      "DevOps and platform config files (Terraform state, AWS credentials, Spring Boot actuator env, kubeconfig, Fly.io config, WordPress/Django settings) are served from the web root. Misconfigured static hosts and CI deploys routinely publish these alongside the app, leaking cloud keys and database passwords.",
+    impactOneline:
+      "Terraform state, AWS creds, or actuator env is downloadable — full cloud takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "exposedInfraArtifacts" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove infra artifacts from the deployed web root and rotate every exposed credential.",
+      steps: [
+        "Delete terraform.tfstate, .aws/credentials, kubeconfig, and settings backups from the public artifact.",
+        "Disable Spring Boot actuator endpoints in production or restrict them to internal networks.",
+        "Rotate every cloud key, database password, and API token any exposed file contained."
+      ]
+    },
+    fixPrompt:
+      "My production deploy serves infrastructure files (terraform.tfstate, .aws/credentials, actuator/env, fly.toml, kubeconfig, or settings.py) over HTTP. Remove them from the web root, block those paths at the edge, disable actuator in production, and list every secret I must rotate.",
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "jwt-alg-none-accepted",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: 'JWT "none" algorithm accepted on API route',
+    description:
+      "An API route that requires authentication accepts a forged unsigned JWT with alg:none. This lets anyone mint valid-looking tokens without the signing secret — full account takeover.",
+    impactOneline:
+      "Attackers can forge JWTs with alg:none and impersonate any user, including admins.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "jwtAlgNoneProbe" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to a specific algorithm and reject alg:none.",
+      steps: [
+        "Configure your JWT library to allow only HS256/RS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Add a test that rejects unsigned alg:none tokens."
+      ]
+    },
+    fixPrompt:
+      'My API accepts JWTs with alg:"none", letting attackers forge tokens. Pin verification to HS256/RS256, explicitly reject alg:none, and show me the middleware/library config change.',
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "thugir-jwt-weak-claims",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "JWT in client bundle with weak algorithm or missing validation claims",
+    description:
+      "A JSON Web Token was found in client-side code with alg=none/empty or missing exp/iss/aud claims — tokens may be forgeable or never expire.",
+    impactOneline: "Weak JWTs in the browser enable session forgery and privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "thugirJwtClaims" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Never ship JWTs to the client; enforce alg, exp, iss, and aud server-side.",
+      steps: [
+        "Remove JWT material from client bundles and use HttpOnly session cookies.",
+        "Reject alg=none and enforce expected signing algorithm.",
+        "Validate exp, iat, iss, and aud on every request."
+      ]
+    },
+    fixPrompt:
+      "A JWT with weak header/claims is exposed in my client bundle. Move auth tokens to HttpOnly cookies, reject unsigned tokens, and show the server-side validation middleware.",
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "thugir-sensitive-js-endpoints",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Sensitive admin/API endpoints referenced in client JavaScript",
+    description:
+      "The shipped JavaScript references admin, debug, graphql, or token-related API paths useful for unauthorized probing.",
+    impactOneline: "Attackers map hidden endpoints from your bundle before you patch them.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "thugirJsEndpoints" },
+    tierRequired: "free",
+    remediation: {
+      summary: "Remove internal endpoint documentation from client bundles.",
+      steps: [
+        "Strip debug/admin route lists from production JavaScript.",
+        "Gate sensitive APIs behind authentication and authorization.",
+        "Use non-obvious paths only server-side."
+      ]
+    },
+    fixPrompt:
+      "My client bundle exposes sensitive API/admin endpoint paths. Remove them from production JS and add server-side auth on every listed route.",
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "thugir-dir-discovery",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Sensitive paths exposed via directory probing",
+    description:
+      "Active directory enumeration found exposed admin, actuator, swagger, .git, or debug paths responding on the origin.",
+    impactOneline: "Hidden admin and debug surfaces give attackers a direct map to compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "thugirDirEnum" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate sensitive paths; disable directory listings.",
+      steps: [
+        "Block public access to actuator, swagger, and .git paths.",
+        "Require authentication on /admin and /debug routes.",
+        "Return consistent 404 for non-existent paths to prevent enumeration."
+      ]
+    },
+    fixPrompt:
+      "Directory probing found exposed sensitive paths (actuator/swagger/admin/.git). Lock them behind auth or remove them from production and show the server config changes.",
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "reflexion-escalated-xss",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Reflected XSS confirmed via encoding escalation probe",
+    description:
+      "A unique XSS canary was reflected after WAF-bypass encoding escalation (Thugir reflexion L0–L3).",
+    impactOneline: "XSS that survives encoding filters still steals sessions and performs actions as victims.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reflexionEscalatedXss" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input on output; use CSP without unsafe-inline.",
+      steps: [
+        "HTML-encode dynamic output in templates.",
+        "Remove inline event handlers and eval sinks.",
+        "Deploy a strict Content-Security-Policy."
+      ]
+    },
+    fixPrompt:
+      "Reflected XSS was confirmed with encoding bypass. Fix output encoding on the vulnerable parameter, remove dangerous sinks, and add CSP.",
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "reflexion-escalated-sqli",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL injection indicated by escalated error-based probe",
+    description:
+      "Escalated SQL injection payloads triggered database error messages in HTTP responses.",
+    impactOneline: "SQLi enables full database read/write and often remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reflexionEscalatedSqli" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries; never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concat SQL with prepared statements.",
+        "Suppress verbose SQL errors in production.",
+        "Add input validation on every query parameter."
+      ]
+    },
+    fixPrompt:
+      "SQL injection was triggered by escalated probes. Replace concatenated queries with parameterized statements and show the fixed data access layer.",
+    version: 1,
+    enabled: true
+  },
+{
+    slug: "reflexion-escalated-ssti",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SSTI confirmed via multi-template reflexion probe",
+    description:
+      "Template injection probes (Jinja/Twig/ERB/etc.) evaluated arithmetic and returned 49 in the response.",
+    impactOneline: "SSTI often escalates to remote code execution on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "reflexionEscalatedSsti" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw user input into template expressions.",
+      steps: [
+        "Bind user data as template variables only.",
+        "Disable dangerous template helpers in production.",
+        "Use logic-less templates where possible."
+      ]
+    },
+    fixPrompt:
+      "SSTI was confirmed (7*7 rendered as 49). Stop passing query parameters into template expressions and show the safe render path.",
+    version: 1,
+    enabled: true
   }
 ];

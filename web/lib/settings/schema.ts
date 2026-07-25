@@ -62,8 +62,8 @@ const DEFAULT_PROVIDERS: Record<AiProvider, { url: string; defaultModel: string 
 export const PROVIDER_ENDPOINTS = DEFAULT_PROVIDERS;
 export const AI_PROVIDERS: AiProvider[] = ["openrouter", "anthropic", "openai"];
 
-function defaultTier(model: string): TierAiConfig {
-  return { enabled: true, provider: "openrouter", baseUrl: "", model, apiKey: "", temperature: 0.2, maxTokens: 900 };
+function defaultTier(model: string, provider: AiProvider = "openrouter"): TierAiConfig {
+  return { enabled: true, provider, baseUrl: "", model, apiKey: "", temperature: 0.2, maxTokens: 900 };
 }
 
 export const DEFAULT_SETTINGS: PlatformSettings = {
@@ -85,8 +85,8 @@ export const DEFAULT_SETTINGS: PlatformSettings = {
     deepScanAiEnabled: true,
     tiers: {
       free: { ...defaultTier("anthropic/claude-3.5-haiku") },
-      deep: { ...defaultTier("anthropic/claude-3.7-sonnet"), maxTokens: 1500 },
-      continuous: { ...defaultTier("anthropic/claude-3.7-sonnet"), maxTokens: 1500 }
+      deep: { ...defaultTier("anthropic/claude-3.5-haiku"), maxTokens: 1500 },
+      continuous: { ...defaultTier("anthropic/claude-3.5-haiku"), maxTokens: 1500 }
     }
   },
   security: {
