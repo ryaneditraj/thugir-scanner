@@ -8250,6 +8250,69 @@ const burpbountyText4shellLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyPulseCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/pulse/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Pulse Secure\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/pulse/ returns Pulse Secure heading — Pulse Connect Secure CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyCiscoCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/cisco/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Cisco\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/cisco/ returns Cisco heading — Cisco appliance CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyN8nSettingsCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/n8n/rest/settings", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const version = String(parsed.n8nVersion ?? "");
+  const releaseChannel = String(parsed.releaseChannel ?? "");
+  const authMethod = String(parsed.authenticationMethod ?? "");
+  if (!version || !releaseChannel || !authMethod) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      n8nVersion: version,
+      releaseChannel,
+      authenticationMethod: authMethod,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/n8n/rest/settings returns n8nVersion, releaseChannel, and authenticationMethod JSON — n8n settings CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -33184,6 +33247,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyReact2shellLiveOracle,
   burpbountySpringCloudConfigLiveOracle,
   burpbountyText4shellLiveOracle,
+  burpbountyPulseCveLiveOracle,
+  burpbountyCiscoCveLiveOracle,
+  burpbountyN8nSettingsCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
