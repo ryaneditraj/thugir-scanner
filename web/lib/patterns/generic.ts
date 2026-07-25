@@ -15707,6 +15707,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-xmlrpc-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab WordPress XML-RPC live oracle",
+    description:
+      "POST /wp/xmlrpc.php system.listMethods returns wp.getUsersBlogs and pingback.ping — the Burp Bounty WordPress XML-RPC profile oracle.",
+    impactOneline:
+      "Live XML-RPC probe confirms WordPress remote procedure call surface distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXmlrpcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable XML-RPC when unused or restrict it to authenticated admin networks.",
+      steps: [
+        "Block /xmlrpc.php at the web server or WAF unless required.",
+        "Remove pingback.ping and other unused methods.",
+        "Isolate Burp Bounty Lab WordPress routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/xmlrpc.php endpoint exposes system.listMethods with pingback.ping. Show how to disable WordPress XML-RPC.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-user-enum-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SQLi user-enumeration live oracle",
+    description:
+      "GET /sqli/user?id=1 returns admin profile but id=9999 returns 404 User not found — the Burp Bounty user-enumeration SQLi profile oracle.",
+    impactOneline:
+      "Live differential-response probe confirms predictable user ID enumeration distinct from /sqli/status and /sqli/length routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliUserEnumLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and return consistent responses for valid and invalid user IDs.",
+      steps: [
+        "Bind id parameters with prepared statements.",
+        "Return generic 404 without distinguishing missing users from authorization failures.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/user endpoint leaks admin profiles for id=1 but 404 for missing IDs. Show parameterized queries and enumeration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-tomcat-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
+    description:
+      "GET /cve/tomcat/ returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — the Burp Bounty Tomcat CVE profile oracle.",
+    impactOneline:
+      "Live Tomcat session-deserialization probe confirms CVE-2020-9484-style oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTomcatCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Tomcat and disable PersistentManager file-based session storage with untrusted paths.",
+      steps: [
+        "Patch Tomcat to a version that fixes CVE-2020-9484.",
+        "Avoid storing sessions in user-influenced directories.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/tomcat/ endpoint swaps sessions when JSESSIONID contains path traversal. Show Tomcat CVE-2020-9484 mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

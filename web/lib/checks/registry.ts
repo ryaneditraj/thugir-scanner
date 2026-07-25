@@ -7795,6 +7795,90 @@ const burpbountySourceAppBackupLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyXmlrpcLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/wp/xmlrpc.php", ctx.origin).toString();
+  const listMethodsPayload =
+    '<?xml version="1.0"?><methodCall><methodName>system.listMethods</methodName></methodCall>';
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: listMethodsPayload,
+    headers: { "Content-Type": "text/xml" },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const xmlrpcOk =
+    /<methodResponse/i.test(doc.body) &&
+    /system\.listMethods/i.test(doc.body) &&
+    /wp\.getUsersBlogs/i.test(doc.body) &&
+    /pingback\.ping/i.test(doc.body);
+  if (!xmlrpcOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab POST /wp/xmlrpc.php system.listMethods returns wp.getUsersBlogs and pingback.ping — WordPress XML-RPC profile oracle"
+    }
+  };
+};
+
+const burpbountySqliUserEnumLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const validUrl = new URL("/sqli/user", ctx.origin);
+  validUrl.searchParams.set("id", "1");
+  const missingUrl = new URL("/sqli/user", ctx.origin);
+  missingUrl.searchParams.set("id", "9999");
+  const [validDoc, missingDoc] = await Promise.all([
+    ctx.probe.get(validUrl.toString(), { maxBytes: 8192 }),
+    ctx.probe.get(missingUrl.toString(), { maxBytes: 2048 })
+  ]);
+  const validHit =
+    validDoc.status >= 200 &&
+    validDoc.status < 300 &&
+    /User Profile/i.test(validDoc.body) &&
+    /Username:\s*admin/i.test(validDoc.body) &&
+    /Email:/i.test(validDoc.body);
+  const missingHit =
+    missingDoc.status === 404 && /User not found/i.test(missingDoc.body);
+  if (!validHit || !missingHit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: validUrl.toString(),
+      validStatus: validDoc.status,
+      missingStatus: missingDoc.status,
+      snippet: validDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /sqli/user?id=1 exposes admin profile but id=9999 returns 404 User not found — user-enumeration SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountyTomcatCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const baseUrl = new URL("/cve/tomcat/", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(baseUrl, { maxBytes: 1024 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  if (!/Apache Tomcat/i.test(baselineDoc.body)) return NEGATIVE;
+  const exploitDoc = await ctx.probe.get(baseUrl, {
+    maxBytes: 1024,
+    headers: { Cookie: "JSESSIONID=../groovy" }
+  });
+  const sessionSwap = /PersistentManagerBase:\s*swapping out session/i.test(exploitDoc.body);
+  if (!sessionSwap) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: baseUrl,
+      snippet: exploitDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab /cve/tomcat/ returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — CVE-2020-9484 Tomcat profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32711,6 +32795,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyAiHealthLiveOracle,
   burpbountyAiMetricsLiveOracle,
   burpbountySourceAppBackupLiveOracle,
+  burpbountyXmlrpcLiveOracle,
+  burpbountySqliUserEnumLiveOracle,
+  burpbountyTomcatCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
