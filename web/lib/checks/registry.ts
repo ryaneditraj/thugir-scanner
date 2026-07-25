@@ -24594,6 +24594,40 @@ const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopChatInitEmailEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/chat/init", ctx.origin).toString();
+  const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
+  const missingDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ email: missingEmail }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (missingDoc.status < 200 || missingDoc.status >= 300) return NEGATIVE;
+  if (!/"found"\s*:\s*false/i.test(missingDoc.body)) return NEGATIVE;
+  const knownDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ email: "admin@pwnshop.com" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (knownDoc.status < 200 || knownDoc.status >= 300) return NEGATIVE;
+  if (!/"found"\s*:\s*true/i.test(knownDoc.body)) return NEGATIVE;
+  if (!/"user"\s*:\s*\{/.test(knownDoc.body) || !/"email"\s*:/.test(knownDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      missingEmail,
+      missingSnippet: missingDoc.body.slice(0, 120).trim(),
+      knownSnippet: knownDoc.body.slice(0, 200).trim(),
+      note: "Pwnshop POST /chat/init returns found:true with user profile for registered emails and found:false for unknown addresses — username enumeration (PWN-037)"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -32169,6 +32203,54 @@ const clientSideBrokencrystalsEvidence: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsGotoOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/goto", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      status: doc.status,
+      location,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Broken Crystals GET /api/goto?url= returns HTTP redirect to attacker-controlled URL — unvalidated open redirect oracle"
+    }
+  };
+};
+
+const brokencrystalsAwsMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/aws", ctx.origin);
+  probeUrl.searchParams.set("path", "http://169.254.169.254/latest/meta-data/");
+  probeUrl.searchParams.set("type", "image/jpg");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /ami-id/i.test(doc.body) &&
+    /instance-id/i.test(doc.body) &&
+    /local-ipv4/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns AWS instance metadata — cloud SSRF oracle"
+    }
+  };
+};
+
 // --- Unauthenticated /api/config exposing DB credentials (brokencrystals.com) -----------
 const EXPOSED_CONFIG_PATHS = ["/api/config", "/config.json", "/api/configuration"];
 const SENSITIVE_CONFIG_MARKERS: { label: string; re: RegExp }[] = [
@@ -33788,6 +33870,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopPathTraversalOracle,
   pwnshopDebugInfoLiveOracle,
   pwnshopEventsAuditLiveOracle,
+  pwnshopChatInitEmailEnumerationLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
@@ -33965,6 +34048,8 @@ export const RULES: Record<string, Rule> = {
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
+  brokencrystalsGotoOpenRedirectLiveOracle,
+  brokencrystalsAwsMetadataSsrfLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
