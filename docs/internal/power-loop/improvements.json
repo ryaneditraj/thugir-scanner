@@ -7259,6 +7259,24 @@
       "slug": "burpbounty-passive-api-path-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /passive/api/v1/data returns {\"data\":[{\"id\":1,\"name\":\"test\"}],\"total\":1}; burpbountylab.com/passive/api/v1/data findings 51→57; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-dwr-interface-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/dwr/interface/ returns // DWR Interface + DWREngine._execute + dwr.engine._execute; burpbountylab.com/dwr/interface findings 60→63; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-gateway-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/gateway returns <h1>Behind Kong + Envoy</h1>; burpbountylab.com/ai/gateway findings 59→63; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-backup-listing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/backup/ returns Index of /backup/ with db_backup.sql + site_backup.tar.gz links; burpbountylab.com/backup/ findings 60→63; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12721,6 +12739,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-passive-api-path-live-oracle",
       "shipped_at": "2026-07-25T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-dwr-interface-live-oracle",
+      "shipped_at": "2026-07-25T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-gateway-live-oracle",
+      "shipped_at": "2026-07-25T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-backup-listing-live-oracle",
+      "shipped_at": "2026-07-25T07:10:00.000Z"
     }
   ]
 }
