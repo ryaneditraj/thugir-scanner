@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T04:03:00.000Z",
+  "updated_at": "2026-07-25T05:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/cve/forti/",
+      "source": "BountySecurity/BurpBountyLab — FortiOS CVE practice endpoint (cves.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/weblogic/",
+      "source": "BountySecurity/BurpBountyLab — WebLogic CVE practice endpoint (cves.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/actuator/mappings",
+      "source": "BountySecurity/BurpBountyLab — Spring Boot actuator mappings endpoint profile (spring.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/graphql/query",
+      "source": "BountySecurity/BurpBountyLab — GraphQL injection profile practice endpoint (graphql.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ai/status",
+      "source": "BountySecurity/BurpBountyLab — AI/LLM status disclosure headers profile (ai.py)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/wp/wp-login.php",
       "source": "BountySecurity/BurpBountyLab — WordPress login form profile practice endpoint (wordpress.py)",
