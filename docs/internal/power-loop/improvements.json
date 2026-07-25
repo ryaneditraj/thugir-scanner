@@ -7205,6 +7205,24 @@
       "slug": "burpbounty-source-app-backup-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/source/app.py~ returns PHP source with $db_pass='password123' via editor backup suffix; burpbountylab.com/source/app.py~ gains route-specific oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xmlrpc-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST http://burpbountylab.com/wp/xmlrpc.php system.listMethods returns wp.getUsersBlogs + pingback.ping in methodResponse XML; burpbountylab.com/wp/xmlrpc.php findings 48→53; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-user-enum-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/sqli/user?id=1 returns Username: admin profile but id=9999 returns 404 User not found; burpbountylab.com/sqli/user findings 49→55; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-tomcat-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/tomcat/ returns Apache Tomcat and Cookie JSESSIONID=../groovy triggers PersistentManagerBase: swapping out session; burpbountylab.com/cve/tomcat findings 47→54; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12622,6 +12640,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-source-app-backup-live-oracle",
       "shipped_at": "2026-07-25T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xmlrpc-live-oracle",
+      "shipped_at": "2026-07-25T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sqli-user-enum-live-oracle",
+      "shipped_at": "2026-07-25T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-tomcat-cve-live-oracle",
+      "shipped_at": "2026-07-25T04:10:00.000Z"
     }
   ]
 }
