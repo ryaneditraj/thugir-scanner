@@ -15629,6 +15629,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-health-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI health endpoint live oracle",
+    description:
+      "GET /ai/health returns JSON with model_provider, vector_db, rag_enabled, and token usage counters — the Burp Bounty AI infrastructure health disclosure profile oracle.",
+    impactOneline:
+      "Live AI health probe confirms LLM/RAG/MCP metadata disclosure distinct from /ai/v1/chat/completions gateway headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose AI model providers, vector databases, or token usage on unauthenticated health endpoints.",
+      steps: [
+        "Restrict /ai/health to internal monitoring networks.",
+        "Return only a minimal ok status without provider or usage metadata.",
+        "Isolate Burp Bounty Lab AI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/health endpoint leaks model_provider, vector_db, and token usage. Show how to harden AI health checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ai-metrics-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI Prometheus metrics live oracle",
+    description:
+      "GET /ai/metrics exposes Prometheus counters for prompt_tokens, completion_tokens, and service_info — the Burp Bounty AI observability metrics disclosure profile oracle.",
+    impactOneline:
+      "Live metrics probe confirms unauthenticated Prometheus-style AI token counters distinct from JSON /ai/health.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiMetricsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect AI metrics endpoints behind authentication and network segmentation.",
+      steps: [
+        "Serve /ai/metrics only on internal scrape networks.",
+        "Strip model_provider labels from public metric series.",
+        "Isolate Burp Bounty Lab AI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/metrics endpoint exposes prompt_tokens and completion_tokens without auth. Show Prometheus metrics hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-source-app-backup-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab app.py backup source disclosure live oracle",
+    description:
+      "GET /source/app.py~ returns PHP source with database credentials via editor backup tilde suffix — the Burp Bounty source-disclosure profile oracle.",
+    impactOneline:
+      "Live backup probe confirms /source/app.py~ credential leak distinct from /source/test.php~.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySourceAppBackupLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block web access to editor backup files and rotate any credentials they expose.",
+      steps: [
+        "Deny requests for *~, *.bak, and *.swp suffixes at the web server.",
+        "Remove backup artifacts from the document root.",
+        "Rotate database passwords found in disclosed source."
+      ]
+    },
+    fixPrompt:
+      "Our /source/app.py~ backup file is web-accessible and leaks database credentials. Show backup-file hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

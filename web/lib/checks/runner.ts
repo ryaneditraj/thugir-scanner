@@ -1458,6 +1458,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountyRedirectMetaLiveOracle",
   "burpbountyXssEncodedLiveOracle",
   "burpbountySsrfImgLiveOracle",
+  "burpbountyAiHealthLiveOracle",
+  "burpbountyAiMetricsLiveOracle",
+  "burpbountySourceAppBackupLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
@@ -4251,6 +4254,9 @@ function extractBurpBountyLabSeeds(html: string, pageUrl: string): string[] {
     "/ssti/render?template={{7*7}}",
     "/ssti/preview",
     "/ai/v1/chat/completions",
+    "/ai/health",
+    "/ai/metrics",
+    "/source/app.py~",
     "/redirect/goto?url=/"
   ]) {
     try {
