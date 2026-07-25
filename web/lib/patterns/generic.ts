@@ -8998,6 +8998,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-forgot-password-email-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop forgot-password form enables email enumeration",
+    description:
+      "POST /forgot-password returns distinct success vs no-account HTML messages for registered vs unknown emails — enabling bulk account enumeration.",
+    impactOneline:
+      "Distinct password-reset responses leak whether an email is registered, aiding credential-stuffing attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopForgotPasswordEmailEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for forgot-password lookups — Pwnshop is intentional lab software.",
+      steps: [
+        "Use identical success messages for registered and unregistered emails on /forgot-password.",
+        "Never echo the submitted email address in success responses.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /forgot-password returns different messages for known vs unknown emails. Show how to prevent username enumeration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -13545,6 +13571,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/testimonials/count endpoint executes SQL from the query parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /api/testimonials/count reflected XSS oracle",
+    description:
+      "GET /api/testimonials/count?query= reflects attacker input unescaped in SQL syntax-error responses — the Broken Crystals testimonials reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS via SQL error messages lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape user input in error messages and use parameterized queries — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never echo raw query parameters in SQL error responses.",
+        "Use parameterized queries for all SQL operations.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count endpoint reflects query input unescaped in SQL errors. Show XSS-safe error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-subscriptions-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /api/subscriptions mailing-list reflected XSS oracle",
+    description:
+      "POST /api/subscriptions?email= echoes the email parameter unescaped in the response body — the Broken Crystals mailing-list subscription reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS in subscription endpoints lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSubscriptionsXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape or encode user input in subscription API responses — Broken Crystals is intentional lab software.",
+      steps: [
+        "HTML-encode email values before echoing in API responses.",
+        "Validate email format and reject HTML/script payloads.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/subscriptions endpoint echoes the email query param unescaped. Show reflected XSS remediation.",
     version: 1,
     enabled: true
   },
