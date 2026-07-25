@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T08:06:30.000Z",
+  "updated_at": "2026-07-25T08:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1826,
   "discovery_findings": 16195,
-  "improvements_shipped": 1095,
-  "last_run": "2026-07-25T08:06:30.000Z",
+  "improvements_shipped": 1098,
+  "last_run": "2026-07-25T08:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -50,35 +50,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 365,
-      "skipped_48h": [
-        "burpbountylab.com/dwr/interface",
-        "burpbountylab.com/actuator/beans",
-        "burpbountylab.com/backup/",
-        "burpbountylab.com/ai/gateway",
-        "burpbountylab.com/api-docs"
-      ],
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 13,
+      "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab CVE practice routes (Pulse, Citrix, F5, Apache, Symfony phpinfo)",
-      "improvements_shipped_this_run": 0
+      "focus": "BurpBountyLab MCP tools registry, OpenAPI api-docs, config.bak source disclosure oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/cve/symfony/profiler/phpinfo: phpinfo-exposed on Symfony profiler route (63 findings)",
-      "burpbountylab.com/cve/pulse: hub fingerprint + graphql-introspection-enabled (63 findings)",
-      "burpbountylab.com/cve/citrix: hub fingerprint dominates (63 findings)",
-      "vulnshop.vercel.app/checkout: drained queue tail (4 findings)"
+      "burpbountylab.com/ai/mcp/tools: MCP tool registry JSON with fetch_url + search (57→65 findings)",
+      "burpbountylab.com/api-docs: OpenAPI 3.0 VulnApp API spec exposed (60→66 findings)",
+      "burpbountylab.com/source/config.bak: PHP mysqli credentials in backup file (47→66 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "burpbountylab.com/cve/pulse: no route-specific Pulse Secure CVE oracle (hub fingerprint only)",
-      "burpbountylab.com/cve/citrix: no route-specific Citrix ADC CVE oracle",
-      "burpbountylab.com/cve/f5: no route-specific F5 BIG-IP CVE oracle",
-      "burpbountylab.com/cve/apache: no route-specific Apache CVE oracle",
-      "hub fingerprint still dominates burpbountylab routes (~63/route)"
+      "burpbountylab.com/cve/confluence: route returns 404 — no positive-proof Confluence OGNL oracle",
+      "burpbountylab.com/cve/jira/dashboard: route returns 404 — no positive-proof CVE-Jira oracle",
+      "burpbountylab.com/cve/spring: Spring4Shell route lacks class.module.classLoader positive-proof oracle",
+      "burpbountylab.com/rce/react2shell: Next.js RSC lab needs route-specific POST oracle",
+      "burpbountylab.com/cve/pulse: no route-specific Pulse Secure CVE oracle (hub fingerprint only)"
     ]
   },
   "discovery_highlights": {
@@ -273,7 +266,6 @@
     "burpbountylab.com/ssrf/img": 53,
     "burpbountylab.com/cve/jira/dashboard": 56,
     "burpbountylab.com/passive/graphql": 48,
-    "burpbountylab.com/source/config.bak": 47,
     "burpbountylab.com/wp/xmlrpc.php": 53,
     "burpbountylab.com/sqli/user": 58,
     "burpbountylab.com/cve/tomcat": 54,
@@ -291,13 +283,14 @@
     "burpbountylab.com/xss/url": 60,
     "burpbountylab.com/xss/discover": 57,
     "burpbountylab.com/cve/text4shell": 57,
-    "burpbountylab.com/ai/mcp/tools": 57,
+    "burpbountylab.com/ai/mcp/tools": 65,
+    "burpbountylab.com/api-docs": 66,
+    "burpbountylab.com/source/config.bak": 66,
     "hack-this-site-eta.vercel.app/cms": 41,
     "burpbountylab.com/dwr/interface": 63,
     "burpbountylab.com/actuator/beans": 60,
     "burpbountylab.com/backup/": 63,
     "burpbountylab.com/ai/gateway": 63,
-    "burpbountylab.com/api-docs": 60,
     "burpbountylab.com/cve/pulse": 63,
     "burpbountylab.com/cve/citrix": 63,
     "burpbountylab.com/cve/f5": 63,
