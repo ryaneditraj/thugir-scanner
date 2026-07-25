@@ -8111,6 +8111,74 @@ const burpbountyBackupListingLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyAiMcpToolsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/mcp/tools", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const mcpOk =
+    /"mcp_enabled"\s*:\s*true/i.test(doc.body) &&
+    /"model_name"\s*:\s*"[^"]+"/i.test(doc.body) &&
+    /"tools"\s*:\s*\[/i.test(doc.body) &&
+    /"name"\s*:\s*"fetch_url"/i.test(doc.body) &&
+    /"name"\s*:\s*"search"/i.test(doc.body);
+  if (!mcpOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /ai/mcp/tools returns MCP tool registry JSON with fetch_url and search tools — AI MCP gateway profile oracle distinct from /ai/health and /ai/metrics"
+    }
+  };
+};
+
+const burpbountyApiDocsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/api-docs", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const openApiOk =
+    /"openapi"\s*:\s*"3\./i.test(doc.body) &&
+    /"title"\s*:\s*"VulnApp API"/i.test(doc.body) &&
+    /"\/api\/v1\/users"/i.test(doc.body) &&
+    /"\/api\/v1\/products"/i.test(doc.body);
+  if (!openApiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /api-docs returns OpenAPI 3.0 VulnApp API spec with /api/v1/users and /api/v1/products — API documentation disclosure profile oracle"
+    }
+  };
+};
+
+const burpbountySourceConfigBakLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/source/config.bak", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sourceOk =
+    /<\?php/i.test(doc.body) &&
+    /Database configuration/i.test(doc.body) &&
+    /\$db_host\s*=\s*['"][^'"]+['"]/i.test(doc.body) &&
+    /\$db_pass\s*=\s*['"][^'"]+['"]/i.test(doc.body) &&
+    /mysqli_connect/i.test(doc.body);
+  if (!sourceOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /source/config.bak returns PHP database configuration with mysqli_connect credentials — config backup source-disclosure profile oracle distinct from /source/test.php~ and /source/app.py~"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -33039,6 +33107,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyDwrInterfaceLiveOracle,
   burpbountyAiGatewayLiveOracle,
   burpbountyBackupListingLiveOracle,
+  burpbountyAiMcpToolsLiveOracle,
+  burpbountyApiDocsLiveOracle,
+  burpbountySourceConfigBakLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

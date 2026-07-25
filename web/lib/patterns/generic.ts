@@ -16019,6 +16019,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-mcp-tools-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI MCP tools registry live oracle",
+    description:
+      "GET /ai/mcp/tools returns JSON listing MCP-enabled tools such as search and fetch_url with model metadata.",
+    impactOneline:
+      "Live MCP tools probe confirms AI agent tool registry disclosure oracle distinct from /ai/health JSON and /ai/metrics Prometheus counters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiMcpToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose MCP tool registries and model metadata on unauthenticated public AI routes.",
+      steps: [
+        "Authenticate /ai/mcp/* endpoints at the API gateway.",
+        "Return generic health responses without tool enumeration.",
+        "Restrict MCP tool discovery to internal service meshes."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/mcp/tools endpoint lists MCP tools publicly. Show how to secure AI agent tool registries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-api-docs-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab OpenAPI spec live oracle",
+    description:
+      "GET /api-docs returns OpenAPI 3.0 JSON documenting VulnApp API paths such as /api/v1/users and /api/v1/products.",
+    impactOneline:
+      "Live OpenAPI probe confirms API documentation disclosure oracle distinct from generic Swagger UI hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyApiDocsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove public OpenAPI specs from production or protect them behind authentication.",
+      steps: [
+        "Disable /api-docs on internet-facing deployments.",
+        "Serve API documentation only to authenticated developers.",
+        "Strip sensitive path definitions from public specs."
+      ]
+    },
+    fixPrompt:
+      "Our /api-docs endpoint exposes an OpenAPI spec publicly. Show how to restrict API documentation in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-source-config-bak-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab config.bak source disclosure live oracle",
+    description:
+      "GET /source/config.bak returns PHP database configuration with mysqli_connect credentials from a backup file.",
+    impactOneline:
+      "Live config.bak probe confirms backup source-code disclosure oracle distinct from /source/test.php~ and /source/app.py~ editor backups.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySourceConfigBakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove .bak configuration files from web roots and block backup suffixes at the edge.",
+      steps: [
+        "Delete config.bak and similar backup files from deploy artifacts.",
+        "Deny requests for *.bak, *.old, and *~ suffixes at the reverse proxy.",
+        "Store database credentials in environment variables, not source files."
+      ]
+    },
+    fixPrompt:
+      "Our /source/config.bak file exposes database credentials. Show how to prevent backup file disclosure in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
