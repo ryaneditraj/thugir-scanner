@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T07:10:00.000Z",
+  "updated_at": "2026-07-25T08:06:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2522,
-  "total_findings": 18721,
+  "total_sites_scanned": 2531,
+  "total_findings": 19096,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1821,
-  "discovery_findings": 15770,
+  "discovery_urls_added": 1826,
+  "discovery_findings": 16195,
   "improvements_shipped": 1095,
-  "last_run": "2026-07-25T07:10:00.000Z",
+  "last_run": "2026-07-25T08:06:30.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
@@ -52,23 +52,32 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 314,
-      "skipped_48h": [],
+      "findings": 365,
+      "skipped_48h": [
+        "burpbountylab.com/dwr/interface",
+        "burpbountylab.com/actuator/beans",
+        "burpbountylab.com/backup/",
+        "burpbountylab.com/ai/gateway",
+        "burpbountylab.com/api-docs"
+      ],
       "dns_failures": [],
-      "focus": "BurpBountyLab DWR interface, AI gateway, backup directory listing oracles",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab CVE practice routes (Pulse, Citrix, F5, Apache, Symfony phpinfo)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/dwr/interface: DWR interface JavaScript with DWREngine._execute (60→63 findings)",
-      "burpbountylab.com/ai/gateway: Kong + Envoy infrastructure disclosure (59→63 findings)",
-      "burpbountylab.com/backup/: directory listing with db_backup.sql + site_backup.tar.gz (60→63 findings)"
+      "burpbountylab.com/cve/symfony/profiler/phpinfo: phpinfo-exposed on Symfony profiler route (63 findings)",
+      "burpbountylab.com/cve/pulse: hub fingerprint + graphql-introspection-enabled (63 findings)",
+      "burpbountylab.com/cve/citrix: hub fingerprint dominates (63 findings)",
+      "vulnshop.vercel.app/checkout: drained queue tail (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "burpbountylab.com/cve/confluence: route returns 404 — no positive-proof Confluence OGNL oracle",
-      "burpbountylab.com/cve/jira/dashboard: route returns 404 — no positive-proof CVE-Jira oracle",
+      "burpbountylab.com/cve/pulse: no route-specific Pulse Secure CVE oracle (hub fingerprint only)",
+      "burpbountylab.com/cve/citrix: no route-specific Citrix ADC CVE oracle",
+      "burpbountylab.com/cve/f5: no route-specific F5 BIG-IP CVE oracle",
+      "burpbountylab.com/cve/apache: no route-specific Apache CVE oracle",
       "hub fingerprint still dominates burpbountylab routes (~63/route)"
     ]
   },
@@ -288,6 +297,11 @@
     "burpbountylab.com/actuator/beans": 60,
     "burpbountylab.com/backup/": 63,
     "burpbountylab.com/ai/gateway": 63,
-    "burpbountylab.com/api-docs": 60
+    "burpbountylab.com/api-docs": 60,
+    "burpbountylab.com/cve/pulse": 63,
+    "burpbountylab.com/cve/citrix": 63,
+    "burpbountylab.com/cve/f5": 63,
+    "burpbountylab.com/cve/apache": 63,
+    "burpbountylab.com/cve/symfony/profiler/phpinfo": 63
   }
 }
