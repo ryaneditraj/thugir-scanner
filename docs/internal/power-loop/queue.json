@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T18:02:00.000Z",
+  "updated_at": "2026-07-25T19:44:11.283Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/?maptitle=test",
+      "source": "NeuraLegion/brokencrystals — DOM XSS maptitle query param oracle (README reflective XSS)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/?__dummy=test",
+      "source": "NeuraLegion/brokencrystals — DOM XSS __dummy query param oracle (README reflective XSS)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/api/docs",
+      "source": "Commando-X/vuln-bank — OpenAPI docs + vulnerable banking/API/LLM endpoints (homepage)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/ai/v1/completions",
+      "source": "BountySecurity/BurpBountyLab — OpenAI-compatible completions AI disclosure oracle (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/drupal/admin/views/ajax/autocomplete/user/a",
+      "source": "BountySecurity/BurpBountyLab — Drupal user autocomplete CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/file/raw?path=package.json",
       "source": "NeuraLegion/brokencrystals — LFI oracle GET /api/file/raw path param (README)",
