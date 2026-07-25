@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1811,
   "discovery_findings": 15082,
-  "improvements_shipped": 1086,
+  "improvements_shipped": 1089,
   "last_run": "2026-07-25T05:23:02.674Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 9,
       "oracle_recall": "6/6",
       "gap": [],
       "note": "Pass1 cold-start 8 findings gap=sqli (Heroku wake); 12s retry restored 6/6 (10 findings, pages=6 probes=295)",
@@ -56,9 +56,10 @@
       "skipped_48h": [],
       "dns_failures": [],
       "focus": "BurpBountyLab FortiOS CVE, WebLogic CVE, actuator/mappings, GraphQL query injection, AI status disclosure + drained rce/echo, rce/expect, ssrf/img",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
+      "remote merge: wp-login, Grafana CVE, API-path passive oracles shipped in engine (validation run)",
       "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku retry (pass1 gap=sqli)",
       "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle present (54 findings)",
       "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle present (54 findings)",
@@ -274,11 +275,11 @@
     "burpbountylab.com/wp/xmlrpc.php": 53,
     "burpbountylab.com/sqli/user": 55,
     "burpbountylab.com/cve/tomcat": 54,
-    "burpbountylab.com/wp/wp-login.php": 51,
+    "burpbountylab.com/wp/wp-login.php": 57,
     "burpbountylab.com/actuator/health": 51,
-    "burpbountylab.com/cve/grafana": 51,
+    "burpbountylab.com/cve/grafana": 57,
     "burpbountylab.com/drupal/user/autocomplete/admin": 51,
-    "burpbountylab.com/passive/api/v1/data": 51,
+    "burpbountylab.com/passive/api/v1/data": 57,
     "burpbountylab.com/cve/forti": 54,
     "burpbountylab.com/cve/weblogic": 54,
     "burpbountylab.com/actuator/mappings": 54,

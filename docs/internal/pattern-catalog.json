@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T04:03:58.777Z",
-  "total": 722,
-  "uniqueSlugs": 720,
+  "generatedAt": "2026-07-25T05:02:01.252Z",
+  "total": 725,
+  "uniqueSlugs": 723,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 704,
+    "generic": 707,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 650,
+    "deep": 653,
     "continuous": 0
   },
   "byCategory": {
@@ -24,9 +24,9 @@
     "Source exposure": 6,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 52,
-    "Security misconfiguration": 58,
-    "Broken authentication": 50,
+    "Information disclosure": 53,
+    "Security misconfiguration": 59,
+    "Broken authentication": 51,
     "Injection": 155,
     "Cross-site scripting": 117,
     "general": 18,
@@ -47,6 +47,8 @@
     "burpbounty-crlf-set-live-oracle",
     "burpbounty-dom-xss-live-oracle",
     "burpbounty-drupal-user-disclosure-live-oracle",
+    "burpbounty-grafana-cve-live-oracle",
+    "burpbounty-passive-api-path-live-oracle",
     "burpbounty-passive-secrets-live-oracle",
     "burpbounty-pt-include-live-oracle",
     "burpbounty-pt-read-live-oracle",
@@ -76,6 +78,7 @@
     "burpbounty-ssrf-scheme-live-oracle",
     "burpbounty-ssti-render-live-oracle",
     "burpbounty-tomcat-cve-live-oracle",
+    "burpbounty-wp-login-live-oracle",
     "burpbounty-xmlrpc-live-oracle",
     "burpbounty-xss-attribute-live-oracle",
     "burpbounty-xss-blind-live-oracle",
