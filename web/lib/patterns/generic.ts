@@ -15785,6 +15785,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-wp-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab WordPress login live oracle",
+    description:
+      "GET /wp/wp-login.php exposes a WordPress log/pwd form and POST returns Invalid username or password — the Burp Bounty WordPress login profile oracle.",
+    impactOneline:
+      "Live WordPress login probe confirms authentication endpoint behavior distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict WordPress login exposure and enforce account lockout on failed attempts.",
+      steps: [
+        "Limit wp-login.php exposure with IP allowlists or MFA.",
+        "Use generic login failure messages without user enumeration hints.",
+        "Isolate Burp Bounty Lab WordPress routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-login.php endpoint exposes a WordPress login form. Show how to harden wp-login.php and prevent credential stuffing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-grafana-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Grafana CVE live oracle",
+    description:
+      "GET /grafana/ returns a Grafana dashboard shell with title Grafana and LoadingGrafana markers — the Burp Bounty Grafana CVE/profile oracle.",
+    impactOneline:
+      "Live Grafana dashboard probe confirms exposed monitoring UI distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGrafanaCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Grafana dashboards without authentication on public networks.",
+      steps: [
+        "Require SSO or strong credentials for Grafana.",
+        "Patch Grafana CVEs and restrict admin API access.",
+        "Isolate Burp Bounty Lab Grafana routes from production monitoring."
+      ]
+    },
+    fixPrompt:
+      "Our /grafana/ endpoint exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-passive-api-path-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab API path passive-detection live oracle",
+    description:
+      "GET /passive/api/v1/data returns JSON with a data array of id/name objects and a total counter — the Burp Bounty API path passive-detection profile oracle.",
+    impactOneline:
+      "Live REST API path probe confirms versioned JSON endpoint behavior distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPassiveApiPathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid exposing versioned API paths without authentication in production.",
+      steps: [
+        "Require auth on /api/v1/* routes.",
+        "Use API gateways to hide internal path structure.",
+        "Isolate Burp Bounty Lab passive API routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /passive/api/v1/data endpoint is publicly reachable. Show API path hardening and authentication for versioned REST routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
