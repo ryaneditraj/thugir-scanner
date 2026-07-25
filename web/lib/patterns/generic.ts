@@ -13445,6 +13445,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-secrets-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/secrets token exposure oracle",
+    description:
+      "GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — the Broken Crystals secrets exposure oracle.",
+    impactOneline:
+      "Unauthenticated secrets endpoints leak third-party API tokens attackers can use for account takeover and data exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose secret tokens via unauthenticated API routes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/secrets from production deployments and rotate all exposed tokens immediately.",
+        "Store secrets in a vault and inject them server-side at runtime.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/secrets endpoint returns Slack, OAuth, and payment API tokens without auth. Show secrets management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-safe-files-rfi-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/safe-files remote file inclusion oracle",
+    description:
+      "POST /api/safe-files accepts a user-controlled URL, fetches remote content, and returns it in the response — the Broken Crystals safe-files RFI oracle.",
+    impactOneline:
+      "Server-side URL fetchers with weak allowlists enable remote file inclusion and SSRF to internal or attacker-controlled resources.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSafeFilesRfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches of arbitrary URLs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled URL fetch endpoints or enforce strict destination allowlists.",
+        "Deny requests to internal networks, link-local addresses, and cloud metadata endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/safe-files endpoint fetches remote URLs and returns their content. Show SSRF/RFI hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-auth-bypass-api-live-oracle",
     platform: "generic",
     category: "Authentication bypass",

@@ -32376,6 +32376,94 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const BROKENCRYSTALS_SAFE_FILES_RFI_PROBE = {
+  name: "thugir-rfi-probe",
+  url: "https://filedealer.nexploit.app/rfi.md5.txt",
+  content: "245cc0a508bf7f0ff754c84c0fe0b5bc"
+} as const;
+
+const brokencrystalsSecretsLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const secretsUrl = new URL("/api/secrets", ctx.origin).toString();
+  const doc = await ctx.probe.get(secretsUrl, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const markers: { label: string; sample: string }[] = [];
+  const slack = parsed.slack;
+  if (typeof slack === "string" && /^xox[aboprs]-/i.test(slack)) {
+    markers.push({ label: "Slack token", sample: slack.slice(0, 24) });
+  }
+  const facebook = parsed.facebook;
+  if (typeof facebook === "string" && /^EAAC/i.test(facebook)) {
+    markers.push({ label: "Facebook token", sample: facebook.slice(0, 24) });
+  }
+  const googleOauth = parsed.google_oauth;
+  if (typeof googleOauth === "string" && /\.apps\.googleusercontent\.com$/i.test(googleOauth)) {
+    markers.push({ label: "Google OAuth client", sample: googleOauth.slice(0, 40) });
+  }
+  const paypal = parsed.paypal;
+  if (typeof paypal === "string" && /access_token/i.test(paypal)) {
+    markers.push({ label: "PayPal access token", sample: paypal.slice(0, 40) });
+  }
+  const codeclimate = parsed.codeclimate;
+  if (typeof codeclimate === "string" && /CODECLIMATE_REPO_TOKEN=/i.test(codeclimate)) {
+    markers.push({ label: "CodeClimate token", sample: codeclimate.slice(0, 40) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.94 : 0.92,
+    evidence: {
+      url: secretsUrl,
+      markers: markers.slice(0, 4),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/secrets returns multiple live API tokens (Slack, OAuth, payment keys) without authentication — secrets exposure oracle"
+    }
+  };
+};
+
+const brokencrystalsSafeFilesRfiLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const safeFilesUrl = new URL("/api/safe-files", ctx.origin).toString();
+  const payload = JSON.stringify({
+    name: BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.name,
+    url: BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.url
+  });
+  const doc = await ctx.probe.get(safeFilesUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { name?: unknown; url?: unknown; content?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { name?: unknown; url?: unknown; content?: unknown };
+  } catch {
+    return NEGATIVE;
+  }
+  const content = typeof parsed.content === "string" ? parsed.content.trim() : "";
+  const url = typeof parsed.url === "string" ? parsed.url : "";
+  if (url !== BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.url) return NEGATIVE;
+  if (content !== BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.content) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: safeFilesUrl,
+      remoteUrl: url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/safe-files fetches attacker-controlled URLs and returns remote file content — remote file inclusion oracle"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -34212,6 +34300,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAwsMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
+  brokencrystalsSecretsLiveOracle,
+  brokencrystalsSafeFilesRfiLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,

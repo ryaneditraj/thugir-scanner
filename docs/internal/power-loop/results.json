@@ -1,8 +1,6 @@
 {
   "runs": [
     {
-<<<<<<< Updated upstream
-=======
       "run_id": "2026-07-24T16:02:08.133Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -887,7 +885,6 @@
       "scanned_at": "2026-07-24T16:05:36.420Z"
     },
     {
->>>>>>> Stashed changes
       "run_id": "2026-07-24T16:05:42.096Z",
       "url": "https://pentest-fauxbank.vercel.app/report",
       "auth": "oss_deploy",
@@ -51426,21 +51423,13 @@
       "scanned_at": "2026-07-25T16:09:30.054Z"
     },
     {
-<<<<<<< Updated upstream
       "run_id": "2026-07-25T11:01:51.440Z",
-=======
-      "run_id": "2026-07-25T17:05:44.055Z",
->>>>>>> Stashed changes
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-<<<<<<< Updated upstream
       "finding_count": 13,
-=======
-      "finding_count": 12,
->>>>>>> Stashed changes
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -51450,7 +51439,6 @@
           "category": "Security misconfiguration"
         },
         {
-<<<<<<< Updated upstream
           "slug": "permissive-cors",
           "title": "CORS allows any origin",
           "severity": "medium",
@@ -51458,8 +51446,6 @@
           "category": "Security misconfiguration"
         },
         {
-=======
->>>>>>> Stashed changes
           "slug": "idor-sequential-ids",
           "title": "Object access by predictable sequential IDs (IDOR)",
           "severity": "high",
@@ -51538,7 +51524,6 @@
         }
       ],
       "ai_findings_added": 0,
-<<<<<<< Updated upstream
       "pages_crawled": 6,
       "probes_run": 369,
       "status": "ok",
@@ -54190,12 +54175,6 @@
       "probes_run": 626,
       "status": "ok",
       "scanned_at": "2026-07-25T17:16:29.119Z"
-=======
-      "pages_crawled": 1,
-      "probes_run": 418,
-      "status": "ok",
-      "scanned_at": "2026-07-25T17:05:44.055Z"
->>>>>>> Stashed changes
     }
   ],
   "teacher_delta_runs": [
