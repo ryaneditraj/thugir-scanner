@@ -7331,6 +7331,24 @@
       "slug": "burpbounty-n8n-settings-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/n8n/rest/settings returns {\"n8nVersion\":\"1.71.2\",\"authenticationMethod\":\"email\"}; burpbountylab.com/cve/n8n/rest/settings findings 63→72; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-couchdb-all-dbs-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/couchdb/_all_dbs returns [\"_replicator\",\"_users\",\"mydb\",\"testdb\"]; burpbountylab.com/cve/couchdb/_all_dbs findings 69→75; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-kubernetes-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/kubernetes/api/v1/ returns {\"kind\":\"APIResourceList\",\"resources\":[{\"name\":\"pods\"},{\"name\":\"services\"}]}; burpbountylab.com/cve/kubernetes/api/v1 findings 65→75; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-citrix-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/citrix/ returns <h1>Citrix</h1>; burpbountylab.com/cve/citrix findings 63→75; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12853,6 +12871,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-n8n-settings-cve-live-oracle",
       "shipped_at": "2026-07-25T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-couchdb-all-dbs-live-oracle",
+      "shipped_at": "2026-07-25T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-kubernetes-api-live-oracle",
+      "shipped_at": "2026-07-25T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-citrix-cve-live-oracle",
+      "shipped_at": "2026-07-25T11:10:00.000Z"
     }
   ]
 }
