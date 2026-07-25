@@ -7474,6 +7474,73 @@ const burpbountyCollabForgotLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyRceExpectLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/rce/expect", ctx.origin);
+  probeUrl.searchParams.set("cmd", "id");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const cmdOk =
+    /Command Output/i.test(doc.body) &&
+    /uid=\d+\([^)]+\)\s+gid=\d+\([^)]+\)/.test(doc.body) &&
+    /groups=\d+/.test(doc.body);
+  if (!cmdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /rce/expect?cmd= executes attacker-supplied shell commands and returns uid/gid output — expect/RCE profile oracle"
+    }
+  };
+};
+
+const burpbountyRceEchoLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirEcho${Date.now().toString(36)}`;
+  const probeUrl = new URL("/rce/echo", ctx.origin);
+  probeUrl.searchParams.set("input", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const echoed =
+    /<h1>\s*Echo\s*<\/h1>/i.test(doc.body) &&
+    new RegExp(`<pre>\\s*${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(doc.body);
+  if (!echoed) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /rce/echo?input= reflects attacker-controlled values in command output — echo/RCE profile oracle"
+    }
+  };
+};
+
+const burpbountySourceDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/source/test.php~", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sourceOk =
+    /<\?php/i.test(doc.body) &&
+    /mysqli_connect|mysql_connect/i.test(doc.body) &&
+    /\$db_pass\s*=\s*['"][^'"]+['"]/i.test(doc.body) &&
+    /Database configuration/i.test(doc.body);
+  if (!sourceOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /source/test.php~ returns PHP source with database credentials — backup/source-disclosure profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32378,6 +32445,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyRedirectOutLiveOracle,
   burpbountyRedirectPpLiveOracle,
   burpbountyCollabForgotLiveOracle,
+  burpbountyRceExpectLiveOracle,
+  burpbountyRceEchoLiveOracle,
+  burpbountySourceDisclosureLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

@@ -7127,6 +7127,30 @@
       "slug": "burpbounty-collab-forgot-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/collab/forgot?email=user@example.com returns Reset URL with token=abc123&email= in HTML; burpbountylab.com/collab/forgot findings 28→40; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-expect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/rce/expect?cmd=id returns uid=999(appuser) gid=999(appuser) in Command Output pre block; burpbountylab.com/rce/blind findings 39→42; benchmark 6/6 maintained (10 findings)"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-echo-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/rce/echo?input=canary echoes raw canary inside <pre> without sanitization; burpbountylab.com/rce/blind findings 39→42; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-source-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/source/test.php~ returns <?php mysqli_connect with $db_pass='password123'; burpbountylab.com/rce/blind findings 39→42; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-blind-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /rce/blind returns Processed with no timing/OOB observable without Burp Collaborator; /rce/cmd /sqli/id /pt/linux /xxe/parser return 404 — no positive-proof oracle path"
     }
   ],
   "shipped": [
@@ -12484,6 +12508,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-collab-forgot-live-oracle",
       "shipped_at": "2026-07-24T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-expect-live-oracle",
+      "shipped_at": "2026-07-25T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-echo-live-oracle",
+      "shipped_at": "2026-07-25T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-source-disclosure-live-oracle",
+      "shipped_at": "2026-07-25T00:10:00.000Z"
     }
   ]
 }
