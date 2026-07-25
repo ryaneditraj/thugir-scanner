@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 2483,
-  "total_findings": 17125,
+  "total_sites_scanned": 2493,
+  "total_findings": 17553,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1801,
-  "discovery_findings": 14244,
+  "discovery_urls_added": 1806,
+  "discovery_findings": 14652,
   "improvements_shipped": 1086,
   "last_run": "2026-07-25T04:10:00.000Z",
   "last_run_summary": {
@@ -50,23 +50,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 162,
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 408,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab route-specific oracles: WordPress XML-RPC, SQLi user enumeration, Tomcat CVE-2020-9484",
+      "focus": "BurpBountyLab WordPress login, Spring actuator health, Grafana CVE, Drupal autocomplete, API path passive trigger",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "burpbountylab.com/wp/xmlrpc.php: burpbounty-xmlrpc-live-oracle — POST system.listMethods returns wp.getUsersBlogs (48→53 findings)",
-      "burpbountylab.com/sqli/user?id=1: burpbounty-sqli-user-enum-live-oracle — id=1 admin profile vs id=9999 404 (49→55 findings)",
-      "burpbountylab.com/cve/tomcat/: burpbounty-tomcat-cve-live-oracle — JSESSIONID=../groovy triggers PersistentManagerBase swap (47→54 findings)"
+      "burpbountylab.com/wp/xmlrpc.php: burpbounty-xmlrpc-live-oracle — POST system.listMethods returns wp.getUsersBlogs (53 findings)",
+      "burpbountylab.com/sqli/user?id=1: burpbounty-sqli-user-enum-live-oracle — id=1 admin profile vs id=9999 404 (55 findings)",
+      "burpbountylab.com/cve/tomcat/: burpbounty-tomcat-cve-live-oracle — JSESSIONID=../groovy triggers PersistentManagerBase swap (54 findings)",
+      "burpbountylab.com/drupal/user/autocomplete/admin: burpbounty-drupal-user-disclosure-live-oracle present (51 findings)",
+      "burpbountylab.com/actuator/health: spring-boot-actuator-exposed on health endpoint (51 findings)",
+      "burpbountylab.com/passive/api/v1/data: hub fingerprint dominates (51/route); API-path passive oracle still absent",
+      "burpbountylab.com/wp/wp-login.php: hub fingerprint dominates; WordPress-login route-specific oracle still absent",
+      "burpbountylab.com/cve/grafana/: hub fingerprint dominates; Grafana CVE route-specific oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "burpbountylab.com/cve/confluence: route returns 404 — no positive-proof Confluence OGNL oracle",
+      "burpbountylab.com/wp/wp-login.php: WordPress login route-specific oracle still absent",
+      "burpbountylab.com/cve/grafana: Grafana CVE route-specific oracle still absent",
+      "burpbountylab.com/passive/api/v1/data: API path passive-detection route-specific oracle still absent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
@@ -265,6 +273,11 @@
     "burpbountylab.com/source/config.bak": 47,
     "burpbountylab.com/wp/xmlrpc.php": 53,
     "burpbountylab.com/sqli/user": 55,
-    "burpbountylab.com/cve/tomcat": 54
+    "burpbountylab.com/cve/tomcat": 54,
+    "burpbountylab.com/wp/wp-login.php": 51,
+    "burpbountylab.com/actuator/health": 51,
+    "burpbountylab.com/cve/grafana": 51,
+    "burpbountylab.com/drupal/user/autocomplete/admin": 51,
+    "burpbountylab.com/passive/api/v1/data": 51
   }
 }
