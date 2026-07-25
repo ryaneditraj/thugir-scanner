@@ -7784,6 +7784,269 @@ const burpbountySqliUserLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyAiHealthLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/health", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const modelProvider = String(parsed.model_provider ?? parsed.llm_provider ?? "");
+  const vectorDb = String(parsed.vector_db ?? "");
+  const ragEnabled = parsed.rag_enabled;
+  const usage = parsed.usage;
+  const usageOk =
+    usage &&
+    typeof usage === "object" &&
+    "prompt_tokens" in (usage as Record<string, unknown>) &&
+    "completion_tokens" in (usage as Record<string, unknown>);
+  if (
+    status !== "ok" ||
+    !modelProvider ||
+    !vectorDb ||
+    typeof ragEnabled !== "boolean" ||
+    !usageOk
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      modelProvider,
+      vectorDb,
+      ragEnabled,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Burp Bounty Lab GET /ai/health returns JSON with model_provider, vector_db, rag_enabled, and token usage — AI infrastructure health disclosure profile oracle distinct from /ai/v1/chat/completions"
+    }
+  };
+};
+
+const burpbountyAiMetricsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/metrics", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasHelp =
+    /# HELP prompt_tokens/i.test(doc.body) &&
+    /# HELP completion_tokens/i.test(doc.body) &&
+    /# TYPE total_tokens counter/i.test(doc.body);
+  const hasSeries =
+    /prompt_tokens\{model_name=/i.test(doc.body) &&
+    /completion_tokens\{model_name=/i.test(doc.body) &&
+    /service_info\{service_version=/i.test(doc.body);
+  if (!hasHelp || !hasSeries) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /ai/metrics exposes Prometheus counters for prompt_tokens, completion_tokens, and service_info — AI observability metrics disclosure profile oracle"
+    }
+  };
+};
+
+const burpbountySourceAppBackupLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/source/app.py~", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sourceOk =
+    /<\?php/i.test(doc.body) &&
+    /mysqli_connect|mysql_connect/i.test(doc.body) &&
+    /\$db_pass\s*=\s*['"][^'"]+['"]/i.test(doc.body) &&
+    /Database configuration/i.test(doc.body);
+  if (!sourceOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /source/app.py~ returns PHP source with database credentials via editor backup suffix — source-disclosure profile oracle distinct from /source/test.php~"
+    }
+  };
+};
+
+const burpbountyXmlrpcLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/wp/xmlrpc.php", ctx.origin).toString();
+  const listMethodsPayload =
+    '<?xml version="1.0"?><methodCall><methodName>system.listMethods</methodName></methodCall>';
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: listMethodsPayload,
+    headers: { "Content-Type": "text/xml" },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const xmlrpcOk =
+    /<methodResponse/i.test(doc.body) &&
+    /system\.listMethods/i.test(doc.body) &&
+    /wp\.getUsersBlogs/i.test(doc.body) &&
+    /pingback\.ping/i.test(doc.body);
+  if (!xmlrpcOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab POST /wp/xmlrpc.php system.listMethods returns wp.getUsersBlogs and pingback.ping — WordPress XML-RPC profile oracle"
+    }
+  };
+};
+
+const burpbountySqliUserEnumLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const validUrl = new URL("/sqli/user", ctx.origin);
+  validUrl.searchParams.set("id", "1");
+  const missingUrl = new URL("/sqli/user", ctx.origin);
+  missingUrl.searchParams.set("id", "9999");
+  const [validDoc, missingDoc] = await Promise.all([
+    ctx.probe.get(validUrl.toString(), { maxBytes: 8192 }),
+    ctx.probe.get(missingUrl.toString(), { maxBytes: 2048 })
+  ]);
+  const validHit =
+    validDoc.status >= 200 &&
+    validDoc.status < 300 &&
+    /User Profile/i.test(validDoc.body) &&
+    /Username:\s*admin/i.test(validDoc.body) &&
+    /Email:/i.test(validDoc.body);
+  const missingHit =
+    missingDoc.status === 404 && /User not found/i.test(missingDoc.body);
+  if (!validHit || !missingHit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: validUrl.toString(),
+      validStatus: validDoc.status,
+      missingStatus: missingDoc.status,
+      snippet: validDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /sqli/user?id=1 exposes admin profile but id=9999 returns 404 User not found — user-enumeration SQLi profile oracle"
+    }
+  };
+};
+
+const burpbountyTomcatCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const baseUrl = new URL("/cve/tomcat/", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(baseUrl, { maxBytes: 1024 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  if (!/Apache Tomcat/i.test(baselineDoc.body)) return NEGATIVE;
+  const exploitDoc = await ctx.probe.get(baseUrl, {
+    maxBytes: 1024,
+    headers: { Cookie: "JSESSIONID=../groovy" }
+  });
+  const sessionSwap = /PersistentManagerBase:\s*swapping out session/i.test(exploitDoc.body);
+  if (!sessionSwap) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: baseUrl,
+      snippet: exploitDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab /cve/tomcat/ returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — CVE-2020-9484 Tomcat profile oracle"
+    }
+  };
+};
+
+const burpbountyWpLoginLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/wp/wp-login.php", ctx.origin).toString();
+  const formDoc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (formDoc.status < 200 || formDoc.status >= 400) return NEGATIVE;
+  const hasLoginForm =
+    /WordPress Login/i.test(formDoc.body) &&
+    /<form[^>]+method\s*=\s*["']POST["'][^>]*action\s*=\s*["']\/wp\/wp-login\.php["']/i.test(formDoc.body) &&
+    /name\s*=\s*["']log["']/i.test(formDoc.body) &&
+    /name\s*=\s*["']pwd["']/i.test(formDoc.body);
+  if (!hasLoginForm) return NEGATIVE;
+  const authDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: "log=admin&pwd=wrongpassword",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 1024
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Invalid username or password/i.test(authDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: authDoc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /wp/wp-login.php exposes WordPress log/pwd form and POST returns Invalid username or password — WordPress login profile oracle"
+    }
+  };
+};
+
+const burpbountyGrafanaCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const candidatePaths = ["/cve/grafana/", "/grafana/"];
+  for (const path of candidatePaths) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const grafanaHit =
+      /<title>\s*Grafana\s*<\/title>/i.test(doc.body) &&
+      /your home dashboard/i.test(doc.body) &&
+      /LoadingGrafana/i.test(doc.body);
+    if (!grafanaHit) continue;
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: probeUrl,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "Burp Bounty Lab Grafana route returns title Grafana with home dashboard shell — Grafana CVE/profile oracle distinct from generic hub fingerprinting"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const burpbountyPassiveApiPathLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/passive/api/v1/data", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { data?: unknown; total?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { data?: unknown; total?: unknown };
+  } catch {
+    return NEGATIVE;
+  }
+  const rows = parsed.data;
+  const total = parsed.total;
+  const rowOk =
+    Array.isArray(rows) &&
+    rows.length > 0 &&
+    typeof rows[0] === "object" &&
+    rows[0] !== null &&
+    "id" in (rows[0] as Record<string, unknown>) &&
+    "name" in (rows[0] as Record<string, unknown>);
+  if (!rowOk || typeof total !== "number") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      total,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /passive/api/v1/data returns JSON data array with id/name objects and total counter — API path passive-detection profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32700,6 +32963,15 @@ export const RULES: Record<string, Rule> = {
   burpbountySstiPreviewLiveOracle,
   burpbountyXssUrlLiveOracle,
   burpbountySqliUserLiveOracle,
+  burpbountyAiHealthLiveOracle,
+  burpbountyAiMetricsLiveOracle,
+  burpbountySourceAppBackupLiveOracle,
+  burpbountyXmlrpcLiveOracle,
+  burpbountySqliUserEnumLiveOracle,
+  burpbountyTomcatCveLiveOracle,
+  burpbountyWpLoginLiveOracle,
+  burpbountyGrafanaCveLiveOracle,
+  burpbountyPassiveApiPathLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

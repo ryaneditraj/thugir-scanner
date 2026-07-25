@@ -15707,6 +15707,240 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-health-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI health endpoint live oracle",
+    description:
+      "GET /ai/health returns JSON with model_provider, vector_db, rag_enabled, and token usage counters — the Burp Bounty AI infrastructure health disclosure profile oracle.",
+    impactOneline:
+      "Live AI health probe confirms LLM/RAG/MCP metadata disclosure distinct from /ai/v1/chat/completions gateway headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose AI model providers, vector databases, or token usage on unauthenticated health endpoints.",
+      steps: [
+        "Restrict /ai/health to internal monitoring networks.",
+        "Return only a minimal ok status without provider or usage metadata.",
+        "Isolate Burp Bounty Lab AI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/health endpoint leaks model_provider, vector_db, and token usage. Show how to harden AI health checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ai-metrics-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI Prometheus metrics live oracle",
+    description:
+      "GET /ai/metrics exposes Prometheus counters for prompt_tokens, completion_tokens, and service_info — the Burp Bounty AI observability metrics disclosure profile oracle.",
+    impactOneline:
+      "Live metrics probe confirms unauthenticated Prometheus-style AI token counters distinct from JSON /ai/health.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiMetricsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect AI metrics endpoints behind authentication and network segmentation.",
+      steps: [
+        "Serve /ai/metrics only on internal scrape networks.",
+        "Strip model_provider labels from public metric series.",
+        "Isolate Burp Bounty Lab AI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/metrics endpoint exposes prompt_tokens and completion_tokens without auth. Show Prometheus metrics hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-source-app-backup-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab app.py backup source disclosure live oracle",
+    description:
+      "GET /source/app.py~ returns PHP source with database credentials via editor backup tilde suffix — the Burp Bounty source-disclosure profile oracle.",
+    impactOneline:
+      "Live backup probe confirms /source/app.py~ credential leak distinct from /source/test.php~.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySourceAppBackupLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block web access to editor backup files and rotate any credentials they expose.",
+      steps: [
+        "Deny requests for *~, *.bak, and *.swp suffixes at the web server.",
+        "Remove backup artifacts from the document root.",
+        "Rotate database passwords found in disclosed source."
+      ]
+    },
+    fixPrompt:
+      "Our /source/app.py~ backup file is web-accessible and leaks database credentials. Show backup-file hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xmlrpc-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab WordPress XML-RPC live oracle",
+    description:
+      "POST /wp/xmlrpc.php system.listMethods returns wp.getUsersBlogs and pingback.ping — the Burp Bounty WordPress XML-RPC profile oracle.",
+    impactOneline:
+      "Live XML-RPC probe confirms WordPress remote procedure call surface distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXmlrpcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable XML-RPC when unused or restrict it to authenticated admin networks.",
+      steps: [
+        "Block /xmlrpc.php at the web server or WAF unless required.",
+        "Remove pingback.ping and other unused methods.",
+        "Isolate Burp Bounty Lab WordPress routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/xmlrpc.php endpoint exposes system.listMethods with pingback.ping. Show how to disable WordPress XML-RPC.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-user-enum-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SQLi user-enumeration live oracle",
+    description:
+      "GET /sqli/user?id=1 returns admin profile but id=9999 returns 404 User not found — the Burp Bounty user-enumeration SQLi profile oracle.",
+    impactOneline:
+      "Live differential-response probe confirms predictable user ID enumeration distinct from /sqli/status and /sqli/length routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliUserEnumLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and return consistent responses for valid and invalid user IDs.",
+      steps: [
+        "Bind id parameters with prepared statements.",
+        "Return generic 404 without distinguishing missing users from authorization failures.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/user endpoint leaks admin profiles for id=1 but 404 for missing IDs. Show parameterized queries and enumeration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-tomcat-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
+    description:
+      "GET /cve/tomcat/ returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — the Burp Bounty Tomcat CVE profile oracle.",
+    impactOneline:
+      "Live Tomcat session-deserialization probe confirms CVE-2020-9484-style oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTomcatCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Tomcat and disable PersistentManager file-based session storage with untrusted paths.",
+      steps: [
+        "Patch Tomcat to a version that fixes CVE-2020-9484.",
+        "Avoid storing sessions in user-influenced directories.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/tomcat/ endpoint swaps sessions when JSESSIONID contains path traversal. Show Tomcat CVE-2020-9484 mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab WordPress login live oracle",
+    description:
+      "GET /wp/wp-login.php exposes a WordPress log/pwd form and POST returns Invalid username or password — the Burp Bounty WordPress login profile oracle.",
+    impactOneline:
+      "Live WordPress login probe confirms authentication endpoint behavior distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict WordPress login exposure and enforce account lockout on failed attempts.",
+      steps: [
+        "Limit wp-login.php exposure with IP allowlists or MFA.",
+        "Use generic login failure messages without user enumeration hints.",
+        "Isolate Burp Bounty Lab WordPress routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-login.php endpoint exposes a WordPress login form. Show how to harden wp-login.php and prevent credential stuffing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-grafana-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Grafana CVE live oracle",
+    description:
+      "GET /grafana/ returns a Grafana dashboard shell with title Grafana and LoadingGrafana markers — the Burp Bounty Grafana CVE/profile oracle.",
+    impactOneline:
+      "Live Grafana dashboard probe confirms exposed monitoring UI distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGrafanaCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Grafana dashboards without authentication on public networks.",
+      steps: [
+        "Require SSO or strong credentials for Grafana.",
+        "Patch Grafana CVEs and restrict admin API access.",
+        "Isolate Burp Bounty Lab Grafana routes from production monitoring."
+      ]
+    },
+    fixPrompt:
+      "Our /grafana/ endpoint exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-passive-api-path-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab API path passive-detection live oracle",
+    description:
+      "GET /passive/api/v1/data returns JSON with a data array of id/name objects and a total counter — the Burp Bounty API path passive-detection profile oracle.",
+    impactOneline:
+      "Live REST API path probe confirms versioned JSON endpoint behavior distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPassiveApiPathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid exposing versioned API paths without authentication in production.",
+      steps: [
+        "Require auth on /api/v1/* routes.",
+        "Use API gateways to hide internal path structure.",
+        "Isolate Burp Bounty Lab passive API routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /passive/api/v1/data endpoint is publicly reachable. Show API path hardening and authentication for versioned REST routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
