@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-24T23:05:00.000Z",
+  "updated_at": "2026-07-25T00:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/sqli/status?id=1",
+      "source": "BountySecurity/BurpBountyLab — status-code differential SQLi profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/sqli/length?q=admin",
+      "source": "BountySecurity/BurpBountyLab — content-length differential SQLi profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/pt/include?page=../../../etc/passwd",
+      "source": "BountySecurity/BurpBountyLab — PHP-style file inclusion path-traversal profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/redirect/meta?url=https://example.com",
+      "source": "BountySecurity/BurpBountyLab — meta-refresh open-redirect profile practice endpoint",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/passive/params?user_id=1&file=readme&token=abc",
+      "source": "BountySecurity/BurpBountyLab — vulnerability-indicative parameter names passive-detection trigger",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/sqli/id?id=1",
       "source": "BountySecurity/BurpBountyLab — SQLi-by-ID error-based profile practice endpoint",

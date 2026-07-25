@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-24T23:08:13.129953Z",
+  "updated_at": "2026-07-25T00:05:53.034Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2446,
-  "total_findings": 15684,
+  "total_sites_scanned": 2455,
+  "total_findings": 16016,
   "critical_findings": 45,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1781,
-  "discovery_findings": 12851,
+  "discovery_urls_added": 1786,
+  "discovery_findings": 13173,
   "improvements_shipped": 1071,
-  "last_run": "2026-07-24T23:08:13.129953Z",
+  "last_run": "2026-07-25T00:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Benchmark recall stable at 6/6 (10 findings) \u2014 no benchmark misses",
+      "note": "Benchmark recall stable at 6/6 (10 findings) — no benchmark misses",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,29 +48,29 @@
         }
       }
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 304,
+      "findings": 322,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab SQLi-by-ID, command-injection RCE, Linux path-traversal, XXE parser, passive tech fingerprints",
-      "improvements_shipped_this_run": 3
+      "focus": "BurpBountyLab status-code SQLi, content-length SQLi, PHP include traversal, meta-redirect, passive vuln-params; hack-this-site-eta auth routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 stable first-pass deep crawl",
-      "burpbountylab.com/passive/tech: tech-stack-disclosure route-specific oracle (37 findings)",
-      "burpbountylab.com/sqli/id: hub fingerprint 36 findings \u2014 route-specific SQLi-by-ID oracle still absent",
-      "hack-this-site-eta.vercel.app/labs/git-exposure.html: vulnlab-git-head-live-oracle + 41 findings"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — stable first-pass deep crawl (pages=6 probes=314)",
+      "burpbountylab.com/passive/params: reflected-xss-query-param route-specific oracle (39 findings)",
+      "burpbountylab.com/sqli/status: hub fingerprint 39 findings — route-specific status-code SQLi oracle still absent",
+      "burpbountylab.com/sqli/length: hub fingerprint 39 findings — route-specific content-length SQLi oracle still absent",
+      "burpbountylab.com/pt/include: hub fingerprint 39 findings — route-specific PHP-include traversal oracle still absent",
+      "burpbountylab.com/redirect/meta: hub fingerprint 39 findings — route-specific meta-refresh redirect oracle still absent",
+      "hack-this-site-eta.vercel.app/auth/jwt.html: 44 findings incl client-side auth lab evidence"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "burpbountylab.com/rce/cmd: command-injection \u2014 route-specific oracle still absent (hub fingerprint dominates)",
-      "burpbountylab.com/pt/linux: path-traversal file-read \u2014 route-specific oracle still absent",
-      "burpbountylab.com/xxe/parser: XML parser XXE \u2014 route-specific oracle still absent",
-      "burpbountylab.com/rce/blind: blind command execution \u2014 route-specific oracle still absent"
+      "burpbountylab route pages: hub fingerprint dominates (~39/route); route-specific status-code SQLi, content-length SQLi, PHP-include, meta-redirect oracles still absent"
     ]
   },
   "discovery_highlights": {
@@ -249,6 +249,14 @@
     "burpbountylab.com/rce/cmd": 36,
     "burpbountylab.com/pt/linux": 36,
     "burpbountylab.com/xxe/parser": 36,
-    "burpbountylab.com/passive/tech": 37
+    "burpbountylab.com/passive/tech": 37,
+    "burpbountylab.com/sqli/status": 39,
+    "burpbountylab.com/sqli/length": 39,
+    "burpbountylab.com/pt/include": 39,
+    "burpbountylab.com/redirect/meta": 39,
+    "burpbountylab.com/passive/params": 39,
+    "hack-this-site-eta.vercel.app/api/auth/login": 41,
+    "hack-this-site-eta.vercel.app/auth/jwt.html": 44,
+    "hack-this-site-eta.vercel.app/auth/session.html": 42
   }
 }
