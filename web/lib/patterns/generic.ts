@@ -15551,6 +15551,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-redirect-meta-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab meta-refresh open redirect live oracle",
+    description:
+      "GET /redirect/meta?url= returns HTML with meta-refresh and location.replace to attacker URLs — the Burp Bounty meta-redirect profile oracle.",
+    impactOneline:
+      "Live meta-refresh probe confirms open redirect via HTML refresh headers distinct from HTTP 302 /redirect/goto and form-action routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRedirectMetaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets before embedding them in meta-refresh or JavaScript location.replace calls.",
+      steps: [
+        "Allowlist permitted redirect hosts and reject external absolute URLs.",
+        "Prefer server-side redirects with strict target validation over client-side meta-refresh.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/meta endpoint issues meta-refresh and location.replace to attacker URLs. Show redirect validation mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xss-encoded-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab URL-encoded XSS live oracle",
+    description:
+      "GET /xss/encoded?q= decodes URL-encoded input and echoes it unescaped in paragraph and input value contexts — the Burp Bounty encoded-input XSS profile oracle.",
+    impactOneline:
+      "Live encoded XSS probe confirms reflected script injection after URL decoding distinct from /xss/reflect and attribute-context routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssEncodedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode user input after URL decoding before rendering in HTML text nodes and attributes.",
+      steps: [
+        "Decode query parameters once, then apply context-aware output encoding.",
+        "Use Content-Security-Policy to block inline script execution.",
+        "Isolate Burp Bounty Lab XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/encoded endpoint decodes URL-encoded q values and reflects them unescaped. Show output encoding after decoding.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssrf-img-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Burp Bounty Lab image-proxy SSRF live oracle",
+    description:
+      "GET /ssrf/img?src= fetches attacker image URLs and echoes remote HTML — the Burp Bounty image-proxy SSRF profile oracle.",
+    impactOneline:
+      "Live image-proxy probe confirms SSRF via src parameter distinct from /ssrf/fetch url= and /ssrf/proxy target= routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySsrfImgLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to arbitrary image URLs and validate src hosts against an allowlist.",
+      steps: [
+        "Proxy images only from trusted CDN hosts.",
+        "Reject file://, metadata, and internal IP ranges in image-proxy handlers.",
+        "Isolate Burp Bounty Lab SSRF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/img endpoint fetches arbitrary src URLs server-side. Show image-proxy SSRF mitigations and URL allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",

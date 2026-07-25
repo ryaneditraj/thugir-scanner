@@ -7627,6 +7627,83 @@ const burpbountyPtIncludeLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyRedirectMetaLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/redirect/meta", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const meta = doc.body.match(
+    /<meta[^>]*http-equiv=["']refresh["'][^>]*content=["'][^"']*url=([^"';]+)/i
+  );
+  const metaOk = meta && resolvesToOpenRedirectProbe(meta[1].trim(), ctx.origin);
+  const scriptOk = new RegExp(
+    `location\\.replace\\(\\s*["']${OPEN_REDIRECT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']\\s*\\)`,
+    "i"
+  ).test(doc.body);
+  if (!metaOk && !scriptOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: metaOk && scriptOk ? 0.93 : 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      metaRefresh: meta?.[1]?.trim(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /redirect/meta?url= issues meta-refresh and location.replace to attacker URL — meta-refresh open redirect profile oracle distinct from HTTP 302 routes"
+    }
+  };
+};
+
+const burpbountyXssEncodedLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const probeUrl = new URL("/xss/encoded", ctx.origin);
+  probeUrl.searchParams.set("q", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  const inParagraph = new RegExp(`<p>[^<]*${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(
+    doc.body
+  );
+  const inValue = new RegExp(`value\\s*=\\s*["']${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`, "i").test(
+    doc.body
+  );
+  if (!inParagraph && !inValue) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: inParagraph && inValue ? 0.92 : 0.9,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /xss/encoded?q= decodes URL-encoded input and echoes it unescaped in paragraph and input value — encoded-input XSS profile oracle"
+    }
+  };
+};
+
+const burpbountySsrfImgLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssrf/img", ctx.origin);
+  probeUrl.searchParams.set("src", `${SSRF_CANARY_URL}/img.png`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!bodyReflectsSsrfCanary(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      param: "src",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /ssrf/img?src= fetches attacker image URL and echoes Example Domain HTML — image-proxy SSRF profile oracle distinct from /ssrf/fetch and /ssrf/proxy"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32537,6 +32614,9 @@ export const RULES: Record<string, Rule> = {
   burpbountySqliStatusLiveOracle,
   burpbountySqliLengthLiveOracle,
   burpbountyPtIncludeLiveOracle,
+  burpbountyRedirectMetaLiveOracle,
+  burpbountyXssEncodedLiveOracle,
+  burpbountySsrfImgLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
