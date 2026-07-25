@@ -32350,25 +32350,26 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   const ldapUrl = new URL("/api/users/ldap", ctx.origin);
   ldapUrl.searchParams.set("query", "(&(objectClass=person)(objectClass=user)(email=*))");
   const doc = await ctx.probe.get(ldapUrl.toString(), {
-    maxBytes: 16384,
-    timeoutMs: 15000
+    maxBytes: 131072,
+    timeoutMs: 20000
   });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   const body = doc.body.trim();
   if (!body.startsWith("[")) return NEGATIVE;
-  let parsed: unknown[];
+  let resultCount = 0;
   try {
-    parsed = JSON.parse(body) as unknown[];
+    const parsed = JSON.parse(body) as unknown[];
+    if (Array.isArray(parsed)) resultCount = parsed.length;
   } catch {
-    return NEGATIVE;
+    resultCount = (body.match(/\{\}/g) || []).length;
   }
-  if (!Array.isArray(parsed) || parsed.length < 5) return NEGATIVE;
+  if (resultCount < 5) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.92,
     evidence: {
       url: ldapUrl.toString(),
-      resultCount: parsed.length,
+      resultCount,
       snippet: body.slice(0, 200).trim(),
       note: "Broken Crystals GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries — LDAP injection oracle"
     }

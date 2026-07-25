@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T16:07:39.982Z",
-  "total": 776,
-  "uniqueSlugs": 774,
+  "generatedAt": "2026-07-25T17:05:36.156Z",
+  "total": 779,
+  "uniqueSlugs": 777,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 758,
+    "generic": 761,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 691,
+    "deep": 694,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 62,
     "Security misconfiguration": 72,
     "Broken authentication": 54,
-    "Injection": 163,
+    "Injection": 165,
     "Cross-site scripting": 118,
     "general": 20,
     "SSRF": 2,
@@ -35,6 +35,7 @@
     "Sensitive data exposure": 16,
     "AI security": 37,
     "Open redirect": 1,
+    "Authentication bypass": 1,
     "Path traversal": 2,
     "XSS": 1
   },
@@ -44,6 +45,7 @@
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-goto-open-redirect-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
+    "brokencrystals-ldap-injection-live-oracle",
     "burpbounty-ai-disclosure-live-oracle",
     "burpbounty-ai-gateway-live-oracle",
     "burpbounty-ai-health-live-oracle",
@@ -786,6 +788,8 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
+    "vuln-expose-auth-bypass-api-live-oracle",
+    "vuln-expose-sqli-search-api-live-oracle",
     "vulnlab-admin-secrets-live-oracle",
     "vulnlab-auth-login-enumeration-live-oracle",
     "vulnlab-auth-session-live-oracle",
