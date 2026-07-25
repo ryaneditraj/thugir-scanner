@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T09:05:00.000Z",
+  "updated_at": "2026-07-25T10:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/actuator/heapdump",
+      "source": "BountySecurity/BurpBountyLab — Spring Boot actuator heapdump memory dump endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/couchdb/_all_dbs",
+      "source": "BountySecurity/BurpBountyLab — CouchDB _all_dbs CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/traefik/",
+      "source": "BountySecurity/BurpBountyLab — Traefik reverse-proxy CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/solarwinds/",
+      "source": "BountySecurity/BurpBountyLab — SolarWinds Orion CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/.svn/entries",
+      "source": "BountySecurity/BurpBountyLab — SVN metadata exposure passive trigger (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/actuator/loggers",
       "source": "BountySecurity/BurpBountyLab — Spring Boot actuator loggers endpoint (hub scrape)",
