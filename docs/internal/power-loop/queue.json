@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T21:25:00.000Z",
+  "updated_at": "2026-07-25T23:03:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/phpinfo.php",
+      "source": "BountySecurity/BurpBountyLab — phpinfo exposure passive trigger (misc module)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/dwr/util.js",
+      "source": "BountySecurity/BurpBountyLab — DWR util.js passive fingerprint trigger (misc module)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/swagger.json",
+      "source": "BountySecurity/BurpBountyLab — swagger.json API spec exposure (misc module)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/virtual-cards",
+      "source": "Commando-X/vuln-bank — BOLA virtual-cards API endpoint (OWASP API1; Medium pentest reports)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/admin/",
+      "source": "BountySecurity/BurpBountyLab — admin panel fuzzing directory trigger (misc module)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/file/azure?path=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — Azure metadata SSRF oracle /api/file/azure (README cloud endpoints)",
