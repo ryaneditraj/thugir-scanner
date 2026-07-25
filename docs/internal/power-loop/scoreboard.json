@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T05:23:02.674Z",
+  "updated_at": "2026-07-25T06:07:24.568Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2502,
-  "total_findings": 17993,
+  "total_sites_scanned": 2512,
+  "total_findings": 18387,
   "critical_findings": 45,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1811,
-  "discovery_findings": 15082,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1816,
+  "discovery_findings": 15456,
   "improvements_shipped": 1089,
-  "last_run": "2026-07-25T05:23:02.674Z",
+  "last_run": "2026-07-25T06:07:24.568Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 9,
+      "oracle_findings": 10,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Pass1 cold-start 8 findings gap=sqli (Heroku wake); 12s retry restored 6/6 (10 findings, pages=6 probes=295)",
+      "note": "Stable 6/6 first-pass recall with deep crawl (pages=6 probes=295)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,35 @@
         }
       }
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ directory absent (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 430,
+      "findings": 374,
       "skipped_48h": [],
       "dns_failures": [],
-      "focus": "BurpBountyLab FortiOS CVE, WebLogic CVE, actuator/mappings, GraphQL query injection, AI status disclosure + drained rce/echo, rce/expect, ssrf/img",
-      "improvements_shipped_this_run": 3
+      "focus": "OWASP LLM Top 10 showcase + BurpBountyLab XSS-URL/discover, Text4Shell CVE, AI MCP tools + drained Jira CVE, hack-this-site OWASP/CMS",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "remote merge: wp-login, Grafana CVE, API-path passive oracles shipped in engine (validation run)",
-      "juice-shop.herokuapp.com: benchmark recall 6/6 after Heroku retry (pass1 gap=sqli)",
-      "burpbountylab.com/rce/echo: burpbounty-rce-echo-live-oracle present (54 findings)",
-      "burpbountylab.com/rce/expect: burpbounty-rce-expect-live-oracle present (54 findings)",
-      "burpbountylab.com/ssrf/img: burpbounty-ssrf-img-live-oracle present (53 findings)",
-      "burpbountylab.com/actuator/mappings: spring-boot-actuator-exposed on mappings endpoint (54 findings)",
-      "burpbountylab.com/ai/status: burpbounty-ai-disclosure-live-oracle present (54 findings)",
-      "burpbountylab.com/cve/forti: hub fingerprint dominates (~54/route); FortiOS CVE route-specific oracle still absent",
-      "burpbountylab.com/cve/weblogic: hub fingerprint dominates; WebLogic CVE route-specific oracle still absent",
-      "burpbountylab.com/graphql/query: hub fingerprint dominates; GraphQL injection route-specific oracle still absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
+      "edward-playground.github.io/top10-showcase: client-side-prompt-injection-evidence (3 findings)",
+      "burpbountylab.com/xss/url: hub fingerprint dominates (57 findings); XSS-URL route-specific oracle still absent",
+      "burpbountylab.com/xss/discover: hub fingerprint dominates (57 findings); multi-param XSS discovery oracle still absent",
+      "burpbountylab.com/cve/text4shell: hub fingerprint dominates (57 findings); Text4Shell CVE route-specific oracle still absent",
+      "burpbountylab.com/ai/mcp/tools: hub fingerprint dominates (57 findings); MCP tools disclosure oracle still absent",
+      "burpbountylab.com/cve/jira/dashboard: hub fingerprint dominates (56 findings); Jira CVE route-specific oracle still absent",
+      "hack-this-site-eta.vercel.app/owasp: 46 findings incl exposed-source-maps + graphql-introspection-enabled",
+      "hack-this-site-eta.vercel.app/cms: 41 findings incl exposed-source-maps + permissive-cors"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop Heroku cold-start: pass1 often misses sqli before 12s wake retry",
-      "burpbountylab.com/cve/forti: FortiOS CVE route-specific oracle still absent",
-      "burpbountylab.com/cve/weblogic: WebLogic CVE route-specific oracle still absent",
-      "burpbountylab.com/graphql/query: GraphQL injection route-specific oracle still absent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "burpbountylab.com/xss/url: XSS-URL route-specific oracle still absent",
+      "burpbountylab.com/cve/text4shell: Text4Shell CVE route-specific oracle still absent",
+      "burpbountylab.com/ai/mcp/tools: MCP tools disclosure route-specific oracle still absent",
+      "burpbountylab.com/cve/jira/dashboard: Jira CVE route-specific oracle still absent",
+      "top10-showcase: LLM attack chains require interactive scenario navigation beyond shallow crawl"
     ]
   },
   "discovery_highlights": {
@@ -269,7 +269,7 @@
     "burpbountylab.com/rce/echo": 54,
     "burpbountylab.com/rce/expect": 54,
     "burpbountylab.com/ssrf/img": 53,
-    "burpbountylab.com/cve/jira/dashboard": 42,
+    "burpbountylab.com/cve/jira/dashboard": 56,
     "burpbountylab.com/passive/graphql": 48,
     "burpbountylab.com/source/config.bak": 47,
     "burpbountylab.com/wp/xmlrpc.php": 53,
@@ -284,6 +284,12 @@
     "burpbountylab.com/cve/weblogic": 54,
     "burpbountylab.com/actuator/mappings": 54,
     "burpbountylab.com/graphql/query": 53,
-    "burpbountylab.com/ai/status": 54
+    "burpbountylab.com/ai/status": 54,
+    "edward-playground.github.io/top10-showcase": 3,
+    "burpbountylab.com/xss/url": 57,
+    "burpbountylab.com/xss/discover": 57,
+    "burpbountylab.com/cve/text4shell": 57,
+    "burpbountylab.com/ai/mcp/tools": 57,
+    "hack-this-site-eta.vercel.app/cms": 41
   }
 }
