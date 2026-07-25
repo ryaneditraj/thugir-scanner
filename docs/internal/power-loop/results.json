@@ -1,6 +1,893 @@
 {
   "runs": [
     {
+<<<<<<< Updated upstream
+=======
+      "run_id": "2026-07-24T16:02:08.133Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 10,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 295,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:02:08.133Z"
+    },
+    {
+      "run_id": "2026-07-24T16:03:44.582Z",
+      "url": "http://burpbountylab.com/sqli/search?q=laptop",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-rce-ping-live-oracle",
+          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-xxe-parse-live-oracle",
+          "title": "Burp Bounty Lab XXE parser resolves external entities",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-cors-live-oracle",
+          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-pt-read-live-oracle",
+          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "burpbounty-crlf-set-live-oracle",
+          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 298,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:03:44.582Z"
+    },
+    {
+      "run_id": "2026-07-24T16:04:05.423Z",
+      "url": "http://burpbountylab.com/rce/eval?code=1%2b1",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-rce-ping-live-oracle",
+          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-xxe-parse-live-oracle",
+          "title": "Burp Bounty Lab XXE parser resolves external entities",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-cors-live-oracle",
+          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-pt-read-live-oracle",
+          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "burpbounty-crlf-set-live-oracle",
+          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 297,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:04:05.423Z"
+    },
+    {
+      "run_id": "2026-07-24T16:04:25.839Z",
+      "url": "http://burpbountylab.com/cve/spring/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-rce-ping-live-oracle",
+          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-xxe-parse-live-oracle",
+          "title": "Burp Bounty Lab XXE parser resolves external entities",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-cors-live-oracle",
+          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-pt-read-live-oracle",
+          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "burpbounty-crlf-set-live-oracle",
+          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 296,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:04:25.839Z"
+    },
+    {
+      "run_id": "2026-07-24T16:04:46.962Z",
+      "url": "http://burpbountylab.com/passive/cookies",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-rce-ping-live-oracle",
+          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-xxe-parse-live-oracle",
+          "title": "Burp Bounty Lab XXE parser resolves external entities",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-cors-live-oracle",
+          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-pt-read-live-oracle",
+          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "burpbounty-crlf-set-live-oracle",
+          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 297,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:04:46.962Z"
+    },
+    {
+      "run_id": "2026-07-24T16:05:09.411Z",
+      "url": "http://burpbountylab.com/drupal/user/1",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "phpinfo-exposed",
+          "title": "PHP phpinfo() page reachable in production",
+          "severity": "high",
+          "confidence": 0.95,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-xss-reflect-live-oracle",
+          "title": "Burp Bounty Lab reflected XSS live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-sqli-login-live-oracle",
+          "title": "Burp Bounty Lab SQLi login live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssti-render-live-oracle",
+          "title": "Burp Bounty Lab SSTI render live oracle",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-ssrf-fetch-live-oracle",
+          "title": "Burp Bounty Lab SSRF fetch live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "burpbounty-dom-xss-live-oracle",
+          "title": "Burp Bounty Lab DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "burpbounty-rce-ping-live-oracle",
+          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-xxe-parse-live-oracle",
+          "title": "Burp Bounty Lab XXE parser resolves external entities",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "burpbounty-cors-live-oracle",
+          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "burpbounty-pt-read-live-oracle",
+          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "burpbounty-crlf-set-live-oracle",
+          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 297,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:05:09.411Z"
+    },
+    {
+      "run_id": "2026-07-24T16:05:30.478Z",
+      "url": "https://pentest-fauxbank.vercel.app/scanner",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 9,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-fauxbank-lab-evidence",
+          "title": "FauxBank OWASP banking pentest training lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-authenticated-sqli-search",
+          "title": "Authenticated SQL injection via FauxBank search API",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "fauxbank-idor-accounts-probe",
+          "title": "FauxBank account IDOR via predictable account IDs",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-csrf-transfer-probe",
+          "title": "FauxBank transfer API missing CSRF protection",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-stored-xss-support-probe",
+          "title": "FauxBank support tickets store unescaped HTML (stored XSS)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 327,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:05:30.478Z"
+    },
+    {
+      "run_id": "2026-07-24T16:05:36.420Z",
+      "url": "https://pentest-fauxbank.vercel.app/instructor",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 9,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-fauxbank-lab-evidence",
+          "title": "FauxBank OWASP banking pentest training lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-authenticated-sqli-search",
+          "title": "Authenticated SQL injection via FauxBank search API",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "fauxbank-idor-accounts-probe",
+          "title": "FauxBank account IDOR via predictable account IDs",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-csrf-transfer-probe",
+          "title": "FauxBank transfer API missing CSRF protection",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "fauxbank-stored-xss-support-probe",
+          "title": "FauxBank support tickets store unescaped HTML (stored XSS)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 327,
+      "status": "ok",
+      "scanned_at": "2026-07-24T16:05:36.420Z"
+    },
+    {
+>>>>>>> Stashed changes
       "run_id": "2026-07-24T16:05:42.096Z",
       "url": "https://pentest-fauxbank.vercel.app/report",
       "auth": "oss_deploy",
@@ -50539,13 +51426,21 @@
       "scanned_at": "2026-07-25T16:09:30.054Z"
     },
     {
+<<<<<<< Updated upstream
       "run_id": "2026-07-25T11:01:51.440Z",
+=======
+      "run_id": "2026-07-25T17:05:44.055Z",
+>>>>>>> Stashed changes
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
+<<<<<<< Updated upstream
       "finding_count": 13,
+=======
+      "finding_count": 12,
+>>>>>>> Stashed changes
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -50555,6 +51450,7 @@
           "category": "Security misconfiguration"
         },
         {
+<<<<<<< Updated upstream
           "slug": "permissive-cors",
           "title": "CORS allows any origin",
           "severity": "medium",
@@ -50562,6 +51458,8 @@
           "category": "Security misconfiguration"
         },
         {
+=======
+>>>>>>> Stashed changes
           "slug": "idor-sequential-ids",
           "title": "Object access by predictable sequential IDs (IDOR)",
           "severity": "high",
@@ -50640,6 +51538,7 @@
         }
       ],
       "ai_findings_added": 0,
+<<<<<<< Updated upstream
       "pages_crawled": 6,
       "probes_run": 369,
       "status": "ok",
@@ -53291,6 +54190,12 @@
       "probes_run": 626,
       "status": "ok",
       "scanned_at": "2026-07-25T17:16:29.119Z"
+=======
+      "pages_crawled": 1,
+      "probes_run": 418,
+      "status": "ok",
+      "scanned_at": "2026-07-25T17:05:44.055Z"
+>>>>>>> Stashed changes
     }
   ],
   "teacher_delta_runs": [
