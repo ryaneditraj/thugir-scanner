@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T13:02:59.125Z",
-  "total": 767,
-  "uniqueSlugs": 765,
+  "generatedAt": "2026-07-25T14:02:12.619Z",
+  "total": 770,
+  "uniqueSlugs": 768,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 749,
+    "generic": 752,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 682,
+    "deep": 685,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 62,
-    "Security misconfiguration": 69,
+    "Security misconfiguration": 71,
     "Broken authentication": 53,
     "Injection": 162,
     "Cross-site scripting": 118,
@@ -34,7 +34,7 @@
     "Server-side request forgery": 12,
     "Sensitive data exposure": 16,
     "AI security": 37,
-    "Path traversal": 1,
+    "Path traversal": 2,
     "XSS": 1
   },
   "slugs": [
@@ -46,6 +46,7 @@
     "burpbounty-ai-mcp-tools-live-oracle",
     "burpbounty-ai-metrics-live-oracle",
     "burpbounty-api-docs-live-oracle",
+    "burpbounty-artica-cve-live-oracle",
     "burpbounty-backup-listing-live-oracle",
     "burpbounty-cisco-cve-live-oracle",
     "burpbounty-citrix-cve-live-oracle",
@@ -60,6 +61,7 @@
     "burpbounty-firebase-cve-live-oracle",
     "burpbounty-grafana-cve-live-oracle",
     "burpbounty-kubernetes-api-live-oracle",
+    "burpbounty-magmi-cve-live-oracle",
     "burpbounty-n8n-settings-cve-live-oracle",
     "burpbounty-netsweeper-cve-live-oracle",
     "burpbounty-passive-api-path-live-oracle",
@@ -80,6 +82,7 @@
     "burpbounty-redirect-out-live-oracle",
     "burpbounty-redirect-pp-live-oracle",
     "burpbounty-ruby-cve-live-oracle",
+    "burpbounty-sharefile-cve-live-oracle",
     "burpbounty-source-app-backup-live-oracle",
     "burpbounty-source-config-bak-live-oracle",
     "burpbounty-source-disclosure-live-oracle",

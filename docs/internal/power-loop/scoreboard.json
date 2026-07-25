@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T14:07:10.087615Z",
+  "updated_at": "2026-07-25T14:13:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,16 +22,16 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1856,
   "discovery_findings": 17955,
-  "improvements_shipped": 1113,
-  "last_run": "2026-07-25T14:07:10.087615Z",
+  "improvements_shipped": 1116,
+  "last_run": "2026-07-25T14:13:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 12,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Primary Heroku unreachable \u2014 6/6 recall via staging fallback (12 findings, pages=6 probes=456)",
+      "note": "Stable 6/6 first-pass recall on primary Heroku (13 findings, pages=6 probes=535); staging fallback also 6/6 when primary unreachable",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -47,36 +47,30 @@
           ]
         }
       },
-      "primary_status": "error \u2014 unreachable"
+      "primary_status": "ok"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 333,
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 257,
       "skipped_48h": [],
-      "dns_failures": [
-        "https://brokencrystals.com/api/goto"
-      ],
-      "focus": "BrokenCrystals goto/upload/SSRF-aws + Pwnshop chat/init + DVCA docs + BurpBountyLab queue drain (ssrf/fetch, rce/ping, pt/read)",
-      "improvements_shipped_this_run": 0
+      "dns_failures": [],
+      "focus": "BurpBountyLab route-specific CVE oracles (ShareFile path-traversal, Artica proxy, MAGMI plugin)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop: benchmark recall 6/6 (12 findings on juice-shop-staging.herokuapp.com) \u2014 primary Heroku unreachable; secret-resend slug still absent",
-      "brokencrystals.com/api/hidden-upload: 33 findings \u2014 thugir-dir-discovery noise; route-specific unrestricted-upload oracle still absent",
-      "brokencrystals.com/api/file/aws: 34 findings \u2014 thugir-dir-discovery noise; route-specific AWS-metadata SSRF oracle still absent",
-      "brokencrystals.com/api/goto: 0 findings \u2014 endpoint error/unreachable; open-redirect oracle not exercised",
-      "pwnshop.ctfsecurity.com/api/v1/chat/init: 14 findings \u2014 client-side-pwnshop-evidence; route-specific username-enumeration oracle (PWN-037) still absent",
-      "damnvulnerablecryptoapp.github.io: 3 findings \u2014 shallow GitHub Pages docs only; no crypto-challenge oracles",
-      "burpbountylab.com/ssrf/fetch + rce/ping + pt/read: 83 findings each \u2014 full hub fingerprint; route-specific SSRF/cmd/PT oracles still absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses; secret-resend slug still absent",
+      "burpbountylab.com/citrix/sharefile/: 75→85 findings — burpbounty-sharefile-cve-live-oracle shipped (download?path= win.ini read)",
+      "burpbountylab.com/cve/artica/fw.login.php: 75→86 findings — burpbounty-artica-cve-live-oracle shipped (Artica Web Proxy apikey login)",
+      "burpbountylab.com/cve/magmi/: 75→86 findings — burpbounty-magmi-cve-live-oracle shipped (MAGMI Utils JS fingerprint)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary oracle unreachable from cloud agent \u2014 staging fallback required",
-      "brokencrystals /api/goto unreachable; hidden-upload + /api/file/aws trigger dir-discovery fingerprint not route-specific SSRF/upload oracles",
-      "pwnshop chat/init: no email/username enumeration slug despite forgot-password queued",
-      "burpbountylab hub fingerprint dominates (~83/route); route-specific ssrf/fetch, rce/ping, pt/read oracles still absent"
+      "burpbountylab.com/cve/firebase/.json: firebase-config-exposed still not triggered (burpbounty-firebase-cve-live-oracle covers JSON oracle)",
+      "pwnshop/forgot-password: email-enumeration oracle (PWN-037) queued but not yet scanned",
+      "brokencrystals /api/goto unreachable; hidden-upload + /api/file/aws trigger dir-discovery fingerprint not route-specific SSRF/upload oracles"
     ]
   },
   "discovery_highlights": {
@@ -91,12 +85,14 @@
     "burpbountylab.com/cve/zoho/": 83,
     "burpbountylab.com/cve/ruby/": 83,
     "burpbountylab.com/cve/wp/local-file-inclusion": 80,
-    "burpbountylab.com/citrix/sharefile/": 75,
+    "burpbountylab.com/citrix/sharefile/": 85,
+    "burpbountylab.com/cve/artica/fw.login.php": 86,
+    "burpbountylab.com/cve/magmi/": 86,
     "burpbountylab.com/cve/couchdb/_users/_all_docs": 75,
     "burpbountylab.com/cve/crowd/": 78,
     "burpbountylab.com/cve/firebase/.json": 79,
     "burpbountylab.com/cve/netsweeper/": 77,
-    "juice-shop.herokuapp.com": 14,
+    "juice-shop.herokuapp.com": 13,
     "brokencrystals.com/api/hidden-upload": 33,
     "brokencrystals.com/api/file/aws": 34,
     "pwnshop.ctfsecurity.com/api/v1/chat/init": 14,
