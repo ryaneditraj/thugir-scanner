@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T11:05:00.000Z",
+  "updated_at": "2026-07-25T12:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/cve/zoho/",
+      "source": "BountySecurity/BurpBountyLab — Zoho ManageEngine CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/ruby/",
+      "source": "BountySecurity/BurpBountyLab — Ruby on Rails path-traversal CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/wp/local-file-inclusion",
+      "source": "BountySecurity/BurpBountyLab — WordPress Duplicator plugin LFI CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/citrix/sharefile/",
+      "source": "BountySecurity/BurpBountyLab — Citrix ShareFile path-traversal CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/couchdb/_users/_all_docs",
+      "source": "BountySecurity/BurpBountyLab — CouchDB _users/_all_docs disclosure CVE practice endpoint (cves.py hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/cve/crowd/",
       "source": "BountySecurity/BurpBountyLab — Atlassian Crowd CVE practice endpoint (hub scrape)",
