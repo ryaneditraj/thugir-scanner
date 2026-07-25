@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T19:44:11.283Z",
+  "updated_at": "2026-07-25T20:11:17.811Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/testimonials/count?query=test",
+      "source": "NeuraLegion/brokencrystals — reflective XSS oracle on testimonials count query param (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file?path=/etc/hosts",
+      "source": "NeuraLegion/brokencrystals — LFI oracle GET /api/file path param distinct from /api/file/raw (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/basic",
+      "source": "NeuraLegion/brokencrystals — mass-assignment privilege escalation POST /api/users/basic isAdmin field (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/api/transfer",
+      "source": "Commando-X/vuln-bank — vulnerable funds-transfer API endpoint (homepage OpenAPI)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/auth/login",
+      "source": "Commando-X/vuln-bank — authentication-bypass / weak-credential login API (homepage OpenAPI)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/?maptitle=test",
       "source": "NeuraLegion/brokencrystals — DOM XSS maptitle query param oracle (README reflective XSS)",

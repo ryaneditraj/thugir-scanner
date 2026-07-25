@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T20:10:00.000Z",
+  "updated_at": "2026-07-25T20:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,22 +15,23 @@
       ]
     }
   },
-  "total_sites_scanned": 2632,
-  "total_findings": 24063,
-  "critical_findings": 52,
+  "total_sites_scanned": 2637,
+  "total_findings": 24349,
+  "critical_findings": 51,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1881,
-  "discovery_findings": 20315,
+  "discovery_urls_added": 1886,
+  "discovery_findings": 20589,
   "improvements_shipped": 1132,
-  "last_run": "2026-07-25T20:10:00.000Z",
+  "last_run": "2026-07-25T20:16:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
+      "primary_status": "first pass 5 findings gap auth_bypass; retry merged to 12 findings pages=1 probes=435",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,34 +47,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (14 findings); secret-resend slug still absent"
+      "note": "Heroku cold-start degraded first pass; retry restored 6/6 recall; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 180,
-      "dns_failures": [],
-      "focus": "brokencrystals file/raw LFI + DOM XSS maptitle; burpbounty AI completions legacy route",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 317,
+      "skipped_48h": [],
+      "dns_failures": [
+        "https://brokencrystals.com/api/goto"
+      ],
+      "focus": "brokencrystals testimonials XSS + /api/file LFI + mass-assignment POST; vulnbank transfer/login APIs; drain sqli/oob + xss/attribute",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "brokencrystals.com/api/file/raw?path=package.json: 46 findings — brokencrystals-file-raw-lfi-live-oracle (39→46)",
-      "brokencrystals.com/?maptitle=test: 45 findings — client-side-brokencrystals-dom-xss-evidence route-specific slug (40→45)",
-      "burpbountylab.com/ai/v1/completions: 89 findings — burpbounty-ai-completions-live-oracle (87→89)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings after retry) — no benchmark misses",
+      "brokencrystals.com/api/testimonials/count?query=test: 44 findings — shared brokencrystals dir-discovery fingerprint; route-specific reflective XSS testimonials oracle absent",
+      "brokencrystals.com/api/file?path=/etc/hosts: 44 findings — shared fingerprint; route-specific /api/file LFI oracle absent (distinct from /api/file/raw)",
+      "brokencrystals.com/api/users/basic: 42 findings — sqli-query-param-injection generic; mass-assignment isAdmin oracle absent",
+      "vulnbank.org/api/transfer: 6 findings — vibe-openapi-docs-exposed + cors/idor generic; banking transfer oracle thin",
+      "vulnbank.org/api/auth/login: 6 findings — same thin vulnbank API fingerprint as transfer",
+      "burpbountylab.com/sqli/oob: 87 findings — hub fingerprint; route-specific OOB/Collaborator SQLi oracle absent",
+      "burpbountylab.com/xss/attribute: 88 findings — hub fingerprint; route-specific attribute XSS oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals /api/users/one/admin_user/adminpermission returns 403 without auth token — mass-assignment admin oracle blocked on production",
-      "brokencrystals /api/products/search and /api/users/me return HTTP 403 on production — route-specific SQLi/BOPLA oracles blocked",
-      "burpbountylab.com/drupal/admin/views/ajax/autocomplete/user/a: route-specific Drupal autocomplete CVE oracle still absent",
-      "brokencrystals.com/api/goto: DNS/connect failure (repeat)"
+      "brokencrystals API routes (testimonials/file/users/basic): shared ~42-44 finding fingerprint — route-specific reflective XSS, /api/file LFI, mass-assignment oracles absent",
+      "vulnbank.org API endpoints: low signal (6 findings) — needs dedicated banking/LLM transfer+auth oracles",
+      "burpbountylab sqli/oob + xss/attribute: hub fingerprint ~87-88/route; path-specific OOB SQLi and attribute XSS oracles still absent",
+      "brokencrystals.com/api/goto: DNS/connect failure (repeat)",
+      "LDAP/adminpermission/vuln-expose API oracles still queued end pending drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 14,
+    "juice-shop.herokuapp.com": 12,
     "brokencrystals.com/api/file/raw?path=package.json": 46,
     "brokencrystals.com/?maptitle=test": 45,
     "burpbountylab.com/ai/v1/completions": 89,
@@ -83,6 +92,24 @@
     "brokencrystals.com/api/testimonials/count": 44,
     "brokencrystals.com/api/partners/partnerLogin": 43,
     "burpbountylab.com/ai/v1/chat/completions": 87,
-    "burpbountylab.com/drupal/admin/views/ajax/autocomplete/user/a": 88
+    "burpbountylab.com/drupal/admin/views/ajax/autocomplete/user/a": 88,
+    "vulns-expose.jveltri.com.ar/api/auth/login": 10,
+    "vulns-expose.jveltri.com.ar/api/search": 10,
+    "burpbountylab.com/cve/f5/": 87,
+    "burpbountylab.com/webadmin/tools/systemstatus_remote.php": 88,
+    "pwnshop.ctfsecurity.com/api/v1/chat/init": 12,
+    "brokencrystals.com/api/file/raw?path=/etc/hosts": 39,
+    "brokencrystals.com/api/file/google?path=https://httpbin.org/get": 38,
+    "burpbountylab.com/cve/fortios/remote/login": 88,
+    "burpbountylab.com/wp/wp-config.php": 88,
+    "burpbountylab.com/sqli/search?q=laptop": 89,
+    "burpbountylab.com/rce/eval?code=1%2b1": 87,
+    "brokencrystals.com/api/testimonials/count?query=test": 44,
+    "brokencrystals.com/api/file?path=/etc/hosts": 44,
+    "brokencrystals.com/api/users/basic": 42,
+    "vulnbank.org/api/transfer": 6,
+    "vulnbank.org/api/auth/login": 6,
+    "burpbountylab.com/sqli/oob": 87,
+    "burpbountylab.com/xss/attribute": 88
   }
 }
