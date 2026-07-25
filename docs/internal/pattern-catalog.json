@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-25T06:10:12.731Z",
-  "total": 728,
-  "uniqueSlugs": 726,
+  "generatedAt": "2026-07-25T07:07:31.637Z",
+  "total": 731,
+  "uniqueSlugs": 729,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 710,
+    "generic": 713,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 72,
-    "deep": 656,
+    "deep": 659,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 6,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 53,
+    "Information disclosure": 56,
     "Security misconfiguration": 59,
     "Broken authentication": 51,
     "Injection": 157,
@@ -40,13 +40,16 @@
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "burpbounty-ai-disclosure-live-oracle",
+    "burpbounty-ai-gateway-live-oracle",
     "burpbounty-ai-health-live-oracle",
     "burpbounty-ai-metrics-live-oracle",
+    "burpbounty-backup-listing-live-oracle",
     "burpbounty-collab-forgot-live-oracle",
     "burpbounty-cors-live-oracle",
     "burpbounty-crlf-set-live-oracle",
     "burpbounty-dom-xss-live-oracle",
     "burpbounty-drupal-user-disclosure-live-oracle",
+    "burpbounty-dwr-interface-live-oracle",
     "burpbounty-grafana-cve-live-oracle",
     "burpbounty-passive-api-path-live-oracle",
     "burpbounty-passive-secrets-live-oracle",
