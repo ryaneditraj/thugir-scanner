@@ -7704,6 +7704,86 @@ const burpbountySsrfImgLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssti/preview", ctx.origin);
+  probeUrl.searchParams.set("content", "{{7*7}}");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const evaluated =
+    /<h1>\s*Preview\s*<\/h1>\s*<div>\s*49\s*<\/div>/i.test(doc.body) ||
+    (/<div>\s*49\s*<\/div>/i.test(doc.body) && /Preview/i.test(doc.body));
+  if (!evaluated) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      probe: "{{7*7}}",
+      result: "49",
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab /ssti/preview?content={{7*7}} evaluates to 49 — SSTI content-preview profile oracle distinct from /ssti/render"
+    }
+  };
+};
+
+const burpbountyXssUrlLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const canary = `thugirUrlXss${Date.now().toString(36)}`;
+  const payload = `javascript:${canary}`;
+  const probeUrl = new URL("/xss/url", ctx.origin);
+  probeUrl.searchParams.set("link", payload);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const reflected =
+    doc.body.includes(`href="${payload}"`) ||
+    doc.body.includes(`src="${payload}"`) ||
+    doc.body.includes(`action="${payload}"`);
+  if (!reflected || !/Visit Link|<h1>\s*Links\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      canary,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab /xss/url?link= reflects javascript: URLs in href, img src, form action, and iframe src — URL-context XSS profile oracle"
+    }
+  };
+};
+
+const burpbountySqliUserLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const base = new URL("/sqli/user", ctx.origin);
+  const okUrl = new URL(base);
+  okUrl.searchParams.set("id", "1");
+  const okDoc = await ctx.probe.get(okUrl.toString(), { maxBytes: 8192 });
+  if (okDoc.status < 200 || okDoc.status >= 400) return NEGATIVE;
+  const profileOk =
+    /User Profile/i.test(okDoc.body) &&
+    /Username:\s*admin/i.test(okDoc.body) &&
+    /Role:\s*admin/i.test(okDoc.body);
+  if (!profileOk) return NEGATIVE;
+
+  const badUrl = new URL(base);
+  badUrl.searchParams.set("id", "1'");
+  const badDoc = await ctx.probe.get(badUrl.toString(), { maxBytes: 8192 });
+  const sqlMarker = SQL_ERROR_MARKERS.find((re) => re.test(badDoc.body));
+  if (!sqlMarker) return NEGATIVE;
+  const match = badDoc.body.match(sqlMarker);
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: okUrl.toString(),
+      sqlErrorUrl: badUrl.toString(),
+      sqlError: match?.[0]?.slice(0, 120) || "SQL syntax error",
+      snippet: badDoc.body.slice(0, 240).trim(),
+      note: "Burp Bounty Lab GET /sqli/user?id=1 returns admin profile and id=1' triggers MySQL syntax error — SQLi-by-ID profile oracle"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -32617,6 +32697,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyRedirectMetaLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
+  burpbountySstiPreviewLiveOracle,
+  burpbountyXssUrlLiveOracle,
+  burpbountySqliUserLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

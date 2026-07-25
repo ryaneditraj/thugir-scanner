@@ -15629,6 +15629,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ssti-preview-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab SSTI content-preview live oracle",
+    description:
+      "GET /ssti/preview?content={{7*7}} evaluates arithmetic to 49 in the preview div — the Burp Bounty SSTI content-preview profile oracle.",
+    impactOneline:
+      "Live SSTI preview oracle on Burp Bounty Lab confirms content-parameter template injection profile coverage distinct from /ssti/render.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySstiPreviewLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines without a strict sandbox.",
+      steps: [
+        "Use logic-less templates or sandboxed rendering contexts.",
+        "Reject template syntax characters in user-controlled preview fields.",
+        "Isolate Burp Bounty Lab SSTI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssti/preview endpoint evaluates user content as templates. Show how to sandbox preview rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xss-url-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Burp Bounty Lab URL-context XSS live oracle",
+    description:
+      "GET /xss/url?link= reflects javascript: URLs unescaped in href, img src, form action, and iframe src — the Burp Bounty URL-context XSS profile oracle.",
+    impactOneline:
+      "Live URL-context XSS oracle on Burp Bounty Lab confirms javascript: protocol injection profile coverage beyond HTML-body reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXssUrlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and block dangerous URL schemes (javascript:, data:) before rendering links.",
+      steps: [
+        "Allowlist only http: and https: schemes in user-supplied URLs.",
+        "Encode URL attributes and reject javascript: protocol handlers.",
+        "Isolate Burp Bounty Lab XSS routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/url page reflects the link query param into href and src attributes. Show URL scheme validation and safe encoding.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-user-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SQLi user-profile live oracle",
+    description:
+      "GET /sqli/user?id=1 returns admin profile JSON-in-HTML and id=1' triggers MySQL syntax errors — the Burp Bounty SQLi-by-ID profile oracle.",
+    impactOneline:
+      "Live SQLi user-profile oracle on Burp Bounty Lab confirms ID-parameter injection profile coverage beyond login-form and search routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliUserLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all ID lookups — never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concatenated ID filters with prepared statements.",
+        "Return generic errors instead of database syntax details.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/user endpoint builds SQL from the id query parameter. Show parameterized queries and safe error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
