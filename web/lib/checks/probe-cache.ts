@@ -1,6 +1,33 @@
-import { fetchDoc, type FetchedDoc } from "./http";
+import { fetchDoc, toRawGithubusercontentUrl, type FetchedDoc } from "./http";
 
 type FetchOpts = Parameters<typeof fetchDoc>[1];
+
+const RETRYABLE_HEROKU_ERROR_RE = /Application Error|herokucdn\.com\/error-pages/i;
+
+/** Cold-start Heroku stubs must not poison the probe cache for the rest of the scan. */
+function isRetryableProbeResult(doc: FetchedDoc): boolean {
+  if (doc.status === 0) return true;
+  if (doc.status === 502 || doc.status === 503 || doc.status === 504) return true;
+  if (RETRYABLE_HEROKU_ERROR_RE.test(doc.body)) return true;
+  return false;
+}
+
+async function fetchWithGithackFallback(url: string, opts: FetchOpts): Promise<FetchedDoc> {
+  const doc = await fetchDoc(url, opts);
+  if (
+    doc.body.length > 0 &&
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    !RETRYABLE_HEROKU_ERROR_RE.test(doc.body)
+  ) {
+    return doc;
+  }
+  const raw = toRawGithubusercontentUrl(url);
+  if (!raw || raw === url) return doc;
+  const alt = await fetchDoc(raw, opts);
+  if (alt.status >= 200 && alt.status < 400 && alt.body.length > 0) return alt;
+  return doc.status === 0 && alt.status > 0 ? alt : doc;
+}
 
 function cacheKey(url: string, opts: FetchOpts = {}): string {
   const method = opts.method ?? "GET";
@@ -19,7 +46,10 @@ export class ProbeCache {
     const key = cacheKey(url, opts);
     let p = this.pending.get(key);
     if (!p) {
-      p = fetchDoc(url, opts);
+      p = fetchWithGithackFallback(url, opts).then((doc) => {
+        if (isRetryableProbeResult(doc)) this.pending.delete(key);
+        return doc;
+      });
       this.pending.set(key, p);
     }
     return p;
