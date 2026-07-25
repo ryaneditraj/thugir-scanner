@@ -8908,6 +8908,78 @@ const burpbountyCitrixCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyCrowdCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/crowd/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Atlassian\s+Crowd\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/crowd/ returns Atlassian Crowd heading — Crowd CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyFirebaseCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/firebase/.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const users = parsed.users;
+  const config = parsed.config;
+  const debug =
+    config && typeof config === "object" && "debug" in config ?
+      (config as { debug?: unknown }).debug
+    : undefined;
+  const hasAdminUser =
+    users &&
+    typeof users === "object" &&
+    Object.values(users as Record<string, unknown>).some(
+      (entry) =>
+        entry &&
+        typeof entry === "object" &&
+        String((entry as { email?: unknown }).email ?? "").includes("@")
+    );
+  if (!hasAdminUser || debug !== true) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/firebase/.json returns users with admin email and config.debug=true — Firebase realtime DB CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyNetsweeperCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/netsweeper/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Netsweeper\s+WebAdmin\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/netsweeper/ returns Netsweeper WebAdmin heading — Netsweeper CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
   {
@@ -33912,6 +33984,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyCouchdbAllDbsLiveOracle,
   burpbountyKubernetesApiLiveOracle,
   burpbountyCitrixCveLiveOracle,
+  burpbountyCrowdCveLiveOracle,
+  burpbountyFirebaseCveLiveOracle,
+  burpbountyNetsweeperCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

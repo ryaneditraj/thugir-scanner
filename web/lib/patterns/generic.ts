@@ -16331,6 +16331,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-crowd-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Atlassian Crowd CVE live oracle",
+    description:
+      "GET /cve/crowd/ returns an Atlassian Crowd heading — the Burp Bounty Crowd identity management CVE profile oracle.",
+    impactOneline:
+      "Live Crowd fingerprint probe confirms route-specific identity management CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrowdCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Atlassian Crowd and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Atlassian Crowd security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/crowd/ endpoint exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-firebase-cve-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Firebase realtime DB CVE live oracle",
+    description:
+      "GET /cve/firebase/.json returns user records and config.debug=true — the Burp Bounty Firebase realtime database CVE profile oracle.",
+    impactOneline:
+      "Live Firebase JSON probe confirms unauthenticated user data disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFirebaseCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Firebase realtime database JSON without authentication on public networks.",
+      steps: [
+        "Require authentication for all Firebase database reads and writes.",
+        "Disable debug mode in production Firebase configurations.",
+        "Isolate Burp Bounty Lab Firebase CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/firebase/.json endpoint leaks user emails and debug config without auth. Show Firebase realtime DB hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Netsweeper CVE live oracle",
+    description:
+      "GET /cve/netsweeper/ returns a Netsweeper WebAdmin heading — the Burp Bounty Netsweeper web filter CVE profile oracle.",
+    impactOneline:
+      "Live Netsweeper fingerprint probe confirms route-specific web filter CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict WebAdmin to trusted networks.",
+      steps: [
+        "Apply Netsweeper security advisories for WebAdmin CVEs.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/netsweeper/ endpoint exposes a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
