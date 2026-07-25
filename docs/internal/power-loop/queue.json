@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-25T17:15:00.000Z",
+  "updated_at": "2026-07-25T18:02:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/file/raw?path=package.json",
+      "source": "NeuraLegion/brokencrystals — LFI oracle GET /api/file/raw path param (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/raw?path=/etc/hosts",
+      "source": "NeuraLegion/brokencrystals — LFI /etc/hosts oracle via /api/file/raw (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/google?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — Google Cloud SSRF oracle /api/file/google (README cloud endpoints)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/fortios/remote/login",
+      "source": "BountySecurity/BurpBountyLab — FortiOS remote login CVE practice endpoint (hub scrape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/wp/wp-config.php",
+      "source": "BountySecurity/BurpBountyLab — WordPress wp-config.php exposure passive trigger (hub scrape)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/secrets",
       "source": "NeuraLegion/brokencrystals — exposed API keys / config secrets oracle GET /api/secrets (README)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T18:35:00.000Z",
+  "updated_at": "2026-07-25T18:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2613,
-  "total_findings": 23095,
+  "total_sites_scanned": 2621,
+  "total_findings": 23569,
   "critical_findings": 51,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1871,
-  "discovery_findings": 19371,
-  "improvements_shipped": 1124,
-  "last_run": "2026-07-25T18:35:00.000Z",
+  "discovery_urls_added": 1876,
+  "discovery_findings": 19833,
+  "improvements_shipped": 1126,
+  "last_run": "2026-07-25T18:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -31,7 +31,7 @@
       "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
-      "note": "Stable 6/6 recall (12 findings); no benchmark misses; secret-resend slug still absent (sensitive_data via juice-shop-leaked-api-key + vibe-unauthenticated-api-routes)",
+      "primary_status": "ok (503 cold-start; 12 findings pages=1 probes=435)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -47,29 +47,37 @@
           ]
         }
       },
-      "primary_status": "ok"
+      "note": "Stable 6/6 recall; no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 468,
       "skipped_48h": [],
-      "dns_failures": [],
-      "focus": "brokencrystals /api/secrets + /api/safe-files route-specific oracles",
-      "improvements_shipped_this_run": 2
+      "dns_failures": [
+        "https://brokencrystals.com/api/goto"
+      ],
+      "focus": "brokencrystals LFI /api/file/raw + Google SSRF oracles; BurpBounty FortiOS + wp-config passive triggers",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
-      "brokencrystals.com/api/secrets: brokencrystals-secrets-live-oracle now fires (38→41 findings)",
-      "brokencrystals.com/api/safe-files: brokencrystals-safe-files-rfi-live-oracle now fires (36→39 findings)"
+      "brokencrystals.com/api/secrets: brokencrystals-secrets-live-oracle now fires (38→41 findings) — shipped prior commit",
+      "brokencrystals.com/api/safe-files: brokencrystals-safe-files-rfi-live-oracle now fires (36→39 findings) — shipped prior commit",
+      "brokencrystals.com/api/file/raw?path=package.json: 39 findings — shared brokencrystals fingerprint; route-specific LFI/file-raw oracle still absent",
+      "brokencrystals.com/api/file/google: 38 findings — goto/aws live-oracles fire; route-specific Google-cloud SSRF oracle still absent",
+      "burpbountylab.com/cve/fortios/remote/login: 88 findings — hub fingerprint; route-specific FortiOS CVE oracle still absent",
+      "burpbountylab.com/wp/wp-config.php: 88 findings — hub fingerprint; route-specific WordPress wp-config oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop (no Resend key in bundle; sensitive_data covered via other slugs)",
+      "results.json had merge-conflict markers — resolved before benchmark scan",
+      "secret-resend slug still absent on juice-shop benchmark",
+      "brokencrystals /api/file/raw LFI oracle absent — shared ~39-finding API fingerprint only",
       "brokencrystals /api/products/search and /api/users/me return HTTP 403 on production — route-specific SQLi/BOPLA oracles blocked",
-      "brokencrystals adminpermission oracle: requires authenticated session; still queued",
-      "pwnshop/forgot-password + lab-stats + admin: still queued"
+      "brokencrystals.com/api/goto: DNS/connect failure (repeat)",
+      "LDAP/adminpermission/vuln-expose API oracles still queued end pending drain"
     ]
   },
   "discovery_highlights": {
@@ -81,6 +89,13 @@
     "vulns-expose.jveltri.com.ar/api/search": 10,
     "burpbountylab.com/cve/f5/": 87,
     "burpbountylab.com/webadmin/tools/systemstatus_remote.php": 88,
-    "pwnshop.ctfsecurity.com/api/v1/chat/init": 12
+    "pwnshop.ctfsecurity.com/api/v1/chat/init": 12,
+    "brokencrystals.com/api/file/raw?path=package.json": 39,
+    "brokencrystals.com/api/file/raw?path=/etc/hosts": 39,
+    "brokencrystals.com/api/file/google?path=https://httpbin.org/get": 38,
+    "burpbountylab.com/cve/fortios/remote/login": 88,
+    "burpbountylab.com/wp/wp-config.php": 88,
+    "burpbountylab.com/sqli/search?q=laptop": 89,
+    "burpbountylab.com/rce/eval?code=1%2b1": 87
   }
 }
