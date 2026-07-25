@@ -7295,6 +7295,24 @@
       "slug": "burpbounty-source-config-bak-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/source/config.bak returns PHP $db_pass='password123' mysqli_connect config; burpbountylab.com/source/config.bak findings 47→66; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-react2shell-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /rce/react2shell Next-Action:test returns 303 x-action-redirect:/login?a=982013569; burpbountylab.com/rce/react2shell findings 27→69; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-spring-cloud-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/spring/actuator returns Spring Cloud Config body; burpbountylab.com/cve/spring findings 16→69; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-text4shell-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/text4shell?input=canary echoes Processed: canary; burpbountylab.com/cve/text4shell findings 57→69; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12787,6 +12805,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-source-config-bak-live-oracle",
       "shipped_at": "2026-07-25T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-react2shell-live-oracle",
+      "shipped_at": "2026-07-25T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-spring-cloud-config-live-oracle",
+      "shipped_at": "2026-07-25T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-text4shell-live-oracle",
+      "shipped_at": "2026-07-25T09:10:00.000Z"
     }
   ]
 }
