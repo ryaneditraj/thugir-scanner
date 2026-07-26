@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T08:05:00.000Z",
+  "updated_at": "2026-07-26T09:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/rest/basket/1",
+      "source": "OWASP Juice Shop v20.1.1 — REST basket IDOR oracle (BOLA on /rest/basket/:id)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/chat",
+      "source": "ctfsec/pwnshop — AI chatbot prompt-injection / agent command injection oracle (PWN-037+)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/loans/apply",
+      "source": "Commando-X/vuln-bank — loan application mass-assignment / BOLA training route",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/admin",
+      "source": "alfredang/pentest FauxBank — unauthenticated admin panel IDOR route (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/user/whoami",
+      "source": "OWASP Juice Shop v20.1.1 — REST session/auth oracle on /rest/user/whoami",
+      "auth": "benchmark"
+    },
     {
       "url": "https://demo.owasp-juice.shop/rest/products/search?q=test",
       "source": "OWASP Juice Shop v20.1.1 — REST product search SQLi oracle on official demo (companion to heroku benchmark)",
