@@ -24306,7 +24306,7 @@ const fauxbankLoansNegativeAmountLiveOracle: Rule = async (ctx) => {
     maxBytes: 2048
   });
   if (posted.status < 200 || posted.status >= 300 || !/"ok"\s*:\s*true/i.test(posted.body)) return NEGATIVE;
-  const listed = await ctx.probe.get(postUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
+  const listed = await fetchDoc(postUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
   if (listed.status < 200 || listed.status >= 300 || !/"loans"\s*:\s*\[/i.test(listed.body)) return NEGATIVE;
   let loans: Array<Record<string, unknown>> = [];
   try {
