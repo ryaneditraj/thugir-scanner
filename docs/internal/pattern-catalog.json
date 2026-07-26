@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-26T06:05:34.784Z",
-  "total": 820,
-  "uniqueSlugs": 815,
+  "generatedAt": "2026-07-26T07:03:49.398Z",
+  "total": 823,
+  "uniqueSlugs": 818,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 802,
+    "generic": 805,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 735,
+    "deep": 738,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 195,
+    "Broken access control": 198,
     "Exposed secret": 25,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -698,6 +698,7 @@
     "fauxbank-authenticated-sqli-search",
     "fauxbank-csrf-transfer-probe",
     "fauxbank-idor-accounts-probe",
+    "fauxbank-loans-negative-amount-live-oracle",
     "fauxbank-loans-request-live-oracle",
     "fauxbank-stored-xss-support-probe",
     "firebase-config-exposed",
@@ -819,10 +820,12 @@
     "vulnbank-ai-anonymous-chat-live-oracle",
     "vulnbank-bill-payments-negative-amount-live-oracle",
     "vulnbank-bopla-register-live-oracle",
+    "vulnbank-check-balance-idor-live-oracle",
     "vulnbank-graphql-introspection-live-oracle",
     "vulnbank-merchant-payment-charge-live-oracle",
     "vulnbank-merchant-register-live-oracle",
     "vulnbank-request-loan-live-oracle",
+    "vulnbank-request-loan-negative-amount-live-oracle",
     "vulnbank-sqli-login-live-oracle",
     "vulnbank-transfer-negative-amount-live-oracle",
     "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
