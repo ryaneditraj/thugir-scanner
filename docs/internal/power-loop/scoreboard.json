@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T00:31:18.196945Z",
+  "updated_at": "2026-07-26T01:50:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,44 +15,39 @@
       ]
     }
   },
-  "total_sites_scanned": 2664,
-  "total_findings": 25688,
+  "total_sites_scanned": 2672,
+  "total_findings": 25964,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1901,
-  "discovery_findings": 21838,
+  "discovery_urls_added": 1906,
+  "discovery_findings": 22102,
   "improvements_shipped": 1143,
-  "last_run": "2026-07-26T00:31:18.196945Z",
+  "last_run": "2026-07-26T01:50:00.000Z",
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 10,
-    "vulnbank.org": 10,
-    "vulnbank.org/api/ai/chat/anonymous": 7,
-    "burpbountylab.com/dwr/util.js": 91,
-    "burpbountylab.com/.git/config": 90,
-    "burpbountylab.com/phpinfo.php": 89,
+    "juice-shop-staging.herokuapp.com": 12,
+    "vulnbank.org/graphql": 8,
+    "vulnbank.org/api/v3/user/1": 8,
+    "vulnbank.org/api/v1/payments/charge": 8,
+    "vulnbank.org/api/transactions": 8,
+    "brokencrystals.com/api/file/digital_ocean?path=https://httpbin.org/get": 51,
+    "burpbountylab.com/sqli/id?id=1": 91,
+    "burpbountylab.com/sqli/status?id=1": 90,
     "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 51,
-    "brokencrystals.com/api/testimonials/count?query=test": 51,
-    "pwnshop.ctfsecurity.com/forgot-password": 16,
-    "burpbountylab.com/collab/host?param=test": 90,
-    "brokencrystals.com/api/subscriptions?email=test": 49,
-    "vulnbank.org/api/v1/merchants/register": 7,
-    "vulnbank.org/api/bill-payments": 7,
-    "vulnbank.org/sup3r_s3cr3t_admin": 7,
-    "brokencrystals.com/marketplace?__proto__[Test]=Test": 51,
     "hack-this-site-eta.vercel.app/api/validate/ssrf": 44,
-    "burpbountylab.com/rce/blind?input=test": 90,
-    "burpbountylab.com/xss/tag?input=test": 90
+    "pwnshop.ctfsecurity.com/forgot-password": 16
   },
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_status": "error — Heroku 503 Application Error (0 findings)",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 361,
+      "pages_crawled": 6,
+      "probes_run": 451,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -68,39 +63,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (10 findings, pages=1 probes=361) \u2014 no benchmark misses; secret-resend slug still absent"
+      "note": "Primary Heroku 503 — staging fallback restored 6/6 (12 findings); secret-resend slug still absent; fast-fail fix shipped to avoid 9+ min hang"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 296,
-      "skipped_48h": [],
+      "urls_scanned": 7,
+      "findings": 264,
+      "skipped_48h": [
+        "vulnbank merchants/register",
+        "bill-payments",
+        "sup3r_s3cr3t_admin",
+        "brokencrystals marketplace __proto__",
+        "hack-this-site SSRF validate"
+      ],
       "dns_failures": [
         "https://brokencrystals.com/api/goto"
       ],
-      "focus": "vulnbank merchant/bill-payment/admin-panel API oracles + brokencrystals prototype-pollution marketplace + hack-this-site SSRF validate + queue drain (rce/blind, xss/tag)",
-      "improvements_shipped_this_run": 3,
-      "parallel_run_note": "Remote parallel run shipped vulnbank-bopla-register + vulnbank-sqli-login + burpbounty-dwr-util-live-oracle"
+      "focus": "vulnbank GraphQL/BOLA/merchant-payment API oracles + brokencrystals DigitalOcean SSRF + queue drain (sqli/status, sqli/id)",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 no benchmark misses; secret-resend slug still absent",
-      "vulnbank.org: 7\u219210 findings (parallel run) \u2014 vulnbank-bopla-register-live-oracle + vulnbank-sqli-login-live-oracle shipped",
-      "burpbountylab.com/dwr/util.js: 89\u219291 findings (parallel run) \u2014 burpbounty-dwr-util-live-oracle shipped",
-      "vulnbank.org/api/v1/merchants/register: 7 findings \u2014 thin vulnbank API fingerprint; no route-specific merchant-registration/BOLA oracle",
-      "vulnbank.org/api/bill-payments: 7 findings \u2014 thin fingerprint; no bill-payment business-logic oracle",
-      "vulnbank.org/sup3r_s3cr3t_admin: 7 findings \u2014 thin fingerprint; no exposed-admin-panel oracle",
-      "brokencrystals.com/marketplace?__proto__[Test]=Test: 51 findings \u2014 shared dir-discovery fingerprint; no route-specific prototype-pollution DOM XSS oracle",
-      "hack-this-site-eta.vercel.app/api/validate/ssrf: 44 findings \u2014 SSRF lab endpoint detected",
-      "burpbountylab.com/rce/blind: 90 findings \u2014 hub fingerprint",
-      "burpbountylab.com/xss/tag: 90 findings \u2014 hub fingerprint"
+      "juice-shop.herokuapp.com: PRIMARY MISS — Heroku 503 (0 findings); staging fallback 6/6 (12 findings)",
+      "vulnbank.org/graphql: 8 findings — thin shared vulnbank fingerprint; vibe-openapi-docs-exposed present; no GraphQL-introspection/BOLA route oracle",
+      "vulnbank.org/api/v3/user/1: 8 findings — thin fingerprint; no hidden-admin user-details BOLA oracle",
+      "vulnbank.org/api/v1/payments/charge: 8 findings — thin fingerprint; no merchant payment-charge business-logic oracle",
+      "vulnbank.org/api/transactions: 8 findings — thin fingerprint; no transfer API BOLA/SQLi oracle",
+      "brokencrystals.com/api/file/digital_ocean: 51 findings — shared brokencrystals dir-discovery fingerprint (aws/azure SSRF oracles); no route-specific DigitalOcean SSRF oracle",
+      "burpbountylab.com/sqli/status: 90 findings — hub fingerprint",
+      "burpbountylab.com/sqli/id: 91 findings — hub fingerprint"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnbank.org API routes (merchants/register, bill-payments, sup3r_s3cr3t_admin): thin 7-finding fingerprint \u2014 needs banking BOLA/merchant/bill-payment/admin oracles",
-      "brokencrystals.com/marketplace prototype-pollution: shared ~51-finding dir-discovery fingerprint \u2014 route-specific __proto__ DOM XSS oracle still absent",
-      "burpbountylab hub pages list all endpoints \u2014 every route triggers full oracle fingerprint regardless of path-specific vulnerability"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "PRIMARY BENCHMARK MISS: juice-shop.herokuapp.com Heroku 503 — recall only via staging fallback; secret-resend slug still absent",
+      "vulnbank.org API routes (graphql, v3/user, payments/charge, transactions): thin 8-finding shared fingerprint — needs route-specific GraphQL/BOLA/merchant-payment oracles",
+      "brokencrystals.com/api/file/digital_ocean: shared ~51-finding fingerprint — route-specific DigitalOcean metadata SSRF oracle still absent",
+      "burpbountylab hub fingerprint ~90-91/route; path-specific sqli/status and sqli/id oracles still absent"
     ]
   }
 }
