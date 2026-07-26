@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-26T21:23:24.129Z",
-  "total": 865,
-  "uniqueSlugs": 860,
+  "generatedAt": "2026-07-26T22:18:17.838Z",
+  "total": 867,
+  "uniqueSlugs": 862,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 847,
+    "generic": 849,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 780,
+    "deep": 782,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 73,
-    "Broken authentication": 60,
+    "Broken authentication": 61,
     "Injection": 175,
-    "Cross-site scripting": 127,
+    "Cross-site scripting": 128,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 22,
@@ -731,6 +731,8 @@
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",
     "missing-security-headers",
+    "nodegoat-tutorial-a2-route-live-oracle",
+    "nodegoat-tutorial-a3-route-live-oracle",
     "notices-file-lfi-probe",
     "oauth-oidc-metadata-exposed",
     "open-redirect-query-param",
