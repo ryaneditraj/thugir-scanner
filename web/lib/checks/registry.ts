@@ -8051,6 +8051,27 @@ const burpbountyDwrUtilLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyPhpinfoLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/phpinfo.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const phpinfoOk =
+    /<title>\s*phpinfo\(\)\s*<\/title>/i.test(doc.body) &&
+    /PHP Version\s+[\d.]+/i.test(doc.body) &&
+    /Build Date/i.test(doc.body);
+  if (!phpinfoOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /phpinfo.php returns phpinfo() HTML with PHP Version and Build Date — phpinfo disclosure profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 const burpbountyGitConfigLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/.git/config", ctx.origin).toString();
@@ -16637,6 +16658,77 @@ const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
       url: payUrl,
       snippet: doc.body.slice(0, 280).trim(),
       note: "Vuln Bank POST /api/bill-payments/create accepts negative amount:-50 and returns success — bill-payment business-logic oracle"
+    }
+  };
+};
+
+const vulnbankMerchantPaymentChargeLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
+  const probeName = `thugir_pay_${Date.now().toString(36)}`;
+  const registerPayload = JSON.stringify({
+    name: probeName,
+    email: `${probeName}@thugir.invalid`,
+    password: "ThugirProbe1!"
+  });
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: registerPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  let registerParsed: Record<string, unknown> | null = null;
+  try {
+    registerParsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const apiKey = String(registerParsed.api_key ?? "");
+  if (String(registerParsed.status ?? "") !== "success" || !apiKey.startsWith("vk_")) return NEGATIVE;
+  const chargeUrl = new URL("/api/v1/payments/charge", ctx.origin).toString();
+  const cardNumber = "4111111111111111";
+  const chargePayload = JSON.stringify({
+    amount: 100,
+    currency: "USD",
+    card_number: cardNumber,
+    cvv: "123",
+    expiry: "12/30",
+    description: "thugir merchant payment probe"
+  });
+  const chargeDoc = await ctx.probe.get(chargeUrl, {
+    method: "POST",
+    body: chargePayload,
+    headers: {
+      "Content-Type": "application/json",
+      "X-Merchant-Api-Key": apiKey
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (chargeDoc.status < 200 || chargeDoc.status >= 400) return NEGATIVE;
+  let chargeParsed: Record<string, unknown> | null = null;
+  try {
+    chargeParsed = JSON.parse(chargeDoc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const debugInfo = chargeParsed.debug_info;
+  if (!debugInfo || typeof debugInfo !== "object") return NEGATIVE;
+  const submittedCard = String((debugInfo as { submitted_card_number?: unknown }).submitted_card_number ?? "");
+  const authMethod = String((debugInfo as { auth_method?: unknown }).auth_method ?? "");
+  const paymentId = chargeParsed.payment_id;
+  if (submittedCard !== cardNumber) return NEGATIVE;
+  if (authMethod !== "api_key") return NEGATIVE;
+  if (paymentId === undefined || paymentId === null) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: chargeUrl,
+      snippet: chargeDoc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/v1/payments/charge with merchant api_key echoes debug_info.submitted_card_number — merchant payment gateway oracle"
     }
   };
 };
@@ -32885,6 +32977,28 @@ const brokencrystalsAzureMetadataSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsDigitalOceanMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/digital_ocean", ctx.origin);
+  probeUrl.searchParams.set("path", "http://169.254.169.254/metadata/v1/id");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /\bhostname\b/i.test(doc.body) &&
+    /\bregion\b/i.test(doc.body) &&
+    /interfaces\/|user-data|public-keys/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/digital_ocean?path=http://169.254.169.254/metadata/v1/id returns DigitalOcean droplet metadata — cloud SSRF oracle distinct from AWS /api/file/aws and Azure /api/file/azure"
+    }
+  };
+};
+
 const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const ldapUrl = new URL("/api/users/ldap", ctx.origin);
@@ -34902,6 +35016,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankSqliLoginLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
   vulnbankBillPaymentsNegativeAmountLiveOracle,
+  vulnbankMerchantPaymentChargeLiveOracle,
   vulnbankVirtualCardsBolaLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
   clientSideDragSecurityFlawsEvidence,
@@ -35220,6 +35335,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
   brokencrystalsAzureMetadataSsrfLiveOracle,
+  brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsSecretsLiveOracle,
@@ -35336,6 +35452,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySwaggerJsonLiveOracle,
   burpbountyAdminPanelLiveOracle,
   burpbountyDwrUtilLiveOracle,
+  burpbountyPhpinfoLiveOracle,
   burpbountyGitConfigLiveOracle,
   burpbountyCollabForgotLiveOracle,
   burpbountyRceExpectLiveOracle,
