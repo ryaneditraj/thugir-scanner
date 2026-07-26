@@ -346,7 +346,9 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
         timeoutMs: 12000,
         maxBytes: 4096
       });
-      if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) continue;
+      // Heroku dyno sleep returns 503/Application Error — bail early instead of probing all paths.
+      if (doc.status === 503 || HEROKU_APP_ERROR_RE.test(doc.body)) return false;
+      if (doc.status < 200) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
       if (p.includes("security-question") && /"question"\s*:/i.test(doc.body)) return true;
       if (p.includes("ftp") && /"name"\s*:\s*"juice-shop"/i.test(doc.body)) return true;
@@ -411,6 +413,19 @@ async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> 
   return ready.has("admin") && ready.has("idor") && ready.has("sqli") && ready.has("sensitive");
 }
 
+/** Heroku Application Error / 503 — dyno asleep; avoid long wake loops. */
+async function juiceShopHerokuDown(pageUrl: string): Promise<boolean> {
+  try {
+    const doc = await fetchDoc(new URL("/rest/admin/application-configuration", pageUrl).toString(), {
+      timeoutMs: 8000,
+      maxBytes: 2048
+    });
+    return doc.status === 503 || HEROKU_APP_ERROR_RE.test(doc.body);
+  } catch {
+    return false;
+  }
+}
+
 /** Pre-fetch Juice Shop REST + bundle paths into probe cache after dyno wake-up. */
 async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Promise<void> {
   const origin = new URL(pageUrl).origin;
@@ -429,6 +444,7 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   const wakeApi = async (): Promise<boolean> => {
     for (let attempt = 0; attempt < 10; attempt++) {
       if (await juiceShopBenchmarkOracleReady(pageUrl)) return true;
+      if (await juiceShopHerokuDown(pageUrl)) return false;
       await new Promise((r) => setTimeout(r, 2500));
     }
     // Last resort: prime whatever API paths respond (partial wake) so other rules still get signal.
@@ -442,6 +458,7 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
           timeoutMs: 10000,
           maxBytes: 16384
         });
+        if (doc.status === 503 || HEROKU_APP_ERROR_RE.test(doc.body)) return false;
         if (
           doc.status >= 200 &&
           doc.status < 500 &&
@@ -523,11 +540,14 @@ async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise
   let best = home;
   for (let attempt = 0; attempt < 4; attempt++) {
     const origin = best.finalUrl || targetUrl;
+    const herokuDown =
+      best.status === 503 || HEROKU_APP_ERROR_RE.test(best.body);
     const pageReady =
-      !HEROKU_APP_ERROR_RE.test(best.body) &&
+      !herokuDown &&
       /main\.js/i.test(best.body) &&
       (await juiceShopApiLive(origin));
     if (pageReady) break;
+    if (herokuDown && attempt >= 1) break;
     await new Promise((r) => setTimeout(r, 3500));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
       timeoutMs: 18000,
@@ -7241,6 +7261,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   home = await warmupRenderHost(target.toString(), home);
   home = await warmupJuiceShopHome(target.toString(), home);
+  if (
+    isJuiceShopHost(home.finalUrl || target.toString()) &&
+    (await juiceShopHerokuDown(home.finalUrl || target.toString()))
+  ) {
+    throw new BlockedTargetError("Juice Shop Heroku dyno unavailable (503) — use staging fallback.");
+  }
   const origin = target.origin;
   const crawlOrigin = new URL(home.finalUrl).origin;
 
