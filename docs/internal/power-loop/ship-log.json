@@ -26,6 +26,17 @@
       "commit_range": "4c908475d7c1b852bd647090ba2b1e0dd9f669a5..5afe5c693c0951138f9fe7beb8c4c72edc9ab20c",
       "gate": "pass",
       "notes": "Sacred zone untouched; typecheck and ship gate passed; PR tool was scoped to automation branch, so main was promoted with a normal Git merge commit."
+    },
+    {
+      "shipped_at": "2026-07-26T00:49:29Z",
+      "method": "direct_git_merge",
+      "pr_number": null,
+      "merge_commit": "f3f782f4ddd1c388032c7f3a04b04580cc1593eb",
+      "improvements_shipped": 1140,
+      "improvements_delta": 33,
+      "commit_range": "ce3458ee7e1b0c3a609f9505db77cf8349a5be3b..db70dddd2482ee73e0ca633e6802de7c0d313b04",
+      "gate": "pass",
+      "notes": "Sacred zone untouched; ship-gate/typecheck passed; benchmark scan passed after retry with 10 findings; PR tool was scoped to cursor/power-loop-main-shipping-fc87, so main was promoted with a normal Git merge commit."
     }
   ]
 }
