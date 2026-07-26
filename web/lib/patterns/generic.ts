@@ -15655,6 +15655,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api5-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API5 BFLA live oracle",
+    description:
+      "GET /api5/users with a regular-user Authorization-Token returns every user record including admin flags — the vAPI broken function level authorization oracle.",
+    impactOneline:
+      "Hidden admin list endpoints reachable with low-privilege tokens expose every account in one request.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi5BflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — enforce function-level authorization on every admin route in production.",
+      steps: [
+        "Deny list/export endpoints to non-admin principals.",
+        "Hide admin routes from API discovery and enforce role checks server-side.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api5/users endpoint lists every user when called with a regular-user token. Show BFLA remediation for hidden admin routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api6-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API6 mass assignment live oracle",
+    description:
+      "POST /api6/user accepts attacker-controlled credit during signup and GET /api6/user/me returns the inflated balance with flag — the vAPI mass assignment oracle.",
+    impactOneline:
+      "Writable object fields let attackers grant themselves credits or admin flags at registration time.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi6MassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — allowlist writable fields on user creation in production.",
+      steps: [
+        "Bind only username/password on signup; ignore credit/isAdmin in request bodies.",
+        "Validate mass-assignment payloads against a server-side schema.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api6/user signup accepts a credit field and persists it. Show mass-assignment hardening for user registration APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api8-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "vAPI API8 SQL injection login live oracle",
+    description:
+      "POST /api8/user/login accepts `' OR '1'='1` SQL injection to bypass authentication and /api8/user/secret returns the admin flag — the vAPI injection oracle.",
+    impactOneline:
+      "Unsanitized login queries let attackers authenticate as admin without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi8SqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — use parameterized queries for every login path in production.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic auth failures without SQL syntax errors.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api8/user/login is vulnerable to SQL injection authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bug-collection-evidence",
     platform: "generic",
     category: "Injection",

