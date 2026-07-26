@@ -14147,6 +14147,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Vuln Bank profile-picture URL SSRF live oracle",
+    description:
+      "POST /upload_profile_picture_url fetches attacker-controlled image_url server-side with no allowlist and saves the response as the user's profile picture — the Vuln Bank profile-picture SSRF oracle.",
+    impactOneline:
+      "Server-side URL fetch on profile uploads enables SSRF against internal services and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankUploadProfilePictureUrlSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal IPs and validate image content — Vuln Bank is intentional training software.",
+      steps: [
+        "Allowlist permitted image hosts instead of fetching arbitrary URLs.",
+        "Reject link-local, private, and metadata IP ranges before outbound requests.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /upload_profile_picture_url endpoint fetches any image_url server-side. Show SSRF remediation with host allowlists and metadata blocking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-transfer-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank money-transfer negative-amount business-logic oracle",
+    description:
+      "POST /transfer accepts negative amount values and credits the sender's balance instead of debiting it — the Vuln Bank money-transfer business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on transfers lets attackers inflate their account balance with negative transfer amounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankTransferNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate transfer amounts are positive and enforce balance checks — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero transfer amounts at the API layer.",
+        "Debit the sender atomically and verify sufficient funds before crediting the recipient.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /transfer endpoint accepts amount:-500 and increases the sender balance. Show business-logic validation for money transfers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-graphql-introspection-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Vuln Bank GraphQL introspection live oracle",
+    description:
+      "POST /graphql returns full __schema introspection including query types for authenticated users — the Vuln Bank GraphQL introspection oracle.",
+    impactOneline:
+      "GraphQL introspection exposes the full API schema, helping attackers map hidden queries and mutations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankGraphqlIntrospectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production — Vuln Bank is intentional training software.",
+      steps: [
+        "Turn off introspection outside development environments.",
+        "Require admin roles for schema exploration tools like GraphiQL.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql endpoint returns __schema introspection for authenticated users. Show how to disable introspection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-swagger-json-live-oracle",
     platform: "generic",
     category: "Information disclosure",
