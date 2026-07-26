@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T20:03:42.317Z",
+  "updated_at": "2026-07-26T21:05:17.629Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
+      "source": "OWASP WrongSecrets — challenge-12 Docker secrets live oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
+      "source": "OWASP WrongSecrets — challenge-13 CI/CD secrets live oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
+      "source": "OWASP WrongSecrets — challenge-14 password-manager secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
+      "source": "OWASP NodeGoat — A2 broken authentication tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a3",
+      "source": "OWASP NodeGoat — A3 sensitive data exposure tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://vapi.apisec.ai/vapi/api9/v1/user/login",
       "source": "roottusk/vAPI — API9 improper assets management v1 login without rate-limit (APIsec hosted)",
