@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api7-cors-misconfig-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api7/user create + login session then GET /api7/user/key with Origin:https://evil-cors-probe.example returns Access-Control-Allow-Origin reflected + Allow-Credentials:true + flag{api7_*}; vapi.apisec.ai/vapi/api7/user/login findings 8→9; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWT via test@test.com + GET /workshop/api/shop/orders/all returns orders[] bulk history on route scan; crapi2.apisec.ai/workshop/api/shop/orders/all findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script>thugirXssProbe</script> reflects raw script in HTML on /xss route scan; ist-edu-bd.vercel.app/xss findings 8→9; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-auth-bypass-route-live-oracle",
       "status": "shipped",

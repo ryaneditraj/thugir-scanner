@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T20:05:49.307Z",
+  "updated_at": "2026-07-26T20:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2793,
-  "total_findings": 27550,
+  "total_sites_scanned": 2795,
+  "total_findings": 27560,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
-  "discovery_findings": 23339,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-26T20:05:49.307Z",
+  "discovery_findings": 23361,
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-26T20:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (13 findings); no benchmark misses; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (12 findings on staging fallback); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 71,
-      "focus": "vuln-expose API route oracles + brokencrystals users/search route oracle",
+      "findings": 23,
+      "focus": "vAPI API7 CORS + crAPI2 orders BFLA + IST Edu XSS route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
-      "vuln-expose.vercel.app/api/auth/login: route scan fires vuln-expose-auth-bypass-route-live-oracle (7 findings)",
-      "vuln-expose.vercel.app/api/search: route scan fires vuln-expose-sqli-search-route-live-oracle (7 findings)",
-      "brokencrystals.com/api/users/search/: route scan fires brokencrystals-users-search-route-live-oracle (57 findings)"
+      "juice-shop: benchmark recall 6/6 (12 findings staging) — no benchmark misses",
+      "vapi.apisec.ai/vapi/api7/user/login: vapi-api7-cors-misconfig-live-oracle fires (8→9 findings)",
+      "crapi2.apisec.ai/workshop/api/shop/orders/all: crapi2-shop-orders-bfla-route-live-oracle fires (4→5 findings)",
+      "ist-edu-bd.vercel.app/xss: ist-edu-search-xss-route-live-oracle fires (8→9 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "crapi2.apisec.ai/workshop/api/shop/orders/all: BOLA/BFLA excessive-data oracle absent without authenticated session",
-      "ist-edu-bd.vercel.app/xss|idor: route-specific reflected-XSS and IDOR live oracles absent (shared 8-finding DVWU hub)",
-      "pwnshop.ctfsecurity.com/wallet: PWN-042 credited_amount override — /wallet and /wallet/topup/vulnbank return 404 on live deploy",
-      "vapi.apisec.ai/vapi/api7/user/login: CORS misconfiguration oracle still absent"
+      "ist-edu-bd.vercel.app/idor: route 404 on deployed SPA — IDOR lives client-side only; no server oracle",
+      "crapi2.apisec.ai/community/api/v2/community/posts/recent: community BOLA oracle still absent",
+      "pwnshop.ctfsecurity.com/wallet: PWN-042 credited_amount override — /wallet returns 404 on live deploy"
     ]
   },
   "discovery_highlights": {
+    "vapi.apisec.ai/vapi/api7/user/login": 9,
+    "crapi2.apisec.ai/workshop/api/shop/orders/all": 5,
+    "ist-edu-bd.vercel.app/xss": 9,
     "brokencrystals.com/api/users/search/": 57,
-    "brokencrystals.com/?maptitle=test": 55,
-    "vulnbank.org/api/docs": 21,
     "vuln-expose.vercel.app/api/auth/login": 7,
-    "vuln-expose.vercel.app/api/search": 7,
-    "ist-edu-bd.vercel.app/xss": 8,
-    "ist-edu-bd.vercel.app/idor": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-9": 8,
-    "vapi.apisec.ai/vapi/api8/user/login": 8,
-    "pwnshop.ctfsecurity.com/register-seller": 23,
-    "juice-shop.herokuapp.com": 13,
+    "juice-shop.herokuapp.com": 12,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 30,
     "ssrf.vulnlab.dev/basic": 8
   }
