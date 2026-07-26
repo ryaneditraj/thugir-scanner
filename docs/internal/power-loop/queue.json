@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T00:23:59.000Z",
+  "updated_at": "2026-07-26T01:45:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnbank.org/graphql",
+      "source": "Commando-X/vuln-bank \u2014 GraphQL analytics endpoint with BOLA/introspection oracles (README + API docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v3/user/1",
+      "source": "Commando-X/vuln-bank \u2014 hidden admin user-details API BOLA oracle (app.py /api/v3/user/<id>)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/payments/charge",
+      "source": "Commando-X/vuln-bank \u2014 merchant payment charge API business-logic oracle (README merchant integration)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/digital_ocean?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals \u2014 DigitalOcean metadata SSRF oracle /api/file/digital_ocean (README cloud endpoints)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/api/transactions",
+      "source": "Commando-X/vuln-bank \u2014 authenticated money-transfer API BOLA/SQLi oracle (pentest report endpoint map)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/api/v1/merchants/register",
       "source": "Commando-X/vuln-bank \u2014 public merchant registration API (OWASP API2 broken auth / API5 BFLA)",
