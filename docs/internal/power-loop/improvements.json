@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /userlogin HTML omits index bundle — fallback fetches / for /assets/index-*.js then matches get(logobgcolor)+cssText background-color; brokencrystals.com/userlogin?logobgcolor=red findings 53→52 with route-specific CSS injection oracle firing; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v2-forgot-password-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v2/forgot-password status:success for registered username vs HTTP 404 status:error User not found for unknown; vulnbank.org/api/v2/forgot-password findings 11→19; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-admin-panel-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin/admin login + GET /admin returns Users table (alice, admin rows) and Audit log (recent); pentest-fauxbank.vercel.app/admin findings 13→13 with route-specific admin-panel oracle; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /testimonials + /assets/index-*.js bundle reads searchParams.get(videosrc) and sets testimonials-video outerHTML to iframe; brokencrystals.com/testimonials findings 54→55; benchmark juice-shop-staging 12 findings 6/6 maintained"
@@ -13588,6 +13606,21 @@
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-loans-request-live-oracle",
       "shipped_at": "2026-07-26T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+      "shipped_at": "2026-07-26T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v2-forgot-password-enumeration-live-oracle",
+      "shipped_at": "2026-07-26T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-admin-panel-live-oracle",
+      "shipped_at": "2026-07-26T10:10:00.000Z"
     }
   ]
 }
