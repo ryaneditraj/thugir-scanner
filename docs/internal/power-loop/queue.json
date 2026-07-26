@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T13:04:00.000Z",
+  "updated_at": "2026-07-26T14:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
@@ -9854,6 +9854,31 @@
       "url": "https://brokencrystals.com/api/users/one/admin_user/info",
       "source": "NeuraLegion/brokencrystals — mass-assignment privilege escalation PUT target /api/users/one/{email}/info (README)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/login",
+      "source": "OWASP crAPI v2 — JWT authentication oracle POST /identity/api/auth/login (APIsec hosted crapi2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/shop/products",
+      "source": "OWASP crAPI v2 — shop product listing API oracle GET /workshop/api/shop/products",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos",
+      "source": "OWASP crAPI v2 — SSRF via video metadata fetch oracle (OWASP API Top 10)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/merchant/contact_mechanic",
+      "source": "OWASP crAPI v2 — BFLA contact_mechanic merchant oracle (happy-path.md)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/community/api/v2/community/posts",
+      "source": "OWASP crAPI v2 — community posts API mass-assignment / injection surface",
+      "auth": "public_demo"
     }
   ]
 }

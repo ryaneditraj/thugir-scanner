@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T13:15:00.000Z",
+  "updated_at": "2026-07-26T14:08:53.904Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2740,
-  "total_findings": 26691,
+  "total_sites_scanned": 2751,
+  "total_findings": 26861,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22617,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-26T13:15:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22763,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-26T14:08:53.904Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 451,
+      "primary_status": "error — juice-shop.herokuapp.com Heroku 503",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +49,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (14 findings); secret-resend slug still absent"
+      "note": "PRIMARY MISS Heroku 503; staging fallback 6/6 (12 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 72,
-      "focus": "ssrf redirect-chain + WrongSecrets challenge route resolution + Broken Crystals adminpermission route oracle",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 146,
+      "focus": "wrongsecrets challenge-5/8 + ai-security redirect/cookie-auth/brute-force + brokencrystals hidden-upload/file/aws; crAPI2 routes queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "ssrf.vulnlab.dev/redirect: 2→7 findings — ssrf-vulnlab-redirect-live-oracle shipped (follow-redirect via /r/?to=)",
-      "wrongsecrets.herokuapp.com/challenge/3: 8→9 findings — wrongsecrets-challenge-live-oracle shipped (canonical /challenge/challenge-N)",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: 45→56 findings — brokencrystals-adminpermission-route-live-oracle shipped",
-      "wrongsecrets queue /challenge/N short paths return 404 — live oracle now resolves to /challenge/challenge-N"
+      "juice-shop.herokuapp.com: PRIMARY Heroku 503 — staging fallback recall 6/6 (12 findings)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-5: 9 findings with wrongsecrets-challenge-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-8: 8 findings (shared WrongSecrets fingerprint)",
+      "ai-security-platform redirect/cookie-auth/brute-force: 6-7 findings — shared SPA fingerprint, no route-specific live oracles",
+      "brokencrystals.com/api/hidden-upload: 54 findings — shared dir-discovery fingerprint without upload oracle",
+      "brokencrystals.com/api/file/aws: 55 findings — shared dir-discovery fingerprint without route-specific SSRF oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ai-security-platform redirect/cookie-auth/brute-force: shared SPA fingerprint without route-specific live oracles",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
+      "PRIMARY juice-shop.herokuapp.com Heroku 503 — recurring availability miss before staging fallback",
+      "secret-resend slug still absent on juice-shop benchmark",
+      "crAPI2.apisec.ai/* route-specific API oracles queued at end — pending drain",
+      "ai-security-platform redirect/cookie-auth/brute-force: route-specific live oracles still absent",
+      "brokencrystals hidden-upload/file/aws: route-specific upload/SSRF oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 14,
-    "ssrf.vulnlab.dev/redirect": 7,
-    "ssrf.vulnlab.dev/basic": 6,
-    "wrongsecrets.herokuapp.com/challenge/3": 9,
+    "brokencrystals.com/api/file/aws": 55,
+    "brokencrystals.com/api/hidden-upload": 54,
+    "wrongsecrets.herokuapp.com/challenge/challenge-5": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-8": 8,
+    "juice-shop-staging.herokuapp.com": 12,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 56,
-    "wrongsecrets.herokuapp.com/challenge/challenge-5": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
