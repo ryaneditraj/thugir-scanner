@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T08:10:12.032Z",
+  "updated_at": "2026-07-26T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2694,
-  "total_findings": 26002,
+  "total_sites_scanned": 2695,
+  "total_findings": 26003,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1936,
-  "discovery_findings": 22148,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-26T08:10:12.032Z",
+  "discovery_findings": 22149,
+  "improvements_shipped": 1160,
+  "last_run": "2026-07-26T09:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,40 +48,34 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 recall (13 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key present; secret-resend slug still absent"
+      "note": "Primary Heroku 503 — staging fallback 6/6 recall (12 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 145,
-      "focus": "juice-shop demo REST oracles + ai-security sqli + fauxbank transactions + brokencrystals signup mass-assignment",
-      "improvements_shipped_this_run": 4
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 55,
+      "focus": "brokencrystals testimonials iframe injection + LDAP error-disclosure fallback",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/track/1: 22 findings — pwnshop-track-idor-live-oracle validated on route (PWN-002)",
-      "pwnshop.ctfsecurity.com: pwnshop-chat-prompt-injection-live-oracle + pwnshop-mass-assignment-admin-live-oracle shipped (parallel evolve)",
-      "brokencrystals.com/api/auth/signup: 52 findings — brokencrystals-mass-assignment-live-oracle on signup route",
-      "demo.owasp-juice.shop/rest/products/search: 13 findings — REST SQLi oracle mirrors heroku benchmark",
-      "brokencrystals.com/userlogin?logobgcolor=red: brokencrystals-userlogin-css-injection-live-oracle shipped (parallel evolve)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — primary Heroku 503, staging fallback",
+      "brokencrystals.com/testimonials: 54→55 findings — brokencrystals-testimonials-iframe-injection-live-oracle shipped",
+      "brokencrystals LDAP oracle: javax.naming error-disclosure fallback when directory entries array unavailable"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ai-security-platform /challenges/sqli: 6 findings hub only — no route-specific SQLi live oracle",
-      "pwnshop mail/1 IDOR inbox oracle still absent — /mail/:user_id returns 404 on public deploy",
-      "pwnshop api/orders/submit XXE and api/settings/less/imports SSTI routes return 404 on public deploy"
+      "ai-security-platform /challenges/sqli: route absent — redirects to login, no SQLi challenge in catalog",
+      "pwnshop mail/1 IDOR inbox oracle still absent — /mail/:user_id returns 404 on public deploy"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 13,
-    "pwnshop.ctfsecurity.com/track/1": 22,
+    "juice-shop-staging.herokuapp.com": 12,
+    "brokencrystals.com/testimonials": 55,
     "brokencrystals.com/api/auth/signup": 52,
-    "demo.owasp-juice.shop/rest/user/login": 14,
+    "pwnshop.ctfsecurity.com/track/1": 22,
     "demo.owasp-juice.shop/rest/products/search?q=test": 13,
-    "pentest-fauxbank.vercel.app/transactions": 12,
-    "demo.owasp-juice.shop/#/chatbot": 14,
     "brokencrystals.com/userlogin?logobgcolor=red": 54
   }
 }
