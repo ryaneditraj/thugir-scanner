@@ -13991,6 +13991,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-virtual-cards-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank virtual-cards BOLA live oracle",
+    description:
+      "POST /api/virtual-cards/{cardId}/toggle-freeze accepts requests from any authenticated user without verifying card ownership — the Vuln Bank virtual-cards broken object level authorization oracle.",
+    impactOneline:
+      "Missing object-level authorization on virtual-card endpoints lets any user freeze or manipulate another customer's cards.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankVirtualCardsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce card ownership checks on every virtual-card mutation — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify the authenticated user owns the virtual card before toggle-freeze or limit updates.",
+        "Use server-side authorization middleware on all /api/virtual-cards/{id} routes.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/virtual-cards/{cardId}/toggle-freeze endpoint lets any logged-in user freeze another user's card. Show BOLA remediation for virtual-card APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-swagger-json-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab swagger.json exposure live oracle",
+    description:
+      "GET /swagger.json returns OpenAPI 3.0 API spec JSON with title API — the Burp Bounty swagger.json disclosure profile oracle distinct from /api-docs.",
+    impactOneline:
+      "Public swagger.json files expose API surface area and aid attackers mapping hidden endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySwaggerJsonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or restrict swagger.json on production applications.",
+      steps: [
+        "Disable public OpenAPI spec endpoints outside development environments.",
+        "Require authentication for API documentation routes.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /swagger.json endpoint exposes an OpenAPI 3.0 spec without authentication. Show how to restrict API documentation in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-admin-panel-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab admin panel directory live oracle",
+    description:
+      "GET /admin/ returns reachable Admin Panel HTML with a login prompt — the Burp Bounty admin directory disclosure profile oracle.",
+    impactOneline:
+      "Discoverable admin panels increase attack surface for credential stuffing and authentication bypass attempts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAdminPanelLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict admin panel paths to trusted networks or use non-obvious entry points.",
+      steps: [
+        "Require VPN or IP allowlisting for administrative interfaces.",
+        "Apply rate limiting and MFA on admin login routes.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/ path returns a reachable Admin Panel page. Show admin interface hardening and access restrictions.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-marketplace-prototype-pollution-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

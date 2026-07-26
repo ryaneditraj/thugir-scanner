@@ -7988,6 +7988,48 @@ const burpbountyRedirectPpLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySwaggerJsonLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/swagger.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const swaggerOk =
+    /"openapi"\s*:\s*"3\./i.test(doc.body) &&
+    /"info"\s*:\s*\{/.test(doc.body) &&
+    /"title"\s*:\s*"API"/i.test(doc.body) &&
+    /"version"\s*:\s*"1\.0"/i.test(doc.body);
+  if (!swaggerOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /swagger.json returns OpenAPI 3.0 API spec JSON — swagger.json disclosure profile oracle distinct from /api-docs and generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyAdminPanelLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/admin/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const adminOk =
+    /<h1>\s*Admin Panel\s*<\/h1>/i.test(doc.body) &&
+    /Login required/i.test(doc.body);
+  if (!adminOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /admin/ returns reachable Admin Panel HTML with login prompt — admin directory disclosure profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
 const burpbountyDwrUtilLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/dwr/util.js", ctx.origin).toString();
@@ -16595,6 +16637,103 @@ const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
       url: payUrl,
       snippet: doc.body.slice(0, 280).trim(),
       note: "Vuln Bank POST /api/bill-payments/create accepts negative amount:-50 and returns success — bill-payment business-logic oracle"
+    }
+  };
+};
+
+const vulnbankVirtualCardsBolaLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const password = "ThugirProbe1!";
+  const userA = `thugir_vca_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const userB = `thugir_vcb_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerUser = async (username: string): Promise<boolean> => {
+    const doc = await ctx.probe.get(registerUrl, {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (doc.status < 200 || doc.status >= 300) return false;
+    try {
+      const parsed = JSON.parse(doc.body) as Record<string, unknown>;
+      return parsed.status === "success";
+    } catch {
+      return false;
+    }
+  };
+  const loginToken = async (username: string): Promise<string | null> => {
+    const loginUrl = new URL("/login", ctx.origin).toString();
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (doc.status < 200 || doc.status >= 300) return null;
+    try {
+      const parsed = JSON.parse(doc.body) as Record<string, unknown>;
+      const token = String(parsed.token ?? "");
+      if (parsed.status === "success" && token.startsWith("eyJ")) return token;
+    } catch {
+      return null;
+    }
+    return null;
+  };
+  if (!(await registerUser(userA)) || !(await registerUser(userB))) return NEGATIVE;
+  const tokenA = await loginToken(userA);
+  const tokenB = await loginToken(userB);
+  if (!tokenA || !tokenB) return NEGATIVE;
+  const createUrl = new URL("/api/virtual-cards/create", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ card_type: "debit", spending_limit: 1000 }),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenA}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  let cardId: number | null = null;
+  try {
+    const parsed = JSON.parse(createDoc.body) as Record<string, unknown>;
+    const cardDetails = parsed.card_details;
+    if (parsed.status !== "success" || !cardDetails || typeof cardDetails !== "object") return NEGATIVE;
+    const id = (cardDetails as { id?: unknown }).id;
+    if (typeof id !== "number") return NEGATIVE;
+    cardId = id;
+  } catch {
+    return NEGATIVE;
+  }
+  const freezeUrl = new URL(`/api/virtual-cards/${cardId}/toggle-freeze`, ctx.origin).toString();
+  const freezeDoc = await ctx.probe.get(freezeUrl, {
+    method: "POST",
+    body: JSON.stringify({}),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${tokenB}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (freezeDoc.status < 200 || freezeDoc.status >= 300) return NEGATIVE;
+  let freezeParsed: Record<string, unknown> | null = null;
+  try {
+    freezeParsed = JSON.parse(freezeDoc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const freezeStatus = String(freezeParsed.status ?? "");
+  const freezeMessage = String(freezeParsed.message ?? "");
+  if (freezeStatus !== "success" || !/frozen successfully/i.test(freezeMessage)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      owner: userA,
+      attacker: userB,
+      cardId,
+      freezeUrl,
+      snippet: freezeDoc.body.slice(0, 280).trim(),
+      note: "Vuln Bank user B can POST /api/virtual-cards/{cardId}/toggle-freeze on user A's virtual card without ownership check — BOLA virtual-cards oracle"
     }
   };
 };
@@ -34763,6 +34902,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankSqliLoginLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
   vulnbankBillPaymentsNegativeAmountLiveOracle,
+  vulnbankVirtualCardsBolaLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
@@ -35193,6 +35333,8 @@ export const RULES: Record<string, Rule> = {
   burpbountySsrfSchemeLiveOracle,
   burpbountyRedirectOutLiveOracle,
   burpbountyRedirectPpLiveOracle,
+  burpbountySwaggerJsonLiveOracle,
+  burpbountyAdminPanelLiveOracle,
   burpbountyDwrUtilLiveOracle,
   burpbountyGitConfigLiveOracle,
   burpbountyCollabForgotLiveOracle,
