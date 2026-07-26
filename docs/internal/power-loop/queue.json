@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T11:06:00.000Z",
+  "updated_at": "2026-07-26T12:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/3",
+      "source": "OWASP WrongSecrets — Challenge 3 Docker secrets oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/4",
+      "source": "OWASP WrongSecrets — Challenge 4 Docker layer secrets oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
+      "source": "AI & Security Platform — IDOR broken access control live demo (Vercel OSS training app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/jwt",
+      "source": "AI & Security Platform — JWT alg-none / broken auth live demo (Vercel OSS training app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/memories",
+      "source": "OWASP Juice Shop demo — unauthenticated REST /rest/memories IDOR oracle (official demo.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/2",
       "source": "OWASP WrongSecrets — Challenge 2 secrets-in-config oracle on official Heroku demo (README)",
