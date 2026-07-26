@@ -13628,6 +13628,21 @@
   ],
   "shipped_log": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "shipped_at": "2026-07-26T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-aws-route-live-oracle",
+      "shipped_at": "2026-07-26T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-auth-login-route-live-oracle",
+      "shipped_at": "2026-07-26T15:10:00.000Z"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
       "shipped_at": "2026-07-26T11:10:00.000Z"
