@@ -17081,6 +17081,71 @@ const vulnbankV1ForgotPasswordPinLeakLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankV2ForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const username = `thugir_v2fp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const v2Url = new URL("/api/v2/forgot-password", ctx.origin).toString();
+  const knownDoc = await ctx.probe.get(v2Url, {
+    method: "POST",
+    body: JSON.stringify({ username }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (knownDoc.status < 200 || knownDoc.status >= 300) return NEGATIVE;
+  let knownParsed: Record<string, unknown> | null = null;
+  try {
+    knownParsed = JSON.parse(knownDoc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (String(knownParsed.status ?? "") !== "success") return NEGATIVE;
+  if (!/reset pin has been sent/i.test(String(knownParsed.message ?? ""))) return NEGATIVE;
+  const unknownUser = `thugir_missing_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  const unknownDoc = await ctx.probe.get(v2Url, {
+    method: "POST",
+    body: JSON.stringify({ username: unknownUser }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (unknownDoc.status < 200 || unknownDoc.status >= 300) return NEGATIVE;
+  let unknownParsed: Record<string, unknown> | null = null;
+  try {
+    unknownParsed = JSON.parse(unknownDoc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (String(unknownParsed.status ?? "") !== "error") return NEGATIVE;
+  if (!/user not found/i.test(String(unknownParsed.message ?? ""))) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      v2Url,
+      knownUsername: username,
+      unknownUsername: unknownUser,
+      snippet: `known=${knownDoc.body.slice(0, 120).trim()} | unknown=${unknownDoc.body.slice(0, 80).trim()}`,
+      note: "Vuln Bank POST /api/v2/forgot-password returns status:success for valid usernames but status:error User not found for unknown accounts — username enumeration oracle distinct from v1 PIN leak"
+    }
+  };
+};
+
 const vulnbankRequestLoanLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
@@ -24130,6 +24195,20 @@ async function ensureFauxbankSession(ctx: RuleContext): Promise<string | null> {
   return r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
 }
 
+async function ensureFauxbankAdminSession(ctx: RuleContext): Promise<string | null> {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return null;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const r = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!/"ok"\s*:\s*true/i.test(r.body) || !/"role"\s*:\s*"admin"/i.test(r.body)) return null;
+  return r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
+}
+
 const fauxbankAuthenticatedSqlInjectionProbe: Rule = async (ctx) => {
   const cookie = await ensureFauxbankSession(ctx);
   if (!cookie) return NEGATIVE;
@@ -24328,6 +24407,34 @@ const fauxbankLoansNegativeAmountLiveOracle: Rule = async (ctx) => {
       loanId: created.id,
       snippet: JSON.stringify(created).slice(0, 200),
       note: "POST /api/loans accepts negative amount and persists a pending loan — FauxBank loan negative-amount business-logic oracle"
+    }
+  };
+};
+
+const fauxbankAdminPanelLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankAdminSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    maxBytes: 65536,
+    headers: { Cookie: cookie },
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const adminPanelOk =
+    /Admin panel/i.test(doc.body) &&
+    /<td>\s*alice\s*<\/td>/i.test(doc.body) &&
+    /<td>\s*admin\s*<\/td>/i.test(doc.body) &&
+    /Audit log \(recent\)/i.test(doc.body);
+  if (!adminPanelOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: adminUrl,
+      snippet: doc.body.match(/<td>\s*alice\s*<\/td>[\s\S]{0,120}<td>\s*admin\s*<\/td>/i)?.[0]?.slice(0, 200) ?? "alice + admin rows in Users table",
+      note: "FauxBank GET /admin with admin/admin credentials exposes user directory and audit log — admin panel privilege-escalation oracle distinct from customer-session probes"
     }
   };
 };
@@ -25964,14 +26071,35 @@ const pwnshopMassAssignmentAdminLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function brokencrystalsFindIndexBundleUrl(
+  ctx: RuleContext,
+  ...htmlSources: string[]
+): Promise<string | null> {
+  for (const html of htmlSources) {
+    const bundleMatch = html.match(/\/assets\/index-[A-Za-z0-9_-]+\.js/);
+    if (bundleMatch) return new URL(bundleMatch[0], ctx.origin).toString();
+  }
+  const homeDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  if (homeDoc.status < 200 || homeDoc.status >= 400) return null;
+  const homeMatch = homeDoc.body.match(/\/assets\/index-[A-Za-z0-9_-]+\.js/);
+  if (!homeMatch) return null;
+  return new URL(homeMatch[0], ctx.origin).toString();
+}
+
 const brokencrystalsUserloginCssInjectionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = new URL("/userlogin?logobgcolor=red", ctx.origin).toString();
   const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
-  const bundleMatch = pageDoc.body.match(/\/assets\/index-[A-Za-z0-9_-]+\.js/);
-  if (!bundleMatch) return NEGATIVE;
-  const bundleUrl = new URL(bundleMatch[0], ctx.origin).toString();
+  const bundleUrl = await brokencrystalsFindIndexBundleUrl(
+    ctx,
+    pageDoc.body,
+    ctx.combined
+  );
+  if (!bundleUrl) return NEGATIVE;
   const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 524288, timeoutMs: 20000 });
   if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
   const paramFlow =
@@ -35546,6 +35674,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankStoredXssSupportProbe,
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
+  fauxbankAdminPanelLiveOracle,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
@@ -35731,6 +35860,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankTransferNegativeAmountLiveOracle,
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
+  vulnbankV2ForgotPasswordEnumerationLiveOracle,
   vulnbankRequestLoanLiveOracle,
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankCheckBalanceIdorLiveOracle,
