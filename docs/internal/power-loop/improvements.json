@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login session then 5 rapid POST /verify-otp form attempts all HTTP 200 with Invalid or expired code and no 429; pwnshop.ctfsecurity.com/verify-otp findings 24→27; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-open-redirect-register-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /register with next=https://evil-open-redirect-probe.example/ returns 302 Location to probe host; pwnshop.ctfsecurity.com/register findings 9→10 with route-specific open-redirect oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sup3r-secret-admin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /register is_admin:true + login + GET /sup3r_s3cr3t_admin returns Admin Panel HTML with admin-sidebar; vulnbank.org/sup3r_s3cr3t_admin findings 6→20; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-userlogin-css-injection-live-oracle",
       "status": "shipped",
@@ -13537,6 +13555,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
+      "shipped_at": "2026-07-26T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-open-redirect-register-live-oracle",
+      "shipped_at": "2026-07-26T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sup3r-secret-admin-live-oracle",
+      "shipped_at": "2026-07-26T11:10:00.000Z"
+    },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
