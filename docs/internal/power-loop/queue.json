@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T21:05:17.629Z",
+  "updated_at": "2026-07-26T22:04:34.520Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
+      "source": "OWASP NodeGoat — A4 insecure direct object references tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a5",
+      "source": "OWASP NodeGoat — A5 security misconfiguration tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a7",
+      "source": "OWASP NodeGoat — A7 cross-site scripting tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
+      "source": "OWASP WrongSecrets — challenge-10 vault/K8s secrets live oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-11",
+      "source": "OWASP WrongSecrets — challenge-11 hardcoded secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
       "source": "OWASP WrongSecrets — challenge-12 Docker secrets live oracle (public Heroku benchmark)",
