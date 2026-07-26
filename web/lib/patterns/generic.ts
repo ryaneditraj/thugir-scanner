@@ -15395,6 +15395,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api3-comment-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API3 comment BOLA live oracle",
+    description:
+      "GET /api3/comment returns every comment record without authentication — including deviceid flags — the vAPI broken object level authorization oracle.",
+    impactOneline:
+      "Unauthenticated list endpoints expose every user's comment metadata to any anonymous caller.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi3CommentBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — enforce object-level authorization on every list endpoint in production.",
+      steps: [
+        "Require authentication before returning comment collections.",
+        "Filter list responses to objects owned by the authenticated principal.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api3/comment endpoint lists every comment without auth. Show BOLA remediation for REST list endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api4-otp-broken-auth-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "vAPI API4 OTP broken authentication live oracle",
+    description:
+      "POST /api4/otp/verify accepts the static OTP 1872 and returns a long-lived API key — the vAPI broken authentication oracle.",
+    impactOneline:
+      "Predictable OTP values let attackers mint API keys without owning the victim's phone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi4OtpBrokenAuthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — use cryptographically random OTPs with rate limiting in production.",
+      steps: [
+        "Generate OTPs with a CSPRNG and short TTL.",
+        "Rate-limit /otp/verify and lock accounts after repeated failures.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api4/otp/verify accepts a static OTP and returns an API key. Show OTP hardening and rate limiting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api4-user-exposure-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "vAPI API4 user exposure live oracle",
+    description:
+      "GET /api4/user with the OTP-leaked Authorization-Token returns all user records including flag data in lastname — the vAPI excessive data exposure oracle.",
+    impactOneline:
+      "Leaked API keys on list endpoints expose every user profile in one request.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi4UserExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — scope API keys and filter user list responses in production.",
+      steps: [
+        "Bind API keys to least-privilege scopes instead of full user export.",
+        "Return only the authenticated user's profile from /user routes.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api4/user endpoint returns all users when called with an OTP-leaked key. Show API key scoping and response filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bug-collection-evidence",
     platform: "generic",
     category: "Injection",

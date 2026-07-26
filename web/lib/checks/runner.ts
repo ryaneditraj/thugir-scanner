@@ -1328,6 +1328,9 @@ const DEEP_RULES = new Set<string>([
   "ssrfVulnlabMetadataAwsLiveOracle",
   "ssrfVulnlabBlocklistBypassLiveOracle",
   "ssrfVulnlabRedirectLiveOracle",
+  "vapiApi3CommentBolaLiveOracle",
+  "vapiApi4OtpBrokenAuthLiveOracle",
+  "vapiApi4UserExposureLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "clientSideDvragLabEvidence",
   "dvragAdminConfigLiveOracle",
@@ -8386,6 +8389,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => {
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (p.platform === "generic") return 0;
       return detection.platform && p.platform === detection.platform ? 1 : 2;
     };
