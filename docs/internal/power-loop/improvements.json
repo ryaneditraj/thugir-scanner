@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api5-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api5/user creates user then GET /vapi/api5/users with base64(username:password) Authorization-Token returns admin flag{api5_*} in address field; vapi.apisec.ai/vapi/api5/user findings 2→8; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api6-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api6/user with credit:10000 then GET /vapi/api6/user/me returns credit 10000 + flag{api6_*}; vapi.apisec.ai/vapi/api6/user findings 5→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api8/user/login {\"username\":\"' OR '1'='1\",\"password\":\"' OR '1'='1\"} returns success:true + authkey; GET /vapi/api8/user/secret returns flag{api8_*}; vapi.apisec.ai/vapi/api8/user/login findings 2→8; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-coupon-category-bypass-live-oracle",
       "status": "shipped",
