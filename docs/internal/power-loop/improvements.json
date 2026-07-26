@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-swagger-json-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/swagger.json returns {\"openapi\":\"3.0.0\",\"info\":{\"title\":\"API\",\"version\":\"1.0\"}}; burpbountylab.com/swagger.json findings 89→93; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-admin-panel-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/admin/ returns <h1>Admin Panel</h1><p>Login required</p>; burpbountylab.com/admin/ findings 89→93; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-virtual-cards-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: user B POST /api/virtual-cards/410/toggle-freeze freezes user A card returns status:success Card frozen successfully; vulnbank.org/api/virtual-cards findings 6→10; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-merchant-register-live-oracle",
       "status": "shipped",
@@ -13327,6 +13345,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
       "shipped_at": "2026-07-26T01:25:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-swagger-json-live-oracle",
+      "shipped_at": "2026-07-26T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-admin-panel-live-oracle",
+      "shipped_at": "2026-07-26T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-virtual-cards-bola-live-oracle",
+      "shipped_at": "2026-07-26T02:10:00.000Z"
     }
   ]
 }
