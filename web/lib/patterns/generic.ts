@@ -13861,6 +13861,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-testimonials-iframe-injection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /testimonials videosrc iframe injection oracle",
+    description:
+      "GET /testimonials?videosrc= reads the videosrc query parameter and sets testimonials-video outerHTML to an iframe — the Broken Crystals DOM iframe injection oracle.",
+    impactOneline:
+      "DOM iframe injection via videosrc lets attackers embed malicious content or execute script gadgets in victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsIframeInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate videosrc against a strict embed URL allowlist — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never pass raw query parameters into iframe src or outerHTML assignments.",
+        "Allowlist trusted video embed origins such as youtube-nocookie.com.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials page reads videosrc from the URL into an iframe outerHTML sink. Show safe embed URL validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-subscriptions-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
