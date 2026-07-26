@@ -16461,6 +16461,74 @@ const vulnExposeSqliSearchRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isVulnExposeHost(ctx: RuleContext): boolean {
+  return /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin);
+}
+
+async function vulnExposeModulePageMarkers(
+  ctx: RuleContext,
+  canonicalPath: string,
+  spec: (typeof VULN_EXPOSE_MODULE_SPECS)[number]
+): Promise<RuleResult> {
+  const canonicalUrl = new URL(canonicalPath, ctx.origin).toString();
+  const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 65536, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = doc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      canonicalUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: spec.note
+    }
+  };
+}
+
+const vulnExposeCmdiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cmdi(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/cmdi"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/cmdi", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /cmdi route scan — command injection lab with ping-tool injection point and reverse-shell payload grid (aliases /cmdi/execute → /cmdi)"
+    }
+  };
+};
+
+const vulnExposeIdorProfileRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/idor(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/idor/dashboard"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/idor/dashboard", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /idor/profile route scan — IDOR privilege-escalation lab with user-profile and document-access panels (aliases /idor/profile → /idor/dashboard)"
+    }
+  };
+};
+
 const brokencrystalsUsersSearchRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -34751,6 +34819,23 @@ const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsTestimonialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsTestimonialsSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/testimonials/count route scan — GET query param executes information_schema SQLi and returns table count"
+    }
+  };
+};
+
 const brokencrystalsTestimonialsIframeInjectionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = new URL("/testimonials", ctx.origin).toString();
@@ -37060,7 +37145,10 @@ export const RULES: Record<string, Rule> = {
   vulnExposeSqliSearchApiLiveOracle,
   vulnExposeAuthBypassRouteLiveOracle,
   vulnExposeSqliSearchRouteLiveOracle,
+  vulnExposeCmdiRouteLiveOracle,
+  vulnExposeIdorProfileRouteLiveOracle,
   brokencrystalsUsersSearchRouteLiveOracle,
+  brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,
