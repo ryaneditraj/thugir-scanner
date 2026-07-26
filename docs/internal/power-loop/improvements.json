@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-register-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/merchants/register returns debug_info.password + api_key vk_* VALIDATION: vulnbank.org/api/v1/merchants/register findings 7→10"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bill-payments-negative-amount-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/bill-payments/create amount:-50 returns status:success VALIDATION: vulnbank.org/api/bill-payments findings 7→11"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /marketplace JS bundle prototypePollutionDomXss createElement(script) gadget VALIDATION: brokencrystals.com/marketplace findings 51→52"
+    },
+    {
       "source": "benchmark:juice-shop",
       "slug": "sql-error-disclosure",
       "status": "shipped",
@@ -13294,6 +13312,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-dwr-util-live-oracle",
       "shipped_at": "2026-07-26T00:26:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-register-live-oracle",
+      "shipped_at": "2026-07-26T01:25:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bill-payments-negative-amount-live-oracle",
+      "shipped_at": "2026-07-26T01:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
+      "shipped_at": "2026-07-26T01:25:00.000Z"
     }
   ]
 }
