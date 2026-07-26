@@ -35879,6 +35879,132 @@ const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const VAPI_API7_CORS_PROBE_ORIGIN = "https://evil-cors-probe.example";
+
+function vapiSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_api7_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api7/user", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const token = vapiBasicAuthToken(username, password);
+  const loginUrl = new URL("/vapi/api7/user/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const sessionCookie = vapiSessionCookieFromDoc(loginDoc);
+  if (!sessionCookie) return NEGATIVE;
+  const keyUrl = new URL("/vapi/api7/user/key", ctx.origin).toString();
+  const keyDoc = await ctx.probe.get(keyUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionCookie, Origin: VAPI_API7_CORS_PROBE_ORIGIN }
+  });
+  if (keyDoc.status < 200 || keyDoc.status >= 400) return NEGATIVE;
+  const acao = (keyDoc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== VAPI_API7_CORS_PROBE_ORIGIN) return NEGATIVE;
+  const creds = (keyDoc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  if (!/"authkey"\s*:/.test(keyDoc.body) && !/flag\{api7_/i.test(keyDoc.body)) return NEGATIVE;
+  const flagMatch = keyDoc.body.match(/flag\{api7_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.92,
+    evidence: {
+      createUrl,
+      loginUrl,
+      keyUrl,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: keyDoc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials and returns authkey — CORS misconfiguration oracle (API7)"
+    }
+  };
+};
+
+const crapi2ShopOrdersAllRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shop\/orders\/all/i.test(pageUrl)) return NEGATIVE;
+  const jwt = await tryApiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const ordersUrl = new URL("/workshop/api/shop/orders/all", ctx.origin).toString();
+  const doc = await ctx.probe.get(ordersUrl, {
+    maxBytes: 16384,
+    timeoutMs: 20000,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"orders"\s*:/.test(doc.body)) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { orders?: Array<{ id?: number; user?: { email?: string } }> };
+    const orders = data.orders;
+    if (!Array.isArray(orders) || orders.length < 2) return NEGATIVE;
+    const emails = [...new Set(orders.map((o) => o.user?.email).filter(Boolean))];
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        ordersUrl,
+        orderCount: orders.length,
+        distinctEmails: emails.slice(0, 4),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "crAPI v2 GET /workshop/api/shop/orders/all returns bulk order history for authenticated regular user — BFLA/excessive data exposure oracle (API3)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+function isIstEduHost(ctx: RuleContext): boolean {
+  return /ist-edu-bd/i.test(ctx.origin);
+}
+
+const IST_EDU_XSS_PROBE = "<script>thugirXssProbe</script>";
+
+const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:xss|search)\/?$/i.test(pathname)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script>thugirXssProbe<\/script>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu GET /api/search?q= reflects raw <script> payload unescaped in HTML — reflected XSS route oracle"
+    }
+  };
+};
+
 // --- Archon engineering knowledge platform — cybersecurity training path --------------
 const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
   {
@@ -37296,6 +37422,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
+  crapi2ShopOrdersAllRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -37309,6 +37436,8 @@ export const RULES: Record<string, Rule> = {
   vapiApi5BflaLiveOracle,
   vapiApi6MassAssignmentLiveOracle,
   vapiApi8SqliLoginLiveOracle,
+  vapiApi7CorsMisconfigLiveOracle,
+  istEduSearchXssRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
