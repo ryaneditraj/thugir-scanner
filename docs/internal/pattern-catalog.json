@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-26T12:19:52.935Z",
-  "total": 835,
-  "uniqueSlugs": 830,
+  "generatedAt": "2026-07-26T13:06:17.639Z",
+  "total": 838,
+  "uniqueSlugs": 833,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 817,
+    "generic": 820,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 750,
+    "deep": 753,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 202,
-    "Exposed secret": 25,
+    "Broken access control": 203,
+    "Exposed secret": 26,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -31,7 +31,7 @@
     "Cross-site scripting": 124,
     "general": 20,
     "SSRF": 4,
-    "Server-side request forgery": 17,
+    "Server-side request forgery": 18,
     "Sensitive data exposure": 20,
     "AI security": 38,
     "Open redirect": 1,
@@ -42,6 +42,7 @@
   "slugs": [
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
+    "brokencrystals-adminpermission-route-live-oracle",
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
     "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
@@ -793,6 +794,7 @@
     "ssrf-vulnlab-basic-live-oracle",
     "ssrf-vulnlab-blocklist-bypass-live-oracle",
     "ssrf-vulnlab-metadata-aws-live-oracle",
+    "ssrf-vulnlab-redirect-live-oracle",
     "ssti-template-injection",
     "stack-cors-wildcard-api",
     "stack-database-url-in-bundle",
@@ -868,6 +870,7 @@
     "weak-api-default-credentials",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
+    "wrongsecrets-challenge-live-oracle",
     "xpath-injection-disclosure",
     "xxe-xml-post-probe"
   ],
