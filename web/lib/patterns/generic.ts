@@ -13445,6 +13445,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals DigitalOcean metadata SSRF oracle",
+    description:
+      "GET /api/file/digital_ocean?path=http://169.254.169.254/metadata/v1/id returns DigitalOcean droplet metadata (hostname, region, interfaces) — the Broken Crystals DigitalOcean cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to DigitalOcean metadata can expose droplet identity and compromise the hosting account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsDigitalOceanMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to DigitalOcean metadata and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254/metadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/digital_ocean endpoint fetches DigitalOcean metadata via the path parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -13991,6 +14017,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-merchant-payment-charge-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank merchant payment charge debug-disclosure oracle",
+    description:
+      "POST /api/v1/payments/charge with a merchant api_key echoes debug_info.submitted_card_number and auth_method in the JSON response — the Vuln Bank merchant payment gateway oracle.",
+    impactOneline:
+      "Payment gateway debug responses leak submitted card numbers and merchant context to any caller with a merchant API key.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantPaymentChargeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info from payment responses and tokenize card data — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw card numbers in payment API responses.",
+        "Remove debug_info blocks from production payment gateway endpoints.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/payments/charge endpoint echoes debug_info.submitted_card_number in the JSON body. Show merchant payment gateway hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-virtual-cards-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -14117,6 +14169,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dwr/util.js endpoint exposes Direct Web Remoting utility JavaScript. Show how to disable DWR in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-phpinfo-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab phpinfo.php exposure live oracle",
+    description:
+      "GET /phpinfo.php returns phpinfo() HTML with PHP Version and Build Date — the Burp Bounty phpinfo disclosure profile oracle distinct from generic hub fingerprinting.",
+    impactOneline:
+      "Live phpinfo.php probe confirms PHP configuration disclosure distinct from generic directory-probing fingerprints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPhpinfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo pages from production and block the paths at the server.",
+      steps: [
+        "Delete phpinfo.php from the deployed web root.",
+        "Return 404 for /phpinfo* paths in your server or WAF rules.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /phpinfo.php endpoint exposes PHP configuration via phpinfo(). Show how to remove diagnostic pages from production.",
     version: 1,
     enabled: true
   },
