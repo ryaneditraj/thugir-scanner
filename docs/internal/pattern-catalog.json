@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-26T20:04:34.014Z",
-  "total": 862,
-  "uniqueSlugs": 857,
+  "generatedAt": "2026-07-26T21:23:24.129Z",
+  "total": 865,
+  "uniqueSlugs": 860,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 844,
+    "generic": 847,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 777,
+    "deep": 780,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 209,
+    "Broken access control": 210,
     "Exposed secret": 26,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 73,
     "Broken authentication": 60,
-    "Injection": 173,
+    "Injection": 175,
     "Cross-site scripting": 127,
     "general": 20,
     "SSRF": 5,
@@ -61,6 +61,7 @@
     "brokencrystals-secrets-live-oracle",
     "brokencrystals-subscriptions-xss-live-oracle",
     "brokencrystals-testimonials-iframe-injection-live-oracle",
+    "brokencrystals-testimonials-route-live-oracle",
     "brokencrystals-testimonials-sqli-live-oracle",
     "brokencrystals-testimonials-xss-live-oracle",
     "brokencrystals-userlogin-css-injection-live-oracle",
@@ -852,6 +853,8 @@
     "vibe-weak-csp",
     "vuln-expose-auth-bypass-api-live-oracle",
     "vuln-expose-auth-bypass-route-live-oracle",
+    "vuln-expose-cmdi-route-live-oracle",
+    "vuln-expose-idor-profile-route-live-oracle",
     "vuln-expose-sqli-search-api-live-oracle",
     "vuln-expose-sqli-search-route-live-oracle",
     "vulnbank-ai-anonymous-chat-live-oracle",

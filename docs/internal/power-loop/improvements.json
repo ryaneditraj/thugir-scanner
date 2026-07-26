@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cmdi SSR HTML shows LABORATORIO DE COMMAND INJECTION + Hostname or IP Address (Command Injection Point) + reverse-shell payload grid; vuln-expose.vercel.app/cmdi/execute findings 12→13 with route-specific CMDi oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-idor-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /idor/dashboard SSR HTML shows IDOR & Privilege Escalation Lab + User Profile Access (IDOR) + Quick IDOR Tests; vuln-expose.vercel.app/idor/profile findings 12→13 with route-specific IDOR oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/testimonials/count?query=select count(table_name)... returns information_schema table count; brokencrystals.com/api/testimonials/count findings 56→57 with route-specific SQLi oracle + scannedUrl; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api7-cors-misconfig-live-oracle",
       "status": "shipped",
@@ -13861,6 +13879,21 @@
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api4-user-exposure-live-oracle",
       "shipped_at": "2026-07-26T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "shipped_at": "2026-07-26T21:00:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-idor-profile-route-live-oracle",
+      "shipped_at": "2026-07-26T21:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-route-live-oracle",
+      "shipped_at": "2026-07-26T21:00:00.000Z"
     }
   ]
 }
