@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T04:10:00.000Z",
+  "updated_at": "2026-07-26T04:04:04.292Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2659,
-  "total_findings": 25334,
+  "total_sites_scanned": 2660,
+  "total_findings": 25346,
   "critical_findings": 53,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1896,
   "discovery_findings": 21551,
   "improvements_shipped": 1143,
-  "last_run": "2026-07-26T04:10:00.000Z",
+  "last_run": "2026-07-26T04:04:04.292Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -59,10 +59,10 @@
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/track: 16→19 findings — pwnshop-track-idor-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/search: 16→19 findings — pwnshop-product-search-sqli-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/admin-login: 16→19 findings — pwnshop-admin-login-sqli-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings staging fallback) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/track: 16→22 findings — pwnshop-track-idor-live-oracle shipped",
+      "pwnshop.ctfsecurity.com/search: route-independent probe — pwnshop-product-search-sqli-live-oracle shipped",
+      "pwnshop.ctfsecurity.com/admin-login: route-independent probe — pwnshop-admin-login-sqli-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -73,7 +73,7 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 10,
-    "pwnshop.ctfsecurity.com/track": 19,
+    "pwnshop.ctfsecurity.com/track": 22,
     "pwnshop.ctfsecurity.com/search": 19,
     "pwnshop.ctfsecurity.com/admin-login": 19,
     "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 51,
