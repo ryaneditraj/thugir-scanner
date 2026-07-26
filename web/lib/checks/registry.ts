@@ -34865,31 +34865,6 @@ const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const crapi2ShopProductsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi2Host(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/workshop\/api\/shop\/products/i.test(pageUrl)) return NEGATIVE;
-  const productsUrl = new URL("/workshop/api/shop/products", ctx.origin).toString();
-  const doc = await ctx.probe.get(productsUrl, { maxBytes: 8192, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
-  const body = doc.body.trim();
-  const productsOk =
-    (/"products"\s*:\s*\[/.test(body) || /^\s*\[\s*\{/.test(body)) &&
-    /"id"\s*:/.test(body) &&
-    /"name"\s*:/.test(body);
-  if (!productsOk) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.9,
-    evidence: {
-      scannedUrl: pageUrl,
-      url: productsUrl,
-      snippet: body.slice(0, 200).trim(),
-      note: "crAPI v2 GET /workshop/api/shop/products returns product catalog without authentication — OWASP API Top 10 training surface oracle"
-    }
-  };
-};
-
 const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -34912,42 +34887,6 @@ const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
       url: probeUrl.toString(),
       snippet: doc.body.slice(0, 240).trim(),
       note: "Broken Crystals /api/file/aws route scan — GET with AWS metadata path returns IMDS ami-id/instance-id — cloud SSRF oracle"
-    }
-  };
-};
-
-const brokencrystalsHiddenUploadRouteLiveOracle: Rule = async (ctx) => {
-  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/hidden-upload/i.test(pageUrl)) return NEGATIVE;
-  const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
-  const boundary = `----ThugirBcUpload${Date.now().toString(36)}`;
-  const fileContent = "\x89PNG\r\n\x1a\n";
-  const body = [
-    `--${boundary}`,
-    'Content-Disposition: form-data; name="file"; filename="probe.png"',
-    "Content-Type: image/png",
-    "",
-    fileContent,
-    `--${boundary}--`,
-    ""
-  ].join("\r\n");
-  const doc = await ctx.probe.get(uploadUrl, {
-    method: "POST",
-    body,
-    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
-    maxBytes: 4096
-  });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
-  if (!/"content"\s*:\s*"data:image\/png;base64,/i.test(doc.body)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.93,
-    evidence: {
-      scannedUrl: pageUrl,
-      url: uploadUrl,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Broken Crystals /api/hidden-upload route scan — POST accepts image upload and returns base64 data URI without authentication"
     }
   };
 };
@@ -36925,9 +36864,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMassAssignmentPutLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
-  brokencrystalsHiddenUploadRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
-  crapi2ShopProductsRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
