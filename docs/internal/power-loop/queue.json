@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T05:05:00.000Z",
+  "updated_at": "2026-07-26T06:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/mail/1",
+      "source": "ctfsec/pwnshop vulnerabilities — inbox IDOR oracle GET /mail/:user_id exposes OTP/reset tokens (PWN-004)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/orders/submit",
+      "source": "ctfsec/pwnshop + PwnMe 2025 writeup — XXE via order submission IDOR oracle (PWN-040 chain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/settings/less/imports",
+      "source": "ctfsec/pwnshop vulnerabilities — SSTI→RCE via Less.php import endpoint (PWN-040)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/track/1",
+      "source": "ctfsec/pwnshop vulnerabilities — unauthenticated order tracking IDOR GET /track/:order_id (PWN-002)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/register",
+      "source": "alfredang/pentest README — FauxBank registration / mass-assignment training module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://pentest-fauxbank.vercel.app/loans",
       "source": "alfredang/pentest — FauxBank loan module OWASP training lab (Vercel OSS deploy)",
