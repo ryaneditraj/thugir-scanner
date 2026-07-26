@@ -8972,6 +8972,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-chat-init-email-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop chat init API enables email enumeration (PWN-037)",
+    description:
+      "POST /chat/init returns {\"found\":true,\"user\":{...}} for registered emails and {\"found\":false} for unknown addresses — enabling bulk account enumeration.",
+    impactOneline:
+      "Distinct JSON responses on chat init leak whether an email is registered, aiding credential-stuffing attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatInitEmailEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for forgot-password and chat-init lookups — PWN-037 is intentional lab software.",
+      steps: [
+        "Use identical success messages for registered and unregistered emails on /forgot-password.",
+        "Remove found:true/false from /chat/init or require authentication before email lookup.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /chat/init returns found:true/false for email lookup. Show how to prevent username enumeration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-forgot-password-email-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop forgot-password form enables email enumeration",
+    description:
+      "POST /forgot-password returns distinct success vs no-account HTML messages for registered vs unknown emails — enabling bulk account enumeration.",
+    impactOneline:
+      "Distinct password-reset responses leak whether an email is registered, aiding credential-stuffing attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopForgotPasswordEmailEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for forgot-password lookups — Pwnshop is intentional lab software.",
+      steps: [
+        "Use identical success messages for registered and unregistered emails on /forgot-password.",
+        "Never echo the submitted email address in success responses.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /forgot-password returns different messages for known vs unknown emails. Show how to prevent username enumeration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -13315,6 +13367,526 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-goto-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Broken Crystals /api/goto open redirect oracle",
+    description:
+      "GET /api/goto?url= returns HTTP 302 Location to an attacker-controlled URL without validation — the Broken Crystals unvalidated redirect oracle.",
+    impactOneline:
+      "Unvalidated redirect endpoints enable phishing by sending victims to attacker-controlled domains via trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGotoOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allow-list — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject external URLs in redirect parameters or validate against a fixed allow-list.",
+        "Use relative-path-only redirects where possible.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/goto?url= endpoint redirects to arbitrary external URLs. Show how to validate redirect destinations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-aws-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals AWS metadata SSRF oracle",
+    description:
+      "GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns AWS instance metadata (ami-id, instance-id) — the Broken Crystals cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to cloud metadata endpoints can expose IAM credentials and compromise the hosting account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAwsMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to link-local and cloud metadata addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254 and other link-local/metadata IP ranges.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/aws endpoint fetches AWS metadata via the path parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-azure-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals Azure metadata SSRF oracle",
+    description:
+      "GET /api/file/azure?path=http://169.254.169.254/metadata/instance?api-version=2021-02-01 returns Azure IMDS compute metadata (azEnvironment, location) — the Broken Crystals Azure cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to Azure instance metadata can expose managed identity tokens and compromise the hosting subscription.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAzureMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to Azure IMDS and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254/metadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/azure endpoint fetches Azure IMDS metadata via the path parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-hidden-upload-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals unrestricted file upload oracle",
+    description:
+      "POST /api/hidden-upload accepts image file uploads and returns the file as a base64 data URI without authentication — the Broken Crystals unrestricted upload oracle.",
+    impactOneline:
+      "Unauthenticated file upload endpoints let attackers store malicious content and chain into XSS or remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHiddenUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and strict file validation on upload endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Authenticate all file upload routes and enforce role-based access control.",
+        "Validate file types with magic-byte inspection, not just Content-Type headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hidden-upload endpoint accepts unauthenticated image uploads and returns base64 content. Show upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-ldap-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals LDAP injection oracle",
+    description:
+      "GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries without sanitizing user-supplied filter fragments — the Broken Crystals LDAP injection oracle.",
+    impactOneline:
+      "LDAP injection lets attackers enumerate directory users and extract sensitive identity attributes from corporate directories.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsLdapInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize LDAP queries and escape filter metacharacters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into LDAP filter strings.",
+        "Use parameterized LDAP APIs or strict allow-list validation on query fragments.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/ldap endpoint accepts raw LDAP filter fragments in the query parameter. Show LDAP injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-secrets-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/secrets token exposure oracle",
+    description:
+      "GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — the Broken Crystals secrets exposure oracle.",
+    impactOneline:
+      "Unauthenticated secrets endpoints leak third-party API tokens attackers can use for account takeover and data exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose secret tokens via unauthenticated API routes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/secrets from production deployments and rotate all exposed tokens immediately.",
+        "Store secrets in a vault and inject them server-side at runtime.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/secrets endpoint returns Slack, OAuth, and payment API tokens without auth. Show secrets management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-safe-files-rfi-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/safe-files remote file inclusion oracle",
+    description:
+      "POST /api/safe-files accepts a user-controlled URL, fetches remote content, and returns it in the response — the Broken Crystals safe-files RFI oracle.",
+    impactOneline:
+      "Server-side URL fetchers with weak allowlists enable remote file inclusion and SSRF to internal or attacker-controlled resources.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSafeFilesRfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches of arbitrary URLs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled URL fetch endpoints or enforce strict destination allowlists.",
+        "Deny requests to internal networks, link-local addresses, and cloud metadata endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/safe-files endpoint fetches remote URLs and returns their content. Show SSRF/RFI hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-users-search-exposure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/search excessive data exposure oracle",
+    description:
+      "GET /api/users/search/ returns cardNumber and phoneNumber for multiple users without authentication — the Broken Crystals excessive data exposure oracle.",
+    impactOneline:
+      "Unauthenticated user search APIs leak payment card numbers and phone numbers attackers can use for fraud and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUsersSearchExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers or phone numbers via unauthenticated search APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning user profile data.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/search/ endpoint returns cardNumber and phoneNumber without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/testimonials/count SQL injection oracle",
+    description:
+      "GET /api/testimonials/count?query= executes attacker-controlled SQL — an information_schema table-count probe returns a numeric count, proving unsanitized SQL execution.",
+    impactOneline:
+      "SQL injection in count endpoints lets attackers read or modify database contents via the query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all SQL — Broken Crystals is intentional lab software.",
+      steps: [
+        "Replace dynamic SQL string building with prepared statements or ORM bindings.",
+        "Restrict count endpoints to predefined safe operations.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count endpoint executes SQL from the query parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /api/testimonials/count reflected XSS oracle",
+    description:
+      "GET /api/testimonials/count?query= reflects attacker input unescaped in SQL syntax-error responses — the Broken Crystals testimonials reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS via SQL error messages lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape user input in error messages and use parameterized queries — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never echo raw query parameters in SQL error responses.",
+        "Use parameterized queries for all SQL operations.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count endpoint reflects query input unescaped in SQL errors. Show XSS-safe error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-subscriptions-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /api/subscriptions mailing-list reflected XSS oracle",
+    description:
+      "POST /api/subscriptions?email= echoes the email parameter unescaped in the response body — the Broken Crystals mailing-list subscription reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS in subscription endpoints lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSubscriptionsXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape or encode user input in subscription API responses — Broken Crystals is intentional lab software.",
+      steps: [
+        "HTML-encode email values before echoing in API responses.",
+        "Validate email format and reject HTML/script payloads.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/subscriptions endpoint echoes the email query param unescaped. Show reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-partner-login-xpath-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/partners/partnerLogin XPATH injection oracle",
+    description:
+      "GET /api/partners/partnerLogin with boolean XPATH injection (' or '1'='1) returns multiple <password> elements in the XML response — the Broken Crystals credential disclosure oracle.",
+    impactOneline:
+      "XPATH injection in login endpoints lets attackers extract other users' passwords from XML responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPartnerLoginXpathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize XPATH queries and escape user input — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into XPATH filter strings.",
+        "Use parameterized XPATH APIs or strict allow-list validation on credentials.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/partners/partnerLogin endpoint is vulnerable to XPATH injection that leaks passwords. Show XPATH hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-file-raw-lfi-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/raw local file inclusion oracle",
+    description:
+      "GET /api/file/raw?path=package.json returns the application package.json from the server filesystem — the Broken Crystals local file inclusion oracle.",
+    impactOneline:
+      "Unauthenticated path traversal/LFI endpoints let attackers read application source, configuration, and host files.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileRawLfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/raw?path= endpoint reads arbitrary server files like package.json. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-file-lfi-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file local file inclusion oracle",
+    description:
+      "GET /api/file?path=package.json returns the application package.json from the server filesystem — the Broken Crystals /api/file local file inclusion oracle distinct from /api/file/raw.",
+    impactOneline:
+      "Unauthenticated path traversal/LFI endpoints let attackers read application source, configuration, and host files.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileLfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file?path= endpoint reads arbitrary server files like package.json. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals mass-assignment privilege escalation oracle",
+    description:
+      "POST /api/users/basic accepts hidden isAdmin:true in the JSON body and GET /api/users/one/{email}/adminpermission confirms admin privileges — the Broken Crystals mass-assignment oracle.",
+    impactOneline:
+      "Mass-assignment lets attackers bind privileged fields like isAdmin during signup and escalate to administrator access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes and reject unknown fields — Broken Crystals is intentional lab software.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin and other privileged fields on create/update.",
+        "Enforce role changes only through authenticated admin workflows.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/basic endpoint accepts isAdmin:true during signup. Show mass-assignment remediation for NestJS user creation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mass-assignment-put-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals PUT profile mass-assignment oracle",
+    description:
+      "PUT /api/users/one/{email}/info accepts hidden isAdmin:true and escalates an existing user to administrator — the Broken Crystals profile-update mass-assignment oracle.",
+    impactOneline:
+      "Mass-assignment on profile updates lets authenticated users escalate privileges by binding hidden admin fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentPutLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist updatable profile fields and reject privileged attributes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Filter isAdmin and role fields out of user profile update DTOs.",
+        "Verify admin permission changes only through audited admin endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /api/users/one/{email}/info endpoint accepts isAdmin:true. Show mass-assignment remediation for profile updates.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-brokencrystals-dom-xss-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals homepage DOM XSS via maptitle and search reflection",
+    description:
+      "Broken Crystals homepage reads maptitle into iframe title attributes and decodeURIComponent(window.location.search) into dangerous-html sinks — enabling DOM XSS via ?maptitle= and arbitrary query params like ?__dummy=.",
+    impactOneline:
+      "DOM XSS via URL parameters on the homepage lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBrokencrystalsDomXssEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw URL parameters into innerHTML or iframe title attributes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Sanitize or allowlist maptitle values before injecting into iframe title attributes.",
+        "Remove decodeURIComponent(window.location.search) reflection into dangerous-html sinks.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our homepage reflects maptitle and window.location.search into dangerous-html sinks. Show DOM XSS remediation for URL-driven client-side injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-auth-bypass-api-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "critical",
+    title: "VulnSite SQLi authentication-bypass API oracle",
+    description:
+      "POST /api/auth/login accepts SQL injection in the username field (admin' OR '1'='1) and returns an authenticated admin session — the VulnSite authentication-bypass API oracle.",
+    impactOneline:
+      "SQL injection in login APIs bypasses authentication and grants attacker-controlled admin sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeAuthBypassApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements.",
+        "Return generic authentication failures without revealing SQL structure.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login endpoint is vulnerable to SQLi auth bypass via admin' OR '1'='1. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-sqli-search-api-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite SQL injection search API oracle",
+    description:
+      "GET /api/search?q=test echoes the raw SQL query in the JSON response and documents UNION/boolean injection vectors — the VulnSite data-extraction search API oracle.",
+    impactOneline:
+      "SQL injection in search APIs exposes database contents and leaks query structure to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeSqliSearchApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL to clients — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search endpoint echoes raw SQL and documents UNION injection vectors. Show SQL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-anonymous-chat-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank unauthenticated AI customer-support chat oracle",
+    description:
+      "POST /api/ai/chat/anonymous accepts unauthenticated chat messages and returns mode:anonymous LLM responses with an explicit no-authentication warning — the Vuln Bank AI customer-support oracle.",
+    impactOneline:
+      "Unauthenticated AI chat endpoints enable prompt-injection, data exfiltration, and abuse of LLM-backed banking support without user identity controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiAnonymousChatLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and rate limits on AI customer-support endpoints — Vuln Bank is intentional training software.",
+      steps: [
+        "Authenticate all AI chat routes and bind sessions to verified customer accounts.",
+        "Apply prompt-injection guardrails and block sensitive data retrieval without authorization.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/chat/anonymous endpoint accepts unauthenticated LLM chat requests. Show AI endpoint authentication and prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-api-config",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -14875,6 +15447,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-completions-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab legacy OpenAI completions endpoint disclosed",
+    description:
+      "GET /ai/v1/completions returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled response headers — distinct from the chat/completions route.",
+    impactOneline:
+      "Live legacy completions disclosure oracle on Burp Bounty Lab confirms OpenAI-compatible text_completion fingerprinting profile coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiCompletionsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal LLM gateway headers from public API responses.",
+      steps: [
+        "Remove X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled from outward-facing responses.",
+        "Disable legacy /v1/completions routes on production gateways.",
+        "Isolate Burp Bounty Lab AI disclosure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/v1/completions endpoint leaks LLM gateway headers and legacy completion JSON. Show how to strip internal AI metadata from API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-rce-eval-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -15365,6 +15963,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /redirect/pp endpoint redirects to arbitrary return_url values. Show post-payment redirect validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-git-config-live-oracle",
+    platform: "generic",
+    category: "Source exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab .git/config source exposure live oracle",
+    description:
+      "GET /.git/config returns live git repository configuration with [core] and remote origin URL — the Burp Bounty passive git exposure profile oracle.",
+    impactOneline:
+      "Live .git/config probe confirms source repository exposure distinct from generic hub fingerprinting (Content-Type text/html bypasses exposed-git-dir http_probe).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGitConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never serve .git directories from production web roots.",
+      steps: [
+        "Exclude .git from deployed artifacts and add deny rules for /.git/*.",
+        "Audit repository history for committed secrets and rotate them.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.git/config endpoint exposes repository configuration. Show how to block .git directory access in production.",
     version: 1,
     enabled: true
   },
@@ -16327,6 +16951,292 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/citrix/ endpoint exposes a Citrix appliance fingerprint. Show Citrix ADC hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-crowd-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Atlassian Crowd CVE live oracle",
+    description:
+      "GET /cve/crowd/ returns an Atlassian Crowd heading — the Burp Bounty Crowd identity management CVE profile oracle.",
+    impactOneline:
+      "Live Crowd fingerprint probe confirms route-specific identity management CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrowdCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Atlassian Crowd and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Atlassian Crowd security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/crowd/ endpoint exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-firebase-cve-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Firebase realtime DB CVE live oracle",
+    description:
+      "GET /cve/firebase/.json returns user records and config.debug=true — the Burp Bounty Firebase realtime database CVE profile oracle.",
+    impactOneline:
+      "Live Firebase JSON probe confirms unauthenticated user data disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFirebaseCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Firebase realtime database JSON without authentication on public networks.",
+      steps: [
+        "Require authentication for all Firebase database reads and writes.",
+        "Disable debug mode in production Firebase configurations.",
+        "Isolate Burp Bounty Lab Firebase CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/firebase/.json endpoint leaks user emails and debug config without auth. Show Firebase realtime DB hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Netsweeper CVE live oracle",
+    description:
+      "GET /cve/netsweeper/ returns a Netsweeper WebAdmin heading — the Burp Bounty Netsweeper web filter CVE profile oracle.",
+    impactOneline:
+      "Live Netsweeper fingerprint probe confirms route-specific web filter CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict WebAdmin to trusted networks.",
+      steps: [
+        "Apply Netsweeper security advisories for WebAdmin CVEs.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/netsweeper/ endpoint exposes a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-zoho-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Zoho ManageEngine CVE live oracle",
+    description:
+      "GET /cve/zoho/ returns a ManageEngine heading — the Burp Bounty Zoho ManageEngine CVE profile oracle.",
+    impactOneline:
+      "Live ManageEngine fingerprint probe confirms route-specific Zoho CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyZohoCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Zoho ManageEngine appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Zoho ManageEngine security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/zoho/ endpoint exposes a ManageEngine fingerprint. Show Zoho ManageEngine hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ruby-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Ruby on Rails CVE live oracle",
+    description:
+      "GET /cve/ruby/ returns a Ruby on Rails App heading — the Burp Bounty Rails path-traversal CVE profile oracle.",
+    impactOneline:
+      "Live Rails fingerprint probe confirms route-specific path-traversal CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRubyCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Ruby on Rails and restrict file-serving endpoints that accept traversal sequences.",
+      steps: [
+        "Upgrade Rails to patched versions for known path-traversal CVEs.",
+        "Validate and canonicalize file paths before serving static assets.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/ruby/ endpoint exposes a Ruby on Rails fingerprint. Show Rails path-traversal hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-lfi-cve-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab WordPress LFI CVE live oracle",
+    description:
+      "GET /cve/wp/local-file-inclusion?file=../../../etc/passwd returns /etc/passwd contents — the Burp Bounty WordPress Duplicator LFI CVE profile oracle.",
+    impactOneline:
+      "Live WordPress LFI probe confirms arbitrary file read distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLfiCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WordPress plugins with known LFI flaws and block traversal sequences in file parameters.",
+      steps: [
+        "Upgrade Duplicator and other file-handling plugins to patched versions.",
+        "Reject file parameters containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/wp/local-file-inclusion endpoint reads /etc/passwd via file=../../../etc/passwd. Show WordPress LFI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sharefile-cve-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Citrix ShareFile path-traversal live oracle",
+    description:
+      "GET /citrix/sharefile/download?path=../../../windows/win.ini returns win.ini contents — the Burp Bounty Citrix ShareFile path-traversal CVE profile oracle.",
+    impactOneline:
+      "Live ShareFile download probe confirms arbitrary file read distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySharefileCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ShareFile and validate path parameters before serving files.",
+      steps: [
+        "Apply Citrix ShareFile security advisories for path-traversal CVEs.",
+        "Canonicalize and reject download paths containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab ShareFile routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /citrix/sharefile/download endpoint reads win.ini via path=../../../windows/win.ini. Show ShareFile path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-artica-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Artica Web Proxy CVE live oracle",
+    description:
+      "GET /cve/artica/fw.login.php returns an Artica Web Proxy login form with apikey field — the Burp Bounty Artica proxy CVE profile oracle.",
+    impactOneline:
+      "Live Artica fingerprint probe confirms route-specific proxy appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyArticaCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Artica Web Proxy appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Artica security advisories for proxy management CVEs.",
+        "Disable unused management services and enforce strong API keys.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/artica/fw.login.php endpoint exposes an Artica Web Proxy login. Show Artica proxy hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-magmi-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Magento MAGMI CVE live oracle",
+    description:
+      "GET /cve/magmi/ returns MAGMI Utils JS — the Burp Bounty Magento MAGMI plugin CVE profile oracle.",
+    impactOneline:
+      "Live MAGMI fingerprint probe confirms route-specific Magento plugin CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyMagmiCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch or remove MAGMI Magento plugins and restrict web access to admin utilities.",
+      steps: [
+        "Upgrade MAGMI to patched versions or uninstall unused Magento plugins.",
+        "Block public access to MAGMI web utilities behind authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/magmi/ endpoint exposes MAGMI Utils JS. Show Magento MAGMI plugin hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-f5-bash-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab F5 BIG-IP bash RCE CVE live oracle",
+    description:
+      "GET /cve/f5/ returns an F5 BIG-IP heading and /mgmt/tm/util/bash exposes the management bash API — the Burp Bounty F5 bash RCE CVE profile oracle.",
+    impactOneline:
+      "Live F5 BIG-IP fingerprint and management API probe confirms route-specific bash RCE CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyF5BashCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch F5 BIG-IP appliances and restrict /mgmt/tm/util/bash to trusted management networks.",
+      steps: [
+        "Apply F5 security advisories for tm.util.bash RCE CVEs.",
+        "Block public access to BIG-IP management interfaces.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/f5/ endpoint fingerprints F5 BIG-IP and /mgmt/tm/util/bash exposes bash RCE. Show BIG-IP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Netsweeper systemstatus CVE live oracle",
+    description:
+      "GET /webadmin/tools/systemstatus_remote.php returns a System Status heading — the Burp Bounty Netsweeper systemstatus_remote.php CVE profile oracle.",
+    impactOneline:
+      "Live Netsweeper systemstatus probe confirms route-specific webadmin CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperSystemstatusCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict webadmin tools to trusted management networks.",
+      steps: [
+        "Apply Netsweeper security advisories for systemstatus_remote.php CVEs.",
+        "Block public access to /webadmin/tools/ management endpoints.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /webadmin/tools/systemstatus_remote.php endpoint exposes Netsweeper system status. Show appliance hardening.",
     version: 1,
     enabled: true
   },
