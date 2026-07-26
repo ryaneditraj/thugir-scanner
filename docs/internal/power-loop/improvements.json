@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-comment-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://vapi.apisec.ai/vapi/api3/comment returns 14+ comment rows without auth including flag{api3_*} in deviceid; vapi.apisec.ai/vapi/api3/user findings 3→5; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-otp-broken-auth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api4/otp/verify {\"otp\":\"1872\"} returns success:true + API key; vapi.apisec.ai/vapi/api4/otp/verify findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-user-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OTP-leaked Authorization-Token on GET /api4/user returns [{\"lastname\":\"flag{api4_ce696239323ea5b2d015}\"}]; vapi.apisec.ai findings 3→5 with all three vapi-* oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-live-oracle",
       "status": "shipped",
