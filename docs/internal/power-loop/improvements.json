@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-negative-amount-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-fauxbank.vercel.app/api/loans amount:-1000 returns ok:true and GET /api/loans lists pending loan with negative amount; pentest-fauxbank.vercel.app/loans findings 11→13; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-check-balance-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://vulnbank.org/check_balance/{account_number} returns status:success with balance and username without auth after probe registration; vulnbank.org/check_balance findings 9→18; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-request-loan-negative-amount-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/request_loan amount:-5000 returns status:success Loan requested successfully; vulnbank.org/request_loan findings 16→18; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-track-idor-live-oracle",
       "status": "shipped",
@@ -13465,6 +13483,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-negative-amount-live-oracle",
+      "shipped_at": "2026-07-26T07:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-check-balance-idor-live-oracle",
+      "shipped_at": "2026-07-26T07:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-request-loan-negative-amount-live-oracle",
+      "shipped_at": "2026-07-26T07:30:00.000Z"
+    },
     {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
