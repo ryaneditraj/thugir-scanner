@@ -25329,6 +25329,82 @@ const pwnshopForgotPasswordEmailEnumerationLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopTrackIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/track/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Order\s+#1\s+Tracking/i.test(doc.body)) return NEGATIVE;
+  const addressMatch = doc.body.match(/const\s+shippingAddress\s*=\s*'([^']{10,})'/);
+  if (!addressMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      shippingAddress: addressMatch[1].slice(0, 120),
+      snippet: addressMatch[0].slice(0, 160),
+      note: "Pwnshop GET /track/1 returns full order tracking with shippingAddress without authentication — order tracking IDOR (PWN-002)"
+    }
+  };
+};
+
+const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/search", ctx.origin);
+  url.searchParams.set("q", "test'");
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const sqlOk =
+    /Database error:/i.test(doc.body) &&
+    /SQL syntax/i.test(doc.body) &&
+    /MySQL server version/i.test(doc.body);
+  if (!sqlOk) return NEGATIVE;
+  const errMatch = doc.body.match(/Database error:[^<]{10,240}/i);
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      sqlError: errMatch?.[0]?.slice(0, 160) ?? "MySQL syntax error",
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Pwnshop GET /search?q=test' returns MySQL syntax error — product search SQL injection oracle (PWN-010)"
+    }
+  };
+};
+
+const pwnshopAdminLoginSqliLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/admin/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: "username=admin'--&password=x",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const sqlOk =
+    /Database error:/i.test(doc.body) &&
+    /SQL syntax/i.test(doc.body) &&
+    /MySQL server version/i.test(doc.body);
+  if (!sqlOk) return NEGATIVE;
+  const errMatch = doc.body.match(/Database error:[^<]{10,240}/i);
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      sqlError: errMatch?.[0]?.replace(/&#39;/g, "'").slice(0, 160) ?? "MySQL syntax error",
+      snippet:
+        doc.body.match(/alert-err[^<]*<\/i>\s*([^<]+)/i)?.[1]?.replace(/&#39;/g, "'").trim() ??
+        doc.body.slice(0, 200).trim(),
+      note: "Pwnshop POST /admin/login with crafted username returns MySQL syntax error — admin login SQL injection oracle (PWN-009)"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -35154,6 +35230,9 @@ export const RULES: Record<string, Rule> = {
   pwnshopEventsAuditLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
+  pwnshopTrackIdorLiveOracle,
+  pwnshopProductSearchSqliLiveOracle,
+  pwnshopAdminLoginSqliLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,

@@ -9024,6 +9024,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-track-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop order tracking IDOR live oracle (PWN-002)",
+    description:
+      "GET /track/:order_id returns full order tracking with shippingAddress JavaScript variable without authentication or ownership validation — the Pwnshop order tracking IDOR oracle.",
+    impactOneline:
+      "Unauthenticated order tracking exposes shipping addresses and order status for any sequential order ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopTrackIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify order ownership before returning tracking data — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind order tracking to authenticated sessions and verify the order belongs to the current user.",
+        "Reject GET /track/:id requests without a valid session or signed tracking token.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /track/:order_id endpoint returns shipping addresses without auth. Show IDOR remediation for order tracking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop product search SQL injection live oracle (PWN-010)",
+    description:
+      "GET /search?q=test' returns MySQL syntax errors from concatenated product search queries — the Pwnshop product search SQL injection oracle.",
+    impactOneline:
+      "SQL injection in product search lets attackers extract database contents and bypass application security controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all search SQL — Pwnshop is intentional lab software.",
+      steps: [
+        "Replace string-concatenated search queries with prepared statements.",
+        "Return generic search errors without revealing SQL structure.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /search endpoint is vulnerable to SQLi via the q parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-admin-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop admin login SQL injection live oracle (PWN-009)",
+    description:
+      "POST /admin/login with a crafted username returns MySQL syntax errors from concatenated admin authentication queries — the Pwnshop admin login SQL injection oracle.",
+    impactOneline:
+      "SQL injection on admin login enables authentication bypass and full administrative takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAdminLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for admin authentication SQL — Pwnshop is intentional lab software.",
+      steps: [
+        "Replace string-concatenated admin login queries with prepared statements.",
+        "Return generic authentication failures without revealing SQL structure.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /admin/login endpoint is vulnerable to SQLi via the username field. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",

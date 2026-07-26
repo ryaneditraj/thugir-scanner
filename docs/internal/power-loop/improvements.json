@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-track-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://pwnshop.ctfsecurity.com/track/1 returns Order #1 Tracking + const shippingAddress = '10 Kingsway Road, Ikoyi, Lagos, Nigeria' without auth; pwnshop.ctfsecurity.com/track findings 16→19; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://pwnshop.ctfsecurity.com/search?q=test' returns Database error: You have an error in your SQL syntax (MySQL); pwnshop.ctfsecurity.com/search findings 16→19; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-admin-login-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pwnshop.ctfsecurity.com/admin/login username=admin'-- returns MySQL syntax error in alert-err; pwnshop.ctfsecurity.com/admin-login findings 16→19; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
       "status": "shipped",
@@ -13393,6 +13411,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-merchant-payment-charge-live-oracle",
       "shipped_at": "2026-07-26T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-track-idor-live-oracle",
+      "shipped_at": "2026-07-26T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-search-sqli-live-oracle",
+      "shipped_at": "2026-07-26T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-admin-login-sqli-live-oracle",
+      "shipped_at": "2026-07-26T04:10:00.000Z"
     }
   ]
 }
