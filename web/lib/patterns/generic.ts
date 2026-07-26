@@ -12613,6 +12613,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-basic-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "ssrf.vulnlab.dev basic SSRF live oracle",
+    description:
+      "GET /basic/?url=https://example.com/ fetches attacker-controlled URLs server-side and returns the response body in the page — the ssrf.vulnlab.dev basic SSRF training oracle.",
+    impactOneline:
+      "Unvalidated server-side URL fetchers let attackers probe internal services and exfiltrate responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabBasicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations and block internal IP ranges — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny RFC1918, link-local, and cloud metadata addresses at the egress layer.",
+        "Use an allowlist of permitted fetch hosts instead of accepting arbitrary URLs.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /basic endpoint fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering and allowlists.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-metadata-aws-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+    description:
+      "GET /metadata/?url=http://169.254.169.254/latest/meta-data/ returns AWS IMDS metadata (ami-id, iam/, instance-id) — the ssrf.vulnlab.dev cloud metadata SSRF oracle.",
+    impactOneline:
+      "SSRF to cloud instance metadata can expose IAM credentials and compromise the hosting account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabMetadataAwsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to 169.254.169.254 and other metadata endpoints — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Require IMDSv2 with hop limits on cloud instances.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /metadata endpoint fetches AWS IMDS via a user-controlled url parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-blocklist-bypass-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+    description:
+      "GET /blocklist/?url=http://2852039166/latest/meta-data/ bypasses a naive localhost/127.0.0.1 substring deny-list via decimal IP encoding and returns AWS metadata — the ssrf.vulnlab.dev blocklist-bypass SSRF oracle.",
+    impactOneline:
+      "Substring blocklists are trivially bypassed with alternate IP encodings, enabling metadata SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabBlocklistBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Resolve and validate URLs before fetch; deny link-local/metadata IPs — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Parse URLs to canonical IP forms and reject private/link-local/metadata ranges.",
+        "Never rely on substring deny-lists for SSRF protection.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blocklist endpoint uses a substring deny-list bypassable via decimal IPs. Show proper SSRF egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",

