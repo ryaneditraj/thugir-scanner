@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T19:06:54.000Z",
+  "updated_at": "2026-07-26T19:36:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
   "discovery_findings": 23339,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-26T19:06:54.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-26T19:36:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (14 findings); jwt-alg-none-accepted present; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (13 findings); no benchmark misses; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 164,
-      "focus": "crAPI2 shop/orders/all BOLA + community posts + DVWU xss/idor + wrongsecrets challenge-9 + queue drain brokencrystals/vulnbank",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 71,
+      "focus": "vuln-expose API route oracles + brokencrystals users/search route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) \u2014 no benchmark misses",
-      "crapi2.apisec.ai/workshop/api/shop/orders/all: 4 findings \u2014 weak-api-default-credentials but no BOLA/BFLA live oracle without auth token",
-      "crapi2.apisec.ai/community/api/v2/community/posts/recent: 5 findings \u2014 shared crAPI fingerprint without community BOLA oracle",
-      "ist-edu-bd.vercel.app/xss + /idor: 8 findings each \u2014 sql-error-disclosure + client-side-sql-evidence hub without route-specific XSS/IDOR live oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-9: 8 findings with client-side-wrongsecrets-challenge-evidence only",
-      "brokencrystals.com/?maptitle=test + ?__dummy=test: 55 findings each \u2014 full brokencrystals live-oracle hub (goto/SSRF/upload/CSS)",
-      "vulnbank.org/api/docs: 21 findings \u2014 vulnbank-* live-oracle cluster via OpenAPI docs surface"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
+      "vuln-expose.vercel.app/api/auth/login: route scan fires vuln-expose-auth-bypass-route-live-oracle (7 findings)",
+      "vuln-expose.vercel.app/api/search: route scan fires vuln-expose-sqli-search-route-live-oracle (7 findings)",
+      "brokencrystals.com/api/users/search/: route scan fires brokencrystals-users-search-route-live-oracle (57 findings)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question-disclosure)",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "crapi2.apisec.ai/workshop/api/shop/orders/all: BOLA/BFLA excessive-data oracle absent without authenticated session",
       "ist-edu-bd.vercel.app/xss|idor: route-specific reflected-XSS and IDOR live oracles absent (shared 8-finding DVWU hub)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-9: secrets-in-VCS live extraction oracle absent (client-side evidence only)",
-      "crapi2.apisec.ai/community/api/v2/community/posts/recent: community post BOLA oracle still absent"
+      "pwnshop.ctfsecurity.com/wallet: PWN-042 credited_amount override — /wallet and /wallet/topup/vulnbank return 404 on live deploy",
+      "vapi.apisec.ai/vapi/api7/user/login: CORS misconfiguration oracle still absent"
     ]
   },
   "discovery_highlights": {
+    "brokencrystals.com/api/users/search/": 57,
     "brokencrystals.com/?maptitle=test": 55,
     "vulnbank.org/api/docs": 21,
+    "vuln-expose.vercel.app/api/auth/login": 7,
+    "vuln-expose.vercel.app/api/search": 7,
     "ist-edu-bd.vercel.app/xss": 8,
     "ist-edu-bd.vercel.app/idor": 8,
     "wrongsecrets.herokuapp.com/challenge/challenge-9": 8,
-    "crapi2.apisec.ai/workshop/api/shop/orders/all": 4,
-    "crapi2.apisec.ai/community/api/v2/community/posts/recent": 5,
-    "juice-shop.herokuapp.com": 14,
     "vapi.apisec.ai/vapi/api8/user/login": 8,
-    "pwnshop.ctfsecurity.com/register-seller": 23
+    "pwnshop.ctfsecurity.com/register-seller": 23,
+    "juice-shop.herokuapp.com": 13,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 30,
+    "ssrf.vulnlab.dev/basic": 8
   }
 }
