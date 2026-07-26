@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T10:10:00.000Z",
+  "updated_at": "2026-07-26T11:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2712,
-  "total_findings": 26384,
+  "total_sites_scanned": 2722,
+  "total_findings": 26481,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1946,
-  "discovery_findings": 22390,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-26T10:10:00.000Z",
+  "discovery_urls_added": 1951,
+  "discovery_findings": 22460,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-26T11:09:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 295,
+      "pages_crawled": 6,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,32 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 84,
-      "focus": "brokencrystals userlogin CSS injection bundle bootstrap + vulnbank v2 forgot-password enumeration + fauxbank admin panel",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 70,
+      "focus": "wrongsecrets challenge/2 + ssrf.vulnlab.dev SSRF lab suite + pwnshop apply-coupon/verify-otp/upload-avatar",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "brokencrystals.com/userlogin?logobgcolor=red: route-specific brokencrystals-userlogin-css-injection-live-oracle now fires via home-page bundle fallback",
-      "vulnbank.org/api/v2/forgot-password: 11→19 findings — vulnbank-v2-forgot-password-enumeration-live-oracle shipped (HTTP 404 for unknown usernames)",
-      "pentest-fauxbank.vercel.app/admin: fauxbank-admin-panel-live-oracle shipped — admin/admin exposes user directory + audit log"
+      "wrongsecrets.herokuapp.com/challenge/2: 8 findings with client-side-wrongsecrets-challenge-evidence",
+      "ssrf.vulnlab.dev/basic: 3 findings — unprotected-webhook-endpoint but no route-specific SSRF live oracle",
+      "pwnshop.ctfsecurity.com/apply-coupon: 23-finding hub without coupon-category-bypass oracle (PWN-016)",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 18-finding hub without stored-XSS SVG upload oracle (PWN-012)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent — adminpermission returns 403 without prior signup flow",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
-      "vulnbank.org/api/v1/loans/apply: route-specific loan mass-assignment live oracle still absent"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent (basic/blocklist/metadata-aws/redirect all 2-3 finding hubs)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/verify-otp: OTP brute-force oracle still absent (11-finding hub)",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 14,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52,
-    "vulnbank.org/api/v2/forgot-password": 19,
-    "pentest-fauxbank.vercel.app/admin": 13,
-    "pwnshop.ctfsecurity.com/apply-coupon": 24,
-    "demo.owasp-juice.shop/rest/basket/1": 14
+    "wrongsecrets.herokuapp.com/challenge/2": 8,
+    "ssrf.vulnlab.dev/basic": 3,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
+    "pwnshop.ctfsecurity.com/verify-otp": 11
   }
 }

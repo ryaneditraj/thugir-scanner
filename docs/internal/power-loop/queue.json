@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T10:05:00.000Z",
+  "updated_at": "2026-07-26T11:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/2",
+      "source": "OWASP WrongSecrets — Challenge 2 secrets-in-config oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/basic",
+      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab requests.get (GitHub README live at ssrf.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-aws",
+      "source": "sampsonc/vulnlab.dev — mock AWS IMDSv1 metadata SSRF oracle (cloud-hosted profile fetcher)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blocklist",
+      "source": "sampsonc/vulnlab.dev — SSRF substring blocklist bypass lab (localhost/127.0.0.1 deny-list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/redirect",
+      "source": "sampsonc/vulnlab.dev — SSRF follow-redirect on trusted host lab (302 chase bypass)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
       "source": "ctfsec/pwnshop vulnerabilities — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016)",
