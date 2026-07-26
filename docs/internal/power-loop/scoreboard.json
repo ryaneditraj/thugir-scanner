@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T08:02:41.385Z",
+  "updated_at": "2026-07-26T08:10:12.032Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2686,
-  "total_findings": 25857,
+  "total_sites_scanned": 2694,
+  "total_findings": 26002,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1931,
-  "discovery_findings": 22003,
+  "discovery_urls_added": 1936,
+  "discovery_findings": 22148,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-26T08:02:41.385Z",
+  "last_run": "2026-07-26T08:10:12.032Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 398,
+      "probes_run": 474,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 recall (14 findings); secret-resend slug still absent"
+      "note": "Primary Heroku 6/6 recall (13 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 49,
-      "focus": "fauxbank loans negative-amount + vulnbank check_balance IDOR + vulnbank request_loan negative-amount",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 145,
+      "focus": "juice-shop demo REST oracles + ai-security sqli + fauxbank transactions + brokencrystals signup mass-assignment",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "pentest-fauxbank.vercel.app/loans: 11→13 findings — fauxbank-loans-negative-amount-live-oracle + fauxbank-loans-request-live-oracle validated",
-      "vulnbank.org/check_balance: 9→18 findings — vulnbank-check-balance-idor-live-oracle shipped",
-      "vulnbank.org/request_loan: 16→18 findings — vulnbank-request-loan-negative-amount-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/track/1: 22 findings — pwnshop-track-idor-live-oracle shipped (PWN-002)",
+      "brokencrystals.com/api/auth/signup: 52 findings — brokencrystals-mass-assignment-live-oracle on signup route",
+      "demo.owasp-juice.shop/rest/products/search: 13 findings — REST SQLi oracle mirrors heroku benchmark",
+      "demo.owasp-juice.shop/rest/user/login: 14 findings — jwt-alg-none-accepted + auth oracles on official demo"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop wallet-top-up oracle still absent (requires VULNBANK_LAB_VULN=1 on self-hosted deploy)",
-      "pwnshop api/orders/submit still thin 10-finding shell without XXE live oracle",
-      "pwnshop api/settings/less/imports still missing SSTI/RCE live oracle (14 findings hub only)",
-      "pwnshop mail/1 IDOR inbox oracle still absent despite 20-finding hub fingerprint"
+      "ai-security-platform /challenges/sqli: 6 findings hub only — no route-specific SQLi live oracle",
+      "pwnshop mail/1 IDOR inbox oracle still absent despite 20-finding hub fingerprint",
+      "pwnshop api/orders/submit XXE oracle still absent",
+      "pwnshop api/settings/less/imports SSTI/RCE oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 14,
-    "vulnbank.org/check_balance/3518655174": 18,
-    "vulnbank.org/request_loan": 18,
-    "pentest-fauxbank.vercel.app/loans": 13,
-    "pwnshop.ctfsecurity.com/mail/1": 20,
-    "pwnshop.ctfsecurity.com/api/settings/css": 18,
-    "vulnbank.org/api/v2/forgot-password": 16,
-    "brokencrystals.com/userlogin?logobgcolor=red": 53,
-    "burpbountylab.com/cve/weblogic/": 94
+    "juice-shop.herokuapp.com": 13,
+    "pwnshop.ctfsecurity.com/track/1": 22,
+    "brokencrystals.com/api/auth/signup": 52,
+    "demo.owasp-juice.shop/rest/user/login": 14,
+    "demo.owasp-juice.shop/rest/products/search?q=test": 13,
+    "pentest-fauxbank.vercel.app/transactions": 12,
+    "demo.owasp-juice.shop/#/chatbot": 14,
+    "ai-security-platform-iota.vercel.app/challenges/sqli": 6
   }
 }
