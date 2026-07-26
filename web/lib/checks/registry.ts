@@ -24149,17 +24149,21 @@ const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  const loanAmount = 42000;
+  const loanAmount = 42000 + (Date.now() % 1000);
   const termMonths = 24;
+  const purpose = `thugir-loan-probe-${Date.now().toString(36)}`;
   const postUrl = listUrl;
   const posted = await ctx.probe.get(postUrl, {
     method: "POST",
-    body: JSON.stringify({ amount: loanAmount, term: termMonths, purpose: "thugir-loan-probe" }),
+    body: JSON.stringify({ amount: loanAmount, termMonths, purpose }),
     headers: { Cookie: cookie, "Content-Type": "application/json" },
     maxBytes: 2048
   });
   if (posted.status < 200 || posted.status >= 300 || !/"ok"\s*:\s*true/i.test(posted.body)) return NEGATIVE;
-  const after = await ctx.probe.get(listUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
+  const after = await fetchDoc(listUrl, {
+    maxBytes: 8192,
+    headers: { Cookie: cookie }
+  });
   if (after.status < 200 || after.status >= 300) return NEGATIVE;
   let afterLoans: Array<Record<string, unknown>> = [];
   try {
@@ -24170,10 +24174,7 @@ const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
   }
   if (afterLoans.length <= beforeCount) return NEGATIVE;
   const created = afterLoans.find(
-    (loan) =>
-      Number(loan.amount) === loanAmount &&
-      Number(loan.termMonths ?? loan.term) === termMonths &&
-      String(loan.purpose ?? "") === "thugir-loan-probe"
+    (loan) => Number(loan.amount) === loanAmount && String(loan.purpose ?? "") === purpose
   );
   if (!created) return NEGATIVE;
   return {

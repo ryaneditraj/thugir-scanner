@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T06:08:00.000Z",
+  "updated_at": "2026-07-26T06:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2682,
-  "total_findings": 25900,
-  "critical_findings": 53,
+  "total_sites_scanned": 2677,
+  "total_findings": 25740,
+  "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1931,
-  "discovery_findings": 22059,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-26T06:08:00.000Z",
+  "discovery_urls_added": 1926,
+  "discovery_findings": 21912,
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-26T06:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 474,
+      "probes_run": 295,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall on primary Heroku (recovered from 05 UTC 503); secret-resend slug still absent"
+      "note": "Primary Heroku 6/6 recall (14 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 166,
-      "focus": "pwnshop mail-IDOR + XXE order-submit + SSTI less/imports + track/1 + fauxbank register oracles",
-      "improvements_shipped_this_run": 15
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 44,
+      "focus": "vulnbank v1 forgot-password PIN leak + request_loan + fauxbank loans module oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — primary Heroku recovered from 503",
-      "demo.owasp-juice.shop/rest/admin/application-configuration: 14 findings (was 503 last run)",
-      "pwnshop.ctfsecurity.com/track/1: 19 findings — shared pwnshop hub fingerprint",
-      "pwnshop.ctfsecurity.com/mail/1: 17 findings — shared pwnshop hub fingerprint, no mail-IDOR oracle",
-      "pwnshop.ctfsecurity.com/api/orders/submit: 8 findings — admin-login-sqli + email-enumeration oracles, no XXE oracle",
-      "pentest-fauxbank.vercel.app/register: 10 findings — shared fauxbank hub fingerprint"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "vulnbank.org/api/v2/forgot-password: 11→16 findings — vulnbank-v1-forgot-password-pin-leak-live-oracle shipped",
+      "vulnbank.org/request_loan: 11→16 findings — vulnbank-request-loan-live-oracle shipped",
+      "pentest-fauxbank.vercel.app/loans: gains fauxbank-loans-request-live-oracle (POST /api/loans pending-loan oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop mail/1 + track/1: shared 17-19 finding fingerprint without route-specific mail-IDOR or track-IDOR live oracles",
-      "pwnshop api/orders/submit: no XXE order-submit live oracle (admin-login-sqli + email-enumeration only)",
-      "pwnshop api/settings/less/imports: thin 4-finding shell — SSTI→RCE oracle still absent",
-      "fauxbank /register: shared hub fingerprint without registration mass-assignment oracle",
-      "brokencrystals.com/api/goto: DNS fail (repeat)"
+      "pwnshop wallet-top-up oracle still absent (requires VULNBANK_LAB_VULN=1 on self-hosted deploy)",
+      "pwnshop wishlist/order IDOR routes return 404 or require auth on public HF instance",
+      "fauxbank /loans negative-amount acceptance oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 13,
-    "demo.owasp-juice.shop/rest/admin/application-configuration": 14,
-    "pwnshop.ctfsecurity.com/track/1": 19,
-    "pwnshop.ctfsecurity.com/mail/1": 17,
-    "pwnshop.ctfsecurity.com/api/orders/submit": 8,
-    "pentest-fauxbank.vercel.app/register": 10,
-    "burpbountylab.com/dwr/interface": 94,
-    "brokencrystals.com/userlogin?logobgcolor=red": 53
+    "juice-shop.herokuapp.com": 14,
+    "vulnbank.org/api/v2/forgot-password": 16,
+    "vulnbank.org/request_loan": 16,
+    "vulnbank.org/api/profile/upload": 14,
+    "pentest-fauxbank.vercel.app/loans": 11,
+    "brokencrystals.com/userlogin?logobgcolor=red": 53,
+    "pwnshop.ctfsecurity.com/track": 22,
+    "burpbountylab.com/cve/weblogic/": 94
   }
 }

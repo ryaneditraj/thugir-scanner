@@ -7667,6 +7667,24 @@
       "slug": "vulnbank-graphql-introspection-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/graphql { __schema { queryType { name } } } returns Query type for authenticated user; vulnbank.org/api/profile/upload findings 11→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/api/v1/forgot-password returns debug_info.pin (3-digit) while /api/v2/forgot-password omits pin; vulnbank.org/api/v2/forgot-password findings 11→16; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-request-loan-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/request_loan amount:25000 returns status:success Loan requested successfully; vulnbank.org/request_loan findings 11→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-request-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-fauxbank.vercel.app/api/loans creates pending loan visible in GET /api/loans; pentest-fauxbank.vercel.app/loans gains fauxbank-loans-request-live-oracle slug; benchmark juice-shop 14 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13461,6 +13479,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-graphql-introspection-live-oracle",
       "shipped_at": "2026-07-26T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+      "shipped_at": "2026-07-26T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-request-loan-live-oracle",
+      "shipped_at": "2026-07-26T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-request-live-oracle",
+      "shipped_at": "2026-07-26T06:10:00.000Z"
     }
   ]
 }
