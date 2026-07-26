@@ -14719,6 +14719,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-cmdi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnSite /cmdi route command injection oracle",
+    description:
+      "When scanning /cmdi or /cmdi/execute, the command injection lab exposes a ping-tool injection point with semicolon/AND/OR/pipe payload grids — route-specific CMDi oracle.",
+    impactOneline:
+      "OS command injection in network diagnostic tools lets attackers execute arbitrary shell commands on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeCmdiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — VulnSite is intentional training software.",
+      steps: [
+        "Use language-native network libraries instead of shelling out to ping.",
+        "Allowlist hostnames and reject shell metacharacters in all inputs.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /cmdi route scan confirms a command injection lab with ping-tool injection. Show safe subprocess and input-validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-idor-profile-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnSite /idor/profile route IDOR oracle",
+    description:
+      "When scanning /idor/profile or /idor/dashboard, the IDOR lab exposes user-profile and document-access panels with predictable object IDs — route-specific broken access control oracle.",
+    impactOneline:
+      "IDOR in profile and document APIs lets attackers read other users' sensitive records by changing object IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeIdorProfileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every object access server-side — VulnSite is intentional training software.",
+      steps: [
+        "Bind object IDs to the authenticated session and reject cross-user access.",
+        "Use unpredictable identifiers instead of sequential IDs for sensitive resources.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /idor/profile route scan confirms an IDOR privilege-escalation lab. Show server-side authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/testimonials/count route SQLi oracle",
+    description:
+      "When scanning /api/testimonials/count, GET query param executes attacker-controlled SQL against information_schema and returns a table count — route-specific SQL injection oracle.",
+    impactOneline:
+      "SQL injection in testimonial count APIs exposes database schema and enables full data extraction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all SQL — Broken Crystals is intentional lab software.",
+      steps: [
+        "Replace dynamic SQL in count endpoints with prepared statements.",
+        "Never pass raw query parameters into SQL fragments.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count route scan confirms SQLi via query param. Show parameterized query remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-users-search-route-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
