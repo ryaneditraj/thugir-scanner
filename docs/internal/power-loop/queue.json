@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T06:05:00.000Z",
+  "updated_at": "2026-07-26T07:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/#/chatbot",
+      "source": "OWASP Juice Shop v20.1.1 — AI chatbot LLM01 prompt-injection entry (#/chatbot on official demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/settings/css",
+      "source": "ctfsec/pwnshop PwnMe 2025 writeup — SSTI→RCE chain PUT /api/settings/css companion to less/imports (PWN-040)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/search?q=test",
+      "source": "ctfsec/pwnshop vulnerabilities — SQL injection product search oracle GET /search (PWN-010)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xss",
+      "source": "AI & Security Platform — live XSS exploit demo in Next.js+Supabase training codebase (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/settings",
+      "source": "alfredang/pentest — FauxBank settings/profile mass-assignment training module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/mail/1",
       "source": "ctfsec/pwnshop vulnerabilities — inbox IDOR oracle GET /mail/:user_id exposes OTP/reset tokens (PWN-004)",
