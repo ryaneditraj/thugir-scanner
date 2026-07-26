@@ -17124,7 +17124,7 @@ const vulnbankV2ForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (unknownDoc.status < 200 || unknownDoc.status >= 300) return NEGATIVE;
+  if (unknownDoc.status >= 500) return NEGATIVE;
   let unknownParsed: Record<string, unknown> | null = null;
   try {
     unknownParsed = JSON.parse(unknownDoc.body) as Record<string, unknown>;
