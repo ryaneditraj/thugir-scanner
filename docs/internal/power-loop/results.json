@@ -1,3876 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-25T11:02:40.733Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 314,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:02:40.733Z"
-    },
-    {
-      "run_id": "2026-07-25T11:02:59.966Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 184,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:02:59.966Z"
-    },
-    {
-      "run_id": "2026-07-25T11:03:48.531Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 12,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 435,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:03:48.531Z"
-    },
-    {
-      "run_id": "2026-07-25T11:04:33.917Z",
-      "url": "http://burpbountylab.com/cve/crowd/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 71,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 360,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:04:33.917Z"
-    },
-    {
-      "run_id": "2026-07-25T11:05:14.649Z",
-      "url": "http://burpbountylab.com/cve/firebase/.json",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 73,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 361,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:05:14.649Z"
-    },
-    {
-      "run_id": "2026-07-25T11:05:46.589Z",
-      "url": "http://burpbountylab.com/cve/netsweeper/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 72,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 360,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:05:46.589Z"
-    },
-    {
-      "run_id": "2026-07-25T11:06:13.501Z",
-      "url": "http://burpbountylab.com/cve/artica/fw.login.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 72,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 361,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:06:13.501Z"
-    },
-    {
-      "run_id": "2026-07-25T11:06:40.567Z",
-      "url": "http://burpbountylab.com/cve/magmi/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 72,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 361,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:06:40.567Z"
-    },
-    {
-      "run_id": "2026-07-25T11:07:07.142Z",
-      "url": "http://burpbountylab.com/cve/kubernetes/api/v1/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 72,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 361,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:07:07.142Z"
-    },
-    {
-      "run_id": "2026-07-25T11:07:33.307Z",
-      "url": "http://burpbountylab.com/cve/n8n/rest/settings",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 72,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 361,
-      "status": "ok",
-      "scanned_at": "2026-07-25T11:07:33.307Z"
-    },
-    {
       "run_id": "2026-07-25T11:07:59.652Z",
       "url": "https://vwad.owasp.org/app/yrprey/",
       "auth": "public_demo",
@@ -52864,9 +48994,1083 @@
       "probes_run": 631,
       "status": "ok",
       "scanned_at": "2026-07-26T09:10:46.012Z"
+    },
+    {
+      "run_id": "2026-07-25T09:01:23.901Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 13,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 474,
+      "status": "ok",
+      "scanned_at": "2026-07-25T09:01:23.901Z"
+    },
+    {
+      "run_id": "2026-07-26T10:02:26.423Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 14,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 459,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:02:26.423Z"
+    },
+    {
+      "run_id": "2026-07-26T10:03:59.704Z",
+      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 24,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-prototype-pollution-evidence",
+          "title": "Client bundle documents prototype pollution via __proto__ merge",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.84,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-evidence",
+          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-ssti-oracle",
+          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-path-traversal-oracle",
+          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-debug-info-live-oracle",
+          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-events-audit-live-oracle",
+          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+          "title": "Pwnshop forgot-password form enables email enumeration",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-track-idor-live-oracle",
+          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-product-search-sqli-live-oracle",
+          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-admin-login-sqli-live-oracle",
+          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-chat-prompt-injection-live-oracle",
+          "title": "Pwnshop chatbot prompt injection live oracle (PWN-031)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "AI security"
+        },
+        {
+          "slug": "pwnshop-mass-assignment-admin-live-oracle",
+          "title": "Pwnshop self-assigned admin role live oracle (PWN-021)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-xss",
+          "title": "Reflected XSS confirmed via encoding escalation probe",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-sqli",
+          "title": "SQL injection indicated by escalated error-based probe",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 445,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:03:59.704Z"
+    },
+    {
+      "run_id": "2026-07-26T10:04:28.649Z",
+      "url": "https://pwnshop.ctfsecurity.com/verify-otp",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 11,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prototype-pollution-evidence",
+          "title": "Client bundle documents prototype pollution via __proto__ merge",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.84,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-evidence",
+          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-ssti-oracle",
+          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-path-traversal-oracle",
+          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 546,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:04:28.649Z"
+    },
+    {
+      "run_id": "2026-07-26T10:04:41.644Z",
+      "url": "https://pwnshop.ctfsecurity.com/profile/upload-avatar",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 14,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-prototype-pollution-evidence",
+          "title": "Client bundle documents prototype pollution via __proto__ merge",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.84,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-evidence",
+          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-ssti-oracle",
+          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-path-traversal-oracle",
+          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+          "title": "Pwnshop forgot-password form enables email enumeration",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-admin-login-sqli-live-oracle",
+          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-chat-prompt-injection-live-oracle",
+          "title": "Pwnshop chatbot prompt injection live oracle (PWN-031)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "AI security"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 578,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:04:41.644Z"
+    },
+    {
+      "run_id": "2026-07-26T10:04:58.160Z",
+      "url": "https://pwnshop.ctfsecurity.com/admin/security?search=test",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "pwnshop-debug-info-live-oracle",
+          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-events-audit-live-oracle",
+          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+          "title": "Pwnshop forgot-password form enables email enumeration",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-track-idor-live-oracle",
+          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-product-search-sqli-live-oracle",
+          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-admin-login-sqli-live-oracle",
+          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-chat-prompt-injection-live-oracle",
+          "title": "Pwnshop chatbot prompt injection live oracle (PWN-031)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "AI security"
+        },
+        {
+          "slug": "pwnshop-mass-assignment-admin-live-oracle",
+          "title": "Pwnshop self-assigned admin role live oracle (PWN-021)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "reflexion-escalated-xss",
+          "title": "Reflected XSS confirmed via encoding escalation probe",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-sqli",
+          "title": "SQL injection indicated by escalated error-based probe",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 413,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:04:58.160Z"
+    },
+    {
+      "run_id": "2026-07-26T10:05:17.012Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/1",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 566,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:05:17.012Z"
+    },
+    {
+      "run_id": "2026-07-26T10:05:49.933Z",
+      "url": "https://demo.owasp-juice.shop/rest/basket/1",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 14,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 457,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:05:49.933Z"
+    },
+    {
+      "run_id": "2026-07-26T10:07:26.544Z",
+      "url": "https://demo.owasp-juice.shop/rest/user/whoami",
+      "auth": "benchmark",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 13,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 440,
+      "status": "ok",
+      "scanned_at": "2026-07-26T10:07:26.544Z"
+    },
+    {
+      "run_id": "2026-07-26T10:08:59.984Z",
+      "url": "https://brokencrystals.com/api/goto",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-26T10:08:59.984Z",
+      "error": "We couldn't reach brokencrystals.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     }
   ],
   "teacher_delta_runs": [
+    {
+      "run_id": "2026-07-26T10:10:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 14 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=459; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall on primary heroku; jwt-alg-none-accepted + reflexion-escalated-ssti + thugir-dir-discovery + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (pwnshop coupon/otp/avatar/admin-security, wrongsecrets challenge/1) + drained demo.owasp-juice basket/1 + whoami → 101 findings across 7 ok URLs; apply-coupon 24-finding pwnshop hub without route-specific coupon-bypass oracle; wrongsecrets/challenge/1 8 findings with client-side-wrongsecrets-challenge-evidence; demo.owasp-juice REST basket/1 + whoami now 14/13 findings mirroring heroku benchmark.",
+      "scanned_at": "2026-07-26T10:10:00.000Z"
+    },
     {
       "run_id": "2026-07-26T08:05:00.000Z",
       "scan_kind": "teacher_delta",
