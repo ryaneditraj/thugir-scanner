@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T01:45:00.000Z",
+  "updated_at": "2026-07-26T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnbank.org/api/v1/forgot-password",
+      "source": "Commando-X/vuln-bank + Medium pentest reports — OTP/PIN leaked in forgot-password API response (API2 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/check_balance/3518655174",
+      "source": "Commando-X/vuln-bank pentest report — BOLA balance disclosure via predictable account_number (OWASP API1)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/request_loan",
+      "source": "Commando-X/vuln-bank pentest report — business-logic loan endpoint without amount validation",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/chat",
+      "source": "NeuraLegion/brokencrystals README — LLM chat endpoint with insecure output handling / XSS oracle",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/internal/secret",
+      "source": "Commando-X/vuln-bank pentest report — exposed internal/secret endpoint via Swagger docs recon",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/graphql",
       "source": "Commando-X/vuln-bank \u2014 GraphQL analytics endpoint with BOLA/introspection oracles (README + API docs)",
