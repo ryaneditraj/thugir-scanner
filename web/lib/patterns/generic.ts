@@ -12691,6 +12691,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-redirect-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+    description:
+      "GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<internal> passes the vulnlab.dev host allow-list then follows a trusted redirect to AWS metadata — the ssrf.vulnlab.dev follow-redirect SSRF oracle.",
+    impactOneline:
+      "Allow-listing hostnames without blocking redirect chains enables SSRF to internal and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate final fetch destinations after redirects; deny metadata IPs — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Resolve URLs after all redirects and reject private/link-local/metadata ranges.",
+        "Do not treat same-site redirectors as inherently trusted fetch targets.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect endpoint allow-lists *.vulnlab.dev but follows redirects to internal metadata. Show SSRF redirect-chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge live oracle",
+    description:
+      "Resolves /challenge/N to /challenge/challenge-N and confirms challenge walkthrough content (Docker ENV/arg layers, Spring application.properties, K8s configmap) with answer submission UI.",
+    impactOneline:
+      "WrongSecrets challenge pages document real secret-hiding patterns in containers, config files, and cloud infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallengeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenges are intentional — ensure similar secrets never ship in production.",
+      steps: [
+        "Scan repos and containers for hardcoded secrets before deploy.",
+        "Use secret managers instead of application.properties or env files in images.",
+        "Rotate any secrets that appeared in Git history or Docker layers."
+      ]
+    },
+    fixPrompt:
+      "Our app mirrors OWASP WrongSecrets challenge pages. Show how to detect secrets in Docker layers, Spring config, and K8s configmaps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -14169,6 +14221,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/users/basic endpoint accepts isAdmin:true during signup. Show mass-assignment remediation for NestJS user creation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-adminpermission-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals adminpermission route live oracle",
+    description:
+      "When scanning /api/users/one/{email}/adminpermission, POST /api/users/basic with isAdmin:true and GET adminpermission confirms privilege escalation on that route pattern.",
+    impactOneline:
+      "Mass-assignment on signup combined with an unprotected adminpermission probe enables privilege-escalation confirmation on API routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAdminpermissionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes and protect adminpermission probes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin on create/update.",
+        "Require authentication and authorization before exposing adminpermission endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/one/{email}/adminpermission endpoint confirms mass-assignment escalation. Show remediation for NestJS user creation and admin probes.",
     version: 1,
     enabled: true
   },
