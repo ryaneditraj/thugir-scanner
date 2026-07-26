@@ -13939,6 +13939,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-merchant-register-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank merchant registration sensitive-data oracle",
+    description:
+      "POST /api/v1/merchants/register returns a live merchant api_key and echoes debug_info.password plus auth_methods — the Vuln Bank merchant registration sensitive-data oracle.",
+    impactOneline:
+      "Merchant registration endpoints that echo passwords and API keys leak credentials attackers can use to impersonate payment integrations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo passwords or raw API keys in registration responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Return API keys only once via a secure channel and hash stored merchant passwords.",
+        "Remove debug_info blocks from production registration responses.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/register endpoint echoes debug_info.password and returns api_key in the JSON body. Show merchant registration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-bill-payments-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank bill-payment negative-amount business-logic oracle",
+    description:
+      "POST /api/bill-payments/create accepts negative amount values and returns status:success with payment_details.amount below zero — the Vuln Bank bill-payment business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on bill payments lets attackers credit their own balance or bypass payment controls with negative charges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBillPaymentsNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate bill-payment amounts are positive and within account limits — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero payment amounts at the API layer.",
+        "Enforce server-side balance checks before processing bill payments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/bill-payments/create endpoint accepts amount:-50 and returns success. Show business-logic validation for bill payments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-marketplace-prototype-pollution-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals marketplace prototype pollution DOM XSS live oracle",
+    description:
+      "GET /marketplace loads a JS bundle with prototypePollutionDomXss script-gadget code and __proto__ marketplace parsing — confirming the Broken Crystals prototype pollution DOM XSS live oracle.",
+    impactOneline:
+      "Prototype pollution on marketplace query parsing can escalate to arbitrary script execution via polluted script src gadgets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMarketplacePrototypePollutionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block __proto__ keys during query parsing and never load script src from polluted prototype properties — Broken Crystals is intentional lab software.",
+      steps: [
+        "Parse query strings with libraries that block __proto__ and constructor keys.",
+        "Validate dynamic script src values against an allowlist.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /marketplace bundle uses prototypePollutionDomXss as a dynamic script source after __proto__ query parsing. Show prototype pollution and DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-dwr-util-live-oracle",
     platform: "generic",
     category: "Information disclosure",
