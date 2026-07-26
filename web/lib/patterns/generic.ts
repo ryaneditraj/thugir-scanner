@@ -2912,6 +2912,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-admin-panel-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank admin panel exposes user directory live oracle",
+    description:
+      "GET /admin with default admin/admin credentials returns a user directory table (alice, bob, carol, admin) and recent audit log — the FauxBank admin panel privilege-escalation oracle distinct from customer-session probes.",
+    impactOneline:
+      "Weak default admin credentials expose full user listings and privileged audit logs to anyone who guesses admin/admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAdminPanelLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default admin credentials and enforce MFA on privileged panels — FauxBank is intentional training software.",
+      steps: [
+        "Remove or rotate default admin/admin credentials in production.",
+        "Require MFA and IP allowlists for admin panel access.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin panel is reachable with default admin/admin credentials and lists all users. Show admin hardening with MFA and credential rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -14455,6 +14481,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v1/forgot-password endpoint still returns debug_info.pin while v2 hides it. Show API versioning and secret-handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v2-forgot-password-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Vuln Bank v2 forgot-password API enables username enumeration",
+    description:
+      "POST /api/v2/forgot-password returns status:success for valid usernames but status:error User not found for unknown accounts — the Vuln Bank v2 forgot-password enumeration oracle distinct from v1 PIN leak.",
+    impactOneline:
+      "Different forgot-password responses for valid vs invalid usernames let attackers enumerate registered accounts even when reset PINs are hidden.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV2ForgotPasswordEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic forgot-password responses for all usernames — Vuln Bank is intentional training software.",
+      steps: [
+        "Return the same success message whether or not the username exists.",
+        "Rate-limit forgot-password endpoints per IP and per username.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v2/forgot-password endpoint returns User not found for invalid usernames. Show enumeration-safe password-reset response handling.",
     version: 1,
     enabled: true
   },
