@@ -12983,7 +12983,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "OWASP WrongSecrets challenge live oracle",
     description:
-      "Resolves /challenge/N to /challenge/challenge-N and confirms challenge walkthrough content (Docker ENV/arg layers, Spring application.properties, K8s configmap) with answer submission UI.",
+      "Resolves /challenge/N to /challenge/challenge-N and confirms challenge walkthrough content (Docker ENV/arg layers, Spring application.properties, K8s configmap, AWS Secrets Manager CSI, IAM/Parameter Store) with answer submission UI.",
     impactOneline:
       "WrongSecrets challenge pages document real secret-hiding patterns in containers, config files, and cloud infrastructure.",
     detectorKind: "rule_ref",
@@ -16769,6 +16769,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tutorial/a3 route documents XSS labs. Show how to isolate NodeGoat training from production XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "NodeGoat A1 injection tutorial live oracle",
+    description:
+      "When scanning /tutorial/a1, the canonical tutorial documents server-side JS/NoSQL injection with eval/SSJS walkthrough — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A1 injection training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never deploy injection tutorial sinks to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Avoid eval() and unsanitized query interpreters in production Node.js apps.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a1 route documents server-side JS injection labs. Show how to isolate NodeGoat training from production injection sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a4-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat A4 IDOR tutorial live oracle",
+    description:
+      "When scanning /tutorial/a4, the canonical tutorial documents insecure direct object references and unauthorized data access — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A4 IDOR training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA4RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never deploy IDOR tutorial patterns to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Enforce object-level authorization on every data access path in production.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a4 route documents insecure direct object reference labs. Show how to isolate NodeGoat IDOR training from production access controls.",
     version: 1,
     enabled: true
   },

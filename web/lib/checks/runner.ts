@@ -1516,6 +1516,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideNodegoatEvidence",
   "nodegoatTutorialA2RouteLiveOracle",
   "nodegoatTutorialA3RouteLiveOracle",
+  "nodegoatTutorialA1RouteLiveOracle",
+  "nodegoatTutorialA4RouteLiveOracle",
   "clientSideGandalfEvidence",
   "clientSideIronwaspEvidence",
   "clientSideTry2hackEvidence",
