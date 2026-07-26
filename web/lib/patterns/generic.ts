@@ -2860,6 +2860,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-loans-request-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank loan request API creates pending loans",
+    description:
+      "FauxBank POST /api/loans accepts authenticated loan applications and persists them as pending loans retrievable via GET /api/loans — the FauxBank loan-module business-logic oracle.",
+    impactOneline:
+      "Unvalidated loan APIs let attackers queue fraudulent or oversized loan requests against victim accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLoansRequestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate loan amounts, terms, and eligibility before creating pending loans.",
+      steps: [
+        "Enforce minimum/maximum loan amounts and credit checks on POST /api/loans.",
+        "Require staff approval workflows before loans enter pending status.",
+        "Rate-limit loan applications per authenticated user."
+      ]
+    },
+    fixPrompt:
+      "Our /api/loans endpoint creates pending loans with only a session cookie. Show loan eligibility validation and approval workflows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-loans-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "FauxBank loan API accepts negative amounts",
+    description:
+      "FauxBank POST /api/loans accepts negative amount values and persists them as pending loans retrievable via GET /api/loans — the FauxBank loan negative-amount business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on loan APIs lets attackers queue fraudulent credit-like loan entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLoansNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject negative or zero loan amounts and enforce eligibility checks before creating pending loans.",
+      steps: [
+        "Validate loan amounts are positive at the API layer.",
+        "Require staff approval workflows before loans enter pending status.",
+        "Rate-limit loan applications per authenticated user."
+      ]
+    },
+    fixPrompt:
+      "Our /api/loans endpoint accepts amount:-1000 and creates a pending loan. Show business-logic validation for loan amounts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-admin-panel-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank admin panel exposes user directory live oracle",
+    description:
+      "GET /admin with default admin/admin credentials returns a user directory table (alice, bob, carol, admin) and recent audit log — the FauxBank admin panel privilege-escalation oracle distinct from customer-session probes.",
+    impactOneline:
+      "Weak default admin credentials expose full user listings and privileged audit logs to anyone who guesses admin/admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAdminPanelLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default admin credentials and enforce MFA on privileged panels — FauxBank is intentional training software.",
+      steps: [
+        "Remove or rotate default admin/admin credentials in production.",
+        "Require MFA and IP allowlists for admin panel access.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin panel is reachable with default admin/admin credentials and lists all users. Show admin hardening with MFA and credential rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -9024,6 +9102,214 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-track-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop order tracking IDOR live oracle (PWN-002)",
+    description:
+      "GET /track/:order_id returns full order tracking with shippingAddress JavaScript variable without authentication or ownership validation — the Pwnshop order tracking IDOR oracle.",
+    impactOneline:
+      "Unauthenticated order tracking exposes shipping addresses and order status for any sequential order ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopTrackIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify order ownership before returning tracking data — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind order tracking to authenticated sessions and verify the order belongs to the current user.",
+        "Reject GET /track/:id requests without a valid session or signed tracking token.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /track/:order_id endpoint returns shipping addresses without auth. Show IDOR remediation for order tracking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop product search SQL injection live oracle (PWN-010)",
+    description:
+      "GET /search?q=test' returns MySQL syntax errors from concatenated product search queries — the Pwnshop product search SQL injection oracle.",
+    impactOneline:
+      "SQL injection in product search lets attackers extract database contents and bypass application security controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all search SQL — Pwnshop is intentional lab software.",
+      steps: [
+        "Replace string-concatenated search queries with prepared statements.",
+        "Return generic search errors without revealing SQL structure.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /search endpoint is vulnerable to SQLi via the q parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-admin-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop admin login SQL injection live oracle (PWN-009)",
+    description:
+      "POST /admin/login with a crafted username returns MySQL syntax errors from concatenated admin authentication queries — the Pwnshop admin login SQL injection oracle.",
+    impactOneline:
+      "SQL injection on admin login enables authentication bypass and full administrative takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAdminLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for admin authentication SQL — Pwnshop is intentional lab software.",
+      steps: [
+        "Replace string-concatenated admin login queries with prepared statements.",
+        "Return generic authentication failures without revealing SQL structure.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /admin/login endpoint is vulnerable to SQLi via the username field. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-chat-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "Pwnshop chatbot prompt injection live oracle (PWN-031)",
+    description:
+      "POST /chat with a developer debug jailbreak returns the full system prompt including the classified INTERNAL AGENT PRIVILEGED COMMANDS section — the Pwnshop direct prompt injection oracle.",
+    impactOneline:
+      "Prompt injection on the Pwnie chatbot leaks system prompts, privileged command schemas, and injected user context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — Pwnshop PWN-031 is intentional lab software.",
+      steps: [
+        "Strip jailbreak patterns and instruction-override phrases before sending user messages to the model.",
+        "Never embed privileged command schemas in prompts reachable via prompt injection.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /chat endpoint leaks the full system prompt via developer debug jailbreak. Show prompt-injection hardening for LLM chatbots.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-mass-assignment-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop self-assigned admin role live oracle (PWN-021)",
+    description:
+      "POST /register accepts is_admin=true and role=admin in the form body, recording role: admin in unauthenticated audit logs — the Pwnshop mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Mass-assigning admin during registration grants attacker accounts full administrative privileges without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopMassAssignmentAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin or role from client input — Pwnshop is intentional lab software.",
+      steps: [
+        "Reject is_admin, role, and other privilege fields from registration request bodies.",
+        "Assign roles server-side after explicit admin approval workflows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /register endpoint accepts is_admin=true mass-assignment. Show allow-list DTO remediation for registration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-open-redirect-register-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop registration open redirect live oracle (PWN-017)",
+    description:
+      "POST /register with next= reflects attacker URLs in the 302 Location header without validation — the Pwnshop registration open redirect oracle.",
+    impactOneline:
+      "Open redirects on registration enable phishing attacks that steal credentials or OAuth tokens via trusted-domain redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-registration redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on registration and login flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /register endpoint reflects next= into a 302 Location to external hosts. Show open-redirect remediation for registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-verify-otp-bruteforce-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Pwnshop OTP verification lacks rate limiting (PWN-015)",
+    description:
+      "POST /verify-otp accepts rapid sequential OTP guesses without HTTP 429 or account lockout — the Pwnshop brute-forceable 2FA oracle.",
+    impactOneline:
+      "Missing OTP rate limits let attackers exhaust the 6-digit code space and bypass two-factor authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVerifyOtpBruteforceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit OTP verification and lock accounts after repeated failures — Pwnshop PWN-015 is intentional lab software.",
+      steps: [
+        "Return HTTP 429 after a small number of failed OTP attempts per session.",
+        "Use exponential backoff and temporary lockouts on repeated failures.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /verify-otp endpoint has no rate limiting. Show OTP brute-force protection with lockouts and backoff.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-userlogin-css-injection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals userlogin CSS injection live oracle",
+    description:
+      "GET /userlogin?logobgcolor= passes the URL search param directly into logo background inline CSS via style.cssText without sanitization — the Broken Crystals CSS injection oracle.",
+    impactOneline:
+      "CSS injection via logobgcolor can exfiltrate page content, hijack UI, or chain into XSS on the login surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUserloginCssInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate URL-driven style values against an allowlist; never pass raw search params into inline CSS.",
+      steps: [
+        "Allowlist logo background colors (named CSS colors or hex codes matching /^#[0-9a-f]{3,8}$/i).",
+        "Reject quotes, semicolons, and url() in user-supplied style values.",
+        "Prefer CSS custom properties set server-side instead of reflecting URL params into style attributes."
+      ]
+    },
+    fixPrompt:
+      "Our /userlogin page reads logobgcolor from the URL into logoBgColor inline CSS. Show how to allowlist safe color values and block CSS injection payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -13445,6 +13731,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals DigitalOcean metadata SSRF oracle",
+    description:
+      "GET /api/file/digital_ocean?path=http://169.254.169.254/metadata/v1/id returns DigitalOcean droplet metadata (hostname, region, interfaces) — the Broken Crystals DigitalOcean cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to DigitalOcean metadata can expose droplet identity and compromise the hosting account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsDigitalOceanMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to DigitalOcean metadata and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254/metadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/digital_ocean endpoint fetches DigitalOcean metadata via the path parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -13623,6 +13935,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/testimonials/count endpoint reflects query input unescaped in SQL errors. Show XSS-safe error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-iframe-injection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /testimonials videosrc iframe injection oracle",
+    description:
+      "GET /testimonials?videosrc= reads the videosrc query parameter and sets testimonials-video outerHTML to an iframe — the Broken Crystals DOM iframe injection oracle.",
+    impactOneline:
+      "DOM iframe injection via videosrc lets attackers embed malicious content or execute script gadgets in victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsIframeInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate videosrc against a strict embed URL allowlist — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never pass raw query parameters into iframe src or outerHTML assignments.",
+        "Allowlist trusted video embed origins such as youtube-nocookie.com.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials page reads videosrc from the URL into an iframe outerHTML sink. Show safe embed URL validation.",
     version: 1,
     enabled: true
   },
@@ -13887,6 +14225,526 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-bopla-register-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank registration BOPLA privilege escalation oracle",
+    description:
+      "POST /register accepts hidden is_admin:true and balance fields in the JSON body, echoing debug_data.is_admin:true — the Vuln Bank broken object property level authorization oracle.",
+    impactOneline:
+      "Mass-assigning is_admin during registration grants attacker accounts full administrative privileges on the banking platform.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBoplaRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin from client input — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject unknown fields in registration payloads and ignore is_admin from client requests.",
+        "Set administrative flags only via server-side role assignment workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint accepts is_admin:true in the JSON body and grants admin privileges. Show BOPLA remediation for user registration APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank SQL injection login bypass oracle",
+    description:
+      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
+    impactOneline:
+      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for administrative accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-register-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank merchant registration sensitive-data oracle",
+    description:
+      "POST /api/v1/merchants/register returns a live merchant api_key and echoes debug_info.password plus auth_methods — the Vuln Bank merchant registration sensitive-data oracle.",
+    impactOneline:
+      "Merchant registration endpoints that echo passwords and API keys leak credentials attackers can use to impersonate payment integrations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo passwords or raw API keys in registration responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Return API keys only once via a secure channel and hash stored merchant passwords.",
+        "Remove debug_info blocks from production registration responses.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/register endpoint echoes debug_info.password and returns api_key in the JSON body. Show merchant registration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-bill-payments-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank bill-payment negative-amount business-logic oracle",
+    description:
+      "POST /api/bill-payments/create accepts negative amount values and returns status:success with payment_details.amount below zero — the Vuln Bank bill-payment business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on bill payments lets attackers credit their own balance or bypass payment controls with negative charges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBillPaymentsNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate bill-payment amounts are positive and within account limits — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero payment amounts at the API layer.",
+        "Enforce server-side balance checks before processing bill payments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/bill-payments/create endpoint accepts amount:-50 and returns success. Show business-logic validation for bill payments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-payment-charge-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank merchant payment charge debug-disclosure oracle",
+    description:
+      "POST /api/v1/payments/charge with a merchant api_key echoes debug_info.submitted_card_number and auth_method in the JSON response — the Vuln Bank merchant payment gateway oracle.",
+    impactOneline:
+      "Payment gateway debug responses leak submitted card numbers and merchant context to any caller with a merchant API key.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantPaymentChargeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info from payment responses and tokenize card data — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw card numbers in payment API responses.",
+        "Remove debug_info blocks from production payment gateway endpoints.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/payments/charge endpoint echoes debug_info.submitted_card_number in the JSON body. Show merchant payment gateway hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-virtual-cards-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank virtual-cards BOLA live oracle",
+    description:
+      "POST /api/virtual-cards/{cardId}/toggle-freeze accepts requests from any authenticated user without verifying card ownership — the Vuln Bank virtual-cards broken object level authorization oracle.",
+    impactOneline:
+      "Missing object-level authorization on virtual-card endpoints lets any user freeze or manipulate another customer's cards.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankVirtualCardsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce card ownership checks on every virtual-card mutation — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify the authenticated user owns the virtual card before toggle-freeze or limit updates.",
+        "Use server-side authorization middleware on all /api/virtual-cards/{id} routes.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/virtual-cards/{cardId}/toggle-freeze endpoint lets any logged-in user freeze another user's card. Show BOLA remediation for virtual-card APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Vuln Bank profile-picture URL SSRF live oracle",
+    description:
+      "POST /upload_profile_picture_url fetches attacker-controlled image_url server-side with no allowlist and saves the response as the user's profile picture — the Vuln Bank profile-picture SSRF oracle.",
+    impactOneline:
+      "Server-side URL fetch on profile uploads enables SSRF against internal services and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankUploadProfilePictureUrlSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal IPs and validate image content — Vuln Bank is intentional training software.",
+      steps: [
+        "Allowlist permitted image hosts instead of fetching arbitrary URLs.",
+        "Reject link-local, private, and metadata IP ranges before outbound requests.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /upload_profile_picture_url endpoint fetches any image_url server-side. Show SSRF remediation with host allowlists and metadata blocking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-transfer-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank money-transfer negative-amount business-logic oracle",
+    description:
+      "POST /transfer accepts negative amount values and credits the sender's balance instead of debiting it — the Vuln Bank money-transfer business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on transfers lets attackers inflate their account balance with negative transfer amounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankTransferNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate transfer amounts are positive and enforce balance checks — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero transfer amounts at the API layer.",
+        "Debit the sender atomically and verify sufficient funds before crediting the recipient.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /transfer endpoint accepts amount:-500 and increases the sender balance. Show business-logic validation for money transfers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-request-loan-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank loan request negative-amount business-logic oracle",
+    description:
+      "POST /request_loan accepts negative amount values and returns status:success — the Vuln Bank loan negative-amount business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on loan requests lets attackers queue fraudulent credit-like loan entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankRequestLoanNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate loan amounts are positive before accepting requests — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero loan amounts at the API layer.",
+        "Enforce credit checks and staff approval workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /request_loan endpoint accepts amount:-5000 and returns status:success. Show business-logic validation for loan amounts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-check-balance-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank unauthenticated balance lookup by account number",
+    description:
+      "GET /check_balance/{account_number} returns account balance and username without authentication — the Vuln Bank balance-enumeration IDOR oracle.",
+    impactOneline:
+      "Unauthenticated balance lookups let attackers enumerate account numbers and harvest financial data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankCheckBalanceIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning account balances — Vuln Bank is intentional training software.",
+      steps: [
+        "Gate /check_balance behind session or token authentication.",
+        "Return generic errors for unknown account numbers to prevent enumeration.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /check_balance/{account_number} endpoint returns balances without auth. Show access-control remediation for financial lookups.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-graphql-introspection-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Vuln Bank GraphQL introspection live oracle",
+    description:
+      "POST /graphql returns full __schema introspection including query types for authenticated users — the Vuln Bank GraphQL introspection oracle.",
+    impactOneline:
+      "GraphQL introspection exposes the full API schema, helping attackers map hidden queries and mutations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankGraphqlIntrospectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production — Vuln Bank is intentional training software.",
+      steps: [
+        "Turn off introspection outside development environments.",
+        "Require admin roles for schema exploration tools like GraphiQL.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql endpoint returns __schema introspection for authenticated users. Show how to disable introspection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v1 forgot-password API leaks reset PIN",
+    description:
+      "POST /api/v1/forgot-password returns debug_info.pin with the 3-digit password-reset PIN while /api/v2/forgot-password omits it — the Vuln Bank API version confusion oracle.",
+    impactOneline:
+      "Legacy API versions that still expose reset PINs let attackers bypass password recovery even when newer versions hide the secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV1ForgotPasswordPinLeakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire or harden legacy API versions and never return reset secrets in responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Deprecate /api/v1/forgot-password and block version downgrade.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/forgot-password endpoint still returns debug_info.pin while v2 hides it. Show API versioning and secret-handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v2-forgot-password-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Vuln Bank v2 forgot-password API enables username enumeration",
+    description:
+      "POST /api/v2/forgot-password returns status:success for valid usernames but status:error User not found for unknown accounts — the Vuln Bank v2 forgot-password enumeration oracle distinct from v1 PIN leak.",
+    impactOneline:
+      "Different forgot-password responses for valid vs invalid usernames let attackers enumerate registered accounts even when reset PINs are hidden.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV2ForgotPasswordEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic forgot-password responses for all usernames — Vuln Bank is intentional training software.",
+      steps: [
+        "Return the same success message whether or not the username exists.",
+        "Rate-limit forgot-password endpoints per IP and per username.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v2/forgot-password endpoint returns User not found for invalid usernames. Show enumeration-safe password-reset response handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sup3r-secret-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank hidden admin panel reachable after BOPLA signup",
+    description:
+      "POST /register with is_admin:true followed by login grants access to GET /sup3r_s3cr3t_admin — the Vuln Bank hidden admin panel oracle.",
+    impactOneline:
+      "Mass-assignment during registration combined with a hidden admin route exposes full administrative control to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSup3rSecretAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block privileged fields on registration and protect admin routes with server-side role checks — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject is_admin and other privilege fields from registration JSON bodies.",
+        "Enforce admin role verification on /sup3r_s3cr3t_admin independent of client-supplied flags.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint accepts is_admin:true and /sup3r_s3cr3t_admin exposes the admin panel. Show BOPLA remediation and admin route protection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-request-loan-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank authenticated loan-request API oracle",
+    description:
+      "POST /request_loan accepts authenticated loan amount requests and returns status:success — the Vuln Bank loan-module business-logic oracle.",
+    impactOneline:
+      "Unvalidated loan request endpoints enable fraudulent loan applications without credit checks or approval workflows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankRequestLoanLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce loan eligibility, limits, and approval workflows — Vuln Bank is intentional training software.",
+      steps: [
+        "Validate loan amounts against account history and credit policies.",
+        "Queue loan requests for manual or automated underwriting before approval.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /request_loan endpoint accepts any amount for authenticated users. Show loan validation and approval workflow hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-swagger-json-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab swagger.json exposure live oracle",
+    description:
+      "GET /swagger.json returns OpenAPI 3.0 API spec JSON with title API — the Burp Bounty swagger.json disclosure profile oracle distinct from /api-docs.",
+    impactOneline:
+      "Public swagger.json files expose API surface area and aid attackers mapping hidden endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySwaggerJsonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or restrict swagger.json on production applications.",
+      steps: [
+        "Disable public OpenAPI spec endpoints outside development environments.",
+        "Require authentication for API documentation routes.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /swagger.json endpoint exposes an OpenAPI 3.0 spec without authentication. Show how to restrict API documentation in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-admin-panel-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab admin panel directory live oracle",
+    description:
+      "GET /admin/ returns reachable Admin Panel HTML with a login prompt — the Burp Bounty admin directory disclosure profile oracle.",
+    impactOneline:
+      "Discoverable admin panels increase attack surface for credential stuffing and authentication bypass attempts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAdminPanelLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict admin panel paths to trusted networks or use non-obvious entry points.",
+      steps: [
+        "Require VPN or IP allowlisting for administrative interfaces.",
+        "Apply rate limiting and MFA on admin login routes.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/ path returns a reachable Admin Panel page. Show admin interface hardening and access restrictions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-marketplace-prototype-pollution-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals marketplace prototype pollution DOM XSS live oracle",
+    description:
+      "GET /marketplace loads a JS bundle with prototypePollutionDomXss script-gadget code and __proto__ marketplace parsing — confirming the Broken Crystals prototype pollution DOM XSS live oracle.",
+    impactOneline:
+      "Prototype pollution on marketplace query parsing can escalate to arbitrary script execution via polluted script src gadgets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMarketplacePrototypePollutionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block __proto__ keys during query parsing and never load script src from polluted prototype properties — Broken Crystals is intentional lab software.",
+      steps: [
+        "Parse query strings with libraries that block __proto__ and constructor keys.",
+        "Validate dynamic script src values against an allowlist.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /marketplace bundle uses prototypePollutionDomXss as a dynamic script source after __proto__ query parsing. Show prototype pollution and DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-dwr-util-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab DWR util.js exposure live oracle",
+    description:
+      "GET /dwr/util.js returns DWRUtil JavaScript with dwr.util.getValue — the Burp Bounty Direct Web Remoting util profile oracle distinct from /dwr/interface/.",
+    impactOneline:
+      "Live DWR util.js probe confirms Direct Web Remoting framework exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDwrUtilLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict Direct Web Remoting endpoints on production applications.",
+      steps: [
+        "Remove unused DWR servlets and JavaScript endpoints from deployed artifacts.",
+        "Restrict /dwr/* paths to trusted networks or disable DWR entirely.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /dwr/util.js endpoint exposes Direct Web Remoting utility JavaScript. Show how to disable DWR in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-phpinfo-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab phpinfo.php exposure live oracle",
+    description:
+      "GET /phpinfo.php returns phpinfo() HTML with PHP Version and Build Date — the Burp Bounty phpinfo disclosure profile oracle distinct from generic hub fingerprinting.",
+    impactOneline:
+      "Live phpinfo.php probe confirms PHP configuration disclosure distinct from generic directory-probing fingerprints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPhpinfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo pages from production and block the paths at the server.",
+      steps: [
+        "Delete phpinfo.php from the deployed web root.",
+        "Return 404 for /phpinfo* paths in your server or WAF rules.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /phpinfo.php endpoint exposes PHP configuration via phpinfo(). Show how to remove diagnostic pages from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-api-config",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -13935,6 +14793,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /userlogin page reads logobgcolor from the URL into logoBgColor inline CSS. Show how to allowlist safe color values and block CSS injection payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-bopla-register-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank registration BOPLA privilege escalation oracle",
+    description:
+      "POST /register accepts hidden is_admin:true and balance fields in the JSON body, echoing debug_data.is_admin:true — the Vuln Bank broken object property level authorization oracle.",
+    impactOneline:
+      "Mass-assigning is_admin during registration grants attacker accounts full administrative privileges on the banking platform.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBoplaRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin from client input — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject unknown fields in registration payloads and ignore is_admin from client requests.",
+        "Set administrative flags only via server-side role assignment workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint accepts is_admin:true in the JSON body and grants admin privileges. Show BOPLA remediation for user registration APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank SQL injection login bypass oracle",
+    description:
+      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
+    impactOneline:
+      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for administrative accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-dwr-util-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab DWR util.js exposure live oracle",
+    description:
+      "GET /dwr/util.js returns DWRUtil JavaScript with dwr.util.getValue — the Burp Bounty Direct Web Remoting util profile oracle distinct from /dwr/interface/.",
+    impactOneline:
+      "Live DWR util.js probe confirms Direct Web Remoting framework exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDwrUtilLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict Direct Web Remoting endpoints on production applications.",
+      steps: [
+        "Remove unused DWR servlets and JavaScript endpoints from deployed artifacts.",
+        "Restrict /dwr/* paths to trusted networks or disable DWR entirely.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /dwr/util.js endpoint exposes Direct Web Remoting utility JavaScript. Show how to disable DWR in production.",
     version: 1,
     enabled: true
   },

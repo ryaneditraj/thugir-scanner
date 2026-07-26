@@ -1,6 +1,306 @@
 {
-  "updated_at": "2026-07-25T23:03:00.000Z",
+  "updated_at": "2026-07-26T11:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/2",
+      "source": "OWASP WrongSecrets — Challenge 2 secrets-in-config oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/basic",
+      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab requests.get (GitHub README live at ssrf.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-aws",
+      "source": "sampsonc/vulnlab.dev — mock AWS IMDSv1 metadata SSRF oracle (cloud-hosted profile fetcher)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blocklist",
+      "source": "sampsonc/vulnlab.dev — SSRF substring blocklist bypass lab (localhost/127.0.0.1 deny-list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/redirect",
+      "source": "sampsonc/vulnlab.dev — SSRF follow-redirect on trusted host lab (302 chase bypass)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
+      "source": "ctfsec/pwnshop vulnerabilities — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/verify-otp",
+      "source": "ctfsec/pwnshop vulnerabilities — brute-forceable 6-digit OTP oracle POST /verify-otp (PWN-015)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/upload-avatar",
+      "source": "ctfsec/pwnshop vulnerabilities — stored XSS via SVG avatar upload POST /profile/upload-avatar (PWN-012)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/security?search=test",
+      "source": "ctfsec/pwnshop vulnerabilities — second-order SQLi in admin audit log search GET /admin/security?search= (PWN-014)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/1",
+      "source": "OWASP WrongSecrets — Challenge 1 git-secrets oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/basket/1",
+      "source": "OWASP Juice Shop v20.1.1 — REST basket IDOR oracle (BOLA on /rest/basket/:id)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/chat",
+      "source": "ctfsec/pwnshop — AI chatbot prompt-injection / agent command injection oracle (PWN-037+)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/loans/apply",
+      "source": "Commando-X/vuln-bank — loan application mass-assignment / BOLA training route",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/admin",
+      "source": "alfredang/pentest FauxBank — unauthenticated admin panel IDOR route (Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/user/whoami",
+      "source": "OWASP Juice Shop v20.1.1 — REST session/auth oracle on /rest/user/whoami",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/products/search?q=test",
+      "source": "OWASP Juice Shop v20.1.1 — REST product search SQLi oracle on official demo (companion to heroku benchmark)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/user/login",
+      "source": "OWASP Juice Shop v20.1.1 — REST login SQLi/auth-bypass oracle on official demo",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/sqli",
+      "source": "AI & Security Platform — live SQL injection exploit demo in Next.js+Supabase training codebase",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/transactions",
+      "source": "alfredang/pentest FauxBank — transactions module IDOR/BOLA training route (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/signup",
+      "source": "NeuraLegion/brokencrystals — signup mass-assignment / broken auth oracle (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/#/chatbot",
+      "source": "OWASP Juice Shop v20.1.1 — AI chatbot LLM01 prompt-injection entry (#/chatbot on official demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/settings/css",
+      "source": "ctfsec/pwnshop PwnMe 2025 writeup — SSTI→RCE chain PUT /api/settings/css companion to less/imports (PWN-040)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/search?q=test",
+      "source": "ctfsec/pwnshop vulnerabilities — SQL injection product search oracle GET /search (PWN-010)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xss",
+      "source": "AI & Security Platform — live XSS exploit demo in Next.js+Supabase training codebase (web search)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/settings",
+      "source": "alfredang/pentest — FauxBank settings/profile mass-assignment training module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/mail/1",
+      "source": "ctfsec/pwnshop vulnerabilities — inbox IDOR oracle GET /mail/:user_id exposes OTP/reset tokens (PWN-004)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/orders/submit",
+      "source": "ctfsec/pwnshop + PwnMe 2025 writeup — XXE via order submission IDOR oracle (PWN-040 chain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/settings/less/imports",
+      "source": "ctfsec/pwnshop vulnerabilities — SSTI→RCE via Less.php import endpoint (PWN-040)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/track/1",
+      "source": "ctfsec/pwnshop vulnerabilities — unauthenticated order tracking IDOR GET /track/:order_id (PWN-002)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/register",
+      "source": "alfredang/pentest README — FauxBank registration / mass-assignment training module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/loans",
+      "source": "alfredang/pentest — FauxBank loan module OWASP training lab (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/profile",
+      "source": "alfredang/pentest — FauxBank profile/settings IDOR training module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/api/v2/forgot-password",
+      "source": "Commando-X/vuln-bank + Ostorlab writeup — API version confusion reset PIN leak oracle (v1 debug_info vs v2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/merchant/register",
+      "source": "Commando-X/vuln-bank README — merchant payment API registration endpoint (OWASP API2 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/userlogin?logobgcolor=red",
+      "source": "NeuraLegion/brokencrystals — CSS injection via logobgcolor URL param (public benchmark)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/order/1",
+      "source": "pwnshop vulnerabilities page — IDOR oracle GET /order/:id (PWN-001)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wallet",
+      "source": "ctfsec/pwnshop README — wallet top-up / payment-card funding business-logic oracle",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/static/openapi.json",
+      "source": "VulnBank blog — unauthenticated OpenAPI spec documents all endpoints (API9 inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/profile/upload",
+      "source": "VulnBank compliance page — profile picture upload SSRF oracle (hidden admin panel chain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/admin/application-configuration",
+      "source": "OWASP Juice Shop official demo — unauthenticated admin application-configuration (benchmark companion)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/track",
+      "source": "ctfsec/pwnshop README — order tracking IDOR oracle GET /track (PWN-002 companion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wishlist/1",
+      "source": "ctfsec/pwnshop README — unauthenticated wishlist IDOR GET /wishlist/:user_id (PWN-003)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/search/filters",
+      "source": "ctfsec/pwnshop README — product search/filter SQLi oracle GET /search/filters (PWN-012)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/export-orders",
+      "source": "ctfsec/pwnshop README — CSV formula injection oracle GET /export-orders (PWN-017)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/login",
+      "source": "ctfsec/pwnshop README — admin SQLi login oracle POST /admin/login (PWN-011)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/forgot-password",
+      "source": "Commando-X/vuln-bank + Medium pentest reports — OTP/PIN leaked in forgot-password API response (API2 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/check_balance/3518655174",
+      "source": "Commando-X/vuln-bank pentest report — BOLA balance disclosure via predictable account_number (OWASP API1)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/request_loan",
+      "source": "Commando-X/vuln-bank pentest report — business-logic loan endpoint without amount validation",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/chat",
+      "source": "NeuraLegion/brokencrystals README — LLM chat endpoint with insecure output handling / XSS oracle",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/internal/secret",
+      "source": "Commando-X/vuln-bank pentest report — exposed internal/secret endpoint via Swagger docs recon",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/graphql",
+      "source": "Commando-X/vuln-bank — GraphQL analytics endpoint with BOLA/introspection oracles (README + API docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v3/user/1",
+      "source": "Commando-X/vuln-bank — hidden admin user-details API BOLA oracle (app.py /api/v3/user/<id>)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/payments/charge",
+      "source": "Commando-X/vuln-bank — merchant payment charge API business-logic oracle (README merchant integration)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/digital_ocean?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — DigitalOcean metadata SSRF oracle /api/file/digital_ocean (README cloud endpoints)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/api/transactions",
+      "source": "Commando-X/vuln-bank — authenticated money-transfer API BOLA/SQLi oracle (pentest report endpoint map)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/merchants/register",
+      "source": "Commando-X/vuln-bank — public merchant registration API (OWASP API2 broken auth / API5 BFLA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/bill-payments",
+      "source": "Commando-X/vuln-bank — bill payments business-logic oracle (negative amount / rate-limit gaps per pentest reports)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/sup3r_s3cr3t_admin",
+      "source": "Commando-X/vuln-bank — exposed admin panel path (Medium pentest report recon)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/marketplace?__proto__[Test]=Test",
+      "source": "NeuraLegion/brokencrystals — prototype pollution DOM XSS oracle GET /marketplace?__proto__ (README)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/ssrf",
+      "source": "dkyazzentwatwa/hack-this-site — SSRF validation API lab endpoint (GitHub api/validate/ssrf)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/phpinfo.php",
       "source": "BountySecurity/BurpBountyLab — phpinfo exposure passive trigger (misc module)",
