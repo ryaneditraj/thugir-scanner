@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T22:04:34.520Z",
+  "updated_at": "2026-07-26T23:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a6",
+      "source": "OWASP NodeGoat — A6 cross-site request forgery tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-15",
+      "source": "OWASP WrongSecrets — challenge-15 Git secrets live oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-16",
+      "source": "OWASP WrongSecrets — challenge-16 front-end secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-17",
+      "source": "OWASP WrongSecrets — challenge-17 Docker secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/path/linux?file=../../../etc/passwd",
+      "source": "Burp Bounty Lab — path traversal File Read Linux profile (public intentional vuln lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
       "source": "OWASP NodeGoat — A4 insecure direct object references tutorial route (public Heroku benchmark)",
