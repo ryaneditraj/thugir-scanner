@@ -2886,6 +2886,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-loans-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "FauxBank loan API accepts negative amounts",
+    description:
+      "FauxBank POST /api/loans accepts negative amount values and persists them as pending loans retrievable via GET /api/loans — the FauxBank loan negative-amount business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on loan APIs lets attackers queue fraudulent credit-like loan entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLoansNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject negative or zero loan amounts and enforce eligibility checks before creating pending loans.",
+      steps: [
+        "Validate loan amounts are positive at the API layer.",
+        "Require staff approval workflows before loans enter pending status.",
+        "Rate-limit loan applications per authenticated user."
+      ]
+    },
+    fixPrompt:
+      "Our /api/loans endpoint accepts amount:-1000 and creates a pending loan. Show business-logic validation for loan amounts.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -14221,6 +14247,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /transfer endpoint accepts amount:-500 and increases the sender balance. Show business-logic validation for money transfers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-request-loan-negative-amount-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank loan request negative-amount business-logic oracle",
+    description:
+      "POST /request_loan accepts negative amount values and returns status:success — the Vuln Bank loan negative-amount business-logic oracle.",
+    impactOneline:
+      "Missing amount validation on loan requests lets attackers queue fraudulent credit-like loan entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankRequestLoanNegativeAmountLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate loan amounts are positive before accepting requests — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero loan amounts at the API layer.",
+        "Enforce credit checks and staff approval workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /request_loan endpoint accepts amount:-5000 and returns status:success. Show business-logic validation for loan amounts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-check-balance-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank unauthenticated balance lookup by account number",
+    description:
+      "GET /check_balance/{account_number} returns account balance and username without authentication — the Vuln Bank balance-enumeration IDOR oracle.",
+    impactOneline:
+      "Unauthenticated balance lookups let attackers enumerate account numbers and harvest financial data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankCheckBalanceIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning account balances — Vuln Bank is intentional training software.",
+      steps: [
+        "Gate /check_balance behind session or token authentication.",
+        "Return generic errors for unknown account numbers to prevent enumeration.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /check_balance/{account_number} endpoint returns balances without auth. Show access-control remediation for financial lookups.",
     version: 1,
     enabled: true
   },

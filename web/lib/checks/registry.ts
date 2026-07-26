@@ -17119,6 +17119,106 @@ const vulnbankRequestLoanLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankRequestLoanNegativeAmountLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankProbeUserToken(ctx);
+  if (!token) return NEGATIVE;
+  const loanUrl = new URL("/request_loan", ctx.origin).toString();
+  const loanAmount = -5000;
+  const doc = await ctx.probe.get(loanUrl, {
+    method: "POST",
+    body: JSON.stringify({ amount: loanAmount }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const message = String(parsed.message ?? "");
+  if (status !== "success" || !/loan requested successfully/i.test(message)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: loanUrl,
+      amount: loanAmount,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /request_loan accepts negative amount and returns status:success — loan negative-amount business-logic oracle"
+    }
+  };
+};
+
+const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const username = `thugir_bal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const probeBalance = 1234.56;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password: VULNBANK_PROBE_PASSWORD,
+      balance: probeBalance
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  let accountNumber = "";
+  try {
+    const parsed = JSON.parse(registerDoc.body) as {
+      status?: string;
+      debug_data?: { account_number?: string; balance?: number };
+    };
+    if (parsed.status !== "success") return NEGATIVE;
+    accountNumber = String(parsed.debug_data?.account_number ?? "");
+    if (!/^\d{10}$/.test(accountNumber)) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const balanceUrl = new URL(`/check_balance/${accountNumber}`, ctx.origin).toString();
+  const balanceDoc = await ctx.probe.get(balanceUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (balanceDoc.status < 200 || balanceDoc.status >= 300) return NEGATIVE;
+  let balanceParsed: Record<string, unknown> | null = null;
+  try {
+    balanceParsed = JSON.parse(balanceDoc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(balanceParsed.status ?? "");
+  const balance = balanceParsed.balance;
+  const returnedAccount = String(balanceParsed.account_number ?? "");
+  if (
+    status !== "success" ||
+    returnedAccount !== accountNumber ||
+    typeof balance !== "number" ||
+    Math.abs(balance - probeBalance) > 0.01
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: balanceUrl,
+      accountNumber,
+      balance,
+      snippet: balanceDoc.body.slice(0, 280).trim(),
+      note: "Vuln Bank GET /check_balance/{account_number} returns account balance without authentication — balance-enumeration IDOR oracle"
+    }
+  };
+};
+
 const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = new URL("/marketplace", ctx.origin).toString();
@@ -24187,6 +24287,47 @@ const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
       termMonths,
       snippet: JSON.stringify(created).slice(0, 200),
       note: "POST /api/loans creates a pending loan visible in GET /api/loans — FauxBank loan-module business-logic oracle"
+    }
+  };
+};
+
+const fauxbankLoansNegativeAmountLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const loanAmount = -1000 - (Date.now() % 500);
+  const termMonths = 12;
+  const purpose = `thugir-neg-loan-${Date.now().toString(36)}`;
+  const postUrl = new URL("/api/loans", ctx.origin).toString();
+  const posted = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ amount: loanAmount, termMonths, purpose }),
+    headers: { Cookie: cookie, "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (posted.status < 200 || posted.status >= 300 || !/"ok"\s*:\s*true/i.test(posted.body)) return NEGATIVE;
+  const listed = await ctx.probe.get(postUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
+  if (listed.status < 200 || listed.status >= 300 || !/"loans"\s*:\s*\[/i.test(listed.body)) return NEGATIVE;
+  let loans: Array<Record<string, unknown>> = [];
+  try {
+    loans = ((JSON.parse(listed.body) as { loans?: Array<Record<string, unknown>> }).loans ??
+      []) as Array<Record<string, unknown>>;
+  } catch {
+    return NEGATIVE;
+  }
+  const created = loans.find(
+    (loan) => Number(loan.amount) === loanAmount && String(loan.purpose ?? "") === purpose
+  );
+  if (!created) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: postUrl,
+      amount: loanAmount,
+      loanId: created.id,
+      snippet: JSON.stringify(created).slice(0, 200),
+      note: "POST /api/loans accepts negative amount and persists a pending loan — FauxBank loan negative-amount business-logic oracle"
     }
   };
 };
@@ -35258,6 +35399,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankCsrfTransferProbe,
   fauxbankStoredXssSupportProbe,
   fauxbankLoansRequestLiveOracle,
+  fauxbankLoansNegativeAmountLiveOracle,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
@@ -35444,6 +35586,8 @@ export const RULES: Record<string, Rule> = {
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
   vulnbankRequestLoanLiveOracle,
+  vulnbankRequestLoanNegativeAmountLiveOracle,
+  vulnbankCheckBalanceIdorLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
