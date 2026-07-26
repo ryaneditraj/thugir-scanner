@@ -5488,7 +5488,7 @@ values
    true),
   ('ssrf-vulnlab-basic-live-oracle', 'generic', 'Server-side request forgery', 'high',
    'ssrf.vulnlab.dev basic SSRF live oracle',
-   'GET /basic/?url=https://example.com/ fetches attacker-controlled URLs server-side and returns the response body in the page — the ssrf.vulnlab.dev basic SSRF training oracle.',
+   'GET /basic/?url= fetches attacker-controlled URLs server-side and returns the response body in the page — the ssrf.vulnlab.dev basic SSRF training oracle.',
    'Unvalidated server-side URL fetchers let attackers probe internal services and exfiltrate responses.',
    'rule_ref',
    '{"rule":"ssrfVulnlabBasicLiveOracle"}'::jsonb,

