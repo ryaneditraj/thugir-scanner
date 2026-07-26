@@ -17011,6 +17011,114 @@ const vulnbankGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankV1ForgotPasswordPinLeakLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const username = `thugir_fp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const v1Url = new URL("/api/v1/forgot-password", ctx.origin).toString();
+  const v1Doc = await ctx.probe.get(v1Url, {
+    method: "POST",
+    body: JSON.stringify({ username }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (v1Doc.status < 200 || v1Doc.status >= 300) return NEGATIVE;
+  let v1Parsed: Record<string, unknown> | null = null;
+  try {
+    v1Parsed = JSON.parse(v1Doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (String(v1Parsed.status ?? "") !== "success") return NEGATIVE;
+  const v1Debug = v1Parsed.debug_info;
+  if (!v1Debug || typeof v1Debug !== "object") return NEGATIVE;
+  const pin = String((v1Debug as { pin?: unknown }).pin ?? "");
+  const pinLength = (v1Debug as { pin_length?: unknown }).pin_length;
+  if (!/^\d{3}$/.test(pin) || pinLength !== 3) return NEGATIVE;
+  const v2Url = new URL("/api/v2/forgot-password", ctx.origin).toString();
+  const v2Doc = await ctx.probe.get(v2Url, {
+    method: "POST",
+    body: JSON.stringify({ username }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (v2Doc.status < 200 || v2Doc.status >= 300) return NEGATIVE;
+  let v2Parsed: Record<string, unknown> | null = null;
+  try {
+    v2Parsed = JSON.parse(v2Doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const v2Debug = v2Parsed?.debug_info;
+  if (!v2Debug || typeof v2Debug !== "object") return NEGATIVE;
+  if ("pin" in (v2Debug as object)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      v1Url,
+      v2Url,
+      pin,
+      snippet: v1Doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/v1/forgot-password exposes debug_info.pin while /api/v2/forgot-password omits it — legacy API version confusion leaks password-reset PINs"
+    }
+  };
+};
+
+const vulnbankRequestLoanLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankProbeUserToken(ctx);
+  if (!token) return NEGATIVE;
+  const loanUrl = new URL("/request_loan", ctx.origin).toString();
+  const loanAmount = 25000;
+  const doc = await ctx.probe.get(loanUrl, {
+    method: "POST",
+    body: JSON.stringify({ amount: loanAmount }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const message = String(parsed.message ?? "");
+  if (status !== "success" || !/loan requested successfully/i.test(message)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: loanUrl,
+      amount: loanAmount,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /request_loan accepts authenticated loan requests and returns status:success — loan-module business-logic oracle"
+    }
+  };
+};
+
 const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = new URL("/marketplace", ctx.origin).toString();
@@ -24024,6 +24132,60 @@ const fauxbankStoredXssSupportProbe: Rule = async (ctx) => {
       canary,
       snippet: listed.body.match(new RegExp(`"body"\\s*:\\s*"[^"]*${canary}[^"]*"`, "i"))?.[0]?.slice(0, 200) ?? listed.body.slice(0, 200),
       note: "POST /api/support stores raw HTML; GET /api/support returns unescaped XSS payload in ticket body (FauxBank lesson #3)"
+    }
+  };
+};
+
+const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const listUrl = new URL("/api/loans", ctx.origin).toString();
+  const before = await ctx.probe.get(listUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
+  if (before.status < 200 || before.status >= 300 || !/"loans"\s*:\s*\[/i.test(before.body)) return NEGATIVE;
+  let beforeCount = 0;
+  try {
+    beforeCount = ((JSON.parse(before.body) as { loans?: unknown[] }).loans ?? []).length;
+  } catch {
+    return NEGATIVE;
+  }
+  const loanAmount = 42000;
+  const termMonths = 24;
+  const postUrl = listUrl;
+  const posted = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ amount: loanAmount, term: termMonths, purpose: "thugir-loan-probe" }),
+    headers: { Cookie: cookie, "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (posted.status < 200 || posted.status >= 300 || !/"ok"\s*:\s*true/i.test(posted.body)) return NEGATIVE;
+  const after = await ctx.probe.get(listUrl, { maxBytes: 8192, headers: { Cookie: cookie } });
+  if (after.status < 200 || after.status >= 300) return NEGATIVE;
+  let afterLoans: Array<Record<string, unknown>> = [];
+  try {
+    afterLoans = ((JSON.parse(after.body) as { loans?: Array<Record<string, unknown>> }).loans ??
+      []) as Array<Record<string, unknown>>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (afterLoans.length <= beforeCount) return NEGATIVE;
+  const created = afterLoans.find(
+    (loan) =>
+      Number(loan.amount) === loanAmount &&
+      Number(loan.termMonths ?? loan.term) === termMonths &&
+      String(loan.purpose ?? "") === "thugir-loan-probe"
+  );
+  if (!created) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: postUrl,
+      loanId: created.id,
+      amount: loanAmount,
+      termMonths,
+      snippet: JSON.stringify(created).slice(0, 200),
+      note: "POST /api/loans creates a pending loan visible in GET /api/loans — FauxBank loan-module business-logic oracle"
     }
   };
 };
@@ -35094,6 +35256,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankIdorAccountsProbe,
   fauxbankCsrfTransferProbe,
   fauxbankStoredXssSupportProbe,
+  fauxbankLoansRequestLiveOracle,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
@@ -35278,6 +35441,8 @@ export const RULES: Record<string, Rule> = {
   vulnbankUploadProfilePictureUrlSsrfLiveOracle,
   vulnbankTransferNegativeAmountLiveOracle,
   vulnbankGraphqlIntrospectionLiveOracle,
+  vulnbankV1ForgotPasswordPinLeakLiveOracle,
+  vulnbankRequestLoanLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
