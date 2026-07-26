@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T01:50:00.000Z",
+  "updated_at": "2026-07-26T02:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,40 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2675,
-  "total_findings": 25997,
+  "total_sites_scanned": 2684,
+  "total_findings": 26291,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1906,
-  "discovery_findings": 22110,
+  "discovery_urls_added": 1911,
+  "discovery_findings": 22378,
   "improvements_shipped": 1146,
-  "last_run": "2026-07-26T01:50:00.000Z",
-  "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 12,
-    "vulnbank.org/graphql": 8,
-    "vulnbank.org/api/v3/user/1": 8,
-    "vulnbank.org/api/v1/payments/charge": 8,
-    "vulnbank.org/api/transactions": 8,
-    "brokencrystals.com/api/file/digital_ocean?path=https://httpbin.org/get": 51,
-    "vulnbank.org/api/v1/merchants/register": 10,
-    "vulnbank.org/api/bill-payments": 11,
-    "brokencrystals.com/marketplace?__proto__[Test]=Test": 52,
-    "burpbountylab.com/sqli/id?id=1": 91,
-    "burpbountylab.com/sqli/status?id=1": 90,
-    "pwnshop.ctfsecurity.com/forgot-password": 16
-  },
+  "last_run": "2026-07-26T02:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "error — Heroku 503 Application Error (0 findings)",
-      "oracle_findings": 12,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 451,
+      "probes_run": 474,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -64,44 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku 503 — staging fallback restored 6/6 (12 findings); fast-fail fix shipped; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall on primary Heroku; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 264,
-      "skipped_48h": [
-        "vulnbank merchants/register",
-        "bill-payments",
-        "sup3r_s3cr3t_admin",
-        "brokencrystals marketplace __proto__",
-        "hack-this-site SSRF validate"
-      ],
+      "findings": 268,
       "dns_failures": [
         "https://brokencrystals.com/api/goto"
       ],
-      "focus": "vulnbank GraphQL/BOLA/merchant-payment API oracles + brokencrystals DigitalOcean SSRF + queue drain (sqli/status, sqli/id)",
-      "improvements_shipped_this_run": 1,
-      "parallel_run_note": "Parallel run shipped vulnbank-merchant-register + vulnbank-bill-payments-negative-amount + brokencrystals-marketplace-prototype-pollution live oracles"
+      "focus": "vulnbank forgot-password OTP leak + check_balance BOLA + request_loan business-logic + brokencrystals LLM chat XSS + internal/secret exposure oracles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: PRIMARY MISS — Heroku 503 (0 findings); staging fallback 6/6 (12 findings)",
-      "vulnbank.org/graphql: 8 findings — thin shared vulnbank fingerprint; no GraphQL-introspection/BOLA route oracle",
-      "vulnbank.org/api/v3/user/1: 8 findings — no hidden-admin user-details BOLA oracle",
-      "vulnbank.org/api/v1/payments/charge: 8 findings — no merchant payment-charge business-logic oracle",
-      "vulnbank.org/api/transactions: 8 findings — no transfer API BOLA/SQLi oracle",
-      "brokencrystals.com/api/file/digital_ocean: 51 findings — shared fingerprint; no route-specific DigitalOcean SSRF oracle",
-      "vulnbank.org/api/v1/merchants/register: 10 findings (parallel) — vulnbank-merchant-register-live-oracle shipped",
-      "vulnbank.org/api/bill-payments: 11 findings (parallel) — vulnbank-bill-payments-negative-amount-live-oracle shipped",
-      "brokencrystals.com/marketplace: 52 findings (parallel) — brokencrystals-marketplace-prototype-pollution-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
+      "vulnbank.org/api/v1/forgot-password: 9 findings — thin shared vulnbank fingerprint; no OTP/PIN-leak route oracle",
+      "vulnbank.org/check_balance/3518655174: 9 findings — no BOLA balance-disclosure route oracle",
+      "vulnbank.org/request_loan: 8 findings — no loan business-logic route oracle",
+      "brokencrystals.com/api/chat: 51 findings — shared brokencrystals fingerprint; no LLM chat XSS route oracle",
+      "vulnbank.org/internal/secret: 9 findings — no internal/secret exposure route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "PRIMARY BENCHMARK MISS: juice-shop.herokuapp.com Heroku 503 — recall only via staging fallback; secret-resend slug still absent",
-      "vulnbank.org API routes (graphql, v3/user, payments/charge, transactions): thin 8-finding shared fingerprint — needs route-specific oracles",
-      "brokencrystals.com/api/file/digital_ocean: shared ~51-finding fingerprint — route-specific DigitalOcean metadata SSRF oracle still absent",
-      "vulnbank.org/sup3r_s3cr3t_admin: thin fingerprint — exposed-admin-panel oracle still absent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vulnbank.org API routes (forgot-password, check_balance, request_loan, internal/secret): thin 8-9 finding shared fingerprint — needs route-specific oracles",
+      "brokencrystals.com/api/chat: shared ~51-finding fingerprint — route-specific LLM insecure-output-handling oracle still absent",
+      "brokencrystals.com/api/goto: DNS/connect failure (repeat)"
     ]
+  },
+  "discovery_highlights": {
+    "juice-shop.herokuapp.com": 13,
+    "vulnbank.org/api/v1/forgot-password": 9,
+    "vulnbank.org/check_balance/3518655174": 9,
+    "vulnbank.org/request_loan": 8,
+    "brokencrystals.com/api/chat": 51,
+    "vulnbank.org/internal/secret": 9,
+    "burpbountylab.com/wp/xmlrpc.php": 91,
+    "burpbountylab.com/sqli/length?q=admin": 91,
+    "pwnshop.ctfsecurity.com/forgot-password": 16
   }
 }
