@@ -15811,6 +15811,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api7-cors-misconfig-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API7 CORS misconfiguration live oracle",
+    description:
+      "GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials: true and returns authkey — the vAPI security misconfiguration CORS oracle.",
+    impactOneline:
+      "Permissive CORS with credentials lets any third-party site read sensitive API keys from authenticated sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi7CorsMisconfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — restrict CORS origins and never combine wildcard/reflected origins with credentials in production.",
+      steps: [
+        "Allowlist trusted origins instead of reflecting arbitrary Origin headers.",
+        "Never set Access-Control-Allow-Credentials: true with Access-Control-Allow-Origin: * or reflected origins.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api7/user/key reflects arbitrary Origin with credentials and returns auth keys. Show CORS hardening for authenticated API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi2-shop-orders-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI v2 shop orders/all BFLA route live oracle",
+    description:
+      "GET /workshop/api/shop/orders/all returns bulk order history for an authenticated regular user — the crAPI v2 broken function level authorization oracle.",
+    impactOneline:
+      "Admin-style list endpoints reachable by regular users expose every customer order in one request.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapi2ShopOrdersAllRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI v2 is intentional API security training — scope list endpoints to the authenticated principal in production.",
+      steps: [
+        "Return only the caller's orders from /orders endpoints.",
+        "Enforce admin role checks on bulk export routes.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/orders/all route returns bulk order history for regular users. Show BFLA remediation for shop admin endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "IST Edu search reflected XSS route live oracle",
+    description:
+      "GET /api/search?q= reflects raw <script> payloads unescaped in HTML when scanning /xss or /search — the IST Edu reflected XSS training oracle.",
+    impactOneline:
+      "Reflected XSS in search results lets attackers execute scripts in victim browsers through trusted university URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — encode all user input before rendering in HTML responses.",
+      steps: [
+        "HTML-encode search query output before inserting into response templates.",
+        "Add Content-Security-Policy to block inline script execution.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search route reflects raw script tags in HTML. Show output encoding remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bug-collection-evidence",
     platform: "generic",
     category: "Injection",
