@@ -13887,6 +13887,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-bopla-register-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank registration BOPLA privilege escalation oracle",
+    description:
+      "POST /register accepts hidden is_admin:true and balance fields in the JSON body, echoing debug_data.is_admin:true — the Vuln Bank broken object property level authorization oracle.",
+    impactOneline:
+      "Mass-assigning is_admin during registration grants attacker accounts full administrative privileges on the banking platform.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBoplaRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin from client input — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject unknown fields in registration payloads and ignore is_admin from client requests.",
+        "Set administrative flags only via server-side role assignment workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint accepts is_admin:true in the JSON body and grants admin privileges. Show BOPLA remediation for user registration APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank SQL injection login bypass oracle",
+    description:
+      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
+    impactOneline:
+      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for administrative accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-dwr-util-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab DWR util.js exposure live oracle",
+    description:
+      "GET /dwr/util.js returns DWRUtil JavaScript with dwr.util.getValue — the Burp Bounty Direct Web Remoting util profile oracle distinct from /dwr/interface/.",
+    impactOneline:
+      "Live DWR util.js probe confirms Direct Web Remoting framework exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDwrUtilLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict Direct Web Remoting endpoints on production applications.",
+      steps: [
+        "Remove unused DWR servlets and JavaScript endpoints from deployed artifacts.",
+        "Restrict /dwr/* paths to trusted networks or disable DWR entirely.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /dwr/util.js endpoint exposes Direct Web Remoting utility JavaScript. Show how to disable DWR in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "exposed-api-config",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -13935,6 +14013,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /userlogin page reads logobgcolor from the URL into logoBgColor inline CSS. Show how to allowlist safe color values and block CSS injection payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-bopla-register-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank registration BOPLA privilege escalation oracle",
+    description:
+      "POST /register accepts hidden is_admin:true and balance fields in the JSON body, echoing debug_data.is_admin:true — the Vuln Bank broken object property level authorization oracle.",
+    impactOneline:
+      "Mass-assigning is_admin during registration grants attacker accounts full administrative privileges on the banking platform.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBoplaRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin from client input — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject unknown fields in registration payloads and ignore is_admin from client requests.",
+        "Set administrative flags only via server-side role assignment workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint accepts is_admin:true in the JSON body and grants admin privileges. Show BOPLA remediation for user registration APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank SQL injection login bypass oracle",
+    description:
+      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
+    impactOneline:
+      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for administrative accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-dwr-util-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab DWR util.js exposure live oracle",
+    description:
+      "GET /dwr/util.js returns DWRUtil JavaScript with dwr.util.getValue — the Burp Bounty Direct Web Remoting util profile oracle distinct from /dwr/interface/.",
+    impactOneline:
+      "Live DWR util.js probe confirms Direct Web Remoting framework exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyDwrUtilLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict Direct Web Remoting endpoints on production applications.",
+      steps: [
+        "Remove unused DWR servlets and JavaScript endpoints from deployed artifacts.",
+        "Restrict /dwr/* paths to trusted networks or disable DWR entirely.",
+        "Isolate Burp Bounty Lab passive routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /dwr/util.js endpoint exposes Direct Web Remoting utility JavaScript. Show how to disable DWR in production.",
     version: 1,
     enabled: true
   },

