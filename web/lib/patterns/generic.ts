@@ -9154,6 +9154,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-chat-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "Pwnshop chatbot prompt injection live oracle (PWN-031)",
+    description:
+      "POST /chat with a developer debug jailbreak returns the full system prompt including the classified INTERNAL AGENT PRIVILEGED COMMANDS section — the Pwnshop direct prompt injection oracle.",
+    impactOneline:
+      "Prompt injection on the Pwnie chatbot leaks system prompts, privileged command schemas, and injected user context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — Pwnshop PWN-031 is intentional lab software.",
+      steps: [
+        "Strip jailbreak patterns and instruction-override phrases before sending user messages to the model.",
+        "Never embed privileged command schemas in prompts reachable via prompt injection.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /chat endpoint leaks the full system prompt via developer debug jailbreak. Show prompt-injection hardening for LLM chatbots.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-mass-assignment-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop self-assigned admin role live oracle (PWN-021)",
+    description:
+      "POST /register accepts is_admin=true and role=admin in the form body, recording role: admin in unauthenticated audit logs — the Pwnshop mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Mass-assigning admin during registration grants attacker accounts full administrative privileges without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopMassAssignmentAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin or role from client input — Pwnshop is intentional lab software.",
+      steps: [
+        "Reject is_admin, role, and other privilege fields from registration request bodies.",
+        "Assign roles server-side after explicit admin approval workflows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /register endpoint accepts is_admin=true mass-assignment. Show allow-list DTO remediation for registration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-userlogin-css-injection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals userlogin CSS injection live oracle",
+    description:
+      "GET /userlogin?logobgcolor= passes the URL search param directly into logo background inline CSS via style.cssText without sanitization — the Broken Crystals CSS injection oracle.",
+    impactOneline:
+      "CSS injection via logobgcolor can exfiltrate page content, hijack UI, or chain into XSS on the login surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUserloginCssInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate URL-driven style values against an allowlist; never pass raw search params into inline CSS.",
+      steps: [
+        "Allowlist logo background colors (named CSS colors or hex codes matching /^#[0-9a-f]{3,8}$/i).",
+        "Reject quotes, semicolons, and url() in user-supplied style values.",
+        "Prefer CSS custom properties set server-side instead of reflecting URL params into style attributes."
+      ]
+    },
+    fixPrompt:
+      "Our /userlogin page reads logobgcolor from the URL into logoBgColor inline CSS. Show how to allowlist safe color values and block CSS injection payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnforge-academy-evidence",
     platform: "generic",
     category: "Broken access control",
