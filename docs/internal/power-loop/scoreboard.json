@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T04:04:04.292Z",
+  "updated_at": "2026-07-26T04:12:19.678Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2660,
-  "total_findings": 25346,
+  "total_sites_scanned": 2666,
+  "total_findings": 25592,
   "critical_findings": 53,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1896,
-  "discovery_findings": 21551,
+  "discovery_urls_added": 1921,
+  "discovery_findings": 21788,
   "improvements_shipped": 1143,
-  "last_run": "2026-07-26T04:04:04.292Z",
+  "last_run": "2026-07-26T04:12:19.678Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall — no benchmark misses; secret-resend slug still absent"
+      "note": "PRIMARY MISS Heroku 503 — staging fallback 6/6; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "pwnshop track IDOR + product search SQLi + admin login SQLi live oracles",
+      "urls_added": 5,
+      "urls_scanned": 9,
+      "findings": 246,
+      "focus": "pwnshop order-IDOR + wallet + track/search/admin oracles; vulnbank OpenAPI + profile-upload SSRF",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings staging fallback) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/track: 16→22 findings — pwnshop-track-idor-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/search: route-independent probe — pwnshop-product-search-sqli-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/admin-login: route-independent probe — pwnshop-admin-login-sqli-live-oracle shipped"
+      "juice-shop.herokuapp.com: PRIMARY MISS Heroku 503 → staging fallback 6/6 (12 findings)",
+      "pwnshop.ctfsecurity.com/track: 22 findings — pwnshop-track-idor-live-oracle (parallel run)",
+      "pwnshop.ctfsecurity.com/order/1: 14 findings — email-enumeration oracles",
+      "vulnbank.org/static/openapi.json: 14 findings — vibe-openapi-docs-exposed",
+      "pwnshop.ctfsecurity.com/wallet: 10 findings — wallet-top-up oracle still absent"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop wishlist/export-orders routes return 404 on live host — oracles deferred",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment covered by brokencrystals-mass-assignment-live-oracle signup flow"
+      "teacher_delta blocked — nuclei/engine unavailable",
+      "PRIMARY MISS: juice-shop.herokuapp.com Heroku 503 every run",
+      "secret-resend slug still absent",
+      "pwnshop wallet: no wallet-top-up oracle",
+      "vulnbank profile/upload: no upload-SSRF oracle",
+      "demo.owasp-juice.shop admin-config: 503 from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 10,
+    "juice-shop-staging.herokuapp.com": 12,
     "pwnshop.ctfsecurity.com/track": 22,
-    "pwnshop.ctfsecurity.com/search": 19,
-    "pwnshop.ctfsecurity.com/admin-login": 19,
-    "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 51,
-    "vulnbank.org/api/ai/chat/anonymous": 7,
-    "burpbountylab.com/.git/config": 90,
-    "burpbountylab.com/phpinfo.php": 94,
-    "burpbountylab.com/collab/host?param=test": 90,
-    "brokencrystals.com/api/testimonials/count?query=test": 51,
-    "brokencrystals.com/api/subscriptions?email=test": 49,
-    "pwnshop.ctfsecurity.com/forgot-password": 16
+    "pwnshop.ctfsecurity.com/order/1": 14,
+    "vulnbank.org/static/openapi.json": 14,
+    "pwnshop.ctfsecurity.com/wallet": 10,
+    "vulnbank.org/api/profile/upload": 11,
+    "burpbountylab.com/cve/forti/": 94,
+    "burpbountylab.com/cve/weblogic/": 94
   }
 }
