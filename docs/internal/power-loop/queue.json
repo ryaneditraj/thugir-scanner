@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T14:06:00.000Z",
+  "updated_at": "2026-07-26T15:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://vapi.apisec.ai/vapi/api8/user/login",
+      "source": "APIsec vAPI — API8 security misconfiguration login endpoint (roottusk/vapi public lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api3/user",
+      "source": "APIsec vAPI — API3 BOLA broken object authorization exercise (OWASP API Top 10)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api4/otp/verify",
+      "source": "APIsec vAPI — API4 broken authentication OTP verify endpoint (public hosted lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api5/user",
+      "source": "APIsec vAPI — API5 mass assignment user registration endpoint (roottusk/vapi)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/forget-password",
+      "source": "APIsec crAPI v2 — BFLA password-reset endpoint (OWASP API challenge 1)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
       "source": "OWASP WrongSecrets — Challenge 5 K8s ConfigMap secrets oracle (official Heroku demo; /challenge/challenge-N path)",

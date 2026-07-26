@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T15:10:00.000Z",
+  "updated_at": "2026-07-26T15:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2755,
-  "total_findings": 26894,
-  "critical_findings": 62,
+  "total_sites_scanned": 2760,
+  "total_findings": 26931,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22782,
+  "discovery_urls_added": 1971,
+  "discovery_findings": 22805,
   "improvements_shipped": 1167,
-  "last_run": "2026-07-26T15:10:00.000Z",
+  "last_run": "2026-07-26T15:14:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
@@ -33,6 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 459,
+      "primary_status": "ok — primary Heroku responsive (no 503)",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +49,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (14 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (14 findings); jwt-alg-none-accepted newly present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 70,
-      "focus": "wrongsecrets challenge-8 logging + brokencrystals file/aws route + crAPI2 auth login route oracles",
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 42,
+      "focus": "vAPI API3/4/5/8 route probes + crAPI forget-password BFLA + pwnshop chat-init drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-8: 8→9 findings — wrongsecrets-challenge-live-oracle shipped (Docker/K8s logging markers for challenge-8)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — primary ok, jwt-alg-none-accepted newly detected",
+      "wrongsecrets.herokuapp.com/challenge/challenge-8: 8→9 findings — wrongsecrets-challenge-live-oracle shipped (Docker/K8s logging markers)",
       "brokencrystals.com/api/file/aws: 55→56 findings — brokencrystals-file-aws-route-live-oracle shipped (IMDS ami-id on route scan)",
-      "crapi2.apisec.ai/identity/api/auth/login: 4→5 findings — crapi2-auth-login-route-live-oracle shipped (demo JWT from POST login)"
+      "crapi2.apisec.ai/identity/api/auth/login: 4→5 findings — crapi2-auth-login-route-live-oracle shipped (demo JWT from POST login)",
+      "pwnshop.ctfsecurity.com/api/v1/chat/init: 27 findings — full pwnshop live-oracle hub (chat-init email enum, mail IDOR, OTP brute-force)",
+      "crapi2.apisec.ai/identity/api/auth/forget-password: 4 findings — weak-api-default-credentials + exposed-env-file; BFLA oracle still absent",
+      "vapi.apisec.ai/vapi/api3-8: 2 findings each — thin header/tech-stack fingerprint without route-specific API Top 10 oracles",
+      "damnvulnerablecryptoapp.github.io: 3 findings — reflexion-escalated-ssti on static docs page"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vapi.apisec.ai/vapi/api3-8: route-specific API Top 10 live oracles absent (BOLA, broken auth OTP, mass assignment)",
+      "crapi2.apisec.ai/identity/api/auth/forget-password: BFLA password-reset oracle still absent without authenticated session chain",
       "ai-security-platform open-redirect/cookie-auth/brute-force: login-gated SPA without portable live oracles",
-      "crapi2.apisec.ai/workshop/api/shop/products: shop listing route oracle absent — endpoint unreachable this run",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login)",
-      "brokencrystals.com/api/hidden-upload: route-specific upload oracle still absent (generic hidden-upload oracle fires)"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent",
+      "brokencrystals.com/api/goto: recurring DNS failure blocks SSRF open-redirect oracle testing",
+      "brokencrystals.com/api/hidden-upload: route-specific upload oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "wrongsecrets.herokuapp.com/challenge/challenge-8": 9,
+    "pwnshop.ctfsecurity.com/api/v1/chat/init": 27,
     "brokencrystals.com/api/file/aws": 56,
+    "wrongsecrets.herokuapp.com/challenge/challenge-8": 9,
+    "juice-shop.herokuapp.com": 14,
     "crapi2.apisec.ai/identity/api/auth/login": 5,
+    "crapi2.apisec.ai/identity/api/auth/forget-password": 4,
     "pwnshop.ctfsecurity.com/apply-coupon": 28,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 27,
-    "juice-shop.herokuapp.com": 14
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 27
   }
 }
