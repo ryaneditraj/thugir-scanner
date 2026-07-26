@@ -16707,7 +16707,7 @@ const vulnbankMerchantPaymentChargeLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (chargeDoc.status < 200 || chargeDoc.status >= 400) return NEGATIVE;
+  if (chargeDoc.status < 200 || chargeDoc.status >= 500) return NEGATIVE;
   let chargeParsed: Record<string, unknown> | null = null;
   try {
     chargeParsed = JSON.parse(chargeDoc.body) as Record<string, unknown>;
