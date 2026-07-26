@@ -9284,6 +9284,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-mail-inbox-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop PwnMail inbox IDOR live oracle (PWN-004)",
+    description:
+      "GET /mail/<inbox_token> returns another user's OTP and password-reset mail without ownership validation — the Pwnshop PwnMail inbox IDOR oracle.",
+    impactOneline:
+      "Inbox IDOR lets attackers read OTP codes and reset tokens for any user, enabling account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopMailInboxIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind mail inbox tokens to the authenticated session and reject cross-user reads — Pwnshop PWN-004 is intentional lab software.",
+      steps: [
+        "Verify the session user owns the inbox_token before returning messages.",
+        "Use unpredictable per-session inbox URLs instead of static user tokens.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /mail/<inbox_token> endpoint exposes other users' OTP mail. Show inbox ownership validation for PwnMail.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-avatar-svg-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Pwnshop stored XSS via SVG avatar upload (PWN-012)",
+    description:
+      "POST /profile/upload-avatar accepts SVG files with onload handlers and serves them at /uploads/ without sanitization — the Pwnshop stored XSS avatar oracle.",
+    impactOneline:
+      "Stored SVG XSS on profile avatars can hijack sessions or deface accounts when the upload is rendered to other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAvatarSvgXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize/strip script handlers before serving avatar files — Pwnshop PWN-012 is intentional lab software.",
+      steps: [
+        "Allow only raster image formats (PNG/JPEG/WebP) for avatar uploads.",
+        "Serve user uploads from a separate domain with Content-Disposition: attachment.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile/upload-avatar endpoint stores SVG with onload XSS. Show avatar upload hardening and content-type validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-apply-coupon-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop authenticated coupon application live oracle (PWN-016)",
+    description:
+      "POST /apply-coupon returns valid:true with discount_percent after OTP-authenticated session — confirms coupon logic is reachable and HALFOFF applies a 50% discount.",
+    impactOneline:
+      "Broken coupon validation enables discount abuse and checkout price manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopApplyCouponLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate coupon category restrictions at checkout, not only at apply time — Pwnshop PWN-016 is intentional lab software.",
+      steps: [
+        "Enforce category and per-user coupon limits again at checkout settlement.",
+        "Reject coupon stacking and parameter pollution on checkout POST bodies.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /apply-coupon endpoint applies HALFOFF without re-validating category restrictions at checkout. Show business-logic coupon remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-userlogin-css-injection-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
