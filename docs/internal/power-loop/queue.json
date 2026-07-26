@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T12:06:00.000Z",
+  "updated_at": "2026-07-26T13:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
+      "source": "OWASP WrongSecrets — Challenge 5 K8s ConfigMap secrets oracle (official Heroku demo; /challenge/challenge-N path)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
+      "source": "OWASP WrongSecrets — Challenge 8 secrets-in-properties oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/redirect",
+      "source": "AI & Security Platform — open redirect CWE-601 live demo (Vercel OSS training app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
+      "source": "AI & Security Platform — client-writable admin cookie auth bypass live demo (Vercel OSS)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/brute-force",
+      "source": "AI & Security Platform — no rate-limit brute-force login live demo (Vercel OSS)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/3",
       "source": "OWASP WrongSecrets — Challenge 3 Docker secrets oracle on official Heroku demo (README)",
