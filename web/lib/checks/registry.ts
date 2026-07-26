@@ -35908,11 +35908,24 @@ const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
   const sessionCookie = vapiSessionCookieFromDoc(loginDoc);
   if (!sessionCookie) return NEGATIVE;
   const keyUrl = new URL("/vapi/api7/user/key", ctx.origin).toString();
-  const keyDoc = await ctx.probe.get(keyUrl, {
+  const keyHeaders = {
+    Cookie: sessionCookie,
+    "Authorization-Token": token,
+    Origin: VAPI_API7_CORS_PROBE_ORIGIN
+  };
+  let keyDoc = await ctx.probe.get(keyUrl, {
     maxBytes: 2048,
     timeoutMs: 15000,
-    headers: { Cookie: sessionCookie, Origin: VAPI_API7_CORS_PROBE_ORIGIN }
+    headers: keyHeaders
   });
+  if (keyDoc.status === 403 && /userNotLoggedIn/i.test(keyDoc.body)) {
+    await new Promise((r) => setTimeout(r, 800));
+    keyDoc = await ctx.probe.get(keyUrl, {
+      maxBytes: 2048,
+      timeoutMs: 15000,
+      headers: keyHeaders
+    });
+  }
   if (keyDoc.status < 200 || keyDoc.status >= 400) return NEGATIVE;
   const acao = (keyDoc.headers["access-control-allow-origin"] || "").trim();
   if (acao !== VAPI_API7_CORS_PROBE_ORIGIN) return NEGATIVE;
