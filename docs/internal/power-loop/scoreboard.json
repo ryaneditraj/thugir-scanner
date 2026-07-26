@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T16:15:00.000Z",
+  "updated_at": "2026-07-26T17:15:11.401Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2772,
-  "total_findings": 27183,
+  "total_sites_scanned": 2781,
+  "total_findings": 27238,
   "critical_findings": 64,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1976,
-  "discovery_findings": 23030,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-26T16:15:00.000Z",
+  "discovery_urls_added": 1981,
+  "discovery_findings": 23072,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-26T17:15:11.401Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 474,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,32 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (14 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (13 findings); jwt-alg-none-accepted flaky absent this pass; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 10,
-      "focus": "vAPI API3 BOLA comment list + API4 OTP broken-auth + API4 user exposure live oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 42,
+      "focus": "vAPI API1/API2/API6/API7 route oracles + agentpwn APWN-DE-003 + crAPI2 mechanic_report + vulnshop template/support drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/api3/user: 3→5 findings — vapi-api3-comment-bola + api4 OTP/user oracles shipped",
-      "vapi.apisec.ai/vapi/api4/otp/verify: 3→5 findings — vapi-api4-otp-broken-auth + user-exposure oracles",
-      "pwnshop.ctfsecurity.com/register-seller: 28 findings — full pwnshop live-oracle hub",
-      "brokencrystals.com/api/secrets: 56 findings — exposed-env-file + graphql hub fingerprint",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (Vulnbank payment declined)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no category misses; jwt-alg-none-accepted absent vs 16 UTC 14-finding pass",
+      "vapi.apisec.ai/vapi/api1|api2|api6|api7: 5 findings each — shared api3/api4 BOLA+OTP hub without route-specific API1/API2/API6/API7 live oracles",
+      "agentpwn.com/attacks/data-exfiltration/3: 6 findings — hidden-prompt-injection + dangerous-html-sinks; no APWN-DE-003 URL-exfil live oracle",
+      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report: 4 findings — weak-api-default-credentials + exposed-env-file; BOLA IDOR oracle absent without auth token",
+      "vulnshop.vercel.app/template|support: 6 findings each — shared SPA client-side-vulnshop-evidence hub without route-specific SSTI/LFI oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "pwnshop.ctfsecurity.com/wallet: PWN-042 credited_amount override needs Vulnbank lab vuln mode + working test card",
-      "vapi.apisec.ai/vapi/api5/user: mass-assignment oracle still absent",
-      "vapi.apisec.ai/vapi/api8/user/login: security misconfiguration oracle still absent",
-      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report: BOLA oracle absent without auth token",
-      "vulnshop.vercel.app routes: route-specific SSTI/LFI/SSRF live oracles absent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question-disclosure)",
+      "jwt-alg-none-accepted flaky on juice-shop — present 16 UTC (14 findings) absent 17 UTC (13 findings)",
+      "vapi.apisec.ai/vapi/api1/user: API1 BOLA live oracle absent — returns shared api3/api4 fingerprint",
+      "vapi.apisec.ai/vapi/api2/user/login: API2 broken-auth live oracle absent",
+      "vapi.apisec.ai/vapi/api6/user: API6 mass-assignment live oracle absent",
+      "vapi.apisec.ai/vapi/api7/user/login: API7 security-misconfiguration live oracle absent",
+      "agentpwn.com/attacks/data-exfiltration/3: APWN-DE-003 RAG-poison URL-exfil live oracle absent (static payload page only)",
+      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report: BOLA oracle needs authenticated session token",
+      "vulnshop.vercel.app/track-order: SSRF oracle still pending drain"
     ]
   },
   "discovery_highlights": {
@@ -83,6 +85,9 @@
     "juice-shop.herokuapp.com": 14,
     "vapi.apisec.ai/vapi/api3/user": 5,
     "vapi.apisec.ai/vapi/api4/otp/verify": 5,
+    "vapi.apisec.ai/vapi/api1/user": 5,
+    "vapi.apisec.ai/vapi/api2/user/login": 5,
+    "agentpwn.com/attacks/data-exfiltration/3": 6,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "pwnshop.ctfsecurity.com/apply-coupon": 23,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 27,
