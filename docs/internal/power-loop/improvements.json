@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file/digital_ocean?path=http://169.254.169.254/metadata/v1/id returns hostname/region/interfaces metadata; brokencrystals.com/api/file/digital_ocean findings 51→53; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-phpinfo-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/phpinfo.php returns <title>phpinfo()</title> + PHP Version 8.2.0 + Build Date; burpbountylab.com/phpinfo.php findings 89→94; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-payment-charge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/payments/charge with merchant api_key returns debug_info.submitted_card_number=4111111111111111 + auth_method=api_key; vulnbank.org/api/v1/payments/charge findings 8→11; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-swagger-json-live-oracle",
       "status": "shipped",
@@ -13360,6 +13378,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-virtual-cards-bola-live-oracle",
       "shipped_at": "2026-07-26T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+      "shipped_at": "2026-07-26T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-phpinfo-live-oracle",
+      "shipped_at": "2026-07-26T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-payment-charge-live-oracle",
+      "shipped_at": "2026-07-26T03:10:00.000Z"
     }
   ]
 }
