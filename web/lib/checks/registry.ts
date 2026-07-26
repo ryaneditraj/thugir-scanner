@@ -16607,7 +16607,7 @@ const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) 
   const scriptMatch = pageDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
   if (!scriptMatch) return NEGATIVE;
   const bundleUrl = new URL(scriptMatch[1], ctx.origin).toString();
-  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 524_288, timeoutMs: 20000 });
+  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 1_048_576, timeoutMs: 20000 });
   if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
   const ppGadget =
     /prototypePollutionDomXss[\s\S]{0,120}createElement\(["']script["']\)/i.test(bundleDoc.body) &&

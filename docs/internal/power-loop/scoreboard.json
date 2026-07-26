@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T00:31:18.196945Z",
+  "updated_at": "2026-07-26T01:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,44 +15,35 @@
       ]
     }
   },
-  "total_sites_scanned": 2664,
-  "total_findings": 25688,
-  "critical_findings": 54,
+  "total_sites_scanned": 2668,
+  "total_findings": 25885,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1901,
-  "discovery_findings": 21838,
-  "improvements_shipped": 1143,
-  "last_run": "2026-07-26T00:31:18.196945Z",
+  "discovery_findings": 21846,
+  "improvements_shipped": 1146,
+  "last_run": "2026-07-26T01:25:00.000Z",
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 10,
-    "vulnbank.org": 10,
+    "juice-shop.herokuapp.com": 8,
+    "vulnbank.org/api/v1/merchants/register": 10,
+    "vulnbank.org/api/bill-payments": 11,
+    "brokencrystals.com/marketplace?__proto__[Test]=Test": 52,
     "vulnbank.org/api/ai/chat/anonymous": 7,
     "burpbountylab.com/dwr/util.js": 91,
     "burpbountylab.com/.git/config": 90,
-    "burpbountylab.com/phpinfo.php": 89,
     "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 51,
-    "brokencrystals.com/api/testimonials/count?query=test": 51,
-    "pwnshop.ctfsecurity.com/forgot-password": 16,
-    "burpbountylab.com/collab/host?param=test": 90,
-    "brokencrystals.com/api/subscriptions?email=test": 49,
-    "vulnbank.org/api/v1/merchants/register": 7,
-    "vulnbank.org/api/bill-payments": 7,
-    "vulnbank.org/sup3r_s3cr3t_admin": 7,
-    "brokencrystals.com/marketplace?__proto__[Test]=Test": 51,
-    "hack-this-site-eta.vercel.app/api/validate/ssrf": 44,
-    "burpbountylab.com/rce/blind?input=test": 90,
-    "burpbountylab.com/xss/tag?input=test": 90
+    "pwnshop.ctfsecurity.com/forgot-password": 16
   },
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 8,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 1,
-      "probes_run": 361,
+      "probes_run": 238,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -68,39 +59,27 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (10 findings, pages=1 probes=361) \u2014 no benchmark misses; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (8 findings) — no benchmark misses; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 296,
-      "skipped_48h": [],
-      "dns_failures": [
-        "https://brokencrystals.com/api/goto"
-      ],
-      "focus": "vulnbank merchant/bill-payment/admin-panel API oracles + brokencrystals prototype-pollution marketplace + hack-this-site SSRF validate + queue drain (rce/blind, xss/tag)",
-      "improvements_shipped_this_run": 3,
-      "parallel_run_note": "Remote parallel run shipped vulnbank-bopla-register + vulnbank-sqli-login + burpbounty-dwr-util-live-oracle"
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 33,
+      "focus": "vulnbank merchant/bill-payment oracles + brokencrystals marketplace prototype-pollution live oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) \u2014 no benchmark misses; secret-resend slug still absent",
-      "vulnbank.org: 7\u219210 findings (parallel run) \u2014 vulnbank-bopla-register-live-oracle + vulnbank-sqli-login-live-oracle shipped",
-      "burpbountylab.com/dwr/util.js: 89\u219291 findings (parallel run) \u2014 burpbounty-dwr-util-live-oracle shipped",
-      "vulnbank.org/api/v1/merchants/register: 7 findings \u2014 thin vulnbank API fingerprint; no route-specific merchant-registration/BOLA oracle",
-      "vulnbank.org/api/bill-payments: 7 findings \u2014 thin fingerprint; no bill-payment business-logic oracle",
-      "vulnbank.org/sup3r_s3cr3t_admin: 7 findings \u2014 thin fingerprint; no exposed-admin-panel oracle",
-      "brokencrystals.com/marketplace?__proto__[Test]=Test: 51 findings \u2014 shared dir-discovery fingerprint; no route-specific prototype-pollution DOM XSS oracle",
-      "hack-this-site-eta.vercel.app/api/validate/ssrf: 44 findings \u2014 SSRF lab endpoint detected",
-      "burpbountylab.com/rce/blind: 90 findings \u2014 hub fingerprint",
-      "burpbountylab.com/xss/tag: 90 findings \u2014 hub fingerprint"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (8 findings) — no benchmark misses",
+      "vulnbank.org/api/v1/merchants/register: 7→10 findings — vulnbank-merchant-register-live-oracle shipped",
+      "vulnbank.org/api/bill-payments: 7→11 findings — vulnbank-bill-payments-negative-amount-live-oracle shipped",
+      "brokencrystals.com/marketplace: 51→52 findings — brokencrystals-marketplace-prototype-pollution-live-oracle shipped"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnbank.org API routes (merchants/register, bill-payments, sup3r_s3cr3t_admin): thin 7-finding fingerprint \u2014 needs banking BOLA/merchant/bill-payment/admin oracles",
-      "brokencrystals.com/marketplace prototype-pollution: shared ~51-finding dir-discovery fingerprint \u2014 route-specific __proto__ DOM XSS oracle still absent",
-      "burpbountylab hub pages list all endpoints \u2014 every route triggers full oracle fingerprint regardless of path-specific vulnerability"
+      "vulnbank.org/sup3r_s3cr3t_admin: thin 7-finding fingerprint — exposed-admin-panel oracle still absent",
+      "burpbountylab hub pages list all endpoints — every route triggers full oracle fingerprint regardless of path-specific vulnerability"
     ]
   }
 }
