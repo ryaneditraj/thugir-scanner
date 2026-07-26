@@ -9362,6 +9362,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-coupon-category-bypass-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop coupon category restriction bypass live oracle (PWN-016)",
+    description:
+      "PHONE20 is phones-only at /apply-coupon but checkout accepts coupon_code=PHONE20 on fashion cart items without re-validating allowed_category — the Pwnshop coupon category bypass oracle.",
+    impactOneline:
+      "Category-restricted coupons can be applied at checkout without the required product category in cart.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopCouponCategoryBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate coupon category restrictions at checkout settlement — Pwnshop PWN-016 is intentional lab software.",
+      steps: [
+        "Enforce allowed_category checks again when processing checkout coupon_code.",
+        "Reject checkout when cart contents no longer match coupon category restrictions.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our checkout accepts PHONE20 on non-phone cart items even though /apply-coupon enforces category. Show coupon re-validation at checkout.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-avatar-upload-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Pwnshop avatar upload route live oracle (PWN-012)",
+    description:
+      "When scanning /profile/upload-avatar, POST stores SVG with onload handlers served at /uploads/ without sanitization — route-specific stored XSS oracle.",
+    impactOneline:
+      "Unsanitized avatar uploads enable stored XSS when malicious SVG is served back to users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAvatarUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize served avatar content — Pwnshop PWN-012 is intentional lab software.",
+      steps: [
+        "Allow only raster image formats for avatar uploads.",
+        "Serve user uploads from a separate domain without script execution.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /profile/upload-avatar route stores SVG with onload XSS. Show avatar upload hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-apply-coupon-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop apply-coupon route live oracle (PWN-016)",
+    description:
+      "When scanning /apply-coupon, POST accepts HALFOFF after OTP login and returns valid:true with 50% discount — route-specific coupon application oracle.",
+    impactOneline:
+      "Authenticated coupon endpoints without business-logic guards enable discount abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopApplyCouponRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate coupon rules at checkout — Pwnshop is intentional lab software.",
+      steps: [
+        "Enforce category and per-user coupon limits at checkout settlement.",
+        "Rate-limit coupon application endpoints.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /apply-coupon route applies HALFOFF after OTP login. Show route-specific coupon validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-userlogin-css-injection-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -12791,6 +12869,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /redirect endpoint allow-lists *.vulnlab.dev but follows redirects to internal metadata. Show SSRF redirect-chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-basic-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "ssrf.vulnlab.dev /basic route SSRF live oracle",
+    description:
+      "When scanning /basic, GET /basic/?url= fetches attacker-controlled URLs and returns the response body — route-specific basic SSRF oracle.",
+    impactOneline:
+      "Unvalidated server-side URL fetchers let attackers probe internal services and exfiltrate responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabBasicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny RFC1918, link-local, and cloud metadata addresses at the egress layer.",
+        "Use an allowlist of permitted fetch hosts instead of accepting arbitrary URLs.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /basic route fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-metadata-aws-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev metadata-aws route SSRF live oracle",
+    description:
+      "When scanning /metadata or /metadata-aws, GET /metadata/?url=http://169.254.169.254/latest/meta-data/ returns AWS IMDS metadata — route-specific cloud metadata SSRF oracle.",
+    impactOneline:
+      "SSRF to cloud instance metadata can expose IAM credentials and compromise the hosting account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabMetadataAwsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to 169.254.169.254 — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Require IMDSv2 with hop limits on cloud instances.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /metadata route fetches AWS IMDS via user-controlled url. Show how to block cloud metadata SSRF on route scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-blocklist-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /blocklist route SSRF live oracle",
+    description:
+      "When scanning /blocklist, decimal IP 2852039166 bypasses substring deny-list and returns AWS metadata — route-specific blocklist-bypass SSRF oracle.",
+    impactOneline:
+      "Substring blocklists are trivially bypassed with alternate IP encodings, enabling metadata SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabBlocklistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Resolve and validate URLs before fetch — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Parse URLs to canonical IP forms and reject private/link-local/metadata ranges.",
+        "Never rely on substring deny-lists for SSRF protection.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blocklist route uses a substring deny-list bypassable via decimal IPs. Show proper SSRF egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /redirect route SSRF live oracle",
+    description:
+      "When scanning /redirect, GET /redirect/?url= passes vulnlab.dev allow-list then follows redirect to AWS metadata — route-specific follow-redirect SSRF oracle.",
+    impactOneline:
+      "Allow-listing hostnames without blocking redirect chains enables SSRF to internal and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate final fetch destinations after redirects — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Resolve URLs after all redirects and reject private/link-local/metadata ranges.",
+        "Do not treat same-site redirectors as inherently trusted fetch targets.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect route allow-lists *.vulnlab.dev but follows redirects to internal metadata. Show SSRF redirect-chain remediation.",
     version: 1,
     enabled: true
   },
