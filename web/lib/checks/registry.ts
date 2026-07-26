@@ -16427,6 +16427,57 @@ const vulnExposeSqliSearchApiLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeAuthBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeAuthBypassApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/auth/login route scan — POST accepts SQLi username admin' OR '1'='1 and returns authenticated admin session"
+    }
+  };
+};
+
+const vulnExposeSqliSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeSqliSearchApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/search route scan — GET echoes raw SQL query and documents UNION/boolean injection vectors"
+    }
+  };
+};
+
+const brokencrystalsUsersSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/search/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsUsersSearchExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/search/ route scan — GET returns cardNumber and phoneNumber for multiple users without authentication"
+    }
+  };
+};
+
 const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const chatUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
@@ -36868,6 +36919,9 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnExposeLabModuleEvidence,
   vulnExposeAuthBypassApiLiveOracle,
   vulnExposeSqliSearchApiLiveOracle,
+  vulnExposeAuthBypassRouteLiveOracle,
+  vulnExposeSqliSearchRouteLiveOracle,
+  brokencrystalsUsersSearchRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,

@@ -14667,6 +14667,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-auth-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "critical",
+    title: "VulnSite /api/auth/login route SQLi bypass oracle",
+    description:
+      "When scanning /api/auth/login, POST accepts SQL injection in the username field and returns an authenticated admin session — route-specific authentication-bypass API oracle.",
+    impactOneline:
+      "SQL injection in login APIs bypasses authentication and grants attacker-controlled admin sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeAuthBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements.",
+        "Return generic authentication failures without revealing SQL structure.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login route scan confirms SQLi auth bypass. Show parameterized query remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-sqli-search-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite /api/search route SQL injection oracle",
+    description:
+      "When scanning /api/search, GET echoes the raw SQL query in the JSON response and documents UNION/boolean injection vectors — route-specific search API oracle.",
+    impactOneline:
+      "SQL injection in search APIs exposes database contents and leaks query structure to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeSqliSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL to clients — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search route scan echoes raw SQL and documents UNION injection. Show SQL injection remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-users-search-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/search route exposure oracle",
+    description:
+      "When scanning /api/users/search/, GET returns cardNumber and phoneNumber for multiple users without authentication — route-specific excessive data exposure oracle.",
+    impactOneline:
+      "Unauthenticated user search APIs leak payment card numbers and phone numbers attackers can use for fraud and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUsersSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers or phone numbers via unauthenticated search APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning user profile data.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/search/ route scan returns cardNumber and phoneNumber without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-ai-anonymous-chat-live-oracle",
     platform: "generic",
     category: "Broken access control",
