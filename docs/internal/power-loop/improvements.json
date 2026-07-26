@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-inbox-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: victim register+login → GET /mail/<token>; attacker completes OTP via own /mail redirect then GET /mail/<victim_token> returns victim OTP mail (PWN-004); pwnshop.ctfsecurity.com/apply-coupon findings 23→28; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-svg-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile/upload-avatar SVG onload=alert(1) → {\"ok\":true,\"url\":\"/uploads/avatar_*.svg\"} served with onload intact (PWN-012); pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→27; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-apply-coupon-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OTP session via /mail redirect + POST /apply-coupon code=HALFOFF returns {\"valid\":true,\"discount_percent\":50}; pwnshop.ctfsecurity.com/apply-coupon findings 23→28; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-redirect-live-oracle",
       "status": "shipped",
