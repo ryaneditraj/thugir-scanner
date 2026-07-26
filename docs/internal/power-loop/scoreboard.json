@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T12:08:00.000Z",
+  "updated_at": "2026-07-26T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,23 +16,23 @@
     }
   },
   "total_sites_scanned": 2730,
-  "total_findings": 26595,
-  "critical_findings": 55,
+  "total_findings": 26608,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 22548,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-26T12:08:00.000Z",
+  "discovery_findings": 22561,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-26T12:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 474,
+      "probes_run": 295,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (13 findings); reflexion-escalated-ssti + thugir-dir-discovery present; jwt-alg-none-accepted absent this pass; secret-resend slug still absent"
+      "note": "Stable 6/6 recall on staging fallback (primary Heroku 503); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 61,
-      "focus": "wrongsecrets challenge/3+4 + ai-security IDOR/JWT + pwnshop admin/security second-order SQLi + demo.owasp-juice queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 13,
+      "focus": "ssrf.vulnlab.dev basic/metadata/blocklist route-specific SSRF live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/admin/security?search=test: 25 findings — sql-error-disclosure + reflected-xss-query-param on admin audit search (PWN-014 second-order SQLi signal)",
-      "wrongsecrets.herokuapp.com/challenge/3: 8 findings with client-side-wrongsecrets-challenge-evidence",
-      "wrongsecrets.herokuapp.com/challenge/4: 8 findings with client-side-wrongsecrets-challenge-evidence",
-      "ai-security-platform-iota.vercel.app/challenges/idor: 6-finding hub without route-specific IDOR live oracle",
-      "ai-security-platform-iota.vercel.app/challenges/jwt: 6-finding hub without route-specific JWT alg-none live oracle",
-      "demo.owasp-juice.shop/rest/memories + /rest/basket/1: Heroku 503 — demo dyno unavailable"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
+      "ssrf.vulnlab.dev/basic: 3→6 findings — ssrf-vulnlab-basic + metadata-aws + blocklist-bypass live oracles shipped",
+      "ssrf.vulnlab.dev/metadata: 2→3 findings — ssrf-vulnlab-basic-live-oracle on route scan",
+      "ssrf.vulnlab.dev/blocklist: 2→4 findings — ssrf-vulnlab-basic + metadata-aws live oracles on route scan",
+      "pwnshop.ctfsecurity.com/admin/security?search=test: 25 findings — sql-error-disclosure on admin audit search (PWN-014 signal)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop REST endpoints 503 — queue drain blocked until dyno recovers",
-      "ai-security-platform IDOR/JWT challenge pages: shared 6-finding SPA fingerprint without route-specific live oracles",
-      "pwnshop admin/security: sql-error-disclosure present but dedicated second-order SQLi slug still absent",
-      "wrongsecrets challenge/3+4: same 8-finding fingerprint as challenge/1+2 — challenge-specific secret oracle differentiation still absent"
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
+      "ai-security-platform IDOR/JWT challenge pages: shared 6-finding SPA fingerprint without route-specific live oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 13,
+    "juice-shop-staging.herokuapp.com": 12,
+    "ssrf.vulnlab.dev/basic": 6,
+    "ssrf.vulnlab.dev/blocklist": 4,
+    "ssrf.vulnlab.dev/metadata": 3,
     "pwnshop.ctfsecurity.com/admin/security?search=test": 25,
-    "wrongsecrets.herokuapp.com/challenge/3": 8,
-    "wrongsecrets.herokuapp.com/challenge/4": 8,
-    "wrongsecrets.herokuapp.com/challenge/1": 8,
-    "ai-security-platform-iota.vercel.app/challenges/idor": 6,
-    "ai-security-platform-iota.vercel.app/challenges/jwt": 6,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }

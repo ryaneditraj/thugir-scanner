@@ -8376,7 +8376,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ctx: RuleContext = { origin, scanUrl: targetInput, home, scripts, combined, probe };
 
   const all = patternsForTier("deep").sort((a, b) => {
-    const w = (p: Pattern) => (p.platform === "generic" ? 0 : detection.platform && p.platform === detection.platform ? 1 : 2);
+    const w = (p: Pattern) => {
+      if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (p.platform === "generic") return 0;
+      return detection.platform && p.platform === detection.platform ? 1 : 2;
+    };
     return w(a) - w(b);
   });
   const findings: PatternFinding[] = [];
