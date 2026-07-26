@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T14:08:53.904Z",
+  "updated_at": "2026-07-26T14:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 22763,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-26T14:08:53.904Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-26T14:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -53,36 +53,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 146,
-      "focus": "wrongsecrets challenge-5/8 + ai-security redirect/cookie-auth/brute-force + brokencrystals hidden-upload/file/aws; crAPI2 routes queued",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 79,
+      "focus": "pwnshop OTP session chain + PwnMail IDOR + SVG avatar XSS + HALFOFF coupon oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: PRIMARY Heroku 503 — staging fallback recall 6/6 (12 findings)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-5: 9 findings with wrongsecrets-challenge-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-8: 8 findings (shared WrongSecrets fingerprint)",
-      "ai-security-platform redirect/cookie-auth/brute-force: 6-7 findings — shared SPA fingerprint, no route-specific live oracles",
-      "brokencrystals.com/api/hidden-upload: 54 findings — shared dir-discovery fingerprint without upload oracle",
-      "brokencrystals.com/api/file/aws: 55 findings — shared dir-discovery fingerprint without route-specific SSRF oracle"
+      "pwnshop.ctfsecurity.com/apply-coupon: 23→28 findings — pwnshop-apply-coupon-live-oracle shipped (HALFOFF valid:true after OTP session)",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 18→27 findings — pwnshop-avatar-svg-xss-live-oracle shipped (SVG onload served at /uploads/)",
+      "pwnshop.ctfsecurity.com/apply-coupon: pwnshop-mail-inbox-idor-live-oracle shipped — cross-user /mail/<inbox_token> OTP read (PWN-004)",
+      "pwnshopCompleteOtpSession helper reads OTP via GET /mail redirect instead of brute-force"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "PRIMARY juice-shop.herokuapp.com Heroku 503 — recurring availability miss before staging fallback",
-      "secret-resend slug still absent on juice-shop benchmark",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "ai-security-platform open-redirect/admin-console/rate-limiting: login-gated SPA without portable live oracles",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (VULNBANK_LAB_VULN lab-mode only)",
       "crAPI2.apisec.ai/* route-specific API oracles queued at end — pending drain",
-      "ai-security-platform redirect/cookie-auth/brute-force: route-specific live oracles still absent",
       "brokencrystals hidden-upload/file/aws: route-specific upload/SSRF oracles still absent"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/apply-coupon": 28,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 27,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
     "brokencrystals.com/api/file/aws": 55,
     "brokencrystals.com/api/hidden-upload": 54,
-    "wrongsecrets.herokuapp.com/challenge/challenge-5": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-8": 8,
-    "juice-shop-staging.herokuapp.com": 12,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 56,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop-staging.herokuapp.com": 12
   }
 }
