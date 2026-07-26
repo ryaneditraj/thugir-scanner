@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T23:15:00.000Z",
+  "updated_at": "2026-07-26T23:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2014,
   "discovery_findings": 23938,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-26T23:15:00.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-26T23:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -48,42 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (12 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key present; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (12 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 184,
-      "focus": "NodeGoat A6 CSRF + wrongsecrets challenge-15/16/17 + burpbounty path/linux + vulnbank queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "wrongsecrets challenge-10/11 AWS CSI+IAM markers + NodeGoat A1 injection + A4 IDOR route live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark category misses",
-      "vulnbank.org/api/v1/merchants/register: 20 findings — vulnbank-merchant-register-live-oracle + vulnbank-bopla-register-live-oracle on first route scan",
-      "vulnbank.org/api/bill-payments: 20 findings — shared vulnbank hub with bill-payments route-specific oracles absent",
-      "vulnbank.org/sup3r_s3cr3t_admin: 20 findings — vulnbank-sup3r-secret-admin-live-oracle confirmed",
-      "burpbountylab.com/path/linux: 94 findings — burpbounty-pt-read-live-oracle fires on path traversal route",
-      "nodegoat-websec.herokuapp.com/tutorial/a6: 6 findings — shared tutorial hub; nodegoat-tutorial-a6 CSRF route oracle absent",
-      "wrongsecrets.herokuapp.com/challenge/challenge-15/16/17: 8 findings each — client-side-wrongsecrets-challenge-evidence only; no wrongsecrets-challenge-live-oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-10: 8→9 findings — wrongsecrets-challenge-live-oracle (AWS Secrets Manager CSI-Driver markers)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-11: 8→9 findings — wrongsecrets-challenge-live-oracle (IAM privilege escalation + Parameter Store markers)",
+      "nodegoat-websec.herokuapp.com/tutorial/a1: 6→7 findings — nodegoat-tutorial-a1-route-live-oracle shipped",
+      "nodegoat-websec.herokuapp.com/tutorial/a4: 6→7 findings — nodegoat-tutorial-a4-route-live-oracle shipped",
+      "vulnbank.org/api/v1/merchants/register: 20 findings — vulnbank-merchant-register-live-oracle on route scan",
+      "burpbountylab.com/path/linux: 94 findings — burpbounty-pt-read-live-oracle fires on path traversal route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question-disclosure)",
-      "nodegoat-websec.herokuapp.com/tutorial/a6: CSRF route-specific live oracle absent (shared 6-finding tutorial hub)",
-      "wrongsecrets challenge-15/16/17: client-side evidence only — no challenge-specific live oracle slugs",
-      "vulnbank.org/api/bill-payments: route-specific bill-payment oracle absent when scanning shared API hub fingerprint"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "nodegoat-websec.herokuapp.com/tutorial/a5/a6/a7: misconfig, CSRF, and access-control route oracles still absent",
+      "wrongsecrets challenge-15/16/17: client-side evidence only — no challenge-specific live oracle markers",
+      "pwnshop.ctfsecurity.com/wallet: route returns 404 — wallet-top-up oracle blocked on live deploy"
     ]
   },
   "discovery_highlights": {
+    "wrongsecrets.herokuapp.com/challenge/challenge-10": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-11": 9,
+    "nodegoat-websec.herokuapp.com/tutorial/a1": 7,
+    "nodegoat-websec.herokuapp.com/tutorial/a4": 7,
     "http://burpbountylab.com/path/linux": 94,
     "vulnbank.org/api/v1/merchants/register": 20,
-    "vulnbank.org/api/bill-payments": 20,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "wrongsecrets.herokuapp.com/challenge/challenge-15": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-16": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-17": 8,
-    "nodegoat-websec.herokuapp.com/tutorial/a6": 6,
     "juice-shop-staging.herokuapp.com": 12
   }
 }

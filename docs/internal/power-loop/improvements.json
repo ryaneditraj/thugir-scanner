@@ -4,7 +4,19 @@
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: challenge-12 canonical page documents Docker COPY layer secrets (COPY operations + hid a key there); challenge-13 documents CI/CD pipeline secrets (Github Actions exfiltration); challenge-12 findings 8→9 and challenge-13 8→9 with wrongsecrets-challenge-live-oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-10 canonical page documents AWS Secrets Manager + CSI-Driver K8s mount walkthrough; challenge-11 documents IAM privilege escalation + AWS SSM Parameter Store; challenge-10/11 findings 8→9 with wrongsecrets-challenge-live-oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a1 returns A1 Injection + Server Side JS Injection + NoSQL/eval topics; nodegoat-websec.herokuapp.com/tutorial/a1 findings 6→7 with route-specific injection oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a4-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a4 returns A4 Insecure Direct Object References + direct object reference walkthrough + unauthorized access topics; nodegoat-websec.herokuapp.com/tutorial/a4 findings 6→7 with route-specific IDOR oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",

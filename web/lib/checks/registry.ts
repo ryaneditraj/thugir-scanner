@@ -6431,6 +6431,49 @@ const nodegoatTutorialA3RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatTutorialA1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a1\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a1", [
+    { label: "A1 injection tutorial title", re: /A1\s*-\s*Injection|A1 Injection/i },
+    {
+      label: "Server-side JS injection walkthrough",
+      re: /Server Side JS Injection|SSJS Injection|ServerSide JavaScript Injection/i
+    },
+    { label: "NoSQL / eval injection topics", re: /NoSQL|eval\(|interpreter into executing unintended commands/i }
+  ], "NodeGoat /tutorial/a1 documents injection (server-side JS/NoSQL) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA4RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a4\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a4", [
+    {
+      label: "A4 insecure direct object reference title",
+      re: /A4\s*-\s*Insecure Direct Object|A4 Insecure DOR|Insecure Direct Object References/i
+    },
+    {
+      label: "Direct object reference walkthrough",
+      re: /direct object references?|Insecure Direct Object/i
+    },
+    { label: "Unauthorized access topics", re: /accessing data without proper authorization|unauthorized access/i }
+  ], "NodeGoat /tutorial/a4 documents insecure direct object reference (IDOR) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -31387,6 +31430,18 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "Logging secrets walkthrough",
       re: /challenge focuses on.*Logging|Logging<\/strong>/i
+    },
+    {
+      label: "AWS Secrets Manager CSI walkthrough",
+      re: /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i
+    },
+    {
+      label: "IAM privilege escalation walkthrough",
+      re: /IAM privilege escalation|cant-read-secrets/i
+    },
+    {
+      label: "AWS SSM Parameter Store walkthrough",
+      re: /Parameter Store|SSM Parameter/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -31406,9 +31461,13 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
               ? "Spring application.properties secrets"
               : /K8s Configmap/i.test(doc.body)
                 ? "Kubernetes configmap secrets"
-                : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
-                  ? "container/K8s log secrets"
-                  : "hardcoded secrets";
+                : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
+                  ? "AWS Secrets Manager via K8s CSI driver"
+                  : /IAM privilege escalation|Parameter Store/i.test(doc.body)
+                    ? "IAM privilege escalation / AWS Parameter Store secrets"
+                    : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
+                      ? "container/K8s log secrets"
+                      : "hardcoded secrets";
   return {
     fired: true,
     confidence: markers.length >= 3 ? 0.92 : 0.9,
@@ -37689,6 +37748,8 @@ export const RULES: Record<string, Rule> = {
   clientSideNodegoatEvidence,
   nodegoatTutorialA2RouteLiveOracle,
   nodegoatTutorialA3RouteLiveOracle,
+  nodegoatTutorialA1RouteLiveOracle,
+  nodegoatTutorialA4RouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
