@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T16:04:00.000Z",
+  "updated_at": "2026-07-26T17:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://vapi.apisec.ai/vapi/api1/user",
+      "source": "APIsec vAPI — API1 BOLA broken object authorization user endpoint (roottusk/vapi public lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api2/user/login",
+      "source": "APIsec vAPI — API2 broken authentication login endpoint (roottusk/vapi OWASP API Top 10)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api6/user",
+      "source": "APIsec vAPI — API6 mass assignment user registration endpoint (roottusk/vapi public sandbox)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api7/user/login",
+      "source": "APIsec vAPI — API7 security misconfiguration login/key endpoint (roottusk/vapi)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/data-exfiltration/3",
+      "source": "opena2a/agentpwn — APWN-DE-003 RAG-poisoned URL exfiltration payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
       "source": "OWASP crAPI v2 — API1 BOLA mechanic report IDOR oracle (OWASPLA 2025 guide)",
