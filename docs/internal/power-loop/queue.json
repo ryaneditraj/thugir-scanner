@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T04:06:06.686Z",
+  "updated_at": "2026-07-26T05:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-fauxbank.vercel.app/loans",
+      "source": "alfredang/pentest — FauxBank loan module OWASP training lab (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/profile",
+      "source": "alfredang/pentest — FauxBank profile/settings IDOR training module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/api/v2/forgot-password",
+      "source": "Commando-X/vuln-bank + Ostorlab writeup — API version confusion reset PIN leak oracle (v1 debug_info vs v2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/merchant/register",
+      "source": "Commando-X/vuln-bank README — merchant payment API registration endpoint (OWASP API2 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/userlogin?logobgcolor=red",
+      "source": "NeuraLegion/brokencrystals — CSS injection via logobgcolor URL param (public benchmark)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/order/1",
       "source": "pwnshop vulnerabilities page — IDOR oracle GET /order/:id (PWN-001)",
