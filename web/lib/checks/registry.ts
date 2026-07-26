@@ -33670,25 +33670,43 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   const body = doc.body.trim();
-  if (!body.startsWith("[")) return NEGATIVE;
-  let resultCount = 0;
-  try {
-    const parsed = JSON.parse(body) as unknown[];
-    if (Array.isArray(parsed)) resultCount = parsed.length;
-  } catch {
-    resultCount = (body.match(/\{\}/g) || []).length;
-  }
-  if (resultCount < 5) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      url: ldapUrl.toString(),
-      resultCount,
-      snippet: body.slice(0, 200).trim(),
-      note: "Broken Crystals GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries — LDAP injection oracle"
+  if (body.startsWith("[")) {
+    let resultCount = 0;
+    try {
+      const parsed = JSON.parse(body) as unknown[];
+      if (Array.isArray(parsed)) resultCount = parsed.length;
+    } catch {
+      resultCount = (body.match(/\{\}/g) || []).length;
     }
-  };
+    if (resultCount >= 5) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url: ldapUrl.toString(),
+          resultCount,
+          snippet: body.slice(0, 200).trim(),
+          note: "Broken Crystals GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries — LDAP injection oracle"
+        }
+      };
+    }
+  }
+  if (
+    /javax\.naming\.NamingException/i.test(body) &&
+    /LDAP:\s*error code/i.test(body) &&
+    /OU=Users,O=BrokenCrystals/i.test(body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: ldapUrl.toString(),
+        ldapError: body.slice(0, 220).trim(),
+        note: "Broken Crystals GET /api/users/ldap?query= passes attacker LDAP filters to javax.naming — LDAP injection oracle (naming error disclosure when directory context is offline)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const BROKENCRYSTALS_SAFE_FILES_RFI_PROBE = {
@@ -33832,6 +33850,34 @@ const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
       tableCount: count,
       snippet: body,
       note: "Broken Crystals GET /api/testimonials/count executes attacker-controlled SQL in query param — information_schema probe returned table count"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsIframeInjectionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = new URL("/testimonials", ctx.origin).toString();
+  const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const scriptMatch = pageDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
+  if (!scriptMatch) return NEGATIVE;
+  const bundleUrl = new URL(scriptMatch[1], ctx.origin).toString();
+  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 1_048_576, timeoutMs: 20000 });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
+  const videosrcGadget =
+    /get\("videosrc"\)/i.test(bundleDoc.body) &&
+    /testimonials-video/i.test(bundleDoc.body) &&
+    /\.outerHTML\s*=\s*`<iframe/i.test(bundleDoc.body);
+  if (!videosrcGadget) return NEGATIVE;
+  const idx = bundleDoc.body.indexOf("testimonials-video");
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: pageUrl,
+      bundleUrl,
+      snippet: bundleDoc.body.slice(idx, idx + 180).trim(),
+      note: "Broken Crystals GET /testimonials?videosrc= reads videosrc from the URL and sets testimonials-video outerHTML to an iframe — DOM iframe injection live oracle"
     }
   };
 };
@@ -36018,6 +36064,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsSafeFilesRfiLiveOracle,
   brokencrystalsUsersSearchExposureLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
+  brokencrystalsTestimonialsIframeInjectionLiveOracle,
   brokencrystalsTestimonialsXssLiveOracle,
   brokencrystalsSubscriptionsXssLiveOracle,
   brokencrystalsPartnerLoginXpathLiveOracle,

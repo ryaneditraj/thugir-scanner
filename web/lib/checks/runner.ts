@@ -1400,6 +1400,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsSafeFilesRfiLiveOracle",
   "brokencrystalsUsersSearchExposureLiveOracle",
   "brokencrystalsTestimonialsSqliLiveOracle",
+  "brokencrystalsTestimonialsIframeInjectionLiveOracle",
   "brokencrystalsTestimonialsXssLiveOracle",
   "brokencrystalsSubscriptionsXssLiveOracle",
   "brokencrystalsPartnerLoginXpathLiveOracle",
