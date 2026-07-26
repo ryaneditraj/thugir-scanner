@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1936,
   "discovery_findings": 22148,
-  "improvements_shipped": 1155,
+  "improvements_shipped": 1158,
   "last_run": "2026-07-26T08:10:12.032Z",
   "last_run_summary": {
     "hour_utc": "08",
@@ -56,22 +56,22 @@
       "urls_scanned": 8,
       "findings": 145,
       "focus": "juice-shop demo REST oracles + ai-security sqli + fauxbank transactions + brokencrystals signup mass-assignment",
-      "improvements_shipped_this_run": 1
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/track/1: 22 findings — pwnshop-track-idor-live-oracle shipped (PWN-002)",
+      "pwnshop.ctfsecurity.com/track/1: 22 findings — pwnshop-track-idor-live-oracle validated on route (PWN-002)",
+      "pwnshop.ctfsecurity.com: pwnshop-chat-prompt-injection-live-oracle + pwnshop-mass-assignment-admin-live-oracle shipped (parallel evolve)",
       "brokencrystals.com/api/auth/signup: 52 findings — brokencrystals-mass-assignment-live-oracle on signup route",
       "demo.owasp-juice.shop/rest/products/search: 13 findings — REST SQLi oracle mirrors heroku benchmark",
-      "demo.owasp-juice.shop/rest/user/login: 14 findings — jwt-alg-none-accepted + auth oracles on official demo"
+      "brokencrystals.com/userlogin?logobgcolor=red: brokencrystals-userlogin-css-injection-live-oracle shipped (parallel evolve)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "ai-security-platform /challenges/sqli: 6 findings hub only — no route-specific SQLi live oracle",
-      "pwnshop mail/1 IDOR inbox oracle still absent despite 20-finding hub fingerprint",
-      "pwnshop api/orders/submit XXE oracle still absent",
-      "pwnshop api/settings/less/imports SSTI/RCE oracle still absent"
+      "pwnshop mail/1 IDOR inbox oracle still absent — /mail/:user_id returns 404 on public deploy",
+      "pwnshop api/orders/submit XXE and api/settings/less/imports SSTI routes return 404 on public deploy"
     ]
   },
   "discovery_highlights": {
@@ -82,6 +82,6 @@
     "demo.owasp-juice.shop/rest/products/search?q=test": 13,
     "pentest-fauxbank.vercel.app/transactions": 12,
     "demo.owasp-juice.shop/#/chatbot": 14,
-    "ai-security-platform-iota.vercel.app/challenges/sqli": 6
+    "brokencrystals.com/userlogin?logobgcolor=red": 54
   }
 }

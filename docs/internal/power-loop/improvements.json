@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pwnshop.ctfsecurity.com/chat developer debug jailbreak returns reply with You are Pwnie + INTERNAL AGENT PRIVILEGED COMMANDS; pwnshop.ctfsecurity.com findings 20→22; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mass-assignment-admin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /register is_admin=true&role=admin records ACCOUNT_REGISTERED detail role: admin in GET /api/v1/events; pwnshop.ctfsecurity.com findings 20→22; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /userlogin?logobgcolor=red + /assets/index-*.js confirms searchParams.get(logobgcolor) → style.cssText background-color injection; brokencrystals.com/userlogin?logobgcolor=red findings 53→54; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-loans-negative-amount-live-oracle",
       "status": "shipped",
@@ -13483,6 +13501,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-live-oracle",
+      "shipped_at": "2026-07-26T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mass-assignment-admin-live-oracle",
+      "shipped_at": "2026-07-26T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+      "shipped_at": "2026-07-26T08:10:00.000Z"
+    },
     {
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-loans-negative-amount-live-oracle",
