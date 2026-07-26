@@ -2860,6 +2860,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-loans-request-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank loan request API creates pending loans",
+    description:
+      "FauxBank POST /api/loans accepts authenticated loan applications and persists them as pending loans retrievable via GET /api/loans — the FauxBank loan-module business-logic oracle.",
+    impactOneline:
+      "Unvalidated loan APIs let attackers queue fraudulent or oversized loan requests against victim accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLoansRequestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate loan amounts, terms, and eligibility before creating pending loans.",
+      steps: [
+        "Enforce minimum/maximum loan amounts and credit checks on POST /api/loans.",
+        "Require staff approval workflows before loans enter pending status.",
+        "Rate-limit loan applications per authenticated user."
+      ]
+    },
+    fixPrompt:
+      "Our /api/loans endpoint creates pending loans with only a session cookie. Show loan eligibility validation and approval workflows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -14221,6 +14247,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /graphql endpoint returns __schema introspection for authenticated users. Show how to disable introspection in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v1 forgot-password API leaks reset PIN",
+    description:
+      "POST /api/v1/forgot-password returns debug_info.pin with the 3-digit password-reset PIN while /api/v2/forgot-password omits it — the Vuln Bank API version confusion oracle.",
+    impactOneline:
+      "Legacy API versions that still expose reset PINs let attackers bypass password recovery even when newer versions hide the secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV1ForgotPasswordPinLeakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire or harden legacy API versions and never return reset secrets in responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Deprecate /api/v1/forgot-password and block version downgrade.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/forgot-password endpoint still returns debug_info.pin while v2 hides it. Show API versioning and secret-handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-request-loan-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank authenticated loan-request API oracle",
+    description:
+      "POST /request_loan accepts authenticated loan amount requests and returns status:success — the Vuln Bank loan-module business-logic oracle.",
+    impactOneline:
+      "Unvalidated loan request endpoints enable fraudulent loan applications without credit checks or approval workflows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankRequestLoanLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce loan eligibility, limits, and approval workflows — Vuln Bank is intentional training software.",
+      steps: [
+        "Validate loan amounts against account history and credit policies.",
+        "Queue loan requests for manual or automated underwriting before approval.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /request_loan endpoint accepts any amount for authenticated users. Show loan validation and approval workflow hardening.",
     version: 1,
     enabled: true
   },
