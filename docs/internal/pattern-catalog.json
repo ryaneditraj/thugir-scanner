@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-26T14:05:55.308Z",
-  "total": 841,
-  "uniqueSlugs": 836,
+  "generatedAt": "2026-07-26T15:09:56.294Z",
+  "total": 843,
+  "uniqueSlugs": 838,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 823,
+    "generic": 825,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 756,
+    "deep": 758,
     "continuous": 0
   },
   "byCategory": {
@@ -26,11 +26,11 @@
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 72,
-    "Broken authentication": 58,
+    "Broken authentication": 59,
     "Injection": 171,
     "Cross-site scripting": 125,
     "general": 20,
-    "SSRF": 4,
+    "SSRF": 5,
     "Server-side request forgery": 18,
     "Sensitive data exposure": 20,
     "AI security": 38,
@@ -47,6 +47,7 @@
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
     "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+    "brokencrystals-file-aws-route-live-oracle",
     "brokencrystals-file-lfi-live-oracle",
     "brokencrystals-file-raw-lfi-live-oracle",
     "brokencrystals-goto-open-redirect-live-oracle",
@@ -674,6 +675,7 @@
     "command-injection-form-probe",
     "convex-open-query-no-auth",
     "cors-reflect-origin",
+    "crapi2-auth-login-route-live-oracle",
     "cursor-next-public-secret",
     "dangerous-html-sinks",
     "directory-listing-enabled",

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/challenge-8 documents Logging focus with docker logs + kubectl logs walkthrough and data-cy=answer-textbox; wrongsecrets.herokuapp.com/challenge/challenge-8 findings 8→9 with wrongsecrets-challenge-live-oracle; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-aws-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns ami-id/instance-id/local-ipv4 on route scan; brokencrystals.com/api/file/aws findings 55→56; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-auth-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /identity/api/auth/login email=test@test.com password=Test123! returns JWT token on route scan; crapi2.apisec.ai/identity/api/auth/login findings 4→5; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-mail-inbox-idor-live-oracle",
       "status": "shipped",
