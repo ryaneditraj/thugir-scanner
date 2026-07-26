@@ -13774,6 +13774,21 @@
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
       "shipped_at": "2026-07-26T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-comment-bola-live-oracle",
+      "shipped_at": "2026-07-26T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-otp-broken-auth-live-oracle",
+      "shipped_at": "2026-07-26T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-user-exposure-live-oracle",
+      "shipped_at": "2026-07-26T16:15:00.000Z"
     }
   ]
 }
