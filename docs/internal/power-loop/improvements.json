@@ -7559,6 +7559,24 @@
       "slug": "burpbounty-git-config-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/.git/config returns [core] repositoryformatversion + remote origin URL (Content-Type text/html bypasses exposed-git-dir http_probe); burpbountylab.com/.git/config findings 89→90; benchmark juice-shop 10 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bopla-register-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/register with is_admin:true returns debug_data.is_admin:true and fields_registered includes is_admin; vulnbank.org findings 7→10; benchmark juice-shop 7 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/login username=admin' OR '1'='1 returns isAdmin:true JWT with debug_info.username=admin; vulnbank.org findings 7→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-dwr-util-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://burpbountylab.com/dwr/util.js returns // DWRUtil JavaScript + dwr.util.getValue=function + DWRUtil=dwr.util; burpbountylab.com/dwr/util.js findings 89→91; benchmark juice-shop 7 findings 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13261,6 +13279,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-git-config-live-oracle",
       "shipped_at": "2026-07-25T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bopla-register-live-oracle",
+      "shipped_at": "2026-07-26T00:26:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-live-oracle",
+      "shipped_at": "2026-07-26T00:26:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-dwr-util-live-oracle",
+      "shipped_at": "2026-07-26T00:26:00.000Z"
     }
   ]
 }

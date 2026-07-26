@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25T23:10:00.000Z",
+  "updated_at": "2026-07-26T00:26:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2656,
-  "total_findings": 25325,
-  "critical_findings": 52,
+  "total_sites_scanned": 2662,
+  "total_findings": 25688,
+  "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1896,
-  "discovery_findings": 21542,
-  "improvements_shipped": 1140,
-  "last_run": "2026-07-25T23:10:00.000Z",
+  "discovery_findings": 21716,
+  "improvements_shipped": 1143,
+  "last_run": "2026-07-26T00:26:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 10,
+      "oracle_findings": 7,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 1,
-      "probes_run": 295,
+      "probes_run": 216,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall — no benchmark misses; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (7 findings, pages=1 probes=216) — no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 148,
-      "focus": "brokencrystals Azure SSRF + vulnbank AI anonymous chat + burpbounty .git/config oracles",
+      "urls_scanned": 2,
+      "findings": 182,
+      "focus": "vulnbank BOPLA/SQLi login + burpbounty DWR util.js oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (10 findings) — no benchmark misses",
-      "brokencrystals.com/api/file/azure: 45→51 findings — brokencrystals-azure-metadata-ssrf-live-oracle shipped",
-      "vulnbank.org/api/ai/chat/anonymous: 6→7 findings — vulnbank-ai-anonymous-chat-live-oracle shipped",
-      "burpbountylab.com/.git/config: 89→90 findings — burpbounty-git-config-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (7 findings) — no benchmark misses",
+      "vulnbank.org: 7→10 findings — vulnbank-bopla-register-live-oracle + vulnbank-sqli-login-live-oracle shipped",
+      "burpbountylab.com/dwr/util.js: 89→91 findings — burpbounty-dwr-util-live-oracle shipped (distinct from /dwr/interface/)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent without prior signup flow",
-      "burpbountylab misc routes (phpinfo/dwr-util/swagger/admin): hub fingerprint ~89-90/route; path-specific DWR/swagger/admin oracles still absent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "vulnbank.org/api/virtual-cards + /api/transfer: thin findings (token required) — BOLA/transfer oracles still absent",
+      "burpbountylab misc routes (phpinfo/swagger/admin): hub fingerprint ~89-91/route; swagger.json and admin-panel route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 10,
-    "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 51,
-    "vulnbank.org/api/ai/chat/anonymous": 7,
+    "juice-shop.herokuapp.com": 7,
+    "vulnbank.org": 10,
+    "vulnbank.org/api/ai/chat/anonymous": 10,
+    "burpbountylab.com/dwr/util.js": 91,
     "burpbountylab.com/.git/config": 90,
     "burpbountylab.com/phpinfo.php": 89,
-    "burpbountylab.com/collab/host?param=test": 90,
+    "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 51,
     "brokencrystals.com/api/testimonials/count?query=test": 51,
-    "brokencrystals.com/api/subscriptions?email=test": 49,
     "pwnshop.ctfsecurity.com/forgot-password": 16
   }
 }
