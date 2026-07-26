@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T07:15:00.000Z",
+  "updated_at": "2026-07-26T08:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/rest/products/search?q=test",
+      "source": "OWASP Juice Shop v20.1.1 — REST product search SQLi oracle on official demo (companion to heroku benchmark)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/user/login",
+      "source": "OWASP Juice Shop v20.1.1 — REST login SQLi/auth-bypass oracle on official demo",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/sqli",
+      "source": "AI & Security Platform — live SQL injection exploit demo in Next.js+Supabase training codebase",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/transactions",
+      "source": "alfredang/pentest FauxBank — transactions module IDOR/BOLA training route (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/signup",
+      "source": "NeuraLegion/brokencrystals — signup mass-assignment / broken auth oracle (public benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/#/chatbot",
       "source": "OWASP Juice Shop v20.1.1 — AI chatbot LLM01 prompt-injection entry (#/chatbot on official demo)",
