@@ -26165,33 +26165,44 @@ const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
   };
 };
 
-async function pwnshopRegisterAndReachOtpGate(ctx: RuleContext): Promise<boolean> {
+function pwnshopSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^connect\.sid=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function pwnshopRegisterAndLoginCookie(ctx: RuleContext): Promise<string | null> {
   const username = `thugir_otp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const email = `${username}@probe.local`;
-  const registerUrl = new URL("/register", ctx.origin).toString();
-  await ctx.probe.get(registerUrl, {
+  const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
     method: "POST",
     body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  const loginUrl = new URL("/login", ctx.origin).toString();
-  const loginDoc = await ctx.probe.get(loginUrl, {
+  const registerCookie = pwnshopSessionCookieFromDoc(registerDoc);
+  if (!registerCookie) return null;
+  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
     method: "POST",
     body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: registerCookie
+    },
     maxBytes: 4096,
     timeoutMs: 15000,
     redirect: "manual"
   });
   const location = loginDoc.headers["location"] || "";
-  return [301, 302, 303, 307, 308].includes(loginDoc.status) && /verify-otp/i.test(location);
+  if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(location)) {
+    return null;
+  }
+  return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
 }
 
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  if (!(await pwnshopRegisterAndReachOtpGate(ctx))) return NEGATIVE;
+  const cookie = await pwnshopRegisterAndLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
   const otpUrl = new URL("/verify-otp", ctx.origin).toString();
   const otps = ["000001", "000002", "000003", "000004", "000005"];
   let acceptedAttempts = 0;
@@ -26199,7 +26210,10 @@ const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
     const doc = await ctx.probe.get(otpUrl, {
       method: "POST",
       body: `otp=${otp}`,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
       maxBytes: 8192,
       timeoutMs: 10000
     });
