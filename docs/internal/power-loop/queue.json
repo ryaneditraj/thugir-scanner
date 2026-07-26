@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T15:04:00.000Z",
+  "updated_at": "2026-07-26T16:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
+      "source": "OWASP crAPI v2 — API1 BOLA mechanic report IDOR oracle (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/template",
+      "source": "chethan-vinayak/vulnshop — SSTI /template?name= oracle (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/support",
+      "source": "chethan-vinayak/vulnshop — LFI /support?file= path traversal oracle (Vercel OSS)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/track-order",
+      "source": "chethan-vinayak/vulnshop — SSRF /track-order?url= cloud metadata oracle (Vercel OSS)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/register-seller",
+      "source": "ctfsec/pwnshop — seller registration SSTI prerequisite route PWN-040 (public CTF lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://vapi.apisec.ai/vapi/api8/user/login",
       "source": "APIsec vAPI — API8 security misconfiguration login endpoint (roottusk/vapi public lab)",

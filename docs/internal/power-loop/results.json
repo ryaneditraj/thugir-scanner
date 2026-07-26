@@ -1,295 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-25T17:15:33.921Z",
-      "url": "https://brokencrystals.com/hidden-upload",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 37,
-      "findings": [
-        {
-          "slug": "exposed-env-file",
-          "title": "Environment file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "exposed-config-backup",
-          "title": "Config or backup file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "exposed-git-dir",
-          "title": "Exposed .git directory",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphiql-ui-exposed",
-          "title": "GraphiQL interactive IDE exposed in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "sqli-query-param-injection",
-          "title": "SQL injection via raw query parameter",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "xpath-injection-disclosure",
-          "title": "XPATH injection leaks credentials in XML response",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "weak-api-default-credentials",
-          "title": "JSON login API accepts common default credentials",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "command-injection-form-probe",
-          "title": "OS command injection via form POST parameter",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "ssti-template-injection",
-          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "server-side-eval-evidence",
-          "title": "Server handler passes request body to eval()",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-xxe-evidence",
-          "title": "Client bundle documents XXE via external entity expansion",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "xxe-xml-post-probe",
-          "title": "XXE confirmed via POST XML entity expansion",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "sqli-header-error-disclosure",
-          "title": "SQL injection via HTTP request header",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "client-side-brokencrystals-evidence",
-          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "brokencrystals-goto-open-redirect-live-oracle",
-          "title": "Broken Crystals /api/goto open redirect oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Open redirect"
-        },
-        {
-          "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
-          "title": "Broken Crystals AWS metadata SSRF oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "SSRF"
-        },
-        {
-          "slug": "brokencrystals-hidden-upload-live-oracle",
-          "title": "Broken Crystals unrestricted file upload oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "exposed-api-config",
-          "title": "Unauthenticated API config exposes database credentials",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "client-side-css-injection-evidence",
-          "title": "Client bundle reflects URL param into inline CSS",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
-          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
-          "severity": "high",
-          "confidence": 0.89,
-          "category": "Injection"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vibe-public-cloud-storage-bucket",
-          "title": "Public cloud storage bucket lists objects without auth",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "firebase-config-exposed",
-          "title": "Firebase web config present in bundle",
-          "severity": "info",
-          "confidence": 0.9,
-          "category": "Information exposure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 500,
-      "status": "ok",
-      "scanned_at": "2026-07-25T17:15:33.921Z"
-    },
-    {
-      "run_id": "2026-07-25T17:15:38.327Z",
-      "url": "https://brokencrystals.com/api/goto",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-25T17:15:38.327Z",
-      "error": "We couldn't reach brokencrystals.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
       "run_id": "2026-07-25T17:15:38.521Z",
       "url": "http://burpbountylab.com/crlf/set",
       "auth": "public_demo",
@@ -41574,6 +41285,227 @@
       "probes_run": 469,
       "status": "ok",
       "scanned_at": "2026-07-26T15:13:50.823Z"
+    },
+    {
+      "run_id": "2026-07-25T09:01:22.622Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 13,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 474,
+      "status": "ok",
+      "scanned_at": "2026-07-25T09:01:22.622Z"
+    },
+    {
+      "run_id": "2026-07-26T16:01:59.981Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 14,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 459,
+      "status": "ok",
+      "scanned_at": "2026-07-26T16:01:59.981Z"
     }
   ],
   "teacher_delta_runs": [
