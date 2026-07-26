@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-12 canonical page documents Docker COPY layer secrets (COPY operations + hid a key there); challenge-13 documents CI/CD pipeline secrets (Github Actions exfiltration); challenge-12 findings 8→9 and challenge-13 8→9 with wrongsecrets-challenge-live-oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a2-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a2 returns A2-Broken Authentication and Session Management + Session Fixation + brute force/password reset topics; nodegoat-websec.herokuapp.com/tutorial/a2 findings 6→7 with route-specific oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a3-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a3 returns A3-Cross-Site Scripting (XSS) + Reflected/Stored/DOM XSS walkthrough + output encoding guidance; nodegoat-websec.herokuapp.com/tutorial/a3 findings 6→7 with route-specific oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-cmdi-route-live-oracle",
       "status": "shipped",

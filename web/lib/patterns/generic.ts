@@ -16721,6 +16721,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-tutorial-a2-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "NodeGoat A2 broken authentication tutorial live oracle",
+    description:
+      "When scanning /tutorial/a2, the canonical tutorial documents broken authentication and session management (session fixation, brute force, password reset) — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A2 broken-auth training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA2RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never deploy broken-auth tutorial patterns to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Implement secure session management and password reset flows in production apps.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a2 route documents broken authentication labs. Show how to isolate NodeGoat training from production auth flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a3-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat A3 XSS tutorial live oracle",
+    description:
+      "When scanning /tutorial/a3, the canonical tutorial documents reflected/stored/DOM XSS with input validation and output-encoding guidance — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A3 XSS training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA3RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never deploy XSS tutorial sinks to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Apply context-sensitive output encoding on all untrusted data in production apps.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a3 route documents XSS labs. Show how to isolate NodeGoat training from production XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",

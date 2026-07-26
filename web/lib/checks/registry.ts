@@ -6360,6 +6360,77 @@ const clientSideNodegoatEvidence: Rule = async (ctx) => {
   };
 };
 
+function isNodegoatHost(ctx: RuleContext): boolean {
+  return /nodegoat-websec\.herokuapp\.com/i.test(ctx.origin);
+}
+
+async function nodegoatTutorialMarkers(
+  ctx: RuleContext,
+  tutorialSlug: string,
+  markers: { label: string; re: RegExp }[],
+  note: string
+): Promise<RuleResult> {
+  const canonicalUrl = new URL(`/tutorial/${tutorialSlug}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = doc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      canonicalUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note
+    }
+  };
+}
+
+const nodegoatTutorialA2RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a2\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a2", [
+    {
+      label: "A2 broken auth tutorial title",
+      re: /A2-Broken Authentication and Session Management|Broken Authentication/i
+    },
+    { label: "Session management walkthrough", re: /Session Management|Session Fixation/i },
+    { label: "Brute force / password reset topics", re: /brute force|password reset/i }
+  ], "NodeGoat /tutorial/a2 documents broken authentication and session management training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA3RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a3\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a3", [
+    {
+      label: "A3 XSS tutorial title",
+      re: /A3-Cross-Site Scripting \(XSS\)|Cross-Site Scripting \(XSS\)/i
+    },
+    { label: "Reflected/stored XSS walkthrough", re: /Reflected XSS|Stored XSS|DOM\s+based XSS/i },
+    { label: "Output encoding mitigation guidance", re: /output encoding|Input validation and sanitization/i }
+  ], "NodeGoat /tutorial/a3 documents cross-site scripting (reflected/stored/DOM) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -22622,6 +22693,14 @@ const CLIENT_WRONGSECRETS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "K8s configmap secret walkthrough",
     re: /K8s Configmap|config-map in the default namespace|kubectl.*find the secret/i
+  },
+  {
+    label: "Docker COPY layer secret walkthrough",
+    re: /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i
+  },
+  {
+    label: "CI/CD pipeline secrets walkthrough",
+    re: /CI\/CD pipeline|CI\/CD tooling|Github Actions|Exfiltrate the secret using Github/i
   }
 ];
 
@@ -22641,11 +22720,15 @@ const clientSideWrongSecretsChallengeEvidence: Rule = async (ctx) => {
     pageUrl.match(/challenge-(\d+)/i)?.[1] ?? corpus.match(/challenge-(\d+)/i)?.[1];
   const note = /K8s Configmap|config-map in the default namespace/i.test(corpus)
     ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Kubernetes configmap secret extraction with answer submission UI`
-    : /application\.properties|Spring Boot application/i.test(corpus)
-    ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
-    : /Docker documentation|copy the Jar file/i.test(corpus)
-      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
-      : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
+    : /CI\/CD pipeline|CI\/CD tooling|Github Actions/i.test(corpus)
+      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents CI/CD pipeline secret exfiltration with answer submission UI`
+      : /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i.test(corpus)
+        ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker COPY layer secret extraction with answer submission UI`
+        : /application\.properties|Spring Boot application/i.test(corpus)
+          ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
+          : /Docker documentation|copy the Jar file/i.test(corpus)
+            ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
+            : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.91 : 0.88,
@@ -31278,12 +31361,20 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /Docker arg based password|layers got constructed/i
     },
     {
+      label: "Docker COPY layer secret walkthrough",
+      re: /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i
+    },
+    {
       label: "Spring application.properties walkthrough",
       re: /application\.properties|Spring Boot application/i
     },
     {
       label: "Kubernetes configmap walkthrough",
       re: /K8s Configmap|config-map in the default namespace/i
+    },
+    {
+      label: "CI/CD pipeline secrets walkthrough",
+      re: /CI\/CD pipeline|CI\/CD tooling|Github Actions|Exfiltrate the secret using Github/i
     },
     {
       label: "Docker container logs walkthrough",
@@ -31305,15 +31396,19 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
   const focus =
     /Docker arg based password/i.test(doc.body)
       ? "Docker build-arg layer secrets"
-      : /Docker ENV based password/i.test(doc.body)
-        ? "Docker ENV secrets"
-        : /application\.properties/i.test(doc.body)
-          ? "Spring application.properties secrets"
-          : /K8s Configmap/i.test(doc.body)
-            ? "Kubernetes configmap secrets"
-            : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
-              ? "container/K8s log secrets"
-              : "hardcoded secrets";
+      : /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i.test(doc.body)
+        ? "Docker COPY layer secrets"
+        : /Docker ENV based password/i.test(doc.body)
+          ? "Docker ENV secrets"
+          : /CI\/CD pipeline|CI\/CD tooling|Github Actions/i.test(doc.body)
+            ? "CI/CD pipeline secrets"
+            : /application\.properties/i.test(doc.body)
+              ? "Spring application.properties secrets"
+              : /K8s Configmap/i.test(doc.body)
+                ? "Kubernetes configmap secrets"
+                : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
+                  ? "container/K8s log secrets"
+                  : "hardcoded secrets";
   return {
     fired: true,
     confidence: markers.length >= 3 ? 0.92 : 0.9,
@@ -37592,6 +37687,8 @@ export const RULES: Record<string, Rule> = {
   clientSideGoogleXssGameEvidence,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
+  nodegoatTutorialA2RouteLiveOracle,
+  nodegoatTutorialA3RouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
