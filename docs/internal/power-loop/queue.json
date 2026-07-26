@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T17:04:00.000Z",
+  "updated_at": "2026-07-26T18:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
+      "source": "OWASP WrongSecrets — challenge-6 secrets-in-properties live oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-7",
+      "source": "OWASP WrongSecrets — challenge-7 secrets-in-config live oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/prompt-injection/1",
+      "source": "opena2a/agentpwn — APWN-PI-001 direct prompt-injection payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/context-window/1",
+      "source": "opena2a/agentpwn — APWN-CW-001 context-window injection payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/sqli",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi error-based training route (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "http://vapi.apisec.ai/vapi/api1/user",
       "source": "APIsec vAPI — API1 BOLA broken object authorization user endpoint (roottusk/vapi public lab)",
