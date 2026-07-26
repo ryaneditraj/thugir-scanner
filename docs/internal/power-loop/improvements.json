@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-auth-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login admin' OR '1'='1 returns success:true role:admin on route scan with scannedUrl; vuln-expose.vercel.app/api/auth/login findings 7 with route-specific auth-bypass oracle; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=test echoes raw SELECT query + vulnerabilities.union_select on route scan; vuln-expose.vercel.app/api/search findings 7 with route-specific SQLi oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/search/ returns cardNumber+phoneNumber for multiple users on route scan with scannedUrl; brokencrystals.com/api/users/search/ findings 57 with route-specific exposure oracle; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api5-bfla-live-oracle",
       "status": "shipped",
