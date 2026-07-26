@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T21:04:24.669Z",
+  "updated_at": "2026-07-26T21:08:35.137Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2803,
-  "total_findings": 27787,
+  "total_sites_scanned": 2811,
+  "total_findings": 27989,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
-  "discovery_findings": 23552,
+  "discovery_urls_added": 2009,
+  "discovery_findings": 23754,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-26T21:04:24.669Z",
+  "last_run": "2026-07-26T21:08:35.137Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_error": "https://juice-shop.herokuapp.com unreachable — staging fallback",
@@ -49,43 +49,43 @@
           ]
         }
       },
-      "note": "Primary Heroku error; staging fallback 6/6 (12 findings); jwt-alg-none-accepted + reflexion-escalated-ssti present; secret-resend slug still absent"
+      "note": "Primary Heroku error; staging fallback 6/6 (12 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 213,
-      "focus": "vAPI API9 v1 login + NodeGoat A1 + vuln-expose IDOR/CMDI modules + wrongsecrets challenge-3 + brokencrystals testimonials/file/users/basic drain",
+      "findings": 202,
+      "focus": "wrongsecrets challenge-12/13/14 + NodeGoat A2/A3 + brokencrystals azure-file/adminpermission/subscriptions drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) after primary Heroku error — no category gaps",
-      "vapi.apisec.ai/vapi/api9/v1/user/login: 8 findings incl vapi-api8-sqli-login-live-oracle + shared API3-6 hub oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-3: 9 findings with wrongsecrets-challenge-live-oracle + client-side-wrongsecrets-challenge-evidence",
-      "vuln-expose.vercel.app/idor/profile + /cmdi/execute: 12 findings each shared hub — route-specific IDOR/CMDI live oracles still absent",
-      "nodegoat-websec.herokuapp.com/tutorial/a1: 6 findings with client-side-nodegoat-evidence + server-side-eval-evidence",
-      "brokencrystals.com/api/testimonials/count|file|users/basic: 54-56 findings shared dir-discovery fingerprint"
+      "wrongsecrets.herokuapp.com/challenge/challenge-14: 9 findings with wrongsecrets-challenge-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-12|13: 8 findings each with client-side-wrongsecrets-challenge-evidence only (no live oracle)",
+      "nodegoat-websec.herokuapp.com/tutorial/a2|a3: 6 findings each with client-side-nodegoat-evidence + vibe-hardcoded-demo-credentials",
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: 56 findings incl brokencrystals-adminpermission-route-live-oracle",
+      "brokencrystals.com/api/file/azure?path=https://httpbin.org/get: 55 findings shared hub — route-specific azure SSRF oracle absent",
+      "brokencrystals.com/api/subscriptions?email=test: 54 findings shared hub without subscriptions-specific XSS live oracle on route scan"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question-disclosure)",
-      "vuln-expose.vercel.app/idor/profile: route-specific IDOR profile oracle absent (shared 12-finding vuln-expose hub)",
-      "vuln-expose.vercel.app/cmdi/execute: route-specific command-injection live oracle absent (shared hub fingerprint)",
-      "vapi.apisec.ai/vapi/api9/v1/user/login: API9 improper-assets v1 brute-force PIN oracle still absent (hub fires API8 SQLi oracle)",
-      "brokencrystals.com/api/file?path=/etc/hosts: route-specific LFI/file oracle absent (shared ~56-finding hub)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "wrongsecrets challenge-12/13: wrongsecrets-challenge-live-oracle absent (client-side evidence only)",
+      "nodegoat A2/A3: route-specific broken-auth / sensitive-data live oracles absent (shared 6-finding tutorial hub)",
+      "brokencrystals.com/api/file/azure: route-specific azure SSRF live oracle absent despite brokencrystals-azure-metadata-ssrf-live-oracle in hub",
+      "brokencrystals.com/api/subscriptions?email=test: subscriptions XSS oracle not route-confirmed (shared hub fingerprint)"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/testimonials/count?query=test": 56,
-    "brokencrystals.com/api/file?path=/etc/hosts": 56,
-    "brokencrystals.com/api/users/basic": 54,
-    "vuln-expose.vercel.app/idor/profile": 12,
-    "vuln-expose.vercel.app/cmdi/execute": 12,
-    "wrongsecrets.herokuapp.com/challenge/challenge-3": 9,
-    "vapi.apisec.ai/vapi/api9/v1/user/login": 8,
-    "nodegoat-websec.herokuapp.com/tutorial/a1": 6,
-    "juice-shop-staging.herokuapp.com": 12,
-    "brokencrystals.com/api/users/search/": 57
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 56,
+    "brokencrystals.com/api/file/azure?path=https://httpbin.org/get": 55,
+    "brokencrystals.com/api/subscriptions?email=test": 54,
+    "wrongsecrets.herokuapp.com/challenge/challenge-14": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-12": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-13": 8,
+    "nodegoat-websec.herokuapp.com/tutorial/a2": 6,
+    "nodegoat-websec.herokuapp.com/tutorial/a3": 6,
+    "juice-shop-staging.herokuapp.com": 12
   }
 }
