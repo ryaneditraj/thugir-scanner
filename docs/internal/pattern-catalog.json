@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-26T17:20:30.099Z",
-  "total": 853,
-  "uniqueSlugs": 848,
+  "generatedAt": "2026-07-26T18:03:23.510Z",
+  "total": 856,
+  "uniqueSlugs": 851,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 835,
+    "generic": 838,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 768,
+    "deep": 771,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 206,
+    "Broken access control": 208,
     "Exposed secret": 26,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 72,
     "Broken authentication": 60,
-    "Injection": 171,
+    "Injection": 172,
     "Cross-site scripting": 126,
     "general": 20,
     "SSRF": 5,
@@ -826,6 +826,9 @@
     "vapi-api3-comment-bola-live-oracle",
     "vapi-api4-otp-broken-auth-live-oracle",
     "vapi-api4-user-exposure-live-oracle",
+    "vapi-api5-bfla-live-oracle",
+    "vapi-api6-mass-assignment-live-oracle",
+    "vapi-api8-sqli-login-live-oracle",
     "verbose-error-disclosure",
     "vibe-algolia-admin-in-client",
     "vibe-auth0-secret-in-client",
