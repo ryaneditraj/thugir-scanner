@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T02:05:00.000Z",
+  "updated_at": "2026-07-26T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/track",
+      "source": "ctfsec/pwnshop README — order tracking IDOR oracle GET /track (PWN-002 companion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wishlist/1",
+      "source": "ctfsec/pwnshop README — unauthenticated wishlist IDOR GET /wishlist/:user_id (PWN-003)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/search/filters",
+      "source": "ctfsec/pwnshop README — product search/filter SQLi oracle GET /search/filters (PWN-012)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/export-orders",
+      "source": "ctfsec/pwnshop README — CSV formula injection oracle GET /export-orders (PWN-017)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/login",
+      "source": "ctfsec/pwnshop README — admin SQLi login oracle POST /admin/login (PWN-011)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnbank.org/api/v1/forgot-password",
       "source": "Commando-X/vuln-bank + Medium pentest reports — OTP/PIN leaked in forgot-password API response (API2 broken auth)",
