@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T09:05:00.000Z",
+  "updated_at": "2026-07-26T10:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
+      "source": "ctfsec/pwnshop vulnerabilities — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/verify-otp",
+      "source": "ctfsec/pwnshop vulnerabilities — brute-forceable 6-digit OTP oracle POST /verify-otp (PWN-015)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/upload-avatar",
+      "source": "ctfsec/pwnshop vulnerabilities — stored XSS via SVG avatar upload POST /profile/upload-avatar (PWN-012)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/security?search=test",
+      "source": "ctfsec/pwnshop vulnerabilities — second-order SQLi in admin audit log search GET /admin/security?search= (PWN-014)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/1",
+      "source": "OWASP WrongSecrets — Challenge 1 git-secrets oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/rest/basket/1",
       "source": "OWASP Juice Shop v20.1.1 — REST basket IDOR oracle (BOLA on /rest/basket/:id)",
