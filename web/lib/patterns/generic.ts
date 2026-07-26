@@ -9232,6 +9232,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-open-redirect-register-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop registration open redirect live oracle (PWN-017)",
+    description:
+      "POST /register with next= reflects attacker URLs in the 302 Location header without validation — the Pwnshop registration open redirect oracle.",
+    impactOneline:
+      "Open redirects on registration enable phishing attacks that steal credentials or OAuth tokens via trusted-domain redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-registration redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on registration and login flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /register endpoint reflects next= into a 302 Location to external hosts. Show open-redirect remediation for registration flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-verify-otp-bruteforce-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Pwnshop OTP verification lacks rate limiting (PWN-015)",
+    description:
+      "POST /verify-otp accepts rapid sequential OTP guesses without HTTP 429 or account lockout — the Pwnshop brute-forceable 2FA oracle.",
+    impactOneline:
+      "Missing OTP rate limits let attackers exhaust the 6-digit code space and bypass two-factor authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVerifyOtpBruteforceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit OTP verification and lock accounts after repeated failures — Pwnshop PWN-015 is intentional lab software.",
+      steps: [
+        "Return HTTP 429 after a small number of failed OTP attempts per session.",
+        "Use exponential backoff and temporary lockouts on repeated failures.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /verify-otp endpoint has no rate limiting. Show OTP brute-force protection with lockouts and backoff.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-userlogin-css-injection-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -14507,6 +14559,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v2/forgot-password endpoint returns User not found for invalid usernames. Show enumeration-safe password-reset response handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sup3r-secret-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank hidden admin panel reachable after BOPLA signup",
+    description:
+      "POST /register with is_admin:true followed by login grants access to GET /sup3r_s3cr3t_admin — the Vuln Bank hidden admin panel oracle.",
+    impactOneline:
+      "Mass-assignment during registration combined with a hidden admin route exposes full administrative control to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSup3rSecretAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block privileged fields on registration and protect admin routes with server-side role checks — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject is_admin and other privilege fields from registration JSON bodies.",
+        "Enforce admin role verification on /sup3r_s3cr3t_admin independent of client-supplied flags.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint accepts is_admin:true and /sup3r_s3cr3t_admin exposes the admin panel. Show BOPLA remediation and admin route protection.",
     version: 1,
     enabled: true
   },
