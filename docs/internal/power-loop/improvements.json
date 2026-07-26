@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /testimonials + /assets/index-*.js bundle reads searchParams.get(videosrc) and sets testimonials-video outerHTML to iframe; brokencrystals.com/testimonials findings 54→55; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns javax.naming.NamingException LDAP error code 1 with OU=Users,O=BrokenCrystals when directory entries unavailable; brokencrystals.com/testimonials LDAP oracle maintained via error-disclosure fallback; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-sqli-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/sqli redirects to /login — challenge catalog lists 14 labs (XSS, IDOR, admin-console, etc.) with no SQLi route; no portable live oracle without authenticated session"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-chat-prompt-injection-live-oracle",
       "status": "shipped",
@@ -13501,6 +13519,16 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
+      "shipped_at": "2026-07-26T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-injection-live-oracle",
+      "shipped_at": "2026-07-26T09:10:00.000Z"
+    },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-chat-prompt-injection-live-oracle",
