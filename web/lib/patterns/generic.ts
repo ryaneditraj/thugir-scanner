@@ -14329,6 +14329,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-file-aws-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/aws route SSRF live oracle",
+    description:
+      "When scanning /api/file/aws, GET with path=http://169.254.169.254/latest/meta-data/ returns AWS IMDS metadata (ami-id, instance-id) — route-specific cloud SSRF confirmation.",
+    impactOneline:
+      "Route-specific confirmation that the AWS metadata SSRF endpoint is reachable when scanning Broken Crystals file/aws paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileAwsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to link-local and cloud metadata addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254 and other link-local/metadata IP ranges.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/aws route scan confirms cloud metadata SSRF. Show how to block AWS IMDS fetches from user-controlled path parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-hidden-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/hidden-upload route live oracle",
+    description:
+      "When scanning /api/hidden-upload, POST accepts image uploads and returns base64 data URI content without authentication — route-specific unrestricted upload confirmation.",
+    impactOneline:
+      "Route-specific confirmation that the hidden upload endpoint accepts unauthenticated file uploads when scanning Broken Crystals upload paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHiddenUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and strict file validation on upload endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Authenticate all file upload routes and enforce role-based access control.",
+        "Validate file types with magic-byte inspection, not just Content-Type headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hidden-upload route scan confirms unauthenticated uploads. Show upload hardening for NestJS multipart handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi2-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "crAPI v2 auth login route live oracle",
+    description:
+      "When scanning /identity/api/auth/login, POST with demo credentials returns a JWT token — the crAPI v2 authentication oracle.",
+    impactOneline:
+      "Route-specific confirmation that crAPI v2 issues JWTs from the identity login endpoint for API security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapi2AuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI v2 is intentional API security training — enforce strong auth in production APIs.",
+      steps: [
+        "Disable default demo credentials on any non-lab deployment.",
+        "Rate-limit and monitor authentication endpoints for credential stuffing.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/auth/login route accepts demo credentials and returns JWTs. Show production API authentication hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi2-shop-products-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "crAPI v2 shop products route live oracle",
+    description:
+      "When scanning /workshop/api/shop/products, GET returns a JSON product catalog without authentication — the crAPI v2 shop listing oracle.",
+    impactOneline:
+      "Route-specific confirmation that crAPI v2 exposes unauthenticated shop product data for OWASP API Top 10 training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapi2ShopProductsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI v2 is intentional API security training — require authentication on product APIs in production.",
+      steps: [
+        "Authenticate all shop/catalog API routes before returning product data.",
+        "Apply object-level authorization checks on product and order endpoints.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /workshop/api/shop/products route returns product JSON without auth. Show API access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-mass-assignment-put-live-oracle",
     platform: "generic",
     category: "Broken access control",

