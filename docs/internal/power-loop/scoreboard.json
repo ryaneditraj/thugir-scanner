@@ -17,18 +17,18 @@
   },
   "total_sites_scanned": 2684,
   "total_findings": 26291,
-  "critical_findings": 55,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1911,
   "discovery_findings": 22378,
-  "improvements_shipped": 1146,
+  "improvements_shipped": 1149,
   "last_run": "2026-07-26T02:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (14 findings); no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 268,
+      "urls_scanned": 10,
+      "findings": 464,
       "dns_failures": [
         "https://brokencrystals.com/api/goto"
       ],
-      "focus": "vulnbank forgot-password OTP leak + check_balance BOLA + request_loan business-logic + brokencrystals LLM chat XSS + internal/secret exposure oracles",
-      "improvements_shipped_this_run": 0
+      "focus": "burpbounty swagger.json + admin/ path-specific oracles + vulnbank virtual-cards BOLA + queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "burpbountylab.com/swagger.json: 89→93 findings — burpbounty-swagger-json-live-oracle shipped",
+      "burpbountylab.com/admin/: 89→93 findings — burpbounty-admin-panel-live-oracle shipped",
+      "vulnbank.org/api/virtual-cards: 6→10 findings — vulnbank-virtual-cards-bola-live-oracle shipped",
       "vulnbank.org/api/v1/forgot-password: 9 findings — thin shared vulnbank fingerprint; no OTP/PIN-leak route oracle",
-      "vulnbank.org/check_balance/3518655174: 9 findings — no BOLA balance-disclosure route oracle",
-      "vulnbank.org/request_loan: 8 findings — no loan business-logic route oracle",
-      "brokencrystals.com/api/chat: 51 findings — shared brokencrystals fingerprint; no LLM chat XSS route oracle",
-      "vulnbank.org/internal/secret: 9 findings — no internal/secret exposure route oracle"
+      "brokencrystals.com/api/chat: 51 findings — shared brokencrystals fingerprint; no LLM chat XSS route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnbank.org API routes (forgot-password, check_balance, request_loan, internal/secret): thin 8-9 finding shared fingerprint — needs route-specific oracles",
-      "brokencrystals.com/api/chat: shared ~51-finding fingerprint — route-specific LLM insecure-output-handling oracle still absent",
-      "brokencrystals.com/api/goto: DNS/connect failure (repeat)"
+      "vulnbank.org/sup3r_s3cr3t_admin: exposed-admin-panel oracle still absent",
+      "hack-this-site-eta.vercel.app/api/validate/ssrf: validate/ssrf returns 404 — SSRF fetch live oracle still absent",
+      "vulnbank.org API routes (forgot-password, check_balance, request_loan, internal/secret): thin 8-9 finding shared fingerprint — needs route-specific oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 13,
+    "juice-shop.herokuapp.com": 14,
+    "burpbountylab.com/swagger.json": 93,
+    "burpbountylab.com/admin/": 93,
+    "vulnbank.org/api/virtual-cards": 10,
     "vulnbank.org/api/v1/forgot-password": 9,
-    "vulnbank.org/check_balance/3518655174": 9,
-    "vulnbank.org/request_loan": 8,
     "brokencrystals.com/api/chat": 51,
-    "vulnbank.org/internal/secret": 9,
     "burpbountylab.com/wp/xmlrpc.php": 91,
     "burpbountylab.com/sqli/length?q=admin": 91,
     "pwnshop.ctfsecurity.com/forgot-password": 16
