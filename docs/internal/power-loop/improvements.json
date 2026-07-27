@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /allowlist/?url=http://169.254.169.254/latest/meta-data/?vulnlab.dev returns ami-id/hostname/iam/ metadata while bare metadata URL rejected; ssrf.vulnlab.dev/allowlist findings 7→9 with allowlist-bypass + route oracles; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper attaches scannedUrl on /allowlist scans; ssrf.vulnlab.dev/allowlist fires route oracle with metadataMarkers evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-jwt-alg-none-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/user/authentication-details accepts alg:none JWT returning admin role while rejecting no-auth and malformed tokens; juice-shop.herokuapp.com benchmark findings 13→17 with reliable dedicated oracle; recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /rest/chat returns SSE data stream (deltaContent or LLM error + [DONE]) without authentication — chatbot prompt-injection surface; demo.owasp-juice.shop /rest/chat confirmed; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper fires on #/chatbot scans with scannedUrl evidence; replaces hub-only fingerprint on demo.owasp-juice.shop/#/chatbot; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-live-oracle",
       "status": "shipped",
@@ -14113,6 +14143,31 @@
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-profile-route-live-oracle",
       "shipped_at": "2026-07-27T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-route-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-jwt-alg-none-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-api-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-route-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
     }
   ]
 }
