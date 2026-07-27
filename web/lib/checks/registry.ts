@@ -17034,6 +17034,69 @@ const vulnExposeIdorProfileRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeBlindSqliApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const usersUrl = new URL("/api/users", ctx.origin);
+  usersUrl.searchParams.set(
+    "id",
+    "1 AND (SELECT SUBSTRING(password,1,1) FROM users WHERE id=1)='a'"
+  );
+  const doc = await ctx.probe.get(usersUrl.toString(), { maxBytes: 4096, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  if (!/SUBSTRING\s*\(\s*password/i.test(doc.body)) return NEGATIVE;
+  if (!/boolean_based|blind|id_injection/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: usersUrl.toString(),
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "VulnSite GET /api/users?id= accepts boolean-blind SUBSTRING(password,…) payloads and echoes the raw SQL query — blind SQL injection API oracle"
+    }
+  };
+};
+
+const vulnExposeSqliBlindRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sqli\/blind(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/sqli/blind"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/sqli/blind", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const apiResult = await vulnExposeBlindSqliApiLiveOracle(ctx);
+  return {
+    fired: true,
+    confidence: apiResult.fired ? 0.94 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      ...(apiResult.fired ? { api: apiResult.evidence } : {}),
+      scannedUrl: pageUrl,
+      note: "VulnSite /sqli/blind route scan — advanced blind SQLi lab with boolean/time-based extraction panels and /api/users SUBSTRING injection oracle"
+    }
+  };
+};
+
+const vulnExposeXssCspBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/csp-bypass(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/xss/csp-bypass"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/xss/csp-bypass", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /xss/csp-bypass route scan — CSP bypass lab with policy simulator and JSONP/Angular/DOM/WebSocket bypass methods"
+    }
+  };
+};
+
 const brokencrystalsUsersSearchRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -18067,7 +18130,25 @@ const VULN_EXPOSE_MODULE_SPECS: {
     note: "VulnSite /sqli/blind module documents boolean/time-based blind SQL injection extraction lab"
   },
   {
-    pathRe: /\/xss\//i,
+    pathRe: /\/xss\/csp-bypass(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "CSP bypass advanced lab banner",
+        re: /XSS CSP Bypass - Laboratorio Avanzado|LABORATORIO DE CSP BYPASS AVANZADO/i
+      },
+      {
+        label: "CSP policy simulator panel",
+        re: /CSP Policy Simulator|Content Security Policy Activa/i
+      },
+      {
+        label: "CSP bypass testing methods",
+        re: /CSP Bypass Testing|Método de Bypass|JSONP|unsafe-eval|unsafe-inline/i
+      }
+    ],
+    note: "VulnSite /xss/csp-bypass module documents Content Security Policy bypass techniques (JSONP, Angular, DOM, WebSocket)"
+  },
+  {
+    pathRe: /\/xss\/(?!csp-bypass)/i,
     markers: [
       {
         label: "XSS exploitation lab banner",
@@ -39217,6 +39298,9 @@ export const RULES: Record<string, Rule> = {
   vulnExposeSqliSearchRouteLiveOracle,
   vulnExposeCmdiRouteLiveOracle,
   vulnExposeIdorProfileRouteLiveOracle,
+  vulnExposeBlindSqliApiLiveOracle,
+  vulnExposeSqliBlindRouteLiveOracle,
+  vulnExposeXssCspBypassRouteLiveOracle,
   brokencrystalsUsersSearchRouteLiveOracle,
   brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,

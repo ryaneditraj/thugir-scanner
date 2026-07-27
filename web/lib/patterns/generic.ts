@@ -15291,6 +15291,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-sqli-blind-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite /sqli/blind route blind SQLi oracle",
+    description:
+      "When scanning /sqli/blind, the advanced blind SQLi lab exposes boolean/time-based extraction panels and GET /api/users echoes SUBSTRING(password,…) payloads in the raw SQL query — route-specific blind injection oracle.",
+    impactOneline:
+      "Blind SQL injection lets attackers extract secrets character-by-character without direct query output.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeSqliBlindRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/blind route scan confirms a boolean/time-based blind SQLi lab with /api/users SUBSTRING injection. Show blind SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-xss-csp-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite /xss/csp-bypass route CSP bypass oracle",
+    description:
+      "When scanning /xss/csp-bypass, the CSP bypass lab exposes a policy simulator and JSONP/Angular/DOM/WebSocket bypass methods with vulnerable payload input — route-specific CSP bypass XSS oracle.",
+    impactOneline:
+      "CSP bypass XSS lets attackers execute scripts even when a Content Security Policy is present.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeXssCspBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strict CSP without unsafe-inline/unsafe-eval and validate all sinks — VulnSite is intentional training software.",
+      steps: [
+        "Remove unsafe-inline and unsafe-eval from script-src directives.",
+        "Use nonces or hashes for required inline scripts.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/csp-bypass route scan confirms a CSP bypass lab with JSONP/Angular/DOM methods. Show Content Security Policy hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-blind-sqli-api-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite blind SQLi /api/users API oracle",
+    description:
+      "GET /api/users?id= accepts boolean-blind SUBSTRING(password,…) payloads and echoes the raw SQL query with injection hints — blind SQL injection API oracle.",
+    impactOneline:
+      "Blind SQL injection via API parameters lets attackers extract database secrets without visible error output.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeBlindSqliApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/users echoes blind SUBSTRING(password,…) SQL payloads. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-route-live-oracle",
     platform: "generic",
     category: "Injection",
