@@ -14237,6 +14237,21 @@
       "source": "discovery:crapi2.apisec.ai",
       "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
       "shipped_at": "2026-07-27T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-alg-none-live-oracle",
+      "shipped_at": "2026-07-27T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-route-live-oracle",
+      "shipped_at": "2026-07-27T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-50-dotnet-ilspy-markers",
+      "shipped_at": "2026-07-27T12:15:00.000Z"
     }
   ]
 }
