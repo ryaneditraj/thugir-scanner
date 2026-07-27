@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T22:10:00.000Z",
+  "updated_at": "2026-07-27T22:38:11.524Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3054,
-  "total_findings": 31184,
+  "total_sites_scanned": 3062,
+  "total_findings": 31306,
   "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2129,
-  "discovery_findings": 26103,
+  "discovery_urls_added": 2134,
+  "discovery_findings": 26225,
   "improvements_shipped": 1158,
-  "last_run": "2026-07-27T22:10:00.000Z",
+  "last_run": "2026-07-27T22:38:11.524Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 451,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,37 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); no benchmark misses"
+      "note": "Primary juice-shop.herokuapp.com error; staging fallback 6/6 (14 findings); jwt-alg-none-live-oracle + chatbot + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 135,
-      "focus": "route-live-oracle wrappers for pwnshop coupon bypass, brokencrystals LDAP, brokencrystals marketplace",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 122,
+      "focus": "vuln-expose network-tools + cmdi landing + WrongSecrets challenge-0/1/2; queue drain challenge-18/19 + hack-this-site path-traversal",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/apply-coupon: 23→31 — pwnshop-coupon-category-bypass-route-live-oracle (PWN-016 category bypass with scannedUrl)",
-      "brokencrystals.com/api/users/ldap: 54→56 — brokencrystals-ldap-route-live-oracle with scannedUrl evidence",
-      "brokencrystals.com/marketplace: 45→48 — brokencrystals-marketplace-route-live-oracle (prototype pollution DOM XSS route oracle)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku error, no category gaps",
+      "vuln-expose.vercel.app/network-tools: 15 findings — client-side-ssrf-evidence + vuln-expose lab oracles; route-specific ping SSRF oracle still absent",
+      "vuln-expose.vercel.app/cmdi: 15 findings — shared VulnSite hub fingerprint without /cmdi/execute route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-2: 10 findings — wrongsecrets-challenge-live-oracle + route oracle",
+      "hack-this-site-eta.vercel.app/api/validate/path-traversal: 46 findings — queue drain path-traversal hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/wallet: route returns 404 on live deploy — wallet top-up oracle blocked",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS oracle needs OTP session (intermittent)",
-      "vulnweb.netlify.app/sqli|xss|idor: 1-finding hubs — route-specific lab oracles absent"
+      "vuln-expose.vercel.app/network-tools: no vuln-expose-network-tools-ssrf-ping-lab route oracle despite Herramienta de Ping lab page",
+      "vuln-expose.vercel.app/cmdi landing: shared 15-finding hub without CMDi execute-route live oracle",
+      "wrongsecrets challenge-0/1: client-side evidence only (8 each) — wrongsecrets-challenge-live-oracle absent on intro/Git challenges"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "pwnshop.ctfsecurity.com/apply-coupon": 31,
-    "brokencrystals.com/api/users/ldap": 56,
-    "brokencrystals.com/marketplace": 48,
-    "vuln-expose.vercel.app/sqli/blind": 16,
-    "vuln-expose.vercel.app/xss/csp-bypass": 14
+    "vuln-expose.vercel.app/network-tools": 15,
+    "vuln-expose.vercel.app/cmdi": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-2": 10,
+    "hack-this-site-eta.vercel.app/api/validate/path-traversal": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-18": 10
   }
 }
