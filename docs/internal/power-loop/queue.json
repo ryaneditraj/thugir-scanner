@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T04:04:18.620Z",
+  "updated_at": "2026-07-27T05:16:04.679Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-36",
+      "source": "OWASP WrongSecrets — challenge-36 binary reverse-engineering oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-37",
+      "source": "OWASP WrongSecrets — challenge-37 CI/CD base64 auth bypass oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-38",
+      "source": "OWASP WrongSecrets — challenge-38 Git secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-39",
+      "source": "OWASP WrongSecrets — challenge-39 cryptography oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-40",
+      "source": "OWASP WrongSecrets — challenge-40 cryptography oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
       "source": "OWASP WrongSecrets — challenge-31 front-end secret-in-webpage oracle (public Heroku benchmark)",
