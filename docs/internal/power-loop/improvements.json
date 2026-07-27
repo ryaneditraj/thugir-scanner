@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-attack-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /attacks/jailbreak/1 exposes meta name=ai-instructions DAN jailbreak + security-test-id APWN-JB-001 + off-screen SYSTEM INSTRUCTIONS with /api/report callback; agentpwn.com/attacks/jailbreak/1 findings 6→7; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level3.php route scan delegates to sqlErrorDisclosure confirming GET /api/portal?q= returns SQL syntax error; vulnforge-academy.vercel.app/.../level3.php findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-upload-profile-picture-url-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile/upload route scan POST /upload_profile_picture_url with image_url=https://www.google.com/favicon.ico returns debug_info.fetched_url SSRF proof; vulnbank.org/profile/upload findings 8→21; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api1-route-live-oracle",
       "status": "shipped",
@@ -14372,6 +14390,21 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-search-xss-live-oracle",
       "shipped_at": "2026-07-27T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-attack-route-live-oracle",
+      "shipped_at": "2026-07-27T18:00:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-sqli-route-live-oracle",
+      "shipped_at": "2026-07-27T18:00:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-upload-profile-picture-url-route-live-oracle",
+      "shipped_at": "2026-07-27T18:00:00.000Z"
     }
   ]
 }
