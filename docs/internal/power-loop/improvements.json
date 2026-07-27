@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-mechanic-report-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /workshop/api/mechanic/mechanic_report?report_id=1 returns adam007@example.com vehicle PII; report_id=2 returns pogba006@example.com — sequential BOLA; crapi.apisec.ai/.../mechanic_report findings 3→5; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api10-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api10/user/flag returns {\"message\":\"Hey! I didn't log and monitor...\",\"flag\":\"flag{api10_...}\"} without auth; vapi.apisec.ai/vapi/api10/user/flag findings 10→12; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "jwt-alg-none-accepted",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: jwtAlgNoneProbe now probes /rest/user/authentication-details on Juice Shop hosts; alg:none JWT returns {\"role\":\"admin\"}; juice-shop.herokuapp.com now fires jwt-alg-none-accepted + juice-shop-jwt-alg-none-live-oracle (17 findings, 6/6 recall)"
+    },
+    {
       "source": "discovery:agentpwn.com",
       "slug": "agentpwn-attack-route-live-oracle",
       "status": "shipped",
@@ -14405,6 +14423,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-upload-profile-picture-url-route-live-oracle",
       "shipped_at": "2026-07-27T18:00:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-mechanic-report-route-live-oracle",
+      "shipped_at": "2026-07-27T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api10-route-live-oracle",
+      "shipped_at": "2026-07-27T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "jwt-alg-none-accepted",
+      "shipped_at": "2026-07-27T19:15:00.000Z"
     }
   ]
 }
