@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T18:02:05.519Z",
+  "updated_at": "2026-07-27T18:20:54.459Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3011,
-  "total_findings": 30729,
+  "total_sites_scanned": 3019,
+  "total_findings": 30787,
   "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2104,
-  "discovery_findings": 25762,
+  "discovery_urls_added": 2109,
+  "discovery_findings": 25820,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-27T18:02:05.519Z",
+  "last_run": "2026-07-27T18:20:54.459Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,35 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "urls_ok": 3,
-      "findings": 33,
-      "focus": "vAPI API1/API2/API3 route live oracles for discovery scannedUrl evidence",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "urls_ok": 8,
+      "findings": 58,
+      "focus": "crAPI v1 BOLA oracles, vAPI api10 logging, voice-goat VWAD subroutes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503",
-      "vapi.apisec.ai/vapi/api1/user: 9→11 findings — vapi-api1-route-live-oracle",
-      "vapi.apisec.ai/vapi/api2/user/login: 9→11 findings — vapi-api2-route-live-oracle",
-      "vapi.apisec.ai/vapi/api3/comment: 10→11 findings — vapi-api3-comment-route-live-oracle"
+      "vuln-expose.vercel.app/idor/profile: 13 findings — vuln-expose-idor-profile-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/a1: 7 findings — nodegoat-tutorial-a1-route-live-oracle",
+      "vapi.apisec.ai/vapi/api10/user/flag: 10 findings — cross-API hub cluster (no api10-logging oracle slug)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "jwt-alg-none-accepted slug absent — juice-shop-jwt-alg-none-live-oracle present but not mapped slug",
-      "crapi2.apisec.ai/community: TLS reset from cloud agent — community mass-assignment oracle unvalidated",
-      "nodegoat-websec.herokuapp.com/learn: open-redirect oracle blocked without authenticated session"
+      "crapi.apisec.ai BOLA routes (mechanic_report, vehicle/vehicles): 3-finding hub only — no route-specific crAPI BOLA oracle",
+      "vwad voice-goat/voicebank + voicerag: 404 subpaths — voice-goat not deployed on VWAD (client-side-vwad-app-not-found-evidence)"
     ]
   },
   "discovery_highlights": {
-    "vapi.apisec.ai/vapi/api1/user": 11,
-    "vapi.apisec.ai/vapi/api2/user/login": 11,
-    "vapi.apisec.ai/vapi/api3/comment": 11,
-    "pwnshop.ctfsecurity.com/api/v1/invoices/1/download": 28,
-    "wrongsecrets.herokuapp.com/challenge/challenge-9": 10,
-    "duck-store.escape.tech/api/v1/users": 10,
-    "ginandjuice.shop/catalog": 9,
-    "juice-shop-staging.herokuapp.com": 14
+    "vuln-expose.vercel.app/idor/profile": 13,
+    "vapi.apisec.ai/vapi/api10/user/flag": 10,
+    "vapi.apisec.ai/vapi/api9/v1/user/login": 10,
+    "nodegoat-websec.herokuapp.com/tutorial/a1": 7,
+    "vwad.owasp.org/app/voice-goat/voicebank": 6,
+    "juice-shop-staging.herokuapp.com": 14,
+    "pwnshop.ctfsecurity.com/api/v1/invoices/1/download": 28
   }
 }
