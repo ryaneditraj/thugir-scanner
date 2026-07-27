@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T11:05:00.000Z",
+  "updated_at": "2026-07-27T12:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
+      "source": "OWASP WrongSecrets — challenge-44 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-45",
+      "source": "OWASP WrongSecrets — challenge-45 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-46",
+      "source": "OWASP WrongSecrets — challenge-46 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest FauxBank — missing CSRF on transfers oracle POST /api/transfer (GitHub README lesson 7)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
+      "source": "alfredang/pentest FauxBank — broken access control IDOR oracle GET /api/accounts/[id] (GitHub README lesson 1)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
       "source": "OWASP WrongSecrets — challenge-47 HashiCorp Vault template injection part 2 (public Heroku benchmark)",
