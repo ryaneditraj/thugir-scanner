@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-aws-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget picked http://www.ssrf.vulnlab.dev on /metadata-aws 404 — ssrfVulnlabProbeOrigin now forces https://ssrf.vulnlab.dev; GET /metadata/?url=http://169.254.169.254/latest/meta-data/ returns ami-id/iam/instance-id; ssrf.vulnlab.dev/metadata-aws findings 2→7 with route oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: canonical https://ssrf.vulnlab.dev origin + ssrfVulnlabFetchDoc 503 retry; GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<metadata> returns ami-id tree; ssrf.vulnlab.dev/redirect findings 3→8 with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-26 documents Web3 smart-contract secrets + answer-textbox UI — added Web3/smart-contract markers to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-26 findings 8→9; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-benefits-nosql-route-live-oracle",
       "status": "shipped",

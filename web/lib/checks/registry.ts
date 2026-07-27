@@ -31532,7 +31532,26 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
 };
 
 function isSsrfVulnlabHost(ctx: RuleContext): boolean {
-  return /ssrf\.vulnlab\.dev/i.test(ctx.origin);
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /ssrf\.vulnlab\.dev/i.test(corpus);
+}
+
+/** reachTarget() can pick http://www.ssrf.vulnlab.dev on 404 route scans — labs only live on apex https. */
+function ssrfVulnlabProbeOrigin(ctx: RuleContext): string {
+  if (!isSsrfVulnlabHost(ctx)) return ctx.origin;
+  return "https://ssrf.vulnlab.dev";
+}
+
+async function ssrfVulnlabFetchDoc(
+  url: string,
+  opts?: { maxBytes?: number; timeoutMs?: number }
+): Promise<Awaited<ReturnType<typeof fetchDoc>>> {
+  let doc = await fetchDoc(url, opts);
+  if (doc.status === 503 || doc.status === 429) {
+    await new Promise((r) => setTimeout(r, 1200));
+    doc = await fetchDoc(url, opts);
+  }
+  return doc;
 }
 
 function ssrfVulnlabDecodeBody(raw: string): string {
@@ -31555,9 +31574,10 @@ function ssrfVulnlabLabBody(html: string): string | null {
 
 const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL("/basic/", ctx.origin);
-  probeUrl.searchParams.set("url", `${ctx.origin}/`);
-  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/basic/", origin);
+  probeUrl.searchParams.set("url", `${origin}/`);
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = ssrfVulnlabLabBody(doc.body);
   if (!body) return NEGATIVE;
@@ -31579,9 +31599,10 @@ const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL("/metadata/", ctx.origin);
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/metadata/", origin);
   probeUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
-  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = ssrfVulnlabLabBody(doc.body);
   if (!body) return NEGATIVE;
@@ -31603,13 +31624,14 @@ const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
-  const blockedUrl = new URL("/blocklist/", ctx.origin);
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const blockedUrl = new URL("/blocklist/", origin);
   blockedUrl.searchParams.set("url", "http://127.0.0.1/");
-  const blockedDoc = await fetchDoc(blockedUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  const blockedDoc = await ssrfVulnlabFetchDoc(blockedUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
   if (!/banned substring|127\.0\.0\.1/i.test(blockedDoc.body)) return NEGATIVE;
-  const bypassUrl = new URL("/blocklist/", ctx.origin);
+  const bypassUrl = new URL("/blocklist/", origin);
   bypassUrl.searchParams.set("url", "http://2852039166/latest/meta-data/");
-  const bypassDoc = await fetchDoc(bypassUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  const bypassDoc = await ssrfVulnlabFetchDoc(bypassUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
   if (/banned substring/i.test(bypassDoc.body)) return NEGATIVE;
   const body = ssrfVulnlabLabBody(bypassDoc.body);
@@ -31628,11 +31650,12 @@ const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
 
 const ssrfVulnlabRedirectLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
   const innerTarget = "http://169.254.169.254/latest/meta-data/";
-  const redirectChain = `${ctx.origin}/r/?to=${encodeURIComponent(innerTarget)}`;
-  const probeUrl = new URL("/redirect/", ctx.origin);
+  const redirectChain = `${origin}/r/?to=${encodeURIComponent(innerTarget)}`;
+  const probeUrl = new URL("/redirect/", origin);
   probeUrl.searchParams.set("url", redirectChain);
-  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = ssrfVulnlabLabBody(doc.body);
   if (!body) return NEGATIVE;
@@ -31798,6 +31821,14 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "Binary Go secret walkthrough",
       re: /Hiding in binaries part 3|wrongsecrets-golang(?:-arm|-linux)?|secret in a Go binary|the Go binary/i
+    },
+    {
+      label: "Web3 smart contract secrets walkthrough",
+      re: /Secrets in smart contracts|smart contract developer|blockchain does not get rid/i
+    },
+    {
+      label: "Web3 challenge focus",
+      re: /challenge focuses on.*Web3|Web3<\/strong>/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -31837,11 +31868,13 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                               ? "C++ binary embedded secrets"
                               : /Hiding in binaries part 1|wrongsecrets-c/i.test(doc.body)
                                 ? "C binary embedded secrets"
-                              : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
-                                    doc.body
-                                  )
-                                ? "container/K8s log secrets"
-                                : "hardcoded secrets";
+                                : /Secrets in smart contracts|challenge focuses on.*Web3/i.test(doc.body)
+                                  ? "Web3 smart contract on-chain secrets"
+                                  : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
+                                        doc.body
+                                      )
+                                    ? "container/K8s log secrets"
+                                    : "hardcoded secrets";
   return {
     fired: true,
     confidence: markers.length >= 3 ? 0.92 : 0.9,
