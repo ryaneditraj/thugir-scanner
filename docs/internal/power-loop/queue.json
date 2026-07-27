@@ -32,7 +32,7 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
       "source": "AI Security Platform — CWE-732 misconfigured Supabase Row Level Security oracle (public Vercel demo)",
       "auth": "public_demo"
     },
