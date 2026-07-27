@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T14:09:00.000Z",
+  "updated_at": "2026-07-27T15:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2982,
-  "total_findings": 30429,
+  "total_sites_scanned": 2990,
+  "total_findings": 30489,
   "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2089,
+  "discovery_urls_added": 2094,
   "discovery_findings": 25575,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-27T14:09:00.000Z",
+  "last_run": "2026-07-27T15:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -34,7 +34,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 453,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -56,30 +56,33 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 64,
-      "focus": "vulnforge XSS levels + agentpwn jailbreak/supply-chain/capability-abuse + fauxbank API route drain"
+      "urls_ok": 7,
+      "findings": 46,
+      "focus": "trojan-trap file upload + untrusted-python RCE + duck-store vuln catalog/testimonials + queue drain vapi/api1-2 + ai-security supabase-data"
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503",
-      "vulnforge-academy level3/level4: 4 findings each — reflexion-escalated-ssti hub without route-specific XSS oracle",
-      "agentpwn jailbreak/supply-chain/capability-abuse: 6 findings each incl hidden-prompt-injection",
-      "pentest-fauxbank.vercel.app/api/transfer: 15 findings incl fauxbank-transfer-route-live-oracle",
-      "pentest-fauxbank.vercel.app/api/accounts/1: 15 findings incl fauxbank-accounts-route-live-oracle",
-      "vapi.apisec.ai/vapi/api8/user/login: 8 findings with vapi cross-API oracle cluster"
+      "trojan-trap-seven.vercel.app: 5 findings incl reflexion-escalated-ssti on file-upload lab",
+      "duck-store.escape.tech/vulnerabilities: 8 findings with vibe-unauthenticated-api-routes + vibe-openapi-docs-exposed",
+      "duck-store.escape.tech/api/v1/testimonials: 6 findings — unauthenticated API route oracle (BOLA benchmark route)",
+      "vapi.apisec.ai/vapi/api1/user: 9 findings incl vapi-api7-cors-misconfig-live-oracle",
+      "ginandjuice.shop/catalog?searchTerm=test: scan error Invalid URL — query-string URL rejected by scanner"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnforge level3/level4: no route-specific reflected/stored XSS live oracle",
-      "agentpwn routes: hidden-prompt-injection present but no APWN-specific category oracle slugs"
+      "jwt-alg-none-accepted slug absent; juice-shop-jwt-alg-none-live-oracle covers auth_bypass category",
+      "ginandjuice.shop/catalog?searchTerm=test: Invalid URL error — scanner URL parser rejects query-string discovery targets",
+      "duck-store /api/v1/testimonials: vibe-unauthenticated-api-routes present but no route-specific BOLA write-oracle for testimonial update",
+      "untrusted-python.vercel.app: reflexion-escalated-ssti false-positive risk on static exec demo page without server-side template engine"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "pentest-fauxbank.vercel.app/api/transfer": 15,
-    "pentest-fauxbank.vercel.app/api/accounts/1": 15,
-    "vapi.apisec.ai/vapi/api8/user/login": 8,
-    "agentpwn.com/attacks/jailbreak/1": 6,
-    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php": 4
+    "vapi.apisec.ai/vapi/api1/user": 9,
+    "duck-store.escape.tech/vulnerabilities": 8,
+    "vapi.apisec.ai/vapi/api2/user/login": 8,
+    "trojan-trap-seven.vercel.app": 5,
+    "duck-store.escape.tech/api/v1/testimonials": 6
   }
 }

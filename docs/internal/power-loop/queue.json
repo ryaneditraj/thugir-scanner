@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T14:07:14.286Z",
+  "updated_at": "2026-07-27T15:06:37.064Z",
   "discovery_urls": [
+    {
+      "url": "https://trojan-trap-seven.vercel.app/",
+      "source": "Trojan Trap — intentionally vulnerable file upload + malware-scan bypass lab (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://untrusted-python.vercel.app/",
+      "source": "untrusted-python — server-side Python exec sandbox escape demo (Vercel blog post lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — published vulnerability catalog oracle page (escape.tech blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials",
+      "source": "Escape Duck Store — BOLA/authz gap benchmark route (Escape AI pentest blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?searchTerm=test",
+      "source": "PortSwigger Gin & Juice Shop — catalog search SQLi/XSS scanner benchmark route",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php",
       "source": "webspoilt/vulnforge-academy — Level 3 reflected XSS challenge (GitHub repo structure)",
