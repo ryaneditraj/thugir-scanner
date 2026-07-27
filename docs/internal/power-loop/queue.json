@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T06:05:00.000Z",
+  "updated_at": "2026-07-27T07:06:53.734Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-54",
+      "source": "OWASP WrongSecrets — challenge-54 .gitignore AES-256-CBC secret oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
+      "source": "OWASP WrongSecrets — challenge-55 SSH keypair committed to repo/Docker oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
+      "source": "OWASP WrongSecrets — challenge-60 insecure MCP server env-var leak oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+      "source": "OWASP WrongSecrets — challenge-61 Telegram bot credentials hardcoded in source oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+      "source": "OWASP WrongSecrets — challenge-62 AI prompt-injection secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-41",
       "source": "OWASP WrongSecrets — challenge-41 password-shucking cryptography oracle (public Heroku benchmark)",
