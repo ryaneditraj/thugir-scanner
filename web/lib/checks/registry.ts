@@ -37392,6 +37392,23 @@ function vapiBasicAuthToken(username: string, password: string): string {
   return Buffer.from(`${username}:${password}`).toString("base64");
 }
 
+const vapiApi3CommentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api3\/comment/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi3CommentBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api3/comment route scan — GET returns every comment JSON without authentication — BOLA / excessive data exposure oracle (API3)"
+    }
+  };
+};
+
 const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_bfla_${Date.now()}`;
@@ -37475,23 +37492,6 @@ const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "vAPI /api6/user route scan — POST credit inflation and GET /api6/user/me returns flag — mass assignment oracle (API6)"
-    }
-  };
-};
-
-const vapiApi7RouteLiveOracle: Rule = async (ctx) => {
-  if (!isVapiHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api7\/user/i.test(pageUrl)) return NEGATIVE;
-  const result = await vapiApi7CorsMisconfigLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "vAPI /api7/user route scan — GET /api7/user/key reflects arbitrary Origin with credentials and returns authkey — CORS misconfiguration oracle (API7)"
     }
   };
 };
@@ -39280,6 +39280,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi2BrokenAuthLiveOracle,
   vapiApi2RouteLiveOracle,
   vapiApi3CommentBolaLiveOracle,
+  vapiApi3CommentRouteLiveOracle,
   vapiApi4OtpBrokenAuthLiveOracle,
   vapiApi4UserExposureLiveOracle,
   vapiApi5BflaLiveOracle,
@@ -39287,7 +39288,6 @@ export const RULES: Record<string, Rule> = {
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
-  vapiApi7RouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,
