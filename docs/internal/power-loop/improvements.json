@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-43 documents Documentation/social-media secret sharing + challenge-52 Secrets focus + challenge-41 password shucking + challenge-42 Spring Boot Actuator audit — added markers to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-43 findings 8→9; challenge-52 8→9; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper attaches scannedUrl when scanning /challenge/challenge-N; wrongsecrets.herokuapp.com/challenge/challenge-43 fires route oracle with challengeId evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-path-traversal-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: switched from ctx.probe.get to fetchDoc with Vercel-checkpoint retry; GET /api/include?page=../../etc/passwd returns root:x:0:0: — direct rule invocation confirmed; vulnlab-validate-path-traversal-route-live-oracle added; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-mail-idor-route-live-oracle",
       "status": "shipped",
@@ -13891,6 +13909,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "shipped_at": "2026-07-27T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-route-live-oracle",
+      "shipped_at": "2026-07-27T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-path-traversal-live-oracle",
+      "shipped_at": "2026-07-27T07:15:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-live-oracle",
