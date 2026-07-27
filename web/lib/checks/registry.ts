@@ -26804,8 +26804,8 @@ async function pwnshopOtpFromMailInbox(
 ): Promise<string | null> {
   const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
   // OTP mail can arrive after login redirect — poll with fetchDoc (bypasses probe cache on retries).
-  for (let attempt = 0; attempt < 6; attempt++) {
-    if (attempt > 0) await pwnshopSleep(1200);
+  for (let attempt = 0; attempt < 10; attempt++) {
+    if (attempt > 0) await pwnshopSleep(1500);
     const doc = await fetchDoc(mailUrl, {
       maxBytes: 65536,
       timeoutMs: 15000,
@@ -27115,7 +27115,7 @@ const pwnshopSellerPreviewSstiLiveOracle: Rule = async (ctx) => {
 
 const pwnshopDownloadPathTraversalLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
-  const cookie = await pwnshopCompleteOtpSession(ctx);
+  const cookie = await pwnshopEnsureSellerSession(ctx);
   if (!cookie) return NEGATIVE;
   const downloadUrl = new URL("/download", ctx.origin);
   downloadUrl.searchParams.set("file", "../../package.json");

@@ -9492,32 +9492,6 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "pwnshop-download-path-traversal-live-oracle",
-    platform: "generic",
-    category: "Broken access control",
-    severityDefault: "high",
-    title: "Pwnshop invoice download path traversal live oracle (PWN-038)",
-    description:
-      "GET /download?file=../../package.json returns application package.json via path.join traversal without resolved-path validation.",
-    impactOneline:
-      "Path traversal on invoice downloads can expose server files and source configuration.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "pwnshopDownloadPathTraversalLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Resolve and validate download paths against an allowlisted invoices directory.",
-      steps: [
-        "Use path.resolve() and verify the resolved path stays under the invoices root.",
-        "Reject .. segments and absolute paths in file= query parameters.",
-        "Run Pwnshop only in isolated lab environments."
-      ]
-    },
-    fixPrompt:
-      "Our /download?file= endpoint returns ../../package.json via path traversal. Show resolved-path validation for file downloads.",
-    version: 1,
-    enabled: true
-  },
-  {
     slug: "pwnshop-seller-preview-ssti-route-live-oracle",
     platform: "generic",
     category: "Injection",

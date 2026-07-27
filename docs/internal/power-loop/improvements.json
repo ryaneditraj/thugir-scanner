@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-preview-ssti-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /seller/preview?template=<%= 7*7 %> returns 49 after OTP+seller registration — ejs.render() SSTI (PWN-040); pwnshop.ctfsecurity.com/seller/preview findings 13→28 with live+route oracles; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-path-traversal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /download?file=../../package.json returns pwnshop-app package.json after OTP+seller session — path.join traversal (PWN-038); pwnshop.ctfsecurity.com/download findings 11→33 with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: scanning /loans POST /api/loans creates pending loan visible in GET /api/loans; pentest-fauxbank.vercel.app/loans findings 11→14 with route oracle; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-metadata-aws-route-live-oracle",
       "status": "shipped",
@@ -14014,6 +14032,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-testimonials-route-live-oracle",
       "shipped_at": "2026-07-26T21:00:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-preview-ssti-live-oracle",
+      "shipped_at": "2026-07-27T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-path-traversal-route-live-oracle",
+      "shipped_at": "2026-07-27T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-route-live-oracle",
+      "shipped_at": "2026-07-27T05:15:00.000Z"
     }
   ]
 }
