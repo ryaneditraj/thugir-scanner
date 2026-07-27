@@ -1445,6 +1445,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsHiddenUploadLiveOracle",
   "brokencrystalsMcpToolsLiveOracle",
   "brokencrystalsMcpRouteLiveOracle",
+  "brokencrystalsJwtAlgNoneLiveOracle",
+  "brokencrystalsJwtRouteLiveOracle",
   "brokencrystalsSecretsLiveOracle",
   "brokencrystalsSecretsRouteLiveOracle",
   "brokencrystalsSafeFilesRfiLiveOracle",

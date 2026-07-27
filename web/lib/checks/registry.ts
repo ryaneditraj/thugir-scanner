@@ -32178,6 +32178,14 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "Obfuscated Java binary secret walkthrough",
       re: /Hiding in binaries part 7|wrongsecrets-java-obfuscated|obfuscated Java CLI/i
+    },
+    {
+      label: ".NET self-contained binary walkthrough",
+      re: /Hiding in binaries revisited|\.NET8 binary|wrongsecrets-dotnet/i
+    },
+    {
+      label: "ILSpy reverse-engineering walkthrough",
+      re: /ILSpy|ilspycmd|sfextract/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -32243,10 +32251,14 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                                                     doc.body
                                                   )
                                                 ? "Swift binary embedded secrets"
-                                                : /challenge focuses on.*Documentation|share an "innocent" piece of data over social media/i.test(
+                                                : /Hiding in binaries revisited|\.NET8 binary|wrongsecrets-dotnet|ILSpy/i.test(
                                                       doc.body
                                                     )
-                                                  ? "documentation/social media secret exposure"
+                                                  ? ".NET self-contained binary / ILSpy reverse-engineering secrets"
+                                                  : /challenge focuses on.*Documentation|share an "innocent" piece of data over social media/i.test(
+                                                        doc.body
+                                                      )
+                                                    ? "documentation/social media secret exposure"
                                           : /challenge focuses on.*Secrets<\/strong>/i.test(doc.body)
                                             ? "secrets management"
                                             : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
@@ -36375,6 +36387,57 @@ const brokencrystalsMcpRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/rsa/signature/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({ user: "admin", exp: now + 3600 });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, noneAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: algNoneToken }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  if (!looksAuthGatedJson(noneAuth) || !/"secret"\s*:\s*"/i.test(noneAuth.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      statusWithAlgNone: noneAuth.status,
+      responseSample: noneAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals GET /api/auth/jwt/rsa/signature/validate accepts alg:none JWT and returns secret — JWT none-algorithm bypass oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtAlgNoneLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt route scan — alg:none JWT bypasses /api/auth/jwt/rsa/signature/validate and returns secret"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -38780,6 +38843,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsMcpToolsLiveOracle,
   brokencrystalsMcpRouteLiveOracle,
+  brokencrystalsJwtAlgNoneLiveOracle,
+  brokencrystalsJwtRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,
   brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
