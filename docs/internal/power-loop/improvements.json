@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a5-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a5 returns A5-Security Misconfiguration + stack-level misconfiguration walkthrough + privileged runtime/header-leak topics; nodegoat-websec.herokuapp.com/tutorial/a5 findings 6→7 with route-specific misconfiguration oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a6-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a6 returns A6-Sensitive Data Exposure + encryption at rest/in transit + weak-crypto database theft topics; nodegoat-websec.herokuapp.com/tutorial/a6 findings 6→7 with route-specific sensitive-data oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a7-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a7 returns A7-Missing Function Level Access Control + server-side authorization checks + benefits module bypass topics; nodegoat-websec.herokuapp.com/tutorial/a7 findings 6→7 with route-specific access-control oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-live-oracle",
       "status": "shipped",
