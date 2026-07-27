@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T00:13:37.679Z",
-  "total": 872,
-  "uniqueSlugs": 867,
+  "generatedAt": "2026-07-27T01:02:43.763Z",
+  "total": 874,
+  "uniqueSlugs": 869,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 854,
+    "generic": 856,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 787,
+    "deep": 789,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 212,
+    "Broken access control": 213,
     "Exposed secret": 26,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 74,
     "Broken authentication": 61,
-    "Injection": 176,
+    "Injection": 177,
     "Cross-site scripting": 128,
     "general": 20,
     "SSRF": 5,
@@ -738,6 +738,7 @@
     "nodegoat-tutorial-a5-route-live-oracle",
     "nodegoat-tutorial-a6-route-live-oracle",
     "nodegoat-tutorial-a7-route-live-oracle",
+    "nodegoat-tutorial-a8-route-live-oracle",
     "notices-file-lfi-probe",
     "oauth-oidc-metadata-exposed",
     "open-redirect-query-param",
@@ -899,6 +900,7 @@
     "vulnlab-rest-bola-live-oracle",
     "vulnlab-utilities-hash-live-oracle",
     "vulnlab-validate-idor-live-oracle",
+    "vulnlab-validate-path-traversal-live-oracle",
     "vulnlab-validate-sqli-live-oracle",
     "vulnlab-validate-xss-live-oracle",
     "vulnshop-debug-api-live-oracle",

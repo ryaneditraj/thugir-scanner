@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-path-traversal-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/include?page=../../etc/passwd returns root:x:0:0 passwd lines when scanning /api/validate/path-traversal; hack-this-site-eta.vercel.app/api/validate/path-traversal findings 44→45 with route-specific path-traversal live oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a8-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a8 returns A8-Cross-Site Request Forgery (CSRF) + forged HTTP request walkthrough + profile form CSRF exploit topics; nodegoat-websec.herokuapp.com/tutorial/a8 findings 6→7 with route-specific CSRF oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-18 documents Cryptography + MD5/SHA1/rockyou.txt; challenge-19 documents C binary (wrongsecrets-c + Ghidra); challenge-20 documents C++ binary (wrongsecrets-cplus); challenge-18/19/20 findings 8→9 with extended wrongsecrets-challenge-live-oracle markers; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tutorial-a5-route-live-oracle",
       "status": "shipped",
