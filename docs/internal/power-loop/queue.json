@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T15:06:37.064Z",
+  "updated_at": "2026-07-27T16:04:05.950Z",
   "discovery_urls": [
+    {
+      "url": "http://vapi.apisec.ai/vapi/api3/comment",
+      "source": "roottusk/vAPI — API3 excessive data exposure hidden /comment endpoint (Postman docs + writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api5/users",
+      "source": "roottusk/vAPI — API5 BFLA hidden /users list endpoint (allthewriteups walkthrough)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api4/login",
+      "source": "roottusk/vAPI — API4 mobile OTP login rate-limiting oracle (zerodayhacker walkthrough)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough with API oracle docs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/invoices/1/download",
+      "source": "ctfsec/pwnshop — PWN-038 path traversal invoice download oracle (OSS deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://trojan-trap-seven.vercel.app/",
       "source": "Trojan Trap — intentionally vulnerable file upload + malware-scan bypass lab (Vercel OSS deploy)",
