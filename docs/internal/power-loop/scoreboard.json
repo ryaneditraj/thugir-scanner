@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T23:42:32.689Z",
+  "updated_at": "2026-07-27T23:43:09.421Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2139,
   "discovery_findings": 26307,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T23:42:32.689Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-27T23:43:09.421Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -53,26 +53,30 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 82,
-      "focus": "vuln-expose corporate blog/invoices + ssrf.vulnlab scheme/gopher/parser; queue drain nodegoat a9/a10 + wrongsecrets challenge-21/22",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 13,
+      "findings": 125,
+      "focus": "vuln-expose blog/invoices + ssrf.vulnlab scheme/gopher/parser + engine rescan challenge-0/1/network-tools/nodegoat-learn",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — primary healthy, no category gaps",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-0: 8→10 findings — wrongsecrets-challenge-live-oracle via Intro/onboarding markers",
+      "wrongsecrets.herokuapp.com/challenge/challenge-1: 8→10 findings — wrongsecrets-challenge-live-oracle via Git/Trufflehog markers",
+      "vuln-expose.vercel.app/network-tools: 15→16 findings — vuln-expose-network-tools-route-live-oracle shipped",
+      "nodegoat-websec.herokuapp.com/learn: 6→7 findings — nodegoat-learn-open-redirect-route-live-oracle via A10 tutorial marker fallback",
       "ssrf.vulnlab.dev/scheme: 8 findings — cross-lab SSRF oracles fire but no route-specific file:// scheme-abuse oracle",
       "ssrf.vulnlab.dev/gopher: 7 findings — shared SSRF hub without gopher-to-TCP route oracle",
       "ssrf.vulnlab.dev/parser: 7 findings — shared SSRF hub without URL-parser-disagreement route oracle",
       "nodegoat-websec.herokuapp.com/tutorial/a9: 7 findings — nodegoat-tutorial-a9-route-live-oracle shipped",
-      "nodegoat-websec.herokuapp.com/tutorial/a10: 7 findings — nodegoat-tutorial-a10-route-live-oracle shipped",
-      "wrongsecrets.herokuapp.com/challenge/challenge-21: 10 findings — wrongsecrets-challenge-live-oracle + route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-22: 10 findings — wrongsecrets-challenge-live-oracle + route oracle"
+      "nodegoat-websec.herokuapp.com/tutorial/a10: 7 findings — nodegoat-tutorial-a10-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ssrf.vulnlab.dev/scheme|gopher|parser: cross-lab SSRF oracles fire on all routes but route-specific scheme-abuse, gopher-TCP, and parser-disagreement live oracles still absent",
-      "vuln-expose.vercel.app/blog|invoices: shared 13-finding VulnSite hub without blog-stored-XSS or invoice-search SQLi route oracles"
+      "ssrf.vulnlab.dev/scheme|gopher|parser: cross-lab SSRF oracles fire but route-specific scheme/gopher/parser oracles still absent",
+      "vuln-expose.vercel.app/blog|invoices: shared 13-finding VulnSite hub without route-specific blog-XSS or invoice-SQLi oracles",
+      "nodegoat /learn live redirect probe blocked on public Heroku without session — marker oracle via /tutorial/a10 only",
+      "vulnweb.netlify.app/* routes return Netlify 404 — dead discovery queue URLs"
     ]
   },
   "discovery_highlights": {
@@ -80,9 +84,9 @@
     "vuln-expose.vercel.app/blog": 13,
     "vuln-expose.vercel.app/invoices": 13,
     "ssrf.vulnlab.dev/scheme": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-0": 10,
+    "wrongsecrets.herokuapp.com/challenge/challenge-1": 10,
     "wrongsecrets.herokuapp.com/challenge/challenge-21": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 10,
-    "nodegoat-websec.herokuapp.com/tutorial/a9": 7,
-    "nodegoat-websec.herokuapp.com/tutorial/a10": 7
+    "vuln-expose.vercel.app/network-tools": 16
   }
 }
