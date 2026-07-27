@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-0-1-intro-git-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-0 Intro walkthrough (Welcome to OWASP WrongSecrets + Every challenge is about finding a secret + wrongsecrets-desktop docker run) and challenge-1 Git walkthrough (Trufflehog/Git-secrets + secret called password) markers added to wrongsecretsChallengeLiveOracle; challenge-0/1 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-network-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /network-tools Herramienta de Ping + ICMP Echo Request + Ejecutar Ping panels; vuln-expose.vercel.app/network-tools findings 15→16 with vuln-expose-network-tools-route-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-learn-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /tutorial/a10 documents /learn?url= res.redirect(req.query.url) open redirect; nodegoat-websec.herokuapp.com/learn findings 6→7 with nodegoat-learn-open-redirect-route-live-oracle (A10 marker fallback on session-gated public Heroku); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-coupon-category-bypass-route-live-oracle",
       "status": "shipped",
@@ -14527,6 +14545,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-marketplace-route-live-oracle",
       "shipped_at": "2026-07-27T22:00:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-0-1-intro-git-markers",
+      "shipped_at": "2026-07-27T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-network-tools-route-live-oracle",
+      "shipped_at": "2026-07-27T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-learn-open-redirect-route-live-oracle",
+      "shipped_at": "2026-07-27T23:30:00.000Z"
     }
   ]
 }
