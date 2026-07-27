@@ -32162,6 +32162,22 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "AES weak MD5 key walkthrough",
       re: /Cracking AES Encryption with a Weak MD5 Key|MD5 hash of a PIN/i
+    },
+    {
+      label: "AI project specification walkthrough",
+      re: /Project Specification|Challenge 56: Find the Secret|documentation for secrets|LLM instructions/i
+    },
+    {
+      label: "Swift binary secret walkthrough",
+      re: /Hiding in binaries part 5|wrongsecrets-swift|Swift binary/i
+    },
+    {
+      label: "Java CLI binary secret walkthrough",
+      re: /Hiding in binaries part 6|wrongsecrets-java(?:-obfuscated)?|plain Java CLI/i
+    },
+    {
+      label: "Obfuscated Java binary secret walkthrough",
+      re: /Hiding in binaries part 7|wrongsecrets-java-obfuscated|obfuscated Java CLI/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -32207,14 +32223,30 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                                     ? "password shucking / pre-hashed credential secrets"
                                     : /Spring Boot Actuator[\s\S]{0,120}[Aa]udit [Ee]vent/i.test(doc.body)
                                       ? "Spring Boot Actuator audit log secrets"
-                                      : /Cracking AES Encryption with a Weak MD5 Key|MD5 hash of a PIN/i.test(
+                                        : /Cracking AES Encryption with a Weak MD5 Key|MD5 hash of a PIN/i.test(
                                             doc.body
                                           )
                                         ? "weak MD5-derived AES key secrets"
-                                        : /challenge focuses on.*Documentation|share an "innocent" piece of data over social media/i.test(
+                                        : /Project Specification|Challenge 56: Find the Secret|documentation for secrets/i.test(
                                               doc.body
                                             )
-                                          ? "documentation/social media secret exposure"
+                                          ? "AI project specification / documentation secrets"
+                                          : /Hiding in binaries part 7|wrongsecrets-java-obfuscated/i.test(
+                                                doc.body
+                                              )
+                                            ? "obfuscated Java CLI binary secrets"
+                                            : /Hiding in binaries part 6|wrongsecrets-java/i.test(
+                                                  doc.body
+                                                )
+                                              ? "Java CLI binary secrets"
+                                              : /Hiding in binaries part 5|wrongsecrets-swift/i.test(
+                                                    doc.body
+                                                  )
+                                                ? "Swift binary embedded secrets"
+                                                : /challenge focuses on.*Documentation|share an "innocent" piece of data over social media/i.test(
+                                                      doc.body
+                                                    )
+                                                  ? "documentation/social media secret exposure"
                                           : /challenge focuses on.*Secrets<\/strong>/i.test(doc.body)
                                             ? "secrets management"
                                             : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
@@ -36223,6 +36255,126 @@ const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function brokencrystalsMcpSessionId(ctx: RuleContext): Promise<string | null> {
+  const mcpUrl = new URL("/api/mcp", ctx.origin).toString();
+  const initPayload = JSON.stringify({
+    jsonrpc: "2.0",
+    method: "initialize",
+    params: {
+      protocolVersion: "2024-11-05",
+      capabilities: {},
+      clientInfo: { name: "thugir", version: "1" }
+    },
+    id: 1
+  });
+  const doc = await ctx.probe.get(mcpUrl, {
+    method: "POST",
+    body: initPayload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const headerSession = (doc.headers["mcp-session-id"] || doc.headers["Mcp-Session-Id"] || "").trim();
+  if (headerSession) return headerSession;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      result?: { session?: { mcpSessionId?: string } };
+    };
+    return parsed.result?.session?.mcpSessionId ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function brokencrystalsMcpJsonRpc(
+  ctx: RuleContext,
+  sessionId: string,
+  method: string,
+  params?: unknown,
+  id = 2
+): Promise<{ body: string; status: number }> {
+  const mcpUrl = new URL("/api/mcp", ctx.origin).toString();
+  const payload = JSON.stringify({ jsonrpc: "2.0", method, params, id });
+  const doc = await ctx.probe.get(mcpUrl, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      "Mcp-Session-Id": sessionId
+    },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  return { body: doc.body, status: doc.status };
+}
+
+const brokencrystalsMcpToolsLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const sessionId = await brokencrystalsMcpSessionId(ctx);
+  if (!sessionId) return NEGATIVE;
+  const listDoc = await brokencrystalsMcpJsonRpc(ctx, sessionId, "tools/list");
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let tools: Array<{ name?: string; accessLevel?: string; description?: string }> = [];
+  try {
+    const parsed = JSON.parse(listDoc.body) as {
+      result?: { tools?: Array<{ name?: string; accessLevel?: string; description?: string }> };
+    };
+    tools = parsed.result?.tools ?? [];
+  } catch {
+    return NEGATIVE;
+  }
+  if (tools.length < 3) return NEGATIVE;
+  const byName = new Map(tools.map((t) => [t.name ?? "", t]));
+  const getCount = byName.get("get_count");
+  const spawnProcess = byName.get("spawn_process");
+  const getConfig = byName.get("get_config");
+  const sqlToolOk =
+    getCount &&
+    /SQL query|select count/i.test(getCount.description ?? "") &&
+    getCount.accessLevel === "public";
+  const adminToolsOk =
+    spawnProcess?.accessLevel === "admin" && getConfig?.accessLevel === "admin";
+  if (!sqlToolOk || !adminToolsOk) return NEGATIVE;
+  const countDoc = await brokencrystalsMcpJsonRpc(ctx, sessionId, "tools/call", {
+    name: "get_count",
+    arguments: {
+      query: "select count(*) as count from testimonial"
+    }
+  }, 3);
+  const countOk =
+    countDoc.status >= 200 &&
+    countDoc.status < 400 &&
+    /Query result:\s*\d+/i.test(countDoc.body);
+  if (!countOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      sessionId,
+      tools: tools.map((t) => `${t.name}:${t.accessLevel ?? "unknown"}`).slice(0, 8),
+      countSnippet: countDoc.body.slice(0, 120).trim(),
+      note: "Broken Crystals POST /api/mcp initialize + tools/list exposes public SQL get_count and admin spawn_process/get_config tools — unauthenticated MCP gateway oracle"
+    }
+  };
+};
+
+const brokencrystalsMcpRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mcp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMcpToolsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -38515,6 +38667,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
+  brokencrystalsMcpToolsLiveOracle,
+  brokencrystalsMcpRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,
   brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
