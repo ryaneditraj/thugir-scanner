@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T05:21:39.275Z",
-  "total": 883,
-  "uniqueSlugs": 878,
+  "generatedAt": "2026-07-27T06:05:30.984Z",
+  "total": 886,
+  "uniqueSlugs": 881,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 865,
+    "generic": 868,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 798,
+    "deep": 801,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 217,
+    "Broken access control": 218,
     "Exposed secret": 27,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -32,7 +32,7 @@
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 22,
-    "Sensitive data exposure": 22,
+    "Sensitive data exposure": 24,
     "AI security": 38,
     "Business logic": 3,
     "Open redirect": 1,
@@ -712,6 +712,8 @@
     "fauxbank-loans-negative-amount-live-oracle",
     "fauxbank-loans-request-live-oracle",
     "fauxbank-loans-route-live-oracle",
+    "fauxbank-profile-route-live-oracle",
+    "fauxbank-profile-sensitive-data-live-oracle",
     "fauxbank-stored-xss-support-probe",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
@@ -767,6 +769,7 @@
     "pwnshop-download-path-traversal-route-live-oracle",
     "pwnshop-events-audit-live-oracle",
     "pwnshop-forgot-password-email-enumeration-live-oracle",
+    "pwnshop-mail-idor-route-live-oracle",
     "pwnshop-mail-inbox-idor-live-oracle",
     "pwnshop-mass-assignment-admin-live-oracle",
     "pwnshop-open-redirect-register-live-oracle",

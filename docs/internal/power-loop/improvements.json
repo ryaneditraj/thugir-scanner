@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: attacker OTP session reads victim inbox GET /mail/<token> — OTP mail body 'Your Pwnshop Login Code' + victim username; pwnshop.ctfsecurity.com/mail/1 findings 20→29 with inbox+route oracles; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-sensitive-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/profile returns {\"ssnFake\":\"FAKE-111-22-3333\",\"fullName\":\"Alice Liddell\",...} without redaction; pentest-fauxbank.vercel.app/profile findings 11→16 with sensitive-data+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile route scan fires fauxbank-profile-sensitive-data-live-oracle with scannedUrl evidence; pentest-fauxbank.vercel.app/profile findings 11→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-seller-preview-ssti-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /seller/preview?template=<%= 7*7 %> returns 49 after OTP+seller registration — ejs.render() SSTI (PWN-040); pwnshop.ctfsecurity.com/seller/preview findings 13→28 with live+route oracles; benchmark juice-shop 12 findings 6/6 maintained"
@@ -14047,6 +14065,21 @@
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-loans-route-live-oracle",
       "shipped_at": "2026-07-27T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-idor-route-live-oracle",
+      "shipped_at": "2026-07-27T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-sensitive-data-live-oracle",
+      "shipped_at": "2026-07-27T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-route-live-oracle",
+      "shipped_at": "2026-07-27T06:10:00.000Z"
     }
   ]
 }
