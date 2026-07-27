@@ -14875,6 +14875,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-mcp-tools-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals MCP tools registry live oracle",
+    description:
+      "POST /api/mcp initialize + tools/list exposes public SQL get_count and admin spawn_process/get_config MCP tools without authentication.",
+    impactOneline:
+      "Unauthenticated MCP gateway enumerates dangerous tools and confirms SQL get_count execution — distinct from generic API hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate MCP sessions and restrict tool exposure — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Do not expose admin tools (spawn_process, get_config) to guest MCP sessions.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/mcp endpoint lists SQL and admin MCP tools without auth. Show how to secure MCP gateway tool registries in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mcp-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/mcp route live oracle",
+    description:
+      "When scanning /api/mcp, initialize + tools/list confirms public SQL get_count and admin spawn_process/get_config MCP tools.",
+    impactOneline:
+      "Route-specific confirmation that the MCP gateway exposes dangerous tools when scanning Broken Crystals /api/mcp paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate MCP sessions and restrict tool exposure — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Do not expose admin tools to guest MCP sessions.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/mcp route scan confirms unauthenticated MCP tool registry disclosure. Show MCP gateway hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-aws-route-live-oracle",
     platform: "generic",
     category: "SSRF",
