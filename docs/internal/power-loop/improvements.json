@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api1-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api1/user register + GET /api1/user/1 with Authorization-Token returns Michaels flag{api1_d0cd9be2324cc237235b}; vapi.apisec.ai/vapi/api1/user findings 5→10; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api2-broken-auth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api2/user/login savanna48@ortiz.com cred + GET /api2/user/details returns all users with flag{api2_6bf2beda61e2a1ab2d0a} in address; vapi route scans gain API2 oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api6-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api6/user fires vapi-api6-route-live-oracle with scannedUrl + credit:10000 flag; vapi.apisec.ai/vapi/api6/user findings 5→11; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-54-gitignore-markers",
       "status": "shipped",
