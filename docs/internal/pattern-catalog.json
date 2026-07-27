@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T20:05:38.284Z",
-  "total": 924,
-  "uniqueSlugs": 919,
+  "generatedAt": "2026-07-27T21:07:57.497Z",
+  "total": 927,
+  "uniqueSlugs": 922,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 906,
+    "generic": 909,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 839,
+    "deep": 842,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 66,
-    "Injection": 184,
-    "Cross-site scripting": 131,
+    "Injection": 186,
+    "Cross-site scripting": 132,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 25,
@@ -908,10 +908,13 @@
     "vibe-weak-csp",
     "vuln-expose-auth-bypass-api-live-oracle",
     "vuln-expose-auth-bypass-route-live-oracle",
+    "vuln-expose-blind-sqli-api-live-oracle",
     "vuln-expose-cmdi-route-live-oracle",
     "vuln-expose-idor-profile-route-live-oracle",
+    "vuln-expose-sqli-blind-route-live-oracle",
     "vuln-expose-sqli-search-api-live-oracle",
     "vuln-expose-sqli-search-route-live-oracle",
+    "vuln-expose-xss-csp-bypass-route-live-oracle",
     "vulnbank-ai-anonymous-chat-live-oracle",
     "vulnbank-bill-payments-negative-amount-live-oracle",
     "vulnbank-bopla-register-live-oracle",
