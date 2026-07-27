@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T03:06:00.000Z",
+  "updated_at": "2026-07-27T04:04:18.620Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
+      "source": "OWASP WrongSecrets — challenge-31 front-end secret-in-webpage oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-32",
+      "source": "OWASP WrongSecrets — challenge-32 front-end secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-33",
+      "source": "OWASP WrongSecrets — challenge-33 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-34",
+      "source": "OWASP WrongSecrets — challenge-34 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-35",
+      "source": "OWASP WrongSecrets — challenge-35 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-26",
       "source": "OWASP WrongSecrets — challenge-26 Web3 smart-contract storage oracle (public Heroku benchmark)",
